@@ -1,0 +1,215 @@
+// See FactFileReader.js for an explanation of the format
+
+ボッブ: Bob, genitive: Bob's
+先生: teacher, plural: teachers
+友達: friend
+私: I, genitive: my
+だ: is
+grammar:ellipsis
+家: house, plural: houses
+犬: dog, plural: dogs
+車: car, plural: cars
+本: book, plural: books
+grammar:plural
+grammar:questions
+grammar:iruVsAru
+ある: is, past: was, grammar: iruVsAru
+いる: is, past: was, grammar: iruVsAru
+お金: money
+彼: he, genitive: his, obj: him
+彼女: she, genitive: her, obj: her
+grammar:no
+grammar:ha
+grammar:ga
+grammar:haGaHas
+
+セーター: sweater
+ジーンズ: jeans, plural: jeans
+大きい: big, inflect:iadj
+小さい: small, inflect:iadj
+白い: white, inflect:iadj
+黒い: black, inflect:iadj
+多い: a lot, inflect:iadj
+少ない: few, inflect:iadj
+
+読む: read, past: read (past), inflect:uverb
+grammar:wo
+買う: buy, past: bought, inflect:uverb
+店: shop
+雑誌: magazine, plural: magazines
+新聞: newpaper, plural: newspapers
+服: clothes, plural: clothes
+
+grammar:niLoc
+行く: go, past: went, inflect:uverb
+レストラン: restaurant, plural: restaurants
+grammar:niDir
+人: person, plural: people
+アメリカ人: American, plural: Americans
+パーチェ: party
+図書館: library
+学校: school
+公園: park, plural: parks
+映画館: movie theatre, plural: movie theatres
+オフィス: office
+デパート: department store
+会う: meet, past: met, inflect:uverb
+grammar:niMeet
+grammar:deLoc
+東京: Tokyo
+大阪: Osaka
+働く: work, past: worked, inflect: uverb
+
+日本: Japan
+好き: like, past: liked
+よく: often
+見る: watch/see, past: watched/saw, inflect:ruverb
+テレビ: TV
+インターネット: Internet
+grammar:deMeans
+ラジオ: radio
+聴く: listen to, past: listened to, inflect: uverb
+音楽: music, plural: music
+電話: phone, plural: phones
+使う: use, past: used, inflect:uverb
+話す: talk, past: talked, inflect:uverb
+grammar:nokoto
+grammar:toPerson
+値段: price
+子供: child
+
+何: what
+名前: name
+言う: say, past: said, inflect:uverb
+
+書く: write, past: wrote, inflect:uverb
+
+携帯: smartphone, plural: smartphones
+メール: e-mail, plural: e-mails
+コンピューター: computer
+手紙: letter, plural: letters
+ペン: pen, plural: pens
+もらう: receive, past: received, inflect: uverb
+
+趣味: hobby
+水泳: swimming
+英語: English
+興味: interest
+grammar:niKyoumi
+映画: movie, plural: movies
+仕事: work / job
+料理: cooking
+日本語: Japanese
+上手: good at
+下手: bad at
+
+いい: good
+悪い: bad, inflect:iadj
+
+たくさん: a lot / many
+とても: a lot / very
+
+この: this
+その: that
+町: city
+
+バス: bus, plural: buses
+電車: train, plural: trains
+飛行機: airplane, plural: airplanes
+地下鉄: subway
+速い: fast, inflect:iadj
+遅い: slow, inflect:iadj
+
+食べ物: food
+日本人: Japanese, plural: Japanese people
+アメリカ: America
+
+grammar:toshite
+社長: boss, plural: bosses
+警察官: policeman, plural: policemen
+運転手: driver, plural: drivers
+医者: doctor, plural: doctors
+作家: writer, plural: writers
+
+君: you, genitive: your, obj: you
+思う: think, past: thought, inflect: uverb
+grammar:toDirectSpeech
+grammar:nai
+grammar:inai
+grammar:kunai
+grammar:anai
+grammar:wanai
+grammar:amari
+
+部屋: room
+来る: come, past: came, inflect:ruverb
+ここ: here
+から: from
+出る: go out, past: went out, inflect:ruverb
+grammar:imperativeTe
+食べる: eat, past: ate, inflect:ruverb
+作る: make/build/cook, past: made/built/cooked, inflect:uverb
+
+会社: company
+駅: train station
+grammar:imperativeTte
+
+ゴミ: trash
+冷蔵庫: fridge
+出す: take out, past: took out, inflect: uverb
+grammar:imperativeSite
+知る: know, past: knew, inflect:uverb
+grammar:gerund
+空く: empty out, past: emptied out, inflect:uverb
+grammar:imperativeIte
+それ: that
+これ: this
+壊れる: break, past: broke, inflect:ruverb
+grammar:negativeImperative
+ください: please
+新しい: new, inflect:iadj
+古い: old, inflect:iadj
+
+貸す: borrow, past: borrowed, inflect:uverb
+肉: meat
+着る: wear, past: wore, inflect:ruverb
+grammar:ruVerbsNegation
+grammar:past
+
+
+// particles
+
+
+?,unstudied: grammar: questions
+あまり,unstudied: grammar: amari
+
+いた,unstudied: grammar: past, requires: いる
+として,unstudied: grammar: toshite
+のこと,unstudied: grammar: nokoto
+
+は,unstudied: grammar: ha
+が,unstudied: grammar: ga
+
+は[has],unstudied: grammar: haGaHas
+が[has],unstudied: grammar: haGaHas
+
+と[directSpeech],unstudied: grammar: toDirectSpeech
+と[person],unstudied: grammar: toPerson
+
+の,unstudied: grammar: no
+を,unstudied: grammar: wo
+に[loc],unstudied: grammar: niLoc
+に[dir],unstudied: grammar: niDir
+に[meet],unstudied: grammar: niMeet
+に[kyoumi],unstudied: grammar: niKyoumi
+で[loc],unstudied: grammar: deLoc
+で[means],unstudied: grammar: deMeans
+
+//    word('だった').setEnglish('is').explanation('past')
+//    word('じゃない').setEnglish('is').explanation('not')
+//    word('じゃなかった').setEnglish('is').explanation('not, past')
+//    word('か').setEnglish('indicates a question')
+
+ない,unstudied: not exist (about a thing), grammar: nai
+いない,unstudied: not exist (about a person), grammar: inai
+よくない,unstudied: not good, requires: いい, grammar: kunai, grammar: iiToYo

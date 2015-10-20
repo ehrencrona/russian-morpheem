@@ -1,0 +1,1228 @@
+// See SentenceFileReader.js for an explanation of the format
+
+// 0 == ボッブ
+
+// 1 == 先生
+
+// 2 == 友達
+
+// 3 == 私
+
+// 4 == だ
+ボッブ だ : It is Bob.
+私 だ : It is me.
+
+// 5 == ellipsis
+先生 だ (requires:ellipsis) : It is (my) teacher.
+友達 だ (requires:ellipsis) : (He) is a friend.
+
+// 6 == 家
+家 だ (requires:ellipsis) : It is a house.
+
+// 7 == 犬
+犬 だ (requires:ellipsis) : It is a dog.
+
+// 8 == 車
+車 だ (requires:ellipsis) : It is a car.
+
+// 9 == 本
+本 だ (requires:ellipsis) : It is a book.
+
+// 10 == plural
+先生 だ (requires:ellipsis, requires:plural) : They are (my) teachers.
+友達 だ (requires:ellipsis, requires:plural) : (They) are friends.
+本 だ (requires:ellipsis, requires:plural) : (These) are books.
+犬 だ (requires:ellipsis, requires:plural) : (These) are dogs.
+家 だ (requires:ellipsis, requires:plural) : (These) are houses.
+車 だ (requires:ellipsis, requires:plural) : (These) are cars.
+
+// 11 == questions
+本 だ ? : Is it a book?
+犬 だ ? : Is it a dog?
+家 だ ? : Is it a house?
+車 だ ? : Is it a car?
+
+// 12 == iruVsAru
+
+// 13 == ある
+車 ある ? : Do you have a car?
+家 ある ? : Do you have a house?
+本 ある ? : Do you have a book?
+犬 ある ? : Do you have a dog?
+車 ある : (I) have a car.
+家 ある : (I) have a house.
+本 ある : (I) have a book.
+犬 ある : (I) have a dog.
+
+// 14 == いる
+ボッブ いる ? : Is Bob (there)?
+先生 いる ? (requires:ellipsis) : Is (my) teacher (there)?
+友達 いる ? (requires:ellipsis) : Do (you) have friends?
+ボッブ いる (requires:ellipsis) : Bob is (there)
+
+// 15 == お金
+お金 だ (requires:ellipsis) : It is money.
+お金 ある ? : Do you have money?
+お金 ある : (I) have money.
+
+// 16 == 彼
+彼 いる (requires:ellipsis) : he is (there)
+
+// 17 == 彼女
+彼女 いる (requires:ellipsis) : she is (there)
+
+// 18 == no
+犬 の 家 だ : It's the dog's house.
+ボッブ の 車 だ : It's Bob's car.
+ボッブ の 家 だ : It's Bob's house.
+彼 の 車 だ : It's his car.
+彼 の 家 だ : It's his house.
+彼 の 本 だ : It's his book.
+彼 の 犬 だ : It's his dog.
+彼 の お金 だ : It's his money.
+彼女 の 車 だ : It's her car.
+彼女 の 家 だ : It's her house.
+彼女 の 本 だ : It's her book.
+彼女 の 犬 だ : It's her dog.
+彼女 の お金 だ : It's her money.
+先生 の 本 だ : It's the teacher's book.
+
+// 19 == ha
+私 は 先生 だ : I am a teacher
+ボッブ は いる : Bob is here.
+友達 は 先生 だ : My friend is a teacher.
+
+// 20 == ga
+ボッブ が いる ? : Is Bob (here)?
+犬 が いる ? (requires:ellipsis, requires:plural) : Are there dogs (here)?
+車 が ある ? (requires:ellipsis) : Do (you) have a car?
+お金 が ある ? (requires:ellipsis) : Do (you) have money?
+先生 が いる : The teacher is here.
+
+// 21 == haGaHas
+ボッブ は[has] 犬 が[has] いる : Bob has a dog.
+先生 は[has] 犬 が いる (requires:ellipsis) : (My) teacher has a dog.
+友達 は[has] 犬 が いる (requires:ellipsis) : (My) friend has a dog.
+先生 は[has] 犬 が[has] いる (requires:ellipsis, requires:plural) : (My) teacher has dogs.
+友達 は[has] 犬 が[has] いる (requires:ellipsis, requires:plural) : (My) friend has dogs.
+私 は[has] 家 が[has] ある : I have a house
+私 は[has] 車 が[has] ある : I have a car
+私 は[has] 車 が[has] ある : I have a car.
+私 は[has] お金 が[has] ある : I have money.
+
+// 22 == セーター
+私 の セーター だ : It's my sweater.
+彼 の セーター だ : It's his sweater.
+友達 の セーター だ : It's a friend's sweater.
+
+// 23 == ジーンズ
+私 の ジーンズ だ : It's my jeans.
+彼 の ジーンズ だ : It's his jeans.
+友達 の ジーンズ だ : It's the jeans of a friend.
+
+// 24 == 大きい
+車 は 大きい : The car is big.
+家 は 大きい : The house is big.
+犬 は 大きい : The dog is big.
+セーター は 大きい : The sweater is big.
+友達 の 犬 は 大きい : (My) friend's dog is big.
+ボッブ の 大きい 車 だ : It's Bob's big car.
+ジーンズ は 大きい : The jeans are big.
+先生 の 家 は 大きい : The teacher's house is big.
+
+// 25 == 小さい
+車 は 小さい : The car is small.
+家 は 小さい : The house is small.
+犬 は 小さい : The dog is small.
+セーター は 小さい : The sweater is small.
+ジーンズ は 小さい : The jeans are small.
+本 は 小さい : The book is small.
+家 は 小さい : The house is small.
+車 は 小さい : The car is small.
+本 は 小さい ? : Is the book small?
+家 は 小さい ? : Is the house small?
+車 は 小さい ? : Is the car small?
+先生 の 家 は 小さい : The teacher's house is small.
+
+// 26 == 白い
+車 は 白い : The car is white.
+家 は 白い : The house is white.
+犬 は 白い : The dog is white.
+セーター は 白い : The sweater is white.
+ジーンズ は 白い : The jeans are white.
+
+// 27 == 黒い
+車 は 黒い : The car is black.
+家 は 黒い : The house is black.
+犬 は 黒い : The dog is black.
+セーター は 黒い : The sweater is black.
+友達 の 犬 は 黒い : (My) friend's dog is black.
+ジーンズ は 黒い : The jeans are black.
+黒い ジーンズ は 大きい : The black jeans are big.
+黒い ジーンズ は 小さい : The black jeans are small.
+黒い セーター は 大きい : The black sweater is big.
+黒い セーター は 小さい : The black sweater is small.
+
+// 28 == 多い
+犬 が 多い : There are a lot of dogs.
+車 が 多い : There are a lot of cars.
+友達 は[has] 本 が[has] 多い (requires:ellipsis) : (My) friend has a lot of books.
+友達 は[has] 犬 が[has] 多い (requires:ellipsis) : (My) friend has a lot of dogs.
+
+// 29 == 少ない
+車 が 少ない : There are few cars.
+友達 は[has] 本 が[has] 少ない (requires:ellipsis) : (My) friend has few books.
+私 は[has] 友達 が[has] 少ない : I have few friends.
+先生 は[has] お金 が[has] 少ない (requires:plural) : teachers don't have a lot of money.
+私 は[has] お金 が[has] 少ない : I don't have a lot of money.
+
+// 30 == 読む
+
+// 31 == wo
+ボッブ は 本 を 読む : Bob reads a book.
+私 は 本 を 読む : I read books.
+彼 は 本 を 読む : he reads a book.
+彼女 は 本 を 読む : she reads a book.
+
+// 32 == 買う
+友達 は 車 を 買う (requires:ellipsis) : (My) friend buys a car.
+友達 は 家 を 買う (requires:ellipsis) : (My) friend buys a house.
+友達 は 本 を 買う (requires:ellipsis) : (My) friend buys a book.
+友達 は 犬 を 買う (requires:ellipsis) : (My) friend buys a dog.
+ボッブ は 本 を 買う : Bob buys a book.
+ボッブ は 本 を 買う : Bob buys books.
+
+// 33 == 店
+店 は 本 が 多い : The shop has a lot of books.
+店 は 本 が 少ない : The shop has few books.
+ボッブ の 店 だ : It's Bob's shop.
+
+// 34 == 雑誌
+ボッブ は 雑誌 を 読む : Bob reads a magazine.
+ボッブ は 雑誌 を 買う : Bob buys a magazine.
+ボッブ は 雑誌 を 買う : Bob buys magazines.
+私 は 雑誌 を 読む : I read magazines.
+
+// 35 == 新聞
+ボッブ は 新聞 を 読む : Bob reads a newpaper.
+ボッブ は 新聞 を 買う : Bob buys a newpaper.
+ボッブ は 新聞 を 買う : Bob buys newspapers.
+私 は 新聞 を 読む : I read newspapers.
+
+// 36 == 服
+友達 は[has] 服 が[has] 多い (requires:ellipsis) : (My) friend has a lot of clothes.
+ボッブ は 服 を 買う : Bob buys clothes.
+店 は 服 が 多い : The shop has a lot of clothes.
+店 は 服 が 少ない : The shop has few clothes.
+
+// 37 == niLoc
+ボッブ は 車 に[loc] いる : Bob is in the car
+ボッブ は 家 に[loc] いる : Bob is in the house
+大きい 犬 は 車 に[loc] いる : There is a big dog in the car
+大きい 犬 は 家 に[loc] いる : There is a big dog in the house
+小さい 犬 は 車 に[loc] いる : There is a small dog in the car
+小さい 犬 は 家 に[loc] いる : There is a small dog in the house
+白い 犬 は 車 に[loc] いる : There is a white dog in the car
+白い 犬 は 家 に[loc] いる : There is a white dog in the house
+黒い 犬 は 車 に[loc] いる : There is a black dog in the car
+黒い 犬 は 家 に[loc] いる : There is a black dog in the house
+私 の 家 に[loc] は 犬 が 多い : There are many dogs in my house.
+友達 の 店 に[loc] は 新聞 が 多い : There are many newspapers at my friend's shop.
+友達 の 店 に[loc] は 雑誌 が 多い : There are many magazines at my friend's shop.
+友達 の 店 に[loc] は 本 が 多い : There are many books at my friend's shop.
+友達 の 店 に[loc] は 服 が 多い : There are many clothes at my friend's shop.
+友達 は 車 に[loc] いる (requires:ellipsis) : (My) friend is in the car.
+店 に[loc] は 本 が 多い : There are a lot of book at the shop.
+店 に[loc] いる : (He) is at the shop.
+
+// 38 == 行く
+私 は 行く : I'll go.
+
+// 39 == レストラン
+レストラン に[loc] いる : (He) is at the restaurant.
+
+// 40 == niDir
+彼 は ボッブ の 家 に[dir] 行く : He goes to Bob's house.
+彼 は 店 に[dir] 行く : He goes to the shop.
+彼 は レストラン に[dir] 行く : He goes to the restaurant.
+
+// 41 == 人
+人 が 多い : There are a lot of people.
+人 が 少ない : There are few people.
+私 の 家 に[loc] は 人 が 多い : There are many people in my house.
+店 に[loc] は 人 が 多い : There are a lot of people at the shop.
+レストラン に[loc] は 人 が 多い : There are a lot of people at the restaurant.
+
+// 42 == アメリカ人
+ボッブ は アメリカ人 : Bob is American.
+レストラン に[loc] は アメリカ人 が 多い : There are a lot of American people at the restaurant.
+先生 は アメリカ人 : The teacher is American
+アメリカ人 は 車 が ある (requires:plural) : Americans have cars.
+アメリカ人 の 車 が 大きい (requires:plural) : Americans' cars are big.
+
+// 43 == パーチェ
+パーチェ に[loc] は 人 が 多い : There are a lot of people at the party.
+パーチェ に[loc] は アメリカ人 が 多い : There are a lot of American people at the party.
+パーチェ に[loc] いる : (He) is at the party.
+先生 は パーチェ に[dir] 行く : (My) teacher goes to a party.
+私 は パーチェ に[dir] 行く : I go to a party.
+
+// 44 == 図書館
+図書館 に[loc] は 人 が 多い : There are a lot of people at the library.
+図書館 に[loc] いる : (He) is at the library.
+図書館 は 雑誌 が ある : The library has magazines.
+図書館 は 新聞 が ある : The library has newspapers.
+彼 は 図書館 に[dir] 行く : He goes to the library.
+
+// 45 == 学校
+学校 の 先生 は アメリカ人 だ (requires:plural) : The school's teachers are American.
+先生 は 学校 に[dir] 行く (requires:plural) : The teacher walks to school.
+先生 は 学校 に[dir] いる (requires:plural) : The teacher is at school.
+学校 に[loc] は 図書館 が ある : There is a library at school.
+
+// 46 == 公園
+公園 に[loc] は 人 が 多い : There are a lot of people at the park.
+公園 に[loc] いる : (He) is at the park.
+彼 は 公園 に[dir] 行く : He goes to the park.
+公園 に[loc] は レストラン が ある : There is a restaurant in the park.
+
+// 47 == 映画館
+映画館 に[loc] は 人 が 多い : There are a lot of people at the movie theatre.
+映画館 に[loc] いる : (He) is at the movie theatre.
+彼 は 映画館 に[dir] 行く : he goes to the movie theatre.
+彼女 は 映画館 に[dir] 行く : she goes to the movie theatre.
+彼 は 映画館 に[dir] 行く : He goes to the movie theatre.
+
+// 48 == オフィス
+オフィス に[loc] は 人 が 多い : There are a lot of people at the office.
+先生 は 彼 の オフィス に[loc] いる : The teacher is in his office.
+オフィス に[loc] いる : (He) is at the office.
+
+// 49 == デパート
+デパート に[loc] は 人 が 多い : There are a lot of people at the department store.
+デパート に[loc] いる : (He) is at the department store.
+彼 は デパート に[dir] 行く : he goes to the department store.
+彼女 は デパート に[dir] 行く : she goes to the department store.
+
+// 50 == 会う
+
+// 51 == niMeet
+友達 に[meet] 会う : Meet with friends.
+先生 に[meet] 会う : Meet the teacher.
+
+// 52 == deLoc
+ボッブ は 店 で[loc] 服 を 買う : Bob buys clothes at the shop.
+店 で[loc] 本 を 買う : Buy a book at a shop
+店 で[loc] 犬 を 買う : Buy a dog at a shop
+デパート で[loc] 本 を 買う : Buy a book at a department store
+デパート で[loc] 犬 を 買う : Buy a dog at a department store
+本 を 図書館 で[loc] 読む : Read a book at the library.
+本 を 公園 で[loc] 読む : Read a book at the park.
+本 を 家 で[loc] 読む : Read a book at home.
+友達 に[meet] 映画館 で[loc] 会う : I meet my friends at the movie theatre.
+先生 に[meet] 図書館 で[loc] 会う (requires:ellipsis) : (I) meet the teacher at the library.
+先生 に[meet] 学校 で[loc] 会う (requires:ellipsis) : (I) meet the teacher at school.
+ボッブ に[meet] パーチェ で[loc] 会う : Meet  Bob  at the  party.
+ボッブ に[meet] 図書館 で[loc] 会う : Meet  Bob  at the  library.
+ボッブ に[meet] 店 で[loc] 会う : Meet  Bob  at the  shop.
+ボッブ に[meet] デパート で[loc] 会う : Meet  Bob  at the  department store.
+ボッブ に[meet] 映画館 で[loc] 会う : Meet  Bob  at the  movie theatre.
+ボッブ に[meet] レストラン で[loc] 会う : Meet  Bob  at the  restaurant.
+ボッブ に[meet] 公園 で[loc] 会う : Meet  Bob  at the  park.
+ボッブ に[meet] オフィス で[loc] 会う : Meet  Bob  at the  office.
+
+// 53 == 東京
+ボッブ は 東京 に[loc] いる : Bob is in Tokyo.
+ボッブ は 東京 に[loc] いる ? : Is Bob in Tokyo?
+東京 に[loc] は 車 が 多い : There are a lot of cars in Tokyo
+東京 に[loc] は 人 が 多い : There are a lot of people in Tokyo
+東京 に[loc] は 犬 が 多い : There are a lot of dogs in Tokyo
+東京 に[loc] は 車 が 少ない : There are few cars in Tokyo
+東京 に[loc] は 人 が 少ない : There are few people in Tokyo
+東京 に[loc] は 犬 が 少ない : There are few dogs in Tokyo
+彼 は 東京 に[dir] 行く : he goes to Tokyo.
+彼女 は 東京 に[dir] 行く : she goes to Tokyo.
+
+// 54 == 大阪
+大阪 で[loc] は 公園 が 少ない : There are few parks in Osaka.
+ボッブ は 大阪 に[loc] いる : Bob is in Osaka.
+ボッブ は 大阪 に[loc] いる ? : Is Bob in Osaka?
+大阪 に[loc] は 車 が 多い : There are a lot of cars in Osaka
+大阪 に[loc] は 人 が 多い : There are a lot of people in Osaka
+大阪 に[loc] は 犬 が 多い : There are a lot of dogs in Osaka
+大阪 に[loc] は 車 が 少ない : There are few cars in Osaka
+大阪 に[loc] は 人 が 少ない : There are few people in Osaka
+大阪 に[loc] は 犬 が 少ない : There are few dogs in Osaka
+彼 は 大阪 に[dir] 行く : he goes to Osaka.
+彼女 は 大阪 に[dir] 行く : she goes to Osaka.
+
+// 55 == 働く
+彼 は レストラン で[loc] 働く : He works at a restaurant
+彼 は 図書館 で[loc] 働く : He works at a library
+彼 は 店 で[loc] 働く : He works at a shop
+彼 は オフィス で[loc] 働く : He works at a office
+彼 は オフィス で[loc] 働く : He works in an office.
+先生 は 学校 で[loc] 働く : Teachers work at school.
+アメリカ人 は レストラン で[loc] 働く : There are Americans working at the restaurant
+アメリカ人 は 映画館 で[loc] 働く : There are Americans working at the movie theatre
+アメリカ人 は 図書館 で[loc] 働く : There are Americans working at the library
+アメリカ人 は 学校 で[loc] 働く : There are Americans working at the school
+
+// 56 == 日本
+日本 で[loc] は 公園 が 少ない : There are few parks in Japan.
+ボッブ は 日本 に[loc] いる : Bob is in Japan.
+ボッブ は 日本 に[loc] いる ? : Is Bob in Japan?
+日本 に[loc] は 車 が 多い : There are a lot of cars in Japan
+日本 に[loc] は 人 が 多い : There are a lot of people in Japan
+日本 に[loc] は 犬 が 多い : There are a lot of dogs in Japan
+日本 に[loc] は 車 が 少ない : There are few cars in Japan
+日本 に[loc] は 人 が 少ない : There are few people in Japan
+日本 に[loc] は 犬 が 少ない : There are few dogs in Japan
+彼 は 日本 に[dir] 行く : he goes to Japan.
+彼女 は 日本 に[dir] 行く : she goes to Japan.
+
+// 57 == 好き
+日本 の 車 が 好き : (I) like Japanese cars.
+日本 の 人 が 好き : (I) like the people of Japan.
+先生 は 犬 が 好き : (My) teacher likes dogs.
+彼 は 犬 が 好き : he likes dogs.
+彼女 は 犬 が 好き : she likes dogs.
+本 が 好き ? : Do (you) like (the) book
+私 の 友達 が 好き ? : Do (you) like my friends?
+
+// 58 == よく
+ボッブ は 本 を よく 読む : Bob often reads books.
+ボッブ は 本 を よく 買う : Bob often buys books.
+ボッブ は 雑誌 を よく 読む : Bob often reads magazines.
+ボッブ は 雑誌 を よく 買う : Bob often buys magazines.
+ボッブ は 新聞 を よく 読む : Bob often reads newspapers.
+ボッブ は 新聞 を よく 買う : Bob often buys newspapers.
+ボッブ は 服 を よく 読む : Bob often reads clothes.
+ボッブ は 服 を よく 買う : Bob often buys clothes.
+彼 は よく 東京 に[dir] 行く : he often goes to Tokyo.
+彼 は よく 大阪 に[dir] 行く : he often goes to Osaka.
+彼 は よく 日本 に[dir] 行く : he often goes to Japan.
+彼女 は よく 東京 に[dir] 行く : she often goes to Tokyo.
+彼女 は よく 大阪 に[dir] 行く : she often goes to Osaka.
+彼女 は よく 日本 に[dir] 行く : she often goes to Japan.
+
+// 59 == 見る
+映画館 で[loc] 見る : I will watch (it) at the movie theatre.
+ボッブ は 先生 を 見る : Bob sees the teacher.
+家 を 見る : (I) see the house.
+公園 で[loc] ボッブ を 見る : (I) see Bob at the park.
+
+// 60 == テレビ
+私 は[has] テレビ が[has] ある : I have a TV
+テレビ が ある ? (requires:ellipsis) : Do (you) have a TV?
+私 は[has] テレビ が[has] ある : I have a TV.
+店 に[loc] は テレビ が 多い : There are a lot of TV at the shop.
+店 で[loc] テレビ を 買う : Buy a TV at a shop
+デパート で[loc] テレビ を 買う : Buy a TV at a department store
+ボッブ は テレビ を よく 見る : Bob often watches TV.
+テレビ を 見る : I watch TV.
+
+// 61 == インターネット
+
+// 62 == deMeans
+インターネット で[means] 読む : Read (it) on the internet.
+雑誌 を インターネット で[means] 読む : Read magazines on the Internet.
+新聞 を インターネット で[means] 読む : Read newspapers on the Internet.
+車 を インターネット で[means] 買う : Buy a car on the internet.
+家 を インターネット で[means] 買う : Buy a house on the internet.
+よく 車 で[means] 行く : (I) often go by car.
+ボッブ の 車 で[means] 行く : go in Bob's car.
+テレビ で[means] 見る : See it on TV.
+
+// 63 == ラジオ
+私 は[has] ラジオ が[has] ある : I have a radio
+
+// 64 == 聴く
+ボッブ は ラジオ を よく 聴く : Bob often listens to the radio.
+友達 は 日本 の ラジオ を 聴く : My friend listens to Japanese radio.
+
+// 65 == 音楽
+ボッブ は 音楽 を よく 聴く : Bob often listens to music.
+音楽 が 好き ? : Do (you) like (the) music
+彼 は 音楽 を ラジオ で[means] 聴く : he listens to music on the radio.
+彼女 は 音楽 を ラジオ で[means] 聴く : she listens to music on the radio.
+人 は パーチェ で[loc] 音楽 を 聴く : People listen to music at the party.
+
+// 66 == 電話
+電話 だ (requires:ellipsis) : It is a phone.
+電話 だ (requires:ellipsis, requires:plural) : (These) are phones.
+電話 だ ? : Is it a phone?
+電話 が ある ? (requires:ellipsis) : Do (you) have a phone?
+私 は[has] 電話 が[has] ある : I have a phone.
+
+// 67 == 使う
+インターネット を 使う : Use the internet.
+彼 の 電話 を 使う : Use his phone.
+彼 の 車 を 使う : Use his car.
+彼女 の 電話 を 使う : Use her phone.
+彼女 の 車 を 使う : Use her car.
+
+// 68 == 話す
+電話 で[means] 話す : Talk on the phone.
+パーチェ で[loc] 話す : Talk at the party.
+図書館 で[loc] 話す : Talk at the library.
+店 で[loc] 話す : Talk at the shop.
+デパート で[loc] 話す : Talk at the department store.
+映画館 で[loc] 話す : Talk at the movie theatre.
+レストラン で[loc] 話す : Talk at the restaurant.
+公園 で[loc] 話す : Talk at the park.
+オフィス で[loc] 話す : Talk at the office.
+
+// 69 == nokoto
+彼 は 彼女 のこと を 話す : He talks about her.
+彼 は 車 のこと を 話す : He talks about car.
+彼 は 日本 のこと を 話す : He talks about Japan.
+彼女 は 車 のこと を 読む : She reads about car.
+彼女 は 日本 のこと を 読む : She reads about Japan.
+
+// 70 == toPerson
+私 は ボッブ と[person] 話す : I talk to Bob.
+私 は ボッブ と[person] 車 で[loc] 話す : I talk to Bob on the car.
+
+// 71 == 値段
+彼女 は 車 の 値段 を 見る : She looks at the price of the car.
+彼女 は 服 の 値段 を 見る : She looks at the price of the clothes.
+彼女 と[person] 車 の 値段 のこと を 話す : Talk to her about the price of the car.
+彼女 と[person] 服 の 値段 のこと を 話す : Talk to her about the price of the clothes.
+
+// 72 == 子供
+子供 は 学校 で[loc] 友達 が 多い : They children have a lot of friends at school.
+子供 は 車 に[loc] いる : The children are in the car.
+学校 に[loc] は 子供 が 多い : There are a lot of children at school.
+子供 が いる : The child is here.
+子供 は 学校 に[loc] いる : The children are at school.
+子供 は 学校 に[dir] 行く (requires:plural) : The children walk to school.
+子供 は 学校 に[dir] いる (requires:plural) : The children are at school.
+テレビ で[means] ボッブ の 子供 を 見る : See Bob's child on TV.
+ボッブ は 子供 のこと を 話す : Bob talks about children.
+
+// 73 == 何
+何 だ ? : What is that?
+何 を 読む ? : What do you read?
+何 を テレビ で[means] 見る ? : What do (you) watch on TV?
+何 を 見る ? : What do you see?
+
+// 74 == 名前
+彼 の 名前 は 何 ? : What's his name?
+彼女 の 名前 は 何 ? : What's her name?
+犬 の 名前 は 何 ? : What's the dog's name?
+彼女 と[person] 子供 の 名前 のこと を 話す : Talk to her about the name of the child.
+
+// 75 == 言う
+電話 で[means] 言う : Say it by phone.
+彼 は 名前 を 言う : he says ( his ) name
+彼女 は 名前 を 言う : she says ( her ) name
+電話 で[means] 値段 を 言う : Say the price by phone.
+電話 で[means] 言う : I will tell you by phone.
+
+// 76 == 書く
+彼 は 本 を 書く : He writes a book
+
+// 77 == 携帯
+携帯 ある ? : Do you have a smartphone?
+携帯 ある : (I) have a smartphone.
+彼 の 携帯 だ : It's his smartphone.
+彼女 の 携帯 だ : It's her smartphone.
+友達 は[has] 携帯 が[has] 多い (requires:ellipsis) : (My) friend has a lot of smartphones.
+友達 は 携帯 を 買う (requires:ellipsis) : (My) friend buys a smartphone.
+店 に[loc] は 携帯 が 多い : There are a lot of smartphone at the shop.
+雑誌 を 携帯 で[means] 読む : Read magazines on the smartphone.
+新聞 を 携帯 で[means] 読む : Read newspapers on the smartphone.
+携帯 を インターネット で[means] 買う : Buy a smartphone on the internet.
+彼 は よく 携帯 を 使う : He often uses a smartphone.
+彼女 は 携帯 の 値段 を 見る : She looks at the price of the smartphone.
+彼女 と[person] 携帯 の 値段 のこと を 話す : Talk to her about the price of the smartphone.
+
+// 78 == メール
+私 は メール を 読む : I read e-mails.
+彼 は メール を 書く : He writes a e-mail
+彼 は 携帯 で[means] メール を 書く : He writes an e-mail on (his) smartphone
+
+// 79 == コンピューター
+店 で[loc] コンピューター を 買う : Buy a computer at a shop
+デパート で[loc] コンピューター を 買う : Buy a computer at a department store
+彼 は よく コンピューター を 使う : He often uses a computer.
+彼 は コンピューター のこと を 話す : He talks about computers.
+彼女 は コンピューター で[means] 本 を 書く : She writes a book using a computer
+彼 は コンピューター で[means] メール を 書く : He writes an e-mail on (his) computer
+
+// 80 == 手紙
+私 は 手紙 を 読む : I read letters.
+彼 は 手紙 を 書く : He writes a letter
+彼女 は コンピューター で[means] 手紙 を 書く : She writes a letter using a computer
+
+// 81 == ペン
+ペン ある ? : Do you have a pen?
+ペン ある : (I) have a pen.
+彼 の ペン だ : It's his pen.
+彼女 の ペン だ : It's her pen.
+先生 の ペン だ : It's the teacher's pen.
+友達 は[has] ペン が[has] 多い (requires:ellipsis) : (My) friend has a lot of pens.
+友達 は[has] ペン が[has] 少ない (requires:ellipsis) : (My) friend has few pens.
+友達 は ペン を 買う (requires:ellipsis) : (My) friend buys a pen.
+店 で[loc] ペン を 買う : Buy a pen at a shop
+デパート で[loc] ペン を 買う : Buy a pen at a department store
+彼女 は ペン で[means] 手紙 を 書く : She writes a letter using a pen
+彼女 は ペン で[means] 本 を 書く : She writes a book using a pen
+
+// 82 == もらう
+ボッブ は お金 を もらう : Bob receives money.
+彼 は 手紙 を もらう : He receives a letter
+彼 は 本 を もらう : He receives a book
+彼 は ペン を もらう : He gets a pen.
+彼女 は メール を もらう : She receives an e-mail.
+
+// 83 == 趣味
+趣味 は 何 ? : What is (your) hobby?
+趣味 が ある ? : Do you have any hobbies?
+
+// 84 == 水泳
+先生 は 水泳 が 好き : (My) teacher likes swimming
+彼 は 水泳 が 好き : he likes swimming
+彼女 は 水泳 が 好き : she likes swimming
+ボッブ の 趣味 は 水泳 だ : Bob's hobby is swimming.
+
+// 85 == 英語
+学校 に[loc] は 英語 で[means] 話す : They speak English at school.
+ボッブ の 趣味 は 英語 だ : Bob's hobby is English.
+ボッブ は 英語 で[means] ラジオ を 聴く : Bob listens to radio in English
+ボッブ は 英語 で[means] 本 を 読む : Bob reads (a) book in English
+ボッブ は 英語 で[means] ラジオ を 聴く : Bob listens to radio in English
+
+// 86 == 興味
+私 は 興味 が ある : I am interested.
+
+// 87 == niKyoumi
+彼女 は[has] 水泳 に[kyoumi] 興味 が[has] ある : She is interested in swimming
+彼女 は[has] 英語 に[kyoumi] 興味 が[has] ある : She is interested in English
+音楽 に[kyoumi] 興味 が ある ? : Are you interested in music?
+本 に[kyoumi] 興味 が ある ? : Are you interested in books?
+
+// 88 == 映画
+映画 に[kyoumi] 興味 が ある ? : Are you interested in movies?
+映画 が 好き ? : Do (you) like (the) movie
+何 の 映画 に[dir] 行く ? : What kind of movie (should we) go to?
+映画 を コンピューター で[loc] 見る : (I will) watch a movie at the computer.
+映画 を 映画館 で[loc] 見る : (I will) watch a movie at the movie theatre.
+
+// 89 == 仕事
+車 で[means] 仕事 に[dir] 行く : (I) go to work by car.
+仕事 に[kyoumi] 興味 が ある ? : Are you interested in the job?
+何 の 仕事 に[kyoumi] 興味 が ある ? : What kind of job are you interested in?
+ボッブ は 仕事 が ある ? : Does Bob have a job?
+彼 は 仕事 が ある ? : Does he have a job?
+彼女 は 仕事 が ある ? : Does she have a job?
+何 の 仕事 が ある : What kind of jobs are there?
+
+// 90 == 料理
+何 の 料理 が 好き ? : What kind of food do you like?
+先生 は 料理 が 好き : (My) teacher likes cooking
+彼 は 料理 が 好き : he likes cooking
+彼女 は 料理 が 好き : she likes cooking
+ボッブ の 趣味 は 料理 だ : Bob's hobby is cooking.
+彼女 は[has] 料理 に[kyoumi] 興味 が[has] ある : She is interested in cooking
+日本 料理 が 好き : I like Japanese cuisine.
+
+// 91 == 日本語
+ボッブ は 日本語 で[means] ラジオ を 聴く : Bob listens to radio in Japanese
+ボッブ は 日本語 で[means] 本 を 読む : Bob reads (a) book in Japanese
+ボッブ は 日本語 で[means] ラジオ を 聴く : Bob listens to radio in Japanese
+日本語 で[means] テレビ を 見る : (I will) watch TV in Japanese.
+日本語 で[means] 映画 を 見る : (I will) watch a movie in Japanese.
+
+// 92 == 上手
+友達 は 英語 が 上手 だ : (My) friend is good at English.
+友達 は 料理 が 上手 だ : (My) friend is good at cooking.
+友達 は 水泳 が 上手 だ : (My) friend is good at swimming.
+
+// 93 == 下手
+友達 は 英語 が 下手 だ : (My) friend is bad at English.
+友達 は 料理 が 下手 だ : (My) friend is bad at cooking.
+友達 は 水泳 が 下手 だ : (My) friend is bad at swimming.
+
+// 94 == いい
+いい 映画 だ : It's a good movie
+いい 本 だ : It's a good book
+いい 音楽 だ : It's good music
+テレビ で[means] いい 映画 を 見る : Watch a good movie on TV.
+ラジオ で[means] いい 音楽 を 聴く : Listen to good music on the radio.
+インターネット で[means] いい 音楽 を 聴く : Listen to good music on the Internet.
+いい 仕事 が ある : (I) have a good job.
+いい 子供 だ : It is a good child.
+
+// 95 == 悪い
+悪い 音楽 だ : It's bad music
+テレビ で[means] 悪い 映画 を 見る : Watch a bad movie on TV.
+ラジオ で[means] 悪い 音楽 を 聴く : Listen to bad music on the radio.
+インターネット で[means] 悪い 音楽 を 聴く : Listen to bad music on the Internet.
+
+// 96 == たくさん
+店 に[loc] は 携帯 が たくさん ある : There are many smartphone at the shop.
+店 に[loc] は 本 が たくさん ある : There are many book at the shop.
+店 に[loc] は テレビ が たくさん ある : There are many TV at the shop.
+先生 の 家 に[loc] は 本 が たくさん ある : There are a lot of books at the teacher's house.
+先生 の 家 に[loc] は 犬 が たくさん いる : There are a lot of dogs at the teacher's house.
+ボッブ は 趣味 が たくさん ある : Bob has a lot of hobbies.
+彼 は 趣味 が たくさん ある : he has a lot of hobbies.
+彼女 は 趣味 が たくさん ある : she has a lot of hobbies.
+悪い 映画 が たくさん ある : There are many bad movies.
+悪い 本 が たくさん ある : There are many bad books.
+
+// 97 == とても
+彼女 は 英語 が とても 上手 だ : She is very good at English.
+彼女 は 英語 が とても 下手 だ : She is very bad at English.
+彼女 は 料理 が とても 上手 だ : She is very good at cooking.
+彼女 は 料理 が とても 下手 だ : She is very bad at cooking.
+彼女 は 水泳 が とても 上手 だ : She is very good at swimming.
+彼女 は 水泳 が とても 下手 だ : She is very bad at swimming.
+
+// 98 == この
+この ペン は 先生 の だ : This is the teacher's pen.
+この 本 は 小さい : this book is small.
+この 家 は 小さい : this house is small.
+この 車 は 小さい : this car is small.
+この 公園 に[loc] は 人 が 多い : There are a lot of people in this park.
+この 映画 は とても 興味 が ある : This movie is very interesting.
+この 本 は 興味 が ある : This book is interesting.
+私 は この 仕事 が 上手 だ : I'm good at at this job.
+私 は この 仕事 が 下手 だ : I'm bad at at this job.
+この 本 が いい : I'll take this book.
+この 携帯 が いい : I'll take this smartphone.
+
+// 99 == その
+その 本 は 小さい : that book is small.
+その 家 は 小さい : that house is small.
+その 車 は 小さい : that car is small.
+彼 は その 家 を 買う : He buys that house.
+その 人 は アメリカ人 だ (requires:plural) : Those people are Americans.
+
+// 100 == 町
+この 町 に[loc] は 映画館 が 少ない : There are few movie theatres in this city.
+この 町 に[loc] は 車 が 少ない : There are few cars in this city.
+この 町 に[loc] は レストラン が 少ない : There are few restaurants in this city.
+この 町 に[loc] は 公園 が 少ない : There are few parks in this city.
+この 町 に[loc] は 映画館 が 多い : There are a lot of movie theatres in this city.
+この 町 に[loc] は 車 が 多い : There are a lot of cars in this city.
+この 町 に[loc] は レストラン が 多い : There are a lot of restaurants in this city.
+この 町 に[loc] は 公園 が 多い : There are a lot of parks in this city.
+この 町 は 大きい : This is a big city.
+この 町 は 小さい : This is a small city.
+彼 は 町 に[dir] 行く : he goes to the city.
+彼女 は 町 に[dir] 行く : she goes to the city.
+
+// 101 == バス
+バス だ (requires:ellipsis) : It is a bus.
+バス だ ? : Is it a bus?
+よく バス で[means] 行く : (I) often go by bus.
+バス で[means] 仕事 に[dir] 行く : (I) go to work by bus.
+私 は ボッブ と[person] バス で[loc] 話す : I talk to Bob on the bus.
+この バス で[means] 行く : (We) go by this bus.
+
+// 102 == 電車
+電車 だ (requires:ellipsis) : It is a train.
+電車 だ ? : Is it a train?
+よく 電車 で[means] 行く : (I) often go by train.
+電車 で[means] 仕事 に[dir] 行く : (I) go to work by train.
+私 は ボッブ と[person] 電車 で[loc] 話す : I talk to Bob on the train.
+
+// 103 == 飛行機
+飛行機 だ (requires:ellipsis) : It is a airplane.
+飛行機 だ ? : Is it a airplane?
+よく 飛行機 で[means] 行く : (I) often go by airplane.
+私 は ボッブ と[person] 飛行機 で[loc] 話す : I talk to Bob on the airplane.
+
+// 104 == 地下鉄
+地下鉄 だ (requires:ellipsis) : It is a subway.
+地下鉄 だ ? : Is it a subway?
+よく 地下鉄 で[means] 行く : (I) often go by subway.
+地下鉄 で[means] 仕事 に[dir] 行く : (I) go to work by subway.
+私 は ボッブ と[person] 地下鉄 で[loc] 話す : I talk to Bob on the subway.
+
+// 105 == 速い
+バス は 速い : The bus is fast.
+飛行機 は 速い : The airplane is fast.
+電車 は 速い : The train is fast.
+車 は 速い : The car is fast.
+コンピューター は 速い : The computer is fast.
+速い 車 が 好き : (I) like fast cars.
+日本 の 車 は 速い : Japanese cars are fast.
+家 で[loc] は インターネット が 速い : (I) have fast internet at home.
+
+// 106 == 遅い
+バス は 遅い : The bus is slow.
+電車 は 遅い : The train is slow.
+車 は 遅い : The car is slow.
+地下鉄 は 遅い : The subway is slow.
+コンピューター は 遅い : The computer is slow.
+ボッブ は 遅い だ : Bob is late.
+家 で[loc] は インターネット が 遅い : (I) have slow internet at home.
+
+// 107 == 食べ物
+この レストラン は[has] 食べ物 が[has] いい : This restaurant has good food.
+この レストラン は[has] 食べ物 が[has] 悪い : This restaurant has bad food.
+日本 の 食べ物 が 好き : I like Japanese food.
+雑誌 で[loc] 食べ物 のこと を 読む : (I) read about food in a magazine.
+彼 は 食べ物 のこと を 話す : He talks about food.
+彼女 は 食べ物 のこと を 読む : She reads about food.
+この レストラン の 食べ物 は 悪い : The food at this restaurant is bad
+この レストラン の 食べ物 は いい : The food at this restaurant is good
+私 は デパート で[loc] 食べ物 を 買う : I buy food at the department store
+私 は 店 で[loc] 食べ物 を 買う : I buy food at the shop
+
+// 108 == 日本人
+ボッブ は 日本人 : Bob is Japanese.
+パーチェ に[loc] は 日本人 が 多い : There are a lot of Japanese people at the party.
+レストラン に[loc] は 日本人 が 多い : There are a lot of Japanese people at the restaurant.
+先生 は 日本人 : The teacher is Japanese
+日本人 は レストラン で[loc] 働く : There are Japanese people working at the restaurant
+日本人 は 映画館 で[loc] 働く : There are Japanese people working at the movie theatre
+日本人 は 図書館 で[loc] 働く : There are Japanese people working at the library
+日本人 は 学校 で[loc] 働く : There are Japanese people working at the school
+
+// 109 == アメリカ
+ボッブ は アメリカ に[loc] いる : Bob is in America.
+ボッブ は アメリカ に[loc] いる ? : Is Bob in America?
+アメリカ に[loc] は 車 が 多い : There are a lot of cars in America
+アメリカ に[loc] は 人 が 多い : There are a lot of people in America
+アメリカ に[loc] は 犬 が 多い : There are a lot of dogs in America
+アメリカ に[loc] は 車 が 少ない : There are few cars in America
+アメリカ に[loc] は 人 が 少ない : There are few people in America
+アメリカ に[loc] は 犬 が 少ない : There are few dogs in America
+彼 は よく アメリカ に[dir] 行く : he often goes to America.
+彼女 は よく アメリカ に[dir] 行く : she often goes to America.
+彼 は アメリカ に[dir] 行く : he goes to America.
+彼女 は アメリカ に[dir] 行く : she goes to America.
+
+// 110 == toshite
+彼 は 先生 として 働く : He works as a teacher
+彼 は 町 で[loc] 先生 として 働く : He works as a teacher in the city
+先生 として 言う : I tell you (this) as a teacher.
+
+// 111 == 社長
+社長 は[has] 飛行機 が[has] ある : The CEO has a plane!
+社長 は 日本人 : (My) boss is Japanese.
+社長 は アメリカ人 : (My) boss is American.
+社長 は 彼 の オフィス に[loc] いる : The boss is in his office.
+社長 の 車 で[means] 行く : go in the boss's car.
+仕事 に[loc] いい 社長 が いる : There's a good boss at my job.
+社長 と[person] 仕事 のこと を 話す : Talk about work with my boss.
+
+// 112 == 警察官
+警察官 は バス に[loc] いる : The policeman is in the bus.
+警察官 は 車 に[loc] いる : The policeman is in the car.
+私 は 警察官 だ : I am a policeman
+彼 は 警察官 として 働く : He works as a policeman
+彼 は 町 で[loc] 警察官 として 働く : He works as a policeman in the city
+友達 は 警察官 だ : My friend is a policeman.
+警察官 の 家 は 小さい : The policeman's house is small.
+警察官 の 家 は 大きい : The policeman's house is big.
+警察官 が いる : The policeman is here.
+警察官 に[meet] 会う : Meet the policeman.
+警察官 は 日本人 : The policeman is Japanese
+警察官 は アメリカ人 : The policeman is American
+ボッブ は 警察官 を 見る : Bob sees the policeman.
+
+// 113 == 運転手
+運転手 の バス だ : It's the driver's bus.
+運転手 の 車 だ : It's the driver's car.
+運転手 は バス に[loc] いる : The driver is in the bus.
+運転手 は 車 に[loc] いる : The driver is in the car.
+私 は 運転手 だ : I am a driver
+彼 は 運転手 として 働く : He works as a driver
+彼 は 町 で[loc] 運転手 として 働く : He works as a driver in the city
+運転手 は[has] お金 が[has] 少ない (requires:plural) : drivers don't have a lot of money.
+友達 は 運転手 だ : My friend is a driver.
+運転手 の 家 は 小さい : The driver's house is small.
+運転手 の 家 は 大きい : The driver's house is big.
+運転手 が いる : The driver is here.
+運転手 に[meet] 会う : Meet the driver.
+運転手 は 日本人 : The driver is Japanese
+運転手 は アメリカ人 : The driver is American
+ボッブ は 運転手 を 見る : Bob sees the driver.
+
+// 114 == 医者
+私 は 医者 だ : I am a doctor
+彼 は 医者 として 働く : He works as a doctor
+彼 は 町 で[loc] 医者 として 働く : He works as a doctor in the city
+医者 は[has] お金 が[has] たくさん ある (requires:plural) : doctors have a lot of money.
+友達 は 医者 だ : My friend is a doctor.
+医者 の 家 は 小さい : The doctor's house is small.
+医者 の 家 は 大きい : The doctor's house is big.
+医者 が いる : The doctor is here.
+医者 に[meet] 会う : Meet the doctor.
+医者 は 日本人 : The doctor is Japanese
+医者 は アメリカ人 : The doctor is American
+ボッブ は 医者 を 見る : Bob sees the doctor.
+医者 として 言う : I tell you (this) as a doctor.
+
+// 115 == 作家
+作家 の ペン だ : It's the writer's pen.
+作家 の 本 だ : It's the writer's book.
+私 は 作家 だ : I am a writer
+彼 は 作家 として 働く : He works as a writer
+彼 は 町 で[loc] 作家 として 働く : He works as a writer in the city
+友達 は 作家 だ : My friend is a writer.
+作家 の 家 に[loc] は 本 が たくさん ある : There are a lot of books at the writer's house.
+作家 の 家 に[loc] は 犬 が たくさん いる : There are a lot of dogs at the writer's house.
+作家 の 家 は 小さい : The writer's house is small.
+作家 の 家 は 大きい : The writer's house is big.
+作家 が いる : The writer is here.
+作家 に[meet] 会う : Meet the writer.
+作家 は 日本人 : The writer is Japanese
+作家 は アメリカ人 : The writer is American
+ボッブ は 作家 を 見る : Bob sees the writer.
+作家 は 本 を たくさん 書く : The author writes a lot of books.
+
+// 116 == 君
+君 は よく 図書館 に[dir] 行く ? : Do you often go to the library?
+君 何 を テレビ で[means] 見る ? : What do you watch on TV?
+君 は[has] 料理 に[kyoumi] 興味 が[has] ある ? : Are you interested in cooking?
+君 は[has] 水泳 に[kyoumi] 興味 が[has] ある ? : Are you interested in swimming?
+君 は[has] 英語 に[kyoumi] 興味 が[has] ある ? : Are you interested in English?
+君 は 私 の 友達 が 好き ? : Do (you) like my friends?
+
+// 117 == 思う
+ボッブ は 子供 のこと を 思う : Bob thinks about children.
+彼 は 彼女 のこと を 思う : He thinks of her.
+私 のこと を 思う ? : Do (you) think of me?
+君 は 私 のこと を 思う ? : Do you think of me?
+
+// 118 == toDirectSpeech
+何 と[directSpeech] 言う : What to say?
+何 と[directSpeech] 思う : What do (you) think?
+いい と[directSpeech] 思う : I think (it's) good
+悪い と[directSpeech] 思う : I think (it's) bad
+この レストラン の 料理 が いい と[directSpeech] 思う : I think this restaurant's food is good
+この レストラン の 料理 が 悪い と[directSpeech] 思う : I think this restaurant's food is bad
+その レストラン の 料理 が いい と[directSpeech] 思う : I think that restaurant's food is good
+その レストラン の 料理 が 悪い と[directSpeech] 思う : I think that restaurant's food is bad
+その 車 が 速い と[directSpeech] 思う : I think that car is fast.
+その 車 が 遅い と[directSpeech] 思う : I think that car is slow.
+私 は 日本語 が 上手 だ と[directSpeech] 思う : I think (I'm) good at at Japanese
+私 は 日本語 が 下手 だ と[directSpeech] 思う : I think (I'm) bad at at Japanese
+私 は 英語 が 上手 だ と[directSpeech] 思う : I think (I'm) good at at English
+私 は 英語 が 下手 だ と[directSpeech] 思う : I think (I'm) bad at at English
+私 は 音楽 が 上手 だ と[directSpeech] 思う : I think (I'm) good at at music
+私 は 音楽 が 下手 だ と[directSpeech] 思う : I think (I'm) bad at at music
+私 は 料理 が 上手 だ と[directSpeech] 思う : I think (I'm) good at at cooking
+私 は 料理 が 下手 だ と[directSpeech] 思う : I think (I'm) bad at at cooking
+私 は 水泳 が 上手 だ と[directSpeech] 思う : I think (I'm) good at at swimming
+私 は 水泳 が 下手 だ と[directSpeech] 思う : I think (I'm) bad at at swimming
+好き と[directSpeech] 言う : To say: "(I) like (you)."
+好き と[directSpeech] 思う : (I) think (I) like (it).
+彼女 は この 作家 が いい だ と[directSpeech] 思う : She thinks this is a good author.
+
+// 119 == nai
+人 は お金 が ない (requires:plural) : People don't have money.
+お金 ない ? : Do you not have any money?
+私 は[has] 家 が[has] ない : I don't have a house.
+私 は[has] 飛行機 が[has] ない : I don't have a plane!
+私 は[has] お金 が[has] ない : I have no money.
+運転手 は[has] オフィス が ない (requires:plural) : drivers don't have offices.
+医者 は[has] オフィス が ない (requires:plural) : doctors don't have offices.
+私 は[has] 料理 に[kyoumi] 興味 が[has] ない : I have no interest in cooking
+私 は[has] 水泳 に[kyoumi] 興味 が[has] ない : I have no interest in swimming
+私 は[has] 英語 に[kyoumi] 興味 が[has] ない : I have no interest in English
+私 は 趣味 が ない : I have no hobbies.
+お金 に[kyoumi] 興味 が ない ? : Are you not interested in money?
+ボッブ は 彼女 に[kyoumi] 興味 が ない と[directSpeech] 言う : Bob says he's not interested in her.
+私 は この 作家 の 本 に[kyoumi] 興味 が ない : I'm not interested in this author's books.
+彼 は 仕事 が ない : He doesn't have a job.
+
+// 120 == inai
+ボッブ いない ? : Isn't Bob (there)?
+友達 いない ? (requires:ellipsis) : Don't (you) have any friends?
+彼 いない (requires:ellipsis) : he is not (there)
+彼女 いない (requires:ellipsis) : she is not (there)
+ボッブ いない (requires:ellipsis) : Bob is not (there)
+ボッブ は[has] 犬 が[has] いない : Bob does not have a dog.
+子供 は 車 に[loc] いない : The child is not in the car.
+先生 が いない : The teacher is not here.
+警察官 が いない : The policeman is not here.
+運転手 が いない : The driver is not here.
+医者 が いない : The doctor is not here.
+作家 が いない : The writer is not here.
+パーチェ に[loc] いない : (He) is not at the party.
+図書館 に[loc] いない : (He) is not at the library.
+店 に[loc] いない : (He) is not at the shop.
+デパート に[loc] いない : (He) is not at the department store.
+映画館 に[loc] いない : (He) is not at the movie theatre.
+レストラン に[loc] いない : (He) is not at the restaurant.
+公園 に[loc] いない : (He) is not at the park.
+オフィス に[loc] いない : (He) is not at the office.
+仕事 に[loc] いい 社長 が いない : There are no good bosses at my job.
+私 は 子供 が いない : I don't have any children.
+彼 は 子供 が いない : he doesn't have any children.
+彼女 は 子供 が いない : she doesn't have any children.
+
+// 121 == kunai
+この 本 が 小さくない : This book is not small.
+この 本 が 大きくない : This book is not big.
+この 家 が 小さくない : This house is not small.
+この 家 が 大きくない : This house is not big.
+この 車 が 小さくない : This car is not small.
+この 車 が 大きくない : This car is not big.
+バス は 速くない : The bus is not fast.
+電車 は 速くない : The train is not fast.
+飛行機 は 速くない : The airplane is not fast.
+車 は 速くない : The car is not fast.
+地下鉄 は 速くない : The subway is not fast.
+本 は 小さくない : The book is not small.
+家 は 小さくない : The house is not small.
+車 は 小さくない : The car is not small.
+この 本 は 悪くない と[directSpeech] 言う : (I) think it's not a bad book, (he) says.
+彼女 の 英語 は 悪くない と[directSpeech] 思う : (I) think her English is not bad.
+彼女 の 日本語 は 悪くない と[directSpeech] 思う : (I) think her Japanese is not bad.
+この レストラン の 食べ物 は 悪くない : The food at this restaurant is not bad
+
+// 122 == anai
+彼 は 働かない : He doesn't work.
+本 を 読まない : (He) doesn't read books.
+ボッブ は 音楽 を 聴かない : Bob does not listen to music.
+ボッブ は ラジオ を 聴かない : Bob does not listen to radio.
+この バス で[means] 行かない : (We) don't go by this bus.
+
+// 123 == wanai
+携帯 を 使わない : He does not use a smartphone.
+コンピューター を 使わない : He does not use a computer.
+
+// 124 == amari
+服 を あまり 買わない (requires:ellipsis) : (I) seldom buy clothes.
+本 を あまり 買わない (requires:ellipsis) : (I) seldom buy books.
+彼 は あまり オフィス に[loc] いない : He is almost never at the office.
+君 は あまり オフィス に[loc] いない : You are almost never at the office.
+この 町 に[loc] は 映画館 が あまり ない : There are are almost no movie theatres in this city.
+この 町 に[loc] は 車 が あまり ない : There are are almost no cars in this city.
+この 町 に[loc] は レストラン が あまり ない : There are are almost no restaurants in this city.
+この 町 に[loc] は 公園 が あまり ない : There are are almost no parks in this city.
+友達 に[meet] あまり 会わない : I almost never see my friends.
+ボッブ は あまり 服 を 買わない : Bob almost never buys clothes.
+
+// 125 == 部屋
+先生 の 家 は 部屋 が 多い : The teacher's house has many rooms.
+彼 の 部屋 が 大きい : His room is big
+彼 の 部屋 が 小さい : His room is small
+
+// 126 == 来る
+ボッブ は バス で[means] 来る : Bob comes by bus.
+ボッブ は 電車 で[means] 来る : Bob comes by train.
+ボッブ は 飛行機 で[means] 来る : Bob comes by airplane.
+ボッブ は 車 で[means] 来る : Bob comes by car.
+ボッブ は 地下鉄 で[means] 来る : Bob comes by subway.
+
+// 127 == ここ
+ボッブ は ここ に[loc] いない : Bob is not here.
+ここ に[loc] は 映画館 が ない : There is not movie theatre here.
+ここ に[loc] は 図書館 が ない : There is not library here.
+ここ の レストラン は 食べ物 が いい : The food in the restaurant here is good.
+友達 は ここ に[dir] 来る : (My) friends come here.
+
+// 128 == から
+彼 は アメリカ から 来る : He comes from the US.
+オフィス から 来る : (I'm) coming from the office.
+
+// 129 == 出る
+子供 は 学校 から 出る : The kids come out of the school building.
+
+// 130 == imperativeTe
+ここ に[dir] 来て : Come here.
+ここ から 出て : Get out of here.
+家 から 出て : Come out of the house
+車 から 出て : Come out of the car
+部屋 から 出て : Come out of the room
+彼 は 東京 に[dir] 来て と[directSpeech] 言う : He says "Come to Tokyo."
+学校 に[dir] 来て : Come to school.
+図書館 に[dir] 来て : Come to the library.
+私 の 家 に[dir] 来て : Come to my house.
+ここ から 出て : Get out of here!
+
+// 131 == 食べる
+食べ物 を 食べて : Eat (your) food.
+友達 と[person] レストラン で[loc] 食べる : I eat with my friends at the restaurant.
+何 を 食べる ? : What should (we) eat?
+犬 は 何 を 食べる ? : What does the dog eat?
+この 部屋 で[loc] 食べて : Eat in this room.
+この レストラン で[loc] 食べる ? : Should we eat at this restaurant?
+彼女 は 彼女 の 部屋 で[loc] 食べる : She's eats in her room.
+
+// 132 == 作る
+ボッブ は 家 を 作る : Bob builds a house.
+彼女 は セーター を 作る : She makes a sweater.
+
+// 133 == 会社
+この 会社 は 携帯 を 作る : This company makes smartphone
+この 会社 は 車 を 作る : This company makes car
+日本 に[loc] は 携帯 を 作る 会社 が ある : There are companies making smartphone in Japan.
+日本 に[loc] は 車 を 作る 会社 が ある : There are companies making car in Japan.
+アメリカ の 会社 は この 家 を 作る : An American company builds this house.
+
+// 134 == 駅
+駅 に[loc] は 人 が 多い : There are a lot of people at the train station.
+ボッブ に[meet] 駅 で[loc] 会う : Meet  Bob  at the  train station.
+駅 に[loc] いない : (He) is not at the train station.
+駅 に[loc] いる : (He) is at the train station.
+駅 で[loc] 話す : Talk at the train station.
+電車 が 駅 から 出る : The train pulls out of the station.
+
+// 135 == imperativeTte
+その 携帯 を 私 に[dir] 買って : Buy me that smartphone!
+その コンピューター を 私 に[dir] 買って : Buy me that computer!
+食べ物 を 作って : Cook food!
+駅 に[dir] 行って : Go to the station.
+コンピューター を 部屋 に[loc] 使って : Use the computer in your room.
+
+// 136 == ゴミ
+この 車 は ゴミ だ : This car is trash.
+この 携帯 は ゴミ だ : This smartphone is trash.
+犬 は ゴミ を 食べる : The dog eats trash.
+
+// 137 == 冷蔵庫
+部屋 に[loc] 冷蔵庫 が ある : There is a fridge in the room.
+冷蔵庫 に[loc] 食べ物 が ある : There is food in the fridge.
+
+// 138 == 出す
+ゴミ を 出す : I (will) take out the trash
+
+// 139 == imperativeSite
+車 を 出して : Bring the car out.
+ペン を 出して : Take out your pens.
+ゴミ を 出して : Take out the trash!
+部屋 から ゴミ を 出して (requires:ellipsis) : Take the trash out of (your) room
+冷蔵庫 から 食べ物 を 出して : Take the food out of the fridge.
+冷蔵庫 を 家 から 出して : Get the fridge out of the house.
+
+// 140 == 知る
+私 は 彼女 を 知らない : I don't know her.
+英語 が 知らない 人 だ (requires:ellipsis) : (It) is a person who doesn't know English.
+
+// 141 == gerund
+ボッブ は テレビ を 見ている : Bob is watching TV.
+家 を 作っている : They are building a house.
+電話 で[means] 話している : He's on the phone.
+仕事 のこと を 思っている : (I'm) thinking about work.
+何 を 見ている ? : What do you see?
+料理 のこと を 知っている : (He) knows about cooking.
+英語 のこと を 知っている : (He) knows about English.
+
+// 142 == 空く
+
+// 143 == imperativeIte
+ボッブ は 音楽 を 聴いている : Bob is listening to music.
+ボッブ は ラジオ を 聴いている : Bob is listening to the radio.
+ここ に[loc] 書いて : Write here.
+この 会社 で[loc] 働いている (requires:ellipsis) : (I'm) working at this company.
+ここ は ボッブ が 働いている 会社 だ : Here is the company were Bob works.
+冷蔵庫 は 空いている : The fridge is empty.
+家 は 空いている : The house is empty.
+オフィス は 空いている : The office is empty.
+電車 は 空いている : The train is empty.
+空いている 家 は ない ? : Are there no unoccupied houses?
+
+// 144 == それ
+それ は いい だ : That one will be good. [e.g. when selecting something in a shop]
+それ は 小さい 本 : that is a small book.
+それ は 小さい 家 : that is a small house.
+それ は 小さい 車 : that is a small car.
+私 は それ を よく 知っている : I know about that well.
+君 は それ を 知っている と[directSpeech] 思う : I think you know that.
+
+// 145 == これ
+これ は いい だ : This one will be good. [e.g. when selecting something in a shop]
+これ は 小さい 本 : this is a small book.
+これ は 小さい 家 : this is a small house.
+これ は 小さい 車 : this is a small car.
+私 は これ を よく 知っている : I know about this well.
+君 は これ を 知っている と[directSpeech] 思う : I think you know this.
+
+// 146 == 壊れる
+車 は 壊れている : The car is broken.
+冷蔵庫 は 壊れている : The fridge is broken.
+携帯 は 壊れている : The smartphone is broken.
+電話 は 壊れている : The phone is broken.
+壊れている (requires:ellipsis) : (It's) broken.
+
+// 147 == negativeImperative
+ゴミ を 言わないで : Don't talk trash.
+お金 と[directSpeech] 思わないで : Don't think about money.
+
+// 148 == ください
+空いている 部屋 を 使って ください : Use an empty room, please.
+仕事 に[dir] 行かないで ください : Don't go to work, please.
+この 新聞 を 読まないで ください : Don't read this newspaper, please.
+この 携帯 を 買わないで ください : Don't buy this cellphone, please.
+話さないで ください : Don't talk, please.
+
+// 149 == 新しい
+新しい 車 を 買う : (I will) buy a new car.
+新しい 映画 を 見る : (I will) watch a recent movie.
+彼女 は よく 新しい 服 を 買っている : She often buys new clothes.
+新しい 仕事 が ある : I have a new job.
+彼 は 新しい 家 を 作っている : He is building a new house.
+
+// 150 == 古い
+古い 本 を 読む : (I) am reading an old book.
+彼 の 家 は 古い : His house is old.
+私 の 冷蔵庫 は 古い : My fridge is old.
+オフィス は 古い 家 に[loc] いる : The office is in an old house.
+この 本 は 古い 日本語 で[means] 書いている : This book is written in old Japanese.
+古い 音楽 が 好き ? : Do you like old music?
+古い 映画 を テレビ で[means] 見ている : I am watching an old movie on TV.
+
+// 151 == 貸す
+お金 を 貸して ください : Please borrow me some money.
+ペン を 貸して ください : Please borrow me the pen.
+携帯 を 貸して ください : Please borrow me the smartphone.
+車 を 貸して ください : Please borrow me the car.
+
+// 152 == 肉
+冷蔵庫 から 肉 を 出して : Take the meat out of the fridge.
+肉 の レストラン だ : (It) is a meat restaurant
+肉 を 作って いる : (I) am cooking meat.
+
+// 153 == 着る
+彼 は 新しい セーター を 着て いる : He is wearing a new sweater.
+彼 は 古い セーター を 着て いる : He is wearing an old sweater.
+彼 は 古い ジーンズ を 着て いる : He is wearing old jeans.
+彼 は 新しい ジーンズ を 着て いる : He is wearing new jeans.
+彼 は 古い セーター を 着て いる : He is wearing an old sweater.
+彼 は 新しい セーター を 着て いる : He is wearing a new sweater.
+何 を 着る ? : What to wear?
+
+// 154 == ruVerbsNegation
+彼女 は 部屋 から 出ない : She does not leave her room.
+彼女 は 家 から 出ない : She does not leave her house.
+彼 は この レストラン で[loc] 食べない : He doesn't eat at this restaurant.
+ボッブ は 肉 を 食べない : Bob doesn't eat meat.
+古い 肉 を 食べないで : Don't eat old meat.
+白い ジーンズ を 着ない ? : Aren't (you) wearing the white jeans?
+白い セーター を 着ない ? : Aren't (you) wearing the white sweater?
+黒い ジーンズ を 着ない ? : Aren't (you) wearing the black jeans?
+黒い セーター を 着ない ? : Aren't (you) wearing the black sweater?
+
+// 155 == past
+子供 は 学校 に[dir] いた (requires:plural) : The children were at school.
+私 は パーチェ に[dir] 行った : I went to a party.
+ボッブ は 音楽 を 聴いた : Bob often listens to music.
+私 は ボッブ と[person] 話した : I talked to Bob.
+何 の 映画 に[dir] 行った ? : What kind of movie did (you) go to?
+彼 は 彼女 のこと を 思った : He thought of her.
+好き と[directSpeech] 思った : (I) thought (you) like (it).
+彼 は メール を もらった : He received an e-mail.
+彼 は 手紙 を もらった : He receives a letter
+彼 は 本 を もらった : He receives a book
+ボッブ は 家 を 作った : Bob built a house.
+壊れた 車 を 使わないで : Don't use the broken car.
+壊れた 冷蔵庫 を 使わないで : Don't use the broken fridge.
+壊れた 電話 を 使わないで : Don't use the broken phone.
+テレビ で[means] 見た : I saw it on TV.
+オフィス は 古い 家 に[loc] いた : The office was in an old house.
+貸した ペン は 壊れて いる : The pen (you) borrowed (me) is broken.
+貸した 携帯 は 壊れて いる : The smartphone (you) borrowed (me) is broken.
+貸した 車 は 壊れて いる : The car (you) borrowed (me) is broken.
+子供 に[dir] テレビ を 見ないで と[directSpeech] 言った : (She) told the kids not to watch TV.
+

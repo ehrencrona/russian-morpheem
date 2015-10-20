@@ -1,0 +1,16 @@
+
+<div ng-click="reveal()">Reveal</div>
+
+<div>
+
+    {{ sentence.meaning }} ( {{ sentence.explanation }} )
+
+    <ul>
+        <li ng-repeat="knownFact in knownFactsByKnowledge">
+            {{ knownFact.fact.description }} - {{ knownFact.knowledge }}
+        </li>
+    </ul>
+
+</div>
+
+
