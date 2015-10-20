@@ -5,6 +5,7 @@ var _ = require('underscore')
 var Sentence = require('../shared/Sentence')
 var Knowledge = require('../shared/Knowledge')
 var typecheck = require('../shared/typecheck')
+var visitUniqueFacts = require('../shared/visitUniqueFacts')
 
 class SentenceModel {
 
@@ -13,6 +14,7 @@ class SentenceModel {
 
         this.sentence = sentence
         this.factKnowledge = factKnowledge
+        this.time = time
 
         this.meaning = sentence.english
         this.explanation = sentence.english
@@ -34,9 +36,9 @@ class SentenceModel {
      */
     visitKnownFacts(visitor, word) {
         // TODO: facts by word
-        this.sentence.visitFacts((fact) => visitor({
+        visitUniqueFacts(this.sentence, (fact) => visitor({
             fact: fact,
-            knowledge: this.factKnowledge.getKnowledge(fact, time)
+            knowledge: this.factKnowledge.getKnowledge(fact, this.time)
         }))
     }
 

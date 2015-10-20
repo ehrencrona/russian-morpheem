@@ -6,17 +6,7 @@ const ALMOST_FORGOTTEN = 0.1
 
 var _ = require('underscore')
 
-function visitUniqueFacts(sentence, visitor) {
-    var seenFacts = {}
-
-    sentence.visitFacts((fact) => {
-        if (!seenFacts[fact.getId()]) {
-            visitor(fact)
-
-            seenFacts[fact.getId()] = true
-        }
-    })
-}
+var visitUniqueFacts = require('./visitUniqueFacts')
 
 function reduceKnowledge(fact, iteratee, memo) {
     var result = memo
@@ -123,7 +113,9 @@ function calculateNextSentenceAmongForgottenFacts(sentences, sentenceKnowledge, 
             return 0
         }
 
-        var knowledge = sentenceKnowledge.getKnowledge(sentence)
+        // 0 knowledge for unknown sentence is not good, but we do prefer better known sentences since it
+        // makes it easier to recognize the word
+        var knowledge = 0.5 + sentenceKnowledge.getKnowledge(sentence)
 
         console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
 

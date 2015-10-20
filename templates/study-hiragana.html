@@ -3,11 +3,12 @@
 
 <div>
 
+    {{sentence.english}} ->
     {{ sentence.meaning }} ( {{ sentence.explanation }} )
 
     <ul>
         <li ng-repeat="knownFact in knownFactsByKnowledge">
-            {{ knownFact.fact.description }} - {{ knownFact.knowledge }}
+            {{ knownFact.fact.getId() }} - {{ knownFact.knowledge }}
         </li>
     </ul>
 

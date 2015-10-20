@@ -1,14 +1,101 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
+var SentenceFileParser = require('../shared/SentenceFileParser')
+var FactFileParser = require('../shared/FactFileParser')
+
+function failedLoading(err) {
+    // no idea what else we could do here. retry?
+    throw err
+}
+
+module.exports = [
+    '$http', 'grammar', '$q',
+    function ($http, grammar, $q) {
+        var factPromise = $http.get('/corpus/hiragana/facts.txt', { timeout: 4000 })
+            .then(
+            function (data) {
+                console.log('Loaded facts.')
+
+                return FactFileParser(data.data, grammar)
+            },
+            failedLoading
+        )
+
+        return $q.all([
+            factPromise,
+            $http.get('/corpus/hiragana/words.txt', { timeout: 4000 })
+        ]).then(function(res) {
+            console.log('Loaded sentences.')
+
+            let facts = res[0]
+            let sentenceData = res[1].data
+
+            var factsById = {}
+
+            for (let fact of facts) factsById[fact.toString()] = fact
+
+            return {
+                sentences: SentenceFileParser(sentenceData, factsById, grammar),
+                facts: facts
+            }
+        },
+            failedLoading)
+    }
+]
+
+},{"../shared/FactFileParser":7,"../shared/SentenceFileParser":16}],2:[function(require,module,exports){
+var Grammar = require('../shared/Grammar')
+
+module.exports = [
+    function () {
+        var grammarById = {}
+
+        function addGrammar(id, desc) {
+            if (grammarById[id]) {
+                throw new Error('Grammar fact "' + id  + '" already exists.')
+            }
+
+            grammarById[id] = new Grammar(id, desc)
+        }
+
+        addGrammar('long')
+        addGrammar('halfvowel')
+        addGrammar('smalltsu')
+        addGrammar('onematopoeia')
+        // explain pronounciation of wo as grammar "wo"
+        addGrammar('silent', 'Japanese "i" and "u" are only silent if they occur between two unvoiced consonants(k, s, sh, t, ch, h, f, p) or at the end of a few certain words.')
+
+        addGrammar('htob')
+        addGrammar('stoz', 'note that shi becomes ji, not zi')
+        addGrammar('htop')
+        addGrammar('ktog')
+        addGrammar('ttod')
+
+        return function grammar(id) {
+            var result = grammarById[id]
+
+            if (!result) {
+                throw new Error('No grammar fact "' + id + '"')
+            }
+
+            return result
+        }
+    }
+]
+
+},{"../shared/Grammar":10}],3:[function(require,module,exports){
+"use strict";
+
 var SentenceModel = require('./SentenceModel')
 var nextSentenceCalculator = require('../shared/NextSentenceCalculator')
 
 class NextSentenceModel {
-    constructor(factKnowledge, sentenceKnowledge, sentences) {
+    constructor(factKnowledge, sentenceKnowledge, sentences, factOrder) {
         this.factKnowledge = factKnowledge
         this.sentenceKnowledge = sentenceKnowledge
         this.sentences = sentences
+        this.factOrder = factOrder
     }
 
     /**
@@ -27,15 +114,17 @@ class NextSentenceModel {
             this.sentenceKnowledge.knew(lastSentence, time)
         }
 
-        var sentence = nextSentenceCalculator.calculateNextSentenceMaximizingStrengthAtRisk(
-            this.sentences, this.sentenceKnowledge, this.factKnowledge, time)[0]
+        var sentence = nextSentenceCalculator.calculateNextSentence(
+            this.sentences, this.sentenceKnowledge, this.factKnowledge, this.factOrder, time)[0].sentence
+
+        console.log('next sentence', sentence)
 
         return new SentenceModel(sentence, this.factKnowledge, time)
     }
 }
 
 module.exports = NextSentenceModel
-},{"../shared/NextSentenceCalculator":11,"./SentenceModel":2}],2:[function(require,module,exports){
+},{"../shared/NextSentenceCalculator":14,"./SentenceModel":4}],4:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -43,6 +132,7 @@ var _ = require('underscore')
 var Sentence = require('../shared/Sentence')
 var Knowledge = require('../shared/Knowledge')
 var typecheck = require('../shared/typecheck')
+var visitUniqueFacts = require('../shared/visitUniqueFacts')
 
 class SentenceModel {
 
@@ -51,6 +141,7 @@ class SentenceModel {
 
         this.sentence = sentence
         this.factKnowledge = factKnowledge
+        this.time = time
 
         this.meaning = sentence.english
         this.explanation = sentence.english
@@ -72,16 +163,16 @@ class SentenceModel {
      */
     visitKnownFacts(visitor, word) {
         // TODO: facts by word
-        this.sentence.visitFacts((fact) => visitor({
+        visitUniqueFacts(this.sentence, (fact) => visitor({
             fact: fact,
-            knowledge: this.factKnowledge.getKnowledge(fact, time)
+            knowledge: this.factKnowledge.getKnowledge(fact, this.time)
         }))
     }
 
 }
 
 module.exports = SentenceModel
-},{"../shared/Knowledge":10,"../shared/Sentence":12,"../shared/typecheck":17,"underscore":18}],3:[function(require,module,exports){
+},{"../shared/Knowledge":13,"../shared/Sentence":15,"../shared/typecheck":21,"../shared/visitUniqueFacts":22,"underscore":23}],5:[function(require,module,exports){
 "use strict";
 
 var SentenceModel = require('./SentenceModel')
@@ -91,8 +182,8 @@ var Word = require('../shared/Word')
 var Knowledge = require('../shared/Knowledge')
 
 module.exports =
-    [ '$scope', '_',
-        function($scope, _) {
+    [ '$scope', '_', 'corpus',
+        function($scope, _, corpusPromise) {
             function getKnownFactsByKnowledge(sentence) {
                 var knownFactsByKnowledge = []
 
@@ -105,25 +196,21 @@ module.exports =
                 return knownFactsByKnowledge
             }
 
-            var sentences = [
+            corpusPromise.then((corpus) => {
+                $scope.sentence =
+                    new NextSentenceModel(new Knowledge(), new Knowledge(), corpus.sentences, corpus.facts).
+                        nextSentence([], [], null, 0)
 
-                new Sentence([ new Word('な'), new Word('か') ], 4711)
+                $scope.reveal = () => {
+                    $scope.revealed = true
+                }
 
-            ]
-
-            $scope.sentence =
-                new NextSentenceModel(new Knowledge(), new Knowledge(), sentences).
-                    nextSentence([], [], null, 0)
-
-            $scope.reveal = () => {
-                $scope.revealed = true
-            }
-
-            $scope.knownFactsByKnowledge = getKnownFactsByKnowledge($scope.sentence)
+                $scope.knownFactsByKnowledge = getKnownFactsByKnowledge($scope.sentence)
+            })
         }]
 
 
-},{"../shared/Knowledge":10,"../shared/Sentence":12,"../shared/Word":15,"./NextSentenceModel":1,"./SentenceModel":2}],4:[function(require,module,exports){
+},{"../shared/Knowledge":13,"../shared/Sentence":15,"../shared/Word":19,"./NextSentenceModel":3,"./SentenceModel":4}],6:[function(require,module,exports){
 "use strict"
 
 var module = angular.module('morpheemJapanese',
@@ -145,11 +232,152 @@ module
                     controller: 'StudyHiraganaController'
                 })
         }])
+    .factory('corpus', require('./CorpusFactory'))
+    .factory('grammar', require('./GrammarFactory'))
     .controller('StudyHiraganaController',
         require('./StudyHiraganaController'))
 
 
-},{"./StudyHiraganaController":3}],5:[function(require,module,exports){
+},{"./CorpusFactory":1,"./GrammarFactory":2,"./StudyHiraganaController":5}],7:[function(require,module,exports){
+"use strict";
+
+/**
+ * Parses a list of facts (words and grammar) that defines the order in which the facts should be learned.
+ * The file also serves to define the English translation of words. Resolves to an array consisting of Words,
+ * Particles and Grammar.
+ *
+ * Each line in the file has the following format:
+ *
+ * 出る: go out, past: went out, inflect:ruverb
+ *
+ * This defines "出る" with its translation of "go out", specifies the English past and how the word is infected.
+ * "ruverb" is used to look up an inflecting function that generates past, negative form etc.
+ *
+ * See facts.txt for an example.
+ */
+
+var Word = require('./Word')
+var UnstudiedWord = require('./UnstudiedWord')
+var Inflections = require('./Inflections')
+var typecheck = require('./typecheck')
+var _ = require('underscore')
+
+module.exports = (data, grammar) => {
+    typecheck([data, grammar], 'string', 'function')
+
+    var facts = []
+    var factsById = {}
+
+    function foundFact(fact) {
+        // there are also particles being read, which are not facts and don't have a getId
+        if (fact.getId) {
+            factsById[fact.getId()] = fact
+        }
+
+        facts.push(fact)
+    }
+
+    function parseWordAndClassifier(jpWord) {
+        let classifier
+        let m = jpWord.match(/(.*)\[(.*)\]/)
+
+        var text
+
+        if (m) {
+            text = m[1]
+            classifier = m[2]
+        }
+        else {
+            text = jpWord
+        }
+
+        return {classifier: classifier, word: text}
+    }
+
+    function parseLeftSideOfDefinition(leftSide) {
+        let elements = _.map(leftSide.split(','), (s) => s.trim())
+
+        let Class = (leftSide.indexOf('unstudied') > 0 ? UnstudiedWord : Word)
+
+        var parseResult = parseWordAndClassifier(elements[0])
+
+        return new Class(parseResult.word, parseResult.classifier)
+    }
+
+    function parseRightSideOfDefinition(rightSide, word) {
+        let elements = _.map(rightSide.split(','), (s) => s.trim())
+
+        for (let element of elements) {
+            let split = _.map(element.split(':'), (s) => s.trim())
+            let tag
+            let text
+
+            if (!split[1]) {
+                // form undefined means this is the english translation
+                text = split[0]
+            }
+            else {
+                tag = split[0]
+                text = split[1]
+            }
+
+            if (tag == 'inflect') {
+                if (!Inflections[text]) {
+                    throw new Error('Unknown inflection "' + text + '"')
+                }
+
+                for (let inflection of Inflections[text](word, grammar)) {
+                    foundFact(inflection)
+                }
+            }
+            else if (tag == 'requires') {
+                var requiredWord = factsById[text]
+
+                if (!requiredWord) {
+                    throw new Error('Unknown required word "' + text + '" in "' + rightSide + '"')
+                }
+
+                word.requiresFact(requiredWord)
+            }
+            else if (tag == 'grammar') {
+                word.requiresFact(grammar(text))
+            }
+            else {
+                word.setEnglish(text, tag)
+            }
+        }
+    }
+
+    for (let line of data.split('\n')) {
+        if (!line || line.substr(0, 2) == '//') {
+            continue
+        }
+
+        let i = line.indexOf(':')
+
+        if (i < 0) {
+            new Error('Every line should start with the Japanese word followed by colon. "' + line + '" does not.')
+        }
+
+        let leftSide = line.substr(0, i)
+        let rightSide = line.substr(i + 1)
+
+        if (leftSide == 'grammar') {
+            foundFact(grammar(rightSide.trim()))
+        }
+        else {
+            let word = parseLeftSideOfDefinition(leftSide)
+
+            parseRightSideOfDefinition(rightSide, word, grammar, factsById)
+
+            foundFact(word)
+        }
+    }
+
+    return facts
+}
+
+},{"./Inflections":12,"./UnstudiedWord":18,"./Word":19,"./typecheck":21,"underscore":23}],8:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -425,7 +653,7 @@ module.exports = {
     Knowledge: Knowledge,
     FactOrder: FactOrder
 }
-},{"./Word":15,"./typecheck":17,"underscore":18}],6:[function(require,module,exports){
+},{"./Word":19,"./typecheck":21,"underscore":23}],9:[function(require,module,exports){
 /**
  * Constants for inflections.
  */
@@ -436,7 +664,7 @@ module.exports = {
     GENITIVE: 'genitive'
 }
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -496,7 +724,7 @@ var Grammar = Class.extend({
 
 module.exports = Grammar
 
-},{"./inheritance-clientserver.js":16}],8:[function(require,module,exports){
+},{"./inheritance-clientserver.js":20}],11:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -533,7 +761,7 @@ var Inflection = UnstudiedWord.extend({
 })
 
 module.exports = Inflection
-},{"./UnstudiedWord":14,"./Word":15,"./inheritance-clientserver.js":16,"./typecheck":17}],9:[function(require,module,exports){
+},{"./UnstudiedWord":18,"./Word":19,"./inheritance-clientserver.js":20,"./typecheck":21}],12:[function(require,module,exports){
 "use strict";
 
 var Word = require('./Word')
@@ -708,7 +936,7 @@ module.exports = {
         ]
     }
 }
-},{"./Forms":6,"./Inflection":8,"./UnstudiedWord":14,"./Word":15,"./typecheck":17,"underscore":18}],10:[function(require,module,exports){
+},{"./Forms":9,"./Inflection":11,"./UnstudiedWord":18,"./Word":19,"./typecheck":21,"underscore":23}],13:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -795,7 +1023,7 @@ class Knowledge {
 module.exports = Knowledge
 
 
-},{"underscore":18}],11:[function(require,module,exports){
+},{"underscore":23}],14:[function(require,module,exports){
 "use strict";
 
 const REPEAT_ABOVE_STRENGTH_AT_RISK = 1
@@ -804,17 +1032,7 @@ const ALMOST_FORGOTTEN = 0.1
 
 var _ = require('underscore')
 
-function visitUniqueFacts(sentence, visitor) {
-    var seenFacts = {}
-
-    sentence.visitFacts((fact) => {
-        if (!seenFacts[fact.getId()]) {
-            visitor(fact)
-
-            seenFacts[fact.getId()] = true
-        }
-    })
-}
+var visitUniqueFacts = require('./visitUniqueFacts')
 
 function reduceKnowledge(fact, iteratee, memo) {
     var result = memo
@@ -921,7 +1139,9 @@ function calculateNextSentenceAmongForgottenFacts(sentences, sentenceKnowledge, 
             return 0
         }
 
-        var knowledge = sentenceKnowledge.getKnowledge(sentence)
+        // 0 knowledge for unknown sentence is not good, but we do prefer better known sentences since it
+        // makes it easier to recognize the word
+        var knowledge = 0.5 + sentenceKnowledge.getKnowledge(sentence)
 
         console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
 
@@ -1000,7 +1220,7 @@ module.exports = {
     calculateNextSentence: calculateNextSentence,
     ALMOST_FORGOTTEN: ALMOST_FORGOTTEN
 }
-},{"underscore":18}],12:[function(require,module,exports){
+},{"./visitUniqueFacts":22,"underscore":23}],15:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -1076,7 +1296,122 @@ var Sentence = Class.extend({
 })
 
 module.exports = Sentence
-},{"./UnstudiedWord":14,"./Word":15,"underscore":18}],13:[function(require,module,exports){
+},{"./UnstudiedWord":18,"./Word":19,"underscore":23}],16:[function(require,module,exports){
+"use strict";
+
+var Sentence = require('./Sentence')
+var typecheck = require('./typecheck')
+var _ = require('underscore')
+
+/**
+ * Reads a file of sentences. See parseLine for the format.
+ */
+
+/**
+ * Parses a Japanese sentence (words delimited by spaces) into Words.
+ */
+function parseSentenceToWords(sentence, wordsById) {
+    var words = []
+
+    for (let token of sentence.split(' ')) {
+        if (!token) {
+            continue
+        }
+
+        let word = wordsById[token]
+
+        if (!word) {
+            let similar = _.filter(_.keys(wordsById), (word) => word[0] == token[0])
+
+            throw new Error('Unknown word "' + token + '" in "' + sentence + '".' + (similar.length ? ' Did you mean any of ' + similar + '?' : ''))
+        }
+
+        words.push(word)
+    }
+
+    return words
+}
+
+/**
+ * Given a line of the form <japanese> (requires: grammar): <english> and function that parses Japanese sentences to Word arrays,
+ * return the object
+ * {
+ *   tags: [ [ 'requires', 'grammar'], ... ]
+ *   words: [ ... ]
+ *   english: 'English sentence'
+ * }
+ */
+function parseLine(line, parseSentenceToWords) {
+    var r = /([^(:]*)(?:\((.*)\))? *:(.*)/
+
+    var m = r.exec(line)
+
+    if (!m) {
+        throw new Error('Every line should have the form <japanese> (requires: grammar): <english>. (The requires part is optional). "' + line + '" does not follow this convention.')
+    }
+
+    var japanese = m[1]
+    var english = m[3]
+    var tags = m[2]
+
+    var result = {
+        tags: []
+    }
+
+    if (tags) {
+        for (let element of tags.split(',')) {
+            let split = _.map(element.split(':'), (s) => s.trim())
+
+            if (split.length != 2) {
+                throw new Error('Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "requires". The element "' + element + '" does not have a colon.')
+            }
+
+            result.tags.push(split)
+        }
+    }
+
+    result.words = parseSentenceToWords(japanese)
+
+    result.english = english.trim()
+
+    return result
+}
+
+module.exports = (data, wordsById, grammar) => {
+    typecheck([data, wordsById, grammar], 'string', 'object', 'function')
+
+    var sentences = []
+
+    for (let line of data.split('\n')) {
+        if (!line || line.substr(0, 2) == '//') {
+            continue
+        }
+
+        var elements = parseLine(line, (sentence) => parseSentenceToWords(sentence, wordsById, grammar))
+
+        var sentence = new Sentence(elements.words)
+
+        // TODO: the IDs of sentences should be persistant after updates of the knowledge base.
+        sentence.id = sentence.toString()
+
+        sentence.setEnglish(elements.english)
+
+        for (let tag of elements.tags) {
+            let name = tag[0]
+            let value = tag[1]
+
+            if (name == 'requires') {
+                sentence.requiresFact(grammar(value))
+            }
+        }
+
+        sentences.push(sentence)
+    }
+
+    return sentences
+}
+
+},{"./Sentence":15,"./typecheck":21,"underscore":23}],17:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -1348,7 +1683,7 @@ module.exports = {
     setRef: setRef,
 }
 
-},{"./UnstudiedWord":14,"./Word":15,"underscore":18}],14:[function(require,module,exports){
+},{"./UnstudiedWord":18,"./Word":19,"underscore":23}],18:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -1450,7 +1785,7 @@ var UnstudiedWord = Class.extend({
 })
 
 module.exports = UnstudiedWord
-},{"./inheritance-clientserver.js":16}],15:[function(require,module,exports){
+},{"./inheritance-clientserver.js":20}],19:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -1473,7 +1808,7 @@ var Word = UnstudiedWord.extend({
 })
 
 module.exports = Word
-},{"./UnstudiedWord":14,"./inheritance-clientserver.js":16}],16:[function(require,module,exports){
+},{"./UnstudiedWord":18,"./inheritance-clientserver.js":20}],20:[function(require,module,exports){
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.
@@ -1539,7 +1874,7 @@ module.exports = Word
     };
 })();
 
-},{}],17:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 function typecheck(args, type1, type2, etc) {
     for (var i = 0; i < arguments.length-1; i++) {
         var expectedType = arguments[i + 1]
@@ -1559,7 +1894,21 @@ function typecheck(args, type1, type2, etc) {
 }
 
 module.exports = typecheck
-},{}],18:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
+module.exports =
+    function(sentence, visitor) {
+        var seenFacts = {}
+
+        sentence.visitFacts((fact) => {
+            if (!seenFacts[fact.getId()]) {
+                visitor(fact)
+
+                seenFacts[fact.getId()] = true
+            }
+        })
+    }
+
+},{}],23:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -3109,4 +3458,4 @@ module.exports = typecheck
   }
 }.call(this));
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]);

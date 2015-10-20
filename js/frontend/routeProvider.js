@@ -19,6 +19,8 @@ module
                     controller: 'StudyHiraganaController'
                 })
         }])
+    .factory('corpus', require('./CorpusFactory'))
+    .factory('grammar', require('./GrammarFactory'))
     .controller('StudyHiraganaController',
         require('./StudyHiraganaController'))
 

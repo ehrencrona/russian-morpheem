@@ -7,8 +7,8 @@ var Word = require('../shared/Word')
 var Knowledge = require('../shared/Knowledge')
 
 module.exports =
-    [ '$scope', '_',
-        function($scope, _) {
+    [ '$scope', '_', 'corpus',
+        function($scope, _, corpusPromise) {
             function getKnownFactsByKnowledge(sentence) {
                 var knownFactsByKnowledge = []
 
@@ -21,23 +21,16 @@ module.exports =
                 return knownFactsByKnowledge
             }
 
-            var na = new Word('な')
-            var ka = new Word('か')
+            corpusPromise.then((corpus) => {
+                $scope.sentence =
+                    new NextSentenceModel(new Knowledge(), new Knowledge(), corpus.sentences, corpus.facts).
+                        nextSentence([], [], null, 0)
 
-            var sentences = [
-                new Sentence([  na, ka ], 4711)
-            ]
+                $scope.reveal = () => {
+                    $scope.revealed = true
+                }
 
-            var factOrder = [ na, ka ]
-
-            $scope.sentence =
-                new NextSentenceModel(new Knowledge(), new Knowledge(), sentences, factOrder).
-                    nextSentence([], [], null, 0)
-
-            $scope.reveal = () => {
-                $scope.revealed = true
-            }
-
-            $scope.knownFactsByKnowledge = getKnownFactsByKnowledge($scope.sentence)
+                $scope.knownFactsByKnowledge = getKnownFactsByKnowledge($scope.sentence)
+            })
         }]
 

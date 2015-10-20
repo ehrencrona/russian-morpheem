@@ -3,30 +3,30 @@
 var _ = require('underscore')
 var fs = require('fs')
 
-var typecheck = require('./typecheck')
+var typecheck = require('../shared/typecheck')
 
-require('./inheritance-clientserver.js')
+require('../shared/inheritance-clientserver.js')
 
-var Grammar = require('./Grammar')
-var Word = require('./Word')
+var Grammar = require('../shared/Grammar')
+var Word = require('../shared/Word')
 
-var UnstudiedWord = require('./UnstudiedWord')
-var Inflection = require('./Inflection')
+var UnstudiedWord = require('../shared/UnstudiedWord')
+var Inflection = require('../shared/Inflection')
 
-var sentenceSetModule = require('./SentenceSet')
+var sentenceSetModule = require('../shared/SentenceSet')
 
 var SentenceSet = sentenceSetModule.SentenceSet
 var set = sentenceSetModule.set
 var setRef = sentenceSetModule.setRef
 
-var FactOrder = require('./FactOrder').FactOrder
+var FactOrder = require('../shared/FactOrder').FactOrder
 var FactFileReader = require('./FactFileReader')
 var SentenceFileReader = require('./SentenceFileReader')
 
 var grammarById = {}
 var allSentences = []
 
-var Forms = require('./Forms')
+var Forms = require('../shared/Forms')
 
 const PAST = Forms.PAST
 const THIRDSG = Forms.THIRDSG
@@ -229,13 +229,15 @@ suru-verb:
 
      */
 
-FactFileReader('hiragana/facts.txt', grammar).then(
+var corpusDir = '../../public/corpus/hiragana'
+
+FactFileReader(corpusDir + '/facts.txt', grammar).then(
     (words) => {
         let wordsById = {}
 
         for (let word of words) wordsById[word.toString()] = word
 
-        return SentenceFileReader('hiragana/words.txt', wordsById, grammar).then((sentences) => {
+        return SentenceFileReader(corpusDir + '/words.txt', wordsById, grammar).then((sentences) => {
             new FactOrder(_.filter(words, isFact)).evaluateConsistency(sentences)
         })
     }).done()

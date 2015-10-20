@@ -7,11 +7,12 @@ angular.module('morpheemJapanese').run(['$templateCache', function($templateCach
     "\n" +
     "<div>\n" +
     "\n" +
+    "    {{sentence.english}} ->\n" +
     "    {{ sentence.meaning }} ( {{ sentence.explanation }} )\n" +
     "\n" +
     "    <ul>\n" +
     "        <li ng-repeat=\"knownFact in knownFactsByKnowledge\">\n" +
-    "            {{ knownFact.fact.description }} - {{ knownFact.knowledge }}\n" +
+    "            {{ knownFact.fact.getId() }} - {{ knownFact.knowledge }}\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "\n" +

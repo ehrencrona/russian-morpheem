@@ -28,7 +28,9 @@ class NextSentenceModel {
         }
 
         var sentence = nextSentenceCalculator.calculateNextSentence(
-            this.sentences, this.sentenceKnowledge, this.factKnowledge, this.factOrder, time)[0]
+            this.sentences, this.sentenceKnowledge, this.factKnowledge, this.factOrder, time)[0].sentence
+
+        console.log('next sentence', sentence)
 
         return new SentenceModel(sentence, this.factKnowledge, time)
     }
