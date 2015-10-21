@@ -10,8 +10,9 @@ require('./inheritance-clientserver.js')
  * rules.
  */
 var Grammar = Class.extend({
-    init: function(id) {
+    init: function(id, explanation) {
         this.id = id
+        this.explanation = explanation
     },
 
     visitFacts: function(visitor) {

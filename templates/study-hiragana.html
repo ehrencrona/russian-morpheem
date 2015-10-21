@@ -1,17 +1,77 @@
+<div ng-if="current.newFacts.length">
 
-<div ng-click="reveal()">Reveal</div>
+    Some new knowledge:
 
-<div>
+    <div ng-repeat="fact in current.newFacts" class="knownFact new">
+        {{ fact.explanation }}
+    </div>
 
-    {{sentence.english}} ->
-    {{ sentence.meaning }} ( {{ sentence.explanation }} )
+    <div ng-click="current.newFacts = null" class="button">Got it</div>
 
-    <ul>
-        <li ng-repeat="knownFact in knownFactsByKnowledge">
-            {{ knownFact.fact.getId() }} - {{ knownFact.knowledge }}
-        </li>
-    </ul>
+</div>
+<div ng-if="!current.newFacts.length">
+    How do you pronounce this?
 
+    <h3>
+        {{ current.sentenceModel.sentence.toString() }}
+    </h3>
+
+    <h4 ng-if="current.revealed">
+        {{ current.sentenceModel.meaning }}
+    </h4>
+
+    <div ng-click="reveal()" ng-if="!current.revealed" class="button">Reveal</div>
+
+    <div ng-click="allKnown()" ng-if="current.revealed" class="button">I got it right</div>
+
+    <div ng-click="someForgotten()" ng-if="current.revealed" class="button">I forgot the following:</div>
+
+    <div
+        ng-repeat="knownFact in current.knownFacts"
+        ng-class="{ known : knownFact.known }"
+        ng-if="current.revealed"
+        ng-click=" toggleKnown(knownFact) "
+        class="knownFact">
+        {{ knownFact.fact.explanation }} - {{ knownFact.knowledge }}
+    </div>
 </div>
 
 
+    <div ng-controller="KnowledgeDebugController">
+
+        <div ng-repeat="knownFact in knownFacts track by knownFact.fact.getId()">
+            <div style="width: {{ knownFact.knowledge * 100}}px" class="bar"></div>
+
+            {{ knownFact.fact.getId() }} {{ knownFact.strength }}
+        </div>
+
+        <table>
+            <tr>
+                <th width="180px">
+                    strengthAtRisk
+                </th>
+                <th width="180px">
+                    chanceOfUnderstandingForgotten
+                </th>
+                <th width="180px">
+                    knowledge
+                </th>
+                <th>
+                </th>
+            </tr>
+            <tr ng-repeat="sentenceScore in sentenceScores track by sentenceScore.sentence.id">
+                <td>
+                    <div style="width: {{ sentenceScore.strengthAtRisk * 180}}px" class="bar"></div>
+                </td>
+                <td>
+                    <div style="width: {{ sentenceScore.chanceOfUnderstandingForgotten * 180}}px" class="bar"></div>
+                </td>
+                <td>
+                    <div style="width: {{ sentenceScore.knowledge * 180}}px" class="bar"></div>
+                </td>
+                <td>
+                    {{sentenceScore.sentence.toString()}}
+                </td>
+            </tr>
+        </table>
+    </div>

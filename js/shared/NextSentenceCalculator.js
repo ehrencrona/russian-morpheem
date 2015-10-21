@@ -82,9 +82,9 @@ function calculateNextSentenceMaximizingStrengthAtRisk(sentences, sentenceKnowle
         var knowledge = sentenceKnowledge.getKnowledge(sentence)
         var strengthAtRisk = getStrengthAtRisk(sentence, factKnowledge, time)
 
-        console.log(sentence.id, 'strengthAtRisk', strengthAtRisk, 'knowledge', knowledge, ' -> ', strengthAtRisk * (1 - knowledge))
+//        console.log(sentence.id, 'strengthAtRisk', strengthAtRisk, 'knowledge', knowledge, ' -> ', strengthAtRisk * (1 - knowledge))
 
-        return strengthAtRisk * (1 - knowledge)
+        return strengthAtRisk * (1.1 - knowledge)
     })
 }
 
@@ -117,7 +117,7 @@ function calculateNextSentenceAmongForgottenFacts(sentences, sentenceKnowledge, 
         // makes it easier to recognize the word
         var knowledge = 0.5 + sentenceKnowledge.getKnowledge(sentence)
 
-        console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
+//        console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
 
         return chance * knowledge
     })
@@ -160,8 +160,6 @@ function calculateNextSentence(sentences, sentenceKnowledge, factKnowledge, fact
     if (!sentenceScores.length || sentenceScores[0].score < PICK_WORD_UNDER_KNOWLEDGE) {
         for (let fact of factOrder) {
             if (factKnowledge.getKnowledge(fact, time) == 0) {
-                console.log('next fact', fact)
-
                 factKnowledge = new ExtendedKnowledge(factKnowledge, fact)
 
                 break

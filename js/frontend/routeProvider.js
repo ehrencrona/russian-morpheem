@@ -23,4 +23,6 @@ module
     .factory('grammar', require('./GrammarFactory'))
     .controller('StudyHiraganaController',
         require('./StudyHiraganaController'))
+    .controller('KnowledgeDebugController',
+        require('./KnowledgeDebugController'))
 

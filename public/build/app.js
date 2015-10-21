@@ -3,6 +3,7 @@
 
 var SentenceFileParser = require('../shared/SentenceFileParser')
 var FactFileParser = require('../shared/FactFileParser')
+var Word = require('../shared/Word')
 
 function failedLoading(err) {
     // no idea what else we could do here. retry?
@@ -29,6 +30,13 @@ module.exports = [
             console.log('Loaded sentences.')
 
             let facts = res[0]
+
+            for (let fact of facts) {
+                if (fact instanceof Word) {
+                    fact.explanation = fact.jp + ' is pronounced "' + fact.getEnglish() + '"'
+                }
+            }
+
             let sentenceData = res[1].data
 
             var factsById = {}
@@ -44,33 +52,33 @@ module.exports = [
     }
 ]
 
-},{"../shared/FactFileParser":7,"../shared/SentenceFileParser":16}],2:[function(require,module,exports){
+},{"../shared/FactFileParser":8,"../shared/SentenceFileParser":17,"../shared/Word":20}],2:[function(require,module,exports){
 var Grammar = require('../shared/Grammar')
 
 module.exports = [
     function () {
         var grammarById = {}
 
-        function addGrammar(id, desc) {
+        function addGrammar(id, explanation) {
             if (grammarById[id]) {
                 throw new Error('Grammar fact "' + id  + '" already exists.')
             }
 
-            grammarById[id] = new Grammar(id, desc)
+            grammarById[id] = new Grammar(id, explanation)
         }
 
-        addGrammar('long')
-        addGrammar('halfvowel')
-        addGrammar('smalltsu')
-        addGrammar('onematopoeia')
+        addGrammar('long', 'Adding a う (and sometimes other vowels) after a vowel sound means the vowel should be pronounced longer.')
+        addGrammar('halfvowel', 'Adding a small よ, ゆ or や (yo, yu, ya) replaces the vowel (always an "i") of the previous syllable, e.g. きゃ　("ki" plus small "ya") is pronounced "kya"')
+        addGrammar('smalltsu', 'Adding a small つ (tsu) means the next consonant should be pronounced as double.')
+        addGrammar('onematopoeia', 'Many words in Japanese attempt to imitate perceptions through the way they sound. They are called onematopoeia.')
         // explain pronounciation of wo as grammar "wo"
-        addGrammar('silent', 'Japanese "i" and "u" are only silent if they occur between two unvoiced consonants(k, s, sh, t, ch, h, f, p) or at the end of a few certain words.')
+        addGrammar('silent', 'Japanese "i" and "u" can be silent if they occur between two unvoiced consonants(k, s, sh, t, ch, h, f, p) or at the end of certain words.')
 
-        addGrammar('htob')
-        addGrammar('stoz', 'note that shi becomes ji, not zi')
-        addGrammar('htop')
-        addGrammar('ktog')
-        addGrammar('ttod')
+        addGrammar('htob', 'A syllable with an "h" sound turns into a "b" sound when two small dashes are added, e.g. は (ha) becomes ば (ba).')
+        addGrammar('stoz', 'A syllable with an "s" sound turns into a "z" sound when two small dashes are added, e.g. さ (sa) becomes ざ (za). One exception し (shi) becomes じ (ji) instead. A Japanese person cannot say "zi".')
+        addGrammar('htop', 'A syllable with an "h" sound turns into a "p" sound when a small circle is added, e.g. は (ha) becomes ぱ (pa).')
+        addGrammar('ktog', 'A syllable with an "k" sound turns into a "g" sound when two small dashes are added, e.g. か (ka) becomes が (ga).')
+        addGrammar('ttod', 'A syllable with an "t" sound turns into a "d" sound when two small dashes are added, e.g. た (ta) becomes だ (da).')
 
         return function grammar(id) {
             var result = grammarById[id]
@@ -84,7 +92,76 @@ module.exports = [
     }
 ]
 
-},{"../shared/Grammar":10}],3:[function(require,module,exports){
+},{"../shared/Grammar":11}],3:[function(require,module,exports){
+"use strict";
+
+var SentenceModel = require('./SentenceModel')
+var NextSentenceCalculator = require('../shared/NextSentenceCalculator')
+var Sentence = require('../shared/Sentence')
+var Word = require('../shared/Word')
+var Knowledge = require('../shared/Knowledge')
+
+function isUnstudied(fact) {
+    return !fact.getId
+}
+
+module.exports =
+    [ '$scope', '$interval', '_', 'corpus',
+        function($scope, $interval, _, corpusPromise) {
+            var factKnowledge = $scope.factKnowledge
+            var sentenceKnowledge = $scope.sentenceKnowledge
+
+            console.log('factKnowldege')
+
+            corpusPromise.then((corpus) => {
+
+                function update() {
+                    let time = new Date().getTime() / 1000
+                    let knownFacts = []
+
+                    for (let fact of corpus.facts) {
+                        if (isUnstudied(fact)) {
+                            continue
+                        }
+
+                        var knowledge = factKnowledge.getKnowledge(fact, time)
+
+                        if (knowledge > 0) {
+                            knownFacts.push({
+                                knowledge: knowledge,
+                                fact: fact,
+                                strength: factKnowledge.getStrength(fact, time)
+                            })
+                        }
+                    }
+
+                    _.sortBy(knownFacts, (knownFact) => -knownFact.knowledge )
+
+                    $scope.knownFacts = knownFacts
+
+                    $scope.sentenceScores = _.filter(_.map(corpus.sentences, (sentence) => {
+                        return {
+                            sentence: sentence,
+                            strengthAtRisk: NextSentenceCalculator.getStrengthAtRisk(sentence, factKnowledge, time),
+                            chanceOfUnderstandingForgotten: NextSentenceCalculator.getChanceOfUnderstanding(sentence, sentenceKnowledge, factKnowledge, time),
+                            knowledge: sentenceKnowledge.getKnowledge(sentence, time)
+                        }
+                    }), (sentenceScore) => {
+                        return sentenceScore.strengthAtRisk || sentenceScore.chanceOfUnderstandingForgotten || sentenceScore.knowledge
+                    })
+                }
+
+                update()
+
+                $interval(() => {
+                    update()
+                }, 1000)
+            })
+
+        }]
+
+
+},{"../shared/Knowledge":14,"../shared/NextSentenceCalculator":15,"../shared/Sentence":16,"../shared/Word":20,"./SentenceModel":5}],4:[function(require,module,exports){
 "use strict";
 
 var SentenceModel = require('./SentenceModel')
@@ -102,16 +179,22 @@ class NextSentenceModel {
      * Returns a SentenceModel
      */
     nextSentence(knownFacts, unknownFacts, lastSentence, time) {
+        console.log('known', knownFacts)
+        console.log('unknown', unknownFacts)
+
         for (let fact of knownFacts) {
             this.factKnowledge.knew(fact, time)
         }
 
-        for (let fact of knownFacts) {
+        for (let fact of unknownFacts) {
             this.factKnowledge.didntKnow(fact, time)
         }
 
         if (lastSentence) {
             this.sentenceKnowledge.knew(lastSentence, time)
+
+            console.log('sentence knowledge for ', lastSentence.getId(),
+                this.sentenceKnowledge.getKnowledge(lastSentence, time))
         }
 
         var sentence = nextSentenceCalculator.calculateNextSentence(
@@ -124,7 +207,7 @@ class NextSentenceModel {
 }
 
 module.exports = NextSentenceModel
-},{"../shared/NextSentenceCalculator":14,"./SentenceModel":4}],4:[function(require,module,exports){
+},{"../shared/NextSentenceCalculator":15,"./SentenceModel":5}],5:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -172,7 +255,7 @@ class SentenceModel {
 }
 
 module.exports = SentenceModel
-},{"../shared/Knowledge":13,"../shared/Sentence":15,"../shared/typecheck":21,"../shared/visitUniqueFacts":22,"underscore":23}],5:[function(require,module,exports){
+},{"../shared/Knowledge":14,"../shared/Sentence":16,"../shared/typecheck":22,"../shared/visitUniqueFacts":23,"underscore":24}],6:[function(require,module,exports){
 "use strict";
 
 var SentenceModel = require('./SentenceModel')
@@ -181,6 +264,10 @@ var Sentence = require('../shared/Sentence')
 var Word = require('../shared/Word')
 var Knowledge = require('../shared/Knowledge')
 
+function getTime() {
+    return new Date().getTime() / 1000
+}
+
 module.exports =
     [ '$scope', '_', 'corpus',
         function($scope, _, corpusPromise) {
@@ -188,29 +275,85 @@ module.exports =
                 var knownFactsByKnowledge = []
 
                 sentence.visitKnownFacts((knownFact) => {
+                    knownFact.known = true
+
                     knownFactsByKnowledge.push(knownFact)
                 })
 
-                knownFactsByKnowledge = _.sortBy(knownFactsByKnowledge, (knownFact) => -knownFact.knowledge )
+                knownFactsByKnowledge = _.sortBy(knownFactsByKnowledge, (knownFact) => knownFact.knowledge )
 
                 return knownFactsByKnowledge
             }
 
-            corpusPromise.then((corpus) => {
-                $scope.sentence =
-                    new NextSentenceModel(new Knowledge(), new Knowledge(), corpus.sentences, corpus.facts).
-                        nextSentence([], [], null, 0)
+            var factKnowledge = new Knowledge()
+            var sentenceKnowledge = new Knowledge()
 
-                $scope.reveal = () => {
-                    $scope.revealed = true
+            $scope.factKnowledge = factKnowledge
+            $scope.sentenceKnowledge = sentenceKnowledge
+
+            corpusPromise.then((corpus) => {
+                var nextSentenceModel = new NextSentenceModel(factKnowledge, sentenceKnowledge, corpus.sentences, corpus.facts)
+
+                var current
+
+                function nextSentence() {
+                    function getFactsWhereKnownIs(known) {
+                        if (!current) {
+                            return []
+                        }
+
+                        return _.pluck(_.filter(current.knownFacts, (knownFact) => knownFact.known == known), 'fact')
+                    }
+
+                    var sentenceModel =
+                        nextSentenceModel.
+                            nextSentence(
+                                getFactsWhereKnownIs(true),
+                                getFactsWhereKnownIs(false),
+                            ( current ?
+                                current.sentenceModel.sentence :
+                                null),
+                            getTime())
+
+                    var knownFactsByKnowledge = getKnownFactsByKnowledge(sentenceModel)
+
+                    current = {
+                        sentenceModel: sentenceModel,
+                        knownFacts: knownFactsByKnowledge,
+                        newFacts: _.pluck(_.filter(knownFactsByKnowledge, (knownFact) => knownFact.knowledge == 0), 'fact'),
+                        revealed: false
+                    }
+
+                    $scope.current = current
                 }
 
-                $scope.knownFactsByKnowledge = getKnownFactsByKnowledge($scope.sentence)
+                nextSentence()
+
+                $scope.reveal = () => {
+                    current.revealed = true
+                }
+
+                $scope.toggleKnown = (knownFact) => {
+                    knownFact.known = !knownFact.known
+                }
+
+                $scope.someForgotten = () => {
+                    nextSentence()
+                }
+
+                $scope.allKnown = () => {
+                    for (let knownFact of current.knownFacts) {
+                        knownFact.known = true
+                    }
+
+                    nextSentence()
+                }
             })
+
         }]
 
 
-},{"../shared/Knowledge":13,"../shared/Sentence":15,"../shared/Word":19,"./NextSentenceModel":3,"./SentenceModel":4}],6:[function(require,module,exports){
+},{"../shared/Knowledge":14,"../shared/Sentence":16,"../shared/Word":20,"./NextSentenceModel":4,"./SentenceModel":5}],7:[function(require,module,exports){
 "use strict"
 
 var module = angular.module('morpheemJapanese',
@@ -236,9 +379,11 @@ module
     .factory('grammar', require('./GrammarFactory'))
     .controller('StudyHiraganaController',
         require('./StudyHiraganaController'))
+    .controller('KnowledgeDebugController',
+        require('./KnowledgeDebugController'))
 
 
-},{"./CorpusFactory":1,"./GrammarFactory":2,"./StudyHiraganaController":5}],7:[function(require,module,exports){
+},{"./CorpusFactory":1,"./GrammarFactory":2,"./KnowledgeDebugController":3,"./StudyHiraganaController":6}],8:[function(require,module,exports){
 "use strict";
 
 /**
@@ -377,7 +522,7 @@ module.exports = (data, grammar) => {
     return facts
 }
 
-},{"./Inflections":12,"./UnstudiedWord":18,"./Word":19,"./typecheck":21,"underscore":23}],8:[function(require,module,exports){
+},{"./Inflections":13,"./UnstudiedWord":19,"./Word":20,"./typecheck":22,"underscore":24}],9:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -653,7 +798,7 @@ module.exports = {
     Knowledge: Knowledge,
     FactOrder: FactOrder
 }
-},{"./Word":19,"./typecheck":21,"underscore":23}],9:[function(require,module,exports){
+},{"./Word":20,"./typecheck":22,"underscore":24}],10:[function(require,module,exports){
 /**
  * Constants for inflections.
  */
@@ -664,7 +809,7 @@ module.exports = {
     GENITIVE: 'genitive'
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -677,8 +822,9 @@ require('./inheritance-clientserver.js')
  * rules.
  */
 var Grammar = Class.extend({
-    init: function(id) {
+    init: function(id, explanation) {
         this.id = id
+        this.explanation = explanation
     },
 
     visitFacts: function(visitor) {
@@ -724,7 +870,7 @@ var Grammar = Class.extend({
 
 module.exports = Grammar
 
-},{"./inheritance-clientserver.js":20}],11:[function(require,module,exports){
+},{"./inheritance-clientserver.js":21}],12:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -761,7 +907,7 @@ var Inflection = UnstudiedWord.extend({
 })
 
 module.exports = Inflection
-},{"./UnstudiedWord":18,"./Word":19,"./inheritance-clientserver.js":20,"./typecheck":21}],12:[function(require,module,exports){
+},{"./UnstudiedWord":19,"./Word":20,"./inheritance-clientserver.js":21,"./typecheck":22}],13:[function(require,module,exports){
 "use strict";
 
 var Word = require('./Word')
@@ -936,26 +1082,49 @@ module.exports = {
         ]
     }
 }
-},{"./Forms":9,"./Inflection":11,"./UnstudiedWord":18,"./Word":19,"./typecheck":21,"underscore":23}],13:[function(require,module,exports){
+},{"./Forms":10,"./Inflection":12,"./UnstudiedWord":19,"./Word":20,"./typecheck":22,"underscore":24}],14:[function(require,module,exports){
 "use strict";
+
+/**
+ * TODO: certain facts are just harder to remember for no obvious reason. if they have proven to decay quickly
+ * before, bring them more often.
+ * TODO: grammar is harder to remember than words
+ */
+
 
 var _ = require('underscore')
 
 const DAY_IN_SEC = 100000
 
+// the index in the DECAY list we start out it. we don't start on 0
+// since failing the first test needs to increase decay.
+const DEFAULT_STRENGTH = 1
+
+const DECAY = []
+
 // if you didn't know the fact on the very first repetition knowledge
-// takes 30 seconds to sink to 50%.
-const DECAY = [ 0.5 / 30 ]
+// takes 15 seconds to sink to 50% (if you did know it, it sinks as
+// described by the next DECAY entry)
+DECAY[DEFAULT_STRENGTH] = 0.5 / 60
+
+var DECAY_IMPROVEMENT_BY_STRENGTH = 4
+
+for (let i = DEFAULT_STRENGTH-1; i >= 0; i--) {
+    DECAY[i] = DECAY[i+1] * DECAY_IMPROVEMENT_BY_STRENGTH
+}
+
+// later repetitions: knowledge falls half as fast on every repetition
+while (DECAY[DECAY.length - 1] > 2 / 200000) {
+    DECAY.push(DECAY[DECAY.length - 1] / DECAY_IMPROVEMENT_BY_STRENGTH)
+}
+
+console.log(DECAY)
 
 // we assume you never completely forget something you've once learned,
 // this is the minimum chance of remembering. this not being 0 also makes
 // it possible to check through getKnowledge if something was ever studied
 const MINIMUM_KNOWLEDGE = 0.01
 
-// later repetitions: knowledge falls half as fast on every repetition
-while (DECAY[DECAY.length - 1] > 0.5 / 250000) {
-    DECAY.push(DECAY[DECAY.length - 1] / 2)
-}
 
 class Knowledge {
     constructor() {
@@ -989,33 +1158,61 @@ class Knowledge {
         }
         else {
             let lastKnownTime = tuple[0]
+
             let strength = tuple[1]
 
-            var result = 1 - (time - lastKnownTime) * DECAY[strength]
+            var alpha = (strength - Math.floor(strength))
+
+            var decayLow = DECAY[Math.floor(strength)]
+            var decayHigh = DECAY[Math.ceil(strength)]
+
+            var decay =
+                (1 - alpha) * (decayLow || 0) +
+                alpha * (decayHigh || 0)
+
+console.log('strength', strength, 'decay', decay)
+
+            var result = 1 - (time - lastKnownTime) * decay
 
             return (result >= MINIMUM_KNOWLEDGE ? result : MINIMUM_KNOWLEDGE)
         }
     }
 
-    knew(fact, time) {
-        this.updateFact(fact, time, 1)
-    }
-
-    didntKnow(fact, time) {
+    saw(fact, time) {
         this.updateFact(fact, time, 0)
     }
 
+    knew(fact, time) {
+        // how surprising was it that we didn't know this?
+        // if it was very surprising the strength needs updating.
+        // if it wasn't, it was probably appropriate.
+        var surprise = 1 - this.getKnowledge(fact, time)
+
+        this.updateFact(fact, time, surprise)
+    }
+
+    didntKnow(fact, time) {
+        // how surprising was it that we didn't know this?
+        // if it was very surprising the strength needs updating.
+        // if it wasn't, it was probably appropriate.
+        var surprise = this.getKnowledge(fact, time)
+
+        this.updateFact(fact, time, -surprise)
+    }
+
     updateFact(fact, time, strengthChange) {
+        console.log('strength change', strengthChange)
+
         var tuple = this.byId[fact.getId()]
 
         if (!tuple) {
-            this.byId[fact.getId()] = [ time, strengthChange ]
+            this.byId[fact.getId()] = [ time, DEFAULT_STRENGTH + strengthChange ]
         }
         else {
             // last known time
             tuple[0] = time
             // strength
-            tuple[1] += strengthChange
+            tuple[1] = Math.max(0, tuple[1] + strengthChange)
         }
     }
 }
@@ -1023,7 +1220,7 @@ class Knowledge {
 module.exports = Knowledge
 
 
-},{"underscore":23}],14:[function(require,module,exports){
+},{"underscore":24}],15:[function(require,module,exports){
 "use strict";
 
 const REPEAT_ABOVE_STRENGTH_AT_RISK = 1
@@ -1108,9 +1305,9 @@ function calculateNextSentenceMaximizingStrengthAtRisk(sentences, sentenceKnowle
         var knowledge = sentenceKnowledge.getKnowledge(sentence)
         var strengthAtRisk = getStrengthAtRisk(sentence, factKnowledge, time)
 
-        console.log(sentence.id, 'strengthAtRisk', strengthAtRisk, 'knowledge', knowledge, ' -> ', strengthAtRisk * (1 - knowledge))
+//        console.log(sentence.id, 'strengthAtRisk', strengthAtRisk, 'knowledge', knowledge, ' -> ', strengthAtRisk * (1 - knowledge))
 
-        return strengthAtRisk * (1 - knowledge)
+        return strengthAtRisk * (1.1 - knowledge)
     })
 }
 
@@ -1143,7 +1340,7 @@ function calculateNextSentenceAmongForgottenFacts(sentences, sentenceKnowledge, 
         // makes it easier to recognize the word
         var knowledge = 0.5 + sentenceKnowledge.getKnowledge(sentence)
 
-        console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
+//        console.log(sentence.id, 'chance', chance, 'sentenceKnowledge', knowledge, ' -> ', chance * knowledge)
 
         return chance * knowledge
     })
@@ -1186,8 +1383,6 @@ function calculateNextSentence(sentences, sentenceKnowledge, factKnowledge, fact
     if (!sentenceScores.length || sentenceScores[0].score < PICK_WORD_UNDER_KNOWLEDGE) {
         for (let fact of factOrder) {
             if (factKnowledge.getKnowledge(fact, time) == 0) {
-                console.log('next fact', fact)
-
                 factKnowledge = new ExtendedKnowledge(factKnowledge, fact)
 
                 break
@@ -1220,7 +1415,7 @@ module.exports = {
     calculateNextSentence: calculateNextSentence,
     ALMOST_FORGOTTEN: ALMOST_FORGOTTEN
 }
-},{"./visitUniqueFacts":22,"underscore":23}],15:[function(require,module,exports){
+},{"./visitUniqueFacts":23,"underscore":24}],16:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -1296,7 +1491,7 @@ var Sentence = Class.extend({
 })
 
 module.exports = Sentence
-},{"./UnstudiedWord":18,"./Word":19,"underscore":23}],16:[function(require,module,exports){
+},{"./UnstudiedWord":19,"./Word":20,"underscore":24}],17:[function(require,module,exports){
 "use strict";
 
 var Sentence = require('./Sentence')
@@ -1411,7 +1606,7 @@ module.exports = (data, wordsById, grammar) => {
     return sentences
 }
 
-},{"./Sentence":15,"./typecheck":21,"underscore":23}],17:[function(require,module,exports){
+},{"./Sentence":16,"./typecheck":22,"underscore":24}],18:[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore')
@@ -1683,7 +1878,7 @@ module.exports = {
     setRef: setRef,
 }
 
-},{"./UnstudiedWord":18,"./Word":19,"underscore":23}],18:[function(require,module,exports){
+},{"./UnstudiedWord":19,"./Word":20,"underscore":24}],19:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -1702,12 +1897,6 @@ var UnstudiedWord = Class.extend({
         this.jp = jp
         this.classifier = classifier
         this.en = {}
-    },
-
-    explanation: function(expl) {
-        this.expl = expl
-
-        return this
     },
 
     related: function(fact) {
@@ -1785,7 +1974,7 @@ var UnstudiedWord = Class.extend({
 })
 
 module.exports = UnstudiedWord
-},{"./inheritance-clientserver.js":20}],19:[function(require,module,exports){
+},{"./inheritance-clientserver.js":21}],20:[function(require,module,exports){
 "use strict";
 
 require('./inheritance-clientserver.js')
@@ -1808,7 +1997,7 @@ var Word = UnstudiedWord.extend({
 })
 
 module.exports = Word
-},{"./UnstudiedWord":18,"./inheritance-clientserver.js":20}],20:[function(require,module,exports){
+},{"./UnstudiedWord":19,"./inheritance-clientserver.js":21}],21:[function(require,module,exports){
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.
@@ -1874,7 +2063,7 @@ module.exports = Word
     };
 })();
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 function typecheck(args, type1, type2, etc) {
     for (var i = 0; i < arguments.length-1; i++) {
         var expectedType = arguments[i + 1]
@@ -1894,10 +2083,12 @@ function typecheck(args, type1, type2, etc) {
 }
 
 module.exports = typecheck
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
+"use strict";
+
 module.exports =
     function(sentence, visitor) {
-        var seenFacts = {}
+        let seenFacts = {}
 
         sentence.visitFacts((fact) => {
             if (!seenFacts[fact.getId()]) {
@@ -1908,7 +2099,7 @@ module.exports =
         })
     }
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -3458,4 +3649,4 @@ module.exports =
   }
 }.call(this));
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]);

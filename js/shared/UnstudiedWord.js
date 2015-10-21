@@ -18,12 +18,6 @@ var UnstudiedWord = Class.extend({
         this.en = {}
     },
 
-    explanation: function(expl) {
-        this.expl = expl
-
-        return this
-    },
-
     related: function(fact) {
         // unused for now
 
