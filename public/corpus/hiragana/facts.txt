@@ -1,0 +1,131 @@
+は:ha
+い:i
+な:na
+か:ka
+ら:ra
+き:ki
+む:mu
+
+さ:sa
+の:no
+ま:ma
+や:ya
+く:ku
+わ:wa
+も:mo
+し:shi
+り:ri
+み:mi
+つ:tsu
+た:ta
+お:o
+け:ke
+
+grammar: ktog
+ぎ:gi, requires: き, grammar: ktog
+が:ga, requires: か, grammar: ktog
+
+ひ:hi
+ん:n
+ほ:ho
+ふ:fu
+に:ni
+ろ:ro
+う:u
+
+grammar:long
+
+ち:chi
+て:te
+こ:ko
+
+grammar: ttod
+だ:da, requires: た, grammar: ttod
+で:de, requires: て, grammar: ttod
+ぐ:gu, requires: く, grammar: ktog
+る:ru
+
+あ:a
+え:e
+す:su
+と:to
+
+grammar:smalltsu
+っ:unstudied, requires: smalltsu, requires: つ
+
+grammar: htop
+ぷ:pu, requires: ふ, grammar: htop
+げ:ge, requires: け, grammar: ktog
+ぴ:pi, requires: ひ, grammar: htop
+
+ゆ:yu
+よ:yo
+grammar:onematopoeia
+せ:se
+
+grammar:halfvowel
+ゅ:-yu, requires: halfvowel, requires: ゆ
+ゃ:-ya, requires: halfvowel, requires: や
+ょ:-yo, requires: halfvowel, requires: よ
+
+grammar: stoz
+ず:zu, requires: す, grammar: stoz
+じ:ji, requires: し, grammar: stoz
+
+ご:go, requires: こ, requires: ktog
+め:me
+ざ:za, requires: さ, grammar: stoz
+ど:do, requires: と, grammar: ttod
+ね:ne
+へ:he
+grammar: htob
+ば:ba, requires: は, grammar: htob
+べ:be, requires: へ, grammar: htob
+ぬ:nu
+び:bi, requires: ひ, grammar: htob
+ぶ:bu, requires: ふ, grammar: htob
+そ:so
+ぞ:zo, requires: そ, grammar: stoz
+ぼ:bo
+ぱ:pa
+ぺ:pe, requires: へ, grammar: htop
+
+grammar:silent
+
+れ:re
+ぽ:po, requires: ほ, grammar: htop
+ぜ:ze, requires: せ, grammar: stoz
+
+// TODO: add information about pronounciation
+を:wo, explanation: を is only really used on it's own as a particle (word) in modern Japanese and is pronounced "o" though technically this is the character "wo"
+
+じゅ, unstudied:ju, requires: じ, requires: ゅ
+しゃ, unstudied:ja, requires: し, requires: ゃ
+ぎょ, unstudied:kyou, requires: ぎ, requires: ょ
+ぎゅ, unstudied:kyuu, requires: ぎ, requires: ゅ
+ぎゃ, unstudied:kya, requires: ぎ, requires: ゃ
+きょ, unstudied:kyou, requires: き, requires: ょ
+きゅ, unstudied:kyuu, requires: き, requires: ゅ
+きゃ, unstudied:kya, requires: き, requires: ゃ
+しょ, unstudied:jo, requires: し, requires: ょ
+しゅ, unstudied:ju, requires: し, requires: ゅ
+じょ, unstudied:jo, requires: じ, requires: ょ
+じゃ, unstudied:ja, requires: じ, requires: ゃ
+ひょ, unstudied:hyo, requires: ひ, requires: ょ
+ひゅ, unstudied:hyu, requires: ひ, requires: ゅ
+ひゃ, unstudied:hua, requires: ひ, requires: ゃ
+
+ちょ, unstudied:cho, requires: ち, requires: ょ
+ちゅ, unstudied:chu, requires: ち, requires: ゅ
+ちゃ, unstudied:cha, requires: ち, requires: ゃ
+
+あ[long], unstudied: requires: long, requires: あ
+う[long], unstudied: requires: long, requires: う
+い[long], unstudied: requires: long, requires: い
+え[long], unstudied: requires: long, requires: え
+// TODO: add a rule for this exception
+お[long], unstudied: requires: long, requires: お
+
+く[silent], unstudied: requires く, requires: silent
+す[silent], unstudied: requires す, requires: silent
+し[silent], unstudied: requires し, requires: silent
