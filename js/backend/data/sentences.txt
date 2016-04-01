@@ -957,8 +957,8 @@
 オフィス に[loc] いない : (He) is not at the office.
 仕事 に[loc] いい 社長 が いない : There are no good bosses at my job.
 私 は 子供 が いない : I don't have any children.
-彼 は 子供 が いない : he doesn't have any children.
-彼女 は 子供 が いない : she doesn't have any children.
+彼 は 子供 が いない : He doesn't have any children.
+彼女 は 子供 が いない : She doesn't have any children.
 
 // 121 == kunai
 この 本 が 小さくない : This book is not small.

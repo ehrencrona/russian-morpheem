@@ -1,0 +1,371 @@
+тут (собака,кошка,лошадь,мышь,улица,телефон)@nom:Here is a (dog,cat,horse,mouse,street,phone).
+на (улица,площадь,библиотека)@prep собака:A dog is (on the street,on the square,at the library) 
+на (квартира,библиотека)@prep собака:There is a dog in the (flat,library) 
+(он,я) тут:(He is,I am) here.
+(он,я,телефон@nom) на квартира@prep:(He's,I'm,The phone is) in the flat.
+(он,я) на дорогая квартира@prep:(He's,I'm) in an expensive flat.
+
+(он,я) на библиотека@prep:(He's,I'm) in the library.
+(собака,кошка,мышь)@nom на квартира@prep:A (dog,cat,mouse) is in the flat.
+что на квартира@prep ?:What is in the flat ?
+где (собака,кошка,лошадь,мышь,улица,квартира)@nom:Where is the (dog,cat,horse,mouse,street,flat)?
+что ето ?:What is this?
+ето (собака,кошка,лошадь,мышь,улица)@nom:This is a (dog,cat,horse,mouse,street).
+ето моя (собака,кошка,улица,квартира)@nom:This is my (dog,cat,street,flat).
+где моя (собака,кошка,улица,квартира)@nom ?:Where is my (dog,cat,street,flat)?
+где он ?:Where is he?
+// где ета (улица,собака)@nom ?:Where is this (street,dog)?
+я где ?:Where am I?
+
+я друг@nom:I am a friend.
+он мой@m друг@nom:He is my friend.
+он друг@nom:He is a friend.
+где мой@m (друг,телефон)@nom ?:Where is my (friend,phone)?
+мой@m друг@nom на улица@prep:My friend is on the street.
+где университет@nom ?:Where is the university?
+ето мой@m университет@nom ?:Is this my university?
+
+он видит лошадь@acc в парк@prep: He seed a horse in the park.
+я вижу лошадь@acc в парк@prep: I see a horse in the park.
+я вижу (собака,кошка,лошадь,мышь,ребёнок)@acc: I see a (dog,cat,horse,mouse,child).
+я (ты@acc,он@acc,она@acc) вижу на улица@prep: I see (you,him,her) on the street.
+я встречаю (ты@acc,он@acc,она@acc) на площадь@prep: I meet (you,him,her) on the square.
+я вижу (собака,кошка,лошадь,мышь)@acc на улица@prep: I see a (dog,cat,horse,mouse) on the street.
+он видит (собака,кошка,лошадь,мышь,ребёнок)@acc: He sees a (dog,cat,horse,mouse,child).
+он видит (собака,кошка,лошадь,мышь)@acc на улица@prep: He sees a (dog,cat,horse,mouse) on the street.
+
+ты@nom слышишь машина@acc на улица@prep ?:Do you hear the car in the street?
+ты@nom слышишь (мышь,машина)@acc ?:Do you hear the (mouse,car)?
+что ты@nom (видишь,слышишь) ?:What do you (see,hear)?
+кто ты@nom (видишь,встречаешь,слышишь) ?:Who do you (see,meet,hear)?
+ты@nom видишь (магазин,машина,он,она)@acc ?:Do you see (the shop,the car,him,her)?
+что он (видит,слышит) ?:What does he (see,hear)?
+кто он (видит,встречает,слышит) ?:Who does he (see,meet,hear)?
+что видит (он,собака)@nom ?:What does (he,the dog) see?
+кто видит (он,собака,лошадь)@nom ?:Whо does (he,the dog,the horse) see?
+кто видит (он,собака,кошка)@acc ?:Whо sees (him,the dog,the cat)?
+
+кто мой@m друг@nom ?:Who is my friend?
+кто он ?: Who is he?
+
+
+что "WhatsApp" ?:What is "WhatsApp"?
+
+
+я слышу (собака,кошка,лошадь,мышь,ты,он,она,мама)@acc: I hear (a dog,a cat,a horse,a mouse,you,him,her,Mom).
+мама слышит (мышь,ты,он,она)@acc: Mom hears (a mouse,you,him,her).
+(собака,кошка) слышит я@acc: Тhe (dog,cat) hears me.
+(собака,кошка) слышит он@acc: Тhe (dog,cat) hears him.
+мама слышит (я,ты)@acc: Mom hears (me,you).
+собака видит (я@acc,он@acc): Тhe dog sees (me,him).
+
+я встречаю (собака,кошка,лошадь,мышь)@acc: I meet the (dog,cat,horse,mouse).
+
+(собака,кошка,лошадь)@nom встречает мышь@acc: Тhe (dog,cat,horse) meets a mouse.
+собака видит (кошка,лошадь,мышь)@acc: Тhe dog sees a (cat,horse,mouse).
+
+на (улица,площадь,газон)@prep мышь@nom: There is a mouse in the (street,square,lawn).
+в (библиотека,университет)@prep мышь@nom: There is a mouse in the (library,university).
+в парк@prep (лошадь@nom,ребёнок): There is a (horse,child) in the park.
+я работаю в (библиотека,университет)@prep:I work at the (library,university).
+он работает в (библиотека,университет)@prep:He works at the (library,university).
+
+я сижу на (улица,площадь,газон)@prep:I sit on the (street,square,lawn).
+он сидит на (улица,площадь,газон)@prep:He sits on the (street,square,lawn).
+я сижу в (библиотека,университет,парк)@prep:I sit (at the library,at the university,in the park).
+он сидит в (библиотека,университет)@prep:He sits at the (library,university).
+ребёнок@nom сидит на (улица,площадь,газон)@prep:He sits on the (street,square,lawn).
+ребёнок@nom сидит в (библиотека,университет)@prep:He sits at the (library,university).
+
+в (библиотека,университет)@prep мышь@nom:A mouse is in the (library,university)
+я работаю в (библиотека,университет)@prep:I work at the (library,university)
+он работает в (библиотека,университет)@prep:He works at the (library,university)
+
+собака играет на (улица,площадь,газон)@prep:The dog plays on the (street,square,lawn)
+ребёнок@nom играет на (улица,площадь,газон)@prep:The child plays on the (street,square,lawn)
+
+я играю на (улица,площадь,газон)@prep:I play on the (street,square,lawn)
+я гуляю на (улица,площадь,газон)@prep:I walk on the (street,square,lawn)
+
+лошадь@nom гуляет на улица@prep:A horse walks on the street.
+она гуляет в парк@prep:She takes a walk in the park.
+
+я читаю (газета,журнал,книга,статья,письмо)@acc:I read (a newspaper,a magazine,a book,an article,a letter)
+он читает (газета,журнал,книга,статья)@acc:He reads (a newspaper,a magazine,a book,an article)
+она читает (газета,журнал,книга,статья,письмо)@acc в библиотека@prep:She reads (a newspaper,a magazine,a book,an article,a letter) at the library
+я пишу (газета,журнал,книга,статья,письмо)@acc:I write (a newspaper,a magazine,a book,an article,a letter)
+я пишу в библиотека@prep:I write at the library
+он пишет (книга,статья,письмо)@acc:He writes (a book,an article,a letter).
+кто пишет (книга,статья,письмо)@acc ?:Who writes (a book,an article,a letter)?
+
+где газета@nom ?:Where is the newspaper?
+где письмо@nom ?:Where is the letter?
+
+ето отличная (газета,библиотека)@nom:It is a great (newspaper,library).
+ето отличный@m (журнал,человек)@nom:It's a great (magazine,person).
+
+я отличный@m (студент,человек)@nom:I am a great (student,person).
+я хороший@m (студент,человек)@nom:I am a good (student,person).
+он отличный@m (друг,студент)@nom:He is a great (friend,student).
+ты отличный@m (друг,студент)@nom:You are a great (friend,student).
+студент@nom в университет@prep:The student is at the university.
+(сегодня,вчера) отличная погода@nom:The weather is great (today,yesterday).
+(сегодня,вчера) хорошая погода@nom:The weather is good (today,yesterday).
+(сегодня,вчера) очень хорошая погода@nom:The weather is very good (today,yesterday).
+(сегодня,вчера) отличный@m день@nom:It's a great day (today,yesterday).
+(сегодня,вчера) хороший@m день@nom:It's a good day (today,yesterday).
+она@nom отличная (собака,кошка)@nom:She is a great (dog,cat).
+она@nom хорошая (собака,кошка)@nom:She is a good (dog,cat).
+
+он@nom большой@m человек@nom:He's a big guy.
+человек@nom сидит на улица@prep:There's a person sitting on the street.
+
+на площадь@prep очень большая библиотека@nom:There's a very big library on the square.
+на площадь@prep большая библиотека@nom:There's a big library on the square.
+моя собака большая:My dog is big.
+он@nom хороший@m друг@nom:He's a good friend.
+большой@f лошадь@nom в парк@prep:There is big horse in the park.
+
+тут белая (собака,кошка,машина)@nom:There is a white (dog,cat,car) here.
+тут чёрная (собака,кошка,машина)@nom:There is a black (dog,cat,car) here.
+тут белый@f (лошадь,мышь)@nom:There is a white (horse,mouse) here.
+тут маленкий@f (лошадь,мышь)@nom:There is a small (horse,mouse) here.
+тут большой@f (лошадь,мышь)@nom:There is a big (horse,mouse) here.
+тут очень большой@f (лошадь,мышь)@nom:There is a very big (horse,mouse) here.
+тут чёрный@f (лошадь,мышь)@nom:There is a black (horse,mouse) here.
+где белая (собака,кошка,машина)@nom ?:Where is the white (dog,cat,car)?
+где чёрная (собака,кошка,машина)@nom ?:Where is the black (dog,cat,car)?
+где маленкая (собака,кошка,машина,книга)@nom ?:Where is the small (dog,cat,car,book)?
+где белая@f (лошадь,мышь)@nom ?:Where is the white (horse,mouse)?
+где чёрная@f (лошадь,мышь)@nom ?:Where is the black (horse,mouse)?
+
+ето хороший@m (планшет,телефон,университет)@nom ?:Is that a good (tablet,phone,university)?
+где белый@m (свитер,планшет)@nom ?:Where is the white (sweater,tablet)?
+где чёрный@m (свитер,планшет)@nom ?:Where is the black (sweater,tablet)?
+где хороший@m свитер@nom ?:Where is the good sweater?
+тут маленкий@m (свитер,планшет)@nom:There is a small (sweater,tablet).
+тут большой@m (свитер,планшет)@nom:There is a big (sweater,tablet).
+планшет@nom в (библиотеке,университете,магазине)@prep:The tablet is at the (library,university,shop).
+свитер@nom в (библиотеке,университете,магазине)@prep:The sweater is at the (library,university,shop).
+белый@m свитер@nom в магазине@prep:The white sweater is at the shop.
+
+он покупает белый@macc (свитер,планшет)@acc ?:He buys a white (sweater,tablet)?
+она покупает маленкий@macc (свитер,планшет)@acc ?:She buys a small (sweater,tablet)?
+она покупает маленкий@macc (свитер,планшет)@acc ?:She buys a small (sweater,tablet)?
+она покупает дорогой@macc (свитер,планшет)@acc ?:She buys an expensive (sweater,tablet)?
+она покупает очень дорогой@macc (свитер,планшет)@acc ?:She buys a very expensive (sweater,tablet)?
+
+мой@m (телефон,планшет)@nom очень дорогой@m:My (phone,tablet) is very expensive.
+(собака,кошка) дорогая ?: Is the (dog,cat) expensive?
+
+тут (магазин,библиотека,университет)@nom:There is a (shop,library,university)
+тут хороший@m магазин@nom:There is a good shop.
+
+машина (в магазин@prep,в университет@prep,в библиотека@prep,на газон@prep,на улица@prep):The car is (at the shop,at the university,at the library,on the lawn,on the street)
+я (в магазин@prep,в университет@prep,в библиотека@prep,на газон@prep,на улица@prep):I am (at the shop,at the university,at the library,on the lawn,on the street)
+он (в магазин,в университет,в библиотека,на газон,на улица,в чентр)@prep:He is (at the shop,at the university,at the library,on the lawn,on the street,in the city center)
+(магазин,университет)@nom в чентр@prep:(The shop,The university) is in the center.
+
+в университет@prep библиотека:There is a library at the university.
+в университет@prep хорошая библиотека:There is a good library at the university.
+ето маленкий@m (университет,магазин,площадь)@nom:It is a small (university,shop,square)
+где (университет,магазин,площадь)@nom ?:Where is the (university,shop,square)?
+
+я работаю в чентр@prep:I work in the center of the city.
+я тут работаю:I work here.
+я работаю:I'm working.
+он работает:He's working.
+он тут работает:He works here.
+
+кто ты@nom ?:Who are you?
+ты@nom тут:You are here.
+ты@nom ребёнок@nom:You are a child.
+
+я люблю (ты,она)@acc: I love (you,her)
+ты я@acc любишь ?: Do you love me?
+(он,она,кошка)@nom любит я@acc: (He,She,The cat) loves me
+(он,она,кошка)@nom любит кошка@acc: (He,She,The cat) loves the cat
+я люблю (мама,собака,кошка,ребёнок)@acc: I love (Mom,the dog,the cat,the child)
+мама@acc любит (я,ребёнок)@acc: Mom loves (me,the child)
+
+кто (он,она)@nom любит ?:Who does (he,she) love?
+что (он,она)@nom любит ?:What does (he,she) love?
+кто ты любишь ?:Who do you love?
+что ты любишь ?:What do you love?
+
+я вижу ребёнок@acc: I see a child.
+
+ето хорошая квартира: This is a good flat.
+ето хороший@m телефон@nom: This is a good phone.
+
+какая собака моя ?:Which dog is mine?
+какая вчера погода@nom ?:What was the weather like yesterday?
+какая сегодня погода@nom ?:What's the weather like today?
+какой@m он человек@nom ?:What kind of person is he?
+какой@m он студент@nom ?:How is he as a student?
+какой@m сегодня день@nom ?:What day is it today? 
+
+я покупаю телефон@acc в магазин@prep:I buy a phone at the shop.
+какой@macc телефон@acc ты покупаешь ?:What kind of phone do you buy?
+какой@macc журнал@acc ты читаешь ?:What kind of magazine do you read?
+
+какую книгу ты читаешь ?:What kind of book are you reading?
+она покупает большую собаку:She buys a big dog.
+
+большая библиотека в чентр@prep:The big library is in the center.
+кто ты встречаешь ?:Who are you meeting?
+
+мой@m друг@nom покупает большую квартиру:My friend buys a big apartment.
+друг@nom покупает хорошую машину в магазине@prep:A friend buys a good car at the shop.
+она@nom покупает белую@facc мышь@acc в магазине@prep:She buys a white mouse at the shop.
+
+он читает отличную книгу:He reads a great book.
+я встречаю большую (собака,кошка)@acc: I meet a large (dog,cat).
+я покупаю белый@macc телефон@acc:I buy a white phone.
+
+он встречает маленкий@macc ребёнок@acc:He meets a small child.
+он встречает маленкий@facc собака@acc:He meets a small dog.
+
+я читаю твой@facc (статья,книга)@acc:I read your (article,book).
+
+какой@macc твой@macc мышь@acc ?:Which is your mouse?
+
+я вижу большой@macc человек@acc:I see a big person.
+
+я вижу твою собаку@acc:I see your dog.
+
+где твои@pl собаки@pl:Where are your dogs?
+
+я люблю твой@macc телефон@acc: I love your phone.
+я люблю твой@macc новый@macc телефон@acc: I love your new phone.
+я люблю твой@facc (квартира,машина)@acc: I love your (apartment,car).
+я люблю твой@facc новую@facc (квартира,машина)@acc: I love your new (apartment,car).
+я встречаю твой@macc друг@acc: I meet your friend.
+
+я вижу (белый,чёрный)@macc мышь@acc:I see a (white,black) mouse.
+я вижу белый@facc (кошка,собака)@acc:I see a white (cat,dog).
+я вижу чёрный@facc (кошка,собака)@acc:I see a black (cat,dog).
+
+в (библиотеке,университете)@prep мышь@pl:There are mice at the (library,university).
+на газоне мышь@pl:There are mice on the lawn.
+в парке лошадь@pl:There are horses in the park.
+лошади@pl гуляет в парке@prep:Horses are walking in the park.
+
+книга на кровати@prep :The book is on the bed.
+я лежу на кровати@prep :I'm lying on the bed.
+
+ты под кроватью@instr ?:Are you under the bed?
+журнал@nom лежит под (кроватью,столом,стулом)@instr :The magazine is lying under the (bed,table,chair).
+собака лежит под (кроватью,столом,стулом)@instr :The dog is lying under the (bed,table,chair).
+телефон@nom лежит на (кровати,столе,стуле)@prep :The phone is lying on the (bed,table,chair).
+кто на (кровати,столе,стуле)@prep :Who is on the (bed,table,chair)?
+что под (кроватью,столом,стулом)@instr :What is under the (bed,table,chair)?
+
+он лежит под деревом@instr в парке@prep:He lies under a tree in the park.
+
+на столе@prep открытая газета:There is an open newspaper lying on the table.
+
+
+телефон@nom под газетой:The phone is under the magazine.
+под машиной лежит человек@nom:There is a man lying under the car.
+под квартирой магазин@nom:Тhere is a shop under the apartment.
+
+она сидит на стуле@prep :She is sitting in the chair.
+
+я вижу открытую@facc дверь@acc:I see an open door.
+где открытый@m магазин@nom:Where is there an open shop?
+на улице@prep открытая машина@nom:Тhere is an unlocked car on the street.
+
+(кошка,ребёнок) за шторой@instr: The (cat,child) is behind the curtain.
+(собака,ребёнок) за дверью@instr: The (dog,child) is behind the door.
+(собака,ребёнок) за окном@instr: А (dog,child) is behind the window.
+за шторой@instr окно@nom: There is a window behind the curtain.
+
+магазин@nom под площадью@instr:The shop is under the square.
+
+в квартире@prep (белая,чёрная) штора:The apartment has a (white,black) curtain.
+
+в машине@prep шторы@pl:The car has curtains.
+в квартире@prep открытые@pl шторы@pl:The apartment has open curtains.
+
+я его встречаю в двери@prep:I meet him at the door.
+
+мой@m друг@nom очень открытый@m человек@nom: My friend is a very outgoing person.
+
+за столом@instr стул@nom:There is a chair behind the table.
+
+на столе@prep (газеты,книги)@pl:There are (magazines,books) on the table.
+
+в квартире@prep (маленкая,белая,чёрная) дверь@nom:The appartment has a (small,white,black) door.
+
+в квартире@prep (маленкие,белые,чёрные) двери@pl:The appartment has (small,white,black) doors.
+на столе@prep (большие,маленкие) книги@pl:There are (big,small) books on the table.
+
+ето твой@m телефон@nom ?:Is that your phone?
+ето твоя@f квартира@nom ?:Is that your apartment?
+ето твои (собаки,кошки)@pl ?:Are those your (dogs,cats)?
+
+в чентре@prep машины@pl:There are cars in the center.
+в чентре@prep большие (квартиры,машины)@pl :Тhere are big (apartments,cars) in the center.
+мои (собаки,кошки)@pl в парке@prep:My (dogs,cats) are in the park.
+
+// сколко (газеты,книги)@genpl ты читаешь ?:How many (newspapers,books) do you read?
+// сколко (лошади,мыши)@genpl ты видишь ?:How many (horses,mice) do you see?
+// сколко (други,человек)@genpl ты видишь ?:How many (horses,mice) do you see?
+
+собака открывает (дверь,окно)@acc:The dog opens a (door,window).
+
+я открываю (дверь,окно,квартиру,книгу,письмо)@acc: I open the (door,window,book,apartment,letter).
+я открываю (дверь,окно,квартиры,книги,письмо)@accpl: I open the (doors,windows,books,apartments,letters).
+
+я закрываю (дверь,окно,квартиру,книгу,письмо)@acc: I close the (door,window,book,apartment,letter).
+я закрываю (дверь,окно,квартиры,книги,письмо)@accpl: I close the (doors,windows,books,apartments,letters).
+
+твоё@n письмо@nom отличное:Your letter is great.
+ето письмо@nom отличное:This is a great letter.
+ты читаешь моё@n письмо@acc ?:You are reading my letter?
+где твоё@n письмо@nom ?:Where is your letter?
+твоё@n письмо@nom на столе@prep ?:Your letter is on the table.
+
+ты закрываешь открытая@f (квартиру,книгу)@acc: You close the open (apartment,book).
+ты закрываешь открытых@accpl (квартиры,книги)@accpl: You close the open (apartment,book).
+она закрывает открытое@n (дверь,окно)@acc: She closes the open (door,window).
+она закрывает открытых@accpl (дверь,окно)@accpl: She closes the open (doors,windows).
+
+ты покупаешь новый@macc (телефон,планшет)@acc ?:Are you buying a new (phone,tablet)? 
+ты покупаешь новую@facc (квартиру,книгу)@acc ?:Are you buying a new (book,apartment)? 
+
+в чентре@prep большие@pl (улицы,площади)@pl:There are large (streets,squares) in the center.
+
+на улице@prep (белые,новые)@pl машины@pl:There are (white,new) cars on the street.
+на улице@prep машины@pl:There are cars on the street.
+
+ето мой@m новый@m профессор@nom:This is my new professor.
+профессор@nom мой@n новый@m друг@nom:The professor is my new friend.
+
+большое дерево@nom на площади@prep:There is a big tree in the square.
+
+на улице@prep деревья@pl:There are trees on the street.
+на площадь@prep дерево@nom:There is a tree on the square.
+
+в чентре новый@m магазин@nom : There is a new shop in the center.
+
+в парке большие@pl деревья@pl:There are large trees in the park.
+
+профессор@nom покупает дорогой@m телефон@nom:The oligarch buys an expensive phone.
+профессор@nom покупает дорогие@pl телефоны@pl:The oligarch buys expensive phones.
+
+деревья@pl чёрные@pl:The trees are black.
+дерево@nom чёрное@n:The tree is black.
+
+какое@n письмо@nom твоё@n ?:Which letter is yours?
+какое@n дерево@nom ты любишь ?:Which tree do you like?
+
+в квартире@prep большие окна@pl:The apartment has big windows.
+
+ты читаешь письма@accpl ?: You are reading letters?
+ты пишешь письма@accpl ?: You are writing letters?
+ты читаешь (книги,газеты,журналы)@pl ?: Do you read (books,newspapers,magazines)?
+
+я профессор@nom:I'm a professor.
+он олигарх@nom:He's an oligarch.

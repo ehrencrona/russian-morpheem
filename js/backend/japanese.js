@@ -1,5 +1,11 @@
 "use strict";
 
+
+/**
+ * Test of the consistency of the grammar rules for the main language course.
+ * TODO: Grammar rules need moving to a corpus file and then this class can be removed.
+ */
+
 var _ = require('underscore')
 var fs = require('fs')
 
@@ -11,7 +17,7 @@ var Grammar = require('../shared/Grammar')
 var Word = require('../shared/Word')
 
 var UnstudiedWord = require('../shared/UnstudiedWord')
-var Inflection = require('../shared/Inflection')
+var InflectedWord = require('../shared/InflectedWord')
 
 var sentenceSetModule = require('../shared/SentenceSet')
 
@@ -19,7 +25,7 @@ var SentenceSet = sentenceSetModule.SentenceSet
 var set = sentenceSetModule.set
 var setRef = sentenceSetModule.setRef
 
-var FactOrder = require('../shared/FactOrder').FactOrder
+var FactOrder = require('../shared/FactOrder')
 var FactFileReader = require('./FactFileReader')
 var SentenceFileReader = require('./SentenceFileReader')
 

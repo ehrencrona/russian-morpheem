@@ -13,7 +13,7 @@ const DAY_IN_SEC = 100000
 
 // the index in the DECAY list we start out it. we don't start on 0
 // since failing the first test needs to increase decay.
-const DEFAULT_STRENGTH = 1
+const DEFAULT_STRENGTH = 0.5 / 60
 
 const DECAY = []
 
@@ -76,16 +76,7 @@ class Knowledge {
 
             let strength = tuple[1]
 
-            var alpha = (strength - Math.floor(strength))
-
-            var decayLow = DECAY[Math.floor(strength)]
-            var decayHigh = DECAY[Math.ceil(strength)]
-
-            var decay =
-                (1 - alpha) * (decayLow || 0) +
-                alpha * (decayHigh || 0)
-
-console.log('strength', strength, 'decay', decay)
+            var decay = strength
 
             var result = 1 - (time - lastKnownTime) * decay
 
@@ -115,19 +106,36 @@ console.log('strength', strength, 'decay', decay)
         this.updateFact(fact, time, -surprise)
     }
 
-    updateFact(fact, time, strengthChange) {
-        console.log('strength change', strengthChange)
-
+    updateFact(fact, time, surprise) {
         var tuple = this.byId[fact.getId()]
 
         if (!tuple) {
-            this.byId[fact.getId()] = [ time, DEFAULT_STRENGTH + strengthChange ]
+            this.byId[fact.getId()] = [ time, DEFAULT_STRENGTH ]
         }
         else {
             // last known time
             tuple[0] = time
             // strength
-            tuple[1] = Math.max(0, tuple[1] + strengthChange)
+
+            var oldStrength = tuple[1]
+
+            // TODO: document, conceptualize and rename
+            var foo = 6
+
+            var s = surprise * surprise
+
+            var voodoo = (surprise < 0 ?
+                1 / ( 1 + (foo + 1) * s) :
+                1 + (foo - 1) * s)
+
+            tuple[1] = tuple[1] / voodoo
+
+            console.log('update at', time, '. surprise', surprise, '. strength is now', tuple[1], 'from previously', oldStrength,
+                'Sure to forget after',
+                    Math.round(10 / tuple[1] / 60) / 10, 'minutes'
+
+            )
+
         }
     }
 }

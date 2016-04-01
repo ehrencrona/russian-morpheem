@@ -11,20 +11,20 @@ require('./inheritance-clientserver.js')
  * studied separately. These are distinguished by "classifiers", e.g. there is に[loc] ("loc" being the classifier)
  * for specifying location and に[dir] for specifying direction.
  */
-var UnstudiedWord = Class.extend({
-    init: function(jp, classifier) {
+class UnstudiedWord {
+    constructor(jp, classifier) {
         this.jp = jp
         this.classifier = classifier
         this.en = {}
-    },
+    }
 
-    related: function(fact) {
+    related(fact) {
         // unused for now
 
         return this
-    },
+    }
 
-    requiresFact: function(fact) {
+    requiresFact(fact) {
         if (!fact) {
             throw new Error('No fact.')
         }
@@ -36,13 +36,13 @@ var UnstudiedWord = Class.extend({
         this.required.push(fact)
 
         return this
-    },
+    }
 
-    visitFacts: function (visitor) {
+    visitFacts(visitor) {
         this.visitRequired(visitor)
-    },
+    }
 
-    visitRequired: function(visitor) {
+    visitRequired(visitor) {
         if (this.required) {
             for (let fact of this.required) {
                 if (fact.visitFacts) {
@@ -53,9 +53,9 @@ var UnstudiedWord = Class.extend({
                 }
             }
         }
-    },
+    }
 
-    getEnglish: function(form) {
+    getEnglish(form) {
         if (!form) {
             form = ''
         }
@@ -67,9 +67,9 @@ var UnstudiedWord = Class.extend({
         }
 
         return result
-    },
+    }
 
-    setEnglish: function(en, form) {
+    setEnglish(en, form) {
         if (!form) {
             form = ''
         }
@@ -82,14 +82,14 @@ var UnstudiedWord = Class.extend({
         this.en[form] = en
 
         return this
-    },
+    }
 
     /**
      * This is the form used in sentence files (SentenceFileReader)
      */
-    toString: function() {
+    toString() {
         return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
     }
-})
+}
 
 module.exports = UnstudiedWord

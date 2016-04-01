@@ -12,6 +12,8 @@ function fact(id) {
     }
 }
 
+var DAY = 24 * 60 * 60;
+
 describe('Knowledge', function() {
     describe('getKnowledge()', function () {
         it('should return 0 when no fact has been recorded', function () {
@@ -51,6 +53,9 @@ describe('Knowledge', function() {
             var easyFact = fact(1)
             var hardFact = fact(2)
 
+            knowledge.saw(hardFact, 0)
+            knowledge.saw(easyFact, 0)
+
             knowledge.didntKnow(hardFact, 10)
 
             knowledge.knew(hardFact, 10)
@@ -81,20 +86,27 @@ describe('Knowledge', function() {
             knowledge.getStrength(fact(1), 0).should.equal(0)
         })
 
-        it('eventually stops decaying', function () {
+        it('retention should develop reasonably over a few days', function () {
             let knowledge = new Knowledge()
 
             let afact = fact(1)
 
-            var lastTime
+            knowledge.saw(afact, 0)
+            knowledge.knew(afact, 0)
+            knowledge.knew(afact, 600)
+            knowledge.knew(afact, 1200)
 
-            for (let i = 0; i < 20; i++) {
-                lastTime = i * 6000
+            knowledge.knew(afact, DAY)
 
-                knowledge.knew(afact, lastTime)
-            }
+            knowledge.getKnowledge(afact, 2 * DAY).should.be.below(0.5)
 
-            knowledge.getKnowledge(afact, lastTime * 2).should.be.above(0.8)
+            knowledge.knew(afact, 2 * DAY)
+
+            knowledge.getKnowledge(afact, 3 * DAY).should.be.above(0.1)
+
+            knowledge.knew(afact, 7 * DAY)
+
+            knowledge.getKnowledge(afact, 9 * DAY).should.be.above(0.5)
         })
 
         it('should increase strength after knew', function () {

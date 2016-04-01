@@ -8,7 +8,6 @@ var port = process.env.PORT || 8080
 
 const ONE_DAY = 24 * 3600 * 1000
 
-
 function isProd() {
     if (typeof process != 'undefined' && process.env.MORPHEEM_ENV === 'prod') {
         return true

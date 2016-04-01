@@ -2,11 +2,11 @@
 
 var Q = require('q')
 var fs = require('fs')
-var FactFileParser = require('../shared/FactFileParser')
+var InflectionFileParser = require('../shared/InflectionFileParser')
 var typecheck = require('../shared/typecheck')
 
-module.exports = (fileName, getGrammar, getInflection) => {
-    typecheck([fileName, getGrammar, getInflection], 'string', 'function', 'function')
+module.exports = (fileName) => {
+    typecheck([fileName], 'string')
 
     var deferred = Q.defer()
 
@@ -15,7 +15,7 @@ module.exports = (fileName, getGrammar, getInflection) => {
             return deferred.reject(new Error(err))
         }
 
-        deferred.resolve(FactFileParser(body, getGrammar, getInflection))
+        deferred.resolve(InflectionFileParser(body))
     })
 
     return deferred.promise

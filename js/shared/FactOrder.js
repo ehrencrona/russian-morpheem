@@ -96,7 +96,7 @@ var Knowledge = Class.extend({
         return result
     },
 
-    checkAdequateRepetition: function(factIndex) {
+    checkAdequateRepetition: function(fact, factIndex) {
         if (factIndex < MAX_SIMULTANEOUS_STUDY * 3 / 2) {
             return
         }
@@ -116,7 +116,9 @@ var Knowledge = Class.extend({
             var reps = this.studyingById[factId]
 
             if (!this.inadequateRepetition[factId] && age < SCHEDULE.length && reps < SCHEDULE[age]) {
-                console.log('Only', reps, 'repetitions for', factId + '. Expected ' + SCHEDULE[age])
+                console.log('Only', reps, 'repetitions for', factId + '. Expected ' + SCHEDULE[age]
+                    + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + fact.line + ':1)'
+                )
 
                 throw Error()
 
@@ -238,7 +240,7 @@ var FactOrder = Class.extend({
                 }
             }
 
-            knowledge.checkAdequateRepetition(factIndex)
+            knowledge.checkAdequateRepetition(fact, factIndex)
 
             if (_.keys(knowledge.studyingById) == MAX_SIMULTANEOUS_STUDY) {
                 throw new Error('Reached the limit of the number of facts simultaneously studied: ' + knowledge.studying)

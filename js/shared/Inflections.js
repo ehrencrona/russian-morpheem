@@ -2,14 +2,14 @@
 
 var Word = require('./Word')
 var UnstudiedWord = require('./UnstudiedWord')
-var Inflection = require('./Inflection')
+var InflectedWord = require('./InflectedWord')
 var _ = require('underscore')
 var typecheck = require('./typecheck')
 
 var Forms = require('./Forms')
 
 /**
- * Rules generating inflections from base forms. See Inflection.js.
+ * Rules generating inflections from base forms. See InflectedWord.js.
  */
 
 
@@ -71,7 +71,7 @@ module.exports = {
         typecheck(arguments, Word, 'function')
 
         return [
-            new Inflection(replaceEnding(infinitive, {'い': 'くない'}), infinitive).setEnglish('not ' + infinitive.getEnglish()).requiresFact(grammar('kunai'))
+            new InflectedWord(replaceEnding(infinitive, {'い': 'くない'}), infinitive).setEnglish('not ' + infinitive.getEnglish()).requiresFact(grammar('kunai'))
         ]
     },
 
