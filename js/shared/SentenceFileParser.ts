@@ -1,17 +1,13 @@
 "use strict";
 
-var Sentence = require('./Sentence')
-var typecheck = require('./typecheck')
-var _ = require('underscore')
-
-/**
- * Reads a file of sentences. See parseLine for the format.
- */
+import Sentence from './Sentence';
+import Words from './Words';
+import Facts from './Facts';
 
 /**
  * Parses a Japanese sentence (words delimited by spaces) into Words.
  */
-function parseSentenceToWords(sentence, wordsById, lineNumber) {
+function parseSentenceToWords(sentence, allWords: Words, lineNumber) {
     var words = []
 
     let pos = 1
@@ -22,10 +18,10 @@ function parseSentenceToWords(sentence, wordsById, lineNumber) {
             continue
         }
 
-        let word = wordsById[token]
+        let word = allWords.get(token)
 
         if (!word) {
-            let sameLetter = _.filter(_.keys(wordsById), (word) => word[0] == token[0])
+            let sameLetter = Object.keys(allWords.wordsById).filter((word) => word[0] == token[0])
 
             let byMatchLength = sameLetter.map((word) => {
                 let i;
@@ -99,12 +95,14 @@ function parseLineToElements(line, parseSentenceToWords) {
     var tags = m[2]
 
     var result = {
-        tags: []
+        tags: [],
+        words: undefined,
+        english: undefined
     }
 
     if (tags) {
         for (let element of tags.split(',')) {
-            let split = _.map(element.split(':'), (s) => s.trim())
+            let split = element.split(':').map((s) => s.trim())
 
             if (split.length != 2) {
                 throw new Error('Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "requires". The element "' + element + '" does not have a colon.')
@@ -121,22 +119,24 @@ function parseLineToElements(line, parseSentenceToWords) {
     return result
 }
 
-function parseLine(line, wordsById, grammar, lineNumber) {
-    var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, wordsById, lineNumber))
+function parseLine(line, words: Words, facts: Facts, lineNumber) {
+    var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber))
+    
+    let english = elements.english, tags = elements.tags;
 
-    var sentence = new Sentence(elements.words)
+    var sentence = new Sentence(elements.words, line.toString())
 
     // TODO: the IDs of sentences should be persistent after updates of the knowledge base.
     sentence.id = sentence.toString()
 
-    sentence.setEnglish(elements.english)
+    sentence.setEnglish(english)
 
-    for (let tag of elements.tags) {
+    for (let tag of tags) {
         let name = tag[0]
         let value = tag[1]
 
         if (name == 'requires') {
-            sentence.requiresFact(grammar(value))
+            sentence.requiresFact(facts.get(value))
         }
     }
     
@@ -171,9 +171,10 @@ function expandLine(line, lineNumber) {
     }
 }
 
-module.exports = (data, wordsById, grammar) => {
-    typecheck([data, wordsById, grammar], 'string', 'object', 'function')
-
+/**
+ * Reads a file of sentences. See parseLine for the format.
+ */
+export default function parseSentenceFile(data, words: Words, facts: Facts) {
     var sentences = []
 
     let lineNumber = 0;
@@ -186,7 +187,7 @@ module.exports = (data, wordsById, grammar) => {
         }
 
         for (let expandedLine of expandLine(line, lineNumber)) {
-            sentences.push(parseLine(expandedLine, wordsById, grammar, lineNumber))
+            sentences.push(parseLine(expandedLine, words, facts, lineNumber))
         }
     }
 

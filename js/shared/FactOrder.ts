@@ -1,9 +1,9 @@
 "use strict";
 
 var _ = require('underscore')
-var typecheck = require('./typecheck')
 
-var Word = require('./Word')
+import Fact from './Fact';
+import Word from './Word';
 
 var MAX_SIMULTANEOUS_STUDY = 10
 var EASY_REPETITIONS = 5
@@ -13,38 +13,48 @@ function cloneArray(sentences) {
     return sentences.slice(0, sentences.length);
 }
 
-var StudyResult = Class.extend({
-    init: function() {
+class StudyResult {
+    unknownById: { [key: string]: Fact }
+    studyingById: { [key: string]: Fact }
+    knownById: { [key: string]: Fact }
+    
+    constructor() {
         this.unknownById = {}
         this.studyingById = {}
         this.knownById = {}
     }
-})
+}
 
-var Knowledge = Class.extend({
-    init: function() {
+class Knowledge {
+    unknownById: { [key: string]: Fact }
+    learningSince: { [key: string]: number }
+    studyingById: { [key: string]: number }
+    knownById: { [key: string]: number }
+    inadequateRepetition: { [key: string]: boolean }
+
+    constructor() {
         this.studyingById = {}
         this.knownById = {}
         this.learningSince = {}
 
         this.inadequateRepetition = {}
-    },
+    }
 
-    learnedFact: function (factId) {
+    learnedFact(factId) {
         delete this.studyingById[factId]
 
         this.knownById[factId] = 1
-    },
+    }
 
-    firstSawFact: function (factId) {
+    firstSawFact(factId) {
         this.studyingById[factId] = 1
-    },
+    }
 
-    repeatedFact: function (factId) {
+    repeatedFact(factId) {
         this.studyingById[factId]++
-    },
+    }
 
-    learn: function(studyResult, factIndex) {
+    learn(studyResult, factIndex) {
         _.forEach(_.keys(studyResult.knownById), (factId) => {
             var reps = this.knownById[factId]++
 
@@ -64,22 +74,22 @@ var Knowledge = Class.extend({
                 this.repeatedFact(unknownId)
             }
             else {
-                this.firstSawFact(unknownId, factIndex)
+                this.firstSawFact(unknownId)
             }
         })
-    },
+    }
 
-    seekToLearn: function(fact, factIndex) {
+    seekToLearn(fact, factIndex) {
         this.studyingById[fact] = 0
         this.learningSince[fact.getId()] = factIndex
-    },
+    }
 
-    evaluateFactSet: function(factSet) {
+    evaluateFactSet(factSet) {
         var knowledge = this
 
         var result = new StudyResult()
 
-        factSet.visitFacts(function(fact) {
+        factSet.visitFacts((fact: Fact) => {
             var id = fact.getId()
 
             if (knowledge.studyingById[id] !== undefined) {
@@ -94,9 +104,9 @@ var Knowledge = Class.extend({
         })
 
         return result
-    },
+    }
 
-    checkAdequateRepetition: function(fact, factIndex) {
+    checkAdequateRepetition(fact, factIndex) {
         if (factIndex < MAX_SIMULTANEOUS_STUDY * 3 / 2) {
             return
         }
@@ -122,17 +132,20 @@ var Knowledge = Class.extend({
 
                 throw Error()
 
-                this.inadequateRepetition[factId] = true
+                // this.inadequateRepetition[factId] = true
             }
         }
     }
-})
+}
 
-var FactOrder = Class.extend({
-    init: function(facts) {
+export default class FactOrder {
+    factIndexById: { [ key: string ]: number }
+    facts: Fact[]
+    
+    constructor(facts) {
         var seen = {}
 
-        var factIndexById = {}
+        var factIndexById: { [ key: string ]: number } = {}
 
         _.forEach(facts, function(fact, index) {
             if (!fact.getId) {
@@ -148,13 +161,13 @@ var FactOrder = Class.extend({
 
         this.factIndexById = factIndexById
         this.facts = facts
-    },
+    }
 
-    discoverMore: function(sentences) {
+    discoverMore(sentences) {
 
-    },
+    }
 
-    evaluateConsistency: function(sentences) {
+    evaluateConsistency(sentences) {
         var t = new Date().getTime()
 
         sentences = cloneArray(sentences)
@@ -243,7 +256,7 @@ var FactOrder = Class.extend({
             knowledge.checkAdequateRepetition(fact, factIndex)
 
             if (_.keys(knowledge.studyingById) == MAX_SIMULTANEOUS_STUDY) {
-                throw new Error('Reached the limit of the number of facts simultaneously studied: ' + knowledge.studying)
+                throw new Error('Reached the limit of the number of facts simultaneously studied: ' + knowledge.studyingById)
             }
         }
 
@@ -259,19 +272,5 @@ var FactOrder = Class.extend({
 
         console.log('')
         console.log('Words defined but not in fact order:')
-
-        var factsById = {}
-
-        _.forEach(Word.allWords, (word) => {
-            if (this.factIndexById[word.getId()] === undefined) {
-                console.log(word.toString())
-            }
-        })
     }
-
-})
-
-module.exports = {
-    Knowledge: Knowledge,
-    FactOrder: FactOrder
 }

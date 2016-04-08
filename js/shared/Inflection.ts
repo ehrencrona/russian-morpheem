@@ -1,17 +1,28 @@
 'use strict'
 
-const InflectedWord = require('./InflectedWord')
-const Grammar = require('./Grammar')
+import InflectedWord from './InflectedWord'
+import Grammar from './Grammar'
 
 /** 
   * Describes a way of inflecting a word (by adding endings to a stem). Also serves as Fact. 
   */
-module.exports = class Inflection {
-    constructor(id, defaultForm, endings) {
+export default class Inflection {
+    inherits: Inflection
+    
+    constructor(public id, public defaultForm, public endings) {
         this.id = id
         this.defaultForm = defaultForm
         this.endings = endings
     } 
+
+    toJson() {
+        return {
+            id: this.id,
+            defaultForm: this.defaultForm,
+            endings: this.endings,
+            inherit: (this.inherits ? this.inherits.id : undefined)
+        }
+    }
 
     getId() {
         return this.id;
@@ -29,14 +40,14 @@ module.exports = class Inflection {
         }
     }
 
-    visitFacts(visitor) {
+    visitFacts(visitor: (Fact) => any) {
         for (let form in this.endings) {
             visitor(this.getFact(form));
         }                
     }
 
     getFact(form) {
-        return new Grammar(this.id + '@' + form);
+        return new Grammar(this.id + '@' + form, '');
     }
     
     getEnding(form) {
@@ -54,7 +65,7 @@ module.exports = class Inflection {
         }
     }
     
-    inflect(dictionaryForm, stem, excludeInherited, exclude) {
+    inflect(dictionaryForm, stem, excludeInherited: boolean, exclude: any) {
         let result = []
         
         exclude = exclude || {}
@@ -65,8 +76,13 @@ module.exports = class Inflection {
             }
             
             exclude[form] = true
-            result.push(new InflectedWord(stem + this.endings[form], stem, dictionaryForm, form)
-                .requiresFact(this.getFact(form)));
+            
+            let iw = new InflectedWord(stem + this.endings[form], stem, dictionaryForm, form)
+                .requiresFact(this.getFact(form))  
+                
+            iw.setInflection(this)
+            
+            result.push(iw);
         }
 
         if (this.inherits && !excludeInherited) {

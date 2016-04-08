@@ -1,8 +1,9 @@
 'use strict'
 
-const Inflection = require('./Inflection')
+import Inflection from './Inflection'
+import Inflections from './Inflections'
 
-module.exports = (data) => {
+export default function parseInflectionFile(data) {
     let inflections = [];
     let inflectionById = {};
 
@@ -84,5 +85,5 @@ module.exports = (data) => {
         inflections.push(inflection)
     }
 
-    return inflections
+    return new Inflections(inflections)
 }

@@ -15,26 +15,17 @@
  * See facts.txt for an example.
  */
 
-var Word = require('./Word')
-var UnstudiedWord = require('./UnstudiedWord')
-const InflectedWord = require('./InflectedWord')
-var typecheck = require('./typecheck')
-var _ = require('underscore')
+import Word from './Word';
+import UnstudiedWord from './UnstudiedWord';
+import InflectedWord from './InflectedWord';
+import Inflections from './Inflections';
+import Fact from './Fact';
+import Facts from './Facts';
+import Grammars from './Grammars';
 
-module.exports = (data, getGrammar, getInflection) => {
-    typecheck([data, getGrammar, getInflection], 'string', 'function', 'function')
-
-    var facts = []
-    var factsById = {}
-
-    function foundFact(fact) {
-        // there are also particles being read, which are not facts and don't have a getId
-        if (fact.getId) {
-            factsById[fact.getId()] = fact
-        }
-
-        facts.push(fact)
-    }
+export default function parseFactFile(data, inflections: Inflections) {
+    var facts = new Facts()
+    var grammars = new Grammars(inflections)
 
     function parseWordAndClassifier(jpWord) {
         let classifier
@@ -53,8 +44,8 @@ module.exports = (data, getGrammar, getInflection) => {
         return {classifier: classifier, word: text}
     }
 
-    function parseLeftSideOfDefinition(leftSide) {
-        let elements = _.map(leftSide.split(','), (s) => s.trim())
+    function parseLeftSideOfDefinition(leftSide): Fact {
+        let elements = leftSide.split(',').map((s) => s.trim())
 
         var parseResult = parseWordAndClassifier(elements[0])
 
@@ -81,10 +72,10 @@ module.exports = (data, getGrammar, getInflection) => {
     }
 
     function parseRightSideOfDefinition(rightSide, word) {
-        let elements = _.map(rightSide.split(','), (s) => s.trim())
+        let elements = rightSide.split(',').map((s) => s.trim())
 
         for (let element of elements) {
-            let split = _.map(element.split(':'), (s) => s.trim())
+            let split = element.split(':').map((s) => s.trim())
             let tag
             let text
 
@@ -98,7 +89,7 @@ module.exports = (data, getGrammar, getInflection) => {
             }
 
             if (tag == 'inflect') {
-                let inflection = getInflection(text)
+                let inflection = inflections.getInflection(text)
                 
                 if (!inflection) {
                     throw new Error('Unknown inflection "' + text + '"')
@@ -118,17 +109,14 @@ module.exports = (data, getGrammar, getInflection) => {
 
                 word.setInflection(inflection)
             }
-            else if (tag == 'requires') {
-                var requiredWord = factsById[text]
+            else if (tag == 'grammar') {
+                var requiredWord = grammars.get(text)
 
                 if (!requiredWord) {
                     throw new Error('Unknown required word "' + text + '" in "' + rightSide + '"')
                 }
 
                 word.requiresFact(requiredWord)
-            }
-            else if (tag == 'grammar') {
-                word.requiresFact(getGrammar(text))
             }
             else {
                 word.setEnglish(text, tag)
@@ -157,8 +145,8 @@ module.exports = (data, getGrammar, getInflection) => {
         let fact;
 
         if (leftSide == 'grammar') {
-            fact = getGrammar(rightSide.trim())
-            
+            fact = grammars.get(rightSide.trim())
+
             if (!fact) {
                 throw new Error('Unknown grammar "' + rightSide.trim() + '"'
                     + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
@@ -167,11 +155,11 @@ module.exports = (data, getGrammar, getInflection) => {
         else {
             fact = parseLeftSideOfDefinition(leftSide)
 
-            parseRightSideOfDefinition(rightSide, fact, getGrammar, factsById)
+            parseRightSideOfDefinition(rightSide, fact)
+
+            fact.line = lineIndex
+            facts.add(fact)
         }
-        
-        fact.line = lineIndex
-        foundFact(fact)
     }
 
     return facts

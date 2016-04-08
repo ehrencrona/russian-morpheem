@@ -1,35 +1,46 @@
 "use strict";
 
-var _ = require('underscore')
-var Word = require('./Word').Word
-var UnstudiedWord = require('./UnstudiedWord')
+import Word from './Word';
+import Fact from './Fact';
+import UnstudiedWord from './UnstudiedWord';
 
 /**
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
  */
-var Sentence = Class.extend({
-    init: function(words, id) {
+export default class Sentence {
+    english: string
+    required: Fact[]
+    
+    constructor(public words: Word[], public id: string) {
         this.words = words
         this.id = id
-    },
+    }
+    
+    toJson() {
+        return {
+            words: this.words.map((word) => word.getId()),
+            english: this.english,
+            requires: ( this.required ? this.required.map((fact) => fact.getId()) : undefined )
+        }
+    }
 
-    getId: function() {
+    getId() {
         if (this.id === undefined) {
             throw new Error('No ID present.')
         }
 
         return this.id
-    },
+    }
 
-    setEnglish: function(en) {
+    setEnglish(en) {
         this.english = en
-    },
+    }
 
-    en: function() {
+    en() {
         return this.english
-    },
+    }
 
-    jp: function() {
+    jp() {
         var res = ''
 
         for (let word of this.words) {
@@ -37,9 +48,9 @@ var Sentence = Class.extend({
         }
 
         return res
-    },
+    }
 
-    requiresFact: function(fact) {
+    requiresFact(fact: Fact) {
         if (!this.required) {
             this.required = []
         }
@@ -47,9 +58,9 @@ var Sentence = Class.extend({
         this.required.push(fact)
 
         return this
-    },
+    }
 
-    visitFacts: function(visitor) {
+    visitFacts(visitor: (Fact) => any) {
         for (let word of this.words) {
             word.visitFacts(visitor)
         }
@@ -59,9 +70,9 @@ var Sentence = Class.extend({
                 fact.visitFacts(visitor)
             }
         }
-    },
+    }
 
-    toString: function() {
+    toString() {
         var res = ''
 
         for (let word of this.words) {
@@ -70,6 +81,4 @@ var Sentence = Class.extend({
 
         return res
     }
-})
-
-module.exports = Sentence
+}

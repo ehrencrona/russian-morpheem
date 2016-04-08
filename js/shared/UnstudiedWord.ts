@@ -1,6 +1,6 @@
 "use strict";
 
-require('./inheritance-clientserver.js')
+import Fact from './Fact';
 
 /**
  * An UnstudiedWord is a Word that is not a fact, i.e. it is not studied in its own right. Typically, all unstudied words
@@ -11,8 +11,11 @@ require('./inheritance-clientserver.js')
  * studied separately. These are distinguished by "classifiers", e.g. there is に[loc] ("loc" being the classifier)
  * for specifying location and に[dir] for specifying direction.
  */
-class UnstudiedWord {
-    constructor(jp, classifier) {
+export default class UnstudiedWord {
+    en: any
+    required: Fact[]
+    
+    constructor(public jp: string, public classifier: string) {
         this.jp = jp
         this.classifier = classifier
         this.en = {}
@@ -36,6 +39,10 @@ class UnstudiedWord {
         this.required.push(fact)
 
         return this
+    }
+
+    getId() {
+        return this.jp;
     }
 
     visitFacts(visitor) {
@@ -90,6 +97,17 @@ class UnstudiedWord {
     toString() {
         return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
     }
+    
+    toJson(): any {
+        return {
+            target: this.jp,
+            en: this.en,
+            classifier: this.classifier,
+            type: this.getJsonType()
+        }
+    }
+    
+    getJsonType() {
+        return 'unstudied'
+    }
 }
-
-module.exports = UnstudiedWord
