@@ -1,6 +1,7 @@
 "use strict";
 
 import Sentence from './Sentence';
+import Sentences from './Sentences';
 import Words from './Words';
 import Facts from './Facts';
 
@@ -175,7 +176,7 @@ function expandLine(line, lineNumber) {
  * Reads a file of sentences. See parseLine for the format.
  */
 export default function parseSentenceFile(data, words: Words, facts: Facts) {
-    var sentences = []
+    var sentences = new Sentences()
 
     let lineNumber = 0;
 
@@ -187,7 +188,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts) {
         }
 
         for (let expandedLine of expandLine(line, lineNumber)) {
-            sentences.push(parseLine(expandedLine, words, facts, lineNumber))
+            sentences.add(parseLine(expandedLine, words, facts, lineNumber))
         }
     }
 

@@ -1,6 +1,7 @@
 "use strict";
 
 import Fact from './Fact';
+import Inflections from './Inflections'
 
 /**
  * An UnstudiedWord is a Word that is not a fact, i.e. it is not studied in its own right. Typically, all unstudied words
@@ -15,7 +16,7 @@ export default class UnstudiedWord {
     en: any
     required: Fact[]
     
-    constructor(public jp: string, public classifier: string) {
+    constructor(public jp: string, public classifier?: string) {
         this.jp = jp
         this.classifier = classifier
         this.en = {}
@@ -62,7 +63,7 @@ export default class UnstudiedWord {
         }
     }
 
-    getEnglish(form) {
+    getEnglish(form?) {
         if (!form) {
             form = ''
         }
@@ -76,7 +77,7 @@ export default class UnstudiedWord {
         return result
     }
 
-    setEnglish(en, form) {
+    setEnglish(en, form?) {
         if (!form) {
             form = ''
         }
@@ -98,10 +99,14 @@ export default class UnstudiedWord {
         return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
     }
     
+    static fromJson(json, inflections: Inflections): UnstudiedWord {
+        return new UnstudiedWord(json.target, json.classifier).setEnglish(json.en)
+    }
+    
     toJson(): any {
         return {
             target: this.jp,
-            en: this.en,
+            en: this.en[''],
             classifier: this.classifier,
             type: this.getJsonType()
         }

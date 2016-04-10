@@ -16,8 +16,36 @@ export default class Sentence {
         this.id = id
     }
     
+    static fromJson(json, facts, words) {
+        let sentence =
+            new Sentence(
+                json.words.map((wordId) => { 
+                    let word = words.get(wordId)
+
+                    if (!word) {
+                        throw new Error(`Unknown word "${wordId}"`)
+                    }
+                    
+                    if (!(word instanceof Word)) {
+                        throw new Error(`Not a word "${wordId}""`)
+                    }
+                    
+                    return word
+                 }), json.id)
+                .setEnglish(json.english)
+
+        if (json.requires) {    
+            json.requires.forEach((factId) => 
+                sentence.requiresFact(facts.get(factId))
+            )
+        }
+
+        return sentence        
+    }
+    
     toJson() {
         return {
+            id: this.id,
             words: this.words.map((word) => word.getId()),
             english: this.english,
             requires: ( this.required ? this.required.map((fact) => fact.getId()) : undefined )
@@ -34,6 +62,8 @@ export default class Sentence {
 
     setEnglish(en) {
         this.english = en
+        
+        return this
     }
 
     en() {

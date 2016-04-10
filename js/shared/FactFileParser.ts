@@ -23,7 +23,7 @@ import Fact from './Fact';
 import Facts from './Facts';
 import Grammars from './Grammars';
 
-export default function parseFactFile(data, inflections: Inflections) {
+export default function parseFactFile(data, inflections: Inflections): Facts {
     var facts = new Facts()
     var grammars = new Grammars(inflections)
 
@@ -110,13 +110,13 @@ export default function parseFactFile(data, inflections: Inflections) {
                 word.setInflection(inflection)
             }
             else if (tag == 'grammar') {
-                var requiredWord = grammars.get(text)
+                var requiredFact = facts.get(text)
 
-                if (!requiredWord) {
-                    throw new Error('Unknown required word "' + text + '" in "' + rightSide + '"')
+                if (!requiredFact) {
+                    throw new Error('Unknown required fact "' + text + '" in "' + rightSide + '"')
                 }
 
-                word.requiresFact(requiredWord)
+                word.requiresFact(requiredFact)
             }
             else {
                 word.setEnglish(text, tag)

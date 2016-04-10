@@ -8,6 +8,7 @@ import Facts from '../shared/Facts';
 import Corpus from '../shared/Corpus';
 import Words from '../shared/Words';
 import Sentence from '../shared/Sentence';
+import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 
 var corpusDir = '../../public/corpus/russian'
@@ -23,7 +24,7 @@ export default function readCorpus() {
                 words.add(new UnstudiedWord('"WhatsApp"', null))
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
-                .then((sentences: Sentence[]) => {
+                .then((sentences: Sentences) => {
                     return new Corpus(inflections, words, sentences, facts)
                 })
             })

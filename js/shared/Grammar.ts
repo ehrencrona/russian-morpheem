@@ -12,9 +12,9 @@ import Fact from './Fact';
 export default class Grammar {
     required: Fact[]
     
-    constructor(public id, public explanation) {
+    constructor(public id, public explanation?) {
         this.id = id
-        this.explanation = explanation
+        this.explanation = explanation || ''
     }
 
     visitFacts(visitor) {

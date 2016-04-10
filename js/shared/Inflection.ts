@@ -1,6 +1,8 @@
 'use strict'
 
 import InflectedWord from './InflectedWord'
+import Inflections from './Inflections'
+import InflectionFact from './InflectionFact'
 import Grammar from './Grammar'
 
 /** 
@@ -15,12 +17,28 @@ export default class Inflection {
         this.endings = endings
     } 
 
+    static fromJson(json, inflections: Inflections) {
+        let result = new Inflection(json.id, json.defaultForm, json.endings)
+        
+        if (json.inherits) {
+            let parent = inflections.get(json.inherits)
+            
+            if (!parent) {
+                throw new Error('Unknown parent ' + json.inherits)
+            }
+            
+            result.inherit(parent)
+        }
+        
+        return result
+    }
+
     toJson() {
         return {
             id: this.id,
             defaultForm: this.defaultForm,
             endings: this.endings,
-            inherit: (this.inherits ? this.inherits.id : undefined)
+            inherits: (this.inherits ? this.inherits.id : undefined)
         }
     }
 
@@ -38,16 +56,18 @@ export default class Inflection {
                 delete this.endings[form]
             }
         }
+        
+        return this
     }
 
     visitFacts(visitor: (Fact) => any) {
         for (let form in this.endings) {
             visitor(this.getFact(form));
-        }                
+        }
     }
 
     getFact(form) {
-        return new Grammar(this.id + '@' + form, '');
+        return new InflectionFact(this.id + '@' + form, '');
     }
     
     getEnding(form) {
@@ -61,11 +81,21 @@ export default class Inflection {
         }
         else {
             throw new Error('Inflection ' + this.id + 
-                ' (or one of its children) does not contain the form "' + form + '".');
+                ' (or one of its parents) does not contain the form "' + form + '".');
         }
     }
     
-    inflect(dictionaryForm, stem, excludeInherited: boolean, exclude: any) {
+    inflect(word: InflectedWord, stem, form: string) {
+        let iw = new InflectedWord(
+            stem + this.getEnding(form), stem, word.infinitive, form)
+            .requiresFact(this.getFact(form))
+            
+        iw.setInflection(this)
+        
+        return iw
+    }
+    
+    inflectAll(dictionaryForm, stem, excludeInherited: boolean, exclude: any) {
         let result = []
         
         exclude = exclude || {}
@@ -77,16 +107,11 @@ export default class Inflection {
             
             exclude[form] = true
             
-            let iw = new InflectedWord(stem + this.endings[form], stem, dictionaryForm, form)
-                .requiresFact(this.getFact(form))  
-                
-            iw.setInflection(this)
-            
-            result.push(iw);
+            result.push(this.inflect(dictionaryForm, stem, form));
         }
 
         if (this.inherits && !excludeInherited) {
-            result = result.concat(this.inherits.inflect(dictionaryForm, stem, false, exclude))
+            result = result.concat(this.inherits.inflectAll(dictionaryForm, stem, false, exclude))
         }
 
         return result;

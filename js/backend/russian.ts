@@ -11,6 +11,7 @@ import Facts from '../shared/Facts';
 import Word from '../shared/Word';
 import Words from '../shared/Words';
 import Sentence from '../shared/Sentence';
+import Sentences from '../shared/Sentences';
 import Inflection from '../shared/Inflection';
 import Inflections from '../shared/Inflections';
 import InflectedWord from '../shared/InflectedWord';
@@ -27,10 +28,10 @@ readInflectionFile(corpusDir + '/inflections.txt').then(
                 words.add(new UnstudiedWord('"WhatsApp"', null))
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts).then(
-                    (sentences: Sentence[]) => {
-                        console.log(sentences.length + ' sentences')
+                    (sentences: Sentences) => {
+                        console.log(sentences.sentences.length + ' sentences')
 
-                        sentences.forEach((sentence) => {
+                        sentences.sentences.forEach((sentence) => {
                             console.log(sentence.toJson());
                         })
 
