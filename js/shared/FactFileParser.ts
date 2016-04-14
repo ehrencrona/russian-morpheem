@@ -92,7 +92,8 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
                 let inflection = inflections.getInflection(text)
                 
                 if (!inflection) {
-                    throw new Error('Unknown inflection "' + text + '"')
+                    throw new Error('Unknown inflection "' + text + '"'
+                        + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
 
                 if (word.stem === undefined) {
@@ -158,8 +159,8 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
             parseRightSideOfDefinition(rightSide, fact)
 
             fact.line = lineIndex
-            facts.add(fact)
         }
+        facts.add(fact)
     }
 
     return facts

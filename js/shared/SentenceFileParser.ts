@@ -8,8 +8,8 @@ import Facts from './Facts';
 /**
  * Parses a Japanese sentence (words delimited by spaces) into Words.
  */
-function parseSentenceToWords(sentence, allWords: Words, lineNumber) {
-    var words = []
+function parseSentenceToWords(sentence, words: Words, lineNumber) {
+    var result = []
 
     let pos = 1
 
@@ -19,58 +19,26 @@ function parseSentenceToWords(sentence, allWords: Words, lineNumber) {
             continue
         }
 
-        let word = allWords.get(token)
+        let word = words.get(token)
 
         if (!word) {
-            let sameLetter = Object.keys(allWords.wordsById).filter((word) => word[0] == token[0])
-
-            let byMatchLength = sameLetter.map((word) => {
-                let i;
-                
-                for (i = 1; i < word.length; i++) {
-                    if (word[i] !== token[i]) {
-                        break
-                    }
-                }
-
-                return [ word, i ]
-            }).sort((pair1, pair2) => pair2[1] - pair1[1]);
-
-            for (let i = 1; i < byMatchLength.length; i++) {
-                if (byMatchLength[i][1] < byMatchLength[i-1][1]) {
-                    byMatchLength = byMatchLength.slice(0, i);
-                    break
-                }
-            }
-
+            let suggestions = words.getSimilarTo(token);
             let split = token.split('@');
-            
-            let suggestions = byMatchLength.map((match) => match[0]);
-            
-            if (split[1]) {
-                let rightForm = suggestions.filter((word) => {
-                    return word.split('@')[1] == split[1]
-                })
-                
-                if (rightForm.length) {
-                    suggestions = rightForm
-                }
-            }
 
             throw new Error(lineNumber + ': Unknown word "' + token + '" in "' + sentence + '".' + 
-                (byMatchLength.length ? ' Did you mean any of ' + suggestions + '?' : '') +
+                (suggestions.length ? ' Did you mean any of ' + suggestions + '?' : '') +
                 (split[0].match(/[a-z]/) ? ' Note that the word contains Latin characters' : '') +
                 (split[1] && split[1].match(/[а-ё]/) ? ' Note that the form contains Cyrillic characters' : '') 
                 + '\n    at (/projects/morpheem-jp/public/corpus/russian/sentences.txt:' + lineNumber + ':' + pos + ')'
             );
         }
 
-        words.push(word)
+        result.push(word)
         
         pos += token.length + 1
     }
 
-    return words
+    return result
 }
 
 /**

@@ -20,7 +20,8 @@ export default class Facts {
     
     add(fact: Fact) {
         if (this.factsById[fact.getId()]) {
-            console.log('Duplicate fact', fact)
+            console.error('Duplicate fact', fact, 'and', this.factsById[fact.getId()])
+            return
         }
 
         this.factsById[fact.getId()] = fact
@@ -34,7 +35,7 @@ export default class Facts {
         let result = this.factIndexById[fact.getId()]
         
         if (result === undefined) {
-            throw new Error(`Unknown fact ${fact.getId()}`)
+            return -1
         }
         
         return result
@@ -51,6 +52,10 @@ export default class Facts {
             }
             else if (factJson.type == 'word') {
                 fact = words.get(factJson.id);
+                
+                if (!fact) {
+                    throw new Error(`Unknown word "${factJson.id}". Did you mean "${words.getSimilarTo(factJson.id)}"`)
+                }
             }
             else {
                 throw new Error(`Unknown fact type "${factJson.type}""`)

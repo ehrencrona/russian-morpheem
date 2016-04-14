@@ -4,12 +4,13 @@ module.exports = {
 	filename: 'public/js/app.js'
   },
   resolve: {
-	extensions: [ '', '.ts', '.tsx' ]
+	extensions: [ '', '.js', '.ts', '.tsx' ]
   },
   module: {
     loaders: [
-      { test: /\.ts$/, loader: 'ts-loader' },
-      { test: /\.tsx$/, loader: 'jsx-loader' }
+      { test: /\.tsx?$/, loader: 'ts-loader' }
     ]
-  }
+  },
+  devtool: 'source-map'
+  
 }

@@ -25,11 +25,7 @@ export default class Sentence {
                     if (!word) {
                         throw new Error(`Unknown word "${wordId}"`)
                     }
-                    
-                    if (!(word instanceof Word)) {
-                        throw new Error(`Not a word "${wordId}""`)
-                    }
-                    
+
                     return word
                  }), json.id)
                 .setEnglish(json.english)

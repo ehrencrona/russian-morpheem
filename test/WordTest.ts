@@ -10,7 +10,7 @@ import InflectedWord from '../js/shared/InflectedWord';
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', { nom: '-ium' })
+    new Inflection('infl', 'nom', { nom: 'ium' })
 ])
 
 describe('Word', function() {
@@ -37,7 +37,7 @@ describe('Word', function() {
     })
     
     it('converts inflected to JSON and back', function () {
-        let before = new InflectedWord('foo', 'bar', null, 'nom')
+        let before = new InflectedWord('fooium', 'foo', null, 'nom')
             .setEnglish('eng')
             .setInflection(inflections.inflections[0])
         let after = InflectedWord.fromJson(before.toJson(), inflections);

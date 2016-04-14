@@ -11,13 +11,15 @@ import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 
-var corpusDir = '../../public/corpus/russian'
+var corpusDir = 'public/corpus/russian'
 
 export default function readCorpus() {
     return readInflectionFile(corpusDir + '/inflections.txt')
     .then((inflections: Inflections) => {
         return readFactFile(corpusDir + '/facts.txt', inflections)        
             .then((facts: Facts) => {
+                console.log('read', facts.facts.length, 'facts')
+                
                 let words = new Words(facts);                
 
                 words.add(new UnstudiedWord('?', null))

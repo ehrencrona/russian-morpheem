@@ -3,22 +3,20 @@
 
 import Corpus from '../shared/Corpus';
 import xr from 'xr';
-import TestComponent from './TestComponent';
+import TabSet from './TabSet';
 import {render} from 'react-dom';
 import {createElement} from 'react';
 
 let React = { createElement: createElement }
 
 xr.get('/api/corpus')
-.then((corpusJson) => {
+.then((xhr) => {
     var element = document.getElementById('react-root');
-
-    let corpus = Corpus.fromJson(corpusJson)
+    let corpus = Corpus.fromJson(xhr.data)
 
     if (element) {
         render((
-            <TestComponent corpus={ corpus }>
-            </TestComponent>
+            <TabSet corpus={ corpus } />
             ),
             element
         );

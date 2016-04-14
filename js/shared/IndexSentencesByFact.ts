@@ -1,17 +1,74 @@
 import Sentences from './Sentences';
+import Sentence from './Sentence';
 import Facts from './Facts';
+import Fact from './Fact';
 
 const OK_INTERVAL = 10  
 
-interface FactSentences {
+export interface FactSentences {
+    easy: Sentence[],
+    ok: Sentence[],
+    hard: Sentence[]
+}
+
+export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts: Facts, okInterval?: number): FactSentences {
+    let result : FactSentences = { ok: [], easy: [], hard: [] }
+    
+    if (okInterval == undefined) {
+        okInterval = OK_INTERVAL
+    } 
+    
+    let forFactIndex = facts.indexOf(forFact)
+    
+    sentences.sentences.forEach((sentence) => {
+        let hardestIndex = -1
+        let found = false
+
+        sentence.visitFacts((fact) => {
+            let factIndex = facts.indexOf(fact)
+
+            if (factIndex < 0) {
+                return
+            }
+
+            if (fact.getId() == forFact.getId()) {
+                found = true
+            }
+
+            if (factIndex > hardestIndex) {
+                hardestIndex = factIndex
+            }
+        })
+    
+        if (found) {
+            let list
+            
+            if (hardestIndex == forFactIndex) {
+                list = result.easy
+            }
+            else if (hardestIndex - forFactIndex <= okInterval) {
+                list = result.ok
+            }
+            else {
+                list = result.hard
+            }
+            
+            list.push(sentence)
+        }
+    })
+    
+    return result
+}
+
+export interface FactSentenceIndex {
     easy: number,
     ok: number,
     hard: number,
     factIndex: number 
 }
 
-export default function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number) {
-    let result : { [factId: string]: FactSentences } = {}
+export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number): { [factId: string]: FactSentenceIndex } {
+    let result : { [factId: string]: FactSentenceIndex } = {}
     
     if (okInterval == undefined) {
         okInterval = OK_INTERVAL
@@ -22,12 +79,19 @@ export default function indexSentencesByFact(sentences: Sentences, facts: Facts,
         let hardestIndex = -1
         let hardestFactSentences 
         let allFactSentences = []
-         
+
         sentence.visitFacts((fact) => {
             let fs = result[fact.getId()]
             
             if (!fs) {
-                fs = { easy: 0, hard: 0, ok: 0, factIndex: facts.indexOf(fact) }
+                let factIndex = facts.indexOf(fact)
+                
+                if (factIndex < 0) {
+                    return
+                }
+                
+                fs = { easy: 0, hard: 0, ok: 0, factIndex: factIndex }
+                
                 result[fact.getId()] = fs
             }
             

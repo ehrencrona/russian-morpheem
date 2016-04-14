@@ -18,10 +18,15 @@ export default class InflectedWord extends Word {
     constructor(public jp, public stem, public infinitive: InflectedWord, public form) {
         super(jp, '');
         
+        if (!infinitive && jp.substr(0, stem.length) != stem) {
+            throw new Error(`Expected ${jp} to start with ${stem}`)
+        }
+        
         this.stem = stem
         this.infinitive = infinitive || this
         this.form = form
         this.en = {}
+        
     }
 
     setForm(form) {
@@ -39,9 +44,13 @@ export default class InflectedWord extends Word {
         visitor(this.infinitive)
     }
 
-    setInflection(inflection) {
+    setInflection(inflection: Inflection) {
         this.inflection = inflection
-        
+
+        if (this.infinitive == this && (this.jp.substr(this.stem.length) != inflection.getEnding(this.form))) {
+            throw new Error(`Expected ${this.jp} to end with ${inflection.getEnding(this.form)}`)
+        }
+
         return this
     }
 

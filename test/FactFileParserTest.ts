@@ -5,10 +5,13 @@ import { expect } from 'chai';
 import Word from '../js/shared/Word'
 import Grammar from '../js/shared/Grammar'
 import Inflections from '../js/shared/Inflections'
+import Inflection from '../js/shared/Inflection'
 
 // ぎ:gi, requires: き, grammar: ktog
 
 var inflections = new Inflections()
+    
+inflections.add(new Inflection('inflection', 'nom', { nom: 'a'}))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {
@@ -21,6 +24,17 @@ describe('FactFileParser', function() {
 
         if (word instanceof Word) {
             expect(word.getEnglish()).to.equal('meaning')
+        }
+    })
+    
+    it('parses grammar facts', function () {
+        var facts = parser('grammar:inflection@nom', inflections)
+        let fact = facts.facts[0]
+        
+        expect(fact).to.be.instanceOf(Grammar)
+
+        if (fact instanceof Grammar) {
+            expect(fact.id).to.equal('inflection@nom')
         }
     })
 

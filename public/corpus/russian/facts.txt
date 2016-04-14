@@ -26,10 +26,10 @@ grammar: ийadj@m
 хорош--ий: good, inflect: ийadj
 grammar: ыйadj@m
 магазин--:shop, inflect: masc1
---я: I, inflect: я
-grammar: я@nom
---он: he, inflect: он
-grammar: он@nom
+--я: I, inflect: -я
+grammar: -я@nom
+--он: he, inflect: -он
+grammar: -он@nom
 
 библиотек--а:library, inflect: fem1
 grammar: fem1@prep
@@ -37,66 +37,66 @@ grammar: fem1@prep
 на: on/in
 газон--:lawn, inflect: masc1
 
-работа--ть: work, inflect: встречать
-grammar:встречать@1
-grammar:встречать@3
-игра--ть:play, inflect: встречать
-ребён--ок:child, inflect: ребёнок
-grammar:ребёнок@nom
+работа--ть: work, inflect: -встречать
+grammar:-встречать@1
+grammar:-встречать@3
+игра--ть:play, inflect: -встречать
+ребён--ок:child, inflect: -ребёнок
+grammar:-ребёнок@nom
 площад--ь:square, inflect: fem3
 grammar: fem3@prep
 
-си--деть: inflect: видеть
-grammar: видеть@3
-grammar: видеть@1
+си--деть: inflect: -видеть
+grammar: -видеть@3
+grammar: -видеть@1
 парк--:park, inflect: masc1
 
-ви--деть: inflect: видеть
+ви--деть: inflect: -видеть
 grammar: fem1@acc
 grammar: fem3@acc
 кто: who
 
-слыш--ать: inflect: слышать
-grammar:слышать@1
-grammar:слышать@3
+слыш--ать: inflect: -слышать
+grammar: -слышать@1
+grammar: -слышать@3
 мам--а:Mom, inflect: fem1
 
-grammar:он@acc
+grammar: -он@acc
 
-люб--ить: love, inflect: любить
-grammar:любить@1
-grammar:любить@3
-grammar:ребёнок@acc
-grammar:я@acc
+люб--ить: love, inflect: -любить
+grammar: -любить@1
+grammar: -любить@3
+grammar: -ребёнок@acc
+grammar: -я@acc
 
---ты: you, inflect: ты
-grammar: ты@acc
-grammar: ты@nom
+--ты: you, inflect: -ты
+grammar: -ты@acc
+grammar: -ты@nom
 
 что: what
-grammar: видеть@2
-grammar: слышать@2
---она: she, inflect: она
-grammar: она@nom
-grammar: она@acc
+grammar: -видеть@2
+grammar: -слышать@2
+--она: she, inflect: -она
+grammar: -она@nom
+grammar: -она@acc
 
 книг--а:book, inflect: fem2
-чита--ть:read, inflect: встречать
-пи--сать:read, inflect: писать
-grammar: писать@1
+чита--ть:read, inflect: -встречать
+пи--сать:read, inflect: -писать
+grammar: -писать@1
 письм--о:letter, inflect: neu2
 grammar: neu1@acc
 
-grammar: писать@3
+grammar: -писать@3
 
 газет--а:newspaper, inflect: fem1
 журнал--:magazine, inflect: masc1
 grammar: masc1@acc
-стать--я:article, inflect: статья
-grammar: статья@acc 
+стать--я:article, inflect: -статья
+grammar: -статья@acc 
 
-встреча--ть: meet, inflect: встречать
-гуля--ть:take a walk, inflect: встречать
+встреча--ть: meet, inflect: -встречать
+гуля--ть:take a walk, inflect: -встречать
 
 отличн--ый: great, inflect: ыйadj
 
@@ -116,24 +116,24 @@ grammar:ойadj2@f
 как--ой: which, inflect: ойadj2
 очень: very
 
-погода--: weather, inflect: fem1
+погод--а: weather, inflect: fem1
 
 сегодня: today
 вчера: yesterday
-д--ень: day, inflect: день
-grammar: день@nom
+д--ень: day, inflect: -день
+grammar: -день@nom
 
 телефон--: telephone, inflect: masc1
-покупа--ть: buy, inflect: встречать
+покупа--ть: buy, inflect: -встречать
 
 grammar: ойadj2@facc
-grammar: встречать@2
+grammar: -встречать@2
 grammar: ийadj@macc
 grammar: ыйadj@macc
 grammar: ойadj2@macc
 
 кроват--ь: bed, inflect: fem3
-леж--ать: lie, inflect: слышать
+леж--ать: lie, inflect: -слышать
 под:under
 grammar:fem3@instr
 стол--: table, inflect: masc1
@@ -159,12 +159,12 @@ grammar: fem2@pl
 нов--ый: new, inflect: ыйadj
 grammar: ыйadj@pl
 
-закрыва--ть: to close, inflect: встречать
-открыва--ть: to open, inflect: встречать
+закрыва--ть: to close, inflect: -встречать
+открыва--ть: to open, inflect: -встречать
 grammar: ойadj2@pl
 
-grammar: писать@2
-grammar: любить@2
+grammar: -писать@2
+grammar: -любить@2
 профессор--: professor, inflect: masc1
 олигарх--: oligarch, inflect: masc1
 
