@@ -19,6 +19,13 @@ xr.get('/api/corpus')
         xr.put('/api/sentence/' + sentence.getId(), sentence.toJson())        
     }
 
+    corpus.sentences.onAdd = (sentence: Sentence) => {
+        xr.post('/api/sentence', sentence.toJson())
+            .then((res) => {
+                corpus.sentences.changeId(sentence.id, res.data.id)
+            })
+    }
+
     if (element) {
         render((
             <TabSet corpus={ corpus } />

@@ -25,8 +25,8 @@ interface Props {
 }
 
 interface State {
-    tabs: Tab[],
-    first: number
+    tabs?: Tab[],
+    first?: number
 }
 
 let React = { createElement: createElement }
@@ -41,7 +41,7 @@ export default class TabSetComponent extends Component<Props, State> {
             tabs: [
                 new Tab('Facts', 'facts',
                     <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
-                new Tab(sentence.toString(), sentence.getId(),
+                new Tab(sentence.toString(), sentence.getId().toString(),
                     <Sentence corpus={ this.props.corpus } tab={ null } sentence={ sentence }/>, this)
             ],
             first: 0
@@ -69,34 +69,53 @@ export default class TabSetComponent extends Component<Props, State> {
             tabs: newTabs
         })
     }
+    
+    close(index) {
+        return (e) => {
+            this.state.tabs.splice(index, 1)
+            this.setState({ 
+                tabs: this.state.tabs,
+                first: this.state.first + 
+                    (index <= this.state.first && this.state.first > 0 ? -1 : 0) 
+            })
+            e.stopPropagation()
+        }
+    }
 
     render() {
-        let toClosedTab = (offset) => (tab, index) => 
-            <div className='tab' key={tab.id}
+        let toClosedTab = (offset, addToFirst) => (tab, index) => 
+            <div className='tab tab-header' key={tab.id}
                 onClick={ () => {
                     let state = this.state
-                    state.first = index + offset
-console.log('first', index, offset, state.first)                    
+                    state.first = index + offset + addToFirst
                     this.setState(state)
-                }}
-            >{ tab.name }</div>
-                            
+                }}>
+                <div className='tab-name'>{ tab.name }</div>
+                <div className='tab-close' onClick={ this.close(index + offset) }>Close</div>
+            </div>
+
         return (
             <div>
                 <div className='closedTabs'>
                     <div className='tabs'>
-                        { this.state.tabs.slice(0, this.state.first).map(toClosedTab(0)) }
+                        { this.state.tabs.slice(0, this.state.first).map(toClosedTab(0, 0)) }
                     </div>
                     <div className='tabs'>
-                        { this.state.tabs.slice(this.state.first+2).map(toClosedTab(this.state.first+1)).reverse() }
+                        { this.state.tabs.slice(this.state.first+2).map(toClosedTab(this.state.first+2, -1)).reverse() }
                     </div>
                 </div>
                 
                 <div className='openTabs'>
                 { this.state.tabs.slice(this.state.first, this.state.first+2).map(
-                    (tab) => <div className='tab' key={ tab.id }>{ 
+                    (tab, index) => <div className='tab' key={ tab.id }>
+                        <div className='tab-header'>
+                            <div className='tab-name'>{ tab.name }</div>
+                            <div className='tab-close' onClick={ this.close(this.state.first + index) }>Close</div>
+                        </div>
+                        { 
                         cloneElement(tab.element, { tab: tab })  
-                    }</div>
+                        }
+                    </div>
                 ) }
                 </div>
             </div>

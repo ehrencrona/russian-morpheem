@@ -11,7 +11,7 @@ export default class Sentence {
     english: string
     required: Fact[]
     
-    constructor(public words: Word[], public id: string) {
+    constructor(public words: Word[], public id: number) {
         this.words = words
         this.id = id
     }
@@ -48,7 +48,7 @@ export default class Sentence {
         }
     }
 
-    getId() {
+    getId(): number {
         if (this.id === undefined) {
             throw new Error('No ID present.')
         }

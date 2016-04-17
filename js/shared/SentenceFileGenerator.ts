@@ -23,7 +23,19 @@ export function sentenceToString(sentence: Sentence, words: Words) {
 }
 
 export default function sentencesToString(sentences: Sentences, words: Words) {
-    return sentences.sentences.map((sentence) => {
-        return sentenceToString(sentence, words) + '\n'
-    }).join('')
+    let res = ''
+    let lineNumber = 0
+    
+    sentences.sentences.forEach((sentence) => {
+        while (lineNumber < sentence.getId()) {
+            lineNumber++
+            res += '\n'
+        }
+
+        res += sentenceToString(sentence, words) + '\n'
+        
+        lineNumber++
+    })
+    
+    return res
 }

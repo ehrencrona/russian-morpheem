@@ -13,6 +13,55 @@ import Facts from '../js/shared/Facts'
 import { expect } from 'chai';
 
 describe('Sentences', function() {
+    it('deletes', function() {        
+        let io = new Word('io')
+                
+        let words = new Words().add(io)
+        
+        let sentences = new Sentences()
+        
+        sentences.add(new Sentence([ io ], null))
+        
+        let deleted = new Sentence([ io ], null)
+        
+        sentences.add(deleted)
+        sentences.remove(deleted)
+        
+        sentences.add(new Sentence([ io ], null))
+
+        expect(sentences.sentences.length).to.equal(2);
+        expect(sentences.sentences[1].id).to.equal(2);
+    })
+
+    it('change change id', function() {        
+        let io = new Word('io')
+                
+        let words = new Words().add(io)
+        
+        let sentences = new Sentences()
+        
+        let sentence = new Sentence([ io ], null)
+        
+        sentences.add(sentence)
+        
+        const NEW_ID = 17
+        const OLD_ID = 0 
+        
+        expect(sentence.id).to.equal(OLD_ID)
+        
+        sentences.changeId(OLD_ID, NEW_ID)
+
+        expect(sentences.sentences[0].id).to.equal(NEW_ID)
+
+        sentence.id = OLD_ID
+        sentence.words = [ io, io ]
+
+        sentences.store(sentence)
+
+        expect(sentences.sentences[0].id).to.equal(NEW_ID)
+        expect(sentences.sentences.length).to.equal(1)
+    })
+
     it('handles JSON conversion', function () {
         
         let inflection = new Inflection('verb', 'inf', null, { inf: 're', i: 'vo' })
@@ -30,7 +79,7 @@ describe('Sentences', function() {
         let before = new Sentences()
         
         before.add(new Sentence(
-            [ io, bevo ], '1'
+            [ io, bevo ], 1
         ))
         
         let after = Sentences.fromJson(before.toJson(), facts, words)

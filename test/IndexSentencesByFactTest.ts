@@ -31,8 +31,8 @@ describe('IndexSentencesByFact', function() {
     let words = new Words().add(bere).add(io)
     
     let sentences = new Sentences()
-    sentences.add(new Sentence([ io, bevo ], '1'))
-    sentences.add(new Sentence([ bere ], '2'))
+    sentences.add(new Sentence([ io, bevo ], 1))
+    sentences.add(new Sentence([ bere ], 2))
 
     it('finds sentences by fact', function () {
         

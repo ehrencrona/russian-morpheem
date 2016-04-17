@@ -3,10 +3,6 @@ body {
   font-size: 12pt; 
 }
 
-.openTabs {    
-  display: flex;
-}
-
 .closedTabs {
     display: flex;
 }
@@ -16,8 +12,26 @@ body {
 }
 
 .closedTabs .tabs .tab {
-    background-color: #c0c0c0;
+    background-color: #e0e0e0;
     margin-bottom: 2px;
+}
+
+.openTabs {    
+    display: flex;
+}
+
+.openTabs .tab {
+    width: 50%;
+}
+
+.tab-header {
+    display: flex;
+    background-color: #c0c0c0;
+    padding: 4px;
+}
+
+.tab-header .tab-name {
+    flex-grow: 1;
 }
 
 .suggestions {
@@ -58,10 +72,6 @@ body {
     padding: 2px;
     margin-bottom: 4px;
     margin-right: 4px;
-}
-
-.tab {
-    width: 50%;
 }
 
 .sentenceEditor {

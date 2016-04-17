@@ -92,7 +92,7 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
     var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber))
     
     let english = elements.english, tags = elements.tags;
-    var sentence = new Sentence(elements.words, sentenceIndex.toString())
+    var sentence = new Sentence(elements.words, Math.max(sentenceIndex, lineNumber-1))
 
     sentence.setEnglish(english)
 

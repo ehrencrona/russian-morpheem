@@ -151,6 +151,8 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
             selectedIndex: this.state.selectedIndex + 
                 ( this.state.selectedIndex > index ? -1 : 0)
         })
+
+        this.sentenceChanged(this.state.words)
     }
     
     sentenceChanged(words: Word[]) {
@@ -162,6 +164,10 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
             let drag = JSON.parse(e.dataTransfer.getData('text'))
             
             if (drag.index) {
+                if (drag.index == index) {
+                    return
+                }
+            
                 this.dragAndDrop(drag.index, index)
             }
             else {
@@ -224,7 +230,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
             onDrop={ (e) => {                
                 let drag = JSON.parse(e.dataTransfer.getData('text'))
                 
-                if (drag.index) {
+                if (drag.index != undefined) {
                     this.deleteWord(drag.index)
                 }
             } }

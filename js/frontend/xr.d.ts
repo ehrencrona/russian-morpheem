@@ -9,6 +9,7 @@ declare module "xr" {
 
         post(
             url: string,
+            data: any,
             parameters?:  { [name: string]: string }
         )
  

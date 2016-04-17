@@ -28,6 +28,10 @@ interface FactIndex {
     fact: Fact
 }
 
+function randomInt() {
+    return Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
+}
+
 export default class SentenceComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
@@ -35,6 +39,16 @@ export default class SentenceComponent extends Component<Props, State> {
         this.state = {
             sentence: props.sentence
         }
+    }
+    
+    duplicate() {
+        let sentence = new Sentence(this.props.sentence.words, randomInt()).setEnglish(this.props.sentence.en())
+
+        this.props.corpus.sentences.add(sentence)
+
+        this.props.tab.openTab(
+            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null } />, 
+            sentence.toString(), sentence.getId().toString())
     }
     
     render() {
@@ -63,8 +77,10 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let editor: SentenceEditorComponent
         let wordSearch: WordSearchComponent
-        
+
         return (<div>
+            <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
+
             <SentenceEditorComponent 
                 corpus={ this.props.corpus } 
                 words={ this.props.sentence.words }
@@ -73,9 +89,9 @@ export default class SentenceComponent extends Component<Props, State> {
                 ref={ (ref) => { editor = ref } }
                 onSentenceChange={ (words: Word[]) => {
                     let sentence = new Sentence(words, this.state.sentence.id)
-                    
+
                     this.setState({ sentence: sentence })
-                    
+
                     this.props.corpus.sentences.store(sentence)
                 } }/>
 
