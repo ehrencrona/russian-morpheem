@@ -11,7 +11,7 @@ import Inflection from '../js/shared/Inflection'
 
 var inflections = new Inflections()
     
-inflections.add(new Inflection('inflection', 'nom', { nom: 'a'}))
+inflections.add(new Inflection('inflection', 'nom', null, { nom: 'a'}))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {

@@ -57,7 +57,18 @@ export default function parseInflectionFile(data) {
             new Error('Every line should start with the ID of the inlection followed by colon. "' + line + '" does not.')
         }
 
-        let id = line.substr(0, i)
+        let id, pos
+        
+        let m = line.substr(0, i).match(/(.*)\[(.*)\]/)
+
+        if (m) {
+            id = m[1]
+            pos = m[2]
+        }
+        else {
+            id = line.substr(0, i)
+        }
+        
         let rightSide = line.substr(i + 1)
 
         let endings = parseEndings(rightSide)
@@ -68,7 +79,7 @@ export default function parseInflectionFile(data) {
             let parent = inflectionById[endings.inherits]
             
             if (parent) {
-                inflection = new Inflection(id, parent.defaultForm, endings.endings)
+                inflection = new Inflection(id, parent.defaultForm, pos, endings.endings)
                 
                 inflection.inherit(parent)
             }
@@ -78,7 +89,7 @@ export default function parseInflectionFile(data) {
 
         }
         else {
-            inflection = new Inflection(id, endings.default, endings.endings)
+            inflection = new Inflection(id, endings.default, pos, endings.endings)
         }
 
         inflectionById[id] = inflection

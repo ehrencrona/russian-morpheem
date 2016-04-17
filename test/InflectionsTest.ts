@@ -10,10 +10,10 @@ describe('Inflections', function() {
     it('handles JSON conversion', function () {
 
         let before = new Inflections([            
-            new Inflection('regular', 'nom', { nom: '-a' }),
-            new Inflection('irregular', 'nom', { nom: '-b' })
+            new Inflection('regular', 'nom', null, { nom: '-a' }),
+            new Inflection('irregular', 'nom', null, { nom: '-b' })
         ])
-        
+
         before.inflections[1].inherit(before.inflections[0]);
         
         let after = Inflections.fromJson(before.toJson());

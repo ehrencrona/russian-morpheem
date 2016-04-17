@@ -3,8 +3,8 @@
 import {Component,createElement} from 'react';
 import Corpus from '../shared/Corpus';
 
-import Fact from './Fact';
-import { Tab } from './TabSet';
+import Fact from './FactComponent';
+import { Tab } from './TabSetComponent';
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
@@ -17,7 +17,7 @@ interface State {}
 
 let React = { createElement: createElement }
 
-export default class Facts extends Component<Props, State> {
+export default class FactsComponent extends Component<Props, State> {
     render() {
         let index : { [factId: string]: FactSentenceIndex } =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)

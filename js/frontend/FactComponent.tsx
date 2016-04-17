@@ -1,16 +1,18 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import FactModel from '../shared/Fact'
-import { Tab } from './TabSet'
-import Sentence from './Sentence'
+import Fact from '../shared/Fact'
+import InflectedWord from '../shared/InflectedWord'
+
+import { Tab } from './TabSetComponent'
+import Sentence from './SentenceComponent'
 
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
 
 interface Props {
     corpus: Corpus,
-    fact: FactModel,
+    fact: Fact,
     tab: Tab
 }
 
@@ -18,10 +20,12 @@ interface State {}
 
 let React = { createElement: createElement }
 
-export default class Fact extends Component<Props, State> {
+export default class FactComponent extends Component<Props, State> {
     render() {
+        let fact = this.props.fact
+        
         let index : FactSentences =
-            findSentencesForFact(this.props.fact, this.props.corpus.sentences, this.props.corpus.facts)
+            findSentencesForFact(fact, this.props.corpus.sentences, this.props.corpus.facts)
         
         let toSentence = (sentence) => {
             return <div 
@@ -33,7 +37,23 @@ export default class Fact extends Component<Props, State> {
                 ) }>{ sentence.toString() }</div>
         }
          
+        let inflectionComponents = []
+        
+        if (fact instanceof InflectedWord) {
+            let inflections: InflectedWord[] = []
+            
+            fact.visitAllInflections((inflected: InflectedWord) => { 
+                inflections.push(inflected)    
+            }, false)
+            
+            inflectionComponents = inflections.map((word: InflectedWord) => 
+                <div>{ word.form }: { word.toString() }</div>
+            )
+        }
+         
         return (<div>
+            { inflectionComponents }
+        
             <h3>Easy</h3> 
             {
                 index.easy.map(toSentence)

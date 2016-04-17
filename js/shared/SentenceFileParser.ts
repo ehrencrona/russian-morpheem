@@ -88,15 +88,11 @@ function parseLineToElements(line, parseSentenceToWords) {
     return result
 }
 
-function parseLine(line, words: Words, facts: Facts, lineNumber) {
+function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenceIndex: number) {
     var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber))
     
     let english = elements.english, tags = elements.tags;
-
-    var sentence = new Sentence(elements.words, line.toString())
-
-    // TODO: the IDs of sentences should be persistent after updates of the knowledge base.
-    sentence.id = sentence.toString()
+    var sentence = new Sentence(elements.words, sentenceIndex.toString())
 
     sentence.setEnglish(english)
 
@@ -147,6 +143,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts) {
     var sentences = new Sentences()
 
     let lineNumber = 0;
+    let sentenceIndex = 0;
 
     for (let line of data.split('\n')) {
         lineNumber++;
@@ -156,7 +153,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts) {
         }
 
         for (let expandedLine of expandLine(line, lineNumber)) {
-            sentences.add(parseLine(expandedLine, words, facts, lineNumber))
+            sentences.add(parseLine(expandedLine, words, facts, lineNumber, sentenceIndex++))
         }
     }
 

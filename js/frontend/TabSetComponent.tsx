@@ -1,19 +1,20 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import Facts from './Facts';
+import Facts from './FactsComponent';
+import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
 
 let lastTabId = 0
 
 export class Tab {
-    constructor(public name: string, public id: string, public element: any, public tabSet: TabSet) {
+    constructor(public name: string, public id: string, public element: any, public tabSet: TabSetComponent) {
         this.name = name
         this.id = id
         this.element = element
         this.tabSet = tabSet
     }
-    
+
     openTab(element, name:string, id: string) {
         this.tabSet.openTab(element, name, id, this) 
     }
@@ -30,14 +31,18 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class TabSet extends Component<Props, State> {
+export default class TabSetComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
+        
+        let sentence = this.props.corpus.sentences.sentences[40]
         
         this.state = {
             tabs: [
                 new Tab('Facts', 'facts',
-                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this)
+                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
+                new Tab(sentence.toString(), sentence.getId(),
+                    <Sentence corpus={ this.props.corpus } tab={ null } sentence={ sentence }/>, this)
             ],
             first: 0
         }

@@ -21,9 +21,21 @@ export default class Inflections {
         
         return result
     }
-    
+
     get(id) {
         return this.inflectionsById[id]
+    }
+
+    getAllPos(): string[] {
+        let all : { [s: string]: boolean } = {}
+
+        this.inflections.forEach((inflection) => {
+            if (inflection.pos) {
+                all[inflection.pos] = true
+            }
+        })
+        
+        return Object.keys(all)
     }
     
     getForm(formId) {

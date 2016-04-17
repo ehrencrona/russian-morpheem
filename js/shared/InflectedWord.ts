@@ -58,7 +58,7 @@ export default class InflectedWord extends Word {
         return this.inflection.inflect(this.infinitive, this.stem, form)
     }
 
-    visitAllInflections(visitor, excludeInherited) {
+    visitAllInflections(visitor: (InflectedWord) => any, excludeInherited: boolean) {
         if (!this.inflection) {
             throw new Error(this + ' is an inflected word without inflection.')
         }

@@ -6,7 +6,19 @@ declare module "xr" {
             url: string,
             parameters?:  { [name: string]: string }
         )
-    }
+
+        post(
+            url: string,
+            parameters?:  { [name: string]: string }
+        )
+ 
+        put(
+            url: string,
+            data: any,
+            parameters?:  { [name: string]: string }
+        )
+
+   }
         
     export default new XR();
 }

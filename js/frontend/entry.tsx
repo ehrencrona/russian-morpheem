@@ -2,8 +2,9 @@
 /// <reference path="../../typings/react/react-dom.d.ts" />
 
 import Corpus from '../shared/Corpus';
+import Sentence from '../shared/Sentence';
 import xr from 'xr';
-import TabSet from './TabSet';
+import TabSet from './TabSetComponent';
 import {render} from 'react-dom';
 import {createElement} from 'react';
 
@@ -14,6 +15,10 @@ xr.get('/api/corpus')
     var element = document.getElementById('react-root');
     let corpus = Corpus.fromJson(xhr.data)
 
+    corpus.sentences.onChange = (sentence: Sentence) => {
+        xr.put('/api/sentence/' + sentence.getId(), sentence.toJson())        
+    }
+
     if (element) {
         render((
             <TabSet corpus={ corpus } />
@@ -22,4 +27,3 @@ xr.get('/api/corpus')
         );
     }
 })
-

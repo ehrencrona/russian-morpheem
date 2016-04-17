@@ -20,6 +20,80 @@ body {
     margin-bottom: 2px;
 }
 
+.suggestions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.suggestions .suggestion {
+    display: flex;
+    flex-direction: row;
+    background-color: #d0d0d0;
+    padding: 2px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
+.suggestions .suggestion .form {
+    margin-left: 4px;
+    font-size: 80%;
+    align-self: center;
+}
+
+.suggestions .suggestion .count {
+    margin-left: 4px;
+    font-size: 80%;
+    align-self: center;
+}
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.filter .option {
+    background-color: #d0d0d0;
+    padding: 2px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
 .tab {
     width: 50%;
+}
+
+.sentenceEditor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    margin: 8px 0 8px 0;
+}
+
+.sentenceEditor .word {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid lightgray;
+    padding: 2px;
+}
+
+.sentenceEditor .word .form {
+    margin-left: 4px;
+    font-size: 80%;
+    align-self: center;
+}
+
+.sentenceEditor .space {
+    width: 8px;
+    background-color: blue;
+}
+
+.sentenceEditor .selected {
+    border: 2px solid blue;
+}
+
+.sentenceEditor .sentenceEnd {
+    flex-grow: 1;
 }

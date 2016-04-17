@@ -13,10 +13,10 @@ import { expect } from 'chai';
 
 describe('InflectedWord', function() {
     let regular =
-        new Inflection('regular', 'nom', { nom: 'a', imp: 'o', fut: 'x' })
+        new Inflection('regular', 'nom', null, { nom: 'a', imp: 'o', fut: 'x' })
 
     let irregular =
-        new Inflection('irregular', 'nom', { imp: 'i' }).inherit(regular)
+        new Inflection('irregular', 'nom', null, { imp: 'i' }).inherit(regular)
 
     let inflections = new Inflections([ regular, irregular ])
     

@@ -11,7 +11,7 @@ import InflectedWord from '../js/shared/InflectedWord';
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', { nom: 'er', past1: 'ais', past2: 'ais' })
+    new Inflection('infl', 'nom', null, { nom: 'er', past1: 'ais', past2: 'ais' })
 ])
 
 describe('Words', function() {

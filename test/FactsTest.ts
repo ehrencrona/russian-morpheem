@@ -14,7 +14,7 @@ import { expect } from 'chai';
 
 describe('Facts', function() {
     let inflection =
-        new Inflection('regular', 'nom', { nom: 'a', imp: 'o' })
+        new Inflection('regular', 'nom', null, { nom: 'a', imp: 'o' })
             
     let inflections = new Inflections([ inflection ])
     

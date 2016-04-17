@@ -10,7 +10,7 @@ import InflectedWord from '../js/shared/InflectedWord';
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', { nom: 'ium' })
+    new Inflection('infl', 'nom', null, { nom: 'ium' })
 ])
 
 describe('Word', function() {

@@ -15,7 +15,7 @@ import { expect } from 'chai';
 describe('Sentences', function() {
     it('handles JSON conversion', function () {
         
-        let inflection = new Inflection('verb', 'inf', { inf: 're', i: 'vo' })
+        let inflection = new Inflection('verb', 'inf', null, { inf: 're', i: 'vo' })
         
         let io = new Word('io')
         let bere = new InflectedWord('bere', 'be', null, 'inf').setInflection(inflection)

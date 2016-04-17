@@ -11,14 +11,15 @@ import Grammar from './Grammar'
 export default class Inflection {
     inherits: Inflection
     
-    constructor(public id, public defaultForm, public endings) {
+    constructor(public id, public defaultForm, public pos, public endings) {
         this.id = id
+        this.pos = pos
         this.defaultForm = defaultForm
         this.endings = endings
     } 
 
     static fromJson(json, inflections: Inflections) {
-        let result = new Inflection(json.id, json.defaultForm, json.endings)
+        let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings)
         
         if (json.inherits) {
             let parent = inflections.get(json.inherits)
@@ -37,6 +38,7 @@ export default class Inflection {
         return {
             id: this.id,
             defaultForm: this.defaultForm,
+            pos: this.pos,
             endings: this.endings,
             inherits: (this.inherits ? this.inherits.id : undefined)
         }
@@ -85,6 +87,20 @@ export default class Inflection {
         }
     }
     
+    hasForm(form) {
+        let result = this.endings[form]
+        
+        if (result !== undefined) {
+            return true
+        }
+        else if (this.inherits) {                
+            return this.inherits.hasForm(form)
+        }
+        else {
+            return false
+        }
+    }
+
     inflect(word: InflectedWord, stem, form: string) {
         let iw = new InflectedWord(
             stem + this.getEnding(form), stem, word.infinitive, form)
@@ -95,8 +111,8 @@ export default class Inflection {
         return iw
     }
     
-    inflectAll(dictionaryForm, stem, excludeInherited: boolean, exclude: any) {
-        let result = []
+    inflectAll(dictionaryForm, stem, excludeInherited: boolean, exclude: any): InflectedWord[] {
+        let result: InflectedWord[] = []
         
         exclude = exclude || {}
 
