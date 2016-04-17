@@ -15,13 +15,15 @@ describe('SentenceFileParser', function() {
 
         let words = new Words();
         words.add(a)
-        words.add(new Word('b'))
+        words.add(new Word('b', '1'))
+        words.add(new Word('b', '2'))
 
-        var sentences = parser('a b: english',  words, new Facts())
+        var sentences = parser('a b[1] b[2]: english',  words, new Facts())
         let sentence = sentences.sentences[0]
 
-        expect(sentence.words.length).to.equal(2)
+        expect(sentence.words.length).to.equal(3)
         expect(sentence.words[0]).to.equal(a)
+        expect(sentence.words[1].classifier).to.equal('1')
         expect(sentence.english).to.equal('english')
     })
 

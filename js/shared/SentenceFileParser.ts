@@ -139,7 +139,7 @@ function expandLine(line, lineNumber) {
 /**
  * Reads a file of sentences. See parseLine for the format.
  */
-export default function parseSentenceFile(data, words: Words, facts: Facts) {
+export default function parseSentenceFile(data, words: Words, facts: Facts): Sentences {
     var sentences = new Sentences()
 
     let lineNumber = 0;

@@ -14,7 +14,6 @@ describe('Corpus', function() {
 
             expect(after.facts.facts.length).to.be.greaterThan(0)
             expect(after.facts.facts.length).to.equal(corpus.facts.facts.length)
-            console.log(after.sentences.sentences.length, 'sentences')
             expect(after.sentences.sentences.length).to.be.greaterThan(0)
             expect(after.sentences.sentences.length).to.equal(corpus.sentences.sentences.length)
             

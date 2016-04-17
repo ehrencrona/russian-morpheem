@@ -11,7 +11,7 @@ import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 
-var corpusDir = 'public/corpus/russian'
+export const corpusDir = 'public/corpus/russian'
 
 export default function readCorpus() {
     return readInflectionFile(corpusDir + '/inflections.txt')
