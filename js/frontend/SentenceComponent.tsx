@@ -29,7 +29,7 @@ interface FactIndex {
 }
 
 function randomInt() {
-    return Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
+    return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 }
 
 export default class SentenceComponent extends Component<Props, State> {
@@ -50,7 +50,16 @@ export default class SentenceComponent extends Component<Props, State> {
             <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null } />, 
             sentence.toString(), sentence.getId().toString())
     }
-    
+
+    delete() {
+        let sentence = new Sentence(this.props.sentence.words, randomInt())
+            .setEnglish(this.props.sentence.en())
+
+        this.props.corpus.sentences.remove(this.props.sentence)
+        
+        this.props.tab.close()
+    }
+        
     render() {
         let factsById = {}
         
@@ -80,6 +89,7 @@ export default class SentenceComponent extends Component<Props, State> {
 
         return (<div>
             <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
+            <div className='button' onClick={ () => this.delete() }>Delete</div>
 
             <SentenceEditorComponent 
                 corpus={ this.props.corpus } 

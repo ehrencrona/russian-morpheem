@@ -7,6 +7,11 @@ declare module "xr" {
             parameters?:  { [name: string]: string }
         )
 
+        del(
+            url: string,
+            parameters?:  { [name: string]: string }
+        )
+        
         post(
             url: string,
             data: any,

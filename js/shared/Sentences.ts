@@ -11,18 +11,25 @@ export default class Sentences {
 
     onAdd: (sentence: Sentence) => void = null
     onChange: (sentence: Sentence) => void = null
+    onDelete: (sentence: Sentence) => void = null
 
     nextSentenceId: number = 0
 
     constructor() {
     }
-
-    changeId(fromId: number, toId: number) {
-        let sentence = this.sentenceById[fromId]
+    
+    get(id: number) {
+        let sentence = this.sentenceById[id]
         
         if (!sentence) {
-            throw new Error(`Unknown sentence ${ fromId }`)
+            throw new Error(`Unknown sentence ${ id }`)
         }
+
+        return sentence;
+    }
+
+    changeId(fromId: number, toId: number) {
+        let sentence = this.get(fromId)
 
         if (this.sentenceById[toId]) {
             throw new Error(`Sentence ${ toId } already existed`)
@@ -44,6 +51,10 @@ export default class Sentences {
         
         this.sentences = this.sentences.filter((storedSentence) =>
             storedSentence.getId() != sentence.getId())
+
+        if (this.onDelete) {
+            this.onDelete(sentence)
+        }
     }
 
     add(sentence: Sentence) {

@@ -19,6 +19,10 @@ xr.get('/api/corpus')
         xr.put('/api/sentence/' + sentence.getId(), sentence.toJson())        
     }
 
+    corpus.sentences.onDelete = (sentence: Sentence) => {
+        xr.del('/api/sentence/' + sentence.getId())        
+    }
+
     corpus.sentences.onAdd = (sentence: Sentence) => {
         xr.post('/api/sentence', sentence.toJson())
             .then((res) => {

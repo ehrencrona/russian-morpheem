@@ -40,9 +40,17 @@ readCorpus().then((corpus) => {
         }
     })
     
+    app.delete('/api/sentence/:id', function(req, res) {
+        corpus.sentences.remove(corpus.sentences.get(req.params['id']))
+    })
+
     app.put('/api/sentence/:id', function(req, res) {
         try {            
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+
+            if (sentence.id != req.params['id']) {
+                throw new Error('Inconsisten ID.');
+            }
 
             corpus.sentences.store(sentence)
 
@@ -62,6 +70,7 @@ readCorpus().then((corpus) => {
 
     corpus.sentences.onAdd = saveSentences
     corpus.sentences.onChange = saveSentences
+    corpus.sentences.onDelete = saveSentences
 
     app.listen(port)
 })

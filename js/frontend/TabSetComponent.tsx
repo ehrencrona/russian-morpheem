@@ -18,6 +18,10 @@ export class Tab {
     openTab(element, name:string, id: string) {
         this.tabSet.openTab(element, name, id, this) 
     }
+    
+    close() {
+        this.tabSet.closeTab(this)
+    }
 }
 
 interface Props {
@@ -48,6 +52,29 @@ export default class TabSetComponent extends Component<Props, State> {
         }
     }
 
+    closeTab(tab: Tab) {
+        let i = this.state.tabs.findIndex((existingTab) => tab.id === existingTab.id)
+
+        if (i < 0) {
+            throw new Error('Unknown tab.')
+        }
+
+        let tabs = this.state.tabs
+        
+        tabs.splice(i, 1)
+
+        let first = this.state.first
+        
+        if (i <= this.state.first && first > 0) {
+            first--
+        }
+
+        this.setState({
+            first: first,
+            tabs: tabs
+        })
+    }
+    
     openTab(element, name: string, id: string, after: Tab) {
         let newTabs = this.state.tabs
         let tab = newTabs.find((tab) => tab.id == id)
