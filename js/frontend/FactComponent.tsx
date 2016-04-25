@@ -5,7 +5,9 @@ import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
 
 import { Tab } from './TabSetComponent'
-import Sentence from './SentenceComponent'
+import SentenceComponent from './SentenceComponent'
+import Sentence from '../shared/Sentence'
+import Word from '../shared/Word'
 
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
@@ -21,6 +23,26 @@ interface State {}
 let React = { createElement: createElement }
 
 export default class FactComponent extends Component<Props, State> {
+    addSentence() {
+        let fact = this.props.fact
+        
+        if (fact instanceof Word) {
+            let sentence = new Sentence([ fact ], null)
+            
+            this.props.corpus.sentences.add(sentence)
+            
+            this.openSentence(sentence)
+        }
+    }
+
+    openSentence(sentence: Sentence) {
+        this.props.tab.openTab(
+            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
+            sentence.toString(),
+            sentence.id.toString()
+        )
+    }
+
     render() {
         let fact = this.props.fact
         
@@ -30,11 +52,7 @@ export default class FactComponent extends Component<Props, State> {
         let toSentence = (sentence) => {
             return <div 
                 key={ sentence.id }
-                onClick={ () => this.props.tab.openTab(
-                    <Sentence sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-                    sentence.toString(),
-                    sentence.id
-                ) }>{ sentence.toString() }</div>
+                onClick={ () => this.openSentence(sentence) }>{ sentence.toString() }</div>
         }
          
         let inflectionComponents = []
@@ -53,6 +71,15 @@ export default class FactComponent extends Component<Props, State> {
          
         return (<div>
             { inflectionComponents }
+        
+            { this.props.fact instanceof Word ?
+
+                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+
+                :
+
+                <div/>
+            }
         
             <h3>Easy</h3> 
             {
