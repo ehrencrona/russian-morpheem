@@ -50,12 +50,13 @@ export default class FactComponent extends Component<Props, State> {
             findSentencesForFact(fact, this.props.corpus.sentences, this.props.corpus.facts)
         
         let toSentence = (sentence) => {
-            return <div 
+            return <li 
                 key={ sentence.id }
-                onClick={ () => this.openSentence(sentence) }>{ sentence.toString() }</div>
+                className='clickable'
+                onClick={ () => this.openSentence(sentence) }>{ sentence.toString() }</li>
         }
          
-        let inflectionComponents = []
+        let inflectionComponents = <div/>
         
         if (fact instanceof InflectedWord) {
             let inflections: InflectedWord[] = []
@@ -64,9 +65,60 @@ export default class FactComponent extends Component<Props, State> {
                 inflections.push(inflected)    
             }, false)
             
-            inflectionComponents = inflections.map((word: InflectedWord) => 
-                <div>{ word.form }: { word.toString() }</div>
-            )
+            let forms = []
+            
+            function stripPlural(form, word: InflectedWord) {
+                if (form == 'pl') {
+                    return word.inflection.defaultForm
+                }
+                
+                return (form.substr(form.length - 2) == 'pl' ?
+                    form.substr(0, form.length - 2) :
+                    form);
+            }
+
+            let wordsByForm = {}
+
+            inflections.forEach((word: InflectedWord) => 
+            {
+                let form = stripPlural(word.form, word)
+                
+                wordsByForm[word.form] = word
+                
+                if (!forms.find((f) => f == form)) {
+                    forms.push(form)
+                }
+            })
+
+            inflectionComponents = (
+                <table className='inflections'>
+                    <thead>
+                        <tr>
+                            <td>Form</td>
+                            <td>Singular</td>
+                            <td>Plural</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { forms.map((form) => {
+                            let pluralForm = 
+                                (form == fact.inflection.defaultForm ? 'pl' : form + 'pl')
+                            
+                            return <tr key={ form }>
+                                <td>
+                                    { form }
+                                </td>
+                                <td> 
+                                    { (wordsByForm[form] ? wordsByForm[form].toString() : '') } 
+                                </td>
+                                <td> 
+                                    { (wordsByForm[pluralForm] ? wordsByForm[pluralForm].toString() : '') } 
+                                </td>
+                            </tr> 
+                        })
+                        }
+                    </tbody>
+                </table>)
         }
          
         return (<div>
@@ -74,7 +126,9 @@ export default class FactComponent extends Component<Props, State> {
         
             { this.props.fact instanceof Word ?
 
-                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+                <div className='buttonBar'>
+                    <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+                </div>
 
                 :
 
@@ -82,14 +136,16 @@ export default class FactComponent extends Component<Props, State> {
             }
         
             <h3>Easy</h3> 
-            {
-                index.easy.map(toSentence)
-            }
+            
+            <ul>
+            { index.easy.map(toSentence) }
+            </ul>
 
             <h3>Hard</h3> 
-            {
-                index.hard.map(toSentence)
-            }
-            </div>)
+            
+            <ul>
+            { index.hard.map(toSentence) }
+            </ul>
+        </div>)
     }
 }

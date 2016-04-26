@@ -88,8 +88,10 @@ export default class SentenceComponent extends Component<Props, State> {
         let wordSearch: WordSearchComponent
 
         return (<div>
-            <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
-            <div className='button' onClick={ () => this.delete() }>Delete</div>
+            <div className='buttonBar'>
+                <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
+                <div className='button' onClick={ () => this.delete() }>Delete</div>
+            </div>
 
             <SentenceEditorComponent 
                 corpus={ this.props.corpus } 

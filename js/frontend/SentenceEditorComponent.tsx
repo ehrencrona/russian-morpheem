@@ -86,7 +86,7 @@ class SentenceEndComponent extends Component<ElementProps, EmptyState> {
 
 class TrashComponent extends Component<ElementProps, EmptyState> {
     render() {
-        return <div className='trash'
+        return <div className='trash button'
             onDragOver={ (e) => e.preventDefault() }
             onDrop={ this.props.onDrop } 
         >Trash</div>
@@ -163,7 +163,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
         let drop = (index) => (e) => {
             let drag = JSON.parse(e.dataTransfer.getData('text'))
             
-            if (drag.index) {
+            if (drag.index != null) {
                 if (drag.index == index) {
                     return
                 }

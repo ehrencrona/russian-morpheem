@@ -154,7 +154,7 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         let factIndexToElement = (suggestion : Suggestion) => 
             <div key={ suggestion.word.getId() } 
-                draggable={ suggestion.inflection || !(suggestion.word instanceof InflectedWord)} 
+                draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
                 className='suggestion'
                 onClick={ () => {
                     let word = suggestion.word
@@ -170,12 +170,12 @@ export default class WordSearchComponent extends Component<Props, State> {
                     e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
                 } }>
                 <div className='word'>{suggestion.word.toString()}</div>
+                <div className='count'>{ getFactOccurrences(suggestion.fact) }</div>
                 { suggestion.inflection ?
                     <div className='form'>{suggestion.inflection.form }</div>
                     :
                     []
                 }
-                <div className='count'>{ getFactOccurrences(suggestion.fact) }</div>
                 { suggestion.inflection ?
                     <div className='count'>{ getFactOccurrences(suggestion.inflection.fact) }</div>
                     :
@@ -183,13 +183,17 @@ export default class WordSearchComponent extends Component<Props, State> {
                 }
             </div>
 
-        return (<div>
-            <div>
-                <input onChange={ (event) => {
-                    this.setState({
-                        filterString: event.target.value,
-                        filterWord: null
-                    })
+        return (<div className='wordSearch'>
+            <div className='filter'>
+                <input type='text' onChange={ (event) => {
+                    let target = event.target
+                    
+                    if (target instanceof HTMLInputElement) {                        
+                        this.setState({
+                            filterString: target.value,
+                            filterWord: null
+                        })
+                    }
                 } }/>
             </div>
         
@@ -198,20 +202,28 @@ export default class WordSearchComponent extends Component<Props, State> {
                 this.props.corpus.inflections.getAllPos().concat(NO_POS).map((pos: string) => {
                     return <div key={pos} onClick={ () => 
                         this.setState({ filterPos: pos, filterForm: null, filterWord: null })
-                    } className='option'>{pos}</div>
+                    } className={ 'option' + (pos == this.state.filterPos ? ' active' : '') }>{pos}</div>
                 })
             }
             </div>
 
-            <div className='filter'>
-            {
-                Array.from(allForms).map((form: string) => {
-                    return <div key={form} onClick={ () => 
-                        this.setState({ filterForm: form })
-                    } className='option'>{ form }</div>
-                })
-            }
-            </div>
+            { (allForms.size > 0 ? 
+
+                <div className='filter'>
+                {
+                    Array.from(allForms).map((form: string) => {
+                        return <div key={form} onClick={ () => 
+                            this.setState({ filterForm: form })
+                        } className={'option' + (form == this.state.filterForm ? ' active' : '') }>{ form }</div>
+                    })
+                }
+                </div>
+                
+                :
+                
+                <div/>
+                
+            ) }
             
 
             <div className='suggestions'>

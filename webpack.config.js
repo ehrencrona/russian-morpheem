@@ -1,10 +1,11 @@
 module.exports = {  
   entry: './js/frontend/entry.tsx',
+  cache: true,
   output: {
-	filename: 'public/js/app.js'
+    filename: 'public/js/app.js'
   },
   resolve: {
-	extensions: [ '', '.js', '.ts', '.tsx' ]
+    extensions: [ '', '.js', '.ts', '.tsx' ]
   },
   module: {
     loaders: [
@@ -12,5 +13,4 @@ module.exports = {
     ]
   },
   devtool: 'source-map'
-  
 }

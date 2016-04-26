@@ -22,20 +22,21 @@ export default class FactsComponent extends Component<Props, State> {
         let index : { [factId: string]: FactSentenceIndex } =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
-        return (<div>
+        return (<ul>
             {
                 this.props.corpus.facts.facts.map((fact) => {
                     let indexEntry: FactSentenceIndex = index[fact.getId()] || { ok: 0, easy: 0, hard: 0, factIndex: 0 }
 
-                    return <div 
+                    return <li 
                         key={ fact.getId() }
+                        className='clickable'
                         onClick={ () => this.props.tab.openTab(
                             <Fact fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
                             fact.getId(),
                             fact.getId()
-                        ) }>{ fact.getId() } ({indexEntry.easy}, {indexEntry.ok}, {indexEntry.hard})</div>
+                        ) }>{ fact.getId() } ({indexEntry.easy}, {indexEntry.ok}, {indexEntry.hard})</li>
                 })
             }
-            </div>)
+            </ul>)
     }
 }
