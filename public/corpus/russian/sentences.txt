@@ -289,7 +289,7 @@
 тут большой@m планшет@nom: There is a big tablet.
 планшет@nom в библиотека@prep: The tablet is at the library.
 планшет@nom в университете: The tablet is at the university.
-планшет@nom в магазине: The tablet is at the shop.
+хороший@m планшет@nom в магазине: undefined
 свитер@nom в библиотека@prep: The sweater is at the library.
 свитер@nom в университете: The sweater is at the university.
 свитер@nom в магазине: The sweater is at the shop.
@@ -310,7 +310,7 @@
 кошка дорогая ?: Is the cat expensive?
 тут магазин@nom: There is a shop
 тут библиотека: There is a library
-тут университет@nom: There is a university
+тут университет@nom: undefined
 тут хороший@m магазин@nom: There is a good shop.
 машина в магазине: The car is at the shop
 машина в университете: The car is at the university
@@ -542,3 +542,7 @@
 ты читаешь журналы ?: Do you read magazines?
 я профессор@nom: I'm a professor.
 он олигарх@nom: He's an oligarch.
+тут чёрный@m свитер@nom: undefined
+в университете белая машина: undefined
+я вижу газон@acc в парке: undefined
+планшет@nom в магазине: undefined

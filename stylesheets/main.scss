@@ -16,11 +16,13 @@ html {
 body {
     background-color: #f5f5f5;
     font-family: 'Source Sans Pro', sans-serif;
+    width: 100%;
     margin: $unit;
     padding: 0;
     font-family: sans-serif;
     font-size: 12pt;
     color: $color-fg;
+    position: fixed;
 }
 
 .button {
@@ -38,67 +40,83 @@ body {
     background-color: darken($color-bg-light, 10%);
 }
 
-.closedTabs {
+.tabSet {
+    height: 100vh;
     display: flex;
+    flex-direction: column;
+    
+    .closedTabs {
+        display: flex;
+        flex-shrink: 0;
 
-    .tabs:first-child {
-        padding-right: $unit;
-    }
+        .tabs:first-child {
+            padding-right: $unit;
+        }
 
-    .tabs:nth-child(2) {
-        padding-left: $unit;
-    }
+        .tabs:nth-child(2) {
+            padding-left: $unit;
+        }
 
-    .tabs {
-        width: 50%;
+        .tabs {
+            width: 50%;
 
-        .tab {
-            background-color: $color-bg-light;
-            margin-bottom: 2px;
-            
-            .index {
-                background-color: darken($color-bg-light, 10%);
-            }
+            .tab {
+                background-color: $color-bg-light;
+                margin-bottom: 2px;
+                
+                .index {
+                    background-color: darken($color-bg-light, 10%);
+                }
 
-            .tab-close {
-                background-color: darken($color-bg-light, 10%);
-            }
+                .tab-close {
+                    background-color: darken($color-bg-light, 10%);
+                }
 
-            .tab-close:hover {
-                background-color: darken($color-bg-light, 20%);
+                .tab-close:hover {
+                    background-color: darken($color-bg-light, 20%);
+                }
             }
         }
     }
-}
 
-.openTabs {    
-    display: flex;
+    .openTabs {    
+        display: flex;
+        flex-grow: 1;
 
-    .tab:first-child {
-        padding-right: $unit;
-    }
+        .tab:first-child {
+            padding-right: $unit;
+        }
 
-    .tab:nth-child(2) {
-        padding-left: $unit;
-    }
+        .tab:nth-child(2) {
+            padding-left: $unit;
+        }
 
-    .tab {
-        width: 50%;
-        
-        .tab-header {
-            color: $color-fg-inverted;
-            background-color: $color-bg-inverted;
+        .tab {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
             
-            .index {
-                background-color: darken($color-bg-inverted, 10%);
+            .tab-header {
+                color: $color-fg-inverted;
+                background-color: $color-bg-inverted;
+                flex-shrink: 0;
+                
+                .index {
+                    background-color: darken($color-bg-inverted, 10%);
+                }
+                
+                .tab-close {
+                    background-color: darken($color-bg-inverted, 10%);
+                }
+
+                .tab-close:hover {
+                    background-color: darken($color-bg-inverted, 20%);
+                }
             }
             
-            .tab-close {
-                background-color: darken($color-bg-inverted, 10%);
-            }
-
-            .tab-close:hover {
-                background-color: darken($color-bg-inverted, 20%);
+            .content {
+                flex-grow: 1;
+                overflow-y: scroll;
             }
         }
     }

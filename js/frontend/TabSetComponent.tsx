@@ -138,7 +138,7 @@ export default class TabSetComponent extends Component<Props, State> {
         }
 
         return (
-            <div>
+            <div className='tabSet'>
                 <div className='closedTabs'>
                     <div className='tabs'>
                         { this.state.tabs.slice(0, this.state.first).map(toClosedTab(0, 0)) }
@@ -166,9 +166,11 @@ export default class TabSetComponent extends Component<Props, State> {
                                 { tab.name }</div>
                                 <div className='tab-close' onClick={ this.close(this.state.first + index) }>Close</div>
                             </div>
+                            <div className='content'>
                             { 
                             cloneElement(tab.element, { tab: tab })  
                             }
+                            </div>
                         </div>
                     }
                 ) }
