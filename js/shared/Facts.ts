@@ -11,6 +11,8 @@ export default class Facts {
     facts : Fact[] = []
     factIndexById : { [id: string]: number } = {}
 
+    onMove: (fact: Fact, newIndex: number) => void = null
+
     constructor() {
     }
 
@@ -31,6 +33,34 @@ export default class Facts {
         return this
     }
     
+    move(fact: Fact, pos: number) {
+        let from = this.indexOf(fact)
+        
+        if (from < 0) {
+            throw new Error('Unknown fact')
+        }
+        
+        this.facts.splice(from, 1)
+        
+        let newIndex = (from < pos ? pos - 1 : pos);
+
+        this.facts.splice(newIndex, 0, fact)
+
+        this.reindexFacts()
+
+        if (this.onMove) {
+            this.onMove(fact, pos)
+        }
+    }
+
+    reindexFacts() {
+        this.factIndexById = {}
+        
+        this.facts.forEach((fact, index) => {
+            this.factIndexById[fact.getId()] = index
+        })
+    }
+
     indexOf(fact: Fact) {
         let result = this.factIndexById[fact.getId()]
         

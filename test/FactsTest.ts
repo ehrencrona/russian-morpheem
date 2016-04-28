@@ -48,4 +48,15 @@ describe('Facts', function() {
         
         expect(after.facts[3].getId()).to.equal('regular@imp');
     })
+    
+    it('can move facts', () => {
+        let oldFacts = facts.facts.map((x) => x)
+        
+        facts.move(oldFacts[1], 3)
+        
+        expect(facts.facts[2]).to.equal(oldFacts[1])
+        expect(facts.facts[0]).to.equal(oldFacts[0])
+        expect(facts.facts[1]).to.equal(oldFacts[2])
+        expect(facts.facts[3]).to.equal(oldFacts[3])
+    })
 })

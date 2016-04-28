@@ -56,6 +56,10 @@ body {
             background-color: $color-bg-light;
             margin-bottom: 2px;
             
+            .index {
+                background-color: darken($color-bg-light, 10%);
+            }
+
             .tab-close {
                 background-color: darken($color-bg-light, 10%);
             }
@@ -84,6 +88,10 @@ body {
         .tab-header {
             color: $color-fg-inverted;
             background-color: $color-bg-inverted;
+            
+            .index {
+                background-color: darken($color-bg-inverted, 10%);
+            }
             
             .tab-close {
                 background-color: darken($color-bg-inverted, 10%);
@@ -211,6 +219,11 @@ body {
             margin-right: $unit;
             margin-bottom: 2 * $unit;
 
+            .index {
+                background-color: darken($color-bg-light, 10%);
+                top: auto;
+            }
+
             .form {
                 margin-left: 4px;
                 font-size: 80%;
@@ -233,33 +246,72 @@ body {
 ul {
     padding: 0;
     margin: 0;
+
+    li {
+        list-style-type: none;
+        padding-bottom: $unit;
+        margin: 0;
+    }
 }
 
-li {
-    list-style-type: none;
-    padding-bottom: $unit;
-    margin: 0;
+.index {
+    display: inline-block;
+    background-color: $color-bg-light;
+    font-size: 60%;
+    border-radius: 4 * $unit;
+    margin-right: $unit;
+    text-align: center;
+    position: relative;
+    top: -0.25em;
+    width: 2em;
+    height: 2em;
+    
+    .number {
+        font-weight: 900;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .inflections {
-    width: 100%;
-    margin-bottom: 2 * $unit;
-    margin-top: 2 * $unit;
-    border-spacing: 0;
+    padding-top: 2 * $unit;
     
-    td {
-        padding: $unit;
+    .inflectionName {
+        font-weight: bold;
     }
+    
+    table {        
+        width: 100%;
+        margin-bottom: 2 * $unit;
+        margin-top: 2 * $unit;
+        border-spacing: 0;
+        
+        td {
+            padding: $unit;
+        }
 
-    tbody td:first-child {
-        font-style: italic;
-    }
-    
-    thead {
-        background-color: $color-bg-light;
+        tbody td:first-child {
+            font-style: italic;
+        }
+        
+        thead {
+            background-color: $color-bg-light;
+        }
     }
 }
 
 .clickable:hover {
     color: black;
+}
+
+.facts {
+    .count {
+        margin-left: $unit;
+    }
+    
+    .count.insufficient {
+        font-weight: bold;
+    }
 }

@@ -35,6 +35,8 @@ body {
     .closedTabs .tabs .tab {
       background-color: #e0e0e0;
       margin-bottom: 2px; }
+      .closedTabs .tabs .tab .index {
+        background-color: #c7c7c7; }
       .closedTabs .tabs .tab .tab-close {
         background-color: #c7c7c7; }
       .closedTabs .tabs .tab .tab-close:hover {
@@ -51,6 +53,8 @@ body {
     .openTabs .tab .tab-header {
       color: #e0e0e0;
       background-color: #808080; }
+      .openTabs .tab .tab-header .index {
+        background-color: #676767; }
       .openTabs .tab .tab-header .tab-close {
         background-color: #676767; }
       .openTabs .tab .tab-header .tab-close:hover {
@@ -145,6 +149,9 @@ body {
     padding: 8px;
     margin-right: 4px;
     margin-bottom: 8px; }
+    .wordSearch .suggestions .suggestion .index {
+      background-color: #c7c7c7;
+      top: auto; }
     .wordSearch .suggestions .suggestion .form {
       margin-left: 4px;
       font-size: 80%;
@@ -160,23 +167,50 @@ body {
 ul {
   padding: 0;
   margin: 0; }
+  ul li {
+    list-style-type: none;
+    padding-bottom: 4px;
+    margin: 0; }
 
-li {
-  list-style-type: none;
-  padding-bottom: 4px;
-  margin: 0; }
+.index {
+  display: inline-block;
+  background-color: #e0e0e0;
+  font-size: 60%;
+  border-radius: 16px;
+  margin-right: 4px;
+  text-align: center;
+  position: relative;
+  top: -0.25em;
+  width: 2em;
+  height: 2em; }
+  .index .number {
+    font-weight: 900;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .inflections {
-  width: 100%;
-  margin-bottom: 8px;
-  margin-top: 8px;
-  border-spacing: 0; }
-  .inflections td {
-    padding: 4px; }
-  .inflections tbody td:first-child {
-    font-style: italic; }
-  .inflections thead {
-    background-color: #e0e0e0; }
+  padding-top: 8px; }
+  .inflections .inflectionName {
+    font-weight: bold; }
+  .inflections table {
+    width: 100%;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-spacing: 0; }
+    .inflections table td {
+      padding: 4px; }
+    .inflections table tbody td:first-child {
+      font-style: italic; }
+    .inflections table thead {
+      background-color: #e0e0e0; }
 
 .clickable:hover {
   color: black; }
+
+.facts .count {
+  margin-left: 4px; }
+
+.facts .count.insufficient {
+  font-weight: bold; }

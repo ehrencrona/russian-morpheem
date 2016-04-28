@@ -81,8 +81,10 @@ export default class SentenceComponent extends Component<Props, State> {
         sortedFacts = sortedFacts.sort((f1, f2) => f1.index - f2.index)
 
         let factIndexToElement = (factIndex : FactIndex) => 
-            <div key={ factIndex.fact.getId() }>{factIndex.index}: {factIndex.fact.getId()}
-            </div>
+            <li key={ factIndex.fact.getId() }>
+                <div className='index'><div className='number'>{ factIndex.index + 1 }</div></div>
+                { factIndex.fact.getId() }
+            </li>
 
         let editor: SentenceEditorComponent
         let wordSearch: WordSearchComponent
@@ -113,11 +115,11 @@ export default class SentenceComponent extends Component<Props, State> {
                 onWordSelect={ (word) => { editor.setWord(word) } } 
                 ref={ (ref) => { wordSearch = ref } }/>
             
-            <div>
+            <ul>
             {
                 sortedFacts.map(factIndexToElement)
             }
-            </div> 
+            </ul> 
         </div>)
     }
 }

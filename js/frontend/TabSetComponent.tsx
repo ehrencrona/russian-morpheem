@@ -2,6 +2,7 @@
 
 import {Component, cloneElement, createElement} from 'react';
 import Facts from './FactsComponent';
+import Fact from './FactComponent';
 import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
 
@@ -110,16 +111,31 @@ export default class TabSetComponent extends Component<Props, State> {
     }
 
     render() {
-        let toClosedTab = (offset, addToFirst) => (tab, index) => 
-            <div className='tab tab-header' key={tab.id}
+        let toClosedTab = (offset, addToFirst) => (tab, index) => {
+            let factIndex
+            
+            let element = tab.element
+
+            if (element.props.fact) {
+                factIndex = this.props.corpus.facts.indexOf(element.props.fact) + 1
+            }
+
+            return <div className='tab tab-header' key={tab.id}
                 onClick={ () => {
                     let state = this.state
                     state.first = index + offset + addToFirst
                     this.setState(state)
                 }}>
-                <div className='tab-name'>{ tab.name }</div>
+                <div className='tab-name'>
+                { (factIndex ? 
+                    
+                    <div className='index'><div className='number'>{ factIndex }</div></div>
+                    
+                    : <div/>) }
+                { tab.name }</div>
                 <div className='tab-close' onClick={ this.close(index + offset) }>Close</div>
             </div>
+        }
 
         return (
             <div>
@@ -134,15 +150,27 @@ export default class TabSetComponent extends Component<Props, State> {
                 
                 <div className='openTabs'>
                 { this.state.tabs.slice(this.state.first, this.state.first+2).map(
-                    (tab, index) => <div className='tab' key={ tab.id }>
-                        <div className='tab-header'>
-                            <div className='tab-name'>{ tab.name }</div>
-                            <div className='tab-close' onClick={ this.close(this.state.first + index) }>Close</div>
-                        </div>
-                        { 
-                        cloneElement(tab.element, { tab: tab })  
+                    (tab, index) => {
+                        let factIndex
+                        
+                        if (tab.element.props.fact) {
+                            factIndex = this.props.corpus.facts.indexOf(tab.element.props.fact) + 1
                         }
-                    </div>
+                        
+                        return <div className='tab' key={ tab.id }>
+                            <div className='tab-header'>
+                                <div className='tab-name'>
+                                { (factIndex ?                             
+                                    <div className='index'><div className='number'>{ factIndex }</div></div>
+                                    : <div/>) }
+                                { tab.name }</div>
+                                <div className='tab-close' onClick={ this.close(this.state.first + index) }>Close</div>
+                            </div>
+                            { 
+                            cloneElement(tab.element, { tab: tab })  
+                            }
+                        </div>
+                    }
                 ) }
                 </div>
             </div>

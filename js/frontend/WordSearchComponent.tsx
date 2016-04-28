@@ -152,8 +152,16 @@ export default class WordSearchComponent extends Component<Props, State> {
             return fi.easy + fi.ok + fi.hard
         } 
 
-        let factIndexToElement = (suggestion : Suggestion) => 
-            <div key={ suggestion.word.getId() } 
+        let factIndexToElement = (suggestion : Suggestion) => {
+            let index = this.props.corpus.facts.indexOf(suggestion.word)
+            
+            if (suggestion.inflection) {
+                index = Math.max(index,
+                    this.props.corpus.facts.indexOf(suggestion.inflection.fact)
+                ) 
+            }
+            
+            return <div key={ suggestion.word.getId() } 
                 draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
                 className='suggestion'
                 onClick={ () => {
@@ -169,6 +177,10 @@ export default class WordSearchComponent extends Component<Props, State> {
                 onDragStart={ (e) => {
                     e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
                 } }>
+                { (index >= 0 ?
+                    <div className='index'><div className='number'>{ index + 1 }</div></div>
+                    :
+                    <div/>) }
                 <div className='word'>{suggestion.word.toString()}</div>
                 <div className='count'>{ getFactOccurrences(suggestion.fact) }</div>
                 { suggestion.inflection ?
@@ -182,7 +194,8 @@ export default class WordSearchComponent extends Component<Props, State> {
                     []
                 }
             </div>
-
+        }
+        
         return (<div className='wordSearch'>
             <div className='filter'>
                 <input type='text' onChange={ (event) => {

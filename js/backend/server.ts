@@ -22,6 +22,12 @@ readCorpus().then((corpus) => {
             .send(corpus.toJson())
     })
 
+    app.put('/api/fact/:pos/:id', function(req, res) {
+        let fact = corpus.facts.get(req.params['id'])
+        
+        corpus.facts.move(fact, parseInt(req.params['pos']))
+    })
+
     app.post('/api/sentence', function(req, res) {
         try {            
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
@@ -71,6 +77,7 @@ readCorpus().then((corpus) => {
     corpus.sentences.onAdd = saveSentences
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
+    corpus.facts.onMove = saveSentences
 
     app.listen(port)
 })

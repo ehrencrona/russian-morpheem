@@ -3,9 +3,12 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
+import InflectionFact from '../shared/InflectionFact'
 
 import { Tab } from './TabSetComponent'
 import SentenceComponent from './SentenceComponent'
+import InflectionsComponent from './InflectionsComponent'
+import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
 
@@ -55,73 +58,27 @@ export default class FactComponent extends Component<Props, State> {
                 className='clickable'
                 onClick={ () => this.openSentence(sentence) }>{ sentence.toString() }</li>
         }
-         
+
         let inflectionComponents = <div/>
-        
+        let wordsWithInflectionComponent = <div/>
+
         if (fact instanceof InflectedWord) {
-            let inflections: InflectedWord[] = []
-            
-            fact.visitAllInflections((inflected: InflectedWord) => { 
-                inflections.push(inflected)    
-            }, false)
-            
-            let forms = []
-            
-            function stripPlural(form, word: InflectedWord) {
-                if (form == 'pl') {
-                    return word.inflection.defaultForm
-                }
-                
-                return (form.substr(form.length - 2) == 'pl' ?
-                    form.substr(0, form.length - 2) :
-                    form);
-            }
-
-            let wordsByForm = {}
-
-            inflections.forEach((word: InflectedWord) => 
-            {
-                let form = stripPlural(word.form, word)
-                
-                wordsByForm[word.form] = word
-                
-                if (!forms.find((f) => f == form)) {
-                    forms.push(form)
-                }
-            })
-
-            inflectionComponents = (
-                <table className='inflections'>
-                    <thead>
-                        <tr>
-                            <td>Form</td>
-                            <td>Singular</td>
-                            <td>Plural</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { forms.map((form) => {
-                            let pluralForm = 
-                                (form == fact.inflection.defaultForm ? 'pl' : form + 'pl')
-                            
-                            return <tr key={ form }>
-                                <td>
-                                    { form }
-                                </td>
-                                <td> 
-                                    { (wordsByForm[form] ? wordsByForm[form].toString() : '') } 
-                                </td>
-                                <td> 
-                                    { (wordsByForm[pluralForm] ? wordsByForm[pluralForm].toString() : '') } 
-                                </td>
-                            </tr> 
-                        })
-                        }
-                    </tbody>
-                </table>)
+            inflectionComponents = <InflectionsComponent 
+                corpus={ this.props.corpus } inflection={ fact.inflection } word={ fact } tab={ this.props.tab } /> 
         }
-         
-        return (<div>
+        else if (fact instanceof InflectionFact) {
+            inflectionComponents = <InflectionsComponent corpus={ this.props.corpus } 
+                inflection={ fact.inflection } tab={ this.props.tab }  />
+            
+            wordsWithInflectionComponent = 
+                <div>
+                    <h3>Words</h3>
+                    <WordsWithInflectionComponent corpus={ this.props.corpus } tab={ this.props.tab } 
+                        inflection={ fact.inflection } form={ fact.form }/>
+                </div>;
+        }
+
+        return (<div>        
             { inflectionComponents }
         
             { this.props.fact instanceof Word ?
@@ -135,10 +92,18 @@ export default class FactComponent extends Component<Props, State> {
                 <div/>
             }
         
+            { wordsWithInflectionComponent }
+            
             <h3>Easy</h3> 
             
             <ul>
             { index.easy.map(toSentence) }
+            </ul>
+
+            <h3>Ok</h3> 
+            
+            <ul>
+            { index.ok.map(toSentence) }
             </ul>
 
             <h3>Hard</h3> 

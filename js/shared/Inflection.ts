@@ -69,7 +69,7 @@ export default class Inflection {
     }
 
     getFact(form) {
-        return new InflectionFact(this.id + '@' + form, '');
+        return new InflectionFact(this.id + '@' + form, this, form);
     }
     
     getEnding(form) {
@@ -111,7 +111,7 @@ export default class Inflection {
         return iw
     }
     
-    inflectAll(dictionaryForm, stem, excludeInherited: boolean, exclude: any): InflectedWord[] {
+    inflectAll(dictionaryForm: InflectedWord, stem: string, excludeInherited: boolean, exclude: any): InflectedWord[] {
         let result: InflectedWord[] = []
         
         exclude = exclude || {}

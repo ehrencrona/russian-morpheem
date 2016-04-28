@@ -3,6 +3,8 @@
 
 import Corpus from '../shared/Corpus';
 import Sentence from '../shared/Sentence';
+import Fact from '../shared/Fact';
+
 import xr from 'xr';
 import TabSet from './TabSetComponent';
 import {render} from 'react-dom';
@@ -30,6 +32,10 @@ xr.get('/api/corpus')
             })
     }
 
+    corpus.facts.onMove = (fact: Fact, pos: number) => {
+        xr.put(`/api/fact/${pos}/${fact.getId()}`, {})
+    }
+    
     if (element) {
         render((
             <TabSet corpus={ corpus } />
