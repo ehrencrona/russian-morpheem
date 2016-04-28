@@ -71,7 +71,7 @@ export default class UnstudiedWord {
         var result = this.en[form]
 
         if (!result) {
-            throw new Error('Form ' + form + ' not present among English translations of "' + this + '".')
+            throw new Error('Form ' + form + ' not present among English translations of "' + this + '", only ' + Object.keys(this.en))
         }
 
         return result

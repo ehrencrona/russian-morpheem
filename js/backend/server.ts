@@ -6,6 +6,7 @@ import readCorpus from './CorpusReader'
 import { corpusDir } from './CorpusReader'
 import Sentence from '../shared/Sentence'
 import writeSentenceFile from '../backend/SentenceFileWriter'
+import writeFactFile from '../backend/FactFileWriter'
 
 var app = express()
 var bodyParser = require('body-parser')
@@ -23,13 +24,24 @@ readCorpus().then((corpus) => {
     })
 
     app.put('/api/fact/:pos/:id', function(req, res) {
-        let fact = corpus.facts.get(req.params['id'])
-        
-        corpus.facts.move(fact, parseInt(req.params['pos']))
+        try {
+            let fact = corpus.facts.get(req.params['id'])
+            let index = parseInt(req.params['pos'])
+            
+            corpus.facts.move(fact, index)
+
+            console.log('Moved ' + fact + ' to ' + index)
+
+            res.status(200).send({})
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
     })
 
     app.post('/api/sentence', function(req, res) {
-        try {            
+        try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
             sentence.id = null
@@ -47,7 +59,15 @@ readCorpus().then((corpus) => {
     })
     
     app.delete('/api/sentence/:id', function(req, res) {
-        corpus.sentences.remove(corpus.sentences.get(req.params['id']))
+        try {
+            corpus.sentences.remove(corpus.sentences.get(req.params['id']))
+
+            res.status(200).send({ })
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
     })
 
     app.put('/api/sentence/:id', function(req, res) {
@@ -55,7 +75,7 @@ readCorpus().then((corpus) => {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
             if (sentence.id != req.params['id']) {
-                throw new Error('Inconsisten ID.');
+                throw new Error('Inconsistent ID.');
             }
 
             corpus.sentences.store(sentence)
@@ -72,12 +92,18 @@ readCorpus().then((corpus) => {
 
     function saveSentences() {
         writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words)
+        .catch((e) => console.error(e.stack))
+    }
+
+    function saveFacts() {
+        writeFactFile(corpusDir + '/facts.txt', corpus.facts)
+        .catch((e) => console.error(e.stack))
     }
 
     corpus.sentences.onAdd = saveSentences
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
-    corpus.facts.onMove = saveSentences
+    corpus.facts.onMove = saveFacts
 
     app.listen(port)
 })

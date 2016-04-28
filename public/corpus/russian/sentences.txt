@@ -38,7 +38,7 @@
 ето моя кошка: This is my cat.
 ето моя улица: This is my street.
 ето моя квартира: This is my flat.
-где моя открытая собака ?: undefined
+где моя собака ?: undefined
 где моя кошка ?: Where is my cat?
 где моя улица ?: Where is my street?
 где моя квартира ?: Where is my flat?

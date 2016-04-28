@@ -59,7 +59,7 @@ export default class FactsComponent extends Component<Props, State> {
 
                         { name } 
                         
-                        <span className={ 'count ' + ((indexEntry.easy + indexEntry.ok < 10) ? 'insufficient' : '') }>
+                        <span className={ 'count ' + ((indexEntry.easy + indexEntry.ok < 8) ? 'insufficient' : '') }>
                              ({indexEntry.easy}, {indexEntry.ok}, {indexEntry.hard})
                         </span>
                     </li>
