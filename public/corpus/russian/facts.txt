@@ -46,17 +46,17 @@ grammar:-ребёнок@nom
 площад--ь:square, inflect: fem3
 grammar: fem3@prep
 
-си--деть: inflect: -видеть
+си--деть: sit, inflect: -видеть
 grammar: -видеть@3
 grammar: -видеть@1
 парк--:park, inflect: masc1
 
-ви--деть: inflect: -видеть
+ви--деть: see, inflect: -видеть
 grammar: fem1@acc
 grammar: fem3@acc
 кто: who
 
-слыш--ать: inflect: -слышать
+слыш--ать: hear, inflect: -слышать
 grammar: -слышать@1
 grammar: -слышать@3
 мам--а:Mom, inflect: fem1
