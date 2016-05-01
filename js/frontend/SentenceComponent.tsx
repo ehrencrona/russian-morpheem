@@ -42,7 +42,7 @@ export default class SentenceComponent extends Component<Props, State> {
     }
     
     duplicate() {
-        let sentence = new Sentence(this.props.sentence.words, randomInt()).setEnglish(this.props.sentence.en())
+        let sentence = new Sentence(this.props.sentence.words.slice(0), randomInt()).setEnglish(this.props.sentence.en())
 
         this.props.corpus.sentences.add(sentence)
 
@@ -107,6 +107,9 @@ export default class SentenceComponent extends Component<Props, State> {
                     this.setState({ sentence: sentence })
 
                     this.props.corpus.sentences.store(sentence)
+                    
+                    // todo: this doesn't update the tab. flux?
+                    this.props.tab.name = sentence.toString();
                 } }/>
 
             <WordSearchComponent 

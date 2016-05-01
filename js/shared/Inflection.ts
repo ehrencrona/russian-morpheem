@@ -52,9 +52,9 @@ export default class Inflection {
         this.inherits = inflection
         
         for (let form in this.endings) {
-            if (this.endings[form] == inflection.getEnding(form)) {
+            if (this.endings[form] == inflection.endings[form]) {
                 console.log('Form ' + form + ' of ' + this.id + ' is same as inherited value.')
-                
+
                 delete this.endings[form]
             }
         }
@@ -69,7 +69,15 @@ export default class Inflection {
     }
 
     getFact(form) {
-        return new InflectionFact(this.id + '@' + form, this, form);
+        if (this.endings[form] != null) {
+            return new InflectionFact(this.id + '@' + form, this, form);
+        }
+        else if (this.inherits) {                
+            return this.inherits.getFact(form)
+        }
+        else {
+            throw new Error('Unknown form ' + form + ' in ' + this.id)
+        }
     }
     
     getEnding(form) {
@@ -116,19 +124,27 @@ export default class Inflection {
         
         exclude = exclude || {}
 
-        for (let form in this.endings) {
-            if (exclude[form]) {
-                continue
+        let at: Inflection = this
+        
+        do {            
+            for (let form in at.endings) {
+                if (exclude[form]) {
+                    continue
+                }
+                
+                exclude[form] = true
+                
+                result.push(this.inflect(dictionaryForm, stem, form));
             }
-            
-            exclude[form] = true
-            
-            result.push(this.inflect(dictionaryForm, stem, form));
-        }
 
-        if (this.inherits && !excludeInherited) {
-            result = result.concat(this.inherits.inflectAll(dictionaryForm, stem, false, exclude))
+            if (!excludeInherited) {
+                at = at.inherits
+            }
+            else {
+                at = null
+            }
         }
+        while (at)
 
         return result;
     }

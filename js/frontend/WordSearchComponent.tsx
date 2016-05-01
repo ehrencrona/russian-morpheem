@@ -44,11 +44,51 @@ export default class WordSearchComponent extends Component<Props, State> {
         super(props)
         
         this.state = {
+            filterString: ''
         }
     }
         
     setWord(word: Word) {
         this.setState({ filterWord: word, filterPos: null, filterForm: null })
+    }
+    
+    selectSuggestion(suggestion: Suggestion) {
+        let word = suggestion.word
+
+        if (!suggestion.inflection && word instanceof InflectedWord) {
+            this.setState({ filterWord: word.infinitive })
+        } 
+        else {
+            this.props.onWordSelect(suggestion.word)
+            this.setState({ filterWord: null, filterString: '' })
+        }
+    }
+    
+    findMatchingInflection(word: InflectedWord, filter: string) {
+        let i = Math.min(filter.length, word.stem.length)
+
+        if (word.stem.substr(0, i) == filter.substr(0, i)) {
+            let found
+            
+            word.visitAllInflections((inflection: InflectedWord) => {
+                if (inflection.toString().substr(0, filter.length) == filter) {
+                    found = inflection
+                }
+            }, false)
+            
+            return found
+        }
+    }
+    
+    factMatchingFilterString(fact, filter: string) {
+        if (fact instanceof Word && 
+            fact.toString().substr(0, filter.length) == filter) {
+            return fact
+        }
+        
+        if (fact instanceof InflectedWord) {
+            return this.findMatchingInflection(fact, filter)
+        }
     }
     
     render() {
@@ -66,8 +106,12 @@ export default class WordSearchComponent extends Component<Props, State> {
                     return
                 }
 
-                if (this.state.filterString && fact instanceof Word) {
-                    if (fact.toString().substr(0, this.state.filterString.length) !== this.state.filterString) {
+                let filterString = this.state.filterString
+                
+                if (filterString) {
+                    fact = this.factMatchingFilterString(fact, filterString)
+                    
+                    if (!fact) {
                         return
                     }
                 }
@@ -100,11 +144,24 @@ export default class WordSearchComponent extends Component<Props, State> {
                 else if (fact instanceof InflectedWord && 
                         (fact.inflection.pos == filterPos || (filterPos == NO_POS && !fact.inflection.pos) || !filterPos)) {
                     let addFact = fact
+                    
+                    let inflection = null
+                      
+                    if (fact.form != fact.inflection.defaultForm) {
+                        let inflectionFact = fact.inflection.getFact(fact.form)
+                        
+                        inflection = {
+                            form: fact.form,
+                            fact: inflectionFact,
+                            index: this.props.corpus.facts.indexOf(inflectionFact)
+                        }
+                    }
+                    
                     let suggestion: Suggestion = {
                         index: this.props.corpus.facts.indexOf(fact),
                         word: fact,
                         fact: fact,
-                        inflection: null
+                        inflection: inflection
                     }
                     
                     let filterForm = this.state.filterForm
@@ -165,14 +222,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
                 className='suggestion'
                 onClick={ () => {
-                    let word = suggestion.word
-                    
-                    if (!suggestion.inflection && word instanceof InflectedWord) {
-                        this.setState({ filterWord: word.infinitive })
-                    } 
-                    else {
-                        this.props.onWordSelect(suggestion.word) 
-                    }
+                    this.selectSuggestion(suggestion)
                 } } 
                 onDragStart={ (e) => {
                     e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
@@ -198,7 +248,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         
         return (<div className='wordSearch'>
             <div className='filter'>
-                <input type='text' onChange={ (event) => {
+                <input type='text' value={ this.state.filterString } onChange={ (event) => {
                     let target = event.target
                     
                     if (target instanceof HTMLInputElement) {                        
@@ -207,14 +257,23 @@ export default class WordSearchComponent extends Component<Props, State> {
                             filterWord: null
                         })
                     }
-                } }/>
+                }}
+                
+                onKeyPress={
+                    (event) => {
+                        if (event.charCode == 13 && suggestions.length) {
+                            this.selectSuggestion(suggestions[0])
+                        }
+                    }
+                }/>
             </div>
         
             <div className='filter'>
             {
                 this.props.corpus.inflections.getAllPos().concat(NO_POS).map((pos: string) => {
                     return <div key={pos} onClick={ () => 
-                        this.setState({ filterPos: pos, filterForm: null, filterWord: null })
+                        this.setState({ filterPos: (pos == this.state.filterPos ? null : pos), 
+                            filterForm: null, filterWord: null })
                     } className={ 'option' + (pos == this.state.filterPos ? ' active' : '') }>{pos}</div>
                 })
             }
@@ -226,7 +285,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 {
                     Array.from(allForms).map((form: string) => {
                         return <div key={form} onClick={ () => 
-                            this.setState({ filterForm: form })
+                            this.setState({ filterForm: (form == this.state.filterForm ? null : form) })
                         } className={'option' + (form == this.state.filterForm ? ' active' : '') }>{ form }</div>
                     })
                 }
