@@ -25,18 +25,48 @@ interface State {}
 
 let React = { createElement: createElement }
 
-export default class InflectionsComponent extends Component<Props, State> {
-    stripPlural(form, word: InflectedWord) {
-        if (form == 'pl') {
-            return word.inflection.defaultForm
+const FIELDS = {
+    v: {
+        cols: [ 'singular', 'plural' ],
+        rows: [ 'infinitive', '1st person', '2nd person', '3rd person'],
+        forms: [ ['inf', ''], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'] ]  
+    } ,
+    adj: {
+        cols: [ 'm sg', 'n sg', 'f sg', 'plural' ],
+        rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+        forms: [
+            ['m','n','f','pl'],
+            ['genm','genn','genf','genpl'],
+            ['datm','datn','datf','datpl'],
+            [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
+            ['instrm','instrn','instrf','instrpl'],
+            ['prepm','prepfn','prepf','preppl']
+        ]
+    },
+    
+    n: {
+        cols: [ 'singular', 'plural' ], 
+        rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+        forms: [        
+            ['nom','pl'],
+            ['gen','genpl'],
+            ['dat','datpl'],
+            ['acc','accpl'],
+            ['instr','instrpl'],
+            ['prep','preppl']
+        ]
+    },
+    pron: [
+        {
+            cols: [ '' ],
+            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+            forms: [ ['nom'], ['gen'], ['dat'], ['instr'], ['prep'] ]
         }
-        
-        return (form.substr(form.length - 2) == 'pl' ?
-            form.substr(0, form.length - 2) :
-            form);
-    }
+    ]
+};
 
-    getWordsByForm(word: InflectedWord): [ { [ form:string]: string}, string[] ] {
+export default class InflectionsComponent extends Component<Props, State> {
+    getWordsByForm(word: InflectedWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
         let inflections: InflectedWord[] = []
@@ -48,16 +78,10 @@ export default class InflectionsComponent extends Component<Props, State> {
         let forms: string[] = []
         
         inflections.forEach((word: InflectedWord) => {
-            let form = this.stripPlural(word.form, word)
-            
             wordsByForm[word.form] = word.toString()
-            
-            if (!forms.find((f) => f == form)) {
-                forms.push(form)
-            }
         })
 
-        return [ wordsByForm, forms ] 
+        return wordsByForm 
     }
     
     render() {
@@ -74,7 +98,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                 .setInflection(inflection) 
         } 
 
-        [ wordsByForm, forms ] = this.getWordsByForm(word)
+        wordsByForm = this.getWordsByForm(word)
 
         let formComponent = (form) => {
             let fact = this.props.inflection.getFact(form);
@@ -83,17 +107,20 @@ export default class InflectionsComponent extends Component<Props, State> {
             if (index > 0) {
                 return <div className='clickable' onClick={ () =>
                     this.props.tab.openTab(
-                        <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } fact={ fact }/>, fact.getId(), fact.getId()
+                        <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
+                            fact={ fact }/>, fact.getId(), fact.getId()
                     ) 
                 }>
-                    <div className='index'><div className='number'>{ index + 1 }</div></div>
                     { wordsByForm[form] } 
+                    <div className='index'><div className='number'>{ index + 1 }</div></div>
                 </div>
             }
             else {
                 return <div>{ wordsByForm[form] }</div>
             }
         }
+        
+        let table = FIELDS[this.props.inflection.pos]
         
         return (
             <div className='inflections'>
@@ -102,29 +129,32 @@ export default class InflectionsComponent extends Component<Props, State> {
                 <table>
                     <thead>
                         <tr>
-                            <td>Form</td>
-                            <td>Singular</td>
-                            <td>Plural</td>
+                            <td></td>
+                            { table.cols.map((name) => 
+                                <td key={name}>{name}</td>
+                            ) }
                         </tr>
                     </thead>
                     <tbody>
-                        { forms.map((form) => {
-                            let pluralForm = 
-                                (form == this.props.inflection.defaultForm ? 'pl' : form + 'pl')
-                            
-                            return <tr key={ form }>
-                                <td>
-                                    { form }
-                                </td>
-                                <td> 
-                                    { (wordsByForm[form] ? formComponent(form) : '') } 
-                                </td>
-                                <td> 
-                                    { (wordsByForm[pluralForm] ? formComponent(pluralForm) : '') } 
-                                </td>
+                        { table.forms.map((forms, index) => {
+                            return <tr key={ index }>
+                                    <td>{ table.rows[index] }</td>
+                                {
+                                    forms.map((form) => {
+                                        return <td key={form}>
+                                            {
+                                                (typeof form == 'string' ?
+                                                    (wordsByForm[form] ? formComponent(form) : '')
+                                                    :
+                                                    form.map((form) => (wordsByForm[form] ? formComponent(form) : ''))
+                                                )
+                                            }
+                                        </td>                                        
+                                    })                                    
+                                }
                             </tr> 
-                        })
-                        }
+                            
+                        }) }
                     </tbody>
                 </table>
             </div>)
