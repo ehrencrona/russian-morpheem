@@ -1,10 +1,10 @@
 тут: here
-ето: this (is)
+это: this (is)
 собак--а: dog, inflect: fem2
 grammar: fem1@nom
 кошк--а: cat, inflect: fem2
 бел--ый: white, inflect: ыйadj
-grammar: ыйadj@f
+grammar: adj@f
 чёрн--ый: black, inflect: ыйadj
 где: where
 лошад--ь: horse, inflect: fem3
@@ -70,19 +70,19 @@ grammar: -она@acc
 чита--ть: read, inflect: -встречать
 пи--сать: read, inflect: -писать
 grammar: -писать@1
-письм--о: letter, inflect: neu2
-grammar: neu1@acc
+стать--я: article, inflect: -статья
+grammar: -статья@acc
 grammar: -писать@3
 газет--а: newspaper, inflect: fem1
 журнал--: magazine, inflect: masc1
 grammar: masc1@acc
-стать--я: article, inflect: -статья
-grammar: -статья@acc
 встреча--ть: meet, inflect: -встречать
 гуля--ть: take a walk, inflect: -встречать
 отличн--ый: great, inflect: ыйadj
 друг--: friend, inflect: masc1
 студент--: student, inflect: masc1
+почему: why
+не: not
 чентр--: center (of city), inflect: masc1
 человек--: person, inflect: masc1
 больш--ой: big, inflect: ойadj2
@@ -90,22 +90,23 @@ grammar: ойadj2@m
 квартир--а: apartment, inflect: fem1
 м--ой: my, inflect: ойadj1
 grammar: ойadj1@f
-grammar: ойadj2@f
 дорог--ой: expensive, inflect: ойadj2
 как--ой: which, inflect: ойadj2
+grammar: ойadj2@accminan
+grammar: -любить@2
 очень: very
 погод--а: weather, inflect: fem1
 сегодня: today
 вчера: yesterday
+тв--ой: your, inflect: ойadj1
 д--ень: day, inflect: -день
 grammar: -день@nom
 телефон--: telephone, inflect: masc1
 покупа--ть: buy, inflect: -встречать
-grammar: ойadj2@facc
+grammar: adj@accf
 grammar: -встречать@2
-grammar: ийadj@macc
-grammar: ыйadj@macc
-grammar: ойadj2@macc
+grammar: ийadj@accminan
+grammar: ыйadj@accminan
 кроват--ь: bed, inflect: fem3
 леж--ать: lie, inflect: -слышать
 под: under
@@ -120,29 +121,39 @@ grammar: fem3@pl
 двер--ь: door, inflect: fem3
 открыт--ый: open, inflect: ыйadj
 grammar: fem1@pl
-тв--ой: your, inflect: ойadj1
-grammar: ойadj1@facc
+grammar: ойadj1@accf
 grammar: ойadj1@pl
 grammar: fem2@pl
 нов--ый: new, inflect: ыйadj
 grammar: ыйadj@pl
 закрыва--ть: to close, inflect: -встречать
 открыва--ть: to open, inflect: -встречать
-grammar: ойadj2@pl
+grammar: adj@pl
 grammar: -писать@2
-grammar: -любить@2
 профессор--: professor, inflect: masc1
 олигарх--: oligarch, inflect: masc1
+письм--о: letter, inflect: neu2
+здесь: here
+grammar: neu1@nom
+grammar: neu1@acc
 grammar: neu1@prep
 grammar: masc1@pl
-grammar: ийadj@pl
 grammar: ыйadj@accpl
-grammar: ойadj2@accpl
+grammar: adj@accpl
 окн--о: window, inflect: neu2
 утр--о: morning, inflect: neu2
 grammar: neu2@pl
 дерев--о: tree, inflect: neu1
-grammar: neu1@nom
 grammar: neu1@pl
-grammar: ыйadj@n
-grammar: ойadj2@n
+grammar: adj@n
+grammar: -встречать@inf
+grammar: -видеть@inf
+grammar: -любить@inf
+grammar: -слышать@inf
+grammar: -писать@inf
+сейчас: now
+эт--от[adj]: this, inflect: -этот
+
+grammar: -этот@accminan
+grammar: -этот@accf
+grammar: -этот@accplinan
