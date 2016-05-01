@@ -7,21 +7,21 @@
 на улица@prep собака: A dog is on the street
 на площадь@prep собака: A dog is on the square
 на библиотека@prep собака: A dog is at the library
-на квартира@prep собака: There is a dog in the flat
+в квартира@prep собака: There is a dog in the flat
 на библиотека@prep собака: There is a dog in the library
 он тут: He is here.
 я тут: I am here.
-он на квартира@prep: He's in the flat.
-я на квартира@prep: I'm in the flat.
-телефон@nom на квартира@prep: The phone is in the flat.
+он в квартира@prep: He's in the flat.
+я в квартира@prep: I'm in the flat.
+телефон@nom в квартира@prep: The phone is in the flat.
 
 
 он на библиотека@prep: He's in the library.
 я на библиотека@prep: I'm in the library.
-собака на квартира@prep: A dog is in the flat.
-кошка на квартира@prep: A cat is in the flat.
-мышь@nom на квартира@prep: A mouse is in the flat.
-что на квартира@prep ?: What is in the flat ?
+собака в квартира@prep: A dog is in the flat.
+кошка в квартира@prep: A cat is in the flat.
+мышь@nom в квартира@prep: A mouse is in the flat.
+что в квартира@prep ?: What is in the flat ?
 где собака: Where is the dog?
 где кошка: Where is the cat?
 где лошадь@nom: Where is the horse?
@@ -60,10 +60,10 @@
 я вижу мышь@acc: I see a mouse.
 я вижу ребёнок@acc: I see a child.
 я ты@acc вижу на улица@prep: I see you on the street.
-я его вижу на улица@prep: I see him on the street.
+я он@acc вижу на улица@prep: I see him on the street.
 я она@acc вижу на улица@prep: I see her on the street.
 я встречаю ты@acc на площадь@prep: I meet you on the square.
-я встречаю его на площадь@prep: I meet him on the square.
+я встречаю он@acc на площадь@prep: I meet him on the square.
 я встречаю она@acc на площадь@prep: I meet her on the square.
 я вижу собаку на улица@prep: I see a dog on the street.
 я вижу кошку на улица@prep: I see a cat on the street.
@@ -88,7 +88,7 @@
 кто ты слышишь ?: Who do you hear?
 ты видишь магазин@acc ?: Do you see the shop?
 ты видишь машину ?: Do you see the car?
-ты видишь его ?: Do you see him?
+ты видишь он@acc ?: Do you see him?
 ты видишь она@acc ?: Do you see her?
 что он видит ?: What does he see?
 что он слышит ?: What does he hear?
@@ -100,7 +100,7 @@
 кто видит он ?: Whо does he see?
 кто видит собака ?: Whо does the dog see?
 кто видит лошадь@nom ?: Whо does the horse see?
-кто видит его ?: Whо sees him?
+кто видит он@acc ?: Whо sees him?
 кто видит собаку ?: Whо sees the dog?
 кто видит кошку ?: Whо sees the cat?
 кто мой@m друг@nom ?: Who is my friend?
@@ -111,21 +111,21 @@
 я слышу лошадь@acc: I hear a horse.
 я слышу мышь@acc: I hear a mouse.
 я слышу ты@acc: I hear you.
-я слышу его: I hear him.
+я слышу он@acc: I hear him.
 я слышу она@acc: I hear her.
 я слышу маму: I hear Mom.
 мама слышит мышь@acc: Mom hears a mouse.
 мама слышит ты@acc: Mom hears you.
-мама слышит его: Mom hears him.
+мама слышит он@acc: Mom hears him.
 мама слышит она@acc: Mom hears her.
 собака слышит я@acc: Тhe dog hears me.
 кошка слышит я@acc: Тhe cat hears me.
-собака слышит его: Тhe dog hears him.
-кошка слышит его: Тhe cat hears him.
+собака слышит он@acc: Тhe dog hears him.
+кошка слышит он@acc: Тhe cat hears him.
 мама слышит я@acc: Mom hears me.
 мама слышит ты@acc: Mom hears you.
 собака видит я@acc: Тhe dog sees me.
-собака видит его: Тhe dog sees him.
+собака видит он@acc: Тhe dog sees him.
 я встречаю собаку: I meet the dog.
 я встречаю кошку: I meet the cat.
 я встречаю лошадь@acc: I meet the horse.
@@ -294,16 +294,16 @@
 свитер@nom в университете: The sweater is at the university.
 свитер@nom в магазине: The sweater is at the shop.
 белый@m свитер@nom в магазине: The white sweater is at the shop.
-он покупает белый@accminan свитер@acc ?: He buys a white sweater?
-он покупает белый@accminan планшет@acc ?: He buys a white tablet?
-она покупает маленкий@accminan свитер@acc ?: She buys a small sweater?
-она покупает маленкий@accminan планшет@acc ?: She buys a small tablet?
-она покупает маленкий@accminan свитер@acc ?: She buys a small sweater?
-она покупает маленкий@accminan планшет@acc ?: She buys a small tablet?
-она покупает дорогой@accminan свитер@acc ?: She buys an expensive sweater?
-она покупает дорогой@accminan планшет@acc ?: She buys an expensive tablet?
-она покупает очень дорогой@accminan свитер@acc ?: She buys a very expensive sweater?
-она покупает очень дорогой@accminan планшет@acc ?: She buys a very expensive tablet?
+он покупает белый@accinanm свитер@acc ?: He buys a white sweater?
+он покупает белый@accinanm планшет@acc ?: He buys a white tablet?
+она покупает маленкий@accinanm свитер@acc ?: She buys a small sweater?
+она покупает маленкий@accinanm планшет@acc ?: She buys a small tablet?
+она покупает маленкий@accinanm свитер@acc ?: She buys a small sweater?
+она покупает маленкий@accinanm планшет@acc ?: She buys a small tablet?
+она покупает дорогой@accinanm свитер@acc ?: She buys an expensive sweater?
+она покупает дорогой@accinanm планшет@acc ?: She buys an expensive tablet?
+она покупает очень дорогой@accinanm свитер@acc ?: She buys a very expensive sweater?
+она покупает очень дорогой@accinanm планшет@acc ?: She buys a very expensive tablet?
 мой@m телефон@nom очень дорогой@m: My phone is very expensive.
 мой@m планшет@nom очень дорогой@m: My tablet is very expensive.
 собака дорогая ?: Is the dog expensive?
@@ -327,9 +327,9 @@
 он в библиотека@prep: He is at the library
 он на газоне: He is on the lawn
 он на улица@prep: He is on the street
-он в чентре: He is in the city center
-магазин@nom в чентре: The shop is in the center.
-университет@nom в чентре: The university is in the center.
+он в центре: He is in the city center
+магазин@nom в центре: The shop is in the center.
+университет@nom в центре: The university is in the center.
 в университете библиотека: There is a library at the university.
 в университете хорошая библиотека: There is a good library at the university.
 это маленкий@m университет@nom: It is a small university
@@ -338,7 +338,7 @@
 где университет@nom ?: Where is the university?
 где магазин@nom ?: Where is the shop?
 где площадь@nom ?: Where is the square?
-я работаю в чентре: I work in the center of the city.
+я работаю в центре: I work in the center of the city.
 я тут работаю: I work here.
 я работаю: I'm working.
 он работает: He's working.
@@ -377,11 +377,11 @@
 какой@m он студент@nom ?: How is he as a student?
 какой@m сегодня день@nom ?: What day is it today?
 я покупаю телефон@acc в магазине: I buy a phone at the shop.
-какой@accminan телефон@acc ты покупаешь ?: What kind of phone do you buy?
-какой@accminan журнал@acc ты читаешь ?: What kind of magazine do you read?
+какой@accinanm телефон@acc ты покупаешь ?: What kind of phone do you buy?
+какой@accinanm журнал@acc ты читаешь ?: What kind of magazine do you read?
 какую книгу ты читаешь ?: What kind of book are you reading?
 она покупает большую собаку: She buys a big dog.
-большая библиотека в чентре: The big library is in the center.
+большая библиотека в центре: The big library is in the center.
 кто ты встречаешь ?: Who are you meeting?
 мой@m друг@nom покупает большую квартиру: My friend buys a big apartment.
 друг@nom покупает хорошую машину в магазине: A friend buys a good car at the shop.
@@ -389,24 +389,24 @@
 он читает отличную книгу: He reads a great book.
 я встречаю большую собаку: I meet a large dog.
 я встречаю большую кошку: I meet a large cat.
-я покупаю белый@accminan телефон@acc: I buy a white phone.
-он встречает маленкий@accminan ребёнок@acc: He meets a small child.
+я покупаю белый@accinanm телефон@acc: I buy a white phone.
+он встречает маленкий@accinanm ребёнок@acc: He meets a small child.
 он встречает маленкую собаку: He meets a small dog.
-я читаю твою@accf статью: I read your article.
-я читаю твою@accf книгу: I read your book.
-какой@accminan твой@accminan мышь@acc ?: Which is your mouse?
-я вижу большой@accminan человек@acc: I see a big person.
-я вижу твою@accf собаку: I see your dog.
+я читаю твою статью: I read your article.
+я читаю твою книгу: I read your book.
+какой@accinanm твой@accinanm мышь@acc ?: Which is your mouse?
+я вижу большой@accinanm человек@acc: I see a big person.
+я вижу твою собаку: I see your dog.
 где твои собака@pl: Where are your dogs?
-я люблю твой@accminan телефон@acc: I love your phone.
-я люблю твой@accminan новый@accminan телефон@acc: I love your new phone.
-я люблю твою@accf квартиру: I love your apartment.
-я люблю твою@accf машину: I love your car.
-я люблю твою@accf новую квартиру: I love your new apartment.
-я люблю твою@accf новую машину: I love your new car.
-я встречаю твой@accminan друг@acc: I meet your friend.
-я вижу белый@accminan мышь@acc: I see a white mouse.
-я вижу чёрный@accminan мышь@acc: I see a black mouse.
+я люблю твой@accinanm телефон@acc: I love your phone.
+я люблю твой@accinanm новый@accinanm телефон@acc: I love your new phone.
+я люблю твою квартиру: I love your apartment.
+я люблю твою машину: I love your car.
+я люблю твою новую квартиру: I love your new apartment.
+я люблю твою новую машину: I love your new car.
+я встречаю твой@accinanm друг@acc: I meet your friend.
+я вижу белый@accinanm мышь@acc: I see a white mouse.
+я вижу чёрный@accinanm мышь@acc: I see a black mouse.
 я вижу белую кошку: I see a white cat.
 я вижу белую собаку: I see a white dog.
 я вижу чёрную кошку: I see a black cat.
@@ -454,27 +454,27 @@
 в квартира@prep белая штора: The apartment has a white curtain.
 в квартира@prep чёрная штора: The apartment has a black curtain.
 в машина@prep штора@pl: The car has curtains.
-в квартира@prep открытые@accinanpl штора@pl: The apartment has open curtains.
-я его встречаю в дверь@prep: I meet him at the door.
+в квартира@prep открытый@accinanpl штора@pl: The apartment has open curtains.
+я он@acc встречаю в дверь@prep: I meet him at the door.
 мой@m друг@nom очень открытый@m человек@nom: My friend is a very outgoing person.
 за столом стул@nom: There is a chair behind the table.
 на столе газета@pl: There are magazines on the table.
 на столе книга@pl: There are books on the table.
-в квартира@prep маленкая дверь@nom: The appartment has a small door.
-в квартира@prep белая дверь@nom: The appartment has a white door.
-в квартира@prep чёрная дверь@nom: The appartment has a black door.
-в квартира@prep маленкие@accinanpl дверь@pl: The appartment has small doors.
-в квартира@prep белые@accinanpl дверь@pl: The appartment has white doors.
-в квартира@prep чёрные@accinanpl дверь@pl: The appartment has black doors.
-на столе большие@accinanpl книга@pl: There are big books on the table.
-на столе маленкие@accinanpl книга@pl: There are small books on the table.
+в квартира@prep маленкая дверь@nom: The apartment has a small door.
+в квартира@prep белая дверь@nom: The apartment has a white door.
+в квартира@prep чёрная дверь@nom: The apartment has a black door.
+в квартира@prep маленкий@accinanpl дверь@pl: The apartment has small doors.
+в квартира@prep белый@accinanpl дверь@pl: The apartment has white doors.
+в квартира@prep чёрный@accinanpl дверь@pl: The apartment has black doors.
+на столе большой@accinanpl книга@pl: There are big books on the table.
+на столе маленкий@accinanpl книга@pl: There are small books on the table.
 это твой@m телефон@nom ?: Is that your phone?
 это твоя квартира ?: Is that your apartment?
 это твои собака@pl ?: Are those your dogs?
 это твои кошка@pl ?: Are those your cats?
-в чентре машина@pl: There are cars in the center.
-в чентре большие@accinanpl квартира@pl: Тhere are big apartments in the center.
-в чентре большие@accinanpl машина@pl: Тhere are big cars in the center.
+в центре машина@pl: There are cars in the center.
+в центре большой@accinanpl квартира@pl: Тhere are big apartments in the center.
+в центре большой@accinanpl машина@pl: Тhere are big cars in the center.
 мои собака@pl в парке: My dogs are in the park.
 мои кошка@pl в парке: My cats are in the park.
 собака открывает дверь@acc: The dog opens a door.
@@ -499,42 +499,42 @@
 я закрываю квартира@accpl: I close the books.
 я закрываю книга@accpl: I close the apartments.
 я закрываю письмо@accpl: I close the letters.
-твоё письмо@nom отличное@n: Your letter is great.
-это письмо@nom отличное@n: This is a great letter.
+твоё письмо@nom отличный@n: Your letter is great.
+это письмо@nom отличный@n: This is a great letter.
 ты читаешь моё письмо@acc ?: You are reading my letter?
 где твоё письмо@nom ?: Where is your letter?
 твоё письмо@nom на столе ?: Your letter is on the table.
 ты закрываешь открытая квартиру: You close the open apartment.
 ты закрываешь открытая книгу: You close the open book.
-ты закрываешь открытый@accpl квартира@accpl: You close the open apartment.
-ты закрываешь открытый@accpl книга@accpl: You close the open book.
-она закрывает открытое@n дверь@acc: She closes the open door.
-она закрывает открытое@n окно@acc: She closes the open window.
-она закрывает открытый@accpl дверь@accpl: She closes the open doors.
-она закрывает открытый@accpl окно@accpl: She closes the open windows.
-ты покупаешь новый@accminan телефон@acc ?: Are you buying a new phone?
-ты покупаешь новый@accminan планшет@acc ?: Are you buying a new tablet?
-ты покупаешь новую квартиру ?: Are you buying a new book?
+ты закрываешь открытый@accinanpl квартира@accpl: You close the open apartment.
+ты закрываешь открытый@accinanpl книга@accpl: You close the open book.
+она закрывает открытый@n дверь@acc: She closes the open door.
+она закрывает открытый@n окно@acc: She closes the open window.
+она закрывает открытый@accinanpl дверь@accpl: She closes the open doors.
+она закрывает открытый@accinanpl окно@accpl: She closes the open windows.
+ты покупаешь новый@accinanm телефон@acc ?: Are you buying a new phone?
+ты покупаешь новый@accinanm планшет@acc ?: Are you buying a new tablet?
+ты покупаешь новую квартиру ?: Are you buying a new apartment?
 ты покупаешь новую книгу ?: Are you buying a new apartment?
-в чентре большие@accinanpl улица@pl: There are large streets in the center.
-в чентре большие@accinanpl площадь@pl: There are large squares in the center.
-на улица@prep белые@accinanpl машина@pl: There are white cars on the street.
-на улица@prep новые@accinanpl машина@pl: There are new cars on the street.
+в центре большой@accinanpl улица@pl: There are large streets in the center.
+в центре большой@accinanpl площадь@pl: There are large squares in the center.
+на улица@prep белый@accinanpl машина@pl: There are white cars on the street.
+на улица@prep новый@accinanpl машина@pl: There are new cars on the street.
 на улица@prep машина@pl: There are cars on the street.
 это мой@m новый@m профессор@nom: This is my new professor.
 профессор@nom моё новый@m друг@nom: The professor is my new friend.
-большое@n дерево@nom на площадь@prep: There is a big tree in the square.
+большой@n дерево@nom на площадь@prep: There is a big tree in the square.
 на улица@prep дерево@pl: There are trees on the street.
 на площадь@prep дерево@nom: There is a tree on the square.
-в чентре новый@m магазин@nom: There is a new shop in the center.
-в парке большие@accinanpl дерево@pl: There are large trees in the park.
+в центре новый@m магазин@nom: There is a new shop in the center.
+в парке большой@accinanpl дерево@pl: There are large trees in the park.
 профессор@nom покупает дорогой@m телефон@nom: The oligarch buys an expensive phone.
-профессор@nom покупает дорогие@accinanpl телефоны: The oligarch buys expensive phones.
-дерево@pl чёрные@pl: The trees are black.
-дерево@nom чёрное@n: The tree is black.
-какое@n письмо@nom твоё ?: Which letter is yours?
-какое@n дерево@nom ты любишь ?: Which tree do you like?
-в квартира@prep большие@accinanpl окно@pl: The apartment has big windows.
+профессор@nom покупает дорогой@accinanpl телефоны: The oligarch buys expensive phones.
+дерево@pl чёрный@pl: The trees are black.
+дерево@nom чёрный@n: The tree is black.
+какой@n письмо@nom твоё ?: Which letter is yours?
+какой@n дерево@nom ты любишь ?: Which tree do you like?
+в квартира@prep большой@accinanpl окно@pl: The apartment has big windows.
 ты читаешь письмо@accpl ?: You are reading letters?
 ты пишешь письмо@accpl ?: You are writing letters?
 ты читаешь книга@pl ?: Do you read books?
@@ -568,16 +568,16 @@
 где он гуляет: undefined
 он студент@nom в хороший@prepm университете: undefined
 он студент@nom в университете: undefined
-моя квартира в чентре: undefined
-он встречает друг@acc в чентре: undefined
-в чентре магазины открытые@pl: undefined
-она работает в чентре: undefined
+моя квартира в центре: undefined
+он встречает друг@acc в центре: undefined
+в центре магазины открытый@pl: undefined
+она работает в центре: undefined
 журнал@nom дорогой@m: undefined
 какой@m твой@m журнал@nom: undefined
 это хороший@m журнал@nom: undefined
 я люблю читать журнал@nom: undefined
-в квартира@prep новые@accinanpl штора@pl: undefined
-она покупает чёрные@accinanpl штора@pl: undefined
+в квартира@prep новый@accinanpl штора@pl: undefined
+она покупает чёрный@accinanpl штора@pl: undefined
 я встречаю человек@acc на площадь@prep: undefined
 он маленкий@m человек@nom: undefined
 белая кошка на стуле: undefined
@@ -586,9 +586,9 @@
 парк@nom за библиотекой: undefined
 в библиотека@prep дорогая книга: undefined
 он видит дорогую машину: undefined
-в чентре дорогие@accinanpl магазины: undefined
+в центре дорогой@accinanpl магазины: undefined
 большая машина дорогая: undefined
-какой@accminan человек@acc ты любишь: undefined
+какой@accinanm человек@acc ты любишь: undefined
 где твой@m свитер@nom: undefined
 это дорогая машина: undefined
 я сегодня работаю: undefined
@@ -601,10 +601,10 @@
 день@nom: undefined
 тут твой@m стул@nom: undefined
 это твоя машина: undefined
-ты любишь маленкие@accinanpl собака@pl: undefined
+ты любишь маленкий@accinanpl собака@pl: undefined
 какой@m свитер@acc ты любишь: undefined
-какие@accinanpl магазины ты любишь: undefined
-ты любишь дорогие@accinanpl машина@pl: undefined
+какой@accinanpl магазины ты любишь: undefined
+ты любишь дорогой@accinanpl машина@pl: undefined
 что ты пишешь: undefined
 ты пишешь письмо@acc: undefined
 почему ты лежишь под столом: undefined
@@ -628,9 +628,65 @@
 здесь погода хорошая: undefined
 профессор@nom читает газету здесь: undefined
 сидишь здесь: undefined
-чентр@nom здесь: undefined
+центр@nom здесь: undefined
 университет@nom здесь: undefined
 она не студент@nom: undefined
 я не олигарх@nom: undefined
 магазин@nom не дорогой@m: undefined
-я не люблю кошка@pl: undefined
+я люблю этот@accinanm парк@nom: undefined
+я читаю этот@accinanpl журналлы: undefined
+я люблю эту страну: undefined
+я люблю этот@accinanm парк@nom: undefined
+у я@gen нет телефона: undefined
+у студента много книг: undefined
+у ты@gen дорогая машина: undefined
+у я@gen хорошая квартира: undefined
+почему у он@acc нет машина@gen: undefined
+у студента много книг: undefined
+она гуляет у библиотека@gen: undefined
+письмо@nom лежит у окно@gen: undefined
+у друга есть ребёнок: undefined
+у мама@gen есть ребёнок: undefined
+в центре много машин: undefined
+на площадь@prep нет машина@gen: undefined
+
+у я@gen нет большой@genf квартира@gen: undefined
+у я@gen нет квартира@gen: undefined
+в парке нет газона: undefined
+у она@gen нет ребёнок@gen: undefined
+в магазине нет окно@gen: undefined
+в комната@prep нет окно@gen: undefined
+
+
+в комната@prep собака: There is a dog in the room
+он в комната@prep: He's in the room.
+я в комната@prep: I'm in the room.
+телефон@nom в комната@prep: The phone is in the room.
+собака в комната@prep: A dog is in the room.
+кошка в комната@prep: A cat is in the room.
+мышь@nom в комната@prep: A mouse is in the room.
+что в комната@prep ?: What is in the room ?
+где комната: Where is the room?
+это моя комната: This is my room.
+где моя комната ?: Where is my room?
+это хорошая комната: This is a good room.
+я люблю твою комнату: I love your room.
+я люблю твою новую квартиру: I love your new room.
+в комната@prep белая штора: The room has a white curtain.
+в комната@prep чёрная штора: The room has a black curtain.
+в комната@prep открытый@accinanpl штора@pl: The room has open curtains.
+в комната@prep маленкая дверь@nom: The room has a small door.
+в комната@prep белая дверь@nom: The room has a white door.
+в комната@prep чёрная дверь@nom: The room has a black door.
+в комната@prep маленкий@accinanpl дверь@pl: The room has small doors.
+в комната@prep белый@accinanpl дверь@pl: The room has white doors.
+в комната@prep чёрный@accinanpl дверь@pl: The room has black doors.
+это твоя комната ?: Is that your room?
+в центре большой@accinanpl комната@pl: Тhere are big rooms in the center.
+в комната@prep большой@accinanpl окно@pl: The room has big windows.
+моя комната в центре: undefined
+в комната@prep новый@accinanpl штора@pl: undefined
+почему ты не в комната@prep: undefined
+у я@gen хорошая комната: undefined
+у я@gen нет большой@genf комната@gen: undefined
+у я@gen нет комната@gen: undefined

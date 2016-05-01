@@ -4,8 +4,7 @@ fem3[n]: nom: -ь, gen: -и, dat: -и, acc: -ь, instr: -ью, prep: -и, pl: и
 -статья[v]: nom: -я, acc: -ю, instr: -ёй, genpl: -ей, inherit: fem2
 -ребёнок[n]: nom: -ок, gen: -ка, dat: -ку, acc: -ка, instr: -ом, prep: -ке
 
-masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, pl: ы, genpl: ов, datpl: ам, accpl: лы, instrpl: ами, preppl: ах
-
+masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, pl: ы, genpl: ов, datpl: ам, accpl: лы, instrpl: ами, preppl: ах 
 -день[n]: nom: ень, gen: ня, dat: ню, acc: ень, instr: нём, prep: не
 neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -ья, genpl: -ьев, datpl: -ьям, accpl: -ья, instrpl: -ьями, preppl: -ьях
 
@@ -18,18 +17,19 @@ neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, i
 -видеть[v]: inf: -деть, 1: -жу, 2: -дишь, 3: -дит, 1pl: -дим, 2pl: -дите, 3pl: -дят
 -слышать[v]: inf: -ать, 1: -у, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ат
 -писать[v]: inf: -сать, 1: -шу, 2: -шешь, 3: -шет, 1pl: -ем, 2pl: -ете, 3pl: -ут
+-быть[v]: inf: быть, 1: есть
 
-adj: m: ***, f: -ая, n: ое, accf: -ую, accman: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, accpl: -их, instrm: -им, instrn: -им, instrf1: -ой, instrf2: -ою, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их
+adj: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их
 
-ойadj2[adj]: m: -ой, accminan: -ой, preppl: и, inherit: adj 
+ойadj2[adj]: m: -ой, accinanm: -ой, preppl: и, inherit: adj 
 ойadj1[adj]: f: -оя, n: -оё, accf: -ою, pl: -ои, preppl: их, inherit: ойadj2
 
-ыйadj[adj]: m: -ый, accminan: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
-ийadj[adj]: m: -ий, accminan: -ий, inherit: adj
+ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
+ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
 
--этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accminan: -от, accplinan: -и, inherit: adj
+-этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accinanm: -от, accinanpl: -и, inherit: adj
 
 -я[pron]: nom: я, gen: меня, dat: мне, acc: меня, instr: мной, prep: мне
 -ты[pron]: nom: ты, gen: тебя, dat: тебе, acc: тебя, instr: тобой, prep: тебе
--он[pron]: nom: он, acc: его, dat: ему, prep: нём
+-он[pron]: nom: он, gen: его, acc: его, dat: ему, prep: нём
 -она[pron]: nom: -она, gen: её, dat: ей, acc: её, instr: ей, prep: ней 

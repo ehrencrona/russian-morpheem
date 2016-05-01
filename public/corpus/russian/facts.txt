@@ -22,11 +22,12 @@ grammar: ийadj@m
 хорош--ий: good, inflect: ийadj
 grammar: ыйadj@m
 магазин--: shop, inflect: masc1
+комнат--а: room, inflect: fem1
 --я: I, inflect: -я
 grammar: -я@nom
 --он: he, inflect: -он
 grammar: -он@nom
-библиотек--а: library, inflect: fem1
+библиотек--а: library, inflect: fem2
 grammar: fem1@prep
 улиц--а: street, inflect: fem1
 на: on/in
@@ -83,7 +84,7 @@ grammar: masc1@acc
 студент--: student, inflect: masc1
 почему: why
 не: not
-чентр--: center (of city), inflect: masc1
+центр--: center (of city), inflect: masc1
 человек--: person, inflect: masc1
 больш--ой: big, inflect: ойadj2
 grammar: ойadj2@m
@@ -92,7 +93,7 @@ grammar: ойadj2@m
 grammar: ойadj1@f
 дорог--ой: expensive, inflect: ойadj2
 как--ой: which, inflect: ойadj2
-grammar: ойadj2@accminan
+grammar: ойadj2@accinanm
 grammar: -любить@2
 очень: very
 погод--а: weather, inflect: fem1
@@ -105,8 +106,8 @@ grammar: -день@nom
 покупа--ть: buy, inflect: -встречать
 grammar: adj@accf
 grammar: -встречать@2
-grammar: ийadj@accminan
-grammar: ыйadj@accminan
+grammar: ийadj@accinanm
+grammar: ыйadj@accinanm
 кроват--ь: bed, inflect: fem3
 леж--ать: lie, inflect: -слышать
 под: under
@@ -138,9 +139,18 @@ grammar: neu1@nom
 grammar: neu1@acc
 grammar: neu1@prep
 grammar: masc1@pl
-grammar: ыйadj@accpl
-grammar: adj@accpl
+grammar: ыйadj@accinanpl
+grammar: adj@accinanpl
 окн--о: window, inflect: neu2
+нет: is not
+grammar: masc1@gen
+grammar: fem1@gen
+много: many
+у: by; also indicates "to have"
+grammar: adj@genm
+grammar: fem2@gen
+grammar: adj@genn
+grammar: adj@genf
 утр--о: morning, inflect: neu2
 grammar: neu2@pl
 дерев--о: tree, inflect: neu1
@@ -152,8 +162,16 @@ grammar: -любить@inf
 grammar: -слышать@inf
 grammar: -писать@inf
 сейчас: now
-эт--от[adj]: this, inflect: -этот
-
-grammar: -этот@accminan
+эт--от: this, inflect: -этот
+grammar: -этот@accinanm
 grammar: -этот@accf
-grammar: -этот@accplinan
+grammar: -этот@accinanpl
+grammar: fem3@gen
+--быть: be, inflect: -быть
+grammar: -быть@1
+без: without
+для: for; for the benefit of
+люд--ь: people, inflect: fem3
+город--: city, inflect: masc1
+стран--а: country, inflect: fem1
+grammar: masc1@genpl
