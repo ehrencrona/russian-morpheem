@@ -105,7 +105,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             let index = this.props.corpus.facts.indexOf(fact);
             
             if (index > 0) {
-                return <div className='clickable' onClick={ () =>
+                return <div key={form} className='clickable' onClick={ () =>
                     this.props.tab.openTab(
                         <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
                             fact={ fact }/>, fact.getId(), fact.getId()
@@ -116,11 +116,16 @@ export default class InflectionsComponent extends Component<Props, State> {
                 </div>
             }
             else {
-                return <div>{ wordsByForm[form] }</div>
+                return <div key={form}>{ wordsByForm[form] }</div>
             }
         }
         
         let table = FIELDS[this.props.inflection.pos]
+        
+        if (!table) {
+            console.log('Unknown POS ' + this.props.inflection.pos + ' of ' + this.props.inflection.getId())
+            return <div/>;
+        }
         
         return (
             <div className='inflections'>
@@ -141,7 +146,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                                     <td>{ table.rows[index] }</td>
                                 {
                                     forms.map((form) => {
-                                        return <td key={form}>
+                                        return <td key={form.toString()}>
                                             {
                                                 (typeof form == 'string' ?
                                                     (wordsByForm[form] ? formComponent(form) : '')

@@ -1,5 +1,6 @@
 import Sentences from './Sentences';
 import Sentence from './Sentence';
+import InflectedWord from './InflectedWord';
 import Facts from './Facts';
 import Fact from './Fact';
 
@@ -24,21 +25,28 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
         let hardestIndex = -1
         let found = false
 
-        sentence.visitFacts((fact) => {
-            let factIndex = facts.indexOf(fact)
+        // if this is an inflected form (we treat the default form as representing the inflection as a fact)
+        // we will never find it by matching indvidual facts.
+        if (forFact instanceof InflectedWord && forFact.form != forFact.inflection.defaultForm) {
+            found = !!sentence.words.find((word) => word.getId() == forFact.getId())
+        }
+        else {            
+            sentence.visitFacts((fact) => {
+                let factIndex = facts.indexOf(fact)
 
-            if (factIndex < 0) {
-                return
-            }
+                if (factIndex < 0) {
+                    return
+                }
 
-            if (fact.getId() == forFact.getId()) {
-                found = true
-            }
+                if (fact.getId() == forFact.getId()) {
+                    found = true
+                }
 
-            if (factIndex > hardestIndex) {
-                hardestIndex = factIndex
-            }
-        })
+                if (factIndex > hardestIndex) {
+                    hardestIndex = factIndex
+                }
+            })
+        }
     
         if (found) {
             let list

@@ -29,7 +29,12 @@ export default class WordsWithInflectionComponent extends Component<Props, State
     
     render() {
         let words: InflectedWord[] = this.props.corpus.facts.facts.filter((fact) => {
-            return fact instanceof InflectedWord && fact.inflection == this.props.inflection; 
+            try {
+                return fact instanceof InflectedWord && 
+                    fact.inflection.getFact(this.props.form).inflection == this.props.inflection; 
+            } catch (e) {
+                return false
+            }
         }).map((word: InflectedWord) => {
             return word.inflect(this.props.form)
         })
@@ -39,7 +44,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
         {
             words.map((word) => {            
                 let index = this.props.corpus.facts.indexOf(word.infinitive);
-                
+
                 return <div key={ word.getId() } className='clickable' onClick={ () =>
                     this.props.tab.openTab(
                         <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } fact={ word }/>, word.toString(), word.getId()

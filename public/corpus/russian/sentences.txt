@@ -481,13 +481,13 @@
 собака открывает окно@acc: The dog opens a window.
 я открываю дверь@acc: I open the door.
 я открываю окно@acc: I open the window.
-я открываю квартиру: I open the book.
-я открываю книгу: I open the apartment.
+
+я открываю новую книгу: undefined
 я открываю письмо@acc: I open the letter.
 я открываю дверь@accpl: I open the doors.
 я открываю окно@accpl: I open the windows.
-я открываю квартира@accpl: I open the books.
-я открываю книга@accpl: I open the apartments.
+
+я открываю новый@accpl книга@accpl: undefined
 я открываю письмо@accpl: I open the letters.
 я закрываю дверь@acc: I close the door.
 я закрываю окно@acc: I close the window.
@@ -504,9 +504,9 @@
 ты читаешь моё письмо@acc ?: You are reading my letter?
 где твоё письмо@nom ?: Where is your letter?
 твоё письмо@nom на столе ?: Your letter is on the table.
-ты закрываешь открытая квартиру: You close the open apartment.
+
 ты закрываешь открытая книгу: You close the open book.
-ты закрываешь открытый@accinanpl квартира@accpl: You close the open apartment.
+
 ты закрываешь открытый@accinanpl книга@accpl: You close the open book.
 она закрывает открытый@n дверь@acc: She closes the open door.
 она закрывает открытый@n окно@acc: She closes the open window.
@@ -522,7 +522,7 @@
 на улица@prep новый@accinanpl машина@pl: There are new cars on the street.
 на улица@prep машина@pl: There are cars on the street.
 это мой@m новый@m профессор@nom: This is my new professor.
-профессор@nom моё новый@m друг@nom: The professor is my new friend.
+мой@m новый@m друг@nom профессор@nom: undefined
 большой@n дерево@nom на площадь@prep: There is a big tree in the square.
 на улица@prep дерево@pl: There are trees on the street.
 на площадь@prep дерево@nom: There is a tree on the square.
@@ -616,7 +616,7 @@
 почему ты любишь работать: undefined
 почему ты я@acc не любишь: undefined
 почему ты не сидишь: undefined
-почему: undefined
+
 почему ты на кровать@prep: undefined
 почему ты она@acc не встречаешь: undefined
 почему сегодня: undefined
@@ -638,7 +638,7 @@
 я люблю эту страну: undefined
 я люблю этот@accinanm парк@nom: undefined
 у я@gen нет телефона: undefined
-у студента много книг: undefined
+у студента слишком много книг: undefined
 у ты@gen дорогая машина: undefined
 у я@gen хорошая квартира: undefined
 почему у он@acc нет машина@gen: undefined
@@ -689,4 +689,47 @@
 почему ты не в комната@prep: undefined
 у я@gen хорошая комната: undefined
 у я@gen нет большой@genf комната@gen: undefined
-у я@gen нет комната@gen: undefined
+это свитер@nom друга: undefined
+свитера: undefined
+это книга студента: undefined
+где машина олигарха: undefined
+где машина@gen олигарха: undefined
+где стул@nom профессора: undefined
+в магазине много свитеров: undefined
+в библиотека@prep много книг: undefined
+в университете много профессоров: undefined
+он читает журнал@acc: undefined
+дверь@prep в магазине открытый@pl: undefined
+почему окно@pl открытый@pl: undefined
+он покупает новый@pl обудь@pl: undefined
+новый@pl: undefined
+в квартира@prep новый@pl штора@pl: undefined
+в газоне белый@pl кошка@pl: undefined
+я люблю маленкий@pl машина@pl: undefined
+здесь хороший@pl магазины: undefined
+в городе маленкий@pl квартира@pl: undefined
+в квартира@dat маленкий@pl комната@pl: undefined
+какой@pl газета@accpl ты читаешь: undefined
+какой@pl человеклы ты любишь: undefined
+какой@pl людь@pl ты встречаешь: undefined
+почему ты не пишешь: undefined
+у я@acc много друг@genpl: undefined
+где открытый@m магазин@nom: Where is there an open shop?
+я люблю открытый@accanpl людь@accpl: undefined
+я открываю книгу: I open the apartment.
+почему ты закрываешь дверь@acc: undefined
+почему ты в библиотека@prep: undefined
+почему твои другзья студенты: undefined
+я тут гуляю: undefined
+он не профессор@nom: undefined
+я не олигарх@nom: undefined
+я не читаю книгу: undefined
+я не собака: undefined
+это мой@m новый@m профессор@nom: undefined
+здесь нет магазинов: undefined
+в этот@prepm городе нет газонов: undefined
+в площадь@prep много человеков: undefined
+в площадь@prep слишком много человеков: undefined
+эта квартира слишком дорогая: undefined
+этот@m телефон@nom слишком большой@m: undefined
+магазин@nom слишком маленкий@m: undefined

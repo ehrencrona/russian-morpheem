@@ -68,7 +68,7 @@ export default class Inflection {
         }
     }
 
-    getFact(form) {
+    getFact(form): InflectionFact {
         if (this.endings[form] != null) {
             return new InflectionFact(this.id + '@' + form, this, form);
         }

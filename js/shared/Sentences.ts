@@ -31,13 +31,27 @@ export default class Sentences {
     changeId(fromId: number, toId: number) {
         let sentence = this.get(fromId)
 
+        if (!sentence) {
+            throw new Error('ID to change from did not exist.')
+        }
+
         if (this.sentenceById[toId]) {
             throw new Error(`Sentence ${ toId } already existed`)
         }
         
-        this.changedIdByOldId[fromId] = toId        
+        if (this.changedIdByOldId[fromId]) {
+            throw new Error(`Sentence ${ fromId } had already been renamed`)
+        }
+        
+        this.changedIdByOldId[fromId] = toId
         this.sentenceById[toId] = sentence
         sentence.id = toId
+
+        if (toId >= this.nextSentenceId) {
+            this.nextSentenceId = sentence.getId() + 1
+        }
+        
+        console.log('changed from ',fromId,'to', toId)
     }
 
     remove(sentence: Sentence) {
@@ -58,18 +72,18 @@ export default class Sentences {
     }
 
     add(sentence: Sentence) {
-        if (this.sentenceById[sentence.getId()]) {
-            throw new Error(`Duplicate sentence ${ sentence.getId() }`)
-        }
-
         if (sentence.getId() == undefined) {
             sentence.id = this.nextSentenceId++
         }
 
+        if (this.sentenceById[sentence.getId()]) {
+            throw new Error(`Duplicate sentence ${ sentence.getId() }`)
+        }
+
         this.sentences.push(sentence)
         this.sentenceById[sentence.getId()] = sentence
-        
-        if (sentence.getId() > this.nextSentenceId) {
+
+        if (sentence.getId() >= this.nextSentenceId) {
             this.nextSentenceId = sentence.getId() + 1
         }
         
@@ -82,7 +96,7 @@ export default class Sentences {
 
     updateChangedId(sentence: Sentence) {
         let changedId = this.changedIdByOldId[sentence.id]
-        
+
         if (changedId) {
             sentence.id = changedId
         }
@@ -92,7 +106,7 @@ export default class Sentences {
         this.updateChangedId(sentence)
 
         if (!this.sentenceById[sentence.getId()]) {
-            throw new Error('Unknown sentence')
+            throw new Error('Unknown sentence "' + sentence.getId() + '"')
         }
 
         this.sentenceById[sentence.getId()] = sentence

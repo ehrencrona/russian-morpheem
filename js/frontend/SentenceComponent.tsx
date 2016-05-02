@@ -42,7 +42,7 @@ export default class SentenceComponent extends Component<Props, State> {
     }
     
     duplicate() {
-        let sentence = new Sentence(this.props.sentence.words.slice(0), randomInt()).setEnglish(this.props.sentence.en())
+        let sentence = new Sentence(this.props.sentence.words.slice(0), null).setEnglish(this.props.sentence.en())
 
         this.props.corpus.sentences.add(sentence)
 
@@ -115,7 +115,7 @@ export default class SentenceComponent extends Component<Props, State> {
             <WordSearchComponent 
                 corpus={ this.props.corpus } 
                 tab={ this.props.tab } 
-                onWordSelect={ (word) => { editor.setWord(word) } } 
+                onWordSelect={ (word) => { editor.setWord(word); wordSearch.clearFilters() } } 
                 ref={ (ref) => { wordSearch = ref } }/>
             
             <ul>

@@ -52,7 +52,7 @@ export default class FactsComponent extends Component<Props, State> {
                         } }
                         onClick={ () => this.props.tab.openTab(
                             <Fact fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
-                            fact.getId(),
+                            fact.toString(),
                             fact.getId()
                         ) }>
                         <div className='index'><div className='number'>{ index + 1 }</div></div>

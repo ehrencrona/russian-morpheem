@@ -51,6 +51,10 @@ export default class WordSearchComponent extends Component<Props, State> {
     setWord(word: Word) {
         this.setState({ filterWord: word, filterPos: null, filterForm: null })
     }
+
+    clearFilters() {
+        this.setState({ filterWord: null, filterString: '', filterForm: null, filterPos: null })
+    }
     
     selectSuggestion(suggestion: Suggestion) {
         let word = suggestion.word

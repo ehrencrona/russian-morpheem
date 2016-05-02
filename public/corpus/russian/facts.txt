@@ -80,14 +80,14 @@ grammar: masc1@acc
 встреча--ть: meet, inflect: -встречать
 гуля--ть: take a walk, inflect: -встречать
 отличн--ый: great, inflect: ыйadj
-друг--: friend, inflect: masc1
+друг--: friend, inflect: -друг
 студент--: student, inflect: masc1
-почему: why
-не: not
 центр--: center (of city), inflect: masc1
 человек--: person, inflect: masc1
 больш--ой: big, inflect: ойadj2
+не: not
 grammar: ойadj2@m
+почему: why
 квартир--а: apartment, inflect: fem1
 м--ой: my, inflect: ойadj1
 grammar: ойadj1@f
@@ -137,7 +137,6 @@ grammar: -писать@2
 здесь: here
 grammar: neu1@nom
 grammar: neu1@acc
-grammar: neu1@prep
 grammar: masc1@pl
 grammar: ыйadj@accinanpl
 grammar: adj@accinanpl
@@ -145,8 +144,11 @@ grammar: adj@accinanpl
 нет: is not
 grammar: masc1@gen
 grammar: fem1@gen
+grammar: masc1@genpl
 много: many
+grammar: fem1@genpl
 у: by; also indicates "to have"
+слишком: too
 grammar: adj@genm
 grammar: fem2@gen
 grammar: adj@genn
@@ -162,6 +164,7 @@ grammar: -любить@inf
 grammar: -слышать@inf
 grammar: -писать@inf
 сейчас: now
+grammar: neu1@prep
 эт--от: this, inflect: -этот
 grammar: -этот@accinanm
 grammar: -этот@accf
@@ -174,4 +177,6 @@ grammar: -быть@1
 люд--ь: people, inflect: fem3
 город--: city, inflect: masc1
 стран--а: country, inflect: fem1
-grammar: masc1@genpl
+обуд--ь: shoe, inflect: fem3
+и: and
+или: or
