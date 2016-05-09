@@ -5,7 +5,7 @@ import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import InflectionFact from '../shared/InflectionFact'
 
-import { Tab } from './TabSetComponent'
+import Tab from './Tab'
 import SentenceComponent from './SentenceComponent'
 import InflectionsComponent from './InflectionsComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'

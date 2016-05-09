@@ -118,7 +118,8 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
         
         this.setState({ 
             words: this.state.words,
-            selectedIndex: index + ( insert ? 1 : 0 )
+            selectedIndex: index+1,
+            insertMode: true
         })
 
         this.sentenceChanged(this.state.words)

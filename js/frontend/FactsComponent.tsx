@@ -5,7 +5,7 @@ import Corpus from '../shared/Corpus';
 import InflectedWord from '../shared/InflectedWord';
 
 import Fact from './FactComponent';
-import { Tab } from './TabSetComponent';
+import Tab from './Tab'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 

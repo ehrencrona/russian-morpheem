@@ -5,7 +5,7 @@ import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import Inflection from '../shared/Inflection'
 
-import { Tab } from './TabSetComponent'
+import Tab from './Tab'
 import FactComponent from './FactComponent'
 import SentenceComponent from './SentenceComponent'
 import Sentence from '../shared/Sentence'
@@ -18,7 +18,8 @@ interface Props {
     corpus: Corpus,
     inflection: Inflection,
     tab: Tab,
-    word?: InflectedWord
+    word?: InflectedWord,
+    onSelect?: (word: Word) => any 
 }
 
 interface State {}
@@ -56,13 +57,11 @@ const FIELDS = {
             ['prep','preppl']
         ]
     },
-    pron: [
-        {
-            cols: [ '' ],
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-            forms: [ ['nom'], ['gen'], ['dat'], ['instr'], ['prep'] ]
-        }
-    ]
+    pron: {
+        cols: [ '' ],
+        rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+        forms: [ ['nom'], ['gen'], ['dat'], ['instr'], ['prep'] ]
+    }
 };
 
 export default class InflectionsComponent extends Component<Props, State> {
@@ -82,6 +81,20 @@ export default class InflectionsComponent extends Component<Props, State> {
         })
 
         return wordsByForm 
+    }
+    
+    formClicked(form) {
+        if (this.props.word && this.props.onSelect) {
+            this.props.onSelect(this.props.word.inflect(form))
+        }
+        else {
+            let fact = this.props.inflection.getFact(form);
+
+            this.props.tab.openTab(
+                <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
+                    fact={ fact }/>, fact.getId(), fact.getId()
+            ) 
+        }
     }
     
     render() {
@@ -105,12 +118,8 @@ export default class InflectionsComponent extends Component<Props, State> {
             let index = this.props.corpus.facts.indexOf(fact);
             
             if (index > 0) {
-                return <div key={form} className='clickable' onClick={ () =>
-                    this.props.tab.openTab(
-                        <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
-                            fact={ fact }/>, fact.getId(), fact.getId()
-                    ) 
-                }>
+                return <div key={form} className='clickable' onClick={ 
+                    () => this.formClicked(form) }>
                     { wordsByForm[form] } 
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                 </div>

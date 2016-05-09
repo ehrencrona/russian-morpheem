@@ -5,25 +5,8 @@ import Facts from './FactsComponent';
 import Fact from './FactComponent';
 import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
-
-let lastTabId = 0
-
-export class Tab {
-    constructor(public name: string, public id: string, public element: any, public tabSet: TabSetComponent) {
-        this.name = name
-        this.id = id
-        this.element = element
-        this.tabSet = tabSet
-    }
-
-    openTab(element, name:string, id: string) {
-        this.tabSet.openTab(element, name, id, this) 
-    }
-    
-    close() {
-        this.tabSet.closeTab(this)
-    }
-}
+import Tab from './Tab';
+import TabComponent from './TabComponent';
 
 interface Props {
     corpus: Corpus
@@ -79,7 +62,7 @@ export default class TabSetComponent extends Component<Props, State> {
     openTab(element, name: string, id: string, after: Tab) {
         let newTabs = this.state.tabs
         let tab = newTabs.find((tab) => tab.id == id)
-        
+
         if (tab) {
             newTabs = newTabs.filter((tab) => tab.id !== id)
         }
@@ -110,14 +93,18 @@ export default class TabSetComponent extends Component<Props, State> {
         }
     }
 
+    getVisibleTabs() {
+        return this.state.tabs.slice(this.state.first, this.state.first+2);
+    }
+    
     render() {
-        let toClosedTab = (offset, addToFirst) => (tab, index) => {
+        let toClosedTab = (offset, addToFirst) => (tab: Tab, index) => {
             let factIndex
             
-            let element = tab.element
+            let component = tab.component
 
-            if (element.props.fact) {
-                factIndex = this.props.corpus.facts.indexOf(element.props.fact) + 1
+            if (component.props.fact) {
+                factIndex = this.props.corpus.facts.indexOf(component.props.fact) + 1
             }
 
             return <div className='tab tab-header' key={tab.id}
@@ -149,30 +136,13 @@ export default class TabSetComponent extends Component<Props, State> {
                 </div>
                 
                 <div className='openTabs'>
-                { this.state.tabs.slice(this.state.first, this.state.first+2).map(
-                    (tab, index) => {
-                        let factIndex
-                        
-                        if (tab.element.props.fact) {
-                            factIndex = this.props.corpus.facts.indexOf(tab.element.props.fact) + 1
-                        }
-                        
-                        return <div className='tab' key={ tab.id }>
-                            <div className='tab-header'>
-                                <div className='tab-name'>
-                                { (factIndex ?                             
-                                    <div className='index'><div className='number'>{ factIndex }</div></div>
-                                    : <div/>) }
-                                { tab.name }</div>
-                                <div className='tab-close' onClick={ this.close(this.state.first + index) }>Close</div>
-                            </div>
-                            <div className='content'>
-                            { 
-                            cloneElement(tab.element, { tab: tab })  
-                            }
-                            </div>
-                        </div>
-                    }
+                { this.getVisibleTabs().map(
+                    (tab, index) => 
+                        <TabComponent 
+                            key={ tab.id }
+                            corpus={ this.props.corpus }
+                            tab={ tab } 
+                            close={ this.close(this.state.first + index) }/>
                 ) }
                 </div>
             </div>

@@ -1,15 +1,15 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
-import Corpus from '../shared/Corpus';
-import Fact from '../shared/Fact';
-import Word from '../shared/Word';
-import InflectedWord from '../shared/InflectedWord';
-import Sentence from '../shared/Sentence';
-import { Tab } from './TabSetComponent'
-import WordSearchComponent from './WordSearchComponent';
-import SentenceEditorComponent from './SentenceEditorComponent';
+import Corpus from '../shared/Corpus'
+import Fact from '../shared/Fact'
+import Word from '../shared/Word'
+import InflectedWord from '../shared/InflectedWord'
+import Sentence from '../shared/Sentence'
+import Tab from './Tab'
+import WordSearchComponent from './WordSearchComponent'
+import SentenceEditorComponent from './SentenceEditorComponent'
 
-import { Component, createElement } from 'react';
+import { Component, createElement } from 'react'
 
 interface Props {
     corpus: Corpus,

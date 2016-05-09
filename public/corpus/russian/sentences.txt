@@ -491,12 +491,12 @@
 я открываю письмо@accpl: I open the letters.
 я закрываю дверь@acc: I close the door.
 я закрываю окно@acc: I close the window.
-я закрываю квартиру: I close the book.
+я закрываю комната@accpl: undefined
 я закрываю книгу: I close the apartment.
 я закрываю письмо@acc: I close the letter.
 я закрываю дверь@accpl: I close the doors.
 я закрываю окно@accpl: I close the windows.
-я закрываю квартира@accpl: I close the books.
+я закрываю комната@accpl: undefined
 я закрываю книга@accpl: I close the apartments.
 я закрываю письмо@accpl: I close the letters.
 твоё письмо@nom отличный@n: Your letter is great.
@@ -529,7 +529,7 @@
 в центре новый@m магазин@nom: There is a new shop in the center.
 в парке большой@accinanpl дерево@pl: There are large trees in the park.
 профессор@nom покупает дорогой@m телефон@nom: The oligarch buys an expensive phone.
-профессор@nom покупает дорогой@accinanpl телефоны: The oligarch buys expensive phones.
+профессор@nom покупает дорогой@accinanpl телефон@accpl: The oligarch buys expensive phones.
 дерево@pl чёрный@pl: The trees are black.
 дерево@nom чёрный@n: The tree is black.
 какой@n письмо@nom твоё ?: Which letter is yours?
@@ -539,7 +539,7 @@
 ты пишешь письмо@accpl ?: You are writing letters?
 ты читаешь книга@pl ?: Do you read books?
 ты читаешь газета@pl ?: Do you read newspapers?
-ты читаешь журналы ?: Do you read magazines?
+ты читаешь журнал@accpl ?: Do you read magazines?
 я профессор@nom: I'm a professor.
 он олигарх@nom: He's an oligarch.
 тут чёрный@m свитер@nom: undefined
@@ -570,7 +570,7 @@
 он студент@nom в университете: undefined
 моя квартира в центре: undefined
 он встречает друг@acc в центре: undefined
-в центре магазины открытый@pl: undefined
+в центре магазин@pl открытый@pl: undefined
 она работает в центре: undefined
 журнал@nom дорогой@m: undefined
 какой@m твой@m журнал@nom: undefined
@@ -586,7 +586,7 @@
 парк@nom за библиотекой: undefined
 в библиотека@prep дорогая книга: undefined
 он видит дорогую машину: undefined
-в центре дорогой@accinanpl магазины: undefined
+в центре дорогой@accinanpl магазин@accpl: undefined
 большая машина дорогая: undefined
 какой@accinanm человек@acc ты любишь: undefined
 где твой@m свитер@nom: undefined
@@ -603,7 +603,7 @@
 это твоя машина: undefined
 ты любишь маленкий@accinanpl собака@pl: undefined
 какой@m свитер@acc ты любишь: undefined
-какой@accinanpl магазины ты любишь: undefined
+какой@accinanpl магазин@accpl ты любишь: undefined
 ты любишь дорогой@accinanpl машина@pl: undefined
 что ты пишешь: undefined
 ты пишешь письмо@acc: undefined
@@ -634,7 +634,7 @@
 я не олигарх@nom: undefined
 магазин@nom не дорогой@m: undefined
 я люблю этот@accinanm парк@nom: undefined
-я читаю этот@accinanpl журналлы: undefined
+я читаю этот@accinanpl журнал@accpl: undefined
 я люблю эту страну: undefined
 я люблю этот@accinanm парк@nom: undefined
 у я@gen нет телефона: undefined
@@ -701,25 +701,25 @@
 он читает журнал@acc: undefined
 дверь@prep в магазине открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
-он покупает новый@pl обудь@pl: undefined
+он покупает новый@pl обудь@accpl: undefined
 новый@pl: undefined
 в квартира@prep новый@pl штора@pl: undefined
 в газоне белый@pl кошка@pl: undefined
 я люблю маленкий@pl машина@pl: undefined
-здесь хороший@pl магазины: undefined
+здесь хороший@pl магазин@pl: undefined
 в городе маленкий@pl квартира@pl: undefined
 в квартира@dat маленкий@pl комната@pl: undefined
 какой@pl газета@accpl ты читаешь: undefined
-какой@pl человеклы ты любишь: undefined
+какой@pl человек@accpl ты любишь: undefined
 какой@pl людь@pl ты встречаешь: undefined
-почему ты не пишешь: undefined
+почему ты не пишешь книгу: undefined
 у я@acc много друг@genpl: undefined
 где открытый@m магазин@nom: Where is there an open shop?
 я люблю открытый@accanpl людь@accpl: undefined
 я открываю книгу: I open the apartment.
-почему ты закрываешь дверь@acc: undefined
+почему закрываешь дверь@acc: undefined
 почему ты в библиотека@prep: undefined
-почему твои другзья студенты: undefined
+почему твои другзья студент@pl: undefined
 я тут гуляю: undefined
 он не профессор@nom: undefined
 я не олигарх@nom: undefined
@@ -733,3 +733,146 @@
 эта квартира слишком дорогая: undefined
 этот@m телефон@nom слишком большой@m: undefined
 магазин@nom слишком маленкий@m: undefined
+этот@m телефон@nom слишком маленкий@m: undefined
+где магазин@nom низкий@genpl цен: undefined
+моя друг@nom низкий@m человек@nom: undefined
+это город@nom низкий@genpl домов: undefined
+я живу в низкий@prepm доме: undefined
+
+я люблю низкий@accinanpl цена@accpl: undefined
+она живёт в белый@prepm низкий@prepm доме: undefined
+она живёт в белый@prepm высокий@prepm доме: undefined
+я живу в высокий@prepm доме: undefined
+это город@nom высокий@genpl домов: undefined
+я не люблю высокий@accinanpl цена@accpl: undefined
+это магазин@nom высокий@genpl цен: undefined
+этот@pl цена@pl слишком высокий@pl: undefined
+сегодня температура слишком высокая: undefined
+твоя температура слишком высокая: undefined
+твоя температура слишком низкая: undefined
+этот@m город@nom слишком большой@m: undefined
+моя город@nom слишком маленкий@m: undefined
+этот@m университет@nom слишком дорогой@m: undefined
+моё окно@nom слишком низкий@n: undefined
+здесь нет библиотека@gen: undefined
+это город@nom без библиотека@gen: undefined
+я без телефона: undefined
+это страна без парков: undefined
+она покупает дорогой@accinanpl обудь@accpl: undefined
+я покупаю обудь@accpl и свитер@acc в магазине: undefined
+здесь много библиотека@gen: undefined
+у я@acc нет книга@gen: undefined
+у он@gen мама@gen много кошка@gen: undefined
+здесь нет людей: undefined
+здесь нет хороший@genpl людей: undefined
+в парке высокий@pl дерево@pl: undefined
+моя квартира без телефона: undefined
+
+я люблю этот@accinanm город@acc: undefined
+я люблю город@acc высокий@genpl домов: undefined
+у мой@genm дом@gen нет большой@genm газона: undefined
+здесь нет белый@genm лошадь@gen: undefined
+у ты@gen большая голова: undefined
+в квартира@prep нет кровать@gen: undefined
+в городе нет большой@genpl площадей: undefined
+в магазине нет обудей: undefined
+в магазине нет дорогой@genpl обудей: undefined
+в магазине нет большой@genpl обудей: undefined
+в комната@prep нет дверь@gen: undefined
+это мой@m город@nom: undefined
+я живу в большой@prepm городе: undefined
+это город@nom профессора: undefined
+в городе много библиотек: undefined
+в городе много людей: undefined
+это город@nom олигархов: undefined
+дом@nom профессора большой@m: undefined
+в городе большой@m университет@nom: undefined
+у олигарха много домов: undefined
+какой@m твой@m дом@nom: undefined
+он живёт в новый@prepm доме: undefined
+мой@m дом@nom белый@m: undefined
+дом@nom собака@gen белый@m: undefined
+цена@pl этот@genm магазина низкий@pl: undefined
+я не вижу цену: undefined
+это хорошая цена: undefined
+здесь хороший@pl цена@pl: undefined
+это отличная цена: undefined
+свитер@nom без цена@gen: undefined
+здесь нет открытый@genpl магазинов: undefined
+отличный@genpl ресторанов в этот@prepm городе нет: undefined
+цена@pl новый@genpl ресторанов высокий@pl: undefined
+у она@gen низкая собака: undefined
+у она@gen низкий@m собака: undefined
+вы знаете где моя машина: undefined
+ты знаешь где моя собака ?: undefined
+я не знаю франзуски: undefined
+профессор@nom знает математика: undefined
+профессор@nom понимает математика: undefined
+я не понимаю математика: undefined
+я это не понимаю: undefined
+я не понимаю этот@accinanm книгу: undefined
+этот@pl книга@pl дорогой@pl: undefined
+я не люблю этот@accinanpl свитер@accpl: undefined
+у она@gen хорошая голова: undefined
+этот@pl людь@pl хороший@pl другзья: undefined
+этот@pl людь@pl студент@pl: undefined
+я знаю этот@accanpl людь@accpl: undefined
+этот@pl книга@pl слишком большой@pl: undefined
+почему у ты@gen нет друг@genpl: undefined
+почему играешь на улица@prep: undefined
+почему не встречаешь маму: undefined
+почему кошка в комната@prep: undefined
+он открывает магазин@acc: undefined
+у профессор@nom много студентов: undefined
+я встречаю новый@accanm профессор@acc: undefined
+профессор@pl работает в университете: undefined
+он мой@m профессор@nom: undefined
+он читает моё письмо@acc: undefined
+письмо@nom на столе: undefined
+у ты@gen много друг@genpl: undefined
+почему у ты@gen нет собака@gen: undefined
+у ты@gen машина: undefined
+у ты@gen большая квартира: undefined
+у ты@gen отличная квартира: undefined
+человек@nom открывает газету: undefined
+это белая кошка: undefined
+это чёрный@m мышь@nom: undefined
+я не знаю где магазин@acc: undefined
+я она@acc не знаю: undefined
+я не знаю олигарх@acc: undefined
+я не знаю олигарх@accpl: undefined
+ты знаешь новый@accanm профессор@acc: undefined
+он знает где покупать отличный@accinanpl планшет@accpl: undefined
+он знает где я живу: undefined
+кто знает где мой@m телефон@nom: undefined
+кто вы: undefined
+что вы читаете: undefined
+что вы видите ?: undefined
+вы видите машину ?: undefined
+какой@accinanm город@acc вы любите: undefined
+в какой@m день@nom вы работаете: undefined
+вы знаете где магазин@nom: undefined
+вы знаете мой@accanm профессор@acc: undefined
+почему вы сидите здесь: undefined
+вы сидите на стуле: undefined
+вы не любите кошка@accpl: undefined
+вы не любите борщ@acc: undefined
+кто вы любите ?: undefined
+что вы любите ?: undefined
+почему вы я@acc не любите: undefined
+профессор@nom закрывает книгу: undefined
+он закрывает магазин@acc: undefined
+я закрываю дверь@acc: I close the door.
+я закрываю дверь@acc дом@gen: undefined
+я закрываю окно@acc дом@gen: undefined
+у дом@gen нет дверь@gen: undefined
+он не закрывает свой@accinanm дом@acc: undefined
+он не закрывает квартиру: undefined
+профессор@nom закрывает свой@accinanm книгу: undefined
+я закрываю книгу профессора: undefined
+я открываю дверь@acc квартира@gen: undefined
+я открываю дверь@accpl: undefined
+собака не знает как открывать дверь@acc: undefined
+я не знаю как покупать квартиру: undefined
+у она@acc много собак: undefined
+у новый@genm дом@gen нет дверь@gen: undefined

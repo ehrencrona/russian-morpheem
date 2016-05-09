@@ -4,8 +4,9 @@ import Corpus from '../shared/Corpus';
 import Fact from '../shared/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
-import { Tab } from './TabSetComponent'
+import Tab from './Tab'
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
+import InflectionsComponent from './InflectionsComponent';
 
 import { Component, createElement } from 'react';
 
@@ -142,8 +143,14 @@ export default class WordSearchComponent extends Component<Props, State> {
                         suggestions.push(suggestion)
                     }, false)
 
-                    Object.keys(fact.inflection.endings)
-                        .forEach((form) => allForms.add(form))
+                    let inflection = fact.inflection
+                    
+                    while (inflection) {
+                        Object.keys(inflection.endings)
+                            .forEach((form) => allForms.add(form))
+                    
+                        inflection = inflection.inherits 
+                    }
                 } 
                 else if (fact instanceof InflectedWord && 
                         (fact.inflection.pos == filterPos || (filterPos == NO_POS && !fact.inflection.pos) || !filterPos)) {
@@ -250,6 +257,8 @@ export default class WordSearchComponent extends Component<Props, State> {
             </div>
         }
         
+        let filterWord = this.state.filterWord
+        
         return (<div className='wordSearch'>
             <div className='filter'>
                 <input type='text' value={ this.state.filterString } onChange={ (event) => {
@@ -301,10 +310,27 @@ export default class WordSearchComponent extends Component<Props, State> {
                 
             ) }
             
-
             <div className='suggestions'>
+
             {
+                (filterWord && filterWord instanceof InflectedWord ?
+                
+                <InflectionsComponent 
+                    corpus={ this.props.corpus }
+                    tab={ this.props.tab }
+                    inflection={ filterWord.inflection }
+                    word={ filterWord }
+                    onSelect={ (word) => {
+                        this.props.onWordSelect(word)
+                        this.setState({ filterWord: null, filterString: '' })
+                    } }
+                    />
+                
+                :
+                
                 suggestions.map(factIndexToElement)
+
+                )
             }
             </div>
         </div>)
