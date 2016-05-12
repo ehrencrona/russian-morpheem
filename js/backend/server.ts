@@ -5,6 +5,8 @@ import 'source-map-support/register'
 import readCorpus from './CorpusReader'
 import { corpusDir } from './CorpusReader'
 import Sentence from '../shared/Sentence'
+import InflectedWord from '../shared/InflectedWord'
+import Word from '../shared/Word'
 import writeSentenceFile from '../backend/SentenceFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
 
@@ -40,6 +42,48 @@ readCorpus().then((corpus) => {
         }
     })
 
+    app.post('/api/word/:word', function(req, res) {
+        try {
+            let wordString = req.params['word']
+
+            if (!wordString) {
+                throw new Error('No word sent')
+            }
+
+            let inflection = corpus.inflections.get(req.body.inflection)
+            let word: Word
+
+            if (inflection) {
+                let defaultEnding = inflection.getEnding(inflection.defaultForm)
+                
+                if (wordString.substr(wordString.length - defaultEnding.length) != defaultEnding) {
+                    throw new Error('Wrong ending.')
+                } 
+
+                let stem = wordString.substr(0, wordString.length - defaultEnding.length)
+                
+                word = new InflectedWord(wordString, stem, null, 
+                    inflection.defaultForm).setInflection(inflection)    
+            }
+            else {
+                word = new Word(wordString)
+            }
+            
+            word.setEnglish('n/a', '')
+
+            corpus.words.add(word)
+            corpus.facts.add(word)
+
+            console.log('Added word ' + word.getId())
+
+            res.status(200).send({})
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
+    })
+    
     app.post('/api/sentence', function(req, res) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
@@ -104,6 +148,7 @@ readCorpus().then((corpus) => {
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
-
+    corpus.facts.onAdd = saveFacts
+    
     app.listen(port)
 })

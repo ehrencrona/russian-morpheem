@@ -4,6 +4,8 @@
 import Corpus from '../shared/Corpus';
 import Sentence from '../shared/Sentence';
 import Fact from '../shared/Fact';
+import Word from '../shared/Word';
+import InflectedWord from '../shared/InflectedWord';
 
 import xr from 'xr';
 import TabSet from './TabSetComponent';
@@ -30,6 +32,11 @@ xr.get('/api/corpus')
             .then((res) => {
                 corpus.sentences.changeId(sentence.id, res.data.id)
             })
+    }
+    
+    corpus.words.onAdd = (word: Word) => {
+        xr.post('/api/word/' + word.jp , {
+            inflection: (word instanceof InflectedWord ? word.inflection.getId() : '') })
     }
 
     corpus.facts.onMove = (fact: Fact, pos: number) => {

@@ -12,6 +12,7 @@ export default class Facts {
     factIndexById : { [id: string]: number } = {}
 
     onMove: (fact: Fact, newIndex: number) => void = null
+    onAdd: (fact: Fact) => void = null
 
     constructor() {
     }
@@ -30,6 +31,10 @@ export default class Facts {
         this.factIndexById[fact.getId()] = this.facts.length
         this.facts.push(fact)
         
+        if (this.onAdd) {
+            this.onAdd(fact)
+        }
+
         return this
     }
     
@@ -90,7 +95,7 @@ export default class Facts {
             else {
                 throw new Error(`Unknown fact type "${factJson.type}""`)
             }
-            
+
             facts.add(fact)
         })
         

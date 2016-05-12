@@ -26,6 +26,12 @@ body {
 .button:hover, .tab-header .tab-close:hover {
   background-color: #c7c7c7; }
 
+input[type=text] {
+  font-family: inherit;
+  font-size: 150%;
+  background-color: #fafafa;
+  border: none; }
+
 .tabSet {
   height: 100vh;
   display: flex;
@@ -137,11 +143,7 @@ body {
   display: flex; }
   .wordSearch .filter input[type=text] {
     width: calc(100% - 4px);
-    font-family: inherit;
-    font-size: 150%;
-    margin: 4px;
-    background-color: #fafafa;
-    border: none; }
+    margin: 4px; }
   .wordSearch .filter .option {
     margin: 0;
     margin-right: 8px;
@@ -207,6 +209,9 @@ ul {
   padding-top: 8px; }
   .inflections .inflectionName {
     font-weight: bold; }
+    .inflections .inflectionName .button, .inflections .inflectionName .tab-header .tab-close, .tab-header .inflections .inflectionName .tab-close {
+      font-weight: normal;
+      display: inline-block; }
   .inflections table {
     width: 100%;
     margin-bottom: 8px;
@@ -227,3 +232,19 @@ ul {
 
 .facts .count.insufficient {
   font-weight: bold; }
+
+.addWord {
+  display: flex;
+  padding: 8px;
+  margin: 8px;
+  background-color: #e0e0e0;
+  align-items: stretch; }
+  .addWord input {
+    flex-grow: 1; }
+  .addWord select {
+    background-color: #fafafa;
+    margin-left: 8px;
+    -webkit-appearance: menulist-button; }
+  .addWord .button, .addWord .tab-header .tab-close, .tab-header .addWord .tab-close {
+    margin: 0;
+    margin-left: 8px; }

@@ -40,6 +40,13 @@ body {
     background-color: darken($color-bg-light, 10%);
 }
 
+input[type=text] {
+    font-family: inherit;
+    font-size: 150%;
+    background-color: lighten($color-bg-light, 10%);
+    border: none;
+}
+
 .tabSet {
     height: 100vh;
     display: flex;
@@ -203,12 +210,7 @@ body {
         
         input[type=text] {
             width: calc(100% - 4px);
-            
-            font-family: inherit;
-            font-size: 150%;
             margin: $unit;
-            background-color: lighten($color-bg-light, 10%);
-            border: none;
         }
         
         .option {
@@ -298,6 +300,11 @@ ul {
     
     .inflectionName {
         font-weight: bold;
+        
+        .button {
+            font-weight: normal;
+            display: inline-block;
+        }
     }
     
     table {        
@@ -331,5 +338,28 @@ ul {
     
     .count.insufficient {
         font-weight: bold;
+    }
+}
+
+.addWord {
+    display: flex;
+    padding: 2 * $unit;
+    margin: 2 * $unit;
+    background-color: $color-bg-light;
+    align-items: stretch;
+
+    input {
+        flex-grow: 1
+    }
+    
+    select {
+        background-color: lighten($color-bg-light, 10%);
+        margin-left: 2 * $unit;
+        -webkit-appearance: menulist-button;
+    }
+    
+    .button {
+        margin: 0;
+        margin-left: 2 * $unit;
     }
 }

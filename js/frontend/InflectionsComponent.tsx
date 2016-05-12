@@ -22,7 +22,10 @@ interface Props {
     onSelect?: (word: Word) => any 
 }
 
-interface State {}
+interface State {
+    inflection?: Inflection,
+    change?: boolean
+}
 
 let React = { createElement: createElement }
 
@@ -65,6 +68,14 @@ const FIELDS = {
 };
 
 export default class InflectionsComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+        
+        this.state = {
+            inflection: props.inflection
+        }
+    }
+    
     getWordsByForm(word: InflectedWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
@@ -88,7 +99,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             this.props.onSelect(this.props.word.inflect(form))
         }
         else {
-            let fact = this.props.inflection.getFact(form);
+            let fact = this.state.inflection.getFact(form);
 
             this.props.tab.openTab(
                 <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
@@ -97,11 +108,19 @@ export default class InflectionsComponent extends Component<Props, State> {
         }
     }
     
+    changeInflection(inflection: Inflection) {
+        this.props.word.setInflection(inflection)
+        
+        this.setState({
+            inflection: inflection
+        })
+    }
+    
     render() {
         let wordsByForm: { [ form:string]: string}
         let forms: string[]
 
-        let inflection = this.props.inflection
+        let inflection = this.state.inflection
         let word: InflectedWord = this.props.word
         
         if (!word) {
@@ -114,7 +133,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         wordsByForm = this.getWordsByForm(word)
 
         let formComponent = (form) => {
-            let fact = this.props.inflection.getFact(form);
+            let fact = this.state.inflection.getFact(form);
             let index = this.props.corpus.facts.indexOf(fact);
             
             if (index > 0) {
@@ -129,16 +148,44 @@ export default class InflectionsComponent extends Component<Props, State> {
             }
         }
         
-        let table = FIELDS[this.props.inflection.pos]
+        let table = FIELDS[this.state.inflection.pos]
         
         if (!table) {
-            console.log('Unknown POS ' + this.props.inflection.pos + ' of ' + this.props.inflection.getId())
+            console.log('Unknown POS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
             return <div/>;
         }
         
+        let alternativeInflections = 
+            this.props.corpus.inflections.getPossibleInflections(this.props.word.jp)
+                .filter((inflection) => inflection.getId() != this.state.inflection.getId())
+                .filter((inflection) => inflection.pos == this.state.inflection.pos)
+        
         return (
             <div className='inflections'>
-                <div className='inflectionName'>{ this.props.inflection.id }</div>
+                <div className='inflectionName'>{ this.state.inflection.id + (inflection.pos ? ' (' + inflection.pos + ')' : '') } 
+                    { (this.props.word && alternativeInflections.length ? 
+                        <div className='button' onClick={ () => this.setState({ change: !this.state.change })}>
+                            { (this.state.change ? 'Done' : 'Change') }</div>
+                        :
+                        <div/>) }
+                </div>
+
+                { (this.state.change ?
+                   
+                    <div className='buttonBar'>{
+                        alternativeInflections.map((inflection) =>
+                            <div className='button' key={ inflection.getId() } 
+                                onClick={ () => { this.changeInflection(inflection) } }>{ inflection.getId()
+                                    + (inflection.pos ? ' (' + inflection.pos + ')' : '')    
+                                }</div>
+                        )
+                    }</div>
+
+                :
+
+                <div/>
+                   
+                ) }
                 
                 <table>
                     <thead>

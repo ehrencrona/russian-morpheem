@@ -17,7 +17,7 @@ export default class InflectedWord extends Word {
      */
     constructor(public jp, public stem, public infinitive: InflectedWord, public form) {
         super(jp, '');
-        
+
         if (!infinitive && jp.substr(0, stem.length) != stem) {
             throw new Error(`Expected ${jp} to start with ${stem}`)
         }

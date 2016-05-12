@@ -104,7 +104,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
         }
     }
 
-    setWord(word, index?, insert?) {
+    setWord(word: Word, index?, insert?) {
         if (!word) {
             throw new Error('No word.')
         }
@@ -172,7 +172,14 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                 this.dragAndDrop(drag.index, index)
             }
             else {
-                this.setWord(this.props.corpus.words.get(drag.word), index, true)                                
+                let fact = this.props.corpus.facts.get(drag.word)
+                
+                if (fact instanceof Word) {
+                    this.setWord(fact, index, true)                                
+                }
+                else {
+                    console.error(`Couldn't find fact "${ drag.word }"`)
+                }
             }
         }
 

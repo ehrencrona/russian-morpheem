@@ -8,7 +8,9 @@ export default class Words {
     inflectionsByDefaultForm : { [s: string]: InflectedWord } = {}
     
     ambiguousForms = {}
-    
+
+    onAdd: (word: Word) => void = null
+
     constructor(facts?: Facts) {
         if (facts) {
             for (let fact of facts.facts) {
@@ -54,7 +56,11 @@ export default class Words {
 
             this.wordsById[word.toString()] = word
         }
-        
+                
+        if (this.onAdd) {
+            this.onAdd(word)
+        }
+
         return this
     }
     

@@ -78,10 +78,11 @@ export default class FactComponent extends Component<Props, State> {
                 </div>;
         }
 
-        return (<div>        
+        return (<div>
+
             { inflectionComponents }
         
-            { this.props.fact instanceof Word ?
+            { fact instanceof Word ?
 
                 <div className='buttonBar'>
                     <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>

@@ -65,7 +65,31 @@ export default class Inflections {
         return this.inflectionsById[id]        
     }
 
-    
+    getBestInflection(wordString: string) {
+        let longestHit = ''
+        let result
+        
+        this.inflections.forEach((inflection) => {
+            let defaultEnding = inflection.getEnding(inflection.defaultForm)
+            
+            if (wordString.substr(wordString.length - defaultEnding.length) == defaultEnding && 
+                defaultEnding.length >= longestHit.length) {
+                longestHit = defaultEnding
+                result = inflection
+            }
+        })
+        
+        return result
+    }
+
+    getPossibleInflections(wordString: string) {
+        return this.inflections.filter((inflection) => {
+            let defaultEnding = inflection.getEnding(inflection.defaultForm)
+
+            return wordString.substr(wordString.length - defaultEnding.length) == defaultEnding
+        })
+    }
+
     toJson() {
         let result = []
         
