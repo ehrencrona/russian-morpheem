@@ -142,13 +142,13 @@ grammar: -встречать@2pl
 grammar: fem2@accpl
 grammar: fem1@accpl
 борщ--: borsht (soup), inflect: masc2
-плох--ой: bad, inflect: ойadj1 
+плох--ой: bad, inflect: ойadj1
 grammar: -этот@pl
 св--ой: his/min (refers to the subject), inflect: ойadj1
 олигарх--: oligarch, inflect: masc1
 понима--ть: understand, inflect: -встречать
 франзуски: French
-математик--а: mathetmatics, inflect: fem1
+математик--а: mathematics, inflect: fem1
 письм--о: letter, inflect: neu2
 grammar: neu1@nom
 grammar: neu1@acc
@@ -226,3 +226,4 @@ grammar: -жить@2pl
 grammar: -жить@3pl
 grammar: ойadj1@n
 всегда: always
+
