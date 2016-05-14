@@ -7,8 +7,6 @@ import Inflection from '../shared/Inflection'
 
 import Tab from './Tab'
 import FactComponent from './FactComponent'
-import SentenceComponent from './SentenceComponent'
-import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
 
 import { Component, createElement } from 'react';
@@ -23,8 +21,7 @@ interface Props {
 }
 
 interface State {
-    inflection?: Inflection,
-    change?: boolean
+    inflection?: Inflection
 }
 
 let React = { createElement: createElement }
@@ -76,6 +73,12 @@ export default class InflectionsComponent extends Component<Props, State> {
         }
     }
     
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            inflection: newProps.inflection
+        })    
+    }
+    
     getWordsByForm(word: InflectedWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
@@ -84,7 +87,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         word.visitAllInflections((inflected: InflectedWord) => { 
             inflections.push(inflected)    
         }, false)
-        
+
         let forms: string[] = []
         
         inflections.forEach((word: InflectedWord) => {
@@ -109,8 +112,8 @@ export default class InflectionsComponent extends Component<Props, State> {
     }
     
     changeInflection(inflection: Inflection) {
-        this.props.word.setInflection(inflection)
-        
+        this.props.corpus.words.changeInflection(this.props.word, inflection)
+
         this.setState({
             inflection: inflection
         })
@@ -126,7 +129,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         if (!word) {
             word = new InflectedWord(
                     inflection.getEnding(inflection.defaultForm), 
-                    '', null, inflection.defaultForm)
+                    null, inflection.defaultForm)
                 .setInflection(inflection) 
         } 
 
@@ -151,42 +154,12 @@ export default class InflectionsComponent extends Component<Props, State> {
         let table = FIELDS[this.state.inflection.pos]
         
         if (!table) {
-            console.log('Unknown POS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
+            console.log('Unknown PoS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
             return <div/>;
         }
-        
-        let alternativeInflections = 
-            this.props.corpus.inflections.getPossibleInflections(this.props.word.jp)
-                .filter((inflection) => inflection.getId() != this.state.inflection.getId())
-                .filter((inflection) => inflection.pos == this.state.inflection.pos)
-        
-        return (
-            <div className='inflections'>
-                <div className='inflectionName'>{ this.state.inflection.id + (inflection.pos ? ' (' + inflection.pos + ')' : '') } 
-                    { (this.props.word && alternativeInflections.length ? 
-                        <div className='button' onClick={ () => this.setState({ change: !this.state.change })}>
-                            { (this.state.change ? 'Done' : 'Change') }</div>
-                        :
-                        <div/>) }
-                </div>
-
-                { (this.state.change ?
-                   
-                    <div className='buttonBar'>{
-                        alternativeInflections.map((inflection) =>
-                            <div className='button' key={ inflection.getId() } 
-                                onClick={ () => { this.changeInflection(inflection) } }>{ inflection.getId()
-                                    + (inflection.pos ? ' (' + inflection.pos + ')' : '')    
-                                }</div>
-                        )
-                    }</div>
-
-                :
-
-                <div/>
-                   
-                ) }
                 
+        return (
+            <div className='inflections'>                
                 <table>
                     <thead>
                         <tr>

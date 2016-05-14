@@ -64,7 +64,7 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
 
             let stem = stemAndEnding[0]
 
-            return new InflectedWord(wordWithoutStemMark, stem, null, 'n/a')
+            return new InflectedWord(wordWithoutStemMark, null, 'n/a')
         } 
         else {
             return new Word(parseResult.word, parseResult.classifier)
@@ -94,10 +94,6 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
                 if (!inflection) {
                     throw new Error('Unknown inflection "' + text + '"'
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
-                }
-
-                if (word.stem === undefined) {
-                    throw new Error('Inflected word "' + word.jp + '" should mark end of stem with two dashes.')
                 }
 
                 word.setForm(inflection.defaultForm)

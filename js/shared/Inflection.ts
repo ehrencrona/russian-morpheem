@@ -111,15 +111,32 @@ export default class Inflection {
 
     inflect(word: InflectedWord, stem, form: string) {
         let iw = new InflectedWord(
-            stem + this.getEnding(form), stem, word.infinitive, form)
+            stem + this.getEnding(form), word.infinitive, form)
             .requiresFact(this.getFact(form))
-            
+
         iw.setInflection(this)
         
         return iw
     }
     
+    getAllForms(): string[] {
+        let result = {}
+        let at: Inflection = this
+
+        do {
+            Object.assign(result, at.endings)
+            
+            at = at.inherits
+        } while (at)
+        
+        return Object.keys(result)
+    }
+    
     inflectAll(dictionaryForm: InflectedWord, stem: string, excludeInherited: boolean, exclude: any): InflectedWord[] {
+        if (dictionaryForm.form != this.defaultForm) {
+            throw new Error('Wrong default form')
+        }
+
         let result: InflectedWord[] = []
         
         exclude = exclude || {}
@@ -131,10 +148,19 @@ export default class Inflection {
                 if (exclude[form]) {
                     continue
                 }
-                
+
                 exclude[form] = true
+
+                let inflectedWord;
                 
-                result.push(this.inflect(dictionaryForm, stem, form));
+                if (form == this.defaultForm) {
+                    inflectedWord = dictionaryForm
+                }
+                else {
+                    inflectedWord = this.inflect(dictionaryForm, stem, form)
+                }
+
+                result.push(inflectedWord);
             }
 
             if (!excludeInherited) {

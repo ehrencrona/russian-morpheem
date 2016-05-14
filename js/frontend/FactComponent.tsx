@@ -8,6 +8,7 @@ import InflectionFact from '../shared/InflectionFact'
 import Tab from './Tab'
 import SentenceComponent from './SentenceComponent'
 import InflectionsComponent from './InflectionsComponent'
+import ChangeInflectionComponent from './ChangeInflectionComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
@@ -63,13 +64,26 @@ export default class FactComponent extends Component<Props, State> {
         let wordsWithInflectionComponent = <div/>
 
         if (fact instanceof InflectedWord) {
-            inflectionComponents = <InflectionsComponent 
-                corpus={ this.props.corpus } inflection={ fact.inflection } word={ fact } tab={ this.props.tab } /> 
+            let inflections
+            
+            inflectionComponents =
+                <div>
+                    <ChangeInflectionComponent
+                        corpus={ this.props.corpus } 
+                        word={ fact }
+                        onChange={ () => inflections.forceUpdate() } />
+                    <InflectionsComponent 
+                        corpus={ this.props.corpus } 
+                        inflection={ fact.inflection } 
+                        word={ fact } 
+                        tab={ this.props.tab }
+                        ref={ (component) => inflections = component} />
+                </div>
         }
         else if (fact instanceof InflectionFact) {
             inflectionComponents = <InflectionsComponent corpus={ this.props.corpus } 
                 inflection={ fact.inflection } tab={ this.props.tab }  />
-            
+
             wordsWithInflectionComponent = 
                 <div>
                     <h3>Words</h3>

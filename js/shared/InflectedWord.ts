@@ -11,22 +11,18 @@ import Inflections from './Inflections'
  */
 export default class InflectedWord extends Word {
     inflection: Inflection
+    stem: string
+    inflectionByForm : { [s: string]: InflectedWord } = {}
     
     /**
      * @param infinitive Word representing the base form. null if this IS the infinitive.
      */
-    constructor(public jp, public stem, public infinitive: InflectedWord, public form) {
+    constructor(public jp: string, public infinitive: InflectedWord, public form: string) {
         super(jp, '');
 
-        if (!infinitive && jp.substr(0, stem.length) != stem) {
-            throw new Error(`Expected ${jp} to start with ${stem}`)
-        }
-        
-        this.stem = stem
         this.infinitive = infinitive || this
         this.form = form
         this.en = {}
-        
     }
 
     setForm(form) {
@@ -44,27 +40,75 @@ export default class InflectedWord extends Word {
         visitor(this.infinitive)
     }
 
+    clone(word: InflectedWord) {
+        this.inflection = word.inflection
+        this.infinitive = word.infinitive
+        this.stem = word.stem
+        this.jp = word.jp
+        this.en = word.en
+    }
+
+    changeInflection(inflection: Inflection) {
+        let defaultEnding = inflection.getEnding(inflection.defaultForm)
+        
+        if (this.jp.substr(this.jp.length - defaultEnding.length) != defaultEnding) {
+            throw new Error(`Expected ${this.jp} to end in ${defaultEnding}`)
+        }
+        
+        let stem = this.jp.substr(0, this.jp.length - defaultEnding.length)
+        
+        this.stem = stem
+        this.inflection = inflection
+
+        for (let inflectedWord of this.inflection.inflectAll(this.infinitive, this.stem, false, {})) {
+            if (this.inflectionByForm[inflectedWord.form]) {
+                this.inflectionByForm[inflectedWord.form].clone(inflectedWord)
+            }
+        }
+    }
+
     setInflection(inflection: Inflection) {
         this.inflection = inflection
 
-        if (this.infinitive == this && (this.jp.substr(this.stem.length) != inflection.getEnding(this.form))) {
-            throw new Error(`Expected ${this.jp} to end with ${inflection.getEnding(this.form)}`)
+        let expectedEnding = inflection.getEnding(this.form)
+        let actualEnding = this.jp.substr(this.jp.length - expectedEnding.length)
+
+        if (this.infinitive == this && (actualEnding != expectedEnding)) {
+            throw new Error(`Expected ${this.jp} to end with ${expectedEnding}, not ${actualEnding}`)
         }
+
+        this.stem = this.jp.substr(0, this.jp.length - expectedEnding.length)
 
         return this
     }
 
     inflect(form: string) {
-        return this.inflection.inflect(this.infinitive, this.stem, form)
+        let result
+        
+        if (form == this.form) {
+            result = this
+        }
+        else {
+            // maintain object identity to make things easier when changing inflection
+            result = this.inflectionByForm[form]
+
+            if (!result) {
+                result = this.inflection.inflect(this.infinitive, this.stem, form)
+
+                this.inflectionByForm[form] = result
+            }
+        }
+
+        return result
     }
 
     visitAllInflections(visitor: (InflectedWord) => any, excludeInherited: boolean) {
         if (!this.inflection) {
             throw new Error(this + ' is an inflected word without inflection.')
         }
-        
-        for (let inflectedWord of this.inflection.inflectAll(this.infinitive, this.stem, excludeInherited, {})) {
-            visitor(inflectedWord)
+
+        for (let form of this.inflection.getAllForms()) {
+            visitor(this.inflect(form))
         }
     }
 
@@ -83,7 +127,7 @@ export default class InflectedWord extends Word {
 
     static fromJson(json, inflections: Inflections): UnstudiedWord {
         if (json.type == 'inflected') {
-            return new InflectedWord(json.target, json.stem, null, json.form)
+            return new InflectedWord(json.target, null, json.form)
                 .setEnglish(json.en)
                 .setInflection(inflections.get(json.inflection))
         }
@@ -96,7 +140,6 @@ export default class InflectedWord extends Word {
         return {
             target: this.jp,
             en: this.en[''],
-            stem: this.stem,
             form: this.form,
             inflection: (this.inflection ? this.inflection.id : undefined),
             type: this.getJsonType()

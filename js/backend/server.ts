@@ -42,6 +42,23 @@ readCorpus().then((corpus) => {
         }
     })
 
+    app.put('/api/word/:word/inflection/:inflection', (req, res) => {
+        let wordString = req.params['word']
+        let inflectionId = req.params['inflection']
+        
+        let word = corpus.words.get(wordString)
+        
+        if (word instanceof InflectedWord) {            
+            corpus.words.changeInflection(word, 
+                corpus.inflections.get(inflectionId))
+                
+            console.log(`Changed inflection of ${word} to ${inflectionId}.`)
+        }
+        else {
+            throw Error(word + ' is not inflected')
+        }
+    })
+
     app.post('/api/word/:word', function(req, res) {
         try {
             let wordString = req.params['word']
@@ -62,7 +79,7 @@ readCorpus().then((corpus) => {
 
                 let stem = wordString.substr(0, wordString.length - defaultEnding.length)
                 
-                word = new InflectedWord(wordString, stem, null, 
+                word = new InflectedWord(wordString, null, 
                     inflection.defaultForm).setInflection(inflection)    
             }
             else {
@@ -149,6 +166,7 @@ readCorpus().then((corpus) => {
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
+    corpus.words.onChangeInflection = saveFacts
     
     app.listen(port)
 })
