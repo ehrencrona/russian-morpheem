@@ -645,8 +645,8 @@
 у студента много книг: undefined
 она гуляет у библиотека@gen: undefined
 письмо@nom лежит у окно@gen: undefined
-у друга есть ребёнок: undefined
-у мама@gen есть ребёнок: undefined
+у друга быть@1 ребёнок: undefined
+у мама@gen быть@1 ребёнок: undefined
 в центре много машин: undefined
 на площадь@prep нет машина@gen: undefined
 
@@ -702,10 +702,10 @@
 дверь@prep в магазине открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
 он покупает новый@pl обудь@accpl: undefined
-новый@pl: undefined
+в городе новый@pl магазин@pl: undefined
 в квартира@prep новый@pl штора@pl: undefined
 в газоне белый@pl кошка@pl: undefined
-я люблю маленкий@pl машина@pl: undefined
+я люблю маленкий@accinanpl машина@accpl: undefined
 здесь хороший@pl магазин@pl: undefined
 в городе маленкий@pl квартира@pl: undefined
 в квартира@dat маленкий@pl комната@pl: undefined
@@ -884,3 +884,23 @@
 планшет@nom белый@m: undefined
 она открывает книгу в библиотека@prep: undefined
 кошка открывает дверь@acc: undefined
+в квартира@dat маленкий@pl окно@pl: undefined
+в магазине дорогой@pl книга@pl: undefined
+дом@pl высокий@pl: undefined
+дом@pl высокий@pl: undefined
+цена@pl высокий@pl: undefined
+здесь цена@pl высокий@pl: undefined
+какой@pl машина@pl хороший@pl: undefined
+вы знаете как в этот@prepm ресторане еда: undefined
+вы знаете где центр@nom: undefined
+он живёт как собака: undefined
+он работает как лошадь@nom: undefined
+эта машина как дом@nom дорогой@m: undefined
+кошка ест мышь@acc: undefined
+кошка ест белый@accinanm мышь@acc: undefined
+кошка ест мышь@pl: undefined
+я ем борщ@acc: undefined
+я ем червоний@accinanm борщ@acc: undefined
+в ресторане он ест лошадь@acc: undefined
+я не ем лошадь@acc: undefined
+моя кошка не ест мышь@accpl: undefined
