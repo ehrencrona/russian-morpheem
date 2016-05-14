@@ -1,6 +1,6 @@
 тут собака: Here is a dog.
 тут кошка: Here is a cat.
-тут лошадь@nom: Here is a horse.
+тут лошадь@nom: undefined
 тут мышь@nom: Here is a mouse.
 тут улица: Here is a street.
 тут телефон@nom: Here is a phone.
@@ -24,14 +24,14 @@
 что в квартира@prep ?: What is in the flat ?
 где собака: Where is the dog?
 где кошка: Where is the cat?
-где лошадь@nom: Where is the horse?
+где лошадь@nom: undefined
 где мышь@nom: Where is the mouse?
 где улица: Where is the street?
 где квартира: Where is the flat?
 что это ?: What is this?
 это собака: This is a dog.
 это кошка: This is a cat.
-это лошадь@nom: This is a horse.
+это лошадь@pl: undefined
 это мышь@nom: This is a mouse.
 это улица: This is a street.
 это моя собака: This is my dog.
@@ -50,7 +50,7 @@
 где мой@m друг@nom ?: Where is my friend?
 где мой@m телефон@nom ?: Where is my phone?
 мой@m друг@nom на улица@prep: My friend is on the street.
-где университет@nom ?: Where is the university?
+где университет@accpl ?: undefined
 это мой@m университет@nom ?: Is this my university?
 он видит лошадь@acc в парке: He seed a horse in the park.
 я вижу лошадь@acc в парке: I see a horse in the park.
@@ -128,7 +128,7 @@
 собака видит он@acc: Тhe dog sees him.
 я встречаю собаку: I meet the dog.
 я встречаю кошку: I meet the cat.
-я встречаю лошадь@acc: I meet the horse.
+я встречаю лошадь@accpl: undefined
 я встречаю мышь@acc: I meet the mouse.
 собака встречает мышь@acc: Тhe dog meets a mouse.
 кошка встречает мышь@acc: Тhe cat meets a mouse.
@@ -251,9 +251,9 @@
 тут чёрная собака: There is a black dog here.
 тут чёрная кошка: There is a black cat here.
 тут чёрная машина: There is a black car here.
-тут белая лошадь@nom: There is a white horse here.
+тут белая лошадь@gen: undefined
 тут белая мышь@nom: There is a white mouse here.
-тут маленкая лошадь@nom: There is a small horse here.
+тут маленкая лошадь@gen: undefined
 тут маленкая мышь@nom: There is a small mouse here.
 тут большая лошадь@nom: There is a big horse here.
 тут большая мышь@nom: There is a big mouse here.
@@ -280,7 +280,7 @@
 это хороший@m университет@nom ?: Is that a good university?
 где белый@m свитер@nom ?: Where is the white sweater?
 где белый@m планшет@nom ?: Where is the white tablet?
-где чёрный@m свитер@nom ?: Where is the black sweater?
+где чёрный@m свитер@accpl ?: undefined
 где чёрный@m планшет@nom ?: Where is the black tablet?
 где хороший@m свитер@nom ?: Where is the good sweater?
 тут маленкий@m свитер@nom: There is a small sweater.
@@ -876,3 +876,11 @@
 я не знаю как покупать квартиру: undefined
 у она@acc много собак: undefined
 у новый@genm дом@gen нет дверь@gen: undefined
+это белая лошадь@nom: undefined
+это чёрный@m свитер@nom: undefined
+тут белая лошадь@nom: undefined
+где лошадь@pl: undefined
+это маленкая лошадь@nom: undefined
+планшет@nom белый@m: undefined
+она открывает книгу в библиотека@prep: undefined
+кошка открывает дверь@acc: undefined
