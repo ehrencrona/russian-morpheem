@@ -136,6 +136,11 @@ grammar: adj@pl
 вы: you (plural)
 grammar: -видеть@2pl
 grammar: -любить@2pl
+ресторан--: restaurant, inflect: masc1
+эт--от: this, inflect: -этот
+grammar: -этот@accinanm
+grammar: -этот@f
+grammar: -этот@m
 grammar: -встречать@2pl
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
@@ -146,7 +151,6 @@ grammar: -есть@3
 grammar: -пить@1
 grammar: -пить@2
 grammar: -пить@3
-эт--от: this, inflect: -этот
 grammar: fem2@accpl
 grammar: fem1@accpl
 борщ--: borsht (soup), inflect: masc2
@@ -183,7 +187,6 @@ grammar: fem3@gen
 grammar: fem2@gen
 grammar: adj@genpl
 город--: city, inflect: masc1
-ресторан--: restaurant, inflect: masc1
 дом--: house, inflect: masc2
 grammar: masc2@pl
 цен--а: price, inflect: fem1
@@ -211,11 +214,8 @@ grammar: -слышать@inf
 grammar: -писать@inf
 сейчас: now
 grammar: neu1@prep
-grammar: -этот@accinanm
 grammar: -этот@accf
 grammar: adj@prepm
-grammar: -этот@m
-grammar: -этот@f
 grammar: -этот@accinanpl
 grammar: -писать@2
 --быть: be, inflect: -быть
@@ -240,4 +240,10 @@ grammar: -жить@2pl
 grammar: -жить@3pl
 grammar: ойadj1@n
 всегда: always
-дава--ть: n/a, inflect: -давать
+да--вать: n/a, inflect: -давать
+часто: often
+иногда: sometimes
+несколько: a few
+--мы: we, inflect: -мы
+--вы: you (plural), inflect: -вы
+--они: they, inflect: -они

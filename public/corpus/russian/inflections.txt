@@ -42,3 +42,7 @@ adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, 
 -ты[pron]: nom: ты, gen: тебя, dat: тебе, acc: тебя, instr: тобой, prep: тебе
 -он[pron]: nom: он, gen: его, acc: его, dat: ему, prep: нём
 -она[pron]: nom: -она, gen: её, dat: ей, acc: её, instr: ей, prep: ней 
+
+-мы[pron]: nom: мы, gen: нас, dat: нам, acc: нас, prep: нами, instr: нас
+-вы[pron]: nom: вы, gen: вас, dat: вам, acc: вас, prep: вами, instr: вас
+-они[pron]: nom: они, gen: их, dat: им, acc: их, prep: ими, instr: них

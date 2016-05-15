@@ -904,3 +904,23 @@
 в ресторане он ест лошадь@acc: undefined
 я не ем лошадь@acc: undefined
 моя кошка не ест мышь@accpl: undefined
+почему вы любите сидеть в парке: undefined
+почему вы любите этот@accinanm ресторан@acc: undefined
+где хороший@m ресторан@nom: undefined
+ты знаешь хороший@accinanm ресторан@acc: undefined
+это отличный@m ресторан@nom: undefined
+я сейчас в ресторане: undefined
+я в ресторане: undefined
+он часто ест в ресторане: undefined
+в центре хороший@accinanpl ресторан@accpl: undefined
+он любит этот@accinanm ресторан@acc: undefined
+я знаю хороший@accinanm ресторан@acc: undefined
+он встречает друг@acc в ресторане: undefined
+я люблю эту машину: undefined
+я работаю в этот@prepm магазине: undefined
+этот@m университет@nom хороший@m: undefined
+эта машина моя: undefined
+этот@m человек@nom мой@m друг@nom: undefined
+я живу в этот@prepm доме: undefined
+эта белая машина моя: undefined
+он знает как открывать дверь@acc: undefined
