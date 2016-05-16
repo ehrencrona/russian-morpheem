@@ -73,6 +73,7 @@ grammar: -она@acc
 grammar: -писать@1
 стать--я: article, inflect: -статья
 grammar: -статья@acc
+grammar: -статья@nom
 grammar: -писать@3
 газет--а: newspaper, inflect: fem1
 журнал--: magazine, inflect: masc1
@@ -132,7 +133,6 @@ grammar: adj@pl
 профессор--: professor, inflect: masc1
 здесь: here
 зна--ть: to know, inflect: -встречать
-как: how
 вы: you (plural)
 grammar: -видеть@2pl
 grammar: -любить@2pl
@@ -141,7 +141,10 @@ grammar: -любить@2pl
 grammar: -этот@accinanm
 grammar: -этот@f
 grammar: -этот@m
+трудн--ый: n/a, inflect: ыйadj
 grammar: -встречать@2pl
+работ--а: n/a, inflect: fem2
+как: how
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
 --пить: drink, inflect: -пить
@@ -247,3 +250,5 @@ grammar: ойadj1@n
 --мы: we, inflect: -мы
 --вы: you (plural), inflect: -вы
 --они: they, inflect: -они
+дела--ть: n/a, inflect: -встречать
+музик--а: n/a, inflect: fem2

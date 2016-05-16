@@ -924,3 +924,33 @@
 я живу в этот@prepm доме: undefined
 эта белая машина моя: undefined
 он знает как открывать дверь@acc: undefined
+как ты это знаешь: undefined
+я не знаю математику: undefined
+я не знаю франзуски: undefined
+я не знаю как ты это делаешь: undefined
+я не знаю как она@acc встречать: undefined
+он большой@m как лошадь@nom: undefined
+я слышу как она закрывает дверь@acc: undefined
+собака большая как лошадь@nom: undefined
+я не люблю эта собака: undefined
+эта книга не дорогая: undefined
+эта комната слишком маленкая: undefined
+профессор@nom читает этот@accinanpl книга@accpl: undefined
+она не любит этот@accinanpl книга@accpl: undefined
+этот@m журнал@nom новый@m: undefined
+эта книга трудная: undefined
+он не понимает трудная математика: undefined
+он не читает трудный@accinanpl книга@accpl: undefined
+в журнале трудная статья: undefined
+этот@m журнал@nom слишком трудный@m: undefined
+она понимает трудная математика: undefined
+работать в ресторане трудная работа: undefined
+это трудная работа: undefined
+сегодня трудный@m день@nom: undefined
+он трудный@m ребёнок: undefined
+он часто трудный@m ребёнок: undefined
+сегодня трудный@m день@nom в работа@prep: undefined
+она читает очень трудный@accinanpl книга@pl: undefined
+у ты@gen какая работа: undefined
+он сейчас в работа@prep: undefined
+он не в работа@prep: undefined
