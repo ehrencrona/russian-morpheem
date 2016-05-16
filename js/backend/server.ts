@@ -42,6 +42,24 @@ readCorpus().then((corpus) => {
         }
     })
 
+    app.post('/api/fact/:id', function(req, res) {
+        try {
+            let components = req.params['id'].split('@')
+            
+            let fact = corpus.inflections.get(components[0]).getFact(components[1])
+
+            corpus.facts.add(fact)
+            
+            console.log('Added ' + fact + '.')
+
+            res.status(200).send({})
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
+    })
+    
     app.put('/api/word/:word/inflection/:inflection', (req, res) => {
         let wordString = req.params['word']
         let inflectionId = req.params['inflection']

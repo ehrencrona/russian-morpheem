@@ -96,19 +96,32 @@ export default class InflectionsComponent extends Component<Props, State> {
 
         return wordsByForm 
     }
-    
+
+    inflectionClicked(inflection: Inflection) {
+        this.props.tab.openTab(
+            <InflectionsComponent 
+                corpus={ this.props.corpus } 
+                tab={ this.props.tab } 
+                inflection={ inflection }/>, 
+            inflection.getId(), inflection.getId())
+    }
+
     formClicked(form) {
         if (this.props.word && this.props.onSelect) {
             this.props.onSelect(this.props.word.inflect(form))
         }
         else {
-            let fact = this.state.inflection.getFact(form);
-
-            this.props.tab.openTab(
-                <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
-                    fact={ fact }/>, fact.getId(), fact.getId()
-            ) 
+            this.openForm(form)
         }
+    }
+    
+    openForm(form) {
+        let fact = this.state.inflection.getFact(form)
+
+        this.props.tab.openTab(
+            <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
+                fact={ fact }/>, fact.getId(), fact.getId()
+        ) 
     }
     
     changeInflection(inflection: Inflection) {
@@ -119,6 +132,14 @@ export default class InflectionsComponent extends Component<Props, State> {
         })
     }
     
+    addFact(form: string) {
+        let fact = this.props.inflection.getFact(form)
+        
+        this.props.corpus.facts.add(fact)
+        
+        this.openForm(form)
+    }
+
     render() {
         let wordsByForm: { [ form:string]: string}
         let forms: string[]
@@ -139,15 +160,30 @@ export default class InflectionsComponent extends Component<Props, State> {
             let fact = this.state.inflection.getFact(form);
             let index = this.props.corpus.facts.indexOf(fact);
             
+            let className = 'form'
+            let inherited = !this.state.inflection.endings[form]
+            
+            if (!this.props.word && inherited) {
+                className += ' inherited'
+            }
+
             if (index > 0) {
-                return <div key={form} className='clickable' onClick={ 
+                className += ' clickable'
+
+                return <div key={form} className={ className } onClick={ 
                     () => this.formClicked(form) }>
                     { wordsByForm[form] } 
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                 </div>
             }
             else {
-                return <div key={form}>{ wordsByForm[form] }</div>
+                return <div key={form} className={ className }>{ wordsByForm[form] }
+                    { !inherited ?
+                        <div className='add' onClick={ () => this.addFact(form) }><div className='number'>add</div></div>
+                        :
+                        []
+                    }
+                </div>
             }
         }
         
@@ -160,7 +196,20 @@ export default class InflectionsComponent extends Component<Props, State> {
                 
         return (
             <div className='inflections'>                
+                { this.props.inflection.inherits ?
+                    
+                        <div className='inherits'>
+                            inherits&nbsp;
+                            <span className='clickable' onClick={ () => this.inflectionClicked(this.props.inflection.inherits) }>
+                                { this.props.inflection.inherits.id }
+                            </span>
+                        </div>
+                    
+                    :
+                    
+                    [] }
                 <table>
+                { table.cols.length > 1 ?                            
                     <thead>
                         <tr>
                             <td></td>
@@ -169,6 +218,8 @@ export default class InflectionsComponent extends Component<Props, State> {
                             ) }
                         </tr>
                     </thead>
+                    : []
+                }
                     <tbody>
                         { table.forms.map((forms, index) => {
                             return <tr key={ index }>

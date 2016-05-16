@@ -189,6 +189,7 @@ grammar: -она@gen
 grammar: fem3@gen
 grammar: fem2@gen
 grammar: adj@genpl
+grammar: adj@prepm
 город--: city, inflect: masc1
 дом--: house, inflect: masc2
 grammar: masc2@pl
@@ -218,7 +219,6 @@ grammar: -писать@inf
 сейчас: now
 grammar: neu1@prep
 grammar: -этот@accf
-grammar: adj@prepm
 grammar: -этот@accinanpl
 grammar: -писать@2
 --быть: be, inflect: -быть
@@ -252,3 +252,4 @@ grammar: ойadj1@n
 --они: they, inflect: -они
 дела--ть: n/a, inflect: -встречать
 музик--а: n/a, inflect: fem2
+grammar: masc1@preppl

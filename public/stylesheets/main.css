@@ -48,7 +48,7 @@ input[type=text] {
       .tabSet .closedTabs .tabs .tab {
         background-color: #e0e0e0;
         margin-bottom: 2px; }
-        .tabSet .closedTabs .tabs .tab .index {
+        .tabSet .closedTabs .tabs .tab .index, .tabSet .closedTabs .tabs .tab .inflections table td .add, .inflections table td .tabSet .closedTabs .tabs .tab .add {
           background-color: #c7c7c7; }
         .tabSet .closedTabs .tabs .tab .tab-close {
           background-color: #c7c7c7; }
@@ -69,7 +69,7 @@ input[type=text] {
         color: #e0e0e0;
         background-color: #808080;
         flex-shrink: 0; }
-        .tabSet .openTabs .tab .tab-header .index {
+        .tabSet .openTabs .tab .tab-header .index, .tabSet .openTabs .tab .tab-header .inflections table td .add, .inflections table td .tabSet .openTabs .tab .tab-header .add {
           background-color: #676767; }
         .tabSet .openTabs .tab .tab-header .tab-close {
           background-color: #676767; }
@@ -164,7 +164,7 @@ input[type=text] {
     padding: 8px;
     margin-right: 4px;
     margin-bottom: 8px; }
-    .wordSearch .suggestions .suggestion .index {
+    .wordSearch .suggestions .suggestion .index, .wordSearch .suggestions .suggestion .inflections table td .add, .inflections table td .wordSearch .suggestions .suggestion .add {
       background-color: #c7c7c7;
       top: auto; }
     .wordSearch .suggestions .suggestion .form {
@@ -187,7 +187,7 @@ ul {
     padding-bottom: 4px;
     margin: 0; }
 
-.index {
+.index, .inflections table td .add {
   display: inline-block;
   background-color: #e0e0e0;
   font-size: 60%;
@@ -198,7 +198,7 @@ ul {
   top: -0.25em;
   width: 2em;
   height: 2em; }
-  .index .number {
+  .index .number, .inflections table td .add .number {
     font-weight: 900;
     height: 100%;
     display: flex;
@@ -212,20 +212,45 @@ ul {
     .inflections .inflectionName .button, .inflections .inflectionName .tab-header .tab-close, .tab-header .inflections .inflectionName .tab-close {
       font-weight: normal;
       display: inline-block; }
+  .inflections .inherits {
+    font-style: italic; }
+    .inflections .inherits .clickable {
+      font-weight: bold; }
   .inflections table {
     width: 100%;
     margin-bottom: 8px;
     margin-top: 8px;
-    border-spacing: 0; }
+    border-spacing: 0;
+    display: inline-block; }
     .inflections table td {
       padding: 4px; }
+      .inflections table td .inherited {
+        color: gray; }
+      .inflections table td .form {
+        margin: 4px 0; }
+      .inflections table td .add {
+        float: right;
+        margin: 0 16px;
+        margin-top: 2px;
+        color: gray;
+        background-color: inherit; }
+        .inflections table td .add .number {
+          font-weight: bold; }
+      .inflections table td .add:hover {
+        background-color: #e0e0e0; }
+      .inflections table td .index, .inflections table td .add {
+        margin: 0 16px;
+        margin-top: 2px;
+        color: gray;
+        float: right; }
     .inflections table tbody td:first-child {
       font-style: italic; }
     .inflections table thead {
       background-color: #e0e0e0; }
 
 .clickable:hover {
-  color: black; }
+  color: black;
+  text-decoration: underline; }
 
 .facts .count {
   margin-left: 4px; }

@@ -314,17 +314,24 @@ export default class WordSearchComponent extends Component<Props, State> {
 
             {
                 (filterWord && filterWord instanceof InflectedWord ?
-                
-                <InflectionsComponent 
-                    corpus={ this.props.corpus }
-                    tab={ this.props.tab }
-                    inflection={ filterWord.inflection }
-                    word={ filterWord }
-                    onSelect={ (word) => {
-                        this.props.onWordSelect(word)
-                        this.setState({ filterWord: null, filterString: '' })
-                    } }
-                    />
+                <div>
+                    <div className='inflections'>
+                        <div className='inflectionName'>
+                            { filterWord.inflection.id + (filterWord.inflection.pos ? ' (' + filterWord.inflection.pos + ')' : '') } 
+                        </div>
+                    </div>
+
+                    <InflectionsComponent 
+                        corpus={ this.props.corpus }
+                        tab={ this.props.tab }
+                        inflection={ filterWord.inflection }
+                        word={ filterWord }
+                        onSelect={ (word) => {
+                            this.props.onWordSelect(word)
+                            this.setState({ filterWord: null, filterString: '' })
+                        } }
+                        />
+                </div>
                 
                 :
                 

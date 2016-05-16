@@ -71,6 +71,8 @@ export default class FactsComponent extends Component<Props, State> {
                                 this.props.corpus.facts.move(
                                     this.props.corpus.facts.get(drag.fact),
                                     index)
+                                    
+                                this.forceUpdate()
                             } }
                             onDragStart={ (e) => { 
                                 e.dataTransfer.setData('text', JSON.stringify( { fact: fact.getId(), index: index } ));

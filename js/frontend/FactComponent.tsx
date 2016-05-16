@@ -70,6 +70,7 @@ export default class FactComponent extends Component<Props, State> {
                 <div>
                     <ChangeInflectionComponent
                         corpus={ this.props.corpus } 
+                        tab={ this.props.tab }
                         word={ fact }
                         onChange={ () => inflections.forceUpdate() } />
                     <InflectionsComponent 

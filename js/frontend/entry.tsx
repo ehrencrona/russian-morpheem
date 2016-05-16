@@ -6,6 +6,7 @@ import Sentence from '../shared/Sentence';
 import Fact from '../shared/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
+import InflectionFact from '../shared/InflectionFact';
 
 import xr from 'xr';
 import TabSet from './TabSetComponent';
@@ -44,7 +45,14 @@ xr.get('/api/corpus')
     }
 
     corpus.facts.onMove = (fact: Fact, pos: number) => {
-        xr.put(`/api/fact/${pos}/${fact.getId()}`, {})
+        xr.put(`/api/fact/${pos}/${ fact.getId() }`, {})
+    }
+
+    corpus.facts.onAdd = (fact: Fact) => {
+        // new words are caught through the words listener
+        if (fact instanceof InflectionFact) {
+            xr.post(`/api/fact/${ fact.getId() }`, {})
+        }
     }
     
     if (element) {

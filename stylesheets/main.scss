@@ -307,14 +307,58 @@ ul {
         }
     }
     
+    .inherits {
+        font-style: italic;
+        
+        .clickable {
+            font-weight: bold;
+        }
+    } 
+    
     table {        
         width: 100%;
         margin-bottom: 2 * $unit;
         margin-top: 2 * $unit;
         border-spacing: 0;
+        display: inline-block;
         
         td {
             padding: $unit;
+            
+            .inherited {
+                color: $color-fg-light;
+                
+                .index {
+                }
+            }
+            
+            .form {
+                margin: $unit 0;
+            }
+            
+            .add {
+                @extend .index;
+                float: right;
+                margin: 0 (4 * $unit);
+                margin-top: 2px;
+                color: $color-fg-light;
+                background-color: inherit;
+
+                .number {
+                    font-weight: bold;
+                }
+            }
+
+            .add:hover {
+                background-color: $color-bg-light;
+            }
+
+            .index {
+                margin: 0 (4 * $unit);
+                margin-top: 2px;
+                color: $color-fg-light;
+                float: right;
+            }
         }
 
         tbody td:first-child {
@@ -329,6 +373,7 @@ ul {
 
 .clickable:hover {
     color: black;
+    text-decoration: underline;
 }
 
 .facts {
