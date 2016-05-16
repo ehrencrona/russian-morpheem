@@ -1,11 +1,12 @@
-fem1[n]: nom: -а, gen: -ы, dat: -е, acc: -у, instr: -ой, prep: -е, pl: -ы, genpl: , datpl: -ам, accpl: -ы, instrpl: -ами, preppl: -ах
+n[n]: nom: ***, pl: -ы, datpl: -ам, accpl: -ы, instrpl: -ами, preppl: -ах
+fem1[n]: nom: -а, gen: -ы, dat: -е, acc: -у, instr: -ой, prep: -е, genpl: , inherit: n
 fem2[n]: gen: -и, pl: -и, accpl: -и, inherit: fem1 
-fem3[n]: nom: -ь, gen: -и, dat: -и, acc: -ь, instr: -ью, prep: -и, pl: и, genpl: ей, datpl: ям, accpl: ями, instrpl: ями, preppl: ях
+fem3[n]: nom: -ь, gen: -и, dat: -и, acc: -ь, instr: -ью, prep: -и, pl: и, genpl: ей, datpl: ям, accpl: ей, instrpl: ями, preppl: ях
 fem4[n]: accpl: -и, inherit: fem3
 -статья[n]: nom: -я, acc: -ю, instr: -ёй, genpl: -ей, inherit: fem2
 -ребёнок[n]: nom: -ок, gen: -ка, dat: -ку, acc: -ка, instr: -ом, prep: -ке
 
-masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, pl: ы, genpl: ов, datpl: ам, accpl: ы, instrpl: ами, preppl: ах 
+masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, genpl: ов, inherit: n 
 -день[n]: nom: ень, gen: ня, dat: ню, acc: ень, instr: нём, prep: не
 neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -ья, genpl: -ьев, datpl: -ьям, accpl: -ья, instrpl: -ьями, preppl: -ьях
 -друг[n]: pl: зья, genpl: зей, datpl: зьям, accpl: зей, instr: ями, prep: яьях, inherit: masc1
@@ -28,10 +29,12 @@ neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, i
 
 -давать[v]: inf: вать, 2: ёшь, 3: ёт, 1pl: ём, 2pl: ёте, inherit: --встречать
 
+-хотеть[v]: inf: теть, 1: чу, 2: чешь, 3: чет, 1pl: тим, 2pl: тите, 3pl: тят	
+
 adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их
 
-ойadj2[adj]: m: -ой, accinanm: -ой, preppl: и, inherit: adj 
-ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, accanm: -оего, genn: -оего, genf: -оей, pl: -ои, preppl: их, inherit: ойadj2
+ойadj2[adj]: m: -ой, accinanm: -ой, inherit: adj 
+ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, accanm: -оего, genn: -оего, genf: -оей, pl: -ои, preppl: оих, inherit: ойadj2
 
 ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj

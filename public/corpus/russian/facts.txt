@@ -122,7 +122,7 @@ grammar: fem1@instr
 grammar: fem3@pl
 двер--ь: door, inflect: fem3
 открыт--ый: open, inflect: ыйadj
-grammar: fem1@pl
+grammar: n@pl
 grammar: ойadj1@accf
 grammar: ойadj1@pl
 grammar: fem2@pl
@@ -144,6 +144,22 @@ grammar: -этот@m
 трудн--ый: n/a, inflect: ыйadj
 grammar: -встречать@2pl
 работ--а: n/a, inflect: fem2
+grammar: n@preppl
+grammar: adj@preppl
+grammar: ыйadj@preppl
+офис--: n/a, inflect: masc1
+grammar: ойadj1@preppl
+разн--ый: n/a, inflect: ыйadj
+люд--ь: people, inflect: fem3
+--они: they, inflect: -они
+grammar: -они@nom
+--мы: we, inflect: -мы
+жи--ть: live, inflect: -жить
+город--: city, inflect: masc1
+дом--: house, inflect: masc2
+grammar: -жить@2pl
+grammar: -мы@nom
+grammar: -жить@3pl
 как: how
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
@@ -155,7 +171,7 @@ grammar: -пить@1
 grammar: -пить@2
 grammar: -пить@3
 grammar: fem2@accpl
-grammar: fem1@accpl
+grammar: n@accpl
 борщ--: borsht (soup), inflect: masc2
 червон--ий: n/a, inflect: ийadj
 плох--ой: bad, inflect: ойadj1
@@ -169,17 +185,16 @@ grammar: -этот@pl
 grammar: ыйadj@pl
 grammar: neu1@nom
 grammar: neu1@acc
-grammar: masc1@pl
 grammar: ыйadj@accinanpl
 grammar: adj@accanm
 grammar: adj@accinanpl
+много: many
 окн--о: window, inflect: neu2
+grammar: fem1@gen
 нет: is not
 grammar: masc1@gen
-grammar: fem1@gen
 grammar: masc1@genpl
 grammar: -друг@genpl
-много: many
 grammar: fem1@genpl
 у: by; also indicates "to have"
 grammar: -я@gen
@@ -190,11 +205,10 @@ grammar: fem3@gen
 grammar: fem2@gen
 grammar: adj@genpl
 grammar: adj@prepm
-город--: city, inflect: masc1
-дом--: house, inflect: masc2
 grammar: masc2@pl
 цен--а: price, inflect: fem1
 grammar: ыйadj@genpl
+хо--теть: n/a, inflect: -хотеть
 низк--ий: low, inflect: ийadj
 высок--ий: tall, inflect: ийadj
 grammar: adj@genm
@@ -202,7 +216,6 @@ grammar: adj@genn
 grammar: adj@genf
 grammar: fem4@accpl
 grammar: fem3@accpl
-grammar: masc1@accpl
 grammar: neu1@genpl
 grammar: neu1@gen
 grammar: neu2@accpl
@@ -225,7 +238,6 @@ grammar: -писать@2
 grammar: -быть@1
 без: without
 для: for; for the benefit of
-люд--ь: people, inflect: fem3
 стран--а: country, inflect: fem1
 обуд--ь: shoe, inflect: fem4
 и: and
@@ -234,22 +246,23 @@ grammar: -быть@1
 забыва--ть: to forget, inflect: -встречать
 цвет--: color, inflect: masc2
 температур--а: temperature, inflect: fem1
-жи--ть: live, inflect: -жить
 grammar: -жить@1
 grammar: -жить@2
 grammar: -жить@3
 grammar: -жить@1pl
-grammar: -жить@2pl
-grammar: -жить@3pl
 grammar: ойadj1@n
 всегда: always
 да--вать: n/a, inflect: -давать
 часто: often
 иногда: sometimes
 несколько: a few
---мы: we, inflect: -мы
 --вы: you (plural), inflect: -вы
---они: they, inflect: -они
 дела--ть: n/a, inflect: -встречать
 музик--а: n/a, inflect: fem2
-grammar: masc1@preppl
+grammar: -друг@pl
+grammar: -есть@3pl
+grammar: -хотеть@1
+grammar: fem3@genpl
+интересн--ый: n/a, inflect: ыйadj
+grammar: -статья@genpl
+grammar: -он@gen

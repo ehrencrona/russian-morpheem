@@ -763,8 +763,8 @@
 здесь много библиотека@gen: undefined
 у я@acc нет книга@gen: undefined
 у он@gen мама@gen много кошка@gen: undefined
-здесь нет людей: undefined
-здесь нет хороший@genpl людей: undefined
+здесь нет людь@genpl: undefined
+здесь нет хороший@genpl людь@genpl: undefined
 в парке высокий@pl дерево@pl: undefined
 моя квартира без телефона: undefined
 
@@ -774,7 +774,7 @@
 здесь нет белый@genm лошадь@gen: undefined
 у ты@gen большая голова: undefined
 в квартира@prep нет кровать@gen: undefined
-в городе нет большой@genpl площадей: undefined
+в городе нет большой@genpl площадь@genpl: undefined
 в магазине нет обудей: undefined
 в магазине нет дорогой@genpl обудей: undefined
 в магазине нет большой@genpl обудей: undefined
@@ -783,7 +783,7 @@
 я живу в большой@prepm городе: undefined
 это город@nom профессора: undefined
 в городе много библиотек: undefined
-в городе много людей: undefined
+в городе много людь@genpl: undefined
 это город@nom олигархов: undefined
 дом@nom профессора большой@m: undefined
 в городе большой@m университет@nom: undefined
@@ -954,3 +954,43 @@
 у ты@gen какая работа: undefined
 он сейчас в работа@prep: undefined
 он не в работа@prep: undefined
+я не гуляю в парках: undefined
+мои другзья едят в дорогой@preppl ресторанах: undefined
+мои другзья живут в этот@preppl домах: undefined
+она не ест в этот@preppl ресторанах: undefined
+я люблю гулять в этот@preppl улицах: undefined
+не люблю сидеть в низкий@preppl машинах: undefined
+в этот@preppl домах большой@pl комната@pl: undefined
+я не знаю в какой@prepm городе я хочу жить: undefined
+в этот@preppl университетах много студентов: undefined
+дом@nom собака@gen под кровать@gen: undefined
+я не хочу работать в этот@preppl странах: undefined
+я не хочу работать в этот@preppl температурах: undefined
+в моих комнатах температура низкая: undefined
+он работает в разный@preppl странах: undefined
+они живут в этот@preppl квартирах: undefined
+на улицах машина@pl: undefined
+на улицах много машин: undefined
+на улицах людь@pl: undefined
+на улицах много людь@genpl: undefined
+я людь@accpl не понимаю: undefined
+мои другзья в магазинах: undefined
+в журналах много интересный@genpl статьей: undefined
+в университетах много отличный@genpl профессоров: undefined
+в парках мышь@pl: undefined
+в этот@preppl парках мышь@pl: undefined
+мои другзья в разный@preppl университетах: undefined
+мы живём в разный@preppl квартирах: undefined
+они живут в новый@preppl квартирах: undefined
+моя работа в центре: undefined
+они живут в центре города: undefined
+они живут в центрах большой@preppl городов: undefined
+она живёт в большой@prepm городе: undefined
+он живёт в маленкий@prepm городе: undefined
+я не хочу жить в этот@preppl домах: undefined
+я не живу в этот@preppl домах: undefined
+я не работаю в этот@preppl офисах: undefined
+она работает в этот@prepm офисе: undefined
+это она@gen офис@nom: undefined
+это он@gen офисе: undefined
+это она@gen дом@nom: undefined
