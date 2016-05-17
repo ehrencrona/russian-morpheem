@@ -141,26 +141,37 @@ grammar: -любить@2pl
 grammar: -этот@accinanm
 grammar: -этот@f
 grammar: -этот@m
-трудн--ый: n/a, inflect: ыйadj
 grammar: -встречать@2pl
+трудн--ый: n/a, inflect: ыйadj
+красив--ый: n/a, inflect: ыйadj
+дом--: house, inflect: masc2
+grammar: ыйadj@pl
 работ--а: n/a, inflect: fem2
+grammar: adj@prepm
+город--: city, inflect: masc1
+как: how
+родител--ь: n/a, inflect: fem4
+офис--: n/a, inflect: masc1
+grammar: -этот@pl
+grammar: -жить@1
+люд--ь: people, inflect: fem3
+ошибк--а: n/a, inflect: femka
 grammar: n@preppl
 grammar: adj@preppl
+жи--ть: live, inflect: -жить
+grammar: -жить@3pl
+grammar: -жить@1pl
 grammar: ыйadj@preppl
-офис--: n/a, inflect: masc1
 grammar: ойadj1@preppl
 разн--ый: n/a, inflect: ыйadj
-люд--ь: people, inflect: fem3
+grammar: -жить@2pl
 --они: they, inflect: -они
 grammar: -они@nom
 --мы: we, inflect: -мы
-жи--ть: live, inflect: -жить
-город--: city, inflect: masc1
-дом--: house, inflect: masc2
-grammar: -жить@2pl
+grammar: -встречать@3pl
+grammar: -жить@2
 grammar: -мы@nom
-grammar: -жить@3pl
-как: how
+покуп--ок: n/a, inflect: -ребёнок
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
 --пить: drink, inflect: -пить
@@ -175,14 +186,12 @@ grammar: n@accpl
 борщ--: borsht (soup), inflect: masc2
 червон--ий: n/a, inflect: ийadj
 плох--ой: bad, inflect: ойadj1
-grammar: -этот@pl
 св--ой: his/min (refers to the subject), inflect: ойadj1
 олигарх--: oligarch, inflect: masc1
 понима--ть: understand, inflect: -встречать
 франзуски: French
 математик--а: mathematics, inflect: fem1
 письм--о: letter, inflect: neu2
-grammar: ыйadj@pl
 grammar: neu1@nom
 grammar: neu1@acc
 grammar: ыйadj@accinanpl
@@ -204,7 +213,6 @@ grammar: -она@gen
 grammar: fem3@gen
 grammar: fem2@gen
 grammar: adj@genpl
-grammar: adj@prepm
 grammar: masc2@pl
 цен--а: price, inflect: fem1
 grammar: ыйadj@genpl
@@ -246,10 +254,7 @@ grammar: -быть@1
 забыва--ть: to forget, inflect: -встречать
 цвет--: color, inflect: masc2
 температур--а: temperature, inflect: fem1
-grammar: -жить@1
-grammar: -жить@2
 grammar: -жить@3
-grammar: -жить@1pl
 grammar: ойadj1@n
 всегда: always
 да--вать: n/a, inflect: -давать
@@ -266,3 +271,11 @@ grammar: fem3@genpl
 интересн--ый: n/a, inflect: ыйadj
 grammar: -статья@genpl
 grammar: -он@gen
+язык--: n/a, inflect: masc2
+grammar: -жить@inf
+grammar: adj@accanpl
+grammar: -ребёнок@gen
+grammar: -любить@3pl
+grammar: ойadj1@genm
+grammar: -мы@gen
+grammar: -любить@1pl
