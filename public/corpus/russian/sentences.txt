@@ -505,7 +505,7 @@
 где твоё письмо@nom ?: Where is your letter?
 твоё письмо@nom на столе ?: Your letter is on the table.
 
-ты закрываешь открытая книгу: You close the open book.
+ты закрываешь открытую книгу: undefined
 
 ты закрываешь открытый@accinanpl книга@accpl: You close the open book.
 она закрывает открытый@n дверь@acc: She closes the open door.
@@ -1098,11 +1098,57 @@
 что ты делаешь здесь: undefined
 я хочу жить в разный@preppl странах: undefined
 я студент@nom: undefined
-они давать@3pl кошка@dat еду: undefined
-профессор@nom дает студенту книгу: undefined
-она возвращать@3 книгу профессору: undefined
-она возвращать@3 машину мама@dat: undefined
-ты возвращать@2 машину родителям: undefined
-я возвращать@1 планшет@acc в магазин@acc: undefined
-я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
-я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
+они дают кошка@dat еду: undefined
+профессор@nom даёт студенту книгу: undefined
+она возвращает книгу профессору: undefined
+она возвращает машину мама@dat: undefined
+ты возвращаешь машину родителям: undefined
+я возвращаю планшет@acc в магазин@acc: undefined
+я возвращаю мой@accinanm свитер@acc в магазин@acc: undefined
+я возвращаю мой@accinanm свитер@acc в магазин@acc: undefined
+это тут: undefined
+какая в комната@prep штора: undefined
+открытый@m: undefined
+ты читаешь открытый@m журнал@nom: undefined
+это новая статья в газета@prep: undefined
+это хорошая статья: undefined
+это отличная статья: undefined
+какая это статья: undefined
+это белый@m шоколад@nom: undefined
+это мой@m шоколад@nom: undefined
+это дорогой@m шоколад@nom: undefined
+это чёрный@m шоколад@nom: undefined
+это отличный@m шоколад@nom: undefined
+где мой@m шоколад@nom: undefined
+где мой@m шоколад@nom: undefined
+мама любит чёрный@accinanm шоколад@acc: undefined
+мама не любит белый@accinanm шоколад@acc: undefined
+шоколад@nom: undefined
+я даю другу шоколад@nom: undefined
+я даю мама@dat шоколад@nom: undefined
+я не даю собака@dat шоколад@nom: undefined
+это мой@pl деньга@pl: undefined
+где твой@pl деньга@pl: undefined
+я даю деньга@accpl другу: undefined
+я даю деньга@accpl студенту: undefined
+студент@pl дают деньга@accpl профессору: undefined
+у студента быть@1 деньга@pl: undefined
+они дают деньга@pl родителям: undefined
+я даю шоколад@acc другу: undefined
+профессор@nom даёт студенту книгу: undefined
+вы даёте собака@dat еду: undefined
+родитель@pl дают ребёнку стул@acc: undefined
+родитель@pl не дают ребёнку шоколад@acc: undefined
+ты даёшь студенту работу: undefined
+ты даёшь студенту журнал@acc: undefined
+ты даёшь планшет@acc другу: undefined
+я даю планшет@acc ребёнку: undefined
+я даю еду кошка@dat: undefined
+я не даю еду собака@dat: undefined
+она дарит родителям книгу: undefined
+она дарит другу шоколад@acc: undefined
+что вы дарите профессору: undefined
+что вы дарите мама@dat: undefined
+мама дарит ребёнку свитер@acc: undefined
+мама дарит ребёнку собаку: undefined
+она дарит дорогой@accinanm подарок@acc ребёнку: undefined

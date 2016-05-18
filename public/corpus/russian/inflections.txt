@@ -17,7 +17,8 @@ masc2[n]: pl: а, accpl: а, inherit: masc1
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
 -встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют
--любить[v]: inf: ить, 1: лю, 2: ишь, 3: ит, 1pl: им, 2pl: ите, 3pl: ят
+-дарить[v]: inf: ить, 1: ю, 2: ишь, 3: ит, 1pl: им, 2pl: ите, 3pl: ят
+-любить[v]: 1: лю, inherit: --дарить
 
 -видеть[v]: inf: -деть, 1: -жу, 2: -дишь, 3: -дит, 1pl: -дим, 2pl: -дите, 3pl: -дят
 -слышать[v]: inf: -ать, 1: -у, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ат
@@ -32,7 +33,7 @@ neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, g
 
 -хотеть[v]: inf: теть, 1: чу, 2: чешь, 3: чет, 1pl: тим, 2pl: тите, 3pl: тят	
 
-adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их
+adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о 
 
 ойadj2[adj]: m: -ой, accinanm: -ой, inherit: adj 
 ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, accanm: -оего, genn: -оего, genf: -оей, pl: -ои, preppl: оих, accanpl: оих, accinanpl: ои, pl: -ои, genpl: -оих, datpl: -оим, instrpl: оими, preppl: -оих, inherit: ойadj2
@@ -40,7 +41,7 @@ adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, 
 ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
 
--этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accinanm: -от, accinanpl: -и, inherit: adj
+-этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accinanm: -от, accinanpl: -и, shortm: ***, shortf: ***, shortn: ***, inherit: adj
 
 -я[pron]: nom: я, gen: меня, dat: мне, acc: меня, instr: мной, prep: мне
 -ты[pron]: nom: ты, gen: тебя, dat: тебе, acc: тебя, instr: тобой, prep: тебе
