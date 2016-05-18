@@ -1,0 +1,1108 @@
+тут собака: Here is a dog.
+тут кошка: Here is a cat.
+тут лошадь@nom: undefined
+тут мышь@nom: Here is a mouse.
+тут улица: Here is a street.
+тут телефон@nom: Here is a phone.
+на улица@prep собака: A dog is on the street
+на площадь@prep собака: A dog is on the square
+на библиотека@prep собака: A dog is at the library
+в квартира@prep собака: There is a dog in the flat
+на библиотека@prep собака: There is a dog in the library
+он тут: He is here.
+я тут: I am here.
+он в квартира@prep: He's in the flat.
+я в квартира@prep: I'm in the flat.
+телефон@nom в квартира@prep: The phone is in the flat.
+
+
+он на библиотека@prep: He's in the library.
+я на библиотека@prep: I'm in the library.
+собака в квартира@prep: A dog is in the flat.
+кошка в квартира@prep: A cat is in the flat.
+мышь@nom в квартира@prep: A mouse is in the flat.
+что в квартира@prep ?: What is in the flat ?
+где собака: Where is the dog?
+где кошка: Where is the cat?
+где лошадь@nom: undefined
+где мышь@nom: Where is the mouse?
+где улица: Where is the street?
+где квартира: Where is the flat?
+что это ?: What is this?
+это собака: This is a dog.
+это кошка: This is a cat.
+это лошадь@pl: undefined
+это мышь@nom: This is a mouse.
+это улица: This is a street.
+это моя собака: This is my dog.
+это моя кошка: This is my cat.
+это моя улица: This is my street.
+это моя квартира: This is my flat.
+где моя собака ?: undefined
+где моя кошка ?: Where is my cat?
+где моя собака ?: undefined
+где моя квартира ?: Where is my flat?
+где он ?: Where is he?
+я где ?: Where am I?
+я друг@nom: I am a friend.
+он мой@m друг@nom: He is my friend.
+он друг@nom: He is a friend.
+где мой@m друг@nom ?: Where is my friend?
+где мой@m телефон@nom ?: Where is my phone?
+мой@m друг@nom на улица@prep: My friend is on the street.
+где университет@accpl ?: undefined
+это мой@m университет@nom ?: Is this my university?
+он видит лошадь@acc в парке: He seed a horse in the park.
+я вижу лошадь@acc в парке: I see a horse in the park.
+я вижу собаку: I see a dog.
+я вижу кошку: I see a cat.
+я вижу лошадь@acc: I see a horse.
+я вижу мышь@acc: I see a mouse.
+я вижу ребёнок@acc: I see a child.
+я ты@acc вижу на улица@prep: I see you on the street.
+я он@acc вижу на улица@prep: I see him on the street.
+я она@acc вижу на улица@prep: I see her on the street.
+я встречаю ты@acc на площадь@prep: I meet you on the square.
+я встречаю он@acc на площадь@prep: I meet him on the square.
+я встречаю она@acc на площадь@prep: I meet her on the square.
+я вижу собаку на улица@prep: I see a dog on the street.
+я вижу кошку на улица@prep: I see a cat on the street.
+я вижу лошадь@acc на улица@prep: I see a horse on the street.
+я вижу мышь@acc на улица@prep: I see a mouse on the street.
+он видит собаку: He sees a dog.
+он видит кошку: He sees a cat.
+он видит лошадь@acc: He sees a horse.
+он видит мышь@acc: He sees a mouse.
+он видит ребёнок@acc: He sees a child.
+он видит собаку на улица@prep: He sees a dog on the street.
+он видит кошку на улица@prep: He sees a cat on the street.
+он видит лошадь@acc на улица@prep: He sees a horse on the street.
+он видит мышь@acc на улица@prep: He sees a mouse on the street.
+ты слышишь машину на улица@prep ?: Do you hear the car in the street?
+ты слышишь мышь@acc ?: Do you hear the mouse?
+ты слышишь машину ?: Do you hear the car?
+что ты видишь ?: What do you see?
+что ты слышишь ?: What do you hear?
+кто ты видишь ?: Who do you see?
+кто ты встречаешь ?: Who do you meet?
+кто ты слышишь ?: Who do you hear?
+ты видишь магазин@acc ?: Do you see the shop?
+ты видишь машину ?: Do you see the car?
+ты видишь он@acc ?: Do you see him?
+ты видишь она@acc ?: Do you see her?
+что он видит ?: What does he see?
+что он слышит ?: What does he hear?
+кто он видит ?: Who does he see?
+кто он встречает ?: Who does he meet?
+кто он слышит ?: Who does he hear?
+что видит он ?: What does he see?
+что видит собака ?: What does the dog see?
+кто видит он ?: Whо does he see?
+кто видит собака ?: Whо does the dog see?
+кто видит лошадь@nom ?: Whо does the horse see?
+кто видит он@acc ?: Whо sees him?
+кто видит собаку ?: Whо sees the dog?
+кто видит кошку ?: Whо sees the cat?
+кто мой@m друг@nom ?: Who is my friend?
+кто он ?: Who is he?
+что "WhatsApp" ?: What is "WhatsApp"?
+я слышу собаку: I hear a dog.
+я слышу кошку: I hear a cat.
+я слышу лошадь@acc: I hear a horse.
+я слышу мышь@acc: I hear a mouse.
+я слышу ты@acc: I hear you.
+я слышу он@acc: I hear him.
+я слышу она@acc: I hear her.
+я слышу маму: I hear Mom.
+мама слышит мышь@acc: Mom hears a mouse.
+мама слышит ты@acc: Mom hears you.
+мама слышит он@acc: Mom hears him.
+мама слышит она@acc: Mom hears her.
+собака слышит я@acc: Тhe dog hears me.
+кошка слышит я@acc: Тhe cat hears me.
+собака слышит он@acc: Тhe dog hears him.
+кошка слышит он@acc: Тhe cat hears him.
+мама слышит я@acc: Mom hears me.
+мама слышит ты@acc: Mom hears you.
+собака видит я@acc: Тhe dog sees me.
+собака видит он@acc: Тhe dog sees him.
+я встречаю собаку: I meet the dog.
+я встречаю кошку: I meet the cat.
+я встречаю лошадь@accpl: undefined
+я встречаю мышь@acc: I meet the mouse.
+собака встречает мышь@acc: Тhe dog meets a mouse.
+кошка встречает мышь@acc: Тhe cat meets a mouse.
+лошадь@nom встречает мышь@acc: Тhe horse meets a mouse.
+собака видит кошку: Тhe dog sees a cat.
+собака видит лошадь@acc: Тhe dog sees a horse.
+собака видит мышь@acc: Тhe dog sees a mouse.
+на улица@prep мышь@nom: There is a mouse in the street.
+на площадь@prep мышь@nom: There is a mouse in the square.
+на газоне мышь@nom: There is a mouse in the lawn.
+в библиотека@prep мышь@nom: There is a mouse in the library.
+в университете мышь@nom: There is a mouse in the university.
+в парке лошадь@nom: There is a horse in the park.
+в парке ребёнок@nom: There is a child in the park.
+я работаю в библиотека@prep: I work at the library.
+я работаю в университете: I work at the university.
+он работает в библиотека@prep: He works at the library.
+он работает в университете: He works at the university.
+я сижу на улица@prep: I sit on the street.
+я сижу на площадь@prep: I sit on the square.
+я сижу на газоне: I sit on the lawn.
+он сидит на улица@prep: He sits on the street.
+он сидит на площадь@prep: He sits on the square.
+он сидит на газоне: He sits on the lawn.
+я сижу в библиотека@prep: I sit at the library.
+я сижу в университете: I sit at the university.
+я сижу в парке: I sit in the park.
+он сидит в библиотека@prep: He sits at the library.
+он сидит в университете: He sits at the university.
+ребёнок@nom сидит на улица@prep: He sits on the street.
+ребёнок@nom сидит на площадь@prep: He sits on the square.
+ребёнок@nom сидит на газоне: He sits on the lawn.
+ребёнок@nom сидит в библиотека@prep: He sits at the library.
+ребёнок@nom сидит в университете: He sits at the university.
+в библиотека@prep мышь@nom: A mouse is in the library
+в университете мышь@nom: A mouse is in the university
+я работаю в библиотека@prep: I work at the library
+я работаю в университете: I work at the university
+он работает в библиотека@prep: He works at the library
+он работает в университете: He works at the university
+собака играет на улица@prep: The dog plays on the street
+собака играет на площадь@prep: The dog plays on the square
+собака играет на газоне: The dog plays on the lawn
+ребёнок@nom играет на улица@prep: The child plays on the street
+ребёнок@nom играет на площадь@prep: The child plays on the square
+ребёнок@nom играет на газоне: The child plays on the lawn
+я играю на улица@prep: I play on the street
+я играю на площадь@prep: I play on the square
+я играю на газоне: I play on the lawn
+я гуляю на улица@prep: I walk on the street
+я гуляю на площадь@prep: I walk on the square
+я гуляю на газоне: I walk on the lawn
+лошадь@nom гуляет на улица@prep: A horse walks on the street.
+она гуляет в парке: She takes a walk in the park.
+я читаю газету: I read a newspaper
+я читаю журнал@acc: I read a magazine
+я читаю книгу: I read a book
+я читаю статью: I read an article
+я читаю письмо@acc: I read a letter
+он читает газету: He reads a newspaper
+он читает журнал@acc: He reads a magazine
+он читает книгу: He reads a book
+он читает статью: He reads an article
+она читает газету в библиотека@prep: She reads a newspaper at the library
+она читает журнал@acc в библиотека@prep: She reads a magazine at the library
+она читает книгу в библиотека@prep: She reads a book at the library
+она читает статью в библиотека@prep: She reads an article at the library
+она читает письмо@acc в библиотека@prep: She reads a letter at the library
+я пишу газету: I write a newspaper
+я пишу журнал@acc: I write a magazine
+я пишу книгу: I write a book
+я пишу статью: I write an article
+я пишу письмо@acc: I write a letter
+я пишу в библиотека@prep: I write at the library
+он пишет книгу: He writes a book.
+он пишет статью: He writes an article.
+он пишет письмо@acc: He writes a letter.
+кто пишет книгу ?: Who writes a book?
+кто пишет статью ?: Who writes an article?
+кто пишет письмо@acc ?: Who writes a letter?
+где газета ?: Where is the newspaper?
+где письмо@nom ?: Where is the letter?
+это отличная газета: It is a great newspaper.
+это отличная библиотека: It is a great library.
+это отличный@m журнал@nom: It's a great magazine.
+это отличный@m человек@nom: It's a great person.
+я отличный@m студент@nom: I am a great student.
+я отличный@m человек@nom: I am a great person.
+я хороший@m студент@nom: I am a good student.
+я хороший@m человек@nom: I am a good person.
+он отличный@m друг@nom: He is a great friend.
+он отличный@m студент@nom: He is a great student.
+ты отличный@m друг@nom: You are a great friend.
+ты отличный@m студент@nom: You are a great student.
+студент@nom в университете: The student is at the university.
+сегодня отличная погода: The weather is great today.
+вчера отличная погода: The weather is great yesterday.
+сегодня хорошая погода: The weather is good today.
+вчера хорошая погода: The weather is good yesterday.
+сегодня очень хорошая погода: The weather is very good today.
+вчера очень хорошая погода: The weather is very good yesterday.
+сегодня отличный@m день@nom: It's a great day today.
+вчера отличный@m день@nom: It's a great day yesterday.
+сегодня хороший@m день@nom: It's a good day today.
+вчера хороший@m день@nom: It's a good day yesterday.
+она отличная собака: She is a great dog.
+она отличная кошка: She is a great cat.
+она хорошая собака: She is a good dog.
+она хорошая кошка: She is a good cat.
+он большой@m человек@nom: He's a big guy.
+человек@nom сидит на улица@prep: There's a person sitting on the street.
+на площадь@prep очень большая библиотека: There's a very big library on the square.
+на площадь@prep большая библиотека: There's a big library on the square.
+моя собака большая: My dog is big.
+он хороший@m друг@nom: He's a good friend.
+большая лошадь@nom в парке: There is big horse in the park.
+тут белая собака: There is a white dog here.
+тут белая кошка: There is a white cat here.
+тут белая машина: There is a white car here.
+тут чёрная собака: There is a black dog here.
+тут чёрная кошка: There is a black cat here.
+тут чёрная машина: There is a black car here.
+тут белая лошадь@gen: undefined
+тут белая мышь@nom: There is a white mouse here.
+тут маленкая лошадь@gen: undefined
+тут маленкая мышь@nom: There is a small mouse here.
+тут большая лошадь@nom: There is a big horse here.
+тут большая мышь@nom: There is a big mouse here.
+тут очень большая лошадь@nom: There is a very big horse here.
+тут очень большая мышь@nom: There is a very big mouse here.
+тут чёрная лошадь@nom: There is a black horse here.
+тут чёрная мышь@nom: There is a black mouse here.
+где белая собака ?: Where is the white dog?
+где белая кошка ?: Where is the white cat?
+где белая машина ?: Where is the white car?
+где чёрная собака ?: Where is the black dog?
+где чёрная кошка ?: Where is the black cat?
+где чёрная машина ?: Where is the black car?
+где маленкая собака ?: Where is the small dog?
+где маленкая кошка ?: Where is the small cat?
+где маленкая машина ?: Where is the small car?
+где маленкая книга ?: Where is the small book?
+где белая лошадь@nom ?: Where is the white horse?
+где белая мышь@nom ?: Where is the white mouse?
+где чёрная лошадь@nom ?: Where is the black horse?
+где чёрная мышь@nom ?: Where is the black mouse?
+это хороший@m планшет@nom ?: Is that a good tablet?
+это хороший@m телефон@nom ?: Is that a good phone?
+это хороший@m университет@nom ?: Is that a good university?
+где белый@m свитер@nom ?: Where is the white sweater?
+где белый@m планшет@nom ?: Where is the white tablet?
+где чёрный@m свитер@accpl ?: undefined
+где чёрный@m планшет@nom ?: Where is the black tablet?
+где хороший@m свитер@nom ?: Where is the good sweater?
+тут маленкий@m свитер@nom: There is a small sweater.
+тут маленкий@m планшет@nom: There is a small tablet.
+тут большой@m свитер@nom: There is a big sweater.
+тут большой@m планшет@nom: There is a big tablet.
+планшет@nom в библиотека@prep: The tablet is at the library.
+планшет@nom в университете: The tablet is at the university.
+хороший@m планшет@nom в магазине: undefined
+свитер@nom в библиотека@prep: The sweater is at the library.
+свитер@nom в университете: The sweater is at the university.
+свитер@nom в магазине: The sweater is at the shop.
+белый@m свитер@nom в магазине: The white sweater is at the shop.
+он покупает белый@accinanm свитер@acc ?: He buys a white sweater?
+он покупает белый@accinanm планшет@acc ?: He buys a white tablet?
+она покупает маленкий@accinanm свитер@acc ?: She buys a small sweater?
+она покупает маленкий@accinanm планшет@acc ?: She buys a small tablet?
+она покупает маленкий@accinanm свитер@acc ?: She buys a small sweater?
+она покупает маленкий@accinanm планшет@acc ?: She buys a small tablet?
+она покупает дорогой@accinanm свитер@acc ?: She buys an expensive sweater?
+она покупает дорогой@accinanm планшет@acc ?: She buys an expensive tablet?
+она покупает очень дорогой@accinanm свитер@acc ?: She buys a very expensive sweater?
+она покупает очень дорогой@accinanm планшет@acc ?: She buys a very expensive tablet?
+мой@m телефон@nom очень дорогой@m: My phone is very expensive.
+мой@m планшет@nom очень дорогой@m: My tablet is very expensive.
+собака дорогая ?: Is the dog expensive?
+кошка дорогая ?: Is the cat expensive?
+тут магазин@nom: There is a shop
+тут библиотека: There is a library
+тут университет@nom: undefined
+тут хороший@m магазин@nom: There is a good shop.
+машина в магазине: The car is at the shop
+машина в университете: The car is at the university
+машина в библиотека@prep: The car is at the library
+машина на газоне: The car is on the lawn
+машина на улица@prep: The car is on the street
+я в магазине: I am at the shop
+я в университете: I am at the university
+я в библиотека@prep: I am at the library
+я на газоне: I am on the lawn
+я на улица@prep: I am on the street
+он в магазине: He is at the shop
+он в университете: He is at the university
+он в библиотека@prep: He is at the library
+он на газоне: He is on the lawn
+он на улица@prep: He is on the street
+он в центре: He is in the city center
+магазин@nom в центре: The shop is in the center.
+университет@nom в центре: The university is in the center.
+в университете библиотека: There is a library at the university.
+в университете хорошая библиотека: There is a good library at the university.
+это маленкий@m университет@nom: It is a small university
+это маленкий@m магазин@nom: It is a small shop
+это маленкий@m площадь@nom: It is a small square
+где университет@nom ?: Where is the university?
+где магазин@nom ?: Where is the shop?
+где площадь@nom ?: Where is the square?
+я работаю в центре: I work in the center of the city.
+я тут работаю: I work here.
+я работаю: I'm working.
+он работает: He's working.
+он тут работает: He works here.
+кто ты ?: Who are you?
+ты тут: You are here.
+ты ребёнок@nom: You are a child.
+я люблю ты@acc: I love you
+я люблю она@acc: I love her
+ты я@acc любишь ?: Do you love me?
+он любит я@acc: He loves me
+она любит я@acc: She loves me
+кошка любит я@acc: The cat loves me
+он любит кошку: He loves the cat
+она любит кошку: She loves the cat
+кошка любит кошку: The cat loves the cat
+я люблю маму: I love Mom
+я люблю собаку: I love the dog
+я люблю кошку: I love the cat
+я люблю ребёнок@acc: I love the child
+маму любит я@acc: Mom loves me
+маму любит ребёнок@acc: Mom loves the child
+кто он любит ?: Who does he love?
+кто она любит ?: Who does she love?
+что он любит ?: What does he love?
+что она любит ?: What does she love?
+кто ты любишь ?: Who do you love?
+что ты любишь ?: What do you love?
+я вижу ребёнок@acc: I see a child.
+это хорошая квартира: This is a good flat.
+это хороший@m телефон@nom: This is a good phone.
+какая собака моя ?: Which dog is mine?
+какая вчера погода ?: What was the weather like yesterday?
+какая сегодня погода ?: What's the weather like today?
+какой@m он человек@nom ?: What kind of person is he?
+какой@m он студент@nom ?: How is he as a student?
+какой@m сегодня день@nom ?: What day is it today?
+я покупаю телефон@acc в магазине: I buy a phone at the shop.
+какой@accinanm телефон@acc ты покупаешь ?: What kind of phone do you buy?
+какой@accinanm журнал@acc ты читаешь ?: What kind of magazine do you read?
+какую книгу ты читаешь ?: What kind of book are you reading?
+она покупает большую собаку: She buys a big dog.
+большая библиотека в центре: The big library is in the center.
+кто ты встречаешь ?: Who are you meeting?
+мой@m друг@nom покупает большую квартиру: My friend buys a big apartment.
+друг@nom покупает хорошую машину в магазине: A friend buys a good car at the shop.
+она покупает белую мышь@acc в магазине: She buys a white mouse at the shop.
+он читает отличную книгу: He reads a great book.
+я встречаю большую собаку: I meet a large dog.
+я встречаю большую кошку: I meet a large cat.
+я покупаю белый@accinanm телефон@acc: I buy a white phone.
+он встречает маленкий@accinanm ребёнок@acc: He meets a small child.
+он встречает маленкую собаку: He meets a small dog.
+я читаю твою статью: I read your article.
+я читаю твою книгу: I read your book.
+какой@accinanm твой@accinanm мышь@acc ?: Which is your mouse?
+я вижу большой@accinanm человек@acc: I see a big person.
+я вижу твою собаку: I see your dog.
+где твой@pl собака@pl: Where are your dogs?
+я люблю твой@accinanm телефон@acc: I love your phone.
+я люблю твой@accinanm новый@accinanm телефон@acc: I love your new phone.
+я люблю твою квартиру: I love your apartment.
+я люблю твою машину: I love your car.
+я люблю твою новую квартиру: I love your new apartment.
+я люблю твою новую машину: I love your new car.
+я встречаю твой@accinanm друг@acc: I meet your friend.
+я вижу белый@accinanm мышь@acc: I see a white mouse.
+я вижу чёрный@accinanm мышь@acc: I see a black mouse.
+я вижу белую кошку: I see a white cat.
+я вижу белую собаку: I see a white dog.
+я вижу чёрную кошку: I see a black cat.
+я вижу чёрную собаку: I see a black dog.
+в библиотека@prep мышь@pl: There are mice at the library.
+в университете мышь@pl: There are mice at the university.
+на газоне мышь@pl: There are mice on the lawn.
+в парке лошадь@pl: There are horses in the park.
+лошадь@pl гуляет в парке: Horses are walking in the park.
+книга на кровать@prep: The book is on the bed.
+я лежу на кровать@prep: I'm lying on the bed.
+ты под кроватью ?: Are you under the bed?
+журнал@nom лежит под кроватью: The magazine is lying under the bed.
+журнал@nom лежит под столом: The magazine is lying under the table.
+журнал@nom лежит под стулом: The magazine is lying under the chair.
+собака лежит под кроватью: The dog is lying under the bed.
+собака лежит под столом: The dog is lying under the table.
+собака лежит под стулом: The dog is lying under the chair.
+телефон@nom лежит на кровать@prep: The phone is lying on the bed.
+телефон@nom лежит на столе: The phone is lying on the table.
+телефон@nom лежит на стуле: The phone is lying on the chair.
+кто на кровать@prep: Who is on the bed?
+кто на столе: Who is on the table?
+кто сидит на стуле: undefined
+что под кроватью: What is under the bed?
+что под столом: What is under the table?
+что под стулом: What is under the chair?
+он лежит под деревом в парке: He lies under a tree in the park.
+на столе открытая газета: There is an open newspaper lying on the table.
+телефон@nom под газетой: The phone is under the magazine.
+под машиной лежит человек@nom: There is a man lying under the car.
+под квартирой магазин@nom: Тhere is a shop under the apartment.
+она сидит на стуле: She is sitting in the chair.
+я вижу открытую дверь@acc: I see an open door.
+где открытый@m магазин@nom: Where is there an open shop?
+на улица@prep открытая машина: Тhere is an unlocked car on the street.
+кошка за шторой: The cat is behind the curtain.
+ребёнок@nom за шторой: The child is behind the curtain.
+собака за дверью: The dog is behind the door.
+ребёнок@nom за дверью: The child is behind the door.
+собака за окном: А dog is behind the window.
+ребёнок@nom за окном: А child is behind the window.
+за шторой окно@nom: There is a window behind the curtain.
+магазин@nom под площадью: The shop is under the square.
+в квартира@prep белая штора: The apartment has a white curtain.
+в квартира@prep чёрная штора: The apartment has a black curtain.
+в машина@prep штора@pl: The car has curtains.
+в квартира@prep открытый@accinanpl штора@pl: The apartment has open curtains.
+я он@acc встречаю в дверь@prep: I meet him at the door.
+мой@m друг@nom очень открытый@m человек@nom: My friend is a very outgoing person.
+за столом стул@nom: There is a chair behind the table.
+на столе газета@pl: There are magazines on the table.
+на столе книга@pl: There are books on the table.
+в квартира@prep маленкая дверь@nom: The apartment has a small door.
+в квартира@prep белая дверь@nom: The apartment has a white door.
+в квартира@prep чёрная дверь@nom: The apartment has a black door.
+в квартира@prep маленкий@accinanpl дверь@pl: The apartment has small doors.
+в квартира@prep белый@accinanpl дверь@pl: The apartment has white doors.
+в квартира@prep чёрный@accinanpl дверь@pl: The apartment has black doors.
+на столе большой@accinanpl книга@pl: There are big books on the table.
+на столе маленкий@accinanpl книга@pl: There are small books on the table.
+это твой@m телефон@nom ?: Is that your phone?
+это твоя квартира ?: Is that your apartment?
+это твой@pl собака@pl ?: Are those your dogs?
+это твой@pl кошка@pl ?: Are those your cats?
+в центре машина@pl: There are cars in the center.
+в центре большой@accinanpl квартира@pl: Тhere are big apartments in the center.
+в центре большой@accinanpl машина@pl: Тhere are big cars in the center.
+мой@pl собака@pl в парке: My dogs are in the park.
+мой@pl кошка@pl в парке: My cats are in the park.
+собака открывает дверь@acc: The dog opens a door.
+собака открывает окно@acc: The dog opens a window.
+я открываю дверь@acc: I open the door.
+я открываю окно@acc: I open the window.
+
+я открываю новую книгу: undefined
+я открываю письмо@acc: I open the letter.
+я открываю дверь@accpl: I open the doors.
+я открываю окно@accpl: I open the windows.
+
+я открываю новый@accpl книга@accpl: undefined
+я открываю письмо@accpl: I open the letters.
+я закрываю дверь@acc: I close the door.
+я закрываю окно@acc: I close the window.
+я закрываю комната@accpl: undefined
+я закрываю книгу: I close the apartment.
+я закрываю письмо@acc: I close the letter.
+я закрываю дверь@accpl: I close the doors.
+я закрываю окно@accpl: I close the windows.
+я закрываю комната@accpl: undefined
+я закрываю книга@accpl: I close the apartments.
+я закрываю письмо@accpl: I close the letters.
+твоё письмо@nom отличный@n: Your letter is great.
+это письмо@nom отличный@n: This is a great letter.
+ты читаешь моё письмо@acc ?: You are reading my letter?
+где твоё письмо@nom ?: Where is your letter?
+твоё письмо@nom на столе ?: Your letter is on the table.
+
+ты закрываешь открытая книгу: You close the open book.
+
+ты закрываешь открытый@accinanpl книга@accpl: You close the open book.
+она закрывает открытый@n дверь@acc: She closes the open door.
+она закрывает открытый@n окно@acc: She closes the open window.
+она закрывает открытый@accinanpl дверь@accpl: She closes the open doors.
+она закрывает открытый@accinanpl окно@accpl: She closes the open windows.
+ты покупаешь новый@accinanm телефон@acc ?: Are you buying a new phone?
+ты покупаешь новый@accinanm планшет@acc ?: Are you buying a new tablet?
+ты покупаешь новую квартиру ?: Are you buying a new apartment?
+ты покупаешь новую книгу ?: Are you buying a new apartment?
+в центре большой@accinanpl улица@pl: There are large streets in the center.
+в центре большой@accinanpl площадь@pl: There are large squares in the center.
+на улица@prep белый@accinanpl машина@pl: There are white cars on the street.
+на улица@prep новый@accinanpl машина@pl: There are new cars on the street.
+на улица@prep машина@pl: There are cars on the street.
+это мой@m новый@m профессор@nom: This is my new professor.
+мой@m новый@m друг@nom профессор@nom: undefined
+большой@n дерево@nom на площадь@prep: There is a big tree in the square.
+на улица@prep дерево@pl: There are trees on the street.
+на площадь@prep дерево@nom: There is a tree on the square.
+в центре новый@m магазин@nom: There is a new shop in the center.
+в парке большой@accinanpl дерево@pl: There are large trees in the park.
+профессор@nom покупает дорогой@m телефон@nom: The oligarch buys an expensive phone.
+профессор@nom покупает дорогой@accinanpl телефон@accpl: The oligarch buys expensive phones.
+дерево@pl чёрный@pl: The trees are black.
+дерево@nom чёрный@n: The tree is black.
+какой@n письмо@nom твоё ?: Which letter is yours?
+какой@n дерево@nom ты любишь ?: Which tree do you like?
+в квартира@prep большой@accinanpl окно@pl: The apartment has big windows.
+ты читаешь письмо@accpl ?: You are reading letters?
+ты пишешь письмо@accpl ?: You are writing letters?
+ты читаешь книга@pl ?: Do you read books?
+ты читаешь газета@pl ?: Do you read newspapers?
+ты читаешь журнал@accpl ?: Do you read magazines?
+я профессор@nom: I'm a professor.
+он олигарх@nom: He's an oligarch.
+тут чёрный@m свитер@nom: undefined
+в университете белая машина: undefined
+я вижу газон@acc в парке: undefined
+
+
+планшет@nom в магазине: undefined
+тут хороший@m магазин@nom: undefined
+тут хорошая библиотека: undefined
+в библиотека@prep книга@pl: undefined
+я на газоне в парке: undefined
+я сижу на газоне в парке: undefined
+он видит мышь@acc в парке: undefined
+она любит книга@pl: undefined
+это книга хорошая: undefined
+он очень маленкий@m: undefined
+где моё письмо@nom: undefined
+что ты читаешь: undefined
+я пишу статью: undefined
+в журнале статья: undefined
+в газета@prep статья: undefined
+это хорошая газета: undefined
+я люблю гулять в парке: undefined
+чёрная кошка гуляет на машина@prep: undefined
+где он гуляет: undefined
+он студент@nom в хороший@prepm университете: undefined
+он студент@nom в университете: undefined
+моя квартира в центре: undefined
+он встречает друг@acc в центре: undefined
+в центре магазин@pl открытый@pl: undefined
+она работает в центре: undefined
+журнал@nom дорогой@m: undefined
+какой@m твой@m журнал@nom: undefined
+это хороший@m журнал@nom: undefined
+я люблю читать журнал@nom: undefined
+в квартира@prep новый@accinanpl штора@pl: undefined
+она покупает чёрный@accinanpl штора@pl: undefined
+я встречаю человек@acc на площадь@prep: undefined
+он маленкий@m человек@nom: undefined
+белая кошка на стуле: undefined
+ребёнок@nom за мамой: undefined
+за дверью большой@m человек@nom: undefined
+парк@nom за библиотекой: undefined
+в библиотека@prep дорогая книга: undefined
+он видит дорогую машину: undefined
+в центре дорогой@accinanpl магазин@accpl: undefined
+большая машина дорогая: undefined
+какой@accinanm человек@acc ты любишь: undefined
+где твой@m свитер@nom: undefined
+это дорогая машина: undefined
+я сегодня работаю: undefined
+вчера он в магазине: undefined
+где ты вчера: undefined
+
+
+какой@m вчера день@nom ?: undefined
+в какой@m день@nom ты работаешь: undefined
+день@nom: undefined
+тут твой@m стул@nom: undefined
+это твоя машина: undefined
+ты любишь маленкий@accinanpl собака@pl: undefined
+какой@m свитер@acc ты любишь: undefined
+какой@accinanpl магазин@accpl ты любишь: undefined
+ты любишь дорогой@accinanpl машина@pl: undefined
+что ты пишешь: undefined
+ты пишешь письмо@acc: undefined
+почему ты лежишь под столом: undefined
+почему ты лежишь на кровать@prep: undefined
+почему ты сидишь здесь: undefined
+почему работаешь сегодня: undefined
+почему ты не в квартира@prep: undefined
+почему работать: undefined
+почему ты любишь работать: undefined
+почему ты я@acc не любишь: undefined
+почему ты не сидишь: undefined
+
+почему ты на кровать@prep: undefined
+почему ты она@acc не встречаешь: undefined
+почему сегодня: undefined
+почему тут: undefined
+почему он здесь: undefined
+здесь не сидеть: undefined
+здесь не играть: undefined
+она работает здесь: undefined
+здесь погода хорошая: undefined
+профессор@nom читает газету здесь: undefined
+сидишь здесь: undefined
+центр@nom здесь: undefined
+университет@nom здесь: undefined
+она не студент@nom: undefined
+я не олигарх@nom: undefined
+магазин@nom не дорогой@m: undefined
+я люблю этот@accinanm парк@nom: undefined
+я читаю этот@accinanpl журнал@accpl: undefined
+я люблю эту страну: undefined
+я люблю этот@accinanm парк@nom: undefined
+у я@gen нет телефона: undefined
+у студента слишком много книг: undefined
+у ты@gen дорогая машина: undefined
+у я@gen хорошая квартира: undefined
+почему у он@acc нет машина@gen: undefined
+у студента много книг: undefined
+она гуляет у библиотека@gen: undefined
+письмо@nom лежит у окно@gen: undefined
+у друга быть@1 ребёнок@nom: undefined
+у мама@gen быть@1 ребёнок@nom: undefined
+в центре много машин: undefined
+на площадь@prep нет машина@gen: undefined
+
+у я@gen нет большой@genf квартира@gen: undefined
+у я@gen нет квартира@gen: undefined
+в парке нет газона: undefined
+у она@gen нет ребёнок@gen: undefined
+в магазине нет окно@gen: undefined
+в комната@prep нет окно@gen: undefined
+
+
+в комната@prep собака: There is a dog in the room
+он в комната@prep: He's in the room.
+я в комната@prep: I'm in the room.
+телефон@nom в комната@prep: The phone is in the room.
+собака в комната@prep: A dog is in the room.
+кошка в комната@prep: A cat is in the room.
+мышь@nom в комната@prep: A mouse is in the room.
+что в комната@prep ?: What is in the room ?
+где комната: Where is the room?
+это моя комната: This is my room.
+где моя комната ?: Where is my room?
+это хорошая комната: This is a good room.
+я люблю твою комнату: I love your room.
+я люблю твою новую квартиру: I love your new room.
+в комната@prep белая штора: The room has a white curtain.
+в комната@prep чёрная штора: The room has a black curtain.
+в комната@prep открытый@accinanpl штора@pl: The room has open curtains.
+в комната@prep маленкая дверь@nom: The room has a small door.
+в комната@prep белая дверь@nom: The room has a white door.
+в комната@prep чёрная дверь@nom: The room has a black door.
+в комната@prep маленкий@accinanpl дверь@pl: The room has small doors.
+в комната@prep белый@accinanpl дверь@pl: The room has white doors.
+в комната@prep чёрный@accinanpl дверь@pl: The room has black doors.
+это твоя комната ?: Is that your room?
+в центре большой@accinanpl комната@pl: Тhere are big rooms in the center.
+в комната@prep большой@accinanpl окно@pl: The room has big windows.
+моя комната в центре: undefined
+в комната@prep новый@accinanpl штора@pl: undefined
+почему ты не в комната@prep: undefined
+у я@gen хорошая комната: undefined
+у я@gen нет большой@genf комната@gen: undefined
+это свитер@nom друга: undefined
+свитера: undefined
+это книга студента: undefined
+где машина олигарха: undefined
+где машина@gen олигарха: undefined
+где стул@nom профессора: undefined
+в магазине много свитеров: undefined
+в библиотека@prep много книг: undefined
+в университете много профессоров: undefined
+он читает журнал@acc: undefined
+дверь@prep в магазине открытый@pl: undefined
+почему окно@pl открытый@pl: undefined
+он покупает новый@pl обудь@accpl: undefined
+в городе новый@pl магазин@pl: undefined
+в квартира@prep новый@pl штора@pl: undefined
+в газоне белый@pl кошка@pl: undefined
+я люблю маленкий@accinanpl машина@accpl: undefined
+здесь хороший@pl магазин@pl: undefined
+в городе маленкий@pl квартира@pl: undefined
+в квартира@dat маленкий@pl комната@pl: undefined
+какой@pl газета@accpl ты читаешь: undefined
+какой@pl человек@accpl ты любишь: undefined
+какой@pl людь@pl ты встречаешь: undefined
+почему ты не пишешь книгу: undefined
+у я@acc много друг@genpl: undefined
+где открытый@m магазин@nom: Where is there an open shop?
+я люблю открытый@accanpl людь@accpl: undefined
+я открываю книгу: I open the apartment.
+почему закрываешь дверь@acc: undefined
+почему ты в библиотека@prep: undefined
+почему твой@pl другзья студент@pl: undefined
+я тут гуляю: undefined
+он не профессор@nom: undefined
+я не олигарх@nom: undefined
+я не читаю книгу: undefined
+я не собака: undefined
+это мой@m новый@m профессор@nom: undefined
+здесь нет магазинов: undefined
+в этот@prepm городе нет газонов: undefined
+в площадь@prep много человеков: undefined
+в площадь@prep слишком много человеков: undefined
+эта квартира слишком дорогая: undefined
+этот@m телефон@nom слишком большой@m: undefined
+магазин@nom слишком маленкий@m: undefined
+этот@m телефон@nom слишком маленкий@m: undefined
+где магазин@nom низкий@genpl цен: undefined
+моя друг@nom низкий@m человек@nom: undefined
+это город@nom низкий@genpl домов: undefined
+я живу в низкий@prepm доме: undefined
+
+я люблю низкий@accinanpl цена@accpl: undefined
+она живёт в белый@prepm низкий@prepm доме: undefined
+она живёт в белый@prepm высокий@prepm доме: undefined
+я живу в высокий@prepm доме: undefined
+это город@nom высокий@genpl домов: undefined
+я не люблю высокий@accinanpl цена@accpl: undefined
+это магазин@nom высокий@genpl цен: undefined
+этот@pl цена@pl слишком высокий@pl: undefined
+сегодня температура слишком высокая: undefined
+твоя температура слишком высокая: undefined
+твоя температура слишком низкая: undefined
+этот@m город@nom слишком большой@m: undefined
+моя город@nom слишком маленкий@m: undefined
+этот@m университет@nom слишком дорогой@m: undefined
+моё окно@nom слишком низкий@n: undefined
+здесь нет библиотека@gen: undefined
+это город@nom без библиотека@gen: undefined
+я без телефона: undefined
+это страна без парков: undefined
+она покупает дорогой@accinanpl обудь@accpl: undefined
+я покупаю обудь@accpl и свитер@acc в магазине: undefined
+здесь много библиотека@gen: undefined
+у я@acc нет книга@gen: undefined
+у он@gen мама@gen много кошка@gen: undefined
+здесь нет людь@genpl: undefined
+здесь нет хороший@genpl людь@genpl: undefined
+в парке высокий@pl дерево@pl: undefined
+моя квартира без телефона: undefined
+
+я люблю этот@accinanm город@acc: undefined
+я люблю город@acc высокий@genpl домов: undefined
+у мой@genm дом@gen нет большой@genm газона: undefined
+здесь нет белый@genm лошадь@gen: undefined
+у ты@gen большая голова: undefined
+в квартира@prep нет кровать@gen: undefined
+в городе нет большой@genpl площадь@genpl: undefined
+в магазине нет обудей: undefined
+в магазине нет дорогой@genpl обудей: undefined
+в магазине нет большой@genpl обудей: undefined
+в комната@prep нет дверь@gen: undefined
+это мой@m город@nom: undefined
+я живу в большой@prepm городе: undefined
+это город@nom профессора: undefined
+в городе много библиотек: undefined
+в городе много людь@genpl: undefined
+это город@nom олигархов: undefined
+дом@nom профессора большой@m: undefined
+в городе большой@m университет@nom: undefined
+у олигарха много домов: undefined
+какой@m твой@m дом@nom: undefined
+он живёт в новый@prepm доме: undefined
+мой@m дом@nom белый@m: undefined
+дом@nom собака@gen белый@m: undefined
+цена@pl этот@genm магазина низкий@pl: undefined
+я не вижу цену: undefined
+это хорошая цена: undefined
+здесь хороший@pl цена@pl: undefined
+это отличная цена: undefined
+свитер@nom без цена@gen: undefined
+здесь нет открытый@genpl магазинов: undefined
+отличный@genpl ресторанов в этот@prepm городе нет: undefined
+цена@pl новый@genpl ресторанов высокий@pl: undefined
+у она@gen низкая собака: undefined
+у она@gen низкий@m собака: undefined
+вы знаете где моя машина: undefined
+ты знаешь где моя собака ?: undefined
+я не знаю франзуски: undefined
+профессор@nom знает математика: undefined
+профессор@nom понимает математика: undefined
+я не понимаю математика: undefined
+я это не понимаю: undefined
+я не понимаю этот@accinanm книгу: undefined
+этот@pl книга@pl дорогой@pl: undefined
+я не люблю этот@accinanpl свитер@accpl: undefined
+у она@gen хорошая голова: undefined
+этот@pl людь@pl хороший@pl другзья: undefined
+этот@pl людь@pl студент@pl: undefined
+я знаю этот@accanpl людь@accpl: undefined
+этот@pl книга@pl слишком большой@pl: undefined
+почему у ты@gen нет друг@genpl: undefined
+почему играешь на улица@prep: undefined
+почему не встречаешь маму: undefined
+почему кошка в комната@prep: undefined
+он открывает магазин@acc: undefined
+у профессор@nom много студентов: undefined
+я встречаю новый@accanm профессор@acc: undefined
+профессор@pl работает в университете: undefined
+он мой@m профессор@nom: undefined
+он читает моё письмо@acc: undefined
+письмо@nom на столе: undefined
+у ты@gen много друг@genpl: undefined
+почему у ты@gen нет собака@gen: undefined
+у ты@gen машина: undefined
+у ты@gen большая квартира: undefined
+у ты@gen отличная квартира: undefined
+человек@nom открывает газету: undefined
+это белая кошка: undefined
+это чёрный@m мышь@nom: undefined
+я не знаю где магазин@acc: undefined
+я она@acc не знаю: undefined
+я не знаю олигарх@acc: undefined
+я не знаю олигарх@accpl: undefined
+ты знаешь новый@accanm профессор@acc: undefined
+он знает где покупать отличный@accinanpl планшет@accpl: undefined
+он знает где я живу: undefined
+кто знает где мой@m телефон@nom: undefined
+кто вы: undefined
+что вы читаете: undefined
+что вы видите ?: undefined
+вы видите машину ?: undefined
+какой@accinanm город@acc вы любите: undefined
+в какой@m день@nom вы работаете: undefined
+вы знаете где магазин@nom: undefined
+вы знаете мой@accanm профессор@acc: undefined
+почему вы сидите здесь: undefined
+вы сидите на стуле: undefined
+вы не любите кошка@accpl: undefined
+вы не любите борщ@acc: undefined
+кто вы любите ?: undefined
+что вы любите ?: undefined
+почему вы я@acc не любите: undefined
+профессор@nom закрывает книгу: undefined
+он закрывает магазин@acc: undefined
+я закрываю дверь@acc: I close the door.
+я закрываю дверь@acc дом@gen: undefined
+я закрываю окно@acc дом@gen: undefined
+у дом@gen нет дверь@gen: undefined
+он не закрывает свой@accinanm дом@acc: undefined
+он не закрывает квартиру: undefined
+профессор@nom закрывает свой@accinanm книгу: undefined
+я закрываю книгу профессора: undefined
+я открываю дверь@acc квартира@gen: undefined
+я открываю дверь@accpl: undefined
+собака не знает как открывать дверь@acc: undefined
+я не знаю как покупать квартиру: undefined
+у она@acc много собак: undefined
+у новый@genm дом@gen нет дверь@gen: undefined
+это белая лошадь@nom: undefined
+это чёрный@m свитер@nom: undefined
+тут белая лошадь@nom: undefined
+где лошадь@pl: undefined
+это маленкая лошадь@nom: undefined
+планшет@nom белый@m: undefined
+она открывает книгу в библиотека@prep: undefined
+кошка открывает дверь@acc: undefined
+в квартира@dat маленкий@pl окно@pl: undefined
+в магазине дорогой@pl книга@pl: undefined
+дом@pl высокий@pl: undefined
+дом@pl высокий@pl: undefined
+цена@pl высокий@pl: undefined
+здесь цена@pl высокий@pl: undefined
+какой@pl машина@pl хороший@pl: undefined
+вы знаете как в этот@prepm ресторане еда: undefined
+вы знаете где центр@nom: undefined
+он живёт как собака: undefined
+он работает как лошадь@nom: undefined
+эта машина как дом@nom дорогой@m: undefined
+кошка ест мышь@acc: undefined
+кошка ест белый@accinanm мышь@acc: undefined
+кошка ест мышь@pl: undefined
+я ем борщ@acc: undefined
+я ем червоний@accinanm борщ@acc: undefined
+в ресторане он ест лошадь@acc: undefined
+я не ем лошадь@acc: undefined
+моя кошка не ест мышь@accpl: undefined
+почему вы любите сидеть в парке: undefined
+почему вы любите этот@accinanm ресторан@acc: undefined
+где хороший@m ресторан@nom: undefined
+ты знаешь хороший@accinanm ресторан@acc: undefined
+это отличный@m ресторан@nom: undefined
+я сейчас в ресторане: undefined
+я в ресторане: undefined
+он часто ест в ресторане: undefined
+в центре хороший@accinanpl ресторан@accpl: undefined
+он любит этот@accinanm ресторан@acc: undefined
+я знаю хороший@accinanm ресторан@acc: undefined
+он встречает друг@acc в ресторане: undefined
+я люблю эту машину: undefined
+я работаю в этот@prepm магазине: undefined
+этот@m университет@nom хороший@m: undefined
+эта машина моя: undefined
+этот@m человек@nom мой@m друг@nom: undefined
+я живу в этот@prepm доме: undefined
+эта белая машина моя: undefined
+он знает как открывать дверь@acc: undefined
+как ты это знаешь: undefined
+я не знаю математику: undefined
+я не знаю франзуски: undefined
+я не знаю как ты это делаешь: undefined
+я не знаю как она@acc встречать: undefined
+он большой@m как лошадь@nom: undefined
+я слышу как она закрывает дверь@acc: undefined
+собака большая как лошадь@nom: undefined
+я не люблю эта собака: undefined
+эта книга не дорогая: undefined
+эта комната слишком маленкая: undefined
+профессор@nom читает этот@accinanpl книга@accpl: undefined
+она не любит этот@accinanpl книга@accpl: undefined
+этот@m журнал@nom новый@m: undefined
+эта статья трудная: undefined
+он не понимает трудная математика: undefined
+он не читает трудный@accinanpl книга@accpl: undefined
+в журнале трудная статья: undefined
+этот@m журнал@nom слишком трудный@m: undefined
+она понимает трудная математика: undefined
+работать в ресторане трудная работа: undefined
+это трудная работа: undefined
+сегодня трудный@m день@nom: undefined
+он трудный@m ребёнок@nom: undefined
+он часто трудный@m ребёнок@nom: undefined
+сегодня трудный@m день@nom в работа@prep: undefined
+она читает очень трудный@accinanpl книга@pl: undefined
+у ты@gen какая работа: undefined
+он сейчас в работа@prep: undefined
+он не в работа@prep: undefined
+я не гуляю в парках: undefined
+мой@pl другзья едят в дорогой@preppl ресторанах: undefined
+мой@pl другзья живут в этот@preppl домах: undefined
+она не ест в этот@preppl ресторанах: undefined
+я люблю гулять в этот@preppl улицах: undefined
+не люблю сидеть в низкий@preppl машинах: undefined
+в этот@preppl домах большой@pl комната@pl: undefined
+я не знаю в какой@prepm городе я хочу жить: undefined
+в этот@preppl университетах много студентов: undefined
+дом@nom собака@gen под кровать@gen: undefined
+я не хочу работать в этот@preppl странах: undefined
+я не хочу работать в этот@preppl температурах: undefined
+в мой@preppl комнатах температура низкая: undefined
+он работает в разный@preppl странах: undefined
+они живут в этот@preppl квартирах: undefined
+на улицах машина@pl: undefined
+на улицах много машин: undefined
+людь@pl на улицах: undefined
+на улицах много людь@genpl: undefined
+я людь@accpl не понимаю: undefined
+мой@pl другзья в магазинах: undefined
+в журналах много интересный@genpl статьей: undefined
+в университетах много отличный@genpl профессоров: undefined
+в парках мышь@pl: undefined
+в этот@preppl парках мышь@pl: undefined
+мой@pl другзья в разный@preppl университетах: undefined
+мы живём в разный@preppl квартирах: undefined
+они живут в новый@preppl квартирах: undefined
+моя работа в центре: undefined
+они живут в центре города: undefined
+они живут в центрах большой@preppl городов: undefined
+она живёт в большой@prepm городе: undefined
+он живёт в маленкий@prepm городе: undefined
+я не хочу жить в этот@preppl домах: undefined
+я не живу в этот@preppl домах: undefined
+я не работаю в этот@preppl офисах: undefined
+она работает в этот@prepm офисе: undefined
+это она@gen офис@nom: undefined
+это он@gen офисе: undefined
+это она@gen дом@nom: undefined
+магазин@nom в центре города: undefined
+в центре городов дорогой@accinanpl магазин@accpl: undefined
+моя работа в центре города: undefined
+ты любишь твою работу: undefined
+у ты@gen хорошая работа: undefined
+франзуски трудный@m язык@nom: undefined
+она делает трудную работу: undefined
+я не люблю трудный@accinanpl книга@accpl: undefined
+твоя работа трудная: undefined
+математика трудная: undefined
+моя работа не трудная: undefined
+у ты@acc быть@1 работа: undefined
+я люблю моя работа: undefined
+в этот@preppl домах живут студент@pl: undefined
+в этот@preppl дорогой@preppl домах живут олигархах: undefined
+в какой@preppl домах вы живёте: undefined
+в какой@preppl городах ты хочешь жить: undefined
+я здесь не знаю много людь@genpl: undefined
+я не люблю этот@accanpl людь@pl: undefined
+людь@pl на площадь@prep: undefined
+этот@pl людь@pl студент@pl: undefined
+этот@pl студент@pl отличный@pl: undefined
+ты знаешь этот@pl людь@accpl: undefined
+это красивый@m дом@nom: undefined
+мой@m дом@nom не красивый@m: undefined
+мой@m дом@nom не в центре: undefined
+какой@m твой@m дом@nom: undefined
+у ты@gen большой@m дом@nom: undefined
+где твой@m дом@nom: undefined
+он красивый@m ребёнок@nom: undefined
+она красивая: undefined
+здесь красивый@m парк@nom: undefined
+мой@m друг@nom не красивый@m человек@nom: undefined
+свой@pl родитель@pl красивый@pl: undefined
+твой@m свитер@nom очень красивый@m: undefined
+я работаю в красивый@prepm офисе: undefined
+на газоне красивая собака: undefined
+я люблю большой@accinanpl город@accpl: undefined
+мы в разный@preppl городах: undefined
+он в большой@prepm городе: undefined
+он не в этот@prepn городе: undefined
+это очень новый@m город@nom: undefined
+как твой@pl родитель@pl: undefined
+у я@gen нет родителей: undefined
+мой@pl родитель@pl красивый@pl: undefined
+он не знает свой@accanpl родитель@accpl: undefined
+я знаю твой@accanpl родитель@accpl: undefined
+где родитель@pl ребёнок@gen: undefined
+я не вижу твой@accanpl родитель@accpl: undefined
+мой@pl родитель@pl здесь нет: undefined
+твой@pl родитель@pl не здесь: undefined
+кто твой@pl родитель@pl: undefined
+где твой@pl родитель@pl: undefined
+у ребёнок@gen нет родителей: undefined
+мой@pl родитель@pl профессор@pl: undefined
+мой@pl родитель@pl не работают: undefined
+мой@pl родитель@pl гуляют в парке: undefined
+мой@pl родитель@pl хороший@pl людь@pl: undefined
+твой@pl родитель@pl любят кошка@accpl: undefined
+вы не мой@pl родитель@pl: undefined
+как ты: undefined
+в какой@prepm офисе ты работаешь: undefined
+здесь нет твой@genm офиса: undefined
+это не твой@m офис@nom: undefined
+мой@m офис@nom в высокий@prepm доме: undefined
+здесь мой@m офис@nom: undefined
+где твой@m офис@nom: undefined
+я работаю в офисе: undefined
+они хороший@pl людь@pl: undefined
+этот@pl людь@pl не понимают: undefined
+этот@pl людь@pl профессор@pl: undefined
+мой@pl родитель@pl живут в разный@preppl городах: undefined
+мы читаем разный@accinanpl книга@accpl: undefined
+они читают разный@accinanpl газета@accpl: undefined
+у мы@gen разный@pl мама@pl: undefined
+мы любим разный@accinanpl книга@accpl: undefined
+мы живём в большой@prepm городе: undefined
+он знает где мы живём: undefined
+мы живём в этот@prepm доме: undefined
+мы не живём в этот@preppl домах: undefined
+я не делаю ошибка@pl: undefined
+здесь ошибка: undefined
+в этот@prepn книга@prep ошибка@pl: undefined
+в этот@prepn книга@prep много ошибк<ок: undefined
+сейчас урок@nom французский@genn язык@gen: undefined
+знаешь французский@m язык@nom: undefined
+он профессор@nom французский@genm язык@gen: undefined
+я не вижу ошибку: undefined
+ты видишь ошибку: undefined
+где ошибка: undefined
+это книга без ошибк<ок: undefined
+здесь большая ошибка: undefined
+профессор@nom не видит ошибку: undefined
+он без ошибк<ок: undefined
+студент@pl делают ошибка@accpl: undefined
+я делаю ошибку: undefined
+что ты делаешь сегодня: undefined
+почему ты это делаешь: undefined
+я не делаю твою работу: undefined
+почему ты делаешь эту работу: undefined
+я делаю покупок@accpl: undefined
+что ты делаешь здесь: undefined
+я хочу жить в разный@preppl странах: undefined
+я студент@nom: undefined
+они давать@3pl кошка@dat еду: undefined
+профессор@nom дает студенту книгу: undefined
+она возвращать@3 книгу профессору: undefined
+она возвращать@3 машину мама@dat: undefined
+ты возвращать@2 машину родителям: undefined
+я возвращать@1 планшет@acc в магазин@acc: undefined
+я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
+я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined

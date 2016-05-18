@@ -1,42 +1,275 @@
+html {
+  margin: 0;
+  padding: 0; }
+
 body {
+  background-color: #f5f5f5;
+  font-family: 'Source Sans Pro', sans-serif;
+  width: 100%;
+  margin: 4px;
+  padding: 0;
   font-family: sans-serif;
-  font-size: 12pt; }
+  font-size: 12pt;
+  color: #404040;
+  position: fixed; }
 
-h3 {
-  font-size: 36pt; }
+.button, .tab-header .tab-close {
+  border-radius: 4px;
+  margin: 8px;
+  text-align: center;
+  padding: 4px 8px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  display: flex;
+  align-items: center; }
 
-h4 {
-  font-size: 24pt;
-  font-style: italic; }
+.button:hover, .tab-header .tab-close:hover {
+  background-color: #c7c7c7; }
 
-.button {
-  border: solid 1px darkslategray;
-  border-radius: 5px;
-  margin: 6pt 0;
-  padding: 6pt;
-  cursor: pointer; }
+input[type=text] {
+  font-family: inherit;
+  font-size: 150%;
+  background-color: #fafafa;
+  border: none; }
 
-.button:hover {
-  background-color: lightgray; }
+.tabSet {
+  height: 100vh;
+  display: flex;
+  flex-direction: column; }
+  .tabSet .closedTabs {
+    display: flex;
+    flex-shrink: 0; }
+    .tabSet .closedTabs .tabs:first-child {
+      padding-right: 4px; }
+    .tabSet .closedTabs .tabs:nth-child(2) {
+      padding-left: 4px; }
+    .tabSet .closedTabs .tabs {
+      width: 50%; }
+      .tabSet .closedTabs .tabs .tab {
+        background-color: #e0e0e0;
+        margin-bottom: 2px; }
+        .tabSet .closedTabs .tabs .tab .index, .tabSet .closedTabs .tabs .tab .inflections table td .add, .inflections table td .tabSet .closedTabs .tabs .tab .add {
+          background-color: #c7c7c7; }
+        .tabSet .closedTabs .tabs .tab .tab-close {
+          background-color: #c7c7c7; }
+        .tabSet .closedTabs .tabs .tab .tab-close:hover {
+          background-color: #adadad; }
+  .tabSet .openTabs {
+    display: flex;
+    flex-grow: 1; }
+    .tabSet .openTabs .tab:first-child {
+      padding-right: 4px; }
+    .tabSet .openTabs .tab:nth-child(2) {
+      padding-left: 4px; }
+    .tabSet .openTabs .tab {
+      width: 50%;
+      display: flex;
+      flex-direction: column; }
+      .tabSet .openTabs .tab .tab-header {
+        color: #e0e0e0;
+        background-color: #808080;
+        flex-shrink: 0; }
+        .tabSet .openTabs .tab .tab-header .index, .tabSet .openTabs .tab .tab-header .inflections table td .add, .inflections table td .tabSet .openTabs .tab .tab-header .add {
+          background-color: #676767; }
+        .tabSet .openTabs .tab .tab-header .tab-close {
+          background-color: #676767; }
+        .tabSet .openTabs .tab .tab-header .tab-close:hover {
+          background-color: #4d4d4d; }
+      .tabSet .openTabs .tab .content {
+        flex-grow: 1;
+        overflow-y: scroll; }
 
-.knownFact {
-  margin: 6pt 0;
-  background-color: #e5e5e5;
-  padding: 6pt; }
+.tab-header {
+  display: flex;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px; }
+  .tab-header .tab-close {
+    border: none;
+    border-radius: 0;
+    border-top-right-radius: 4px;
+    margin: 0; }
+  .tab-header .tab-name {
+    padding: 8px;
+    flex-grow: 1; }
 
-.knownFact.known {
-  color: #ffffff; }
+.filter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
 
-.knownFact.new {
-  font-size: 48pt; }
+.filter .option {
+  background-color: #d0d0d0;
+  padding: 2px;
+  margin-bottom: 4px;
+  margin-right: 4px; }
 
-.bar {
-  background-color: #52928f;
-  height: 10px;
-  display: inline-block; }
+.sentenceEditor {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 8px 0 8px 0; }
 
-table {
-  margin: 10pt 0; }
-  table th {
-    overflow-x: hidden;
-    font-size: 8pt; }
+.sentenceEditor .word {
+  display: flex;
+  flex-direction: row;
+  background-color: #e0e0e0;
+  padding: 8px;
+  margin-right: 4px;
+  margin-bottom: 8px;
+  font-size: 1.5rem; }
+
+.sentenceEditor .word .form {
+  margin-left: 4px;
+  font-size: 80%;
+  align-self: center; }
+
+.sentenceEditor .space {
+  width: 16px;
+  margin-bottom: 8px;
+  background-color: #808080;
+  color: #e0e0e0; }
+
+.sentenceEditor .selected {
+  background-color: #808080;
+  color: #e0e0e0; }
+
+.sentenceEditor .sentenceEnd {
+  flex-grow: 1; }
+
+.wordSearch .filter {
+  padding: 4px;
+  border-bottom: 1px solid #808080;
+  background-color: #e0e0e0;
+  display: flex; }
+  .wordSearch .filter input[type=text] {
+    width: calc(100% - 4px);
+    margin: 4px; }
+  .wordSearch .filter .option {
+    margin: 0;
+    margin-right: 8px;
+    padding: 4px; }
+  .wordSearch .filter .option.active {
+    font-weight: bold;
+    color: black; }
+
+.wordSearch .suggestions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+  .wordSearch .suggestions .suggestion {
+    display: flex;
+    flex-direction: row;
+    background-color: #e0e0e0;
+    padding: 8px;
+    margin-right: 4px;
+    margin-bottom: 8px; }
+    .wordSearch .suggestions .suggestion .index, .wordSearch .suggestions .suggestion .inflections table td .add, .inflections table td .wordSearch .suggestions .suggestion .add {
+      background-color: #c7c7c7;
+      top: auto; }
+    .wordSearch .suggestions .suggestion .form {
+      margin-left: 4px;
+      font-size: 80%;
+      align-self: center; }
+    .wordSearch .suggestions .suggestion .count {
+      margin-left: 4px;
+      font-size: 80%;
+      align-self: center; }
+
+.buttonBar {
+  display: flex; }
+
+ul {
+  padding: 0;
+  margin: 0; }
+  ul li {
+    list-style-type: none;
+    padding-bottom: 4px;
+    margin: 0; }
+
+.index, .inflections table td .add {
+  display: inline-block;
+  background-color: #e0e0e0;
+  font-size: 60%;
+  border-radius: 16px;
+  margin-right: 4px;
+  text-align: center;
+  position: relative;
+  top: -0.25em;
+  width: 2em;
+  height: 2em; }
+  .index .number, .inflections table td .add .number {
+    font-weight: 900;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+
+.inflections {
+  padding-top: 8px; }
+  .inflections .inflectionName {
+    font-weight: bold; }
+    .inflections .inflectionName .button, .inflections .inflectionName .tab-header .tab-close, .tab-header .inflections .inflectionName .tab-close {
+      font-weight: normal;
+      display: inline-block; }
+  .inflections .inherits {
+    font-style: italic; }
+    .inflections .inherits .clickable {
+      font-weight: bold; }
+  .inflections table {
+    width: 100%;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-spacing: 0;
+    display: inline-block; }
+    .inflections table td {
+      padding: 4px; }
+      .inflections table td .inherited {
+        color: gray; }
+      .inflections table td .form {
+        margin: 4px 0; }
+      .inflections table td .add {
+        float: right;
+        margin: 0 16px;
+        margin-top: 2px;
+        color: gray;
+        background-color: inherit; }
+        .inflections table td .add .number {
+          font-weight: bold; }
+      .inflections table td .add:hover {
+        background-color: #e0e0e0; }
+      .inflections table td .index, .inflections table td .add {
+        margin: 0 16px;
+        margin-top: 2px;
+        color: gray;
+        float: right; }
+    .inflections table tbody td:first-child {
+      font-style: italic; }
+    .inflections table thead {
+      background-color: #e0e0e0; }
+
+.clickable:hover {
+  color: black;
+  text-decoration: underline; }
+
+.facts .count {
+  margin-left: 4px; }
+
+.facts .count.insufficient {
+  font-weight: bold; }
+
+.addWord {
+  display: flex;
+  padding: 8px;
+  margin: 8px;
+  background-color: #e0e0e0;
+  align-items: stretch; }
+  .addWord input {
+    flex-grow: 1; }
+  .addWord select {
+    background-color: #fafafa;
+    margin-left: 8px;
+    -webkit-appearance: menulist-button; }
+  .addWord .button, .addWord .tab-header .tab-close, .tab-header .addWord .tab-close {
+    margin: 0;
+    margin-left: 8px; }

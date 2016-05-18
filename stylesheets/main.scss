@@ -1,54 +1,410 @@
+
+$unit: 4px;
+
+$color-fg: #404040;
+$color-fg-light: gray;
+$color-fg-inverted: #e0e0e0;
+
+$color-bg-light: #e0e0e0;
+$color-bg-inverted: #808080;
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
 body {
+    background-color: #f5f5f5;
+    font-family: 'Source Sans Pro', sans-serif;
+    width: 100%;
+    margin: $unit;
+    padding: 0;
     font-family: sans-serif;
     font-size: 12pt;
-}
-
-h3 {
-    font-size: 36pt;
-}
-
-h4 {
-    font-size: 24pt;
-    font-style: italic;
+    color: $color-fg;
+    position: fixed;
 }
 
 .button {
-    border: solid 1px darkslategray;
-    border-radius: 5px;
-    margin: 6pt 0;
-    padding: 6pt;
+    border-radius: $unit;
+    margin: 2 * $unit;
+    text-align: center;
+    padding: $unit (2 * $unit);
+    background-color: $color-bg-light;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .button:hover {
-    background-color: lightgray;
+    background-color: darken($color-bg-light, 10%);
 }
 
-.knownFact {
-    margin: 6pt 0;
-    background-color: #e5e5e5;
-    padding: 6pt;
+input[type=text] {
+    font-family: inherit;
+    font-size: 150%;
+    background-color: lighten($color-bg-light, 10%);
+    border: none;
 }
 
-.knownFact.known {
-    color: #ffffff;
+.tabSet {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+    .closedTabs {
+        display: flex;
+        flex-shrink: 0;
+
+        .tabs:first-child {
+            padding-right: $unit;
+        }
+
+        .tabs:nth-child(2) {
+            padding-left: $unit;
+        }
+
+        .tabs {
+            width: 50%;
+
+            .tab {
+                background-color: $color-bg-light;
+                margin-bottom: 2px;
+                
+                .index {
+                    background-color: darken($color-bg-light, 10%);
+                }
+
+                .tab-close {
+                    background-color: darken($color-bg-light, 10%);
+                }
+
+                .tab-close:hover {
+                    background-color: darken($color-bg-light, 20%);
+                }
+            }
+        }
+    }
+
+    .openTabs {    
+        display: flex;
+        flex-grow: 1;
+
+        .tab:first-child {
+            padding-right: $unit;
+        }
+
+        .tab:nth-child(2) {
+            padding-left: $unit;
+        }
+
+        .tab {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            
+            .tab-header {
+                color: $color-fg-inverted;
+                background-color: $color-bg-inverted;
+                flex-shrink: 0;
+                
+                .index {
+                    background-color: darken($color-bg-inverted, 10%);
+                }
+                
+                .tab-close {
+                    background-color: darken($color-bg-inverted, 10%);
+                }
+
+                .tab-close:hover {
+                    background-color: darken($color-bg-inverted, 20%);
+                }
+            }
+            
+            .content {
+                flex-grow: 1;
+                overflow-y: scroll;
+            }
+        }
+    }
 }
 
-.knownFact.new {
-    font-size: 48pt;
+.tab-header {
+    display: flex;
+    border-top-left-radius: $unit;
+    border-top-right-radius: $unit;
+
+    .tab-close {
+        @extend .button;
+        border: none;
+        border-radius: 0;
+        border-top-right-radius: $unit;
+        margin: 0;
+    }
+
+    .tab-name {
+        padding: 2 * $unit;
+        flex-grow: 1;
+    }
 }
 
-.bar {
-    background-color: #52928f;
-    height: 10px;
+.filter {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.filter .option {
+    background-color: #d0d0d0;
+    padding: 2px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
+.sentenceEditor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    margin: 8px 0 8px 0;
+}
+
+.sentenceEditor .word {
+    display: flex;
+    flex-direction: row;
+    background-color: $color-bg-light;
+    padding: 2 * $unit;
+    margin-right: $unit;
+    margin-bottom: 2 * $unit;
+    font-size: 1.5rem;
+}
+
+.sentenceEditor .word .form {
+    margin-left: 4px;
+    font-size: 80%;
+    align-self: center;
+}
+
+.sentenceEditor .space {
+    width: 4 * $unit;
+    margin-bottom: 2 * $unit;
+    background-color: $color-bg-inverted;
+    color: $color-fg-inverted;
+}
+
+.sentenceEditor .selected {
+    background-color: $color-bg-inverted;
+    color: $color-fg-inverted;
+}
+
+.sentenceEditor .sentenceEnd {
+    flex-grow: 1;
+}
+
+.wordSearch {    
+    .filter {
+        padding: $unit;
+        border-bottom: 1px solid $color-bg-inverted;
+        background-color: $color-bg-light;
+        display: flex;
+        
+        input[type=text] {
+            width: calc(100% - 4px);
+            margin: $unit;
+        }
+        
+        .option {
+            margin: 0;
+            margin-right: 2 * $unit;
+            padding: $unit;
+        }
+        
+        .option.active {
+            font-weight: bold;
+            color: black;
+        }
+    }
+    
+    .suggestions {
+        margin-top: 4 * $unit;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .suggestion {
+            display: flex;
+            flex-direction: row;
+            background-color: $color-bg-light;
+            padding: 2 * $unit;
+            margin-right: $unit;
+            margin-bottom: 2 * $unit;
+
+            .index {
+                background-color: darken($color-bg-light, 10%);
+                top: auto;
+            }
+
+            .form {
+                margin-left: 4px;
+                font-size: 80%;
+                align-self: center;
+            }
+
+            .count {
+                margin-left: 4px;
+                font-size: 80%;
+                align-self: center;
+            }
+        }
+    }
+}
+
+.buttonBar {
+    display: flex;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        padding-bottom: $unit;
+        margin: 0;
+    }
+}
+
+.index {
     display: inline-block;
+    background-color: $color-bg-light;
+    font-size: 60%;
+    border-radius: 4 * $unit;
+    margin-right: $unit;
+    text-align: center;
+    position: relative;
+    top: -0.25em;
+    width: 2em;
+    height: 2em;
+    
+    .number {
+        font-weight: 900;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
-table {
-    margin: 10pt 0;
+.inflections {
+    padding-top: 2 * $unit;
+    
+    .inflectionName {
+        font-weight: bold;
+        
+        .button {
+            font-weight: normal;
+            display: inline-block;
+        }
+    }
+    
+    .inherits {
+        font-style: italic;
+        
+        .clickable {
+            font-weight: bold;
+        }
+    } 
+    
+    table {        
+        width: 100%;
+        margin-bottom: 2 * $unit;
+        margin-top: 2 * $unit;
+        border-spacing: 0;
+        display: inline-block;
+        
+        td {
+            padding: $unit;
+            
+            .inherited {
+                color: $color-fg-light;
+                
+                .index {
+                }
+            }
+            
+            .form {
+                margin: $unit 0;
+            }
+            
+            .add {
+                @extend .index;
+                float: right;
+                margin: 0 (4 * $unit);
+                margin-top: 2px;
+                color: $color-fg-light;
+                background-color: inherit;
 
-    th {
-        overflow-x: hidden;
-        font-size: 8pt;
+                .number {
+                    font-weight: bold;
+                }
+            }
+
+            .add:hover {
+                background-color: $color-bg-light;
+            }
+
+            .index {
+                margin: 0 (4 * $unit);
+                margin-top: 2px;
+                color: $color-fg-light;
+                float: right;
+            }
+        }
+
+        tbody td:first-child {
+            font-style: italic;
+        }
+        
+        thead {
+            background-color: $color-bg-light;
+        }
+    }
+}
+
+.clickable:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+.facts {
+    .count {
+        margin-left: $unit;
+    }
+    
+    .count.insufficient {
+        font-weight: bold;
+    }
+}
+
+.addWord {
+    display: flex;
+    padding: 2 * $unit;
+    margin: 2 * $unit;
+    background-color: $color-bg-light;
+    align-items: stretch;
+
+    input {
+        flex-grow: 1
+    }
+    
+    select {
+        background-color: lighten($color-bg-light, 10%);
+        margin-left: 2 * $unit;
+        -webkit-appearance: menulist-button;
+    }
+    
+    .button {
+        margin: 0;
+        margin-left: 2 * $unit;
     }
 }
