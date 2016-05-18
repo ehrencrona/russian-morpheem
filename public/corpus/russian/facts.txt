@@ -159,6 +159,7 @@ grammar: -жить@1
 grammar: n@preppl
 grammar: adj@preppl
 жи--ть: live, inflect: -жить
+дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
 grammar: -жить@1pl
 grammar: ыйadj@preppl
@@ -170,8 +171,14 @@ grammar: -они@nom
 --мы: we, inflect: -мы
 grammar: -встречать@3pl
 grammar: -жить@2
+да--ть: n/a, inflect: -встречать
+возвраща--ть: n/a, inflect: -встречать
+grammar: masc1@dat
+grammar: fem1@dat
+grammar: fem3@datpl
 grammar: -мы@nom
 покуп--ок: n/a, inflect: -ребёнок
+grammar: -ребёнок@accpl
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
 --пить: drink, inflect: -пить
@@ -262,7 +269,6 @@ grammar: ойadj1@n
 иногда: sometimes
 несколько: a few
 --вы: you (plural), inflect: -вы
-дела--ть: n/a, inflect: -встречать
 музик--а: n/a, inflect: fem2
 grammar: -друг@pl
 grammar: -есть@3pl
@@ -279,3 +285,6 @@ grammar: -любить@3pl
 grammar: ойadj1@genm
 grammar: -мы@gen
 grammar: -любить@1pl
+ур--ок: n/a, inflect: -ребёнок
+французск--ий: n/a, inflect: ийadj
+grammar: femka@genpl

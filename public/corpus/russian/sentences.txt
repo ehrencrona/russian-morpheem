@@ -1077,4 +1077,32 @@
 я не делаю ошибка@pl: undefined
 здесь ошибка: undefined
 в этот@prepn книга@prep ошибка@pl: undefined
-в этот@prepn книга@prep много ошибка@genpl: undefined
+в этот@prepn книга@prep много ошибк<ок: undefined
+сейчас урок@nom французский@genn язык@gen: undefined
+знаешь французский@m язык@nom: undefined
+он профессор@nom французский@genm язык@gen: undefined
+я не вижу ошибку: undefined
+ты видишь ошибку: undefined
+где ошибка: undefined
+это книга без ошибк<ок: undefined
+здесь большая ошибка: undefined
+профессор@nom не видит ошибку: undefined
+он без ошибк<ок: undefined
+студент@pl делают ошибка@accpl: undefined
+я делаю ошибку: undefined
+что ты делаешь сегодня: undefined
+почему ты это делаешь: undefined
+я не делаю твою работу: undefined
+почему ты делаешь эту работу: undefined
+я делаю покупок@accpl: undefined
+что ты делаешь здесь: undefined
+я хочу жить в разный@preppl странах: undefined
+я студент@nom: undefined
+они давать@3pl кошка@dat еду: undefined
+профессор@nom дает студенту книгу: undefined
+она возвращать@3 книгу профессору: undefined
+она возвращать@3 машину мама@dat: undefined
+ты возвращать@2 машину родителям: undefined
+я возвращать@1 планшет@acc в магазин@acc: undefined
+я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
+я возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
