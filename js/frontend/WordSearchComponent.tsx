@@ -10,7 +10,7 @@ import InflectionsComponent from './InflectionsComponent';
 
 import { Component, createElement } from 'react';
 
-const NO_POS = 'none'
+let NO_POS = 'none'
 
 interface Props {
     corpus: Corpus,

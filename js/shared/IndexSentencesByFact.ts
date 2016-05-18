@@ -4,7 +4,7 @@ import InflectedWord from './InflectedWord';
 import Facts from './Facts';
 import Fact from './Fact';
 
-const OK_INTERVAL = 10  
+let OK_INTERVAL = 10  
 
 export interface FactSentences {
     easy: Sentence[],

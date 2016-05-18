@@ -109,7 +109,7 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
 }
 
 function expandLine(line, lineNumber) {
-    const regex = /\(([^)]+,[^)]+)\)/g;
+    let regex = /\(([^)]+,[^)]+)\)/g;
     let elements = line.split(regex)
     
     if (elements.length == 1) {
