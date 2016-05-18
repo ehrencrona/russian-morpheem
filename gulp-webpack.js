@@ -49,7 +49,7 @@ let lastWasFailure;
 gulp.task('js', (done) => {
     return gulp.src(webpackConfig.entry)
         .pipe(webpackStream(webpackConfig))
-        .pipe(gulp.dest(lib.taskDest('js')));
+        .pipe(gulp.dest(webpackConfig.output.filename));
 });
 
 gulp.task('js:watch', (done) => {
