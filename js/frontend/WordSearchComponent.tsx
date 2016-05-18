@@ -261,7 +261,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         
         return (<div className='wordSearch'>
             <div className='filter'>
-                <input type='text' value={ this.state.filterString } onChange={ (event) => {
+                <input type='text' autocapitalize='off' value={ this.state.filterString } onChange={ (event) => {
                     let target = event.target
                     
                     if (target instanceof HTMLInputElement) {                        
