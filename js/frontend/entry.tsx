@@ -8,6 +8,7 @@ import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectionFact from '../shared/InflectionFact';
 
+import 'drag-drop-webkit-mobile';
 import xr from 'xr';
 import TabSet from './TabSetComponent';
 import {render} from 'react-dom';
