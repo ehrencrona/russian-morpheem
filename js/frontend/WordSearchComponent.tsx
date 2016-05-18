@@ -19,7 +19,6 @@ interface Props {
 }
 
 interface State {
-    filterForm?: string,
     filterPos?: string,
     filterString?: string,
     filterWord?: Word
@@ -50,11 +49,11 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
         
     setWord(word: Word) {
-        this.setState({ filterWord: word, filterPos: null, filterForm: null })
+        this.setState({ filterWord: word, filterPos: null })
     }
 
     clearFilters() {
-        this.setState({ filterWord: null, filterString: '', filterForm: null, filterPos: null })
+        this.setState({ filterWord: null, filterString: '', filterPos: null })
     }
     
     selectSuggestion(suggestion: Suggestion) {
@@ -123,10 +122,6 @@ export default class WordSearchComponent extends Component<Props, State> {
                 
                 if (fact instanceof InflectedWord && this.state.filterWord) {
                     fact.visitAllInflections((inflected: InflectedWord) => {
-                        if (this.state.filterForm && this.state.filterForm != inflected.form) {
-                            return
-                        }
-                        
                         let inflectionFact = fact.inflection.getFact(inflected.form)
                         
                         let suggestion: Suggestion = {
@@ -173,24 +168,6 @@ export default class WordSearchComponent extends Component<Props, State> {
                         word: fact,
                         fact: fact,
                         inflection: inflection
-                    }
-                    
-                    let filterForm = this.state.filterForm
-                    
-                    if (filterForm) {
-                        if (!fact.inflection.hasForm(filterForm)) {
-                            return
-                        }
-                        
-                        let formFact = fact.inflection.getFact(filterForm)
-                        
-                        suggestion.word = fact.inflect(filterForm)
-                        suggestion.fact = fact.infinitive
-                        suggestion.inflection = {
-                            form: filterForm,
-                            fact: formFact,
-                            index: this.props.corpus.facts.indexOf(formFact)
-                        }
                     }
                     
                     suggestions.push(suggestion)
@@ -286,30 +263,12 @@ export default class WordSearchComponent extends Component<Props, State> {
                 this.props.corpus.inflections.getAllPos().concat(NO_POS).map((pos: string) => {
                     return <div key={pos} onClick={ () => 
                         this.setState({ filterPos: (pos == this.state.filterPos ? null : pos), 
-                            filterForm: null, filterWord: null })
+                            filterWord: null })
                     } className={ 'option' + (pos == this.state.filterPos ? ' active' : '') }>{pos}</div>
                 })
             }
             </div>
 
-            { (allForms.size > 0 ? 
-
-                <div className='filter'>
-                {
-                    Array.from(allForms).map((form: string) => {
-                        return <div key={form} onClick={ () => 
-                            this.setState({ filterForm: (form == this.state.filterForm ? null : form) })
-                        } className={'option' + (form == this.state.filterForm ? ' active' : '') }>{ form }</div>
-                    })
-                }
-                </div>
-                
-                :
-                
-                <div/>
-                
-            ) }
-            
             <div className='suggestions'>
 
             {
