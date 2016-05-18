@@ -48,8 +48,10 @@
     "grunt-filerev": "^2.1.2",
     "grunt-sass": "^1.0.0",
     "grunt-usemin": "^2.6.2",
+    "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-sass": "^2.3.1",
+    "gulp-webpack": "^1.5.0",
     "livereload": "^0.3.4",
     "node-notifier": "^4.5.0",
     "node-redis": "^0.1.7",
@@ -57,6 +59,7 @@
     "q": "^1.1.2",
     "request": "^2.48.0",
     "should": "^7.1.0",
+    "source-map-support": "^0.4.0",
     "uglify": "^0.1.0",
     "watch": "^0.13.0",
     "webpack-stream": "^3.2.0"
