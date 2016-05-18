@@ -252,11 +252,15 @@ ul {
   color: black;
   text-decoration: underline; }
 
-.facts .count {
-  margin-left: 4px; }
-
-.facts .count.insufficient {
-  font-weight: bold; }
+.facts {
+  padding-left: 8px; }
+  .facts .index, .facts .inflections table td .add, .inflections table td .facts .add {
+    cursor: pointer;
+    margin-right: 12px; }
+  .facts .count {
+    margin-left: 4px; }
+  .facts .insufficient {
+    font-style: italic; }
 
 .addWord {
   display: flex;

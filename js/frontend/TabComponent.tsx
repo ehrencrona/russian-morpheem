@@ -18,15 +18,21 @@ interface Props {
 interface State {
 }
 
-export default class TabSetComponent extends Component<Props, State> {
-    contentElement: Element 
+export default class TabComponent extends Component<Props, State> {
+    contentElement: Element
+    componentInstance
     
     componentWillUnmount() {
         this.props.tab.scrollTop = this.contentElement.scrollTop
+        this.props.tab.state = this.componentInstance.state
     }
-    
+
     componentDidMount() {
         this.contentElement.scrollTop = this.props.tab.scrollTop
+
+        if (this.props.tab.state) {
+            this.componentInstance.setState(this.props.tab.state)
+        }
     }
     
     render() {
@@ -48,7 +54,10 @@ export default class TabSetComponent extends Component<Props, State> {
             </div>
             <div className='content' ref={ (element: Element) => this.contentElement = element }>
             {
-                cloneElement(tab.component, { tab: tab })  
+                cloneElement(tab.component, { 
+                    tab: tab,
+                    ref: (componentInstance) => this.componentInstance = componentInstance 
+                })  
             }
             </div>
         </div>        

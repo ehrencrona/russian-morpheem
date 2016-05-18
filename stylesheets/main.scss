@@ -377,12 +377,19 @@ ul {
 }
 
 .facts {
+    padding-left: $unit * 2;
+
+    .index {
+        cursor: pointer;
+        margin-right: $unit * 3;
+    }
+
     .count {
         margin-left: $unit;
     }
-    
-    .count.insufficient {
-        font-weight: bold;
+
+    .insufficient {
+        font-style: italic;
     }
 }
 

@@ -20,6 +20,8 @@ interface State {
 let React = { createElement: createElement }
 
 export default class TabSetComponent extends Component<Props, State> {
+    lastTabIds: string[] = []
+    
     constructor(props) {
         super(props)
         
@@ -34,6 +36,10 @@ export default class TabSetComponent extends Component<Props, State> {
             ],
             first: 0
         }
+    }
+
+    tabExists(id: string) {
+        return this.state.tabs.find((tab) => tab.id == id)
     }
 
     closeTab(tab: Tab) {
@@ -79,6 +85,13 @@ export default class TabSetComponent extends Component<Props, State> {
             first: i,
             tabs: newTabs
         })
+        
+        this.lastTabIds = this.lastTabIds.filter((lastId) => lastId != id)
+        this.lastTabIds.push(id)
+    }
+    
+    getLastTabIds(): string[]  {
+        return this.lastTabIds
     }
     
     close(index) {
