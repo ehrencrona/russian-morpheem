@@ -2,22 +2,28 @@ module.exports = {
   entry: './js/frontend/entry.tsx',
   cache: true,
   output: {
-    filename: 'public/js/app.js'
+      filename: 'app.js',
+      path: '/home/ehrencrona/morpheem-jp/public/js'
   },
   resolve: {
     extensions: [ '', '.js', '.ts', '.tsx' ]
   },
   module: {
+    preLoaders: [
+	{
+            test: /\.tsx?$/,
+	    loader: 'ts-loader'
+	}
+    ],
     loaders: [
-      { test: /\.tsx?$/, loader: 'ts-loader' },
-      {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel', // 'babel-loader' is also a legal name to reference
-        query: {
-          presets: ['es2015']
-        }
-      }
+	{
+            test: /\.tsx?$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader',
+            query: {
+		presets: ['es2015']
+            }
+	}
     ]
   },
   devtool: 'source-map'
