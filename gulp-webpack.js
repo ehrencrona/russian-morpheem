@@ -58,6 +58,11 @@ gulp.task('js:watch', (done) => {
     // gulp-stream has problems with its error behavior so we use "raw" webpack
     // https://github.com/shama/webpack-stream/issues/34
     let compiler = webpack(webpackConfig, function (err, stats) {
+        if (err) {
+            console.log(err);
+            return
+        }
+        
         let jsonStats = stats.toJson() || {};
         let errors = jsonStats.errors || [];
 
