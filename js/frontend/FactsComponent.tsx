@@ -59,14 +59,28 @@ export default class FactsComponent extends Component<Props, State> {
                         if (fact instanceof InflectedWord) {
                             name = fact.toString();
                         }
+                        
+                        let onClick = () => this.props.tab.openTab(
+                            <Fact fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
+                            fact.toString(),
+                            fact.getId()
+                        );
 
                         return <li 
                             key={ fact.getId() }
                             className='clickable'
                             draggable='true'
-                            onDragOver={ (e) => e.preventDefault() }
+                            onDragOver={ (e) => {
+                                e.preventDefault()
+                                e.dataTransfer.dropEffect = 'move'
+                            } }
                             onDrop={ (e) => {
                                 let drag = JSON.parse(e.dataTransfer.getData('text'))
+
+                                // happens on ios when shimming drag'n'drop
+                                if (drag.fact == fact.getId()) {
+                                    onClick()
+                                }
 
                                 this.props.corpus.facts.move(
                                     this.props.corpus.facts.get(drag.fact),
@@ -77,11 +91,7 @@ export default class FactsComponent extends Component<Props, State> {
                             onDragStart={ (e) => { 
                                 e.dataTransfer.setData('text', JSON.stringify( { fact: fact.getId(), index: index } ));
                             } }
-                            onClick={ () => this.props.tab.openTab(
-                                <Fact fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
-                                fact.toString(),
-                                fact.getId()
-                            ) }>
+                            onClick={ onClick }>
                             <div className='index'><div className='number'>{ index + 1 }</div></div>
 
                             { name } 

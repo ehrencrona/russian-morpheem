@@ -206,15 +206,26 @@ export default class WordSearchComponent extends Component<Props, State> {
                 ) 
             }
             
+            let onClick = () => {
+                this.selectSuggestion(suggestion)
+            }
+
             return <div key={ suggestion.word.getId() } 
                 draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
                 className='suggestion'
-                onClick={ () => {
-                    this.selectSuggestion(suggestion)
-                } } 
+                onClick={ onClick } 
                 onDragStart={ (e) => {
                     e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
-                } }>
+                } }
+                onDrop={
+                    (e) => {
+                        let drag = JSON.parse(e.dataTransfer.getData('text'))
+                        
+                        if (drag.word == suggestion.word.getId()) {
+                            onClick()
+                        }
+                    }
+                }>
                 { (index >= 0 ?
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                     :

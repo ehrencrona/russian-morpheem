@@ -191,28 +191,41 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                     elements.push(<SpaceComponent onDrop={ drop(index) }/>)
                 }
                 
+                let onClick = () => {
+                    let insertMode = false
+                    
+                    if (this.state.selectedIndex == index) {
+                        insertMode = !this.state.insertMode                                
+                    }
+
+                    this.setState({ selectedIndex: index, insertMode: insertMode })
+                    
+                    if (!insertMode) {
+                        this.props.onWordSelect(word)
+                    }                            
+                }
+                
                 elements.push(
                     <WordComponent 
                         key={ index } 
                         word={ word }
                         selected={ index == this.state.selectedIndex && !this.state.insertMode }
-                        onClick={ () => {
-                            let insertMode = false
-                            
-                            if (this.state.selectedIndex == index) {
-                                insertMode = !this.state.insertMode                                
-                            }
-
-                            this.setState({ selectedIndex: index, insertMode: insertMode })
-                            
-                            if (!insertMode) {
-                                this.props.onWordSelect(word)
-                            }                            
-                        } }
+                        onClick={ onClick }
                         onDragStart={ (e) => { 
                             e.dataTransfer.setData('text', JSON.stringify( { word: word.getId(), index: index } ));
                         } }
-                        onDrop={ drop(index) }
+                        onDrop={
+                            (e) => {
+                                let drag = JSON.parse(e.dataTransfer.getData('text'))
+
+                                if (index == drag.index) {
+                                    onClick()
+                                }
+                                else {
+                                    drop(index)(e) 
+                                }                                  
+                            } 
+                        }
                     />)
                 
                 return elements
