@@ -173,7 +173,7 @@ grammar: -встречать@3pl
 grammar: -жить@2
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
-подар--ок: n/a, inflect: -ребёнок
+подар--ок: n/a, inflect: -подарок
 да--вать: n/a, inflect: -давать
 grammar: -ребёнок@dat
 grammar: masc1@dat

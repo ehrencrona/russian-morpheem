@@ -5,7 +5,8 @@ fem3[n]: nom: -ь, gen: -и, dat: -и, acc: -ь, instr: -ью, prep: -и, pl: и
 fem4[n]: accpl: -и, inherit: fem3
 femka[n]: genpl: <ок, inherit: fem2
 -статья[n]: nom: -я, acc: -ю, instr: -ёй, genpl: -ей, inherit: fem2
--ребёнок[n]: nom: -ок, gen: -ка, dat: -ку, acc: -ка, instr: -ом, prep: -ке, pl: ки, genpl: ок, datpl: кам, accpl: ки, instrpl: кой, preppl: ками
+-ребёнок[n]: nom: -ок, gen: -ка, dat: -ку, acc: -ка, instr: -ком, prep: -ке, pl: ки, genpl: ков, datpl: кам, accpl: ки, instrpl: ками, preppl: ках
+-подарок[n]: acc: ок, inherit: --ребёнок
 
 masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, genpl: ов, inherit: n 
 masc3[n]: gen: я, dat: ю, acc: я, instr: ем, prep: еле, inherit: fem3
