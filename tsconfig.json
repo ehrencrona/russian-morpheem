@@ -4,6 +4,7 @@
         "module": "commonjs",
         "outDir": "build/",
         "sourceMap": true,
-        "jsx": "react"
+        "jsx": "react",
+        "noImplicitUseStrict": true
     }
 }

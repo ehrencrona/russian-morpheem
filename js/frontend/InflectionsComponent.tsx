@@ -26,7 +26,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-const FIELDS = {
+let FIELDS = {
     v: {
         cols: [ 'singular', 'plural' ],
         rows: [ 'infinitive', '1st person', '2nd person', '3rd person'],
