@@ -34,14 +34,15 @@ let FIELDS = {
     } ,
     adj: {
         cols: [ 'm sg', 'n sg', 'f sg', 'plural' ],
-        rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+        rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short' ],
         forms: [
             ['m','n','f','pl'],
             ['genm','genn','genf','genpl'],
             ['datm','datn','datf','datpl'],
             [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
             ['instrm','instrn','instrf','instrpl'],
-            ['prepm','prepfn','prepf','preppl']
+            ['prepm','prepfn','prepf','preppl'],
+            ['shortm', 'shortf', 'shortn']
         ]
     },
     
