@@ -25,6 +25,12 @@ export default class TabSetComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
         
+        let lastString = localStorage.getItem('lastTabIds')
+        
+        if (lastString) {
+            this.lastTabIds = JSON.parse(lastString)
+        }
+
         let sentence = this.props.corpus.sentences.sentences[40]
         
         this.state = {
@@ -88,6 +94,12 @@ export default class TabSetComponent extends Component<Props, State> {
         
         this.lastTabIds = this.lastTabIds.filter((lastId) => lastId != id)
         this.lastTabIds.push(id)
+        
+        if (this.lastTabIds.length > 20) {
+            this.lastTabIds.splice(0, this.lastTabIds.length - 20)
+        }
+        
+        localStorage.setItem('lastTabIds', JSON.stringify(this.lastTabIds))
     }
     
     getLastTabIds(): string[]  {
