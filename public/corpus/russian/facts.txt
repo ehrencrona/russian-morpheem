@@ -52,7 +52,6 @@ grammar: fem3@acc
 grammar: -слышать@1
 grammar: -слышать@3
 мам--а: Mom, inflect: fem1
-grammar: -он@acc
 люб--ить: love, inflect: -любить
 grammar: -любить@1
 grammar: -дарить@3
@@ -62,15 +61,14 @@ grammar: -я@acc
 grammar: -ты@acc
 grammar: -ты@nom
 что: what
-grammar: -видеть@2
 grammar: -слышать@2
 --она: she, inflect: -она
 grammar: -она@nom
-grammar: -она@acc
 книг--а: book, inflect: fem2
 чита--ть: read, inflect: -встречать
 пи--сать: read, inflect: -писать
 grammar: -писать@1
+grammar: -видеть@2
 стать--я: article, inflect: -статья
 grammar: -статья@acc
 grammar: -статья@nom
@@ -101,6 +99,8 @@ grammar: -дарить@2
 погод--а: weather, inflect: fem1
 сегодня: today
 вчера: yesterday
+grammar: -он@acc
+grammar: -она@acc
 тв--ой: your, inflect: ойadj1
 д--ень: day, inflect: -день
 grammar: -день@nom
@@ -162,6 +162,7 @@ grammar: -жить@1
 grammar: n@preppl
 grammar: adj@preppl
 жи--ть: live, inflect: -жить
+grammar: -друг@pl
 дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
 grammar: -жить@1pl
@@ -178,7 +179,6 @@ grammar: -жить@2
 grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
-зам--ок: n/a, inflect: -подарок
 подар--ок: n/a, inflect: -подарок
 grammar: -подарок@acc
 grammar: adj@shortm
@@ -188,11 +188,13 @@ grammar: masc1@dat
 дар--ить: n/a, inflect: -дарить
 нужн--ый: n/a, inflect: ыйadj
 одалжива--ть: n/a, inflect: -встречать
+зам--ок: n/a, inflect: -подарок
 grammar: fem1@dat
 grammar: fem3@datpl
 grammar: -мы@nom
 покуп--ок: n/a, inflect: -ребёнок
 grammar: -ребёнок@accpl
+известн--ый: n/a, inflect: ыйadj
 ед--а: n/a, inflect: fem2
 --есть: eat, inflect: -есть
 --пить: drink, inflect: -пить
@@ -281,7 +283,6 @@ grammar: ойadj1@n
 несколько: a few
 --вы: you (plural), inflect: -вы
 музик--а: n/a, inflect: fem2
-grammar: -друг@pl
 grammar: -есть@3pl
 grammar: -хотеть@1
 grammar: fem3@genpl
@@ -302,3 +303,7 @@ grammar: femka@genpl
 деньг--а: n/a, inflect: fem2
 его: his
 её: her / their
+grammar: -ребёнок@prep
+grammar: -ребёнок@pl
+прекрасн--ый: n/a, inflect: ыйadj
+grammar: -встречать@1pl

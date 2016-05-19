@@ -1201,3 +1201,45 @@
 я@dat нужн<ен этот@m свитер@nom: undefined
 студенту нужн<ен телефон@nom профессора: undefined
 кто нужн<ен новый@m планшет@nom: undefined
+вот старый@m замок@nom: undefined
+в мой@m городе старый@m замок@nom: undefined
+в мой@m город@nom старый@m известный@m замок@nom: undefined
+это известный@m замок@nom: undefined
+я вижу старый@accinanm замок@acc: undefined
+я живу в старый@prepm замке: undefined
+в газета@prep вижу высокий@accinanm замок@acc: undefined
+этот@m замок@acc не старый@accinanm: undefined
+в парке красивый@m замок@nom: undefined
+олигарх@nom покупает большой@accinanm замок@acc: undefined
+профессор@nom покупает большой@accinanm замок@acc: undefined
+вот собака замка: undefined
+он любит старый@pl замок@pl: undefined
+ребёнок олигарха играет в замке: undefined
+в парке прекрасный@m замок@nom: undefined
+вот замок@nom города: undefined
+этот@m замок@nom очень известный@m: undefined
+он известный@m профессор@nom: undefined
+этот@m город@nom очень известный@m: undefined
+мы читаем известную книгу: undefined
+я читаю известную книгу: undefined
+вот известный@m университет@nom: undefined
+он работает в известный@prepm ресторане: undefined
+они известный@pl людь@pl: undefined
+они работает здесь: undefined
+они нет студентов: undefined
+они едят в ресторане: undefined
+они мой@pl другзья: undefined
+они мой@pl родитель@pl: undefined
+они не в ресторане: undefined
+они не знают я@acc: undefined
+мама встречает её: undefined
+я вижу её: undefined
+он её знает: undefined
+он любит её: undefined
+он встречает её сегодня: undefined
+ты не видишь её: undefined
+мама встречает его: undefined
+я вижу его: undefined
+она любит его: undefined
+она встречает его сегодня: undefined
+ты не видишь его: undefined
