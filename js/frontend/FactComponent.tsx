@@ -114,11 +114,6 @@ export default class FactComponent extends Component<Props, State> {
             
             <ul>
             { index.easy.map(toSentence) }
-            </ul>
-
-            <h3>Ok</h3> 
-            
-            <ul>
             { index.ok.map(toSentence) }
             </ul>
 

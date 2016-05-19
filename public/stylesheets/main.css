@@ -108,33 +108,30 @@ input[type=text] {
   flex-direction: row;
   flex-wrap: wrap;
   margin: 8px 0 8px 0; }
-
-.sentenceEditor .word {
-  display: flex;
-  flex-direction: row;
-  background-color: #e0e0e0;
-  padding: 8px;
-  margin-right: 4px;
-  margin-bottom: 8px;
-  font-size: 1.5rem; }
-
-.sentenceEditor .word .form {
-  margin-left: 4px;
-  font-size: 80%;
-  align-self: center; }
-
-.sentenceEditor .space {
-  width: 16px;
-  margin-bottom: 8px;
-  background-color: #808080;
-  color: #e0e0e0; }
-
-.sentenceEditor .selected {
-  background-color: #808080;
-  color: #e0e0e0; }
-
-.sentenceEditor .sentenceEnd {
-  flex-grow: 1; }
+  .sentenceEditor .word {
+    display: flex;
+    flex-direction: row;
+    background-color: #e0e0e0;
+    padding: 8px;
+    margin-right: 4px;
+    margin-bottom: 8px;
+    font-size: 1.5rem; }
+  .sentenceEditor .word.drag-target {
+    border-left: 4px solid #404040; }
+  .sentenceEditor .word .form {
+    margin-left: 4px;
+    font-size: 80%;
+    align-self: center; }
+  .sentenceEditor .space {
+    width: 16px;
+    margin-bottom: 8px;
+    background-color: #808080;
+    color: #e0e0e0; }
+  .sentenceEditor .selected {
+    background-color: #808080;
+    color: #e0e0e0; }
+  .sentenceEditor .sentenceEnd {
+    flex-grow: 1; }
 
 .wordSearch .filter {
   padding: 4px;
@@ -178,6 +175,8 @@ input[type=text] {
 
 .buttonBar {
   display: flex; }
+  .buttonBar .selected {
+    font-weight: bold; }
 
 ul {
   padding: 0;
@@ -186,6 +185,8 @@ ul {
     list-style-type: none;
     padding-bottom: 4px;
     margin: 0; }
+  ul li.drag-target {
+    border-top: 4px solid #404040; }
 
 .index, .inflections table td .add {
   display: inline-block;
@@ -260,7 +261,13 @@ ul {
   .facts .count {
     margin-left: 4px; }
   .facts .insufficient {
-    font-style: italic; }
+    font-size: 60%;
+    background-color: #e0e0e0;
+    padding: 2px 3px;
+    border-radius: 2px;
+    position: relative;
+    top: -2px;
+    margin-left: 1px; }
 
 .addWord {
   display: flex;

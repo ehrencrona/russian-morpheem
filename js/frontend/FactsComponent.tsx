@@ -66,13 +66,17 @@ export default class FactsComponent extends Component<Props, State> {
                 lastIds.indexOf(factIndex.fact.getId()) >= 0)
         }
 
+        let filterButton = (id, name) =>
+            <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
+                onClick={ () => { this.setState({ list: id }) }}>{ name }</div>
+
         return (<div>
                 <div className='buttonBar'>
                     <div className='button' onClick={ () => { this.setState({ add: !this.state.add }) }}>+ Word</div>
 
-                    <div className='button' onClick={ () => { this.setState({ list: MISSING }) }}>Missing</div>
-                    <div className='button' onClick={ () => { this.setState({ list: ALL }) }}>All</div>
-                    <div className='button' onClick={ () => { this.setState({ list: RECENT }) }}>Recent</div>
+                    { filterButton(MISSING, 'Missing') }
+                    { filterButton(ALL, 'All') }
+                    { filterButton(RECENT, 'Recent') }
                 </div>
 
                 {(
@@ -95,6 +99,7 @@ export default class FactsComponent extends Component<Props, State> {
                             indexOfFacts={ indexOfFacts }
                             corpus={ this.props.corpus }
                             tab={ this.props.tab }
+                            onMove={ () => this.forceUpdate() }
                             />
                     )
                 }
