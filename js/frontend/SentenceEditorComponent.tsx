@@ -37,7 +37,18 @@ interface WordProps extends ElementProps {
     word: Word
 }
 
-class WordComponent extends Component<WordProps, EmptyState> {
+interface WordState {
+    dragTarget: boolean
+}
+
+class WordComponent extends Component<WordProps, WordState> {
+    constructor(props) {
+        super(props)
+        
+        this.state = {
+            dragTarget: false
+        }
+    }
     
     render() {
         let form, word = this.props.word
@@ -49,10 +60,21 @@ class WordComponent extends Component<WordProps, EmptyState> {
             form = []
         } 
 
-        return <div draggable='true' className={'word' + ( this.props.selected ? ' selected' : '')} 
+        return <div draggable='true' className={'word' + 
+            (this.props.selected ? ' selected' : '') + 
+            (this.state.dragTarget ? ' drag-target' : '')} 
                 onClick={ this.props.onClick }
-                onDragOver={ (e) => e.preventDefault() }
-                onDrop={ this.props.onDrop } 
+                onDragOver={ (e) => {
+                    this.setState({ dragTarget: true })
+                    e.preventDefault()
+                } }
+                onDragLeave={ (e) => {
+                    this.setState({ dragTarget: false })
+                } }
+                onDrop={ (e) => {
+                    this.setState({ dragTarget: false })
+                    this.props.onDrop(e) 
+                } } 
                 onDragStart={ this.props.onDragStart }>
             <div>{ this.props.word.toString() }</div>
             { form }
@@ -89,6 +111,7 @@ class TrashComponent extends Component<ElementProps, EmptyState> {
         return <div className='trash button'
             onDragOver={ (e) => e.preventDefault() }
             onDrop={ this.props.onDrop } 
+            onClick={ this.props.onClick }
         >Trash</div>
     }
 }
@@ -255,6 +278,14 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                     this.deleteWord(drag.index)
                 }
             } }
+            
+            onClick={
+                () => {
+                    if (this.state.selectedIndex >= 0) {
+                        this.deleteWord(this.state.selectedIndex)
+                    }
+                }
+            }
         />
         
         </div>

@@ -73,10 +73,12 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         if (word.stem.substr(0, i) == filter.substr(0, i)) {
             let found
-            
+
             word.visitAllInflections((inflection: InflectedWord) => {
                 if (inflection.toString().substr(0, filter.length) == filter) {
-                    found = inflection
+                    if (!found || inflection.toString() == filter) {
+                        found = inflection
+                    }
                 }
             }, false)
             
@@ -104,14 +106,13 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         if (this.state.filterPos || this.state.filterString || this.state.filterWord) {
             let filterPos = this.state.filterPos
+            let filterString = this.state.filterString
 
             this.props.corpus.facts.facts.forEach((fact: Fact) => {
                 if (this.state.filterWord && fact instanceof Word && this.state.filterWord.getId() != fact.getId()) {
                     return
                 }
 
-                let filterString = this.state.filterString
-                
                 if (filterString) {
                     fact = this.factMatchingFilterString(fact, filterString)
                     
@@ -185,6 +186,16 @@ export default class WordSearchComponent extends Component<Props, State> {
                     })
                 }
             })
+
+            if (filterString) {
+                let i = suggestions.findIndex((s) => s.fact.toString() == filterString)
+                
+                if (i >= 0) {
+                    let exactMatch = suggestions.splice(i, 1)[0]
+                    
+                    suggestions.splice(0, 0, exactMatch)
+                }
+            }
         }
 
         function getFactOccurrences(fact: Fact) {

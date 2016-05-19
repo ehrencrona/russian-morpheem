@@ -167,38 +167,42 @@ input[type=text] {
     flex-wrap: wrap;
     
     margin: 8px 0 8px 0;
-}
+    
+    .word {
+        display: flex;
+        flex-direction: row;
+        background-color: $color-bg-light;
+        padding: 2 * $unit;
+        margin-right: $unit;
+        margin-bottom: 2 * $unit;
+        font-size: 1.5rem;
+    }
 
-.sentenceEditor .word {
-    display: flex;
-    flex-direction: row;
-    background-color: $color-bg-light;
-    padding: 2 * $unit;
-    margin-right: $unit;
-    margin-bottom: 2 * $unit;
-    font-size: 1.5rem;
-}
+    .word.drag-target {
+        border-left: $unit solid $color-fg;
+    }
 
-.sentenceEditor .word .form {
-    margin-left: 4px;
-    font-size: 80%;
-    align-self: center;
-}
+    .word .form {
+        margin-left: 4px;
+        font-size: 80%;
+        align-self: center;
+    }
 
-.sentenceEditor .space {
-    width: 4 * $unit;
-    margin-bottom: 2 * $unit;
-    background-color: $color-bg-inverted;
-    color: $color-fg-inverted;
-}
+    .space {
+        width: 4 * $unit;
+        margin-bottom: 2 * $unit;
+        background-color: $color-bg-inverted;
+        color: $color-fg-inverted;
+    }
 
-.sentenceEditor .selected {
-    background-color: $color-bg-inverted;
-    color: $color-fg-inverted;
-}
+    .selected {
+        background-color: $color-bg-inverted;
+        color: $color-fg-inverted;
+    }
 
-.sentenceEditor .sentenceEnd {
-    flex-grow: 1;
+    .sentenceEnd {
+        flex-grow: 1;
+    }
 }
 
 .wordSearch {    
@@ -261,6 +265,10 @@ input[type=text] {
 
 .buttonBar {
     display: flex;
+
+    .selected {
+        font-weight: bold
+    }
 }
 
 ul {
@@ -271,6 +279,10 @@ ul {
         list-style-type: none;
         padding-bottom: $unit;
         margin: 0;
+    }
+    
+    li.drag-target {
+        border-top: $unit solid $color-fg;
     }
 }
 
@@ -389,7 +401,13 @@ ul {
     }
 
     .insufficient {
-        font-style: italic;
+        font-size: 60%;
+        background-color: $color-bg-light;
+        padding: 2px 3px;
+        border-radius: 2px;
+        position: relative;
+        top: -2px;
+        margin-left: 1px;
     }
 }
 

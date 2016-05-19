@@ -194,11 +194,14 @@ export default class InflectionsComponent extends Component<Props, State> {
             console.log('Unknown PoS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
             return <div/>;
         }
-                
+
+        let children = this.props.corpus.inflections.inflections.filter(
+            (other) => this.props.inflection == other.inherits)
+
         return (
             <div className='inflections'>                
                 { this.props.inflection.inherits ?
-                    
+
                         <div className='inherits'>
                             inherits&nbsp;
                             <span className='clickable' onClick={ () => this.inflectionClicked(this.props.inflection.inherits) }>
@@ -209,6 +212,14 @@ export default class InflectionsComponent extends Component<Props, State> {
                     :
                     
                     [] }
+                { children.map((inflection) => 
+                    <div className='inherits'>
+                        inherited by&nbsp;
+                        <span className='clickable' onClick={ () => this.inflectionClicked(inflection) }>
+                            { inflection.id }
+                        </span>
+                    </div>)
+                }
                 <table>
                 { table.cols.length > 1 ?                            
                     <thead>

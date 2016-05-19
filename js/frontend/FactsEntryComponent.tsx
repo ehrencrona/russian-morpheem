@@ -17,16 +17,24 @@ interface Props {
     indexOfFacts : { [factId: string]: FactSentenceIndex },
     index: number,
     corpus: Corpus,
-    tab: Tab
+    tab: Tab,
+    onMove?: () => any
 }
 
 interface State {
-    add: boolean
+    add?: boolean,
+    dragTarget?: boolean
 }
 
 let React = { createElement: createElement }
 
 export default class FactsEntryComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+        
+        this.state = {}
+    }
+
     onClick(e) {
         let fact = this.props.fact
 
@@ -50,7 +58,11 @@ export default class FactsEntryComponent extends Component<Props, State> {
             this.props.corpus.facts.get(drag.fact),
             this.props.index)
 
-        this.forceUpdate()
+        if (this.props.onMove) {
+            this.props.onMove()
+        }
+
+        this.setState({ dragTarget: false })
     }
 
     render() {
@@ -66,11 +78,17 @@ export default class FactsEntryComponent extends Component<Props, State> {
             name = fact.toString();
         }
         
+        let left = 8 - (indexEntry.easy + indexEntry.ok)
+        
         return ( 
             <li 
+                className={ this.state.dragTarget ? 'drag-target' : '' }
                 onDragOver={ (e) => {
+                    this.setState({ dragTarget: true })
                     e.preventDefault()
-                    e.dataTransfer.dropEffect = 'move'
+                } }
+                onDragLeave={ (e) => {
+                    this.setState({ dragTarget: false })
                 } }
                 onDrop={ (e) => this.onDrop(e) }
                 onClick={ (e) => this.onClick(e) }>
@@ -84,9 +102,9 @@ export default class FactsEntryComponent extends Component<Props, State> {
                     <div className='number'>{ index + 1 }</div>
                 </div>
 
-                <span className={ 'clickable ' + ((indexEntry.easy + indexEntry.ok < 8) ? 'insufficient' : '') }>
-                    { name }
-                </span> 
+                <span className='clickable'>
+                    { name } { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
+                </span>
             </li>
         )
     }
