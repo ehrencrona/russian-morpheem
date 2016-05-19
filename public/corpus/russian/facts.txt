@@ -92,6 +92,7 @@ grammar: ойadj2@m
 квартир--а: apartment, inflect: fem1
 м--ой: my, inflect: ойadj1
 grammar: ойadj1@f
+вот: here (is)
 дорог--ой: expensive, inflect: ойadj2
 как--ой: which, inflect: ойadj2
 grammar: ойadj2@accinanm
@@ -141,6 +142,8 @@ grammar: -дарить@2pl
 grammar: -этот@accinanm
 grammar: -этот@f
 grammar: -этот@m
+слишком: too
+стар--ый: n/a, inflect: ыйadj
 grammar: -встречать@2pl
 трудн--ый: n/a, inflect: ыйadj
 красив--ый: n/a, inflect: ыйadj
@@ -165,15 +168,20 @@ grammar: -жить@1pl
 grammar: ыйadj@preppl
 grammar: ойadj1@preppl
 разн--ый: n/a, inflect: ыйadj
+grammar: ыйadj@accinanpl
 grammar: -жить@2pl
 --они: they, inflect: -они
 grammar: -они@nom
 --мы: we, inflect: -мы
 grammar: -встречать@3pl
 grammar: -жить@2
+grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
+зам--ок: n/a, inflect: -подарок
 подар--ок: n/a, inflect: -подарок
+grammar: -подарок@acc
+grammar: adj@shortm
 да--вать: n/a, inflect: -давать
 grammar: -ребёнок@dat
 grammar: masc1@dat
@@ -207,7 +215,6 @@ grammar: n@accpl
 письм--о: letter, inflect: neu2
 grammar: neu1@nom
 grammar: neu1@acc
-grammar: ыйadj@accinanpl
 grammar: adj@accanm
 grammar: adj@accinanpl
 много: many
@@ -221,7 +228,6 @@ grammar: fem1@genpl
 у: by; also indicates "to have"
 grammar: -я@gen
 grammar: -ты@gen
-слишком: too
 grammar: -она@gen
 grammar: fem3@gen
 grammar: fem2@gen
@@ -294,3 +300,5 @@ grammar: -дарить@1pl
 французск--ий: n/a, inflect: ийadj
 grammar: femka@genpl
 деньг--а: n/a, inflect: fem2
+его: his
+её: her / their

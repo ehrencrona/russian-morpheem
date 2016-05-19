@@ -60,11 +60,11 @@
 я вижу мышь@acc: I see a mouse.
 я вижу ребёнок@acc: I see a child.
 я ты@acc вижу на улица@prep: I see you on the street.
-я он@acc вижу на улица@prep: I see him on the street.
-я она@acc вижу на улица@prep: I see her on the street.
+я его вижу на улица@prep: I see him on the street.
+я её вижу на улица@prep: I see her on the street.
 я встречаю ты@acc на площадь@prep: I meet you on the square.
-я встречаю он@acc на площадь@prep: I meet him on the square.
-я встречаю она@acc на площадь@prep: I meet her on the square.
+я встречаю его на площадь@prep: I meet him on the square.
+я встречаю её на площадь@prep: I meet her on the square.
 я вижу собаку на улица@prep: I see a dog on the street.
 я вижу кошку на улица@prep: I see a cat on the street.
 я вижу лошадь@acc на улица@prep: I see a horse on the street.
@@ -88,8 +88,8 @@
 кто ты слышишь ?: Who do you hear?
 ты видишь магазин@acc ?: Do you see the shop?
 ты видишь машину ?: Do you see the car?
-ты видишь он@acc ?: Do you see him?
-ты видишь она@acc ?: Do you see her?
+ты видишь его ?: Do you see him?
+ты видишь её ?: Do you see her?
 что он видит ?: What does he see?
 что он слышит ?: What does he hear?
 кто он видит ?: Who does he see?
@@ -100,7 +100,7 @@
 кто видит он ?: Whо does he see?
 кто видит собака ?: Whо does the dog see?
 кто видит лошадь@nom ?: Whо does the horse see?
-кто видит он@acc ?: Whо sees him?
+кто видит его ?: Whо sees him?
 кто видит собаку ?: Whо sees the dog?
 кто видит кошку ?: Whо sees the cat?
 кто мой@m друг@nom ?: Who is my friend?
@@ -111,21 +111,21 @@
 я слышу лошадь@acc: I hear a horse.
 я слышу мышь@acc: I hear a mouse.
 я слышу ты@acc: I hear you.
-я слышу он@acc: I hear him.
-я слышу она@acc: I hear her.
+я слышу его: I hear him.
+я слышу её: I hear her.
 я слышу маму: I hear Mom.
 мама слышит мышь@acc: Mom hears a mouse.
 мама слышит ты@acc: Mom hears you.
-мама слышит он@acc: Mom hears him.
-мама слышит она@acc: Mom hears her.
+мама слышит его: Mom hears him.
+мама слышит её: Mom hears her.
 собака слышит я@acc: Тhe dog hears me.
 кошка слышит я@acc: Тhe cat hears me.
-собака слышит он@acc: Тhe dog hears him.
-кошка слышит он@acc: Тhe cat hears him.
+собака слышит его: Тhe dog hears him.
+кошка слышит его: Тhe cat hears him.
 мама слышит я@acc: Mom hears me.
 мама слышит ты@acc: Mom hears you.
 собака видит я@acc: Тhe dog sees me.
-собака видит он@acc: Тhe dog sees him.
+собака видит его: Тhe dog sees him.
 я встречаю собаку: I meet the dog.
 я встречаю кошку: I meet the cat.
 я встречаю лошадь@accpl: undefined
@@ -142,7 +142,7 @@
 в библиотека@prep мышь@nom: There is a mouse in the library.
 в университете мышь@nom: There is a mouse in the university.
 в парке лошадь@nom: There is a horse in the park.
-в парке ребёнок@nom: There is a child in the park.
+в парке ребёнок: There is a child in the park.
 я работаю в библиотека@prep: I work at the library.
 я работаю в университете: I work at the university.
 он работает в библиотека@prep: He works at the library.
@@ -158,11 +158,11 @@
 я сижу в парке: I sit in the park.
 он сидит в библиотека@prep: He sits at the library.
 он сидит в университете: He sits at the university.
-ребёнок@nom сидит на улица@prep: He sits on the street.
-ребёнок@nom сидит на площадь@prep: He sits on the square.
-ребёнок@nom сидит на газоне: He sits on the lawn.
-ребёнок@nom сидит в библиотека@prep: He sits at the library.
-ребёнок@nom сидит в университете: He sits at the university.
+ребёнок сидит на улица@prep: He sits on the street.
+ребёнок сидит на площадь@prep: He sits on the square.
+ребёнок сидит на газоне: He sits on the lawn.
+ребёнок сидит в библиотека@prep: He sits at the library.
+ребёнок сидит в университете: He sits at the university.
 в библиотека@prep мышь@nom: A mouse is in the library
 в университете мышь@nom: A mouse is in the university
 я работаю в библиотека@prep: I work at the library
@@ -172,9 +172,9 @@
 собака играет на улица@prep: The dog plays on the street
 собака играет на площадь@prep: The dog plays on the square
 собака играет на газоне: The dog plays on the lawn
-ребёнок@nom играет на улица@prep: The child plays on the street
-ребёнок@nom играет на площадь@prep: The child plays on the square
-ребёнок@nom играет на газоне: The child plays on the lawn
+ребёнок играет на улица@prep: The child plays on the street
+ребёнок играет на площадь@prep: The child plays on the square
+ребёнок играет на газоне: The child plays on the lawn
 я играю на улица@prep: I play on the street
 я играю на площадь@prep: I play on the square
 я играю на газоне: I play on the lawn
@@ -345,9 +345,9 @@
 он тут работает: He works here.
 кто ты ?: Who are you?
 ты тут: You are here.
-ты ребёнок@nom: You are a child.
+ты ребёнок: You are a child.
 я люблю ты@acc: I love you
-я люблю она@acc: I love her
+я люблю её: I love her
 ты я@acc любишь ?: Do you love me?
 он любит я@acc: He loves me
 она любит я@acc: She loves me
@@ -444,18 +444,18 @@
 где открытый@m магазин@nom: Where is there an open shop?
 на улица@prep открытая машина: Тhere is an unlocked car on the street.
 кошка за шторой: The cat is behind the curtain.
-ребёнок@nom за шторой: The child is behind the curtain.
+ребёнок за шторой: The child is behind the curtain.
 собака за дверью: The dog is behind the door.
-ребёнок@nom за дверью: The child is behind the door.
+ребёнок за дверью: The child is behind the door.
 собака за окном: А dog is behind the window.
-ребёнок@nom за окном: А child is behind the window.
+ребёнок за окном: А child is behind the window.
 за шторой окно@nom: There is a window behind the curtain.
 магазин@nom под площадью: The shop is under the square.
 в квартира@prep белая штора: The apartment has a white curtain.
 в квартира@prep чёрная штора: The apartment has a black curtain.
 в машина@prep штора@pl: The car has curtains.
 в квартира@prep открытый@accinanpl штора@pl: The apartment has open curtains.
-я он@acc встречаю в дверь@prep: I meet him at the door.
+я его встречаю в дверь@prep: I meet him at the door.
 мой@m друг@nom очень открытый@m человек@nom: My friend is a very outgoing person.
 за столом стул@nom: There is a chair behind the table.
 на столе газета@pl: There are magazines on the table.
@@ -581,7 +581,7 @@
 я встречаю человек@acc на площадь@prep: undefined
 он маленкий@m человек@nom: undefined
 белая кошка на стуле: undefined
-ребёнок@nom за мамой: undefined
+ребёнок за мамой: undefined
 за дверью большой@m человек@nom: undefined
 парк@nom за библиотекой: undefined
 в библиотека@prep дорогая книга: undefined
@@ -618,7 +618,7 @@
 почему ты не сидишь: undefined
 
 почему ты на кровать@prep: undefined
-почему ты она@acc не встречаешь: undefined
+почему ты её не встречаешь: undefined
 почему сегодня: undefined
 почему тут: undefined
 почему он здесь: undefined
@@ -641,19 +641,19 @@
 у студента слишком много книг: undefined
 у ты@gen дорогая машина: undefined
 у я@gen хорошая квартира: undefined
-почему у он@acc нет машина@gen: undefined
+почему у его нет машина@gen: undefined
 у студента много книг: undefined
 она гуляет у библиотека@gen: undefined
 письмо@nom лежит у окно@gen: undefined
-у друга быть@1 ребёнок@nom: undefined
-у мама@gen быть@1 ребёнок@nom: undefined
+у друга быть@1 ребёнок: undefined
+у мама@gen быть@1 ребёнок: undefined
 в центре много машин: undefined
 на площадь@prep нет машина@gen: undefined
 
 у я@gen нет большой@genf квартира@gen: undefined
 у я@gen нет квартира@gen: undefined
 в парке нет газона: undefined
-у она@gen нет ребёнок@gen: undefined
+у её нет ребёнок@gen: undefined
 в магазине нет окно@gen: undefined
 в комната@prep нет окно@gen: undefined
 
@@ -725,7 +725,7 @@
 я не олигарх@nom: undefined
 я не читаю книгу: undefined
 я не собака: undefined
-это мой@m новый@m профессор@nom: undefined
+это мой@m новый@m друг@nom: undefined
 здесь нет магазинов: undefined
 в этот@prepm городе нет газонов: undefined
 в площадь@prep много человеков: undefined
@@ -762,7 +762,7 @@
 я покупаю обудь@accpl и свитер@acc в магазине: undefined
 здесь много библиотека@gen: undefined
 у я@acc нет книга@gen: undefined
-у он@gen мама@gen много кошка@gen: undefined
+у его мама@gen много кошка@gen: undefined
 здесь нет людь@genpl: undefined
 здесь нет хороший@genpl людь@genpl: undefined
 в парке высокий@pl дерево@pl: undefined
@@ -801,8 +801,8 @@
 здесь нет открытый@genpl магазинов: undefined
 отличный@genpl ресторанов в этот@prepm городе нет: undefined
 цена@pl новый@genpl ресторанов высокий@pl: undefined
-у она@gen низкая собака: undefined
-у она@gen низкий@m собака: undefined
+у её низкая собака: undefined
+у её низкий@m собака: undefined
 вы знаете где моя машина: undefined
 ты знаешь где моя собака ?: undefined
 я не знаю франзуски: undefined
@@ -813,7 +813,7 @@
 я не понимаю этот@accinanm книгу: undefined
 этот@pl книга@pl дорогой@pl: undefined
 я не люблю этот@accinanpl свитер@accpl: undefined
-у она@gen хорошая голова: undefined
+у её хорошая голова: undefined
 этот@pl людь@pl хороший@pl другзья: undefined
 этот@pl людь@pl студент@pl: undefined
 я знаю этот@accanpl людь@accpl: undefined
@@ -838,8 +838,8 @@
 это белая кошка: undefined
 это чёрный@m мышь@nom: undefined
 я не знаю где магазин@acc: undefined
-я она@acc не знаю: undefined
-я не знаю олигарх@acc: undefined
+я её не знаю: undefined
+я не знаю где он: undefined
 я не знаю олигарх@accpl: undefined
 ты знаешь новый@accanm профессор@acc: undefined
 он знает где покупать отличный@accinanpl планшет@accpl: undefined
@@ -874,7 +874,7 @@
 я открываю дверь@accpl: undefined
 собака не знает как открывать дверь@acc: undefined
 я не знаю как покупать квартиру: undefined
-у она@acc много собак: undefined
+у её много собак: undefined
 у новый@genm дом@gen нет дверь@gen: undefined
 это белая лошадь@nom: undefined
 это чёрный@m свитер@nom: undefined
@@ -928,7 +928,7 @@
 я не знаю математику: undefined
 я не знаю франзуски: undefined
 я не знаю как ты это делаешь: undefined
-я не знаю как она@acc встречать: undefined
+я не знаю как её встречать: undefined
 он большой@m как лошадь@nom: undefined
 я слышу как она закрывает дверь@acc: undefined
 собака большая как лошадь@nom: undefined
@@ -947,8 +947,8 @@
 работать в ресторане трудная работа: undefined
 это трудная работа: undefined
 сегодня трудный@m день@nom: undefined
-он трудный@m ребёнок@nom: undefined
-он часто трудный@m ребёнок@nom: undefined
+он трудный@m ребёнок: undefined
+он часто трудный@m ребёнок: undefined
 сегодня трудный@m день@nom в работа@prep: undefined
 она читает очень трудный@accinanpl книга@pl: undefined
 у ты@gen какая работа: undefined
@@ -971,7 +971,7 @@
 они живут в этот@preppl квартирах: undefined
 на улицах машина@pl: undefined
 на улицах много машин: undefined
-людь@pl на улицах: undefined
+старый@pl людь@pl в ресторане: undefined
 на улицах много людь@genpl: undefined
 я людь@accpl не понимаю: undefined
 мой@pl другзья в магазинах: undefined
@@ -991,9 +991,9 @@
 я не живу в этот@preppl домах: undefined
 я не работаю в этот@preppl офисах: undefined
 она работает в этот@prepm офисе: undefined
-это она@gen офис@nom: undefined
-это он@gen офисе: undefined
-это она@gen дом@nom: undefined
+это её офис@nom: undefined
+это его офисе: undefined
+это её дом@nom: undefined
 магазин@nom в центре города: undefined
 в центре городов дорогой@accinanpl магазин@accpl: undefined
 моя работа в центре города: undefined
@@ -1023,7 +1023,7 @@
 какой@m твой@m дом@nom: undefined
 у ты@gen большой@m дом@nom: undefined
 где твой@m дом@nom: undefined
-он красивый@m ребёнок@nom: undefined
+он красивый@m ребёнок: undefined
 она красивая: undefined
 здесь красивый@m парк@nom: undefined
 мой@m друг@nom не красивый@m человек@nom: undefined
@@ -1078,7 +1078,7 @@
 здесь ошибка: undefined
 в этот@prepn книга@prep ошибка@pl: undefined
 в этот@prepn книга@prep много ошибк<ок: undefined
-сейчас урок@nom французский@genn язык@gen: undefined
+сейчас урок французский@genn язык@gen: undefined
 знаешь французский@m язык@nom: undefined
 он профессор@nom французский@genm язык@gen: undefined
 я не вижу ошибку: undefined
@@ -1105,7 +1105,7 @@
 ты возвращаешь машину родителям: undefined
 я возвращаю планшет@acc в магазин@acc: undefined
 я возвращаю мой@accinanm свитер@acc в магазин@acc: undefined
-я возвращаю мой@accinanm свитер@acc в магазин@acc: undefined
+вы возвращаете мой@accinanm свитер@acc в магазин@acc: undefined
 это тут: undefined
 какая в комната@prep штора: undefined
 открытый@m: undefined
@@ -1152,3 +1152,52 @@
 мама дарит ребёнку свитер@acc: undefined
 мама дарит ребёнку собаку: undefined
 она дарит дорогой@accinanm подарок@acc ребёнку: undefined
+я не хочу подарок@acc: undefined
+я покупаю дорогой@accinanm подарок@acc: undefined
+телефон@nom это подарок@nom: undefined
+подарок@nom лежит на столе: undefined
+она покупает подарок@acc мама@dat: undefined
+вот моя белая собака: undefined
+вот моя машина: undefined
+она знает где лежит маленкий@m подарок@nom: undefined
+вот хороший@m магазин@nom: undefined
+вот мой@m красивый@m подарок@nom: undefined
+вот дорогой@m подарок@nom: undefined
+вот хорошая книга: undefined
+вот моя мама: undefined
+вот это моя машина: undefined
+вот это хороший@m университет@nom: undefined
+вот мой@m профессор@nom: undefined
+мама возвращает книгу в библиотеку: undefined
+профессор@nom возвращает статью студенту: undefined
+где твоя старая квартира: undefined
+вы возвращаете ребёнок@gen мама@dat: undefined
+я люблю старый@accinanpl книга@accpl: undefined
+он старый@m друг@nom: undefined
+я возвращаю книгу в магазин@acc: undefined
+я не старый@m: undefined
+мой@pl родитель@pl не старый@pl: undefined
+я живу в старый@prepm доме: undefined
+моя машина слишком старая: undefined
+моя машина старая: undefined
+моя мама старая: undefined
+она возвращает подарок@acc в магазин@acc: undefined
+у его старый@m телефон@nom: undefined
+в центре старый@m магазин@nom: undefined
+вы покупаете подарок@acc другу: undefined
+эта газета старая: undefined
+ты покупаешь подарок@acc в магазине: undefined
+вот улица где я живу: undefined
+подарок@acc: undefined
+вот моя улица: undefined
+людь@pl гуляют в парке: undefined
+людь@pl сидит на газоне: undefined
+ты даришь профессору подарок@acc: undefined
+я его не знаю: undefined
+нужный@accinanm: undefined
+мама@dat нужн<ен шоколад@nom: undefined
+студенту нужн<ен этот@m журнал@nom: undefined
+я@dat не нужн<ен этот@m журнал@nom: undefined
+я@dat нужн<ен этот@m свитер@nom: undefined
+студенту нужн<ен телефон@nom профессора: undefined
+кто нужн<ен новый@m планшет@nom: undefined
