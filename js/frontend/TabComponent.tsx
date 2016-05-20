@@ -28,11 +28,9 @@ export default class TabComponent extends Component<Props, State> {
     }
 
     componentDidMount() {
-        if (this.componentInstance) {            
-            if (this.props.tab.state) {
-                this.componentInstance.setState(this.props.tab.state)
-            }
-            
+        if (this.props.tab.state) {
+            this.componentInstance.setState(this.props.tab.state)
+
             let oldDidUpdate = this.componentInstance.componentDidUpdate
             
             this.componentInstance.componentDidUpdate = () => {            
