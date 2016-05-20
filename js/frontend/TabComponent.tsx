@@ -28,20 +28,22 @@ export default class TabComponent extends Component<Props, State> {
     }
 
     componentDidMount() {
-        if (this.props.tab.state) {
-            this.componentInstance.setState(this.props.tab.state)
-        }
-        
-        let oldDidUpdate = this.componentInstance.componentDidUpdate
-        
-        this.componentInstance.componentDidUpdate = () => {            
-            this.contentElement.scrollTop = this.props.tab.scrollTop
-            
-            if (oldDidUpdate) {
-                oldDidUpdate.apply(this, arguments)
+        if (this.componentInstance) {            
+            if (this.props.tab.state) {
+                this.componentInstance.setState(this.props.tab.state)
             }
             
-            this.componentInstance.componentDidUpdate = oldDidUpdate
+            let oldDidUpdate = this.componentInstance.componentDidUpdate
+            
+            this.componentInstance.componentDidUpdate = () => {            
+                this.contentElement.scrollTop = this.props.tab.scrollTop
+                
+                if (oldDidUpdate) {
+                    oldDidUpdate.apply(this, arguments)
+                }
+                
+                this.componentInstance.componentDidUpdate = oldDidUpdate
+            }
         }
     }
     
