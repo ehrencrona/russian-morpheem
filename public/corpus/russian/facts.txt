@@ -68,6 +68,7 @@ grammar: -она@nom
 grammar: y-esh-et@1
 стать--я: article, inflect: -статья
 grammar: -статья@acc
+grammar: -статья@nom
 grammar: y-esh-et@3
 газет--а: newspaper, inflect: fem1
 журнал--: magazine, inflect: masc1
@@ -75,7 +76,6 @@ grammar: masc1@acc
 встреча--ть: meet, inflect: -встречать
 гуля--ть: take a walk, inflect: -встречать
 отличн--ый: great, inflect: ыйadj
-grammar: -статья@nom
 друг--: friend, inflect: -друг
 студент--: student, inflect: masc1
 центр--: center (of city), inflect: masc1
@@ -121,6 +121,7 @@ grammar: fem3@pl
 открыт--ый: open, inflect: ыйadj
 grammar: n@pl
 grammar: ойadj1@accf
+длинн--ый: n/a, inflect: ыйadj
 grammar: ойadj1@pl
 grammar: fem2@pl
 нов--ый: new, inflect: ыйadj

@@ -698,7 +698,7 @@
 в магазин@prep много свитер@genpl: undefined
 в библиотека@prep много книга@genpl: undefined
 в университет@prep много профессор@genpl: undefined
-он@nom читать@3 журнал@acc: undefined
+что в журнал@prep сегодня: undefined
 дверь@prep в магазин@prep открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
 он@nom покупать@3 новый@pl обудь@accpl: undefined
@@ -803,7 +803,7 @@
 цена@pl новый@genpl ресторан@genpl высокий@pl: undefined
 у она@gen низкий@f собака@nom: undefined
 у она@gen низкий@m собака@nom: undefined
-вы знать@2pl где мой@f машина@nom: undefined
+вы@nom знать@2pl где мой@f машина@nom: undefined
 ты@nom знать@2 где мой@f собака@nom ?: undefined
 я@nom не знать@1 франзуски: undefined
 профессор@nom знать@3 математика@nom: undefined
@@ -845,21 +845,21 @@
 он@nom знать@3 где покупать@inf отличный@accinanpl планшет@accpl: undefined
 он@nom знать@3 где я@nom жить@1: undefined
 кто знать@3 где мой@m телефон@nom: undefined
-кто вы: undefined
-что вы читать@2pl: undefined
-что вы видеть@2pl ?: undefined
-вы видеть@2pl машина@acc ?: undefined
-какой@accinanm город@acc вы любить@2pl: undefined
-в какой@m день@nom вы работать@2pl: undefined
-вы знать@2pl где магазин@nom: undefined
-вы знать@2pl мой@accanm профессор@acc: undefined
-почему вы сидеть@2pl здесь: undefined
-вы сидеть@2pl на стул@prep: undefined
-вы не любить@2pl кошка@accpl: undefined
-вы не любить@2pl борщ@acc: undefined
-кто вы любить@2pl ?: undefined
-что вы любить@2pl ?: undefined
-почему вы я@acc не любить@2pl: undefined
+кто вы@nom: undefined
+что вы@nom читать@2pl: undefined
+что вы@nom видеть@2pl ?: undefined
+вы@nom видеть@2pl машина@acc ?: undefined
+какой@accinanm город@acc вы@nom любить@2pl: undefined
+в какой@m день@nom вы@nom работать@2pl: undefined
+вы@nom знать@2pl где магазин@nom: undefined
+вы@nom знать@2pl мой@accanm профессор@acc: undefined
+почему вы@nom сидеть@2pl здесь: undefined
+вы@nom сидеть@2pl на стул@prep: undefined
+вы@nom не любить@2pl кошка@accpl: undefined
+вы@nom не любить@2pl борщ@acc: undefined
+кто вы@nom любить@2pl ?: undefined
+что вы@nom любить@2pl ?: undefined
+почему вы@nom я@acc не любить@2pl: undefined
 профессор@nom закрывать@3 книга@acc: undefined
 он@nom закрывать@3 магазин@acc: undefined
 я@nom закрывать@1 дверь@acc: I close the door.
@@ -891,8 +891,8 @@
 цена@pl высокий@pl: undefined
 здесь цена@pl высокий@pl: undefined
 какой@pl машина@pl хороший@pl: undefined
-вы знать@2pl как в этот@prepm ресторан@prep еда@nom: undefined
-вы знать@2pl где центр@nom: undefined
+вы@nom знать@2pl как в этот@prepm ресторан@prep еда@nom: undefined
+вы@nom знать@2pl где центр@nom: undefined
 он@nom жить@3 как собака@nom: undefined
 он@nom работать@3 как лошадь@nom: undefined
 этот@f машина@nom как дом@nom дорогой@m: undefined
@@ -904,8 +904,8 @@
 в ресторан@prep он@nom есть@3 лошадь@acc: undefined
 я@nom не есть@1 лошадь@acc: undefined
 мой@f кошка@nom не есть@3 мышь@accpl: undefined
-почему вы любить@2pl сидеть@inf в парк@prep: undefined
-почему вы любить@2pl этот@accinanm ресторан@acc: undefined
+почему вы@nom любить@2pl сидеть@inf в парк@prep: undefined
+почему вы@nom любить@2pl этот@accinanm ресторан@acc: undefined
 где хороший@m ресторан@nom: undefined
 ты@nom знать@2 хороший@accinanm ресторан@acc: undefined
 это отличный@m ресторан@nom: undefined
@@ -1009,7 +1009,7 @@
 я@nom любить@1 мой@f работа@nom: undefined
 в этот@preppl дом@preppl жить@3pl студент@pl: undefined
 в этот@preppl дорогой@preppl дом@preppl жить@3pl олигарх@preppl: undefined
-в какой@preppl дом@preppl вы жить@2pl: undefined
+в какой@preppl дом@preppl вы@nom жить@2pl: undefined
 в какой@preppl город@preppl ты@nom хотеть@2 жить@inf: undefined
 я@nom здесь не знать@1 много людь@genpl: undefined
 я@nom не любить@1 этот@accanpl людь@pl: undefined
@@ -1053,7 +1053,7 @@
 мой@pl родитель@pl гулять@3pl в парк@prep: undefined
 мой@pl родитель@pl хороший@pl людь@pl: undefined
 твой@pl родитель@pl любить@3pl кошка@accpl: undefined
-вы не мой@pl родитель@pl: undefined
+вы@nom не мой@pl родитель@pl: undefined
 как ты@nom: undefined
 в какой@prepm офис@prep ты@nom работать@2: undefined
 здесь нет твой@genm офис@gen: undefined
@@ -1105,7 +1105,7 @@
 ты@nom возвращать@2 машина@acc родитель@datpl: undefined
 я@nom возвращать@1 планшет@acc в магазин@acc: undefined
 я@nom возвращать@1 мой@accinanm свитер@acc в магазин@acc: undefined
-вы возвращать@2pl мой@accinanm свитер@acc в магазин@acc: undefined
+вы@nom возвращать@2pl мой@accinanm свитер@acc в магазин@acc: undefined
 это тут: undefined
 какой@f в комната@prep штора@nom: undefined
 открытый@m: undefined
@@ -1136,7 +1136,7 @@
 они@nom давать@3pl деньга@pl родитель@datpl: undefined
 я@nom давать@1 шоколад@acc друг@dat: undefined
 профессор@nom давать@3 студент@dat книга@acc: undefined
-вы давать@2pl собака@dat еда@acc: undefined
+вы@nom давать@2pl собака@dat еда@acc: undefined
 родитель@pl давать@3pl ребёнок@dat стул@acc: undefined
 родитель@pl не давать@3pl ребёнок@dat шоколад@acc: undefined
 ты@nom давать@2 студент@dat работа@acc: undefined
@@ -1147,8 +1147,8 @@
 я@nom не давать@1 еда@acc собака@dat: undefined
 она@nom дарить@3 родитель@datpl книга@acc: undefined
 она@nom дарить@3 друг@dat шоколад@acc: undefined
-что вы дарить@2pl профессор@dat: undefined
-что вы дарить@2pl мама@dat: undefined
+что вы@nom дарить@2pl профессор@dat: undefined
+что вы@nom дарить@2pl мама@dat: undefined
 мама@nom дарить@3 ребёнок@dat свитер@acc: undefined
 мама@nom дарить@3 ребёнок@dat собака@acc: undefined
 она@nom дарить@3 дорогой@accinanm подарок@acc ребёнок@dat: undefined
@@ -1171,7 +1171,7 @@
 мама@nom возвращать@3 книга@acc в библиотека@acc: undefined
 профессор@nom возвращать@3 статья@acc студент@dat: undefined
 где твой@f старый@f квартира@nom: undefined
-вы возвращать@2pl ребёнок@gen мама@dat: undefined
+вы@nom возвращать@2pl ребёнок@gen мама@dat: undefined
 я@nom любить@1 старый@accinanpl книга@accpl: undefined
 он@nom старый@m друг@nom: undefined
 я@nom возвращать@1 книга@acc в магазин@acc: undefined
@@ -1184,7 +1184,7 @@
 она@nom возвращать@3 подарок@acc в магазин@acc: undefined
 у он@gen старый@m телефон@nom: undefined
 в центр@prep старый@m магазин@nom: undefined
-вы покупать@2pl подарок@acc друг@dat: undefined
+вы@nom покупать@2pl подарок@acc друг@dat: undefined
 этот@f газета@nom старый@f: undefined
 ты@nom покупать@2 подарок@acc в магазин@prep: undefined
 вот улица@nom где я@nom жить@1: undefined
@@ -1320,7 +1320,21 @@
 я@nom хотеть@1 машина@acc: undefined
 она@nom хотеть@3 ребёнок@acc: undefined
 мы@nom жить@1pl здесь: undefined
-где вы жить@2pl: undefined
-вы жить@2pl здесь: undefined
-вы жить@2pl в центр@prep: undefined
-вы жить@2pl в хороший@prepf квартира@prep: undefined
+где вы@nom жить@2pl: undefined
+вы@nom жить@2pl здесь: undefined
+вы@nom жить@2pl в центр@prep: undefined
+вы@nom жить@2pl в хороший@prepf квартира@prep: undefined
+ты@nom читать@2 журнал@acc ?: undefined
+в газета@prep хороший@f статья@nom: undefined
+он@nom читать@3 длинный@accf статья@acc: undefined
+он@nom читать@3 длинный@accf книга@acc: undefined
+это длинный@f улица@nom: undefined
+в журнал@prep длинный@f статья@nom: undefined
+профессор@nom писать@3 длинный@accf статья@acc: undefined
+она@nom писать@3 длинный@accf статья@acc: undefined
+я@nom не читать@1 длинный@accinanpl книга@accpl: undefined
+это длинный@f книга@nom: undefined
+я@nom любить@1 длинный@accinanpl книга@accpl: undefined
+машина@nom олигарх@gen длинный@f: undefined
+длинный@f книга@nom на стул@prep: undefined
+длинный@f статья@nom в журнал@prep: undefined
