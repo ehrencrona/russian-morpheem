@@ -26,7 +26,7 @@ export default function parseInflectionFile(data) {
             }
 
             let form = elements[0].trim()
-            
+
             if (form == 'inherit') {
                 inherits = ending.trim()
             }

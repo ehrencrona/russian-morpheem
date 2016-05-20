@@ -23,11 +23,11 @@ export default class Inflection {
         
         if (json.inherits) {
             let parent = inflections.get(json.inherits)
-            
+
             if (!parent) {
                 throw new Error('Unknown parent ' + json.inherits)
             }
-            
+
             result.inherit(parent)
         }
         
@@ -109,16 +109,32 @@ export default class Inflection {
         }
     }
 
-    inflect(word: InflectedWord, stem, form: string) {
+    getInflectedForm(word: InflectedWord, form: string) {
+        let ending = this.getEnding(form)
+        let jp
+
+        if (ending[0] == '<') {
+            jp = word.stem.substr(0, word.stem.length-1) + ending.substr(1)
+        }
+        else {
+            jp = word.stem + ending
+        }
+        
+        return jp
+    }
+
+    inflect(word: InflectedWord, form: string) {
+        let jp = this.getInflectedForm(word, form)
+        
         let iw = new InflectedWord(
-            stem + this.getEnding(form), word.infinitive, form)
+            jp, word.infinitive, form)
             .requiresFact(this.getFact(form))
 
         iw.setInflection(this)
-        
+
         return iw
     }
-    
+
     getAllForms(): string[] {
         let result = {}
         let at: Inflection = this
@@ -131,19 +147,19 @@ export default class Inflection {
         
         return Object.keys(result)
     }
-    
-    inflectAll(dictionaryForm: InflectedWord, stem: string, excludeInherited: boolean, exclude: any): InflectedWord[] {
+
+    inflectAll(dictionaryForm: InflectedWord, excludeInherited: boolean, exclude: any): InflectedWord[] {
         if (dictionaryForm.form != this.defaultForm) {
             throw new Error('Wrong default form')
         }
 
         let result: InflectedWord[] = []
-        
+
         exclude = exclude || {}
 
         let at: Inflection = this
-        
-        do {            
+
+        do {
             for (let form in at.endings) {
                 if (exclude[form]) {
                     continue
@@ -157,7 +173,7 @@ export default class Inflection {
                     inflectedWord = dictionaryForm
                 }
                 else {
-                    inflectedWord = this.inflect(dictionaryForm, stem, form)
+                    inflectedWord = this.inflect(dictionaryForm, form)
                 }
 
                 result.push(inflectedWord);

@@ -7,14 +7,7 @@ import Words from './Words';
 import Facts from './Facts';
 
 function wordToString(word: Word, words: Words) {
-    let simpleId = word.jp + (word.classifier ? '[' + word.classifier + ']' : '')
-
-    if (words.get(simpleId)) {
-        return simpleId
-    }
-    else {
-        return word.getId()   
-    }
+    return word.getId()   
 }
 
 export function sentenceToString(sentence: Sentence, words: Words) {

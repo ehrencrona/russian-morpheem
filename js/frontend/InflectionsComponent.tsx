@@ -61,7 +61,7 @@ let FIELDS = {
     pron: {
         cols: [ '' ],
         rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-        forms: [ ['nom'], ['gen'], ['dat'], ['instr'], ['prep'] ]
+        forms: [ ['nom'], ['gen'], ['dat'], ['acc'], ['instr'], ['prep'] ]
     }
 };
 

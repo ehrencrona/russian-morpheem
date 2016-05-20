@@ -18,22 +18,29 @@ masc2[n]: pl: а, accpl: а, inherit: masc1
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
 -встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют
--дарить[v]: inf: ить, 1: ю, 2: ишь, 3: ит, 1pl: им, 2pl: ите, 3pl: ят
--любить[v]: 1: лю, inherit: --дарить
 
--видеть[v]: inf: -еть, 1: -<жу, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ят
--слышать[v]: inf: -ать, 1: -у, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ат
--писать[v]: inf: -сать, 1: -шу, 2: -шешь, 3: -шет, 1pl: -ем, 2pl: -ете, 3pl: -ут
+it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите
+-дарить[v]: inf: ить, 1: ю, 3pl: ят, inherit: it-im-ite 
+-видеть[v]: inf: -еть, 1: -<жу, 3pl: -ят, inherit: it-im-ite
+-слышать[v]: inf: -ать, 1: -у, 3pl: -ат, inherit: it-im-ite
+
+y-esh-et[v]: inf: ****, 1: -у, 2: -ешь, 3: -ет
+-писать[v]: inf: -<сать, 1pl: -ем, 2pl: -ете, 3pl: -ут, inherit: y-esh-et
+-хотеть[v]: inf: <теть, 1pl: <тим, 2pl: <тите, 3pl: <тят, inherit: y-esh-et
+-сказать[v]: inf: <зать, 2pl: и, 3pl: ите, inherit: y-esh-et
+
+yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте
+-жить[v]: inf: -<ть, 1: -у, 3pl: -ут, inherit: yo-yosh-yot
+-давать[v]: inf: вать, 1: ю, 3pl: ют, inherit: yo-yosh-yot
+
+-любить[v]: 1: лю, inherit: --дарить
 -быть[v]: inf: быть, 1: есть
--жить[v]: inf: -ть, 1: -ву, 2: -вёшь, 3: вёт, 1pl: -вём, 2pl: -вёте, 3pl: -вут
 
 -есть[v]: inf: есть, 1: ем, 2: ешь, 3: ест, 1pl: едим, 2pl: едите, 3pl: едят
 -пить[v]: inf: пить, 1: пию, 2: пьёшь, 3: пьёт, 1pl: пьём, 2pl: пьёте, 3pl: пьют
 
--давать[v]: inf: вать, 2: ёшь, 3: ёт, 1pl: ём, 2pl: ёте, inherit: --встречать
 
--хотеть[v]: inf: теть, 1: чу, 2: чешь, 3: чет, 1pl: тим, 2pl: тите, 3pl: тят	
--сказать[v]: inf: <зать, 1: у, 2: ешь, 3: ет, 2pl: и, 3pl: ите  
+
 
 adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о 
 

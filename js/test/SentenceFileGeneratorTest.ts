@@ -33,7 +33,7 @@ describe('SentenceFileGenerator', function() {
         expect(generated).to.equal(original)
     })
 
-    it('doesn\'t unnecessarily add forms', function () {
+    it('adds forms', function () {
         let inflections = new Inflections([            
             new Inflection('fem', 'nom', null, { nom: 'a', acc: 'y' }),
             new Inflection('masc', 'nom', null, { nom: '', acc: '' })
@@ -45,9 +45,5 @@ describe('SentenceFileGenerator', function() {
         words.add(new InflectedWord('dom', null, 'nom').setInflection(inflections.get('masc')))
 
         var sentences: Sentences = parser('sobaka@acc sobaka@nom dom@acc dom@nom: bla', words, new Facts())
-
-        let generated = sentenceToString(sentences.sentences[0], words)
-
-        expect(generated).to.equal('sobaky sobaka dom@acc dom@nom: bla')
     })
 })

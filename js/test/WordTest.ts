@@ -52,4 +52,21 @@ describe('Word', function() {
             expect(after.inflection.id).to.equal(before.inflection.id)
         }
     })
+    
+    it('converts inflected with < to JSON and back', function () {
+        let inflection = 
+            new Inflection('скаж<зать', 'nom', null, 
+                { inf: '<зать', 1: 'у', past: '<зал', })
+
+        let inflections = new Inflections([
+            inflection
+        ])
+
+        let before = new InflectedWord('скаж<зать', null, 'inf').setInflection(inflection)
+
+        let after = InflectedWord.fromJson(before.toJson(), inflections);
+
+        expect(after.getId()).to.equal(before.getId())
+        expect(after.toString()).to.equal(before.toString())
+    })
 })

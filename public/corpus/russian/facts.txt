@@ -41,7 +41,7 @@ grammar: -ребёнок@nom
 площад--ь: square, inflect: fem3
 grammar: fem3@prep
 сид--еть: sit, inflect: -видеть
-grammar: -видеть@3
+grammar: it-im-ite@3
 grammar: -видеть@1
 парк--: park, inflect: masc1
 вид--еть: see, inflect: -видеть
@@ -50,28 +50,25 @@ grammar: fem3@acc
 кто: who
 слыш--ать: hear, inflect: -слышать
 grammar: -слышать@1
-grammar: -слышать@3
 мам--а: Mom, inflect: fem1
 люб--ить: love, inflect: -любить
 grammar: -любить@1
-grammar: -дарить@3
 grammar: -ребёнок@acc
 grammar: -я@acc
 --ты: you, inflect: -ты
 grammar: -ты@acc
 grammar: -ты@nom
 что: what
-grammar: -слышать@2
+grammar: it-im-ite@2
 --она: she, inflect: -она
 grammar: -она@nom
 книг--а: book, inflect: fem2
 чита--ть: read, inflect: -встречать
-пи--сать: read, inflect: -писать
-grammar: -писать@1
-grammar: -видеть@2
+пиш--<сать: read, inflect: -писать
+grammar: y-esh-et@1
 стать--я: article, inflect: -статья
 grammar: -статья@acc
-grammar: -писать@3
+grammar: y-esh-et@3
 газет--а: newspaper, inflect: fem1
 журнал--: magazine, inflect: masc1
 grammar: masc1@acc
@@ -94,7 +91,6 @@ grammar: ойadj1@f
 дорог--ой: expensive, inflect: ойadj2
 как--ой: which, inflect: ойadj2
 grammar: ойadj2@accinanm
-grammar: -дарить@2
 очень: very
 погод--а: weather, inflect: fem1
 сегодня: today
@@ -135,8 +131,7 @@ grammar: adj@pl
 здесь: here
 зна--ть: to know, inflect: -встречать
 вы: you (plural)
-grammar: -видеть@2pl
-grammar: -дарить@2pl
+grammar: it-im-ite@2pl
 ресторан--: restaurant, inflect: masc1
 эт--от: this, inflect: -этот
 grammar: -этот@accinanm
@@ -161,22 +156,22 @@ grammar: -жить@1
 ошибк--а: n/a, inflect: femka
 grammar: n@preppl
 grammar: adj@preppl
-жи--ть: live, inflect: -жить
+жив--<ть: live, inflect: -жить
 grammar: -друг@pl
 дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
-grammar: -жить@1pl
+grammar: yo-yosh-yot@1pl
 grammar: ыйadj@preppl
 grammar: ойadj1@preppl
 разн--ый: n/a, inflect: ыйadj
 grammar: ыйadj@accinanpl
-grammar: -жить@2pl
+grammar: yo-yosh-yot@2pl
 --они: they, inflect: -они
 grammar: -они@nom
 grammar: -встречать@inf
 --мы: we, inflect: -мы
 grammar: -встречать@3pl
-grammar: -жить@2
+grammar: yo-yosh-yot@2
 grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
@@ -243,7 +238,7 @@ grammar: adj@genpl
 цен--а: price, inflect: fem1
 grammar: masc2@pl
 grammar: ыйadj@genpl
-хо--теть: n/a, inflect: -хотеть
+хоч--<теть: n/a, inflect: -хотеть
 низк--ий: low, inflect: ийadj
 высок--ий: tall, inflect: ийadj
 grammar: adj@genm
@@ -266,7 +261,7 @@ grammar: -писать@inf
 grammar: neu1@prep
 grammar: -этот@accf
 grammar: -этот@accinanpl
-grammar: -писать@2
+grammar: y-esh-et@2
 --быть: be, inflect: -быть
 grammar: -быть@1
 без: without
@@ -279,7 +274,7 @@ grammar: -быть@1
 забыва--ть: to forget, inflect: -встречать
 цвет--: color, inflect: masc2
 температур--а: temperature, inflect: fem1
-grammar: -жить@3
+grammar: yo-yosh-yot@3
 grammar: ойadj1@n
 всегда: always
 часто: often
@@ -288,7 +283,6 @@ grammar: ойadj1@n
 --вы: you (plural), inflect: -вы
 музик--а: n/a, inflect: fem2
 grammar: -есть@3pl
-grammar: -хотеть@1
 grammar: fem3@genpl
 интересн--ый: n/a, inflect: ыйadj
 grammar: -статья@genpl
@@ -300,7 +294,7 @@ grammar: -ребёнок@gen
 grammar: -дарить@3pl
 grammar: ойadj1@genm
 grammar: -мы@gen
-grammar: -дарить@1pl
+grammar: it-im-ite@1pl
 ур--ок: n/a, inflect: -ребёнок
 французск--ий: n/a, inflect: ийadj
 grammar: femka@genpl
