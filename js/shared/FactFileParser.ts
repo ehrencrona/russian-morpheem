@@ -23,7 +23,7 @@ import Fact from './Fact';
 import Facts from './Facts';
 import Grammars from './Grammars';
 
-export default function parseFactFile(data, inflections: Inflections): Facts {
+export default function parseFactFile(data, inflections: Inflections, lang: string): Facts {
     var facts = new Facts()
     var grammars = new Grammars(inflections)
 
@@ -52,7 +52,7 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
         let stemAndEnding = parseResult.word.split('--');
         let inflected = stemAndEnding.length == 2;
 
-        if (parseResult.word.match(/[a-z]/)) {
+        if (lang == 'ru' && parseResult.word.match(/[a-z]/)) {
             console.error('Warning: ' + parseResult.word + ' contains Latin characters.')
         }
 
@@ -93,6 +93,11 @@ export default function parseFactFile(data, inflections: Inflections): Facts {
                 
                 if (!inflection) {
                     throw new Error('Unknown inflection "' + text + '"'
+                        + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
+                }
+
+                if (!(word instanceof InflectedWord)) {
+                    throw new Error('Word "' + word + '" has inflection but not stem separator'
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
 

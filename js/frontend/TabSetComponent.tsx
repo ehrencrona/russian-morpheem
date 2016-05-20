@@ -31,17 +31,13 @@ export default class TabSetComponent extends Component<Props, State> {
             this.lastTabIds = JSON.parse(lastString)
         }
 
-        let sentence = this.props.corpus.sentences.sentences[40]
-        
         this.state = {
             tabs: [
                 new Tab('Facts', 'facts',
-                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
-                new Tab(sentence.toString(), sentence.getId().toString(),
-                    <Sentence corpus={ this.props.corpus } tab={ null } sentence={ sentence }/>, this)
+                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this)
             ],
             first: 0
-        }
+        } 
     }
 
     tabExists(id: string) {

@@ -6,7 +6,7 @@ import Inflections from '../shared/Inflections';
 export default class Corpus {
     constructor(
         public inflections: Inflections, public words: Words, 
-        public sentences: Sentences, public facts: Facts) {
+        public sentences: Sentences, public facts: Facts, public lang: string) {
         this.inflections = inflections
         this.words = words
         this.sentences = sentences
@@ -23,7 +23,8 @@ export default class Corpus {
             inflections,
             words,
             sentences,
-            facts)
+            facts, 
+            json.lang)
     }
     
     toJson() {
@@ -31,7 +32,8 @@ export default class Corpus {
             sentences: this.sentences.toJson(),
             inflections: this.inflections.toJson(),
             facts: this.facts.toJson(),
-            words: this.words.toJson()
+            words: this.words.toJson(),
+            lang: this.lang
         }
     }
 }

@@ -6,14 +6,14 @@ import parseFactFile from '../shared/FactFileParser';
 
 import Inflections from '../shared/Inflections';
 
-export default function readFactFile(fileName: string, inflections: Inflections) {
+export default function readFactFile(fileName: string, inflections: Inflections, lang: string) {
     return new Promise((resolve, reject) => {        
         readFile(fileName, 'utf8', function (err, body) {
             if (err) {
                 return reject(err)
             }
 
-            resolve(parseFactFile(body, inflections))
+            resolve(parseFactFile(body, inflections, lang))
         })
     });
 }

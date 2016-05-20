@@ -3,7 +3,7 @@
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 
-export default function parseInflectionFile(data) {
+export default function parseInflectionFile(data, lang: string) {
     let inflections = [];
     let inflectionById = {};
 
@@ -31,7 +31,7 @@ export default function parseInflectionFile(data) {
                 inherits = ending.trim()
             }
             else {            
-                if (ending.match(/[a-z]/)) {
+                if (lang == 'ru' && ending.match(/[a-z]/)) {
                     throw new Error(ending + ' in ' + str + ' contains Latin characters.')
                 }
 

@@ -15,7 +15,7 @@ inflections.add(new Inflection('inflection', 'nom', null, { nom: 'a'}))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {
-        var facts = parser('word:meaning', inflections)
+        var facts = parser('word:meaning', inflections, 'ru')
         let word = facts.facts[0]
         
         expect(word.toString()).to.equal('word')
@@ -28,7 +28,7 @@ describe('FactFileParser', function() {
     })
     
     it('parses grammar facts', function () {
-        var facts = parser('grammar:inflection@nom', inflections)
+        var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]
         
         expect(fact).to.be.instanceOf(Grammar)
@@ -39,7 +39,7 @@ describe('FactFileParser', function() {
     })
 
     it('handles classifiers', function () {
-        var facts = parser('word[type]:meaning', inflections)
+        var facts = parser('word[type]:meaning', inflections, 'ru')
         let word = facts.facts[0]
         
         expect(word).to.be.instanceOf(Word)
@@ -51,7 +51,7 @@ describe('FactFileParser', function() {
     })
 
     it('handles requires', function () {
-        var facts = parser('a:meaning\nb:meaning, grammar: a', inflections)
+        var facts = parser('a:meaning\nb:meaning, grammar: a', inflections, 'ru')
 
         let a = facts.facts[0]
         let b = facts.facts[1]

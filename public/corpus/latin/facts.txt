@@ -1,0 +1,136 @@
+fluvi--i: river, inflect: masc2
+insul--ae: island, inflect: fem1
+oppid--i: town, inflect: neu2
+ocean--i: ocean, inflect: masc2
+imperi--i: empire, inflect: neu2
+provinci--ae: province, inflect: fem1
+numer--i: number, inflect: masc2
+litter--ae: letter, inflect: fem1
+vocabul--i: word, inflect: neu2
+capitul--i: chapter, inflect: neu2
+syllaba--ae: syllable, inflect: fem1
+exempl--i: example, inflect: neu2
+pens--i: duty, inflect: neu2
+magn--i: large, inflect: adj1
+parv--i: small, inflect: adj1
+Graec--i: Greek, inflect: adj1
+Roman--i: Roman, inflect: adj1
+Latin--i: Latin, inflect: adj1
+mult--i: many, inflect: adj1
+pauc--i: few, inflect: adj1
+un--i: one, inflect: adj1
+sex: six
+mille: a thousand
+prim--i: first, inflect: adj1
+secund--i: second, inflect: adj1
+terti--i: thrid, inflect: adj1
+in: in
+et: and
+sed: but
+non: no
+quoque: and
+-ne: (enclitic interrogative - will explain - like ли)
+ubi: where
+num: surely
+quid: what
+grammatic--ae: grammar, inflect: fem1
+singular--i: singular, inflect: adj1
+plural--i: plural, inflect: adj1
+vir--i: man, inflect: masc2
+femin--ae: woman, inflect: fem1
+puer--i: boy, inflect: masc2 
+puell--ae: girl, inflect: fem1
+famili--ae: household, inflect: fem1 
+patr--is: father, inflect: masc3
+matr--is: mother, inflect: fem3
+fili--i: son, inflect: masc2
+fili--ae: daughter, inflect: fem1
+liberorum: children
+serv--i: slave, inflect: masc2
+domin--i: master, inflect: masc2
+ancill--ae: maidservant, inflect: fem1
+domin--ae: mistress, inflect: fem1
+lib--ri: book, inflect: masc2
+titul--i: label, inflect: masc2	
+pagin--ae: page, inflect: fem1
+antiqu--i: ancient, inflect: adj1
+nov--i: new, inflect: adj1
+ceterorum: others
+me--i: my, inflect: adj1
+tu--i: your, inflect: adj1
+centum: 100
+que: and (enclitic; suffix; needs explaining)
+qui: who 
+
+quot: how many?
+masculin--i: masculine, inflect: adj1
+feminin--i: feminine, inflect: adj1
+neut--ri: neuter, inflect: adj1	
+genetiv--i: genitive, inflect: adj1 
+scaen--ae: scene, inflect: fem1
+person--ae: actor, inflect: fem1
+mamma--ae: mom, inflect: fem1	
+laet--i: happy, inflect: adj1
+irat--i: angry, inflect: adj1
+prob--i: honest, inflect: adj1
+improb--i: dishonest, inflect: adj1
+canta--re: sings, inflect: verb1	
+pulsa--re: beats, inflect: verb1
+plora--re: weeps, inflect: verb1
+ride--re: smiles, inflect: verb2
+vide--re: sees, inflect: verb2
+voca--re: calls, inflect: verb1
+veni--re: comes, inflect: verb4
+interroga--re: asks, inflect: verb1
+responde--re: answers, inflect: verb2
+dormi--re: sleeps, inflect: verb4
+audi--re: hears, inflect: verb4
+verbera--re: beats, inflect: verb4
+
+ego: I
+tu: you
+is: he
+ea: she
+id: it
+nos: we
+vos: you
+illi: they
+
+neque: and not
+iam: now
+cur: why
+quia: because
+hic: here
+nominativ--i: nominative, inflect: adj1
+accusativ--i: accusative, inflect: adj1
+verb--i: word; verb1, inflect: masc2
+saccul--i: little bag, inflect: neu2
+pecuni--ae: money, inflect: fem1
+numm--i: coin, inflect: masc2
+mens--ae: table, inflect: fem1
+bacul--i: staff, inflect: neu2
+vacu--i: empty, inflect: adj1
+bon--i: good, inflect: adj1
+quattuor: four
+
+quinque: five
+septem: seven
+octo: eight
+novem: nine
+decem: ten
+habe--re: have, inflect: verb2
+numera--re: count, inflect: verb1
+adesse: be here
+abesse: be away
+saluta--re: greet, inflect: verb1
+tace--re: be silent, inflect: verb1
+accusa--re: accuse, inflect: verb1
+pone--re: place, inflect: verb3
+sume--re: take up, inflect: verb3
+discede--re: go away, inflect: verb3
+impera--re: order, inflect: verb1
+pare--re: obey, inflect: verb2
+
+quod: because
+rursus: again
+tantum: only

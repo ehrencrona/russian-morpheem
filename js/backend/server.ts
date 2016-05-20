@@ -3,10 +3,13 @@
 import * as express from "express"
 import 'source-map-support/register'
 import readCorpus from './CorpusReader'
-import { corpusDir } from './CorpusReader'
+import { getCorpusDir } from './CorpusReader'
+
 import Sentence from '../shared/Sentence'
 import InflectedWord from '../shared/InflectedWord'
 import Word from '../shared/Word'
+import Corpus from '../shared/Corpus'
+
 import writeSentenceFile from '../backend/SentenceFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
 
@@ -17,15 +20,17 @@ var port = process.env.PORT || 8080
 
 app.use(bodyParser.json());
 
-readCorpus().then((corpus) => {    
-    app.use('/', express.static('public'));
+function registerRoutes(corpus: Corpus) {
+    let lang = corpus.lang
 
-    app.get('/api/corpus', function(req, res) {
+    let corpusDir = getCorpusDir(corpus.lang)
+
+    app.get(`/api/${lang}/corpus`, function(req, res) {
         res.status(200)
             .send(corpus.toJson())
     })
 
-    app.put('/api/fact/:pos/:id', function(req, res) {
+    app.put(`/api/${lang}/fact/:pos/:id`, function(req, res) {
         try {
             let fact = corpus.facts.get(req.params['id'])
             let index = parseInt(req.params['pos'])
@@ -42,7 +47,7 @@ readCorpus().then((corpus) => {
         }
     })
 
-    app.post('/api/fact/:id', function(req, res) {
+    app.post(`/api/${lang}/fact/:id`, function(req, res) {
         try {
             let components = req.params['id'].split('@')
             
@@ -60,7 +65,7 @@ readCorpus().then((corpus) => {
         }
     })
     
-    app.put('/api/word/:word/inflection/:inflection', (req, res) => {
+    app.put(`/api/${lang}/word/:word/inflection/:inflection`, (req, res) => {
         let wordString = req.params['word']
         let inflectionId = req.params['inflection']
         
@@ -77,7 +82,7 @@ readCorpus().then((corpus) => {
         }
     })
 
-    app.post('/api/word/:word', function(req, res) {
+    app.post(`/api/${lang}/word/:word`, function(req, res) {
         try {
             let wordString = req.params['word']
 
@@ -119,7 +124,7 @@ readCorpus().then((corpus) => {
         }
     })
     
-    app.post('/api/sentence', function(req, res) {
+    app.post(`/api/${lang}/sentence`, function(req, res) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
@@ -137,7 +142,7 @@ readCorpus().then((corpus) => {
         }
     })
     
-    app.delete('/api/sentence/:id', function(req, res) {
+    app.delete(`/api/${lang}/sentence/:id`, function(req, res) {
         try {
             corpus.sentences.remove(corpus.sentences.get(req.params['id']))
 
@@ -149,7 +154,7 @@ readCorpus().then((corpus) => {
         }
     })
 
-    app.put('/api/sentence/:id', function(req, res) {
+    app.put(`/api/${lang}/sentence/:id`, function(req, res) {
         try {            
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
@@ -185,6 +190,15 @@ readCorpus().then((corpus) => {
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
     corpus.words.onChangeInflection = saveFacts
+}
+
+Promise.all([
+    readCorpus('ru'),
+    readCorpus('lat')
+]).then((corpora) => {
+    app.use('/', express.static('public'));
+
+    corpora.forEach(registerRoutes)
     
     app.listen(port)
 })

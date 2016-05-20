@@ -38,7 +38,7 @@ export default class FactsComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            list: MISSING,
+            list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : MISSING),
             add: false
         }
     }

@@ -1,0 +1,26 @@
+masc1[n]: gen: -ae, nom: -а, voc: -a, dat: -ae, acc: -am, abl: -a, pl: -ae, vocpl: -ae, genpl: -arum, datpl: -is, accpl: -as, ablpl: -is
+fem1[n]: gen: -ae, nom: -а, voc: -a, dat: -ae, acc: -am, abl: -a, pl: -ae, vocpl: -ae, genpl: -arum, datpl: -is, accpl: -as, ablpl: -is 
+fem1a[n]: gen: -ae, nom: -а, voc: -a, dat: -ae, acc: -am, abl: -a, pl: -ae, vocpl: -ae, genpl: -arum, datpl: -abus, accpl: -as, ablpl: -abus 
+
+masc2[n]: gen: -i, nom: -us, voc: -e, dat: -o, acc: -um, abl: -o, pl: -i, vocpl: -i, genpl: -orum, datpl: -is, accpl: -os, ablpl: -is 
+neu2[n]: gen: -i, nom: -um, voc: -um, dat: -o, acc: -um, abl: -o, pl: -a, vocpl: -a, genpl: -orum, datpl: -is, accpl: -a, ablpl: -is
+
+masc3[n]: gen: -is, nom: --, voc: --, dat: -i, acc: -em, abl: -e, pl: -es, vocpl: -es, genpl: -um, datpl: -is, accpl: -es, ablpl: -is 
+masc3i[n]: gen: -is, nom: --, voc: --, dat: -i, acc: -em, abl: -e, pl: -es, vocpl: -es, genpl: -ium, datpl: -is, accpl: -es, ablpl: -is 
+fem3[n]: gen: -is, nom: --, voc: --, dat: -i, acc: -em, abl: -e, pl: -es, vocpl: -es, genpl: -um, datpl: -is, accpl: -es, ablpl: -is
+fem3i[n]: gen: -is, nom: --, voc: --, dat: -i, acc: -em, abl: -e, pl: -es, vocpl: -em, genpl: -ium, datpl: -is, accpl: -es, ablpl: -is 
+neu3[n]: gen: -is, nom: --, voc: --, dat: -i, acc: --, abl: -e, pl: -a, vocpl: -a, genpl: -um, datpl: -is, accpl: -a, ablpl: -is
+neu3i[n]: gen: -is, nom: --, voc: --, dat: -i, acc: --, abl: -i, pl: -ia, vocpl: -ia, genpl: -ium, datpl: -is, accpl: -ia, ablpl: -is 
+
+masc4[n]: gen: -us, nom: -us, voc: -us, dat: -ui, acc: -um, abl: -u, pl: -us, vocpl: -us, genpl: -uum, datpl: -ibus, accpl: -us, ablpl: -ibus 
+fem4[n]: gen: -us, nom: -us, voc: -us, dat: -ui, acc: -um, abl: -u, pl: -us, vocpl: -us, genpl: -uum, datpl: -ibus, accpl: -us, ablpl: -ibus
+neu4[n]: gen: -us, nom: -u, voc: -u, dat: -u, acc: -u, abl: -u, pl: -ua, vocpl: -ua, genpl: -uum, datpl: -ibus, accpl: -ua, ablpl: -ibus
+
+masc5[n]: gen: -ei, nom: -es, voc: -es, dat: -ei, acc: -em, abl: -e, pl: -es, vocpl: -es, genpl: -erum, datpl: -ebus, accpl: -es, ablpl: -ebus 
+
+adj1[adj]: genm: i, nomm: us, nomf: a, nomn: um, vocm: e, vocf: a, vocn: um, accm: um, accf: am, accn: um, genf: e, genn: i, datm: o, datf: e, datn: o, ablm: o, ablf: a, abln: o, nommpl: i, nomfpl: e, nomnpl: a, vocmpl: i, vocfpl: e, vocnpl: a, accmpl: os, accfpl: as, accnpl: a, genmpl: orum, genfpl: arum, gennpl: orum, datmpl: is, datfpl: is, datnpl: is, ablmpl: is, ablfpl: is, ablnpl: is 
+
+verb1[verb]: inf: re, 1: o, 1pl: amus, 2: as, 2pl: atis, 3: at, 3pl: ant, pass1: or, pass1pl: amur, pass2: aris, pass2pl: amini, pass3: atur, pass3pl: antur
+verb2[verb]: inf: re, 1: o, 1pl: amus, 2: as, 2pl: atis, 3: at, 3pl: ant, pass1: or, pass1pl: amur, pass2: aris, pass2pl: amini, pass3: atur, pass3pl: antur
+verb3[verb]: inf: re, 1: o, 1pl: amus, 2: as, 2pl: atis, 3: at, 3pl: ant, pass1: or, pass1pl: amur, pass2: aris, pass2pl: amini, pass3: atur, pass3pl: antur
+verb4[verb]: inf: re, 1: o, 1pl: amus, 2: as, 2pl: atis, 3: at, 3pl: ant, pass1: or, pass1pl: amur, pass2: aris, pass2pl: amini, pass3: atur, pass3pl: antur

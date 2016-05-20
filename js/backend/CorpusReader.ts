@@ -11,14 +11,18 @@ import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 
-export const corpusDir = 'public/corpus/russian'
+export function getCorpusDir(lang) {
+    return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
+} 
 
-export default function readCorpus() {
-    return readInflectionFile(corpusDir + '/inflections.txt')
+export default function readCorpus(lang) {
+    let corpusDir = getCorpusDir(lang)
+    
+    return readInflectionFile(corpusDir + '/inflections.txt', lang)
     .then((inflections: Inflections) => {
-        return readFactFile(corpusDir + '/facts.txt', inflections)        
+        return readFactFile(corpusDir + '/facts.txt', inflections, lang)        
             .then((facts: Facts) => {
-                console.log('read', facts.facts.length, 'facts')
+                console.log('read', facts.facts.length, 'facts in', lang)
                 
                 let words = new Words(facts);                
 
@@ -27,7 +31,7 @@ export default function readCorpus() {
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
                 .then((sentences: Sentences) => {
-                    return new Corpus(inflections, words, sentences, facts)
+                    return new Corpus(inflections, words, sentences, facts, lang)
                 })
             })
     })
