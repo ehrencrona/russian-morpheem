@@ -130,7 +130,8 @@ grammar: adj@pl
 профессор--: professor, inflect: masc1
 здесь: here
 зна--ть: to know, inflect: -встречать
-вы: you (plural)
+--вы: you (plural), inflect: -вы
+grammar: -вы@nom
 grammar: it-im-ite@2pl
 ресторан--: restaurant, inflect: masc1
 эт--от: this, inflect: -этот
@@ -151,19 +152,20 @@ grammar: adj@prepm
 родител--ь: n/a, inflect: fem4
 офис--: n/a, inflect: masc1
 grammar: -этот@pl
+жив--<ть: live, inflect: -жить
 grammar: -жить@1
 люд--ь: people, inflect: fem3
 ошибк--а: n/a, inflect: femka
 grammar: n@preppl
 grammar: adj@preppl
-жив--<ть: live, inflect: -жить
 grammar: -друг@pl
 дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
-grammar: yo-yosh-yot@1pl
 grammar: ыйadj@preppl
 grammar: ойadj1@preppl
 разн--ый: n/a, inflect: ыйadj
+grammar: yo-yosh-yot@1pl
+grammar: yo-yosh-yot@3
 grammar: ыйadj@accinanpl
 grammar: yo-yosh-yot@2pl
 --они: they, inflect: -они
@@ -188,15 +190,39 @@ grammar: masc1@dat
 зам--ок: n/a, inflect: -подарок
 grammar: fem1@dat
 grammar: fem3@datpl
+хоч--<теть: n/a, inflect: -хотеть
 можно: be able to; be allowed to
+grammar: -дарить@inf
+кур--ить: n/a, inflect: -дарить
 нельзя: it's not allowed to
 grammar: -видеть@inf
 grammar: -слышать@inf
 grammar: -мы@nom
-покуп--ок: n/a, inflect: -ребёнок
 grammar: -ребёнок@accpl
 известн--ый: n/a, inflect: ыйadj
 ед--а: n/a, inflect: fem2
+нет: is not
+grammar: fem3@gen
+grammar: fem2@gen
+grammar: masc1@gen
+grammar: fem1@gen
+у: by; also indicates "to have"
+grammar: -я@gen
+grammar: -ты@gen
+grammar: -она@gen
+интересн--ый: n/a, inflect: ыйadj
+много: many
+без: without
+grammar: masc1@genpl
+grammar: -друг@genpl
+grammar: ыйadj@genpl
+grammar: adj@genpl
+grammar: fem1@genpl
+grammar: fem3@genpl
+понима--ть: understand, inflect: -встречать
+grammar: femka@genpl
+математик--а: mathematics, inflect: fem1
+его: his
 --есть: eat, inflect: -есть
 grammar: -есть@3
 --пить: drink, inflect: -пить
@@ -212,41 +238,25 @@ grammar: n@accpl
 плох--ой: bad, inflect: ойadj1
 св--ой: his/min (refers to the subject), inflect: ойadj1
 олигарх--: oligarch, inflect: masc1
-понима--ть: understand, inflect: -встречать
 франзуски: French
-математик--а: mathematics, inflect: fem1
 письм--о: letter, inflect: neu2
 grammar: neu1@nom
 grammar: neu1@acc
-много: many
+покуп--ок: n/a, inflect: -ребёнок
 grammar: adj@accanm
 grammar: adj@accinanpl
-нет: is not
 окн--о: window, inflect: neu2
-grammar: fem1@gen
-grammar: masc1@gen
-grammar: masc1@genpl
-grammar: -друг@genpl
-grammar: fem1@genpl
-у: by; also indicates "to have"
-grammar: -я@gen
-grammar: -ты@gen
-grammar: -она@gen
-grammar: fem3@gen
-grammar: fem2@gen
-grammar: adj@genpl
 цен--а: price, inflect: fem1
 grammar: masc2@pl
-grammar: ыйadj@genpl
-хоч--<теть: n/a, inflect: -хотеть
 низк--ий: low, inflect: ийadj
 высок--ий: tall, inflect: ийadj
+grammar: fem4@accpl
+grammar: fem3@accpl
 grammar: adj@genm
 grammar: adj@genn
 grammar: adj@genf
-grammar: fem4@accpl
-grammar: fem3@accpl
 grammar: neu1@genpl
+grammar: -статья@genpl
 grammar: neu1@gen
 воксал--: n/a, inflect: masc2
 grammar: neu2@accpl
@@ -255,7 +265,6 @@ grammar: neu2@pl
 дерев--о: tree, inflect: neu1
 grammar: neu1@pl
 grammar: adj@n
-grammar: -дарить@inf
 grammar: -писать@inf
 сейчас: now
 grammar: neu1@prep
@@ -264,7 +273,6 @@ grammar: -этот@accinanpl
 grammar: y-esh-et@2
 --быть: be, inflect: -быть
 grammar: -быть@1
-без: without
 для: for; for the benefit of
 стран--а: country, inflect: fem1
 обуд--ь: shoe, inflect: fem4
@@ -273,19 +281,15 @@ grammar: -быть@1
 голов--а: head, inflect: fem1
 забыва--ть: to forget, inflect: -встречать
 цвет--: color, inflect: masc2
+grammar: adj@shortn
 температур--а: temperature, inflect: fem1
-grammar: yo-yosh-yot@3
 grammar: ойadj1@n
 всегда: always
 часто: often
 иногда: sometimes
 несколько: a few
---вы: you (plural), inflect: -вы
 музик--а: n/a, inflect: fem2
 grammar: -есть@3pl
-grammar: fem3@genpl
-интересн--ый: n/a, inflect: ыйadj
-grammar: -статья@genpl
 grammar: -он@gen
 язык--: n/a, inflect: masc2
 grammar: -жить@inf
@@ -297,12 +301,15 @@ grammar: -мы@gen
 grammar: it-im-ite@1pl
 ур--ок: n/a, inflect: -ребёнок
 французск--ий: n/a, inflect: ийadj
-grammar: femka@genpl
 деньг--а: n/a, inflect: fem2
-его: his
 её: her / their
 grammar: -ребёнок@prep
 grammar: -ребёнок@pl
 прекрасн--ый: n/a, inflect: ыйadj
+скаж--<зать: n/a, inflect: -сказать
 grammar: -встречать@1pl
-скаж<--зать: n/a, inflect: -сказать
+пакет--: n/a, inflect: masc2
+grammar: ойadj1@accinanpl
+grammar: -ребёнок@genpl
+grammar: -дарить@1
+grammar: adj@prepf

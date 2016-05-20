@@ -1194,7 +1194,7 @@
 людь@pl сидеть@3 на газон@prep: undefined
 ты@nom дарить@2 профессор@dat подарок@acc: undefined
 я@nom его не знать@1: undefined
-нужный@accinanm: undefined
+пакет@nom нужный@shortn: undefined
 мама@dat нужный@shortm шоколад@nom: undefined
 студент@dat нужный@shortm этот@m журнал@nom: undefined
 я@dat не нужный@shortm этот@m журнал@nom: undefined
@@ -1263,3 +1263,64 @@
 можно открывать@inf окно@acc: undefined
 можно закрывать@inf дверь@acc: undefined
 можно газета@nom: undefined
+я@nom хотеть@1 лежать@inf на газон@prep: undefined
+она@nom покупать@3 обудь@accpl: undefined
+я@nom любить@1 белый@accinanpl обудь@accpl: undefined
+он@nom любить@3 мой@accinanpl обудь@accpl: undefined
+ты@nom видеть@2 мой@accinanpl обудь@accpl: undefined
+где покупать@2 обудь@accpl: undefined
+в этот@prepm ресторан@prep отличный@f еда@nom: undefined
+у я@gen нет еда@gen в квартира@prep: undefined
+здесь нет еда@gen: undefined
+ты@nom я@dat давать@2 еда@nom: undefined
+я@nom покупать@1 подарок@accpl в магазин@prep: undefined
+он@nom давать@3 много подарок@genpl: undefined
+он@nom я@prep давать@3 подарок@accpl: undefined
+я@nom не читать@1 много газета@genpl: undefined
+статья@pl этот@genf газета@gen очень интересный@pl: undefined
+в центр@prep очень интересный@m магазин@nom: undefined
+это интересный@f газета@nom: undefined
+он@nom очень интересный@m человек@nom: undefined
+у я@gen интересный@f работа@nom: undefined
+она@nom жить@3 в интересный@prepm дом@prep: undefined
+я@nom встречать@1 интересный@accinanm человек@acc: undefined
+дом@nom в парк@prep очень интересный@m: undefined
+видеть@1 интересный@accf машина@acc: undefined
+у машина@gen нет дверь@genpl: undefined
+что делать@inf без математика@gen: undefined
+она@nom он@acc не понимать@3: undefined
+у она@gen машина@nom: undefined
+у она@gen большой@f квартира@nom: undefined
+почему у она@gen нет друг@genpl: undefined
+у она@gen много друг@genpl: undefined
+это город@nom без ресторан@genpl: undefined
+дом@nom без собака@gen как библиотека@nom без книга@genpl: undefined
+я@nom жить@1 в улица@dat без машина@gen: undefined
+он@nom без машина@gen: undefined
+в университет@prep много известный@genpl профессор@genpl: undefined
+в этот@prepm магазин@prep много старый@genpl книга@genpl: undefined
+в ресторан@prep много старый@genpl людь@genpl: undefined
+здесь можно курить@inf: undefined
+нельзя курить@inf здесь: undefined
+в этот@prepn ресторан@prep можно курить@inf: undefined
+в комната@prep нельзя курить@inf: undefined
+я@nom любить@1 курить@inf: undefined
+я@nom хотеть@1 курить@inf: undefined
+я@nom не курить@1: undefined
+он@nom не курить@3: undefined
+я@dat нужный@shortn курить@inf: undefined
+он@nom курить@3 в квартира@prep: undefined
+он@nom не хотеть@3 машина@acc: undefined
+он@nom хотеть@inf понимать@inf математика@acc: undefined
+ребёнок@nom хотеть@3 шоколад@acc: undefined
+хотеть@1 встречать@inf интересный@accinanpl людь@accpl: undefined
+хотеть@1 встречать@inf олигарх@acc: undefined
+хотеть@1 встречать@inf профессор@acc: undefined
+где хотеть@2: undefined
+я@nom хотеть@1 машина@acc: undefined
+она@nom хотеть@3 ребёнок@acc: undefined
+мы@nom жить@1pl здесь: undefined
+где вы жить@2pl: undefined
+вы жить@2pl здесь: undefined
+вы жить@2pl в центр@prep: undefined
+вы жить@2pl в хороший@prepf квартира@prep: undefined
