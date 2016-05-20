@@ -47,6 +47,14 @@ export default class FactComponent extends Component<Props, State> {
         )
     }
 
+    openFact(fact: Fact) {
+        this.props.tab.openTab(
+            <FactComponent corpus={ this.props.corpus } fact={ fact } tab={ null }/>,
+            fact.getId(),
+            fact.getId()
+        )
+    }
+
     render() {
         let fact = this.props.fact
         
@@ -68,6 +76,21 @@ export default class FactComponent extends Component<Props, State> {
             
             inflectionComponents =
                 <div>
+                    {
+                        (fact.infinitive != fact ?
+                        
+                            <div className='formName'>
+                                <span className='label'>form</span>&nbsp; 
+                                { fact.form } of&nbsp; 
+                                <span className='clickable name' onClick={ (e) => this.openFact(fact.infinitive) }>
+                                    { fact.infinitive.toString() }
+                                </span>
+                            </div>
+                            
+                            :
+                            
+                            [])
+                    }
                     <ChangeInflectionComponent
                         corpus={ this.props.corpus } 
                         tab={ this.props.tab }

@@ -307,12 +307,29 @@ ul {
     }
 }
 
+.formName {
+    padding-top: 2 * $unit;
+    
+    .label {
+        font-style: italic;
+    }
+    
+    .name {
+        font-weight: bold;
+    }
+}
+
 .inflections {
     padding-top: 2 * $unit;
     
     .inflectionName {
-        font-weight: bold;
+        font-style: italic;
         
+        .name {
+            font-weight: bold;
+            font-style: normal;
+        }
+
         .button {
             font-weight: normal;
             display: inline-block;

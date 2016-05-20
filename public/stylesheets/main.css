@@ -206,10 +206,20 @@ ul {
     align-items: center;
     justify-content: center; }
 
+.formName {
+  padding-top: 8px; }
+  .formName .label {
+    font-style: italic; }
+  .formName .name {
+    font-weight: bold; }
+
 .inflections {
   padding-top: 8px; }
   .inflections .inflectionName {
-    font-weight: bold; }
+    font-style: italic; }
+    .inflections .inflectionName .name {
+      font-weight: bold;
+      font-style: normal; }
     .inflections .inflectionName .button, .inflections .inflectionName .tab-header .tab-close, .tab-header .inflections .inflectionName .tab-close {
       font-weight: normal;
       display: inline-block; }

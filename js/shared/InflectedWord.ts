@@ -55,16 +55,7 @@ export default class InflectedWord extends Word {
     }
 
     changeInflection(inflection: Inflection) {
-        let defaultEnding = inflection.getEnding(inflection.defaultForm)
-
-        if (this.jp.substr(this.jp.length - defaultEnding.length) != defaultEnding) {
-            throw new Error(`Expected ${this.jp} to end in ${defaultEnding}`)
-        }
-
-        let stem = this.jp.substr(0, this.jp.length - defaultEnding.length)
-
-        this.stem = stem
-        this.inflection = inflection
+        this.setInflection(inflection)
 
         for (let inflectedWord of this.inflection.inflectAll(this.infinitive, false, {})) {
             if (this.inflectionByForm[inflectedWord.form]) {
@@ -78,16 +69,18 @@ export default class InflectedWord extends Word {
 
         let expectedEnding = inflection.getEnding(this.form)
 
+        let jp = this.originalJp
+
         if (expectedEnding[0] == '<') {
             expectedEnding = expectedEnding.substr(1)
 
-            let actualEnding = this.jp.substr(this.jp.length - expectedEnding.length)
+            let actualEnding = jp.substr(jp.length - expectedEnding.length)
 
             if (actualEnding != expectedEnding) {
-                throw new Error(`Expected ${this.jp} to end with ${expectedEnding}, not ${actualEnding}`)
+                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualEnding}`)
             }
 
-            this.stem = this.jp.substr(0, this.jp.length - expectedEnding.length)
+            this.stem = jp.substr(0, jp.length - expectedEnding.length)
             
             if (this.stem[this.stem.length-1] == '<') {
                 this.stem = this.stem.substr(0, this.stem.length-1)
@@ -97,13 +90,13 @@ export default class InflectedWord extends Word {
             }
         }
         else {
-            let actualEnding = this.jp.substr(this.jp.length - expectedEnding.length)
+            let actualEnding = jp.substr(jp.length - expectedEnding.length)
 
             if (actualEnding != expectedEnding) {
-                throw new Error(`Expected ${this.jp} to end with ${expectedEnding}, not ${actualEnding}`)
+                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualEnding}`)
             }
 
-            this.stem = this.jp.substr(0, this.jp.length - expectedEnding.length)
+            this.stem = jp.substr(0, jp.length - expectedEnding.length)
         }
 
         this.jp = this.inflection.getInflectedForm(this, this.form)

@@ -68,19 +68,20 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         let word: InflectedWord = this.props.word
         
         let alternativeInflections = 
-            this.props.corpus.inflections.getPossibleInflections(this.props.word.jp)
+            this.props.corpus.inflections.getPossibleInflections(this.props.word.originalJp)
                 .filter((inflection) => inflection.getId() != this.state.inflection.getId())
                 .filter((inflection) => inflection.pos == this.state.inflection.pos)
         
         return (
             <div className='inflections'>
                 <div className='inflectionName'>
-                    <span className='clickable' onClick={ () => this.inflectionClicked(inflection) }>
-                        { inflection.id }
-                    </span>
+                    inflects as&nbsp;
                     
-                    { (inflection.pos ? ' (' + inflection.pos + ')' : '') }
-
+                    <span className='clickable name' onClick={ () => this.inflectionClicked(inflection) }>
+                        { inflection.id }
+                        { (inflection.pos ? ' (' + inflection.pos + ')' : '') }
+                    </span>
+    
                     { (this.props.word && alternativeInflections.length ? 
                         <div className='button' onClick={ () => this.setState({ change: !this.state.change })}>
                             { (this.state.change ? 'Done' : 'Change') }</div>
