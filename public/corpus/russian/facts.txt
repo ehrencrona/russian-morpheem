@@ -19,7 +19,7 @@ grammar: masc1@nom
 grammar: masc1@prep
 grammar: ийadj@m
 планшет--: tablet, inflect: masc1
-хорош--ий: good, inflect: ийadj
+хорош--ий: good, inflect: -хороший
 grammar: ыйadj@m
 магазин--: shop, inflect: masc1
 комнат--а: room, inflect: fem1
@@ -234,7 +234,7 @@ grammar: -пить@3
 grammar: fem2@accpl
 grammar: n@accpl
 борщ--: borsht (soup), inflect: masc2
-червон--ий: n/a, inflect: ийadj
+красн--ый: n/a, inflect: ыйadj
 плох--ой: bad, inflect: ойadj1
 св--ой: his/min (refers to the subject), inflect: ойadj1
 олигарх--: oligarch, inflect: masc1

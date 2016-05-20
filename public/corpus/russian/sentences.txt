@@ -900,7 +900,7 @@
 кошка@nom есть@3 белый@accinanm мышь@acc: undefined
 кошка@nom есть@3 мышь@pl: undefined
 я@nom есть@1 борщ@acc: undefined
-я@nom есть@1 червоний@accinanm борщ@acc: undefined
+я@nom есть@1 красный@accinanm борщ@acc: undefined
 в ресторан@prep он@nom есть@3 лошадь@acc: undefined
 я@nom не есть@1 лошадь@acc: undefined
 мой@f кошка@nom не есть@3 мышь@accpl: undefined

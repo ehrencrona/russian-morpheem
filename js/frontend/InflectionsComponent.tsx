@@ -79,7 +79,7 @@ let FIELDS =
                 ['datm','datn','datf','datpl'],
                 [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
                 ['instrm','instrn','instrf','instrpl'],
-                ['prepm','prepfn','prepf','preppl'],
+                ['prepm','prepn','prepf','preppl'],
                 ['shortm', 'shortf', 'shortn']
             ]
         },
