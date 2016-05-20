@@ -62,8 +62,9 @@ export default class FactsComponent extends Component<Props, State> {
         else if (this.state.list == RECENT) {
             let lastIds = this.props.tab.tabSet.getLastTabIds()
             
-            factIndices = factIndices.filter((factIndex) =>
-                lastIds.indexOf(factIndex.fact.getId()) >= 0)
+            factIndices = factIndices
+                .filter((factIndex) =>
+                    lastIds.indexOf(factIndex.fact.getId()) >= 0)
         }
 
         let filterButton = (id, name) =>

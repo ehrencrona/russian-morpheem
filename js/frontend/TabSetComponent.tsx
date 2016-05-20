@@ -90,11 +90,11 @@ export default class TabSetComponent extends Component<Props, State> {
         
         this.lastTabIds = this.lastTabIds.filter((lastId) => lastId != id)
         this.lastTabIds.push(id)
-        
-        if (this.lastTabIds.length > 20) {
-            this.lastTabIds.splice(0, this.lastTabIds.length - 20)
+
+        if (this.lastTabIds.length > 80) {
+            this.lastTabIds.splice(0, this.lastTabIds.length - 80)
         }
-        
+
         localStorage.setItem('lastTabIds', JSON.stringify(this.lastTabIds))
     }
     
