@@ -21,7 +21,7 @@ neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, g
 -дарить[v]: inf: ить, 1: ю, 2: ишь, 3: ит, 1pl: им, 2pl: ите, 3pl: ят
 -любить[v]: 1: лю, inherit: --дарить
 
--видеть[v]: inf: -деть, 1: -жу, 2: -дишь, 3: -дит, 1pl: -дим, 2pl: -дите, 3pl: -дят
+-видеть[v]: inf: -еть, 1: -<жу, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ят
 -слышать[v]: inf: -ать, 1: -у, 2: -ишь, 3: -ит, 1pl: -им, 2pl: -ите, 3pl: -ат
 -писать[v]: inf: -сать, 1: -шу, 2: -шешь, 3: -шет, 1pl: -ем, 2pl: -ете, 3pl: -ут
 -быть[v]: inf: быть, 1: есть
@@ -33,6 +33,7 @@ neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, g
 -давать[v]: inf: вать, 2: ёшь, 3: ёт, 1pl: ём, 2pl: ёте, inherit: --встречать
 
 -хотеть[v]: inf: теть, 1: чу, 2: чешь, 3: чет, 1pl: тим, 2pl: тите, 3pl: тят	
+-сказать[v]: inf: <зать, 1: у, 2: ешь, 3: ет, 2pl: и, 3pl: ите  
 
 adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о 
 
