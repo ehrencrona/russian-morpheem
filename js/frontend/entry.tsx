@@ -13,18 +13,11 @@ import xr from 'xr';
 import TabSet from './TabSetComponent';
 import {render} from 'react-dom';
 import {createElement} from 'react';
+import getLanguage from './getLanguage';
 
 let React = { createElement: createElement }
 
-let lang = 'ru'
-
-if (localStorage.getItem('lang')) {
-    lang = localStorage.getItem('lang')
-}
-
-if (document.location.hostname.indexOf('latin') > 0) {
-    lang = 'lat'
-}
+let lang = getLanguage()
 
 xr.get(`/api/${lang}/corpus`)
 .then((xhr) => {

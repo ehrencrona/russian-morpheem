@@ -8,6 +8,7 @@ import Inflection from '../shared/Inflection'
 import Tab from './Tab'
 import FactComponent from './FactComponent'
 import Word from '../shared/Word'
+import getLanguage from './getLanguage'
 
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
@@ -226,7 +227,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             }
         }
         
-        let table = FIELDS['lat'][this.state.inflection.pos]
+        let table = FIELDS[getLanguage()][this.state.inflection.pos]
         
         if (!table) {
             console.log('Unknown PoS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
