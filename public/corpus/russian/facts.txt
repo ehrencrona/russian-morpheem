@@ -1,7 +1,6 @@
 тут: here
 это: this (is)
 собак--а: dog, inflect: fem2
-скучн--ый: n/a, inflect: ыйadj
 grammar: fem1@nom
 кошк--а: cat, inflect: fem2
 бел--ый: white, inflect: ыйadj
@@ -11,7 +10,7 @@ grammar: adj@f
 лошад--ь: horse, inflect: fem3
 grammar: fem3@nom
 мыш--ь: mouse, inflect: fem3
-маленк--ий: small, inflect: ийadj
+маленьк--ий: small, inflect: ийadj
 свитер--: sweater, inflect: masc1
 машин--а: car, inflect: fem1
 grammar: masc1@nom
@@ -49,7 +48,6 @@ grammar: -видеть@1
 grammar: fem1@acc
 grammar: fem3@acc
 --кто: who, inflect: -кто
-grammar: adj@prepm
 слыш--ать: hear, inflect: -слышать
 grammar: -слышать@1
 мам--а: Mom, inflect: fem1
@@ -83,6 +81,7 @@ grammar: masc1@acc
 центр--: center (of city), inflect: masc1
 человек--: person, inflect: masc1
 больш--ой: big, inflect: ойadj2
+зачем: what for
 не: not
 grammar: ойadj2@m
 почему: why
@@ -146,9 +145,10 @@ grammar: -этот@m
 grammar: -встречать@2pl
 трудн--ый: n/a, inflect: ыйadj
 красив--ый: n/a, inflect: ыйadj
-дом--: house, inflect: masc2
+дом--: house, inflect: masc3
 grammar: ыйadj@pl
 работ--а: n/a, inflect: fem2
+grammar: adj@prepm
 город--: city, inflect: masc1
 как: how
 родител--ь: n/a, inflect: fem4
@@ -159,8 +159,8 @@ grammar: -жить@1
 люд--ь: people, inflect: fem3
 ошибк--а: n/a, inflect: femka
 grammar: n@preppl
-grammar: -друг@pl
 grammar: adj@preppl
+grammar: -друг@pl
 дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
 grammar: n@accpl
@@ -176,23 +176,30 @@ grammar: -встречать@inf
 grammar: -мы@nom
 grammar: -встречать@3pl
 grammar: yo-yosh-yot@2
+скучн--ый: n/a, inflect: ыйadj
+grammar: adj@accn
+grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
 подар--ок: n/a, inflect: -подарок
 grammar: -подарок@acc
 grammar: adj@shortm
+grammar: adj@shortf
 да--вать: n/a, inflect: -давать
 grammar: -ребёнок@dat
 grammar: masc1@dat
 дар--ить: n/a, inflect: -дарить
 нужн--ый: n/a, inflect: ыйadj
 grammar: ыйadj@preppl
+grammar: fem2@accpl
 grammar: ойadj1@preppl
+grammar: -вы@dat
 должно: have to
 одалжива--ть: n/a, inflect: -встречать
 зам--ок: n/a, inflect: -подарок
 grammar: fem1@dat
 grammar: fem3@datpl
+фильм--: n/a, inflect: masc1
 хоч--<теть: n/a, inflect: -хотеть
 можно: be able to; be allowed to
 grammar: -дарить@inf
@@ -202,10 +209,11 @@ grammar: -видеть@inf
 grammar: -слышать@inf
 grammar: -ребёнок@accpl
 известн--ый: n/a, inflect: ыйadj
-ед--а: n/a, inflect: fem2
+ед--а: n/a, inflect: fem1
 нет: is not
 grammar: fem3@gen
 grammar: fem2@gen
+grammar: masc1@gen
 grammar: fem1@gen
 у: by; also indicates "to have"
 grammar: -этот@accf
@@ -243,9 +251,8 @@ grammar: -есть@2
 grammar: -пить@1
 grammar: -пить@2
 grammar: -пить@3
-grammar: fem2@accpl
 проблем--а: n/a, inflect: fem1
-борщ--: borsht (soup), inflect: masc2
+борщ--: borsht (soup), inflect: masc3
 красн--ый: n/a, inflect: ыйadj
 плох--ой: bad, inflect: ойadj2
 св--ой: his/min (refers to the subject), inflect: ойadj1
@@ -259,7 +266,7 @@ grammar: adj@accinanpl
 grammar: -есть@3pl
 окн--о: window, inflect: neu2
 цен--а: price, inflect: fem1
-grammar: masc2@pl
+grammar: masc3@pl
 низк--ий: low, inflect: ийadj
 высок--ий: tall, inflect: ийadj
 grammar: fem4@accpl
@@ -270,7 +277,7 @@ grammar: adj@genf
 grammar: neu1@genpl
 grammar: -статья@genpl
 grammar: neu1@gen
-воксал--: n/a, inflect: masc2
+вокзал--: n/a, inflect: masc3
 grammar: neu2@accpl
 утр--о: morning, inflect: neu2
 grammar: neu2@pl
@@ -287,12 +294,12 @@ grammar: y-esh-et@2
 grammar: -быть@1
 для: for; for the benefit of
 стран--а: country, inflect: fem1
-обуд--ь: shoe, inflect: fem4
+обув--ь: shoe, inflect: fem4
 и: and
 или: or
 голов--а: head, inflect: fem1
 забыва--ть: to forget, inflect: -встречать
-цвет--: color, inflect: masc2
+цвет--: color, inflect: masc3
 grammar: adj@shortn
 температур--а: temperature, inflect: fem1
 мяс--о: n/a, inflect: neu2
@@ -318,12 +325,10 @@ grammar: -ребёнок@pl
 прекрасн--ый: n/a, inflect: ыйadj
 скаж--<зать: n/a, inflect: -сказать
 grammar: -встречать@1pl
-пакет--: n/a, inflect: masc2
+пакет--: n/a, inflect: masc1
 grammar: ойadj1@accinanpl
 grammar: -ребёнок@genpl
 grammar: adj@prepf
 холодн--ый: n/a, inflect: ыйadj
 grammar: -ребёнок@preppl
 grammar: -есть@inf
-grammar: -я@dat
-grammar: masc1@gen

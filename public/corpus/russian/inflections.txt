@@ -9,11 +9,11 @@ femka[n]: genpl: <ок, inherit: fem2
 -подарок[n]: acc: ок, inherit: --ребёнок
 
 masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, genpl: ов, inherit: n 
-masc3[n]: gen: я, dat: ю, acc: я, instr: ем, prep: еле, inherit: fem3
+masc2[n]: pl: и, accpl: и, inherit: masc1 
+masc3[n]: pl: а, accpl: а, inherit: masc1
 -день[n]: nom: ень, gen: ня, dat: ню, acc: ень, instr: нём, prep: не
 neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -ья, genpl: -ьев, datpl: -ьям, accpl: -ья, instrpl: -ьями, preppl: -ьях
 -друг[n]: pl: <зья, genpl: <зей, datpl: <зьям, accpl: <зей, instrpl: <зьями, preppl: <зьях, inherit: masc1
-masc2[n]: pl: а, accpl: а, inherit: masc1
 
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 

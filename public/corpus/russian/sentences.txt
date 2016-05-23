@@ -251,8 +251,8 @@
 тут чёрный@f машина@nom: There is a black car here.
 тут белый@f лошадь@gen: undefined
 тут белый@f мышь@nom: There is a white mouse here.
-тут маленкий@f лошадь@gen: undefined
-тут маленкий@f мышь@nom: There is a small mouse here.
+тут маленький@f лошадь@gen: undefined
+тут маленький@f мышь@nom: There is a small mouse here.
 тут большой@f лошадь@nom: There is a big horse here.
 тут большой@f мышь@nom: There is a big mouse here.
 тут очень большой@f лошадь@nom: There is a very big horse here.
@@ -265,10 +265,10 @@
 где чёрный@f собака@nom ?: Where is the black dog?
 где чёрный@f кошка@nom ?: Where is the black cat?
 где чёрный@f машина@nom ?: Where is the black car?
-где маленкий@f собака@nom ?: Where is the small dog?
-где маленкий@f кошка@nom ?: Where is the small cat?
-где маленкий@f машина@nom ?: Where is the small car?
-где маленкий@f книга@nom ?: Where is the small book?
+где маленький@f собака@nom ?: Where is the small dog?
+где маленький@f кошка@nom ?: Where is the small cat?
+где маленький@f машина@nom ?: Where is the small car?
+где маленький@f книга@nom ?: Where is the small book?
 где белый@f лошадь@nom ?: Where is the white horse?
 где белый@f мышь@nom ?: Where is the white mouse?
 где чёрный@f лошадь@nom ?: Where is the black horse?
@@ -281,8 +281,8 @@
 где чёрный@m свитер@accpl ?: undefined
 где чёрный@m планшет@nom ?: Where is the black tablet?
 где хороший@m свитер@nom ?: Where is the good sweater?
-тут маленкий@m свитер@nom: There is a small sweater.
-тут маленкий@m планшет@nom: There is a small tablet.
+тут маленький@m свитер@nom: There is a small sweater.
+тут маленький@m планшет@nom: There is a small tablet.
 тут большой@m свитер@nom: There is a big sweater.
 тут большой@m планшет@nom: There is a big tablet.
 планшет@nom в библиотека@prep: The tablet is at the library.
@@ -294,10 +294,10 @@
 белый@m свитер@nom в магазин@prep: The white sweater is at the shop.
 он@nom покупать@3 белый@accinanm свитер@acc ?: He buys a white sweater?
 он@nom покупать@3 белый@accinanm планшет@acc ?: He buys a white tablet?
-она@nom покупать@3 маленкий@accinanm свитер@acc ?: She buys a small sweater?
-она@nom покупать@3 маленкий@accinanm планшет@acc ?: She buys a small tablet?
-она@nom покупать@3 маленкий@accinanm свитер@acc ?: She buys a small sweater?
-она@nom покупать@3 маленкий@accinanm планшет@acc ?: She buys a small tablet?
+она@nom покупать@3 маленький@accinanm свитер@acc ?: She buys a small sweater?
+она@nom покупать@3 маленький@accinanm планшет@acc ?: She buys a small tablet?
+она@nom покупать@3 маленький@accinanm свитер@acc ?: She buys a small sweater?
+она@nom покупать@3 маленький@accinanm планшет@acc ?: She buys a small tablet?
 она@nom покупать@3 дорогой@accinanm свитер@acc ?: She buys an expensive sweater?
 она@nom покупать@3 дорогой@accinanm планшет@acc ?: She buys an expensive tablet?
 она@nom покупать@3 очень дорогой@accinanm свитер@acc ?: She buys a very expensive sweater?
@@ -330,9 +330,9 @@
 университет@nom в центр@prep: The university is in the center.
 в университет@prep библиотека@nom: There is a library at the university.
 в университет@prep хороший@f библиотека@nom: There is a good library at the university.
-это маленкий@m университет@nom: It is a small university
-это маленкий@m магазин@nom: It is a small shop
-это маленкий@m площадь@nom: It is a small square
+это маленький@m университет@nom: It is a small university
+это маленький@m магазин@nom: It is a small shop
+это маленький@m площадь@nom: It is a small square
 где университет@nom ?: Where is the university?
 где магазин@nom ?: Where is the shop?
 где площадь@nom ?: Where is the square?
@@ -388,8 +388,8 @@
 я@nom встречать@1 большой@accf собака@acc: I meet a large dog.
 я@nom встречать@1 большой@accf кошка@acc: I meet a large cat.
 я@nom покупать@1 белый@accinanm телефон@acc: I buy a white phone.
-он@nom встречать@3 маленкий@accinanm ребёнок@acc: He meets a small child.
-он@nom встречать@3 маленкий@accf собака@acc: He meets a small dog.
+он@nom встречать@3 маленький@accinanm ребёнок@acc: He meets a small child.
+он@nom встречать@3 маленький@accf собака@acc: He meets a small dog.
 я@nom читать@1 твой@accf статья@acc: I read your article.
 я@nom читать@1 твой@accf книга@acc: I read your book.
 какой@accinanm твой@accinanm мышь@acc ?: Which is your mouse?
@@ -458,14 +458,14 @@
 за стол@instr стул@nom: There is a chair behind the table.
 на стол@prep газета@pl: There are magazines on the table.
 на стол@prep книга@pl: There are books on the table.
-в квартира@prep маленкий@f дверь@nom: The apartment has a small door.
+в квартира@prep маленький@f дверь@nom: The apartment has a small door.
 в квартира@prep белый@f дверь@nom: The apartment has a white door.
 в квартира@prep чёрный@f дверь@nom: The apartment has a black door.
-в квартира@prep маленкий@accinanpl дверь@pl: The apartment has small doors.
+в квартира@prep маленький@accinanpl дверь@pl: The apartment has small doors.
 в квартира@prep белый@accinanpl дверь@pl: The apartment has white doors.
 в квартира@prep чёрный@accinanpl дверь@pl: The apartment has black doors.
 на стол@prep большой@accinanpl книга@pl: There are big books on the table.
-на стол@prep маленкий@accinanpl книга@pl: There are small books on the table.
+на стол@prep маленький@accinanpl книга@pl: There are small books on the table.
 это твой@m телефон@nom ?: Is that your phone?
 это твой@f квартира@nom ?: Is that your apartment?
 это твой@pl собака@pl ?: Are those your dogs?
@@ -554,7 +554,7 @@
 он@nom видеть@3 мышь@acc в парк@prep: undefined
 она@nom любить@3 книга@pl: undefined
 это книга@nom хороший@f: undefined
-он@nom очень маленкий@m: undefined
+он@nom очень маленький@m: undefined
 где мой@n письмо@nom: undefined
 что ты@nom читать@2: undefined
 я@nom писать@1 статья@acc: undefined
@@ -577,7 +577,7 @@
 в квартира@prep новый@accinanpl штора@pl: undefined
 она@nom покупать@3 чёрный@accinanpl штора@pl: undefined
 я@nom встречать@1 человек@acc на площадь@prep: undefined
-он@nom маленкий@m человек@nom: undefined
+он@nom маленький@m человек@nom: undefined
 белый@f кошка@nom на стул@prep: undefined
 ребёнок@nom за мама@instr: undefined
 за дверь@instr большой@m человек@nom: undefined
@@ -599,7 +599,7 @@
 день@nom: undefined
 тут твой@m стул@nom: undefined
 это твой@f машина@nom: undefined
-ты@nom любить@2 маленкий@accinanpl собака@pl: undefined
+ты@nom любить@2 маленький@accinanpl собака@pl: undefined
 какой@m свитер@acc ты@nom любить@2: undefined
 какой@accinanpl магазин@accpl ты@nom любить@2: undefined
 ты@nom любить@2 дорогой@accinanpl машина@pl: undefined
@@ -673,10 +673,10 @@
 в комната@prep белый@f штора@nom: The room has a white curtain.
 в комната@prep чёрный@f штора@nom: The room has a black curtain.
 в комната@prep открытый@accinanpl штора@pl: The room has open curtains.
-в комната@prep маленкий@f дверь@nom: The room has a small door.
+в комната@prep маленький@f дверь@nom: The room has a small door.
 в комната@prep белый@f дверь@nom: The room has a white door.
 в комната@prep чёрный@f дверь@nom: The room has a black door.
-в комната@prep маленкий@accinanpl дверь@pl: The room has small doors.
+в комната@prep маленький@accinanpl дверь@pl: The room has small doors.
 в комната@prep белый@accinanpl дверь@pl: The room has white doors.
 в комната@prep чёрный@accinanpl дверь@pl: The room has black doors.
 это твой@f комната@nom ?: Is that your room?
@@ -699,14 +699,14 @@
 что в журнал@prep сегодня: undefined
 дверь@prep в магазин@prep открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
-он@nom покупать@3 новый@pl обудь@accpl: undefined
+он@nom покупать@3 новый@pl обувь@accpl: undefined
 в город@prep новый@pl магазин@pl: undefined
 в квартира@prep новый@pl штора@pl: undefined
 в газон@prep белый@pl кошка@pl: undefined
-я@nom любить@1 маленкий@accinanpl машина@accpl: undefined
+я@nom любить@1 маленький@accinanpl машина@accpl: undefined
 здесь хороший@pl магазин@pl: undefined
-в город@prep маленкий@pl квартира@pl: undefined
-в квартира@dat маленкий@pl комната@pl: undefined
+в город@prep маленький@pl квартира@pl: undefined
+в квартира@dat маленький@pl комната@pl: undefined
 какой@pl газета@accpl ты@nom читать@2: undefined
 какой@pl человек@accpl ты@nom любить@2: undefined
 какой@pl людь@pl ты@nom встречать@2: undefined
@@ -730,8 +730,8 @@
 в площадь@prep слишком много человек@genpl: undefined
 этот@f квартира@nom слишком дорогой@f: undefined
 этот@m телефон@nom слишком большой@m: undefined
-магазин@nom слишком маленкий@m: undefined
-этот@m телефон@nom слишком маленкий@m: undefined
+магазин@nom слишком маленький@m: undefined
+этот@m телефон@nom слишком маленький@m: undefined
 где магазин@nom низкий@genpl цена@genpl: undefined
 мой@f друг@nom низкий@m человек@nom: undefined
 это город@nom низкий@genpl дом@genpl: undefined
@@ -749,15 +749,15 @@
 твой@f температура@nom слишком высокий@f: undefined
 твой@f температура@nom слишком низкий@f: undefined
 этот@m город@nom слишком большой@m: undefined
-мой@f город@nom слишком маленкий@m: undefined
+мой@f город@nom слишком маленький@m: undefined
 этот@m университет@nom слишком дорогой@m: undefined
 мой@n окно@nom слишком низкий@n: undefined
 здесь нет библиотека@gen: undefined
 это город@nom без библиотека@gen: undefined
 я@nom без телефон@gen: undefined
 это страна@nom без парк@genpl: undefined
-она@nom покупать@3 дорогой@accinanpl обудь@accpl: undefined
-я@nom покупать@1 обудь@accpl и свитер@acc в магазин@prep: undefined
+она@nom покупать@3 дорогой@accinanpl обувь@accpl: undefined
+я@nom покупать@1 обувь@accpl и свитер@acc в магазин@prep: undefined
 здесь много библиотека@gen: undefined
 у я@acc нет книга@gen: undefined
 у он@gen мама@gen много кошка@gen: undefined
@@ -773,9 +773,9 @@
 у ты@gen большой@f голова@nom: undefined
 в квартира@prep нет кровать@gen: undefined
 в город@prep нет большой@genpl площадь@genpl: undefined
-в магазин@prep нет обудь@genpl: undefined
-в магазин@prep нет дорогой@genpl обудь@genpl: undefined
-в магазин@prep нет большой@genpl обудь@genpl: undefined
+в магазин@prep нет обувь@genpl: undefined
+в магазин@prep нет дорогой@genpl обувь@genpl: undefined
+в магазин@prep нет большой@genpl обувь@genpl: undefined
 в комната@prep нет дверь@gen: undefined
 это мой@m город@nom: undefined
 я@nom жить@1 в большой@prepm город@prep: undefined
@@ -878,11 +878,11 @@
 это чёрный@m свитер@nom: undefined
 тут белый@f лошадь@nom: undefined
 где лошадь@pl: undefined
-это маленкий@f лошадь@nom: undefined
+это маленький@f лошадь@nom: undefined
 планшет@nom белый@m: undefined
 она@nom открывать@3 книга@acc в библиотека@prep: undefined
 кошка@nom открывать@3 дверь@acc: undefined
-в квартира@dat маленкий@pl окно@pl: undefined
+в квартира@dat маленький@pl окно@pl: undefined
 в магазин@prep дорогой@pl книга@pl: undefined
 дом@pl высокий@pl: undefined
 дом@pl высокий@pl: undefined
@@ -932,7 +932,7 @@
 собака@nom большой@f как лошадь@nom: undefined
 я@nom не любить@1 этот@f собака@nom: undefined
 этот@f книга@nom не дорогой@f: undefined
-этот@f комната@nom слишком маленкий@f: undefined
+этот@f комната@nom слишком маленький@f: undefined
 профессор@nom читать@3 этот@accinanpl книга@accpl: undefined
 она@nom не любить@3 этот@accinanpl книга@accpl: undefined
 этот@m журнал@nom новый@m: undefined
@@ -984,7 +984,7 @@
 они@nom жить@3pl в центр@prep город@gen: undefined
 они@nom жить@3pl в центр@preppl большой@preppl город@genpl: undefined
 она@nom жить@3 в большой@prepm город@prep: undefined
-он@nom жить@3 в маленкий@prepm город@prep: undefined
+он@nom жить@3 в маленький@prepm город@prep: undefined
 я@nom не хотеть@1 жить@inf в этот@preppl дом@preppl: undefined
 я@nom не жить@1 в этот@preppl дом@preppl: undefined
 я@nom не работать@1 в этот@preppl офис@preppl: undefined
@@ -1157,7 +1157,7 @@
 она@nom покупать@3 подарок@acc мама@dat: undefined
 вот мой@f белый@f собака@nom: undefined
 вот мой@f машина@nom: undefined
-она@nom знать@3 где лежать@3 маленкий@m подарок@nom: undefined
+она@nom знать@3 где лежать@3 маленький@m подарок@nom: undefined
 вот хороший@m магазин@nom: undefined
 вот мой@m красивый@m подарок@nom: undefined
 вот дорогой@m подарок@nom: undefined
@@ -1262,15 +1262,15 @@
 можно закрывать@inf дверь@acc: undefined
 можно газета@nom: undefined
 я@nom хотеть@1 лежать@inf на газон@prep: undefined
-она@nom покупать@3 обудь@accpl: undefined
-я@nom любить@1 белый@accinanpl обудь@accpl: undefined
-он@nom любить@3 мой@accinanpl обудь@accpl: undefined
-ты@nom видеть@2 мой@accinanpl обудь@accpl: undefined
-где покупать@2 обудь@accpl: undefined
+она@nom покупать@3 обувь@accpl: undefined
+я@nom любить@1 белый@accinanpl обувь@accpl: undefined
+он@nom любить@3 мой@accinanpl обувь@accpl: undefined
+ты@nom видеть@2 мой@accinanpl обувь@accpl: undefined
+где покупать@2 обувь@accpl: undefined
 в этот@prepm ресторан@prep отличный@f еда@nom: undefined
 у я@gen нет еда@gen в квартира@prep: undefined
 здесь нет еда@gen: undefined
-ты@nom я@dat давать@2 еда@nom: undefined
+ты@nom давать@2 я@dat еда@acc: undefined
 я@nom покупать@1 подарок@accpl в магазин@prep: undefined
 он@nom давать@3 много подарок@genpl: undefined
 он@nom я@prep давать@3 подарок@accpl: undefined
@@ -1355,14 +1355,14 @@
 в этот@prepm ресторан@prep отличный@n мясо@nom: undefined
 я@prep не нужный@shortn мясо@nom: undefined
 здесь мясо@nom очень дорогой@n: undefined
-друг@nom одалживать@3 свитер@acc маленкий@datm ребёнок@dat: undefined
+друг@nom одалживать@3 свитер@acc маленький@datm ребёнок@dat: undefined
 твой@pl родитель@pl курить@3pl: undefined
 студент@pl не помнить@3pl математика@acc: undefined
 профессор@pl любить@3pl книга@accpl: undefined
 библиотека@nom одалживать@3 газета@accpl и журнал@accpl людь@datpl: undefined
 я@nom читать@1 этот@accf книга@acc: undefined
 она@nom любить@3 этот@accf библиотека@acc: undefined
-они@nom одалживать@3pl я@dat машина@acc: undefined
+родитель@pl одалживать@3pl я@dat свой@accf дорогой@accf машина@acc: undefined
 я@nom любить@1 читать@inf этот@accf газета@acc: undefined
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
 у я@gen проблема@nom: undefined
@@ -1400,5 +1400,21 @@
 машина@nom олигарх@gen длинный@f: undefined
 длинный@f книга@nom на стул@prep: undefined
 длинный@f статья@nom в журнал@prep: undefined
-: undefined
-мы@nom: undefined
+я@dat нужный@shortn работа@nom: undefined
+
+библиотека@pl одалживать@3pl вы@dat старый@accinanpl книга@accpl: undefined
+они@nom одалживать@3pl вы@dat скучный@accinanpl фильм@accpl: undefined
+вы@dat не нужный@shortm этот@m дорогой@m планшет@nom: undefined
+вы@dat нужный@shortm новый@m офис@nom в университет@prep: undefined
+я@nom дарить@1 вы@dat отличный@accinanm подарок@acc: undefined
+мама@nom писать@3 вы@dat длинный@accn письмо@acc: undefined
+вы@dat нужный@shortf новый@f кровать@nom: undefined
+вы@dat: undefined
+зачем ты@nom давать@2 собака@dat шоколад@acc: undefined
+ты@nom не давать@2 студент@datpl еда@gen: undefined
+ты@nom жить@2 в большой@prepm город@prep: undefined
+ты@nom жить@2 на красивый@prepf улица@prep: undefined
+ты@nom жить@2 на площадь@prep в центр@prep город@gen: undefined
+
+ты@nom жить@2 как собака@nom: undefined
+ты@nom жить@2 как: undefined
