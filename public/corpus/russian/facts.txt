@@ -200,6 +200,8 @@ grammar: -видеть@inf
 grammar: -слышать@inf
 grammar: -мы@nom
 grammar: -ребёнок@accpl
+математик--а: mathematics, inflect: fem1
+понима--ть: understand, inflect: -встречать
 известн--ый: n/a, inflect: ыйadj
 ед--а: n/a, inflect: fem2
 нет: is not
@@ -220,9 +222,7 @@ grammar: ыйadj@genpl
 grammar: adj@genpl
 grammar: fem1@genpl
 grammar: fem3@genpl
-понима--ть: understand, inflect: -встречать
 grammar: femka@genpl
-математик--а: mathematics, inflect: fem1
 его: his
 --есть: eat, inflect: -есть
 grammar: -есть@3
