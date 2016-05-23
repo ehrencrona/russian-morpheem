@@ -805,7 +805,7 @@
 у она@gen низкий@m собака@nom: undefined
 вы@nom знать@2pl где мой@f машина@nom: undefined
 ты@nom знать@2 где мой@f собака@nom ?: undefined
-я@nom не знать@1 франзуски: undefined
+я@nom не знать@1 французский@accinanm: undefined
 профессор@nom знать@3 математика@nom: undefined
 профессор@nom понимать@3 математика@nom: undefined
 я@nom не понимать@1 математика@nom: undefined
@@ -926,7 +926,7 @@
 он@nom знать@3 как открывать@inf дверь@acc: undefined
 как ты@nom это знать@2: undefined
 я@nom не знать@1 математика@acc: undefined
-он@nom не знать@3 франзуски: undefined
+он@nom не знать@3 французский@accinanm: undefined
 я@nom не знать@1 как ты@nom это делать@2: undefined
 я@nom не знать@1 как она@acc встречать@inf: undefined
 он@nom большой@m как лошадь@nom: undefined
@@ -999,7 +999,7 @@
 мой@f работа@nom в центр@prep город@gen: undefined
 ты@nom любить@2 твой@accf работа@acc: undefined
 у ты@gen хороший@f работа@nom: undefined
-франзуски трудный@m язык@nom: undefined
+французский@accinanm трудный@m язык@nom: undefined
 она@nom делать@3 трудный@accf работа@acc: undefined
 я@nom не любить@1 трудный@accinanpl книга@accpl: undefined
 твой@f работа@nom трудный@f: undefined
@@ -1078,7 +1078,7 @@
 здесь ошибка@nom: undefined
 в этот@prepn книга@prep ошибка@pl: undefined
 в этот@prepn книга@prep много ошибка@genpl: undefined
-сейчас урок@nom французский@genn язык@gen: undefined
+сейчас урок@nom французский@genm язык@gen: undefined
 знать@2 французский@m язык@nom: undefined
 он@nom профессор@nom французский@genm язык@gen: undefined
 я@nom не видеть@1 ошибка@acc: undefined
@@ -1328,7 +1328,7 @@
 она@nom покупать@3 я@dat подарок@accpl: undefined
 он@nom не помнить@3 математика@nom: undefined
 он@nom не помнить@3 где машина@nom: undefined
-мама@nom не помнить@3 франзуски: undefined
+мама@nom не помнить@3 французский@accinanm: undefined
 я@nom не помнить@1 этот@accinanm ресторан@acc: undefined
 она@nom я@acc не помнить@3: undefined
 
@@ -1384,3 +1384,10 @@
 я@nom любить@1 гулять@inf в старый@preppl парк@preppl: undefined
 я@nom не любить@1 есть@inf в французский@preppl ресторан@preppl: undefined
 мама@nom не есть@3 в французский@preppl ресторан@preppl: undefined
+она@nom покупать@3 я@dat газета@accpl: undefined
+профессор@nom давать@3 я@dat урок@acc: undefined
+она@nom не понимать@3 урок@acc: undefined
+он@nom есть@3 на урок@prep: undefined
+сегодня урок@nom: undefined
+он@nom профессор@nom математика@gen: undefined
+он@nom профессор@nom французский@genm: undefined
