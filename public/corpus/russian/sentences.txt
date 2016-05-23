@@ -14,8 +14,6 @@
 он@nom в квартира@prep: He's in the flat.
 я@nom в квартира@prep: I'm in the flat.
 телефон@nom в квартира@prep: The phone is in the flat.
-
-
 он@nom на библиотека@prep: He's in the library.
 я@nom на библиотека@prep: I'm in the library.
 собака@nom в квартира@prep: A dog is in the flat.
@@ -698,7 +696,7 @@
 в магазин@prep много свитер@genpl: undefined
 в библиотека@prep много книга@genpl: undefined
 в университет@prep много профессор@genpl: undefined
-он@nom читать@3 журнал@acc: undefined
+что в журнал@prep сегодня: undefined
 дверь@prep в магазин@prep открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
 он@nom покупать@3 новый@pl обудь@accpl: undefined
@@ -1331,9 +1329,7 @@
 мама@nom не помнить@3 французский@accinanm: undefined
 я@nom не помнить@1 этот@accinanm ресторан@acc: undefined
 она@nom я@acc не помнить@3: undefined
-
 вы@nom помнить@2pl этот@genm книга@gen: undefined
-
 человек@dat нужный@shortm дом@nom: undefined
 я@nom ты@acc не помнить@1: undefined
 мама@dat нужный@shortm хороший@m друг@nom: undefined
@@ -1368,7 +1364,6 @@
 она@nom любить@3 этот@accf библиотека@acc: undefined
 они@nom одалживать@3pl я@dat машина@acc: undefined
 я@nom любить@1 читать@inf этот@accf газета@acc: undefined
-
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
 у я@gen проблема@nom: undefined
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
@@ -1391,3 +1386,17 @@
 сегодня урок@nom: undefined
 он@nom профессор@nom математика@gen: undefined
 он@nom профессор@nom французский@genm: undefined
+ты@nom читать@2 журнал@acc ?: undefined
+в газета@prep хороший@f статья@nom: undefined
+он@nom читать@3 длинный@accf статья@acc: undefined
+он@nom читать@3 длинный@accf книга@acc: undefined
+это длинный@f улица@nom: undefined
+в журнал@prep длинный@f статья@nom: undefined
+профессор@nom писать@3 длинный@accf статья@acc: undefined
+она@nom писать@3 длинный@accf статья@acc: undefined
+я@nom не читать@1 длинный@accinanpl книга@accpl: undefined
+это длинный@f книга@nom: undefined
+я@nom любить@1 длинный@accinanpl книга@accpl: undefined
+машина@nom олигарх@gen длинный@f: undefined
+длинный@f книга@nom на стул@prep: undefined
+длинный@f статья@nom в журнал@prep: undefined
