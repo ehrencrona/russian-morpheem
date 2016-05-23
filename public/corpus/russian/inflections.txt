@@ -12,7 +12,7 @@ masc1[n]: nom: -, gen: -а, dat: -у, acc: -, instr: -ом, prep: -е, genpl: о
 masc3[n]: gen: я, dat: ю, acc: я, instr: ем, prep: еле, inherit: fem3
 -день[n]: nom: ень, gen: ня, dat: ню, acc: ень, instr: нём, prep: не
 neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -ья, genpl: -ьев, datpl: -ьям, accpl: -ья, instrpl: -ьями, preppl: -ьях
--друг[n]: pl: зья, genpl: зей, datpl: зьям, accpl: зей, instr: ями, prep: яьях, inherit: masc1
+-друг[n]: pl: <зья, genpl: <зей, datpl: <зьям, accpl: <зей, instrpl: <зьями, preppl: <зьях, inherit: masc1
 masc2[n]: pl: а, accpl: а, inherit: masc1
 
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
@@ -45,7 +45,7 @@ yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте
 adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о 
 
 ойadj2[adj]: m: -ой, accinanm: -ой, inherit: adj 
-ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, accanm: -оего, genn: -оего, genf: -оей, pl: -ои, preppl: оих, accanpl: оих, accinanpl: ои, pl: -ои, genpl: -оих, datpl: -оим, instrpl: оими, preppl: -оих, inherit: ойadj2
+ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, accanm: -оего, genn: -оего, genf: -оей, instrm: -оим, instrn: -оим, instrf: -оей, prepm: -оём, prepn: -оём, prepf: -оей, pl: -ои, preppl: оих, accanpl: оих, accinanpl: ои, pl: -ои, genpl: -оих, datpl: -оим, instrpl: оими, preppl: -оих, inherit: ойadj2
 
 ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
@@ -61,3 +61,5 @@ adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, 
 -мы[pron]: nom: мы, gen: нас, dat: нам, acc: нас, prep: нами, instr: нас
 -вы[pron]: nom: вы, gen: вас, dat: вам, acc: вас, prep: вами, instr: вас
 -они[pron]: nom: они, gen: их, dat: им, acc: их, prep: ими, instr: них
+
+-кто: nom: кто, gen: кого, dat: кому, acc: кого, prep: ком, instr: кем
