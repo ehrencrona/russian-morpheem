@@ -10,7 +10,7 @@ grammar: adj@f
 лошад--ь: horse, inflect: fem3
 grammar: fem3@nom
 мыш--ь: mouse, inflect: fem3
-маленк--ий: small, inflect: ийadj
+маленьк--ий: small, inflect: ийadj
 свитер--: sweater, inflect: masc1
 машин--а: car, inflect: fem1
 grammar: masc1@nom
@@ -81,6 +81,7 @@ grammar: masc1@acc
 центр--: center (of city), inflect: masc1
 человек--: person, inflect: masc1
 больш--ой: big, inflect: ойadj2
+зачем: what for
 не: not
 grammar: ойadj2@m
 почему: why
@@ -176,24 +177,29 @@ grammar: -мы@nom
 grammar: -встречать@3pl
 grammar: yo-yosh-yot@2
 скучн--ый: n/a, inflect: ыйadj
+grammar: adj@accn
 grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
 подар--ок: n/a, inflect: -подарок
 grammar: -подарок@acc
 grammar: adj@shortm
+grammar: adj@shortf
 да--вать: n/a, inflect: -давать
 grammar: -ребёнок@dat
 grammar: masc1@dat
 дар--ить: n/a, inflect: -дарить
 нужн--ый: n/a, inflect: ыйadj
 grammar: ыйadj@preppl
+grammar: fem2@accpl
 grammar: ойadj1@preppl
+grammar: -вы@dat
 должно: have to
 одалжива--ть: n/a, inflect: -встречать
 зам--ок: n/a, inflect: -подарок
 grammar: fem1@dat
 grammar: fem3@datpl
+фильм--: n/a, inflect: masc2
 хоч--<теть: n/a, inflect: -хотеть
 можно: be able to; be allowed to
 grammar: -дарить@inf
@@ -203,7 +209,7 @@ grammar: -видеть@inf
 grammar: -слышать@inf
 grammar: -ребёнок@accpl
 известн--ый: n/a, inflect: ыйadj
-ед--а: n/a, inflect: fem2
+ед--а: n/a, inflect: fem1
 нет: is not
 grammar: fem3@gen
 grammar: fem2@gen
@@ -245,7 +251,6 @@ grammar: -есть@2
 grammar: -пить@1
 grammar: -пить@2
 grammar: -пить@3
-grammar: fem2@accpl
 проблем--а: n/a, inflect: fem1
 борщ--: borsht (soup), inflect: masc2
 красн--ый: n/a, inflect: ыйadj
@@ -272,7 +277,7 @@ grammar: adj@genf
 grammar: neu1@genpl
 grammar: -статья@genpl
 grammar: neu1@gen
-воксал--: n/a, inflect: masc2
+вокзал--: n/a, inflect: masc2
 grammar: neu2@accpl
 утр--о: morning, inflect: neu2
 grammar: neu2@pl
@@ -289,7 +294,7 @@ grammar: y-esh-et@2
 grammar: -быть@1
 для: for; for the benefit of
 стран--а: country, inflect: fem1
-обуд--ь: shoe, inflect: fem4
+обув--ь: shoe, inflect: fem4
 и: and
 или: or
 голов--а: head, inflect: fem1

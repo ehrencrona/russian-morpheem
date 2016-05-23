@@ -1270,7 +1270,7 @@
 в этот@prepm ресторан@prep отличный@f еда@nom: undefined
 у я@gen нет еда@gen в квартира@prep: undefined
 здесь нет еда@gen: undefined
-ты@nom я@dat давать@2 еда@nom: undefined
+ты@nom давать@2 я@dat еда@acc: undefined
 я@nom покупать@1 подарок@accpl в магазин@prep: undefined
 он@nom давать@3 много подарок@genpl: undefined
 он@nom я@prep давать@3 подарок@accpl: undefined
@@ -1362,7 +1362,7 @@
 библиотека@nom одалживать@3 газета@accpl и журнал@accpl людь@datpl: undefined
 я@nom читать@1 этот@accf книга@acc: undefined
 она@nom любить@3 этот@accf библиотека@acc: undefined
-они@nom одалживать@3pl я@dat машина@acc: undefined
+родитель@pl одалживать@3pl я@dat свой@accf дорогой@accf машина@acc: undefined
 я@nom любить@1 читать@inf этот@accf газета@acc: undefined
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
 у я@gen проблема@nom: undefined
@@ -1401,3 +1401,20 @@
 длинный@f книга@nom на стул@prep: undefined
 длинный@f статья@nom в журнал@prep: undefined
 я@dat нужный@shortn работа@nom: undefined
+
+библиотека@pl одалживать@3pl вы@dat старый@accinanpl книга@accpl: undefined
+они@nom одалживать@3pl вы@dat скучный@accinanpl фильм@accpl: undefined
+вы@dat не нужный@shortm этот@m дорогой@m планшет@nom: undefined
+вы@dat нужный@shortm новый@m офис@nom в университет@prep: undefined
+я@nom дарить@1 вы@dat отличный@accinanm подарок@acc: undefined
+мама@nom писать@3 вы@dat длинный@accn письмо@acc: undefined
+вы@dat нужный@shortf новый@f кровать@nom: undefined
+вы@dat: undefined
+зачем ты@nom давать@2 собака@dat шоколад@acc: undefined
+ты@nom не давать@2 студент@datpl еда@gen: undefined
+ты@nom жить@2 в большой@prepm город@prep: undefined
+ты@nom жить@2 на красивый@prepf улица@prep: undefined
+ты@nom жить@2 на площадь@prep в центр@prep город@gen: undefined
+
+ты@nom жить@2 как собака@nom: undefined
+ты@nom жить@2 как: undefined
