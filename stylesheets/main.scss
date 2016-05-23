@@ -267,7 +267,11 @@ input[type=text] {
     display: flex;
 
     .selected {
-        font-weight: bold
+        font-weight: bold;
+    }
+    
+    .separator {
+        margin-right: 2 * $unit;
     }
 }
 

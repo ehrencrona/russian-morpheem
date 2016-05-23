@@ -1400,3 +1400,5 @@
 машина@nom олигарх@gen длинный@f: undefined
 длинный@f книга@nom на стул@prep: undefined
 длинный@f статья@nom в журнал@prep: undefined
+: undefined
+мы@nom: undefined

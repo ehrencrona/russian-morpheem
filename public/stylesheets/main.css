@@ -177,6 +177,8 @@ input[type=text] {
   display: flex; }
   .buttonBar .selected {
     font-weight: bold; }
+  .buttonBar .separator {
+    margin-right: 8px; }
 
 ul {
   padding: 0;

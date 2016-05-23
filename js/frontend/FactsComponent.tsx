@@ -4,9 +4,11 @@ import {Component,createElement} from 'react'
 import Corpus from '../shared/Corpus'
 import InflectedWord from '../shared/InflectedWord'
 import Fact from '../shared/Fact'
+import Sentence from '../shared/Sentence'
 
 import FactsEntryComponent from './FactsEntryComponent'
 import FactComponent from './FactComponent'
+import SentenceComponent from './SentenceComponent'
 import Tab from './Tab'
 import AddWordComponent from './AddWordComponent'
 
@@ -43,6 +45,18 @@ export default class FactsComponent extends Component<Props, State> {
         }
     }
     
+    addSentence() {
+        let sentence = new Sentence([ ], null)
+        
+        this.props.corpus.sentences.add(sentence)
+        
+        this.props.tab.openTab(
+            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
+            sentence.toString(),
+            sentence.id.toString()
+        )
+    }
+    
     render() {
         let indexOfFacts : { [factId: string]: FactSentenceIndex } =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
@@ -74,7 +88,10 @@ export default class FactsComponent extends Component<Props, State> {
         return (<div>
                 <div className='buttonBar'>
                     <div className='button' onClick={ () => { this.setState({ add: !this.state.add }) }}>+ Word</div>
+                    <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
 
+                    <div className='separator'></div>
+                    
                     { filterButton(MISSING, 'Missing') }
                     { filterButton(ALL, 'All') }
                     { filterButton(RECENT, 'Recent') }
