@@ -40,9 +40,9 @@ body {
     background-color: darken($color-bg-light, 10%);
 }
 
-input[type=text] {
+input[type=text], input[type=number] {
     font-family: inherit;
-    font-size: 150%;
+    font-size: 120%;
     background-color: lighten($color-bg-light, 10%);
     border: none;
 }
@@ -268,6 +268,12 @@ input[type=text] {
 
     .selected {
         font-weight: bold;
+    }
+    
+    input {
+        margin: 2 * $unit 0;
+        width: 12 * $unit;
+        text-align: right;
     }
     
     .separator {

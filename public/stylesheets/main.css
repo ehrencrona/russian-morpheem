@@ -26,9 +26,9 @@ body {
 .button:hover, .tab-header .tab-close:hover {
   background-color: #c7c7c7; }
 
-input[type=text] {
+input[type=text], input[type=number] {
   font-family: inherit;
-  font-size: 150%;
+  font-size: 120%;
   background-color: #fafafa;
   border: none; }
 
@@ -177,6 +177,10 @@ input[type=text] {
   display: flex; }
   .buttonBar .selected {
     font-weight: bold; }
+  .buttonBar input {
+    margin: 8px 0;
+    width: 48px;
+    text-align: right; }
   .buttonBar .separator {
     margin-right: 8px; }
 

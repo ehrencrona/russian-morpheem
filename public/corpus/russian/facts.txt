@@ -1,6 +1,7 @@
 тут: here
 это: this (is)
 собак--а: dog, inflect: fem2
+скучн--ый: n/a, inflect: ыйadj
 grammar: fem1@nom
 кошк--а: cat, inflect: fem2
 бел--ый: white, inflect: ыйadj
@@ -48,6 +49,7 @@ grammar: -видеть@1
 grammar: fem1@acc
 grammar: fem3@acc
 --кто: who, inflect: -кто
+grammar: adj@prepm
 слыш--ать: hear, inflect: -слышать
 grammar: -слышать@1
 мам--а: Mom, inflect: fem1
@@ -147,7 +149,6 @@ grammar: -встречать@2pl
 дом--: house, inflect: masc2
 grammar: ыйadj@pl
 работ--а: n/a, inflect: fem2
-grammar: adj@prepm
 город--: city, inflect: masc1
 как: how
 родител--ь: n/a, inflect: fem4
@@ -158,8 +159,8 @@ grammar: -жить@1
 люд--ь: people, inflect: fem3
 ошибк--а: n/a, inflect: femka
 grammar: n@preppl
-grammar: adj@preppl
 grammar: -друг@pl
+grammar: adj@preppl
 дела--ть: n/a, inflect: -встречать
 grammar: -жить@3pl
 grammar: n@accpl
@@ -175,8 +176,6 @@ grammar: -встречать@inf
 grammar: -мы@nom
 grammar: -встречать@3pl
 grammar: yo-yosh-yot@2
-скучн--ый: n/a, inflect: ыйadj
-grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
 подар--ок: n/a, inflect: -подарок
@@ -207,7 +206,6 @@ grammar: -ребёнок@accpl
 нет: is not
 grammar: fem3@gen
 grammar: fem2@gen
-grammar: masc1@gen
 grammar: fem1@gen
 у: by; also indicates "to have"
 grammar: -этот@accf
@@ -327,3 +325,5 @@ grammar: adj@prepf
 холодн--ый: n/a, inflect: ыйadj
 grammar: -ребёнок@preppl
 grammar: -есть@inf
+grammar: -я@dat
+grammar: masc1@gen
