@@ -23,6 +23,7 @@ it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите
 -дарить[v]: inf: ить, 1: ю, 3pl: ят, inherit: it-im-ite 
 -видеть[v]: inf: -еть, 1: -<жу, 3pl: -ят, inherit: it-im-ite
 -слышать[v]: inf: -ать, 1: -у, 3pl: -ат, inherit: it-im-ite
+-смотреть[v]: 1: ю, inherit: --видеть
 
 y-esh-et[v]: inf: ****, 1: -у, 2: -ешь, 3: -ет
 -писать[v]: inf: -<сать, 1pl: -ем, 2pl: -ете, 3pl: -ут, inherit: y-esh-et

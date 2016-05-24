@@ -1281,7 +1281,7 @@
 он@nom очень интересный@m человек@nom: undefined
 у я@gen интересный@f работа@nom: undefined
 она@nom жить@3 в интересный@prepm дом@prep: undefined
-я@nom встречать@1 интересный@accinanm человек@acc: undefined
+я@nom встречать@1 интересный@accanm человек@acc: undefined
 дом@nom в парк@prep очень интересный@m: undefined
 видеть@1 интересный@accf машина@acc: undefined
 у машина@gen нет дверь@genpl: undefined
@@ -1418,3 +1418,49 @@
 
 ты@nom жить@2 как собака@nom: undefined
 ты@nom жить@2 как: undefined
+я@dat скучный@shortn: undefined
+я@nom читать@1 скучный@accf книга@acc: undefined
+мой@m профессор@nom скучный@m человек@nom: undefined
+сегодня скучный@m день@nom: undefined
+сегодня скучный@f погода@nom: undefined
+я@nom читать@1 скучный@accinanm журнал@acc: undefined
+я@nom жить@1 в скучный@prepm город@prep: undefined
+ты@dat скучный@shortn: undefined
+ты@dat скучный@shortn в урок@prep: undefined
+мой@f работа@nom скучный@f: undefined
+я@nom работать@1 в скучный@prepm офис@prep: undefined
+каждый@m день@nom я@nom слушать@1 радио: undefined
+каждый@m день@nom я@nom смотреть@1 телевизор@nom: undefined
+каждый@m день@nom она@nom слушать@3 радио в интернет@prep: undefined
+вечером мы@nom слушать@1pl музыка@acc: undefined
+вечером я@nom смотреть@1 фильм@accpl: undefined
+я@nom смотреть@1 фильм@accpl в квартира@prep друг@gen: undefined
+он@nom смотреть@3 много телевизор@acc: undefined
+мой@m ребёнок@nom смотреть@3 телевизор@acc с друг@instrpl: undefined
+вечером я@nom играть@1 в интернет@prep: undefined
+студент@pl читать@3pl книга@accpl в интернет@prep: undefined
+много человек@genpl слушать@3 музыка@acc в интернет@prep: undefined
+он@nom писать@3 письмо@accpl друг@datpl в интернет@prep: undefined
+вечером я@nom играть@1 в интернет@prep с друг@instrpl: undefined
+он@nom читать@3 журнал@accpl в интернет@prep: undefined
+вот что я@dat интересный@shortn: undefined
+я@prep интересный@shortn играть@inf в интернет@prep: undefined
+я@prep скучный@shortn играть@inf в интернет@prep: undefined
+я@nom слушать@1 радио утром: undefined
+я@nom слушать@1 музыка@acc только в интернет@prep: undefined
+я@nom не слушать@1 много музыка@gen: undefined
+на радио хороший@f музыка@nom: undefined
+на радио скучный@f музыка@nom: undefined
+мой@pl друг@pl любить@3pl музыка@acc: undefined
+любить@1 слушать@inf музыка@acc: undefined
+утром я@nom давать@1 еда@acc кошка@dat: undefined
+утром мама@nom давать@3 еда@acc кошка@dat: undefined
+утром мама@nom гулять@3 с собака@instr: undefined
+я@nom не много есть@1 утром: undefined
+я@nom не много есть@1 вечером: undefined
+утром мама@nom читать@3 журнал@acc: undefined
+он@nom пить@3 каждый@m день@nom: undefined
+я@nom читать@1 каждый@accf книга@acc: undefined
+вечером он@nom не много говорить@3: undefined
+что вы@nom говорить@2pl: undefined
+вечером я@nom говорить@1 с друг@instrpl: undefined
