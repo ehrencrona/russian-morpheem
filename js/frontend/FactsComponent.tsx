@@ -3,6 +3,7 @@
 import {Component,createElement} from 'react'
 import Corpus from '../shared/Corpus'
 import InflectedWord from '../shared/InflectedWord'
+import InflectionFact from '../shared/InflectionFact'
 import Fact from '../shared/Fact'
 import Sentence from '../shared/Sentence'
 
@@ -85,13 +86,21 @@ export default class FactsComponent extends Component<Props, State> {
             <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
                 onClick={ () => { this.setState({ list: id }) }}>{ name }</div>
 
+        let exampleByInflectionId = {}
+
+        this.props.corpus.facts.facts.forEach((fact) => {
+            if (fact instanceof InflectedWord && !exampleByInflectionId[fact.inflection.id]) {
+                exampleByInflectionId[fact.inflection.id] = fact
+            } 
+        })
+
         return (<div>
                 <div className='buttonBar'>
                     <div className='button' onClick={ () => { this.setState({ add: !this.state.add }) }}>+ Word</div>
                     <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
 
                     <div className='separator'></div>
-                    
+
                     { filterButton(MISSING, 'Missing') }
                     { filterButton(ALL, 'All') }
                     { filterButton(RECENT, 'Recent') }
@@ -109,16 +118,29 @@ export default class FactsComponent extends Component<Props, State> {
 
                 <ul className='facts'>
                 {
-                    factIndices.map((factIndex) => 
-                        <FactsEntryComponent
-                            key={ factIndex.fact.getId() }
-                            fact={ factIndex.fact }
+                    factIndices.map((factIndex) => {
+                        let fact = factIndex.fact
+                        let example
+                        
+                        if (fact instanceof InflectionFact) {
+                            example = exampleByInflectionId[fact.inflection.getId()]
+                            
+                            if (example) {
+                                example = example.inflect(fact.form)
+                            }
+                        }
+                        
+                        return <FactsEntryComponent
+                            key={ fact.getId() }
+                            fact={ fact }
                             index={ factIndex.index }
                             indexOfFacts={ indexOfFacts }
                             corpus={ this.props.corpus }
                             tab={ this.props.tab }
                             onMove={ () => this.forceUpdate() }
+                            example={ example }
                             />
+                    }
                     )
                 }
                 </ul>

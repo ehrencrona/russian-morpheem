@@ -8,6 +8,8 @@ $color-fg-inverted: #e0e0e0;
 $color-bg-light: #e0e0e0;
 $color-bg-inverted: #808080;
 
+$small-font: 60%;
+
 html {
     margin: 0;
     padding: 0;
@@ -266,6 +268,10 @@ input[type=text], input[type=number] {
 .buttonBar {
     display: flex;
 
+    > div {
+        display: flex;
+    }
+
     .selected {
         font-weight: bold;
     }
@@ -410,6 +416,15 @@ ul {
     }
 }
 
+.wordsWithInflection {
+    .button {
+        display: inline-block;
+        position: relative;
+        top: - 1px;
+        font-size: $small-font; 
+    }
+}
+
 .clickable:hover {
     color: black;
     text-decoration: underline;
@@ -428,7 +443,7 @@ ul {
     }
 
     .insufficient {
-        font-size: 60%;
+        font-size: $small-font;
         background-color: $color-bg-light;
         padding: 2px 3px;
         border-radius: 2px;

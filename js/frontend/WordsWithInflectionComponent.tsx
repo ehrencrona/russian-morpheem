@@ -26,7 +26,33 @@ interface State {}
 let React = { createElement: createElement }
 
 export default class WordsWithInflectionComponent extends Component<Props, State> {
+    addSentence(word: Word) {
+        let sentence = new Sentence([ word ], null)
+
+        this.props.corpus.sentences.add(sentence)
+
+        this.openSentence(sentence)
+    }
+
+    openSentence(sentence: Sentence) {
+        this.props.tab.openTab(
+            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
+            sentence.toString(),
+            sentence.id.toString()
+        )
+    }
     
+    openFact(word: InflectedWord) {
+        let fact = this.props.corpus.facts.get(word.infinitive.getId())
+
+        if (fact) {            
+            this.props.tab.openTab(
+                <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } fact={ fact }/>, 
+                fact.toString(), fact.getId()
+            )
+        }        
+    }
+
     render() {
         let words: InflectedWord[] = this.props.corpus.facts.facts.filter((fact) => {
             try {
@@ -40,18 +66,16 @@ export default class WordsWithInflectionComponent extends Component<Props, State
         })
 
 
-        return <div>
+        return <div className='wordsWithInflection'>
         {
             words.map((word) => {            
                 let index = this.props.corpus.facts.indexOf(word.infinitive);
 
-                return <div key={ word.getId() } className='clickable' onClick={ () =>
-                    this.props.tab.openTab(
-                        <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } fact={ word }/>, word.toString(), word.getId()
-                    ) 
-                }>
+                return <div key={ word.getId() } className='clickable' onClick={ () => this.openFact(word) }>
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
-                    { word.toString() } 
+                    { word.toString() }
+
+                    <div className='button' onClick={ (e) => { this.addSentence(word); e.stopPropagation() } }>+ Sentence</div>
                 </div>
             })            
         }

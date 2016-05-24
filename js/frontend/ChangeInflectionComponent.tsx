@@ -77,7 +77,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
                 <div className='inflectionName'>
                     inflects as&nbsp;
                     
-                    <span className='clickable name' onClick={ () => this.inflectionClicked(inflection) }>
+                    <span className='name'>
                         { inflection.id }
                         { (inflection.pos ? ' (' + inflection.pos + ')' : '') }
                     </span>

@@ -18,7 +18,8 @@ interface Props {
     inflection: Inflection,
     tab: Tab,
     word?: InflectedWord,
-    onSelect?: (word: Word) => any 
+    onSelect?: (word: Word) => any
+    hideForms?: Object
 }
 
 interface State {
@@ -177,7 +178,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         
         this.props.corpus.facts.add(fact)
         
-        this.openForm(form)
+        this.forceUpdate()
     }
 
     render() {
@@ -203,8 +204,9 @@ export default class InflectionsComponent extends Component<Props, State> {
             let className = 'form'
             let inherited = !this.state.inflection.endings[form]
             
-            if (!this.props.word && inherited) {
-                className += ' inherited'
+            if ((!this.props.word && inherited) ||
+                (this.props.hideForms && this.props.hideForms[form] != undefined)) {
+                return <div key={form}/>
             }
 
             if (index > 0) {
@@ -218,11 +220,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             }
             else {
                 return <div key={form} className={ className }>{ wordsByForm[form] }
-                    { !inherited ?
-                        <div className='add' onClick={ () => this.addFact(form) }><div className='number'>add</div></div>
-                        :
-                        []
-                    }
+                    <div className='add' onClick={ () => this.addFact(form) }><div className='number'>add</div></div>
                 </div>
             }
         }
@@ -238,27 +236,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             (other) => this.props.inflection == other.inherits)
 
         return (
-            <div className='inflections'>                
-                { this.props.inflection.inherits ?
-
-                        <div className='inherits'>
-                            inherits&nbsp;
-                            <span className='clickable' onClick={ () => this.inflectionClicked(this.props.inflection.inherits) }>
-                                { this.props.inflection.inherits.id }
-                            </span>
-                        </div>
-                    
-                    :
-                    
-                    [] }
-                { children.map((inflection) => 
-                    <div className='inherits'>
-                        inherited by&nbsp;
-                        <span className='clickable' onClick={ () => this.inflectionClicked(inflection) }>
-                            { inflection.id }
-                        </span>
-                    </div>)
-                }
+            <div className='inflections'>
                 <table>
                 { table.cols.length > 1 ?                            
                     <thead>

@@ -18,7 +18,8 @@ interface Props {
     index: number,
     corpus: Corpus,
     tab: Tab,
-    onMove?: () => any
+    onMove?: () => any,
+    example?: InflectedWord
 }
 
 interface State {
@@ -103,7 +104,11 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 </div>
 
                 <span className='clickable'>
-                    { name } { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
+                    { name } 
+                    
+                    { this.props.example ? ', e.g. ' + this.props.example.toString()  : '' }
+                    
+                    { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
                 </span>
             </li>
         )
