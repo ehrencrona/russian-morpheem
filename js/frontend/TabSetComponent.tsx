@@ -77,6 +77,10 @@ export default class TabSetComponent extends Component<Props, State> {
 
         let i = newTabs.findIndex((tab) => tab === after)
 
+        if (i < 0) {
+            i = this.state.first
+        }
+
         if (!tab) {
             tab = new Tab(name, id, element, this)
         }
