@@ -7,6 +7,7 @@ import InflectedWord from '../shared/InflectedWord'
 import Sentence from '../shared/Sentence'
 import Tab from './Tab'
 
+import FactNameComponent from './FactNameComponent'
 import WordSearchComponent from './WordSearchComponent'
 import FactComponent from './FactComponent'
 import SentenceEditorComponent from './SentenceEditorComponent'
@@ -96,7 +97,7 @@ export default class SentenceComponent extends Component<Props, State> {
         let factIndexToElement = (factIndex : FactIndex) => 
             <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact) }>
                 <div className='index'><div className='number'>{ factIndex.index + 1 }</div></div>
-                { factIndex.fact.getId() }
+                <FactNameComponent fact={ factIndex.fact } corpus={ this.props.corpus} />
             </li>
 
         let editor: SentenceEditorComponent
@@ -131,8 +132,8 @@ export default class SentenceComponent extends Component<Props, State> {
                 onWordSelect={ (word) => { editor.setWord(word); wordSearch.clearFilters() } } 
                 ref={ (ref) => { wordSearch = ref } }
                 canFilterWord={ true }/>
-            
-            <ul>
+
+            <ul className='sortedFacts'>
             {
                 sortedFacts.map(factIndexToElement)
             }

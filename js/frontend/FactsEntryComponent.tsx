@@ -10,6 +10,7 @@ import AddWordComponent from './AddWordComponent'
 import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import InflectionFact from '../shared/InflectionFact'
+import FactNameComponent from './FactNameComponent'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
@@ -66,29 +67,6 @@ export default class FactsEntryComponent extends Component<Props, State> {
         this.setState({ dragTarget: false })
     }
 
-    getExamples(fact: InflectionFact) {
-        let inflectionIds = new Set()
-
-        this.props.corpus.inflections.inflections.forEach((inflection) => {
-            if (inflection.pos == fact.inflection.pos &&
-                inflection.getInflectionId(fact.form) == fact.inflection.id) {
-                inflectionIds.add(inflection.id)
-            }
-        })
-
-        let result: InflectedWord[] = []
-
-        this.props.corpus.facts.facts.forEach((fact) => {
-            if (result.length < 3 &&
-                fact instanceof InflectedWord && 
-                inflectionIds.has(fact.inflection.id)) {
-                result.push(fact.infinitive.inflect(fact.form))
-            } 
-        })
-
-        return result
-    }
-
     render() {
         let fact = this.props.fact
         let index = this.props.index
@@ -96,19 +74,8 @@ export default class FactsEntryComponent extends Component<Props, State> {
         
         let indexEntry: FactSentenceIndex = indexOfFacts[fact.getId()] || 
             { ok: 0, easy: 0, hard: 0, factIndex: 0 }
-        let name = fact.getId();
-        
-        if (fact instanceof InflectedWord) {
-            name = fact.toString();
-        }
-        
+
         let left = 8 - (indexEntry.easy + indexEntry.ok)
-        
-        let examples
-        
-        if (fact instanceof InflectionFact) {
-            examples = this.getExamples(fact)
-        }
         
         return ( 
             <li 
@@ -133,21 +100,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 </div>
 
                 <span className='clickable'>
-                    { examples && fact instanceof InflectionFact ? 
-
-                        <span>
-                            { 
-                                examples.join(', ') + 
-                                    (examples.length == 3 ? '...' : '') 
-                            }
-                            <span className='form'>{ fact.form }</span> 
-                        </span>
-
-                        : 
-
-                        name 
-
-                    }
+                    <FactNameComponent fact={ fact } corpus={ this.props.corpus} />
                     
                     { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
                 </span>

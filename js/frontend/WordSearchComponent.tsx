@@ -248,14 +248,8 @@ export default class WordSearchComponent extends Component<Props, State> {
                     :
                     <div/>) }
                 <div className='word'>{suggestion.word.toString()}</div>
-                <div className='count'>{ getFactOccurrences(suggestion.fact) }</div>
                 { suggestion.inflection ?
                     <div className='form'>{suggestion.inflection.form }</div>
-                    :
-                    []
-                }
-                { suggestion.inflection ?
-                    <div className='count'>{ getFactOccurrences(suggestion.inflection.fact) }</div>
                     :
                     []
                 }
