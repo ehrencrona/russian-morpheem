@@ -17,6 +17,7 @@ neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -�
 
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
+-человек[n]: genpl: , inherit: masc1
 -встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют
 
 it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите
@@ -40,15 +41,12 @@ yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте
 -есть[v]: inf: есть, 1: ем, 2: ешь, 3: ест, 1pl: едим, 2pl: едите, 3pl: едят
 -пить[v]: inf: пить, 1: пию, 2: пьёшь, 3: пьёт, 1pl: пьём, 2pl: пьёте, 3pl: пьют
 
-
-
-
-adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о 
+adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, accf: -ую, accanpl: их, accinanpl: ие, pl: -ие, genm: -ого, genn: -ого, genf: -ой, genpl: -их, datm: -ому, datn: -ому, datf: -ой, datpl: -им, instrm: -им, instrn: -им, instrf: -ой, instrpl: ими, prepm: -ом, prepn: -ом, prepf: -ой, preppl: -их, shortm: <ен, shortf: а, shortn: о, shortpl: и, adv: о
 
 ойadj2[adj]: m: -ой, accinanm: -ой, inherit: adj 
 ойadj1[adj]: f: -оя, n: -оё, accf: -ою, genm: -оего, datm: оему, datn: оему, datf: оей, accanm: -оего, genn: -оего, genf: -оей, instrm: -оим, instrn: -оим, instrf: -оей, prepm: -оём, prepn: -оём, prepf: -оей, pl: -ои, preppl: оих, accanpl: оих, accinanpl: ои, pl: -ои, genpl: -оих, datpl: -оим, instrpl: оими, preppl: -оих, inherit: ойadj2
 
-ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, inherit: adj
+ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, shortpl: ы, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
 -хороший[adj]: prepm: ем, prepf: ем, prepn: ей, genf: ей, instrf: ей, datf: ей, shortm: , inherit: ийadj
 

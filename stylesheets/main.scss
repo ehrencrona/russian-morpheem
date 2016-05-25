@@ -207,6 +207,11 @@ input[type=text], input[type=number] {
     }
 }
 
+.sortedFacts .form {
+    font-style: italic;
+    margin-left: $unit;
+}
+
 .wordSearch {    
     .filter {
         padding: $unit;

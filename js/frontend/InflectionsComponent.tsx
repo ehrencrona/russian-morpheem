@@ -73,7 +73,7 @@ let FIELDS =
         } ,
         adj: {
             cols: [ 'm sg', 'n sg', 'f sg', 'plural' ],
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short' ],
+            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short', 'adv' ],
             forms: [
                 ['m','n','f','pl'],
                 ['genm','genn','genf','genpl'],
@@ -81,7 +81,8 @@ let FIELDS =
                 [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
                 ['instrm','instrn','instrf','instrpl'],
                 ['prepm','prepn','prepf','preppl'],
-                ['shortm', 'shortn', 'shortf']
+                ['shortm', 'shortn', 'shortf', 'shortpl'],
+                ['adv']
             ]
         },
         
@@ -198,9 +199,9 @@ export default class InflectionsComponent extends Component<Props, State> {
         wordsByForm = this.getWordsByForm(word)
 
         let formComponent = (form) => {
-            let fact = this.state.inflection.getFact(form);
-            let index = this.props.corpus.facts.indexOf(fact);
-            
+            let fact = this.state.inflection.getFact(form)
+            let index = this.props.corpus.facts.indexOf(fact)
+
             let className = 'form'
             let inherited = !this.state.inflection.endings[form]
             

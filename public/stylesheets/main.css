@@ -133,6 +133,10 @@ input[type=text], input[type=number] {
   .sentenceEditor .sentenceEnd {
     flex-grow: 1; }
 
+.sortedFacts .form {
+  font-style: italic;
+  margin-left: 4px; }
+
 .wordSearch .filter {
   padding: 4px;
   border-bottom: 1px solid #808080;
