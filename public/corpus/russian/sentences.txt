@@ -1367,7 +1367,7 @@
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
 у я@gen проблема@nom: undefined
 профессор@nom любить@3 трудный@accinanpl проблема@accpl: undefined
-мы@nom: undefined
+мы@nom жить@1pl на маленький@prepf площадь@prep: undefined
 я@dat холодный@shortn: undefined
 я@nom любить@1 холодный@accinanm борщ@acc: undefined
 они@nom есть@3pl в дорогой@preppl ресторан@preppl: undefined
@@ -1400,7 +1400,7 @@
 машина@nom олигарх@gen длинный@f: undefined
 длинный@f книга@nom на стул@prep: undefined
 длинный@f статья@nom в журнал@prep: undefined
-я@dat нужный@shortn работа@nom: undefined
+я@dat нужный@shortn работать@inf: undefined
 
 библиотека@pl одалживать@3pl вы@dat старый@accinanpl книга@accpl: undefined
 они@nom одалживать@3pl вы@dat скучный@accinanpl фильм@accpl: undefined
@@ -1426,11 +1426,11 @@
 я@nom читать@1 скучный@accinanm журнал@acc: undefined
 я@nom жить@1 в скучный@prepm город@prep: undefined
 ты@dat скучный@shortn: undefined
-ты@dat скучный@shortn в урок@prep: undefined
+ты@dat скучный@shortn на урок@prep: undefined
 мой@f работа@nom скучный@f: undefined
 я@nom работать@1 в скучный@prepm офис@prep: undefined
 каждый@m день@nom я@nom слушать@1 радио: undefined
-каждый@m день@nom я@nom смотреть@1 телевизор@nom: undefined
+каждый@m день@nom я@nom смотреть@1 телевизор@acc: undefined
 каждый@m день@nom она@nom слушать@3 радио в интернет@prep: undefined
 вечером мы@nom слушать@1pl музыка@acc: undefined
 вечером я@nom смотреть@1 фильм@accpl: undefined
@@ -1439,7 +1439,7 @@
 мой@m ребёнок@nom смотреть@3 телевизор@acc с друг@instrpl: undefined
 вечером я@nom играть@1 в интернет@prep: undefined
 студент@pl читать@3pl книга@accpl в интернет@prep: undefined
-много человек@genpl слушать@3 музыка@acc в интернет@prep: undefined
+много людь@genpl слушать@3 музыка@acc в интернет@prep: undefined
 он@nom писать@3 письмо@accpl друг@datpl в интернет@prep: undefined
 вечером я@nom играть@1 в интернет@prep с друг@instrpl: undefined
 он@nom читать@3 журнал@accpl в интернет@prep: undefined
@@ -1460,7 +1460,66 @@
 я@nom не много есть@1 вечером: undefined
 утром мама@nom читать@3 журнал@acc: undefined
 он@nom пить@3 каждый@m день@nom: undefined
-я@nom читать@1 каждый@accf книга@acc: undefined
+я@nom читать@1 каждый@accf книга@acc который@accf я@nom покупать@1: undefined
 вечером он@nom не много говорить@3: undefined
 что вы@nom говорить@2pl: undefined
 вечером я@nom говорить@1 с друг@instrpl: undefined
+в каждый@prepm город@prep библиотека@nom: undefined
+в каждый@prepm дом@prep собака@nom: undefined
+вечером гулять@1: undefined
+она@nom дарить@3 лошадь@datpl еда@acc: undefined
+мой@f мама@nom очень хороший@shortf: undefined
+этот@f дверь@nom открытый@shortf: undefined
+сейчас библиотека@nom открытый@shortf: undefined
+я@dat не нужный@shortf твой@f старый@f машина@nom: undefined
+студент@dat нужный@shortf новый@f квартира@nom в центр@prep: undefined
+на твой@prepf твой@genf улица@prep очень красивый@shortn: undefined
+студент@datpl не нужный@shortn это делать@inf: undefined
+ты@dat плохой@shortn: undefined
+для я@gen это не новый@shortn: undefined
+в квартира@prep открытый@shortn окно@nom: undefined
+вы@nom дарить@2pl мама@dat маленький@accf собака@acc: undefined
+мы@dat не нужный@shortm новый@m профессор@nom: undefined
+мы@dat нельзя открывать@inf окно@accpl: undefined
+можно мы@dat писать@inf в книга@preppl: undefined
+зачем мы@dat делать@inf урок@accpl: undefined
+мы@dat нужный@shortm новый@m дорогой@m планшет@nom: undefined
+ты@nom не давать@2 мы@dat хороший@genf еда@gen: undefined
+мы@dat нельзя курить@inf в квартира@prep: undefined
+это маленький@f квартира@nom студент@gen: undefined
+я@nom хотеть@1 слушать@inf хороший@accf музыка@acc: undefined
+у он@gen нет хороший@genf музыка@gen: undefined
+этот@f музыка@nom скучный@f: undefined
+в мой@prepf комната@prep плохой@m интернет@nom: undefined
+в этот@prepf квартира@prep нет интернет@gen: undefined
+зачем ты@dat нужный@shortm хороший@m интернет@nom: undefined
+
+каждый@m день@nom я@nom смотреть@1 новый@accinanm фильм@acc в интернет@prep: undefined
+каждый@m день@nom я@nom смотреть@1 длинный@accinanm фильм@acc по телевизор@dat: undefined
+я@nom любить@1 смотреть@inf интересный@accinanpl фильм@accpl: undefined
+я@nom не любить@1 смотреть@inf скучный@accinanpl фильм@accpl: undefined
+мы@nom с мама@instr смотреть@1pl по телевизор@dat: undefined
+ты@nom любить@2 смотреть@inf фильм@accpl: undefined
+студент@pl смотреть@3pl скучный@accinanm фильм@acc на урок@prep: undefined
+каждый@n утро@nom мы@nom с мама@instr смотреть@1pl фильм@acc на французский@prepm: undefined
+у вы@gen быть@1 новый@m фильм@nom: undefined
+в этот@prepm фильм@prep нет людь@accpl: undefined
+я@nom очень любить@1 этот@accinanm фильм@acc: undefined
+студент@pl очень любить@3pl смотреть@inf фильм@accpl: undefined
+сегодня я@nom смотреть@1 фильм@acc: undefined
+сегодня мой@m друг@nom смотреть@3 фильм@nom: undefined
+я@nom не любить@1 слушать@inf новый@accf музыка@acc: undefined
+ты@nom любить@2 слушать@inf радио: undefined
+в каждый@prepm парк@prep быть@1 дерево@pl: undefined
+в каждый@prepm город@prep быть@1 парк@nom: undefined
+каждый@datm дом@dat нужный@shortf кошка@nom: undefined
+каждый@datm ребёнок@dat нужный@shortm родитель@nom: undefined
+каждый@m день@nom плохой@f погода@nom: undefined
+профессор@nom каждый@m день@nom слушать@3 радио: undefined
+зачем ты@dat нужный@shortn радио: undefined
+ты@nom не смотреть@2 телевизор@acc: undefined
+мой@f мама@nom смотреть@3 телевизор@acc каждый@m вечер@acc: undefined
+мой@f мама@nom смотреть@3 телевизор@acc: undefined
+мой@m профессор@nom сегодня в телевизор@prep: undefined
+студент@pl смотреть@3pl телевизор@acc у родитель@genpl в квартира@prep: undefined
+зачем телевизор@nom: undefined

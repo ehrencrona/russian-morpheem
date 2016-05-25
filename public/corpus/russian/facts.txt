@@ -97,6 +97,7 @@ grammar: ойadj2@accinanm
 сегодня: today
 вчера: yesterday
 grammar: -он@acc
+grammar: -мы@nom
 grammar: -она@acc
 тв--ой: your, inflect: ойadj1
 д--ень: day, inflect: -день
@@ -150,6 +151,7 @@ grammar: ыйadj@pl
 работ--а: n/a, inflect: fem2
 grammar: adj@prepm
 город--: city, inflect: masc1
+grammar: adj@prepf
 как: how
 родител--ь: n/a, inflect: fem4
 офис--: n/a, inflect: masc1
@@ -165,6 +167,7 @@ grammar: -друг@pl
 grammar: -жить@3pl
 grammar: n@accpl
 разн--ый: n/a, inflect: ыйadj
+плох--ой: bad, inflect: ойadj2
 grammar: yo-yosh-yot@1pl
 grammar: yo-yosh-yot@3
 grammar: ыйadj@accinanpl
@@ -173,33 +176,31 @@ grammar: yo-yosh-yot@2pl
 grammar: -они@nom
 grammar: -встречать@inf
 --мы: we, inflect: -мы
-grammar: -мы@nom
 grammar: -встречать@3pl
 grammar: yo-yosh-yot@2
 скучн--ый: n/a, inflect: ыйadj
 grammar: adj@accn
-grammar: -я@dat
 возвраща--ть: n/a, inflect: -встречать
 шоколад--: n/a, inflect: masc1
 подар--ок: n/a, inflect: -подарок
 grammar: -подарок@acc
 grammar: adj@shortm
 grammar: adj@shortf
+grammar: adj@shortn
 да--вать: n/a, inflect: -давать
+grammar: -я@dat
 grammar: -ребёнок@dat
 grammar: masc1@dat
 дар--ить: n/a, inflect: -дарить
 нужн--ый: n/a, inflect: ыйadj
+grammar: adj@datm
 grammar: ыйadj@preppl
 grammar: fem2@accpl
 grammar: ойadj1@preppl
 grammar: -вы@dat
 должно: have to
 одалжива--ть: n/a, inflect: -встречать
-зам--ок: n/a, inflect: -подарок
 grammar: fem1@dat
-grammar: fem3@datpl
-фильм--: n/a, inflect: masc1
 grammar: -ты@dat
 хоч--<теть: n/a, inflect: -хотеть
 с: with
@@ -207,19 +208,22 @@ grammar: -ты@dat
 радио: radio
 кажд--ый: n/a, inflect: ыйadj
 утром: in the morning
+котор--ый: n/a, inflect: ыйadj
 музык--а: n/a, inflect: fem2
 вечером: in the evening
 только: only
+grammar: -видеть@inf
+фильм--: n/a, inflect: masc1
 grammar: -смотреть@1
 слуша--ть: n/a, inflect: -встречать
 телевизор--: n/a, inflect: masc1
 смотр--еть: n/a, inflect: -смотреть
 можно: be able to; be allowed to
+зам--ок: n/a, inflect: -подарок
 grammar: -дарить@inf
 кур--ить: n/a, inflect: -дарить
 говор--ить: n/a, inflect: -дарить
 нельзя: it's not allowed to
-grammar: -видеть@inf
 grammar: -слышать@inf
 grammar: -ребёнок@accpl
 известн--ый: n/a, inflect: ыйadj
@@ -232,12 +236,13 @@ grammar: fem1@gen
 у: by; also indicates "to have"
 grammar: -этот@accf
 grammar: -я@gen
+grammar: -он@gen
+grammar: fem3@datpl
 grammar: ойadj1@datpl
 grammar: ыйadj@datpl
 grammar: n@datpl
 grammar: adj@datn
 grammar: adj@datpl
-grammar: adj@datm
 grammar: adj@datf
 grammar: -ты@gen
 grammar: -она@gen
@@ -268,7 +273,6 @@ grammar: -пить@3
 проблем--а: n/a, inflect: fem1
 борщ--: borsht (soup), inflect: masc3
 красн--ый: n/a, inflect: ыйadj
-плох--ой: bad, inflect: ойadj2
 св--ой: his/min (refers to the subject), inflect: ойadj1
 олигарх--: oligarch, inflect: masc1
 письм--о: letter, inflect: neu2
@@ -314,7 +318,6 @@ grammar: -быть@1
 голов--а: head, inflect: fem1
 забыва--ть: to forget, inflect: -встречать
 цвет--: color, inflect: masc3
-grammar: adj@shortn
 температур--а: temperature, inflect: fem1
 мяс--о: n/a, inflect: neu2
 grammar: ойadj1@n
@@ -322,7 +325,6 @@ grammar: ойadj1@n
 часто: often
 иногда: sometimes
 несколько: a few
-grammar: -он@gen
 язык--: n/a, inflect: masc2
 grammar: -жить@inf
 grammar: adj@accanpl
@@ -341,7 +343,6 @@ grammar: -встречать@1pl
 пакет--: n/a, inflect: masc1
 grammar: ойadj1@accinanpl
 grammar: -ребёнок@genpl
-grammar: adj@prepf
 холодн--ый: n/a, inflect: ыйadj
 grammar: -ребёнок@preppl
 grammar: -есть@inf
@@ -350,3 +351,6 @@ grammar: -друг@instrpl
 grammar: -друг@datpl
 grammar: -давать@1
 по: in/on
+grammar: -мы@dat
+grammar: -давать@3pl
+вечер--: n/a, inflect: masc3
