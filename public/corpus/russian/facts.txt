@@ -79,7 +79,7 @@ grammar: masc1@acc
 друг--: friend, inflect: -друг
 студент--: student, inflect: masc1
 центр--: center (of city), inflect: masc1
-человек--: person, inflect: masc1
+человек--: person, inflect: -человек
 больш--ой: big, inflect: ойadj2
 зачем: what for
 не: not
