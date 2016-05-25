@@ -1418,3 +1418,8 @@
 
 ты@nom жить@2 как собака@nom: undefined
 ты@nom жить@2 как: undefined
+: undefined
+: undefined
+: undefined
+: undefined
+: undefined

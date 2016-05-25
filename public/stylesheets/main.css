@@ -284,6 +284,9 @@ ul {
     margin-right: 12px; }
   .facts .count {
     margin-left: 4px; }
+  .facts .form {
+    margin-left: 4px;
+    font-style: italic; }
   .facts .insufficient {
     font-size: 60%;
     background-color: #e0e0e0;

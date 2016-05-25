@@ -442,6 +442,11 @@ ul {
         margin-left: $unit;
     }
 
+    .form {
+        margin-left: $unit;
+        font-style: italic;
+    }
+
     .insufficient {
         font-size: $small-font;
         background-color: $color-bg-light;

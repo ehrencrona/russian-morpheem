@@ -91,8 +91,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 { tabButton('words', 'Words') }
                 { tabButton('sentences', 'Sentences') }
                 { tabButton('inflection', 'Inflection') }
-                { tabButton('form', 'Form') }
-                
+
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
         

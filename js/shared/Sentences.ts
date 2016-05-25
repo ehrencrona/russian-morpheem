@@ -29,6 +29,10 @@ export default class Sentences {
     }
 
     changeId(fromId: number, toId: number) {
+        if (fromId == toId) {
+            return
+        }
+
         let sentence = this.get(fromId)
 
         if (!sentence) {

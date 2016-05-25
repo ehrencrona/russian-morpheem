@@ -15,7 +15,8 @@ let NO_POS = 'none'
 interface Props {
     corpus: Corpus,
     tab: Tab,
-    onWordSelect: (Word) => any
+    onWordSelect: (Word) => any,
+    canFilterWord?: boolean
 }
 
 interface State {
@@ -47,19 +48,19 @@ export default class WordSearchComponent extends Component<Props, State> {
             filterString: ''
         }
     }
-        
-    setWord(word: Word) {
-        this.setState({ filterWord: word, filterPos: null })
-    }
 
     clearFilters() {
         this.setState({ filterWord: null, filterString: '', filterPos: null })
     }
     
+    setWord(word: Word) {
+        this.setState({ filterWord: word, filterPos: null })
+    }
+
     selectSuggestion(suggestion: Suggestion) {
         let word = suggestion.word
 
-        if (!suggestion.inflection && word instanceof InflectedWord) {
+        if (!suggestion.inflection && word instanceof InflectedWord && this.props.canFilterWord) {
             this.setState({ filterWord: word.infinitive })
         } 
         else {
@@ -68,33 +69,41 @@ export default class WordSearchComponent extends Component<Props, State> {
         }
     }
     
-    findMatchingInflection(word: InflectedWord, filter: string) {
+    findMatchingInflections(word: InflectedWord, filter: string): Fact[] {
         let i = Math.min(filter.length, word.stem.length)
 
-        if (word.stem.substr(0, i) == filter.substr(0, i)) {
-            let found
+        let result: Fact[] = []
+        let prefixMatch: InflectedWord
 
+        if (word.stem.substr(0, i) == filter.substr(0, i)) {
             word.visitAllInflections((inflection: InflectedWord) => {
-                if (inflection.toString().substr(0, filter.length) == filter) {
-                    if (!found || inflection.toString() == filter) {
-                        found = inflection
-                    }
+                if (inflection.toString() == filter) {
+                    result.push(inflection)
+                }
+                else if (inflection.toString().substr(0, filter.length) == filter) {
+                    prefixMatch = inflection
                 }
             }, false)
-            
-            return found
-        }
-    }
-    
-    factMatchingFilterString(fact, filter: string) {
-        if (fact instanceof Word && 
-            fact.toString().substr(0, filter.length) == filter) {
-            return fact
         }
         
-        if (fact instanceof InflectedWord) {
-            return this.findMatchingInflection(fact, filter)
+        if (result.length && prefixMatch) {
+            result.push(prefixMatch)
         }
+        
+        return result
+    }
+    
+    factsMatchingFilterString(fact, filter: string): Fact[] {
+        if (fact instanceof Word && 
+            fact.toString().substr(0, filter.length) == filter) {
+            return [ fact ]
+        }
+
+        if (fact instanceof InflectedWord) {
+            return this.findMatchingInflections(fact, filter)
+        }
+        
+        return []
     }
     
     render() {
@@ -104,86 +113,83 @@ export default class WordSearchComponent extends Component<Props, State> {
         let suggestions: Suggestion[] = []
         let allForms = new Set<string>()
 
-        if (this.state.filterPos || this.state.filterString || this.state.filterWord) {
-            let filterPos = this.state.filterPos
-            let filterString = this.state.filterString
+        let filterPos = this.state.filterPos
+        let filterString = this.state.filterString
+        let corpus = this.props.corpus
 
-            this.props.corpus.facts.facts.forEach((fact: Fact) => {
-                if (this.state.filterWord && fact instanceof Word && this.state.filterWord.getId() != fact.getId()) {
-                    return
-                }
-
-                if (filterString) {
-                    fact = this.factMatchingFilterString(fact, filterString)
+        function addSuggestionForFact(fact: Fact) {
+            if (fact instanceof InflectedWord && 
+                    (fact.inflection.pos == filterPos || (filterPos == NO_POS && !fact.inflection.pos) || !filterPos)) {
+                let addFact = fact
+                
+                let inflection = null
                     
-                    if (!fact) {
-                        return
+                if (fact.form != fact.inflection.defaultForm) {
+                    let inflectionFact = fact.inflection.getFact(fact.form)
+                    
+                    inflection = {
+                        form: fact.form,
+                        fact: inflectionFact,
+                        index: corpus.facts.indexOf(inflectionFact)
                     }
                 }
                 
-                if (fact instanceof InflectedWord && this.state.filterWord) {
-                    fact.visitAllInflections((inflected: InflectedWord) => {
-                        let inflectionFact = fact.inflection.getFact(inflected.form)
-                        
-                        let suggestion: Suggestion = {
-                            index: this.props.corpus.facts.indexOf(fact),
-                            word: inflected,
-                            fact: fact,
-                            inflection: {
-                                form: inflected.form,
-                                fact: inflectionFact,
-                                index: this.props.corpus.facts.indexOf(inflectionFact)
-                            }
-                        }
-                        
-                        suggestions.push(suggestion)
-                    }, false)
-
-                    let inflection = fact.inflection
-                    
-                    while (inflection) {
-                        Object.keys(inflection.endings)
-                            .forEach((form) => allForms.add(form))
-                    
-                        inflection = inflection.inherits 
-                    }
-                } 
-                else if (fact instanceof InflectedWord && 
-                        (fact.inflection.pos == filterPos || (filterPos == NO_POS && !fact.inflection.pos) || !filterPos)) {
-                    let addFact = fact
-                    
-                    let inflection = null
-                      
-                    if (fact.form != fact.inflection.defaultForm) {
-                        let inflectionFact = fact.inflection.getFact(fact.form)
-                        
-                        inflection = {
-                            form: fact.form,
-                            fact: inflectionFact,
-                            index: this.props.corpus.facts.indexOf(inflectionFact)
-                        }
-                    }
-                    
-                    let suggestion: Suggestion = {
-                        index: this.props.corpus.facts.indexOf(fact),
-                        word: fact,
-                        fact: fact,
-                        inflection: inflection
-                    }
-                    
-                    suggestions.push(suggestion)
-
-                    Object.keys(fact.inflection.endings)
-                        .forEach((form) => allForms.add(form))
+                let suggestion: Suggestion = {
+                    index: corpus.facts.indexOf(fact),
+                    word: fact,
+                    fact: fact,
+                    inflection: inflection
                 }
-                else if (fact instanceof Word && !(fact instanceof InflectedWord) &&
-                        (!filterPos || filterPos == NO_POS)) {
-                    suggestions.push({
-                        index: -1,
-                        word: fact,
-                        fact: fact,
-                        inflection: null
-                    })
+                
+                suggestions.push(suggestion)
+
+                Object.keys(fact.inflection.endings)
+                    .forEach((form) => allForms.add(form))
+            }
+            else if (fact instanceof Word && !(fact instanceof InflectedWord) &&
+                    (!filterPos || filterPos == NO_POS)) {
+                suggestions.push({
+                    index: -1,
+                    word: fact,
+                    fact: fact,
+                    inflection: null
+                })
+            }
+        }
+
+        if (filterPos || filterString || this.state.filterWord) {
+            this.props.corpus.facts.facts.forEach((fact: Fact) => {
+                if (this.state.filterWord) {
+                    if (fact instanceof Word && this.state.filterWord.getId() == fact.getId()) {
+                        if (fact instanceof InflectedWord) {                            
+                            fact.visitAllInflections((inflected: InflectedWord) => {
+                                let inflectionFact = fact.inflection.getFact(inflected.form)
+                                
+                                let suggestion: Suggestion = {
+                                    index: this.props.corpus.facts.indexOf(fact),
+                                    word: inflected,
+                                    fact: fact,
+                                    inflection: {
+                                        form: inflected.form,
+                                        fact: inflectionFact,
+                                        index: this.props.corpus.facts.indexOf(inflectionFact)
+                                    }
+                                }
+                                
+                                suggestions.push(suggestion)
+                            }, false)
+                        }
+                        else {
+                            addSuggestionForFact(fact)
+                        }
+                    }
+                }
+                else if (filterString) {
+                    this.factsMatchingFilterString(fact, filterString)
+                        .forEach(addSuggestionForFact)
+                }
+                else {
+                    addSuggestionForFact(fact)
                 }
             })
 

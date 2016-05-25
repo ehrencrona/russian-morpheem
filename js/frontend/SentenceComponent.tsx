@@ -129,7 +129,8 @@ export default class SentenceComponent extends Component<Props, State> {
                 corpus={ this.props.corpus } 
                 tab={ this.props.tab } 
                 onWordSelect={ (word) => { editor.setWord(word); wordSearch.clearFilters() } } 
-                ref={ (ref) => { wordSearch = ref } }/>
+                ref={ (ref) => { wordSearch = ref } }
+                canFilterWord={ true }/>
             
             <ul>
             {

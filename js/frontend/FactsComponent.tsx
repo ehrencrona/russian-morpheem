@@ -12,6 +12,7 @@ import FactComponent from './FactComponent'
 import SentenceComponent from './SentenceComponent'
 import Tab from './Tab'
 import AddWordComponent from './AddWordComponent'
+import WordSearchComponent from './WordSearchComponent'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
@@ -23,6 +24,7 @@ interface Props {
 const RECENT = 'recent'
 const ALL = 'all'
 const MISSING = 'last' 
+const SEARCH = 'search'
 
 interface State {
     add?: boolean,
@@ -58,6 +60,14 @@ export default class FactsComponent extends Component<Props, State> {
         )
     }
     
+    openFact(fact: Fact) {
+        this.props.tab.openTab(
+            <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
+            fact.toString(),
+            fact.getId()
+        )
+    }
+
     render() {
         let indexOfFacts : { [factId: string]: FactSentenceIndex } =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
@@ -86,11 +96,18 @@ export default class FactsComponent extends Component<Props, State> {
             <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
                 onClick={ () => { this.setState({ list: id }) }}>{ name }</div>
 
-        let exampleByInflectionId = {}
+        let examplesByInflectionId : { [s: string]: InflectedWord[] } = {}
 
         this.props.corpus.facts.facts.forEach((fact) => {
-            if (fact instanceof InflectedWord && !exampleByInflectionId[fact.inflection.id]) {
-                exampleByInflectionId[fact.inflection.id] = fact
+            if (fact instanceof InflectedWord) {
+                let examples = examplesByInflectionId[fact.inflection.id]
+                
+                if (!examples) {
+                    examples = []
+                    examplesByInflectionId[fact.inflection.id] = examples
+                }
+                
+                examples.push(fact)
             } 
         })
 
@@ -104,6 +121,7 @@ export default class FactsComponent extends Component<Props, State> {
                     { filterButton(MISSING, 'Missing') }
                     { filterButton(ALL, 'All') }
                     { filterButton(RECENT, 'Recent') }
+                    { filterButton(SEARCH, 'Search') }
                 </div>
 
                 {(
@@ -116,34 +134,44 @@ export default class FactsComponent extends Component<Props, State> {
                     <div/>
                 )}
 
-                <ul className='facts'>
-                {
-                    factIndices.map((factIndex) => {
-                        let fact = factIndex.fact
-                        let example
-                        
-                        if (fact instanceof InflectionFact) {
-                            example = exampleByInflectionId[fact.inflection.getId()]
+                { this.state.list == SEARCH ?
+
+                    <WordSearchComponent 
+                        corpus={ this.props.corpus }
+                        tab={ this.props.tab } 
+                        onWordSelect={ (word) => { this.openFact(word) } } />
+    
+                    :            
+
+                    <ul className='facts'>
+                    {
+                        factIndices.map((factIndex) => {
+                            let fact = factIndex.fact
+                            let examples: InflectedWord[]
                             
-                            if (example) {
-                                example = example.inflect(fact.form)
+                            if (fact instanceof InflectionFact) {
+                                examples = examplesByInflectionId[fact.inflection.getId()]
+                                
+                                if (examples) {
+                                    examples = examples.slice(0, 3).map(
+                                        (word) => word.inflect(fact.form))
+                                }
                             }
-                        }
-                        
-                        return <FactsEntryComponent
-                            key={ fact.getId() }
-                            fact={ fact }
-                            index={ factIndex.index }
-                            indexOfFacts={ indexOfFacts }
-                            corpus={ this.props.corpus }
-                            tab={ this.props.tab }
-                            onMove={ () => this.forceUpdate() }
-                            example={ example }
-                            />
+                            
+                            return <FactsEntryComponent
+                                key={ fact.getId() }
+                                fact={ fact }
+                                index={ factIndex.index }
+                                indexOfFacts={ indexOfFacts }
+                                corpus={ this.props.corpus }
+                                tab={ this.props.tab }
+                                onMove={ () => this.forceUpdate() }
+                                examples={ examples }
+                                />
+                        })
                     }
-                    )
+                    </ul>
                 }
-                </ul>
             </div>)
     }
 }

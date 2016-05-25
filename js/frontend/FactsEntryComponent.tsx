@@ -9,6 +9,7 @@ import AddWordComponent from './AddWordComponent'
 
 import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
+import InflectionFact from '../shared/InflectionFact'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
@@ -19,7 +20,7 @@ interface Props {
     corpus: Corpus,
     tab: Tab,
     onMove?: () => any,
-    example?: InflectedWord
+    examples?: InflectedWord[]
 }
 
 interface State {
@@ -43,7 +44,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
             <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
             fact.toString(),
             fact.getId()
-        );
+        )
     }
 
     onDrop(e) {
@@ -104,9 +105,21 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 </div>
 
                 <span className='clickable'>
-                    { name } 
-                    
-                    { this.props.example ? ', e.g. ' + this.props.example.toString()  : '' }
+                    { this.props.examples && fact instanceof InflectionFact ? 
+
+                        <span>
+                            { 
+                                this.props.examples.join(', ') + 
+                                    (this.props.examples.length == 3 ? '...' : '') 
+                            }
+                            <span className='form'>{ fact.form }</span> 
+                        </span>
+
+                        : 
+
+                        name 
+
+                    }
                     
                     { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
                 </span>
