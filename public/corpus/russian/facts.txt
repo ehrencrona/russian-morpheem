@@ -200,10 +200,24 @@ grammar: -вы@dat
 grammar: fem1@dat
 grammar: fem3@datpl
 фильм--: n/a, inflect: masc1
+grammar: -ты@dat
 хоч--<теть: n/a, inflect: -хотеть
+с: with
+интернет--: n/a, inflect: masc1
+радио: radio
+кажд--ый: n/a, inflect: ыйadj
+утром: in the morning
+музык--а: n/a, inflect: fem2
+вечером: in the evening
+только: only
+grammar: -смотреть@1
+слуша--ть: n/a, inflect: -встречать
+телевизор--: n/a, inflect: masc1
+смотр--еть: n/a, inflect: -смотреть
 можно: be able to; be allowed to
 grammar: -дарить@inf
 кур--ить: n/a, inflect: -дарить
+говор--ить: n/a, inflect: -дарить
 нельзя: it's not allowed to
 grammar: -видеть@inf
 grammar: -слышать@inf
@@ -308,7 +322,6 @@ grammar: ойadj1@n
 часто: often
 иногда: sometimes
 несколько: a few
-музик--а: n/a, inflect: fem2
 grammar: -он@gen
 язык--: n/a, inflect: masc2
 grammar: -жить@inf
@@ -332,3 +345,8 @@ grammar: adj@prepf
 холодн--ый: n/a, inflect: ыйadj
 grammar: -ребёнок@preppl
 grammar: -есть@inf
+grammar: -давать@inf
+grammar: -друг@instrpl
+grammar: -друг@datpl
+grammar: -давать@1
+по: in/on
