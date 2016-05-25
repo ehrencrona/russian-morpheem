@@ -81,7 +81,7 @@ let FIELDS =
                 [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
                 ['instrm','instrn','instrf','instrpl'],
                 ['prepm','prepn','prepf','preppl'],
-                ['shortm', 'shortf', 'shortn']
+                ['shortm', 'shortn', 'shortf']
             ]
         },
         
