@@ -10,7 +10,7 @@ import Grammar from './Grammar'
   */
 export default class Inflection {
     inherits: Inflection
-    
+
     constructor(public id, public defaultForm, public pos, public endings) {
         this.id = id
         this.pos = pos
@@ -70,7 +70,7 @@ export default class Inflection {
 
     getFact(form): InflectionFact {
         if (this.endings[form] != null) {
-            return new InflectionFact(this.id + '@' + form, this, form);
+            return new InflectionFact(this.id + '@' + form, this, form)
         }
         else if (this.inherits) {                
             return this.inherits.getFact(form)
@@ -80,6 +80,15 @@ export default class Inflection {
         }
     }
     
+    getInflectionId(form): string {
+        if (this.endings[form] != null) {
+            return this.id
+        }
+        else if (this.inherits) {                
+            return this.inherits.getInflectionId(form)
+        }
+    }
+
     getEnding(form) {
         let result = this.endings[form]
         

@@ -96,21 +96,6 @@ export default class FactsComponent extends Component<Props, State> {
             <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
                 onClick={ () => { this.setState({ list: id }) }}>{ name }</div>
 
-        let examplesByInflectionId : { [s: string]: InflectedWord[] } = {}
-
-        this.props.corpus.facts.facts.forEach((fact) => {
-            if (fact instanceof InflectedWord) {
-                let examples = examplesByInflectionId[fact.inflection.id]
-                
-                if (!examples) {
-                    examples = []
-                    examplesByInflectionId[fact.inflection.id] = examples
-                }
-                
-                examples.push(fact)
-            } 
-        })
-
         return (<div>
                 <div className='buttonBar'>
                     <div className='button' onClick={ () => { this.setState({ add: !this.state.add }) }}>+ Word</div>
@@ -147,17 +132,7 @@ export default class FactsComponent extends Component<Props, State> {
                     {
                         factIndices.map((factIndex) => {
                             let fact = factIndex.fact
-                            let examples: InflectedWord[]
-                            
-                            if (fact instanceof InflectionFact) {
-                                examples = examplesByInflectionId[fact.inflection.getId()]
-                                
-                                if (examples) {
-                                    examples = examples.slice(0, 3).map(
-                                        (word) => word.inflect(fact.form))
-                                }
-                            }
-                            
+                                                        
                             return <FactsEntryComponent
                                 key={ fact.getId() }
                                 fact={ fact }
@@ -166,7 +141,6 @@ export default class FactsComponent extends Component<Props, State> {
                                 corpus={ this.props.corpus }
                                 tab={ this.props.tab }
                                 onMove={ () => this.forceUpdate() }
-                                examples={ examples }
                                 />
                         })
                     }

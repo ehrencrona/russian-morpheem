@@ -20,7 +20,6 @@ interface Props {
     corpus: Corpus,
     tab: Tab,
     onMove?: () => any,
-    examples?: InflectedWord[]
 }
 
 interface State {
@@ -67,6 +66,29 @@ export default class FactsEntryComponent extends Component<Props, State> {
         this.setState({ dragTarget: false })
     }
 
+    getExamples(fact: InflectionFact) {
+        let inflectionIds = new Set()
+
+        this.props.corpus.inflections.inflections.forEach((inflection) => {
+            if (inflection.pos == fact.inflection.pos &&
+                inflection.getInflectionId(fact.form) == fact.inflection.id) {
+                inflectionIds.add(inflection.id)
+            }
+        })
+
+        let result: InflectedWord[] = []
+
+        this.props.corpus.facts.facts.forEach((fact) => {
+            if (result.length < 3 &&
+                fact instanceof InflectedWord && 
+                inflectionIds.has(fact.inflection.id)) {
+                result.push(fact.infinitive.inflect(fact.form))
+            } 
+        })
+
+        return result
+    }
+
     render() {
         let fact = this.props.fact
         let index = this.props.index
@@ -81,6 +103,12 @@ export default class FactsEntryComponent extends Component<Props, State> {
         }
         
         let left = 8 - (indexEntry.easy + indexEntry.ok)
+        
+        let examples
+        
+        if (fact instanceof InflectionFact) {
+            examples = this.getExamples(fact)
+        }
         
         return ( 
             <li 
@@ -105,12 +133,12 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 </div>
 
                 <span className='clickable'>
-                    { this.props.examples && fact instanceof InflectionFact ? 
+                    { examples && fact instanceof InflectionFact ? 
 
                         <span>
                             { 
-                                this.props.examples.join(', ') + 
-                                    (this.props.examples.length == 3 ? '...' : '') 
+                                examples.join(', ') + 
+                                    (examples.length == 3 ? '...' : '') 
                             }
                             <span className='form'>{ fact.form }</span> 
                         </span>

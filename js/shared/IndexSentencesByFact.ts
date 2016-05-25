@@ -81,7 +81,9 @@ export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInter
     if (okInterval == undefined) {
         okInterval = OK_INTERVAL
     } 
-    
+
+    let t = new Date().getTime();
+
     sentences.sentences.forEach((sentence) => {
         
         let hardestIndex = -1
