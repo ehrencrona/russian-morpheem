@@ -71,10 +71,11 @@ export default class Inflections {
         
         this.inflections.forEach((inflection) => {
             let defaultEnding = inflection.getEnding(inflection.defaultForm)
+            let suffix = defaultEnding.suffix
             
-            if (wordString.substr(wordString.length - defaultEnding.length) == defaultEnding && 
-                defaultEnding.length >= longestHit.length) {
-                longestHit = defaultEnding
+            if (wordString.substr(wordString.length - suffix.length) == suffix && 
+                suffix.length >= longestHit.length) {
+                longestHit = suffix
                 result = inflection
             }
         })
@@ -86,7 +87,7 @@ export default class Inflections {
         return this.inflections.filter((inflection) => {
             let defaultEnding = inflection.getEnding(inflection.defaultForm)
 
-            return wordString.substr(wordString.length - defaultEnding.length) == defaultEnding
+            return wordString.substr(wordString.length - defaultEnding.suffix.length) == defaultEnding.suffix
         })
     }
 

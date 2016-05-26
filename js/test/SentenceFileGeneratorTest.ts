@@ -11,8 +11,10 @@ import InflectedWord from '../shared/InflectedWord'
 import Inflection from '../shared/Inflection'
 import Inflections from '../shared/Inflections'
 import Sentences from '../shared/Sentences'
+import Ending from '../shared/Ending'
 import Facts from '../shared/Facts'
 import Grammar from '../shared/Grammar'
+import { parseEndings } from '../shared/InflectionFileParser'
 
 describe('SentenceFileGenerator', function() {
     it('generates same string as the read one', function () {
@@ -35,9 +37,10 @@ describe('SentenceFileGenerator', function() {
 
     it('adds forms', function () {
         let inflections = new Inflections([            
-            new Inflection('fem', 'nom', null, { nom: 'a', acc: 'y' }),
-            new Inflection('masc', 'nom', null, { nom: '', acc: '' })
-        ])
+            new Inflection('fem', 'nom', null,
+                parseEndings('nom: a, acc: y', 'fake').endings),
+            new Inflection('masc', 'nom', null, 
+                parseEndings('nom: , acc: ', 'fake').endings) ])
         
         let words = new Words();
 

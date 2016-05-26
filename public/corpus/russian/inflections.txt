@@ -18,7 +18,7 @@ neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -�
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
 -человек[n]: genpl: , inherit: masc1
-v: inf: ****, pastm:
+v: inf: ****, pastm: л, pastf: pastm-а, pastn: pastm-о, pastpl: pastm-и
 -встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют, inherit: v
 
 it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите, inherit: v
@@ -49,7 +49,7 @@ adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, 
 
 ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, shortpl: ы, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
--хороший[adj]: prepm: ем, prepf: ем, prepn: ей, genf: ей, instrf: ей, datf: ей, shortm: , inherit: ийadj
+-хороший[adj]: prepm: ем, prepf: ем, prepn: ей, genf: ей, instrf: ей, datf: ей, shortm: , genm: его, datm: ему, accanm: его, nomn: ее, genn: его, datn: ему, accn: ее, inherit: ийadj
 
 -этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accinanm: -от, accinanpl: -и, shortm: ***, shortf: ***, shortn: ***, inherit: adj
 

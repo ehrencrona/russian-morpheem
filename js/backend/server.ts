@@ -96,11 +96,11 @@ function registerRoutes(corpus: Corpus) {
             if (inflection) {
                 let defaultEnding = inflection.getEnding(inflection.defaultForm)
                 
-                if (wordString.substr(wordString.length - defaultEnding.length) != defaultEnding) {
+                if (wordString.substr(wordString.length - defaultEnding.suffix.length) != defaultEnding) {
                     throw new Error('Wrong ending.')
                 } 
 
-                let stem = wordString.substr(0, wordString.length - defaultEnding.length)
+                let stem = wordString.substr(0, wordString.length - defaultEnding.suffix.length)
                 
                 word = new InflectedWord(wordString, null, 
                     inflection.defaultForm).setInflection(inflection)    

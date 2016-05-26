@@ -9,12 +9,14 @@ import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectedWord from '../shared/InflectedWord';
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
 describe('Facts', function() {
     let inflection =
-        new Inflection('regular', 'nom', null, { nom: 'a', imp: 'o' })
+        new Inflection('regular', 'nom', null, 
+            parseEndings('nom: a, imp: o', 'fake').endings)
             
     let inflections = new Inflections([ inflection ])
     

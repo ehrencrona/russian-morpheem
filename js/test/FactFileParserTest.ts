@@ -6,12 +6,14 @@ import Word from '../shared/Word'
 import Grammar from '../shared/Grammar'
 import Inflections from '../shared/Inflections'
 import Inflection from '../shared/Inflection'
+import { parseEndings } from '../shared/InflectionFileParser'
 
 // ぎ:gi, requires: き, grammar: ktog
 
 var inflections = new Inflections()
     
-inflections.add(new Inflection('inflection', 'nom', null, { nom: 'a'}))
+inflections.add(new Inflection('inflection', 'nom', null, 
+    parseEndings('nom: a', 'fake').endings))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {

@@ -6,9 +6,11 @@ import Inflection from '../shared/Inflection'
 import InflectedWord from '../shared/InflectedWord'
 import Sentence from '../shared/Sentence'
 import Sentences from '../shared/Sentences'
+import Ending from '../shared/Ending'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
 import Facts from '../shared/Facts'
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
@@ -64,7 +66,8 @@ describe('Sentences', function() {
 
     it('handles JSON conversion', function () {
         
-        let inflection = new Inflection('verb', 'inf', null, { inf: 're', i: 'vo' })
+        let inflection = new Inflection('verb', 'inf', null, 
+            parseEndings('inf: re, i: vo', 'fake').endings)
         
         let io = new Word('io')
         let bere = new InflectedWord('bere', null, 'inf').setInflection(inflection)

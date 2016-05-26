@@ -8,15 +8,18 @@ import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectedWord from '../shared/InflectedWord';
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
 describe('InflectedWord', function() {
     let regular =
-        new Inflection('regular', 'nom', null, { nom: 'a', imp: 'o', fut: 'x' })
+        new Inflection('regular', 'nom', null, 
+            parseEndings('nom: a, imp: o, fut: x', 'fake').endings)
 
     let irregular =
-        new Inflection('irregular', 'nom', null, { imp: 'i' }).inherit(regular)
+        new Inflection('irregular', 'nom', null, 
+            parseEndings('imp: i', 'fake').endings).inherit(regular)
 
     let inflections = new Inflections([ regular, irregular ])
     
