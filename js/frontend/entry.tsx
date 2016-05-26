@@ -58,7 +58,7 @@ xr.get(`/api/${lang}/corpus`)
             xr.post(`/api/${lang}/fact/${ fact.getId() }`, {})
         }
     }
-    
+
     if (element) {
         render((
             <TabSet corpus={ corpus } />

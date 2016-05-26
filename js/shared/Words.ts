@@ -3,6 +3,7 @@ import Word from './Word'
 import InflectedWord from './InflectedWord'
 import Inflection from './Inflection'
 import Facts from './Facts'
+import UnstudiedWord from './UnstudiedWord';
 
 export default class Words {
     allWords: Word[] = []
@@ -14,6 +15,8 @@ export default class Words {
     onAdd: (word: Word) => void = null
     onChangeInflection: (word: InflectedWord) => void = null
 
+    static PUNCTUATION = '.?!,;"'
+
     constructor(facts?: Facts) {
         if (facts) {
             for (let fact of facts.facts) {
@@ -24,6 +27,12 @@ export default class Words {
         }
     }
     
+    addPunctuation() {
+        for (let i = 0; i < Words.PUNCTUATION.length; i++) {
+            this.add(new UnstudiedWord(Words.PUNCTUATION[i], null))
+        }
+    }
+
     index(word: Word) {
         let reallyIndex = (word: Word) => {
             if (this.wordsById[word.getId()]) {

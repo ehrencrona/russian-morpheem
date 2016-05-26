@@ -2,7 +2,7 @@
 
 import Corpus from '../shared/Corpus';
 import Fact from '../shared/Fact';
-import Word from '../shared/Word';
+import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectedWord from '../shared/InflectedWord';
 import Tab from './Tab'
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
@@ -22,7 +22,7 @@ interface Props {
 interface State {
     filterPos?: string,
     filterString?: string,
-    filterWord?: Word
+    filterWord?: UnstudiedWord
 }
 
 let React = { createElement: createElement }
@@ -35,7 +35,7 @@ interface Inflection {
 
 interface Suggestion {
     index: number,
-    word: Word,
+    word: UnstudiedWord,
     fact: Fact,
     inflection: Inflection
 }
@@ -53,7 +53,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         this.setState({ filterWord: null, filterString: '', filterPos: null })
     }
     
-    setWord(word: Word) {
+    setWord(word: UnstudiedWord) {
         this.setState({ filterWord: word, filterPos: null })
     }
 
@@ -94,7 +94,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
     
     factsMatchingFilterString(fact, filter: string): Fact[] {
-        if (fact instanceof Word && 
+        if (fact instanceof UnstudiedWord && 
             fact.toString().substr(0, filter.length) == filter) {
             return [ fact ]
         }
@@ -146,7 +146,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 Object.keys(fact.inflection.endings)
                     .forEach((form) => allForms.add(form))
             }
-            else if (fact instanceof Word && !(fact instanceof InflectedWord) &&
+            else if (fact instanceof UnstudiedWord && !(fact instanceof InflectedWord) &&
                     (!filterPos || filterPos == NO_POS)) {
                 suggestions.push({
                     index: -1,
@@ -160,7 +160,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         if (filterPos || filterString || this.state.filterWord) {
             this.props.corpus.facts.facts.forEach((fact: Fact) => {
                 if (this.state.filterWord) {
-                    if (fact instanceof Word && this.state.filterWord.getId() == fact.getId()) {
+                    if (fact instanceof UnstudiedWord && this.state.filterWord.getId() == fact.getId()) {
                         if (fact instanceof InflectedWord) {                            
                             fact.visitAllInflections((inflected: InflectedWord) => {
                                 let inflectionFact = fact.inflection.getFact(inflected.form)

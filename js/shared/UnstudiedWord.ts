@@ -15,7 +15,7 @@ import Inflections from './Inflections'
 export default class UnstudiedWord {
     en: any
     required: Fact[]
-    
+
     constructor(public jp: string, public classifier?: string) {
         this.jp = jp
         this.classifier = classifier

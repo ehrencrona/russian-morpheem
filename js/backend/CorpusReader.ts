@@ -3,7 +3,6 @@
 import readInflectionFile from './InflectionFileReader';
 import readFactFile from './FactFileReader';
 import SentenceFileReader from './SentenceFileReader';
-import UnstudiedWord from '../shared/UnstudiedWord';
 import Facts from '../shared/Facts';
 import Corpus from '../shared/Corpus';
 import Words from '../shared/Words';
@@ -24,10 +23,9 @@ export default function readCorpus(lang) {
             .then((facts: Facts) => {
                 console.log('read', facts.facts.length, 'facts in', lang)
                 
-                let words = new Words(facts);                
+                let words = new Words(facts)                
 
-                words.add(new UnstudiedWord('?', null))
-                words.add(new UnstudiedWord('"WhatsApp"', null))
+                words.addPunctuation()
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
                 .then((sentences: Sentences) => {

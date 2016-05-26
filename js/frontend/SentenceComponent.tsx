@@ -3,6 +3,7 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
 import Word from '../shared/Word'
+import Words from '../shared/Words'
 import InflectedWord from '../shared/InflectedWord'
 import Sentence from '../shared/Sentence'
 import Tab from './Tab'
@@ -107,9 +108,17 @@ export default class SentenceComponent extends Component<Props, State> {
             <div className='buttonBar'>
                 <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
                 <div className='button' onClick={ () => this.delete() }>Delete</div>
+                
+                {
+                    Words.PUNCTUATION.split('').map((char) => 
+                        <div className='button' key={ char } onClick={ () => editor.setWord(
+                            this.props.corpus.words.get(char)
+                        ) }>{ char }</div>
+                    ) 
+                }
             </div>
 
-            <SentenceEditorComponent 
+            <SentenceEditorComponent
                 corpus={ this.props.corpus } 
                 words={ this.props.sentence.words }
                 onWordSelect={ (word: Word) => { 
@@ -126,7 +135,7 @@ export default class SentenceComponent extends Component<Props, State> {
                     this.props.tab.name = sentence.toString();
                 } }/>
 
-            <WordSearchComponent 
+            <WordSearchComponent
                 corpus={ this.props.corpus } 
                 tab={ this.props.tab } 
                 onWordSelect={ (word) => { editor.setWord(word); wordSearch.clearFilters() } } 
