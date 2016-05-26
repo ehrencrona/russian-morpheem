@@ -24,7 +24,6 @@ export default function readCorpus(lang) {
                 console.log('read', facts.facts.length, 'facts in', lang)
                 
                 let words = new Words(facts)                
-
                 words.addPunctuation()
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)

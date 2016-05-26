@@ -6,6 +6,7 @@ grammar: fem1@nom
 бел--ый: white, inflect: ыйadj
 grammar: adj@f
 чёрн--ый: black, inflect: ыйadj
+–: is
 где: where
 лошад--ь: horse, inflect: fem3
 grammar: fem3@nom

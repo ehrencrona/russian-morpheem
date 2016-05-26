@@ -18,20 +18,21 @@ neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -�
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
 -человек[n]: genpl: , inherit: masc1
--встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют
+v: inf: ****, pastm:
+-встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют, inherit: v
 
-it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите
--дарить[v]: inf: ить, 1: ю, 3pl: ят, inherit: it-im-ite 
+it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите, inherit: v
+-дарить[v]: inf: ить, 1: ю, 3pl: ят, inherit: it-im-ite
 -видеть[v]: inf: -еть, 1: -<жу, 3pl: -ят, inherit: it-im-ite
 -слышать[v]: inf: -ать, 1: -у, 3pl: -ат, inherit: it-im-ite
 -смотреть[v]: 1: ю, inherit: --видеть
 
-y-esh-et[v]: inf: ****, 1: -у, 2: -ешь, 3: -ет
+y-esh-et[v]: inf: ****, 1: -у, 2: -ешь, 3: -ет, inherit: v
 -писать[v]: inf: -<сать, 1pl: -ем, 2pl: -ете, 3pl: -ут, inherit: y-esh-et
 -хотеть[v]: inf: <теть, 1pl: <тим, 2pl: <тите, 3pl: <тят, inherit: y-esh-et
 -сказать[v]: inf: <зать, 2pl: и, 3pl: ите, inherit: y-esh-et
 
-yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте
+yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте, inherit: v
 -жить[v]: inf: -<ть, 1: -у, 3pl: -ут, inherit: yo-yosh-yot
 -давать[v]: inf: вать, 1: ю, 3pl: ют, inherit: yo-yosh-yot
 

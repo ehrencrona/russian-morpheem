@@ -103,7 +103,6 @@
 кто@nom видеть@3 кошка@acc ?: Whо sees the cat?
 кто@nom мой@m друг@nom ?: Who is my friend?
 кто@nom он@nom ?: Who is he?
-что "WhatsApp" ?: What is "WhatsApp"?
 я@nom слышать@1 собака@acc: I hear a dog.
 я@nom слышать@1 кошка@acc: I hear a cat.
 я@nom слышать@1 лошадь@acc: I hear a horse.
