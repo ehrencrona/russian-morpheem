@@ -633,7 +633,7 @@
 я@nom любить@1 этот@accinanm парк@nom: undefined
 я@nom читать@1 этот@accinanpl журнал@accpl: undefined
 я@nom любить@1 этот@accf страна@acc: undefined
-я@nom любить@1 этот@accinanm парк@nom: undefined
+
 у я@gen нет телефон@gen: undefined
 у студент@gen слишком много книга@genpl: undefined
 у ты@gen дорогой@f машина@nom: undefined
@@ -1526,3 +1526,68 @@
 зачем твой@datf мама@dat новый@m телевизор@nom: undefined
 я@dat не нужный@shortm телевизор@nom: undefined
 у ты@gen быть@1 телевизор@nom: undefined
+библиотека@nom не одалживать@3 книга@gen мой@datpl студент@datpl: undefined
+я@nom давать@1 еда@acc твой@datpl лошадь@datpl: undefined
+мама@nom читать@3 книга@accpl свой@datpl деть@datpl: undefined
+я@nom давать@1 урок@accpl мой@datpl студент@datpl: undefined
+мой@m друг@nom не давать@3 шоколад@acc мой@datpl собака@datpl: undefined
+зачем ты@nom писать@2 письмо@accpl свой@datpl друг@datpl ?: undefined
+твой@datpl студент@datpl нужный@shortn читать@inf книга@accpl: undefined
+мой@datpl собака@datpl нужный@shortn гулять@inf в парк@prep: undefined
+твой@datpl кошка@datpl не нужный@shortn гулять@inf в парк@prep: undefined
+я@nom читать@1 статья@accpl свой@datpl профессор@datpl: undefined
+зачем твой@datpl родитель@datpl новый@f дорогой@f ?: undefined
+
+какой@datn друг@dat ты@nom дарить@2 подарок@accpl ?: undefined
+я@nom дарить@1 подарок@accpl хороший@datn друг@dat: undefined
+большой@datn город@dat нужный@shortm новый@m парк@nom: undefined
+мы@nom дарить@1pl новый@datn профессор@dat подарок@acc: undefined
+новый@datn университет@dat нужный@shortpl отличный@pl студент@pl: undefined
+этот@datn человек@dat не нужный@shortpl друг@pl: undefined
+старый@datn друг@dat нужный@shortf новый@f работа@nom: undefined
+каждый@datn ребёнок@dat нужный@shortf собака@nom: undefined
+каждый@datm большой@datn город@dat нужный@shortm университет@nom: undefined
+белый@datpl лошадь@datpl нужный@adv есть@inf: undefined
+
+зачем красивый@datpl людь@datpl читать@inf ?: undefined
+известный@datpl людь@datpl нужный@shortn покупать@inf подарок@accpl: undefined
+новый@datpl студент@datpl нужный@shortn много читать@inf в библиотека@prep: undefined
+маленький@datpl деть@datpl нельзя смотреть@inf телевизор@acc: undefined
+плохой@datpl друг@datpl не нужный@adv покупать@inf подарок@accpl: undefined
+этот@datpl студент@datpl не нужный@shortpl скучный@pl книга@pl: undefined
+какой@datpl свой@datpl друг@datpl ты@nom дарить@2 шоколад@acc ?: undefined
+большой@datpl город@datpl нужный@shortpl большой@pl парк@pl: undefined
+маленький@datpl деть@datpl нужный@adv читать@inf интересный@accinanpl книга@accpl: undefined
+маленький@datpl собака@datpl нельзя много есть@inf: undefined
+большой@datpl кошка@datpl нужный@shortn очень много есть@inf: undefined
+этот@datpl людь@datpl нужный@shortpl дорогой@pl магазин@pl: undefined
+какой@datpl людь@datpl ты@nom не открывать@2 дверь@acc ?: undefined
+нельзя открывать@inf дверь@acc плохой@datpl людь@datpl: undefined
+большой@datpl собака@datpl нужный@shortpl большой@accinanpl дом@accpl: undefined
+большой@datpl университет@datpl нужный@shortn много профессор@genpl: undefined
+
+зачем плохой@datpl студент@datpl библиотека@pl ?: undefined
+
+скучный@datpl людь@datpl нужный@shortn читать@inf журнал@accpl: undefined
+отличный@datpl газета@datpl нужный@shortpl интересный@pl статья@pl: undefined
+скучный@datpl газета@datpl нужный@shortpl длинный@pl трудный@pl статья@pl: undefined
+зачем старый@datpl людь@datpl нужный@shortpl собака@pl ?: undefined
+известный@datpl людь@datpl нужный@shortpl известный@pl друг@pl: undefined
+старый@datpl людь@datpl нужный@shortn гулять@inf в парк@preppl: undefined
+: undefined
+
+маленький@datf собака@dat нужный@shortn гулять@inf: undefined
+большой@datf квартира@dat нужный@shortpl большой@pl комната@pl: undefined
+новый@datf библиотека@dat не нужный@shortpl старый@pl книга@pl: undefined
+этот@datf площадь@pl нужный@shortpl дерево@pl: undefined
+этот@datf комната@dat нужный@shortpl новый@pl штора@pl: undefined
+этот@datf кошка@dat нельзя лежать@inf на стол@prep: undefined
+плохой@datf собака@dat нельзя лежать@inf на кровать@prep: undefined
+каждый@datf библиотека@dat нужный@shortpl стол@pl: undefined
+большой@datf улица@dat не нужный@shortpl газон@pl: undefined
+этот@datm человек@dat не нужный@shortpl проблема@pl: undefined
+большой@datm журнал@dat нужный@shortpl длинный@pl статья@pl: undefined
+зачем трудный@datm ребёнок@dat нужный@shortf лошадь@nom ?: undefined
+хороший@datm человек@dat нельзя дарить@inf плохой@accinanpl подарок@pl: undefined
+какой@datm профессор@dat ты@nom писать@2 ?: undefined
+она@nom одалживать@3 свитер@acc старый@datm друг@dat: undefined
