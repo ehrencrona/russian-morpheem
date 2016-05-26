@@ -1522,4 +1522,8 @@
 мой@f мама@nom смотреть@3 телевизор@acc: undefined
 мой@m профессор@nom сегодня в телевизор@prep: undefined
 студент@pl смотреть@3pl телевизор@acc у родитель@genpl в квартира@prep: undefined
-зачем телевизор@nom: undefined
+зачем людь@datpl нужный@shortm телевизор@nom: undefined
+зачем ты@dat телевизор@nom: undefined
+зачем твой@datf мама@dat новый@m телевизор@nom: undefined
+я@dat не нужный@shortm телевизор@nom: undefined
+у ты@gen быть@1 телевизор@nom: undefined
