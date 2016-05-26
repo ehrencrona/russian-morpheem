@@ -2,49 +2,76 @@
 
 import Inflection from './Inflection'
 import Inflections from './Inflections'
+import Ending from './Ending'
+
+interface Endings {
+    default: string, 
+    endings: { [s: string]: Ending },
+    inherits: string
+}
+
+export function parseEndings(str, lang): Endings {
+    let result : { [s: string]: Ending } = {}
+    let inherits
+    let defaultForm 
+    
+    for (let pair of str.split(',')) {
+        let elements = pair.split(':')
+
+        if (elements.length != 2) {
+            throw new Error('Expected "' + pair + '" to be of the form <form>:<ending>, e.g. "gen: -y"')
+        }
+
+        let endingString = elements[1].trim()
+
+        if (endingString[0] == '-') {
+            endingString = endingString.substr(1)
+        }
+
+        let form = elements[0].trim()
+
+        if (form == 'inherit') {
+            inherits = endingString
+        }
+        else {  
+            let ending
+            let relativeTo
+            let suffix = endingString
+            let subtractFromStem = 0
+
+            if (endingString.indexOf('-') > 0) {
+                relativeTo = endingString.split('-')[0]
+                suffix = endingString.split('-')[1]
+            }
+
+            while (suffix[0] == '<') {
+                suffix = suffix.substr(1)
+                subtractFromStem++
+            }
+
+            if (lang == 'ru' && suffix.match(/[a-z]/)) {
+                throw new Error(ending + ' in ' + str + ' contains Latin characters.')
+            }
+
+            ending = new Ending(
+                suffix,
+                relativeTo,
+                subtractFromStem)
+
+            if (!defaultForm) {
+                defaultForm = form
+            }
+            
+            result[form] = ending
+        }            
+    }
+
+    return { default: defaultForm, endings: result, inherits: inherits }
+}
 
 export default function parseInflectionFile(data, lang: string) {
     let inflections = [];
     let inflectionById = {};
-
-    function parseEndings(str) {
-        let result = {}
-        let inherits
-        let defaultForm 
-        
-        for (let pair of str.split(',')) {
-            let elements = pair.split(':')
-            
-            if (elements.length != 2) {
-                throw new Error('Expected "' + pair + '" to be of the form <form>:<ending>, e.g. "gen: -y"')
-            }
-            
-            let ending = elements[1].trim()
-            
-            if (ending[0] == '-') {
-                ending = ending.substr(1)
-            }
-
-            let form = elements[0].trim()
-
-            if (form == 'inherit') {
-                inherits = ending.trim()
-            }
-            else {            
-                if (lang == 'ru' && ending.match(/[a-z]/)) {
-                    throw new Error(ending + ' in ' + str + ' contains Latin characters.')
-                }
-
-                if (!defaultForm) {
-                    defaultForm = form
-                }
-                
-                result[form] = ending.trim()
-            }            
-        }
-
-        return { default: defaultForm, endings: result, inherits: inherits }
-    }
 
     for (let line of data.split('\n')) {
         if (!line || line.substr(0, 2) == '//') {
@@ -54,7 +81,7 @@ export default function parseInflectionFile(data, lang: string) {
         let i = line.indexOf(':')
 
         if (i < 0) {
-            new Error('Every line should start with the ID of the inlection followed by colon. "' + line + '" does not.')
+            new Error('Every line should start with the ID of the inflection followed by colon. "' + line + '" does not.')
         }
 
         let id, pos
@@ -71,7 +98,7 @@ export default function parseInflectionFile(data, lang: string) {
         
         let rightSide = line.substr(i + 1)
 
-        let endings = parseEndings(rightSide)
+        let endings = parseEndings(rightSide, lang)
 
         let inflection
 

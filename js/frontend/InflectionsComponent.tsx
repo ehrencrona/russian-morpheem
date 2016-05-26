@@ -68,8 +68,8 @@ let FIELDS =
     ru: {
         v: {
             cols: [ 'singular', 'plural' ],
-            rows: [ 'infinitive', '1st person', '2nd person', '3rd person'],
-            forms: [ ['inf', ''], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'] ]  
+            rows: [ 'infinitive', '1st person', '2nd person', '3rd person', 'past'],
+            forms: [ ['inf', ''], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'], [ ['pastm', 'pastn', 'pastf'], 'pastpl' ]]
         } ,
         adj: {
             cols: [ 'm sg', 'n sg', 'f sg', 'plural' ],
@@ -191,7 +191,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         
         if (!word) {
             word = new InflectedWord(
-                    inflection.getEnding(inflection.defaultForm), 
+                    inflection.getEnding(inflection.defaultForm).suffix, 
                     null, inflection.defaultForm)
                 .setInflection(inflection) 
         } 

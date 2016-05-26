@@ -1,16 +1,18 @@
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
-import Inflection from '../shared/Inflection';
-import Inflections from '../shared/Inflections';
-import Word from '../shared/Word';
-import UnstudiedWord from '../shared/UnstudiedWord';
-import InflectedWord from '../shared/InflectedWord';
+import Inflection from '../shared/Inflection'
+import Inflections from '../shared/Inflections'
+import Word from '../shared/Word'
+import Ending from '../shared/Ending'
+import UnstudiedWord from '../shared/UnstudiedWord'
+import InflectedWord from '../shared/InflectedWord'
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', null, { nom: 'ium' })
+    new Inflection('infl', 'nom', null, parseEndings('nom: ium', 'fake').endings)
 ])
 
 describe('Word', function() {
@@ -52,11 +54,11 @@ describe('Word', function() {
             expect(after.inflection.id).to.equal(before.inflection.id)
         }
     })
-    
+
     it('converts inflected with < to JSON and back', function () {
         let inflection = 
             new Inflection('скаж<зать', 'nom', null, 
-                { inf: '<зать', 1: 'у', past: '<зал', })
+                parseEndings('inf: <зать, 1: у, past: <зал', 'fake').endings)
 
         let inflections = new Inflections([
             inflection

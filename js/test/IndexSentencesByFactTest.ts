@@ -12,12 +12,15 @@ import Sentences from '../shared/Sentences'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
 import Facts from '../shared/Facts'
+import Ending from '../shared/Ending'
 
+import { parseEndings } from '../shared/InflectionFileParser'
 import { expect } from 'chai';
 
 describe('IndexSentencesByFact', function() {
-    let inflection = new Inflection('verb', 'inf', null, { inf: 're', i: 'vo' })
-    
+    let inflection = new Inflection('verb', 'inf', null, 
+        parseEndings('inf: re, i: vo', 'fake').endings)
+
     let io = new Word('io')
     let bere = new InflectedWord('bere', null, 'inf').setInflection(inflection)
     let bevo = new InflectedWord('bevo', bere, 'i').setInflection(inflection)

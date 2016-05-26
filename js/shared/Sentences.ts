@@ -54,8 +54,6 @@ export default class Sentences {
         if (toId >= this.nextSentenceId) {
             this.nextSentenceId = sentence.getId() + 1
         }
-        
-        console.log('changed from ',fromId,'to', toId)
     }
 
     remove(sentence: Sentence) {

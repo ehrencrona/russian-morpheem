@@ -4,6 +4,7 @@ import InflectedWord from './InflectedWord'
 import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
 import Grammar from './Grammar'
+import Ending from './Ending'
 
 /** 
   * Describes a way of inflecting a word (by adding endings to a stem). Also serves as Fact. 
@@ -11,7 +12,7 @@ import Grammar from './Grammar'
 export default class Inflection {
     inherits: Inflection
 
-    constructor(public id, public defaultForm, public pos, public endings) {
+    constructor(public id, public defaultForm, public pos, public endings: { [s: string]: Ending }) {
         this.id = id
         this.pos = pos
         this.defaultForm = defaultForm
@@ -89,7 +90,7 @@ export default class Inflection {
         }
     }
 
-    getEnding(form) {
+    getEnding(form): Ending {
         let result = this.endings[form]
         
         if (result !== undefined) {
@@ -110,7 +111,7 @@ export default class Inflection {
         if (result !== undefined) {
             return true
         }
-        else if (this.inherits) {                
+        else if (this.inherits) {
             return this.inherits.hasForm(form)
         }
         else {
@@ -120,23 +121,25 @@ export default class Inflection {
 
     getInflectedForm(word: InflectedWord, form: string) {
         let ending = this.getEnding(form)
-        let jp
 
-        if (ending[0] == '<') {
-            jp = word.stem.substr(0, word.stem.length-1) + ending.substr(1)
+        let stem = word.stem
+        let suffix = ending.suffix
+
+        if (ending.relativeTo) {
+            stem = this.getInflectedForm(word.infinitive, ending.relativeTo)
         }
-        else {
-            jp = word.stem + ending
+
+        if (ending.subtractFromStem > 0) {
+            stem = stem.substr(0, stem.length - ending.subtractFromStem)
         }
-        
-        return jp
+
+        return stem + suffix
     }
 
     inflect(word: InflectedWord, form: string) {
         let jp = this.getInflectedForm(word, form)
-        
-        let iw = new InflectedWord(
-            jp, word.infinitive, form)
+
+        let iw = new InflectedWord(jp, word.infinitive, form)
             .requiresFact(this.getFact(form))
 
         iw.setInflection(this)

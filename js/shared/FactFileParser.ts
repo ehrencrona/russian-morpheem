@@ -104,9 +104,10 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 word.setForm(inflection.defaultForm)
                 
                 let defaultEnding = inflection.getEnding(inflection.defaultForm)
+                let defaultSuffix = defaultEnding.suffix
                 
-                if (word.jp.substr(word.jp.length - defaultEnding.length) != defaultEnding) {
-                    throw new Error(word.jp + ' should end with "' + defaultEnding + '".');
+                if (word.jp.substr(word.jp.length - defaultSuffix.length) != defaultSuffix) {
+                    throw new Error(word.jp + ' should end with "' + defaultSuffix + '".');
                 }
 
                 word.setInflection(inflection)

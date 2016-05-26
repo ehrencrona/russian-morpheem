@@ -68,19 +68,18 @@ export default class InflectedWord extends Word {
         this.inflection = inflection
 
         let expectedEnding = inflection.getEnding(this.form)
+        let expectedSuffix = expectedEnding.suffix
 
         let jp = this.originalJp
 
-        if (expectedEnding[0] == '<') {
-            expectedEnding = expectedEnding.substr(1)
+        if (expectedEnding.subtractFromStem > 0) {
+            let actualSuffix = jp.substr(jp.length - expectedSuffix.length)
 
-            let actualEnding = jp.substr(jp.length - expectedEnding.length)
-
-            if (actualEnding != expectedEnding) {
-                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualEnding}`)
+            if (actualSuffix != expectedSuffix) {
+                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualSuffix}`)
             }
 
-            this.stem = jp.substr(0, jp.length - expectedEnding.length)
+            this.stem = jp.substr(0, jp.length - expectedSuffix.length)
             
             if (this.stem[this.stem.length-1] == '<') {
                 this.stem = this.stem.substr(0, this.stem.length-1)
@@ -90,13 +89,13 @@ export default class InflectedWord extends Word {
             }
         }
         else {
-            let actualEnding = jp.substr(jp.length - expectedEnding.length)
+            let actualSuffix = jp.substr(jp.length - expectedSuffix.length)
 
-            if (actualEnding != expectedEnding) {
-                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualEnding}`)
+            if (actualSuffix != expectedSuffix) {
+                throw new Error(`Expected ${jp} to end with ${expectedEnding}, not ${actualSuffix}`)
             }
 
-            this.stem = jp.substr(0, jp.length - expectedEnding.length)
+            this.stem = jp.substr(0, jp.length - expectedSuffix.length)
         }
 
         this.jp = this.inflection.getInflectedForm(this, this.form)

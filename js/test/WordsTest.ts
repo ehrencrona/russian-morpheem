@@ -1,17 +1,20 @@
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
-import Inflection from '../shared/Inflection';
-import Inflections from '../shared/Inflections';
-import Word from '../shared/Word';
-import Words from '../shared/Words';
-import UnstudiedWord from '../shared/UnstudiedWord';
-import InflectedWord from '../shared/InflectedWord';
+import Inflection from '../shared/Inflection'
+import Inflections from '../shared/Inflections'
+import Word from '../shared/Word'
+import Words from '../shared/Words'
+import Ending from '../shared/Ending'
+import UnstudiedWord from '../shared/UnstudiedWord'
+import InflectedWord from '../shared/InflectedWord'
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', null, { nom: 'er', past1: 'ais', past2: 'ais' })
+    new Inflection('infl', 'nom', null, 
+        parseEndings('nom: er, past1: ais, past2: ais', 'fake').endings)
 ])
 
 describe('Words', function() {
@@ -31,7 +34,8 @@ describe('Words', function() {
         let oldPast = words.get('passer@past1')
         
         let newInflection = new Inflection(
-            'infl', 'nom', null, { nom: 'sser', past1: 'ttais', past2: 'ttais' })
+            'infl', 'nom', null, 
+            parseEndings('nom: sser, past1: ttais, past2: ttais', 'fake').endings)
         
         words.changeInflection(w3, newInflection)
         

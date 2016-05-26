@@ -18,7 +18,7 @@ neu1[n]: nom: -о, gen: -а, dat: -у, acc: -о, instr: -ом, prep: -е, pl: -�
 neu2[n]: pl: -а, datpl: -ам, accpl: -а, instrpl: -ами, preppl: -нах, genpl: <он, inherit: neu1
 
 -человек[n]: genpl: , inherit: masc1
-v: inf: ****, pastm:
+v: inf: ****, pastm: л, pastf: pastm-а, pastn: pastm-о, pastpl: pastm-и
 -встречать[v]: inf: -ть, 1: -ю, 1pl: -ем, 2: -ешь, 2pl: -ете, 3: -ет, 3pl: -ют, inherit: v
 
 it-im-ite[v]: inf: ****, 2: ишь, 3: ит, 1pl: им, 2pl: ите, inherit: v

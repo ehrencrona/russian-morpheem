@@ -13,7 +13,9 @@ export default function facsToString(facts: Facts) {
             res += 'grammar: ' + fact.getId() + '\n'
         }
         else if (fact instanceof InflectedWord) {
-            res += fact.stem + '--' + fact.inflection.getEnding(fact.form) + 
+            let ending = fact.inflection.getEnding(fact.form)
+            
+            res += fact.stem + '--' + (ending.subtractFromStem ? '<' : '') + ending.suffix + 
                 ': ' + fact.getEnglish('') + ', inflect: ' + fact.inflection.getId() + '\n'
         }
         else if (fact instanceof Word) {

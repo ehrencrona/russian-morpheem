@@ -4,6 +4,8 @@
 import Inflections from '../shared/Inflections';
 import Inflection from '../shared/Inflection';
 import InflectedWord from '../shared/InflectedWord';
+import Ending from '../shared/Ending';
+import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
 
@@ -11,8 +13,10 @@ describe('Inflections', function() {
     it('handles JSON conversion', function () {
 
         let before = new Inflections([            
-            new Inflection('regular', 'nom', null, { nom: '-a' }),
-            new Inflection('irregular', 'nom', null, { nom: '-b' })
+            new Inflection('regular', 'nom', null, 
+                parseEndings('nom: a', 'fake').endings),
+            new Inflection('irregular', 'nom', null, 
+                parseEndings('nom: b', 'fake').endings)
         ])
 
         before.inflections[1].inherit(before.inflections[0]);
@@ -29,8 +33,11 @@ describe('Inflections', function() {
 
     it('handles inflections removing characters', function () {
         let inflection = 
-            new Inflection('скаж<зать', 'nom', null, 
-                { inf: '<зать', 1: 'у', past: '<зал', })
+            new Inflection('скаж<зать', 'nom', null, {
+                    inf: new Ending('зать', null, 1), 
+                    1: new Ending('у', null, 0), 
+                    past: new Ending('зал', null, 1), 
+                })
 
         let word = new InflectedWord('скаж<зать', null, 'inf').setInflection(inflection)
 
@@ -57,4 +64,19 @@ describe('Inflections', function() {
         expect(oneFromInf.toString()).to.equal('скажу')
         expect(oneFromInf.getId()).to.equal('сказать@1')
     })
-})
+
+    it('handles relative inflections', function () {
+        let inflection = 
+            new Inflection('сказать', 'nom', null, 
+                parseEndings('inf: ать, pastm: ал, pastf: pastm-а', 'fake').endings)
+
+        let word = new InflectedWord('сказать', null, 'inf').setInflection(inflection)
+
+        expect(inflection.inflect(word, 'pastf').toString()).to.equal('сказала')
+
+        let child = new Inflection('бегать', 'nom', null, {}).inherit(inflection)
+        word = new InflectedWord('бегать', null, 'inf').setInflection(child)
+
+        expect(child.inflect(word, 'pastf').toString()).to.equal('бегала')
+
+    })})
