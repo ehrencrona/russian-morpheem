@@ -14,9 +14,9 @@ describe('SentenceFileParser', function() {
         var a = new Word('a')
 
         let words = new Words();
-        words.add(a)
-        words.add(new Word('b', '1'))
-        words.add(new Word('b', '2'))
+        words.addWord(a)
+        words.addWord(new Word('b', '1'))
+        words.addWord(new Word('b', '2'))
 
         var sentences = parser('a b[1] b[2]: english',  words, new Facts())
         let sentence = sentences.sentences[0]
@@ -30,7 +30,7 @@ describe('SentenceFileParser', function() {
     it('handles requires', function () {
         var a = new Word('a')
         let words = new Words();
-        words.add(a)
+        words.addWord(a)
 
         let facts = new Facts()
         facts.add(new Grammar('grammar'))

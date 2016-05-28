@@ -1,19 +1,20 @@
 
 import Word from './Word'
 import InflectedWord from './InflectedWord'
+import InflectableWord from './InflectableWord'
 import Inflection from './Inflection'
 import Facts from './Facts'
 import UnstudiedWord from './UnstudiedWord';
 
 export default class Words {
-    allWords: Word[] = []
     wordsByString : { [s: string]: Word } = {}
     wordsById : { [s: string]: Word } = {}
     
     ambiguousForms = {}
 
-    onAdd: (word: Word) => void = null
-    onChangeInflection: (word: InflectedWord) => void = null
+    onAddWord: (word: Word) => void = null
+    onAddInflectableWord: (word: InflectableWord) => void = null
+    onChangeInflection: (word: InflectableWord) => void = null
 
     static PUNCTUATION = '.?!,;"'
 
@@ -21,7 +22,10 @@ export default class Words {
         if (facts) {
             for (let fact of facts.facts) {
                 if ((fact instanceof Word)) {
-                    this.add(fact);
+                    this.addWord(fact);
+                }
+                else if (fact instanceof InflectableWord) {
+                    this.addInflectableWord(fact)
                 }
             }
         }
@@ -29,7 +33,7 @@ export default class Words {
     
     addPunctuation() {
         for (let i = 0; i < Words.PUNCTUATION.length; i++) {
-            this.add(new UnstudiedWord(Words.PUNCTUATION[i], null))
+            this.addWord(new UnstudiedWord(Words.PUNCTUATION[i], null))
         }
     }
 
@@ -54,33 +58,38 @@ export default class Words {
             }
         }
         
-        if (word instanceof InflectedWord) {
-            word.visitAllInflections(
-                (inflectedWord) => {
-                    reallyIndex(inflectedWord)                     
-                }, false)
-        }
-        else {
-            reallyIndex(word)
-        }
+        reallyIndex(word)
     }
-    
-    add(word: Word) {
-        this.allWords.push(word)
+
+    addWord(word: Word) {
         this.index(word)
                 
-        if (this.onAdd) {
-            this.onAdd(word)
+        if (this.onAddWord) {
+            this.onAddWord(word)
         }
 
         return this
     }
 
-    changeInflection(word: InflectedWord, inflection: Inflection) {
+    addInflectableWord(word: InflectableWord) {
+        word.visitAllInflections((word: InflectedWord) => 
+            this.index(word), false
+        )
+
+        if (this.onAddInflectableWord) {
+            this.onAddInflectableWord(word)
+        }
+
+        return this
+    }
+
+    changeInflection(word: InflectableWord, inflection: Inflection) {
         let wordByForm: { [s: string]: InflectedWord }  = {}
 
         word.visitAllInflections(
             (inflectedWord: InflectedWord) => {
+                delete this.wordsByString[inflectedWord.jp]
+
                 let existingInflection = this.wordsById[inflectedWord.getId()]
                 
                 if (existingInflection instanceof InflectedWord) {
@@ -92,12 +101,13 @@ export default class Words {
                 }
             }, false)
 
-        delete this.wordsByString[word.jp]
 
         word.changeInflection(inflection)
 
         word.visitAllInflections(
             (inflectedWord: InflectedWord) => {
+                this.wordsByString[inflectedWord.jp] = inflectedWord
+                
                 let existingInflection = wordByForm[inflectedWord.form]
 
                 if (!existingInflection) {
@@ -106,8 +116,6 @@ export default class Words {
 
                 this.wordsById[inflectedWord.getId()] = existingInflection
             }, false)
-
-        this.wordsByString[word.jp] = word
         
         if (this.onChangeInflection) {
             this.onChangeInflection(word)

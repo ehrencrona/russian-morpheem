@@ -3,6 +3,7 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
 import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/Inflection'
 
 import Tab from './Tab'
@@ -17,7 +18,7 @@ interface Props {
     corpus: Corpus,
     inflection: Inflection,
     tab: Tab,
-    word?: InflectedWord,
+    word?: InflectableWord,
     onSelect?: (word: Word) => any
     hideForms?: Object
 }
@@ -121,7 +122,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         })    
     }
     
-    getWordsByForm(word: InflectedWord): { [ form:string]: string} {
+    getWordsByForm(word: InflectableWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
         let inflections: InflectedWord[] = []
@@ -187,13 +188,10 @@ export default class InflectionsComponent extends Component<Props, State> {
         let forms: string[]
 
         let inflection = this.state.inflection
-        let word: InflectedWord = this.props.word
-        
+        let word: InflectableWord = this.props.word
+
         if (!word) {
-            word = new InflectedWord(
-                    inflection.getEnding(inflection.defaultForm).suffix, 
-                    null, inflection.defaultForm)
-                .setInflection(inflection) 
+            word = new InflectableWord('.', inflection)
         } 
 
         wordsByForm = this.getWordsByForm(word)

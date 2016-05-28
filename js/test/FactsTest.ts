@@ -8,7 +8,7 @@ import Facts from '../shared/Facts';
 import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
-import InflectedWord from '../shared/InflectedWord';
+import InflectableWord from '../shared/InflectableWord';
 import { parseEndings } from '../shared/InflectionFileParser'
 
 import { expect } from 'chai';
@@ -21,9 +21,8 @@ describe('Facts', function() {
     let inflections = new Inflections([ inflection ])
     
     let word = new Word('foo', 'bar').setEnglish('eng')
-    let inflectedWord = new InflectedWord('fooa', null, 'nom')
+    let inflectedWord = new InflectableWord('foo', inflection)
         .setEnglish('eng')
-        .setInflection(inflection)
 
     let facts = new Facts()
         .add(inflections.getForm('regular@nom'))
@@ -31,7 +30,7 @@ describe('Facts', function() {
         .add(inflectedWord)
         .add(inflections.getForm('regular@imp'))
 
-    let words = new Words().add(word).add(inflectedWord)
+    let words = new Words().add(word).add(inflectedWord.inflect('nom'))
 
     it('looks up facts by index', () => {
         expect(facts.indexOf(word)).to.equal(1)
@@ -45,7 +44,7 @@ describe('Facts', function() {
         expect(after.facts[1]).to.instanceOf(Word);
         expect(after.facts[1].getId()).to.equal(word.getId());
 
-        expect(after.facts[2]).to.instanceOf(InflectedWord);
+        expect(after.facts[2]).to.instanceOf(InflectableWord);
         expect(after.facts[2].getId()).to.equal(inflectedWord.getId());
         
         expect(after.facts[3].getId()).to.equal('regular@imp');

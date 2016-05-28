@@ -17,7 +17,7 @@
 
 import Word from './Word';
 import UnstudiedWord from './UnstudiedWord';
-import InflectedWord from './InflectedWord';
+import InflectableWord from './InflectableWord';
 import Inflections from './Inflections';
 import Fact from './Fact';
 import Facts from './Facts';
@@ -56,23 +56,19 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
             console.error('Warning: ' + parseResult.word + ' contains Latin characters.')
         }
 
+        let wordWithoutStemMark = parseResult.word.replace('--', '')
+
         if (leftSide.indexOf('unstudied') > 0) {
             return new UnstudiedWord(parseResult.word, parseResult.classifier)
         }
-        else if (inflected) {
-            let wordWithoutStemMark = parseResult.word.replace('--', '')
-
-            let stem = stemAndEnding[0]
-
-            return new InflectedWord(wordWithoutStemMark, null, 'n/a')
-        } 
         else {
-            return new Word(parseResult.word, parseResult.classifier)
+            return new Word(wordWithoutStemMark, parseResult.classifier)
         }
     }
 
-    function parseRightSideOfDefinition(rightSide, word) {
+    function parseRightSideOfDefinition(rightSide, word: Word): Fact {
         let elements = rightSide.split(',').map((s) => s.trim())
+        let fact: Fact = word
 
         for (let element of elements) {
             let split = element.split(':').map((s) => s.trim())
@@ -95,22 +91,15 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     throw new Error('Unknown inflection "' + text + '"'
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
-
-                if (!(word instanceof InflectedWord)) {
-                    throw new Error('Word "' + word + '" has inflection but not stem separator'
-                        + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
-                }
-
-                word.setForm(inflection.defaultForm)
                 
                 let defaultEnding = inflection.getEnding(inflection.defaultForm)
                 let defaultSuffix = defaultEnding.suffix
-                
+
                 if (word.jp.substr(word.jp.length - defaultSuffix.length) != defaultSuffix) {
                     throw new Error(word.jp + ' should end with "' + defaultSuffix + '".');
                 }
 
-                word.setInflection(inflection)
+                fact = new InflectableWord(word.jp.substr(0, word.jp.length - defaultSuffix.length), inflection)
             }
             else if (tag == 'grammar') {
                 var requiredFact = facts.get(text)
@@ -125,6 +114,8 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 word.setEnglish(text, tag)
             }
         }
+        
+        return fact
     }
 
     let lineIndex = 0
@@ -158,7 +149,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
         else {
             fact = parseLeftSideOfDefinition(leftSide)
 
-            parseRightSideOfDefinition(rightSide, fact)
+            fact = parseRightSideOfDefinition(rightSide, fact)
 
             fact.line = lineIndex
         }

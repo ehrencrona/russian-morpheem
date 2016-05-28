@@ -4,6 +4,7 @@
 import Inflections from '../shared/Inflections'
 import Inflection from '../shared/Inflection'
 import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 import Sentence from '../shared/Sentence'
 import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
@@ -18,7 +19,7 @@ describe('Sentences', function() {
     it('deletes', function() {        
         let io = new Word('io')
                 
-        let words = new Words().add(io)
+        let words = new Words().addWord(io)
         
         let sentences = new Sentences()
         
@@ -38,7 +39,7 @@ describe('Sentences', function() {
     it('change change id', function() {        
         let io = new Word('io')
                 
-        let words = new Words().add(io)
+        let words = new Words().addWord(io)
         
         let sentences = new Sentences()
         
@@ -70,14 +71,17 @@ describe('Sentences', function() {
             parseEndings('inf: re, i: vo', 'fake').endings)
         
         let io = new Word('io')
-        let bere = new InflectedWord('bere', null, 'inf').setInflection(inflection)
-        let bevo = new InflectedWord('bevo', bere, 'i').setInflection(inflection)
+        
+        let drink = new InflectableWord('be', inflection)
+        
+        let bere = drink.inflect('inf')
+        let bevo = drink.inflect('i')
         
         let facts = new Facts()
         facts.add(io)
         facts.add(bere)
         
-        let words = new Words().add(bere).add(io)
+        let words = new Words().addWord(bere).addWord(io)
         
         let before = new Sentences()
         

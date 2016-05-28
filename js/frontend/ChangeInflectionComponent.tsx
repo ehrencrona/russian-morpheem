@@ -29,7 +29,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            inflection: props.word.inflection
+            inflection: props.word.word.inflection
         }
     }
     
@@ -40,7 +40,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
     }
 
     changeInflection(inflection: Inflection) {
-        this.props.corpus.words.changeInflection(this.props.word, inflection)
+        this.props.corpus.words.changeInflection(this.props.word.word, inflection)
 
         this.setState({
             inflection: inflection
@@ -68,7 +68,8 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         let word: InflectedWord = this.props.word
         
         let alternativeInflections = 
-            this.props.corpus.inflections.getPossibleInflections(this.props.word.originalJp)
+            this.props.corpus.inflections.getPossibleInflections(
+                    this.props.word.word.inflect(this.state.inflection.defaultForm).jp)
                 .filter((inflection) => inflection.getId() != this.state.inflection.getId())
                 .filter((inflection) => inflection.pos == this.state.inflection.pos)
         

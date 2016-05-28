@@ -119,14 +119,13 @@ export default class Inflection {
         }
     }
 
-    getInflectedForm(word: InflectedWord, form: string) {
+    getInflectedForm(stem: string, form: string) {
         let ending = this.getEnding(form)
 
-        let stem = word.stem
         let suffix = ending.suffix
 
         if (ending.relativeTo) {
-            stem = this.getInflectedForm(word.infinitive, ending.relativeTo)
+            stem = this.getInflectedForm(stem, ending.relativeTo)
         }
 
         if (ending.subtractFromStem > 0) {
@@ -134,17 +133,6 @@ export default class Inflection {
         }
 
         return stem + suffix
-    }
-
-    inflect(word: InflectedWord, form: string) {
-        let jp = this.getInflectedForm(word, form)
-
-        let iw = new InflectedWord(jp, word.infinitive, form)
-            .requiresFact(this.getFact(form))
-
-        iw.setInflection(this)
-
-        return iw
     }
 
     getAllForms(): string[] {

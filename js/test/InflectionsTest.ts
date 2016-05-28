@@ -4,6 +4,7 @@
 import Inflections from '../shared/Inflections';
 import Inflection from '../shared/Inflection';
 import InflectedWord from '../shared/InflectedWord';
+import InflectableWord from '../shared/InflectableWord';
 import Ending from '../shared/Ending';
 import { parseEndings } from '../shared/InflectionFileParser'
 
@@ -39,27 +40,27 @@ describe('Inflections', function() {
                     past: new Ending('зал', null, 1), 
                 })
 
-        let word = new InflectedWord('скаж<зать', null, 'inf').setInflection(inflection)
+        let word = new InflectableWord('скаж', inflection)
 
         expect(word.getId()).to.equal('сказать@inf')
         expect(word.toString()).to.equal('сказать')
 
-        let past = inflection.inflect(word, 'past')
+        let past = word.inflect('past')
 
         expect(past.toString()).to.equal('сказал')
         expect(past.getId()).to.equal('сказать@past')
 
-        let inf = past.inflect('inf')
+        let inf = word.inflect('inf')
 
         expect(inf.toString()).to.equal('сказать')
         expect(inf.getId()).to.equal('сказать@inf')
 
-        let oneFromPast = past.inflect('1')
+        let oneFromPast = word.inflect('1')
 
         expect(oneFromPast.toString()).to.equal('скажу')
         expect(oneFromPast.getId()).to.equal('сказать@1')
 
-        let oneFromInf = past.inflect('1')
+        let oneFromInf = word.inflect('1')
 
         expect(oneFromInf.toString()).to.equal('скажу')
         expect(oneFromInf.getId()).to.equal('сказать@1')
@@ -70,13 +71,13 @@ describe('Inflections', function() {
             new Inflection('сказать', 'nom', null, 
                 parseEndings('inf: ать, pastm: ал, pastf: pastm-а', 'fake').endings)
 
-        let word = new InflectedWord('сказать', null, 'inf').setInflection(inflection)
+        let word = new InflectableWord('сказ', inflection)
 
-        expect(inflection.inflect(word, 'pastf').toString()).to.equal('сказала')
+        expect(word.inflect('pastf').toString()).to.equal('сказала')
 
         let child = new Inflection('бегать', 'nom', null, {}).inherit(inflection)
-        word = new InflectedWord('бегать', null, 'inf').setInflection(child)
+        word = new InflectableWord('бег', child)
 
-        expect(child.inflect(word, 'pastf').toString()).to.equal('бегала')
+        expect(word.inflect('pastf').toString()).to.equal('бегала')
 
     })})

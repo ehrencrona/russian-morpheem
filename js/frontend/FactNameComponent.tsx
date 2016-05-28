@@ -5,9 +5,10 @@ import Fact from '../shared/Fact'
 import Inflection from '../shared/Inflection'
 
 import InflectionFact from '../shared/InflectionFact'
+import InflectedWord from '../shared/InflectedWord'
 
 import Sentence from '../shared/Sentence'
-import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 
 import { Component, createElement } from 'react';
 
@@ -31,12 +32,12 @@ export default class FactNameComponent extends Component<Props, State> {
         }
     }
 
-    getExamples(fact: InflectionFact) {
+    getExamples(forFact: InflectionFact) {
         let inflectionIds = new Set()
 
         this.props.corpus.inflections.inflections.forEach((inflection) => {
-            if (inflection.pos == fact.inflection.pos &&
-                inflection.getInflectionId(fact.form) == fact.inflection.id) {
+            if (inflection.pos == forFact.inflection.pos &&
+                inflection.getInflectionId(forFact.form) == forFact.inflection.id) {
                 inflectionIds.add(inflection.id)
             }
         })
@@ -45,9 +46,9 @@ export default class FactNameComponent extends Component<Props, State> {
 
         this.props.corpus.facts.facts.forEach((fact) => {
             if (result.length < 3 &&
-                fact instanceof InflectedWord && 
+                fact instanceof InflectableWord && 
                 inflectionIds.has(fact.inflection.id)) {
-                result.push(fact.infinitive.inflect(fact.form))
+                result.push(fact.inflect(forFact.form))
             } 
         })
 

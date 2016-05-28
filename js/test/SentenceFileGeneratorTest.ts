@@ -7,7 +7,7 @@ import { expect } from 'chai';
 
 import Word from '../shared/Word'
 import Words from '../shared/Words'
-import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/Inflection'
 import Inflections from '../shared/Inflections'
 import Sentences from '../shared/Sentences'
@@ -22,9 +22,9 @@ describe('SentenceFileGenerator', function() {
 
         let words = new Words()
         
-        words.add(a)
-        words.add(new Word('b', '1'))
-        words.add(new Word('b', '2'))
+        words.addWord(a)
+        words.addWord(new Word('b', '1'))
+        words.addWord(new Word('b', '2'))
 
         let original = 'a b[1] b[2]: english'
 
@@ -44,8 +44,8 @@ describe('SentenceFileGenerator', function() {
         
         let words = new Words();
 
-        words.add(new InflectedWord('sobaka', null, 'nom').setInflection(inflections.get('fem')))
-        words.add(new InflectedWord('dom', null, 'nom').setInflection(inflections.get('masc')))
+        words.addInflectableWord(new InflectableWord('sobak', inflections.get('fem')))
+        words.addInflectableWord(new InflectableWord('dom', inflections.get('masc')))
 
         var sentences: Sentences = parser('sobaka@acc sobaka@nom dom@acc dom@nom: bla', words, new Facts())
     })

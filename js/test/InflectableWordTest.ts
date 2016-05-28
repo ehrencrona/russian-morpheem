@@ -8,11 +8,12 @@ import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectedWord from '../shared/InflectedWord';
-import { parseEndings } from '../shared/InflectionFileParser'
+import InflectableWord from '../shared/InflectableWord';
+import { parseEndings } from '../shared/InflectionFileParser';
 
 import { expect } from 'chai';
 
-describe('InflectedWord', function() {
+describe('InflectableWord', function() {
     let regular =
         new Inflection('regular', 'nom', null, 
             parseEndings('nom: a, imp: o, fut: x', 'fake').endings)
@@ -26,9 +27,8 @@ describe('InflectedWord', function() {
     let word = new Word('foo', 'bar').setEnglish('eng')
 
     let inflectedWord = 
-        new InflectedWord('fooa', null, 'nom')
+        new InflectableWord('foo', irregular)
             .setEnglish('eng')
-            .setInflection(irregular)
 
     it('gets right ID', () => {
         expect(inflectedWord.getId()).to.equal('fooa@nom');
@@ -60,8 +60,10 @@ describe('InflectedWord', function() {
     it('can be retrieved from Words (move to WordsTest)', () => {    
         let words = new Words()
         
-        words.add(inflectedWord)
+        words.addInflectableWord(inflectedWord)
         
-        expect(words.get(inflectedWord.getId()).getId()).to.equal(inflectedWord.getId());
+        let nom = inflectedWord.inflect('nom')
+        
+        expect(words.get(nom.getId()).getId()).to.equal(nom.getId());
     })
 })
