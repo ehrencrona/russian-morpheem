@@ -20,7 +20,7 @@ grammar: masc1@nom
 grammar: masc1@prep
 grammar: ийadj@m
 планшет--: tablet, inflect: masc1
-хорош--ий: good, inflect: ийadj
+хорош--ий: good, inflect: -хороший
 grammar: ыйadj@m
 магазин--: shop, inflect: masc1
 комнат--а: room, inflect: fem1
@@ -59,7 +59,7 @@ grammar: -я@acc
 --ты: you, inflect: -ты
 grammar: -ты@acc
 grammar: -ты@nom
-что: what
+--что: what, inflect: -что
 grammar: it-im-ite@2
 --она: she, inflect: -она
 grammar: -она@nom
@@ -159,13 +159,12 @@ grammar: adj@prepf
 grammar: -этот@pl
 жив--<ть: live, inflect: -жить
 grammar: -жить@1
-люд--ь: people, inflect: fem3
+люд--ь: people, inflect: -люди
 ошибк--а: n/a, inflect: femka
 grammar: n@preppl
 grammar: adj@preppl
 grammar: -друг@pl
 дела--ть: n/a, inflect: -встречать
-дет--ь: n/a, inflect: fem4
 grammar: -жить@3pl
 grammar: n@accpl
 разн--ый: n/a, inflect: ыйadj
@@ -357,7 +356,7 @@ grammar: -друг@instrpl
 grammar: -мы@dat
 grammar: -давать@3pl
 вечер--: n/a, inflect: masc3
-дет--: n/a, inflect: -человек
+дет--ь: n/a, inflect: -люди
 перед--: n/a, inflect: -человек
 все--: n/a, inflect: masc1
 весь--: n/a, inflect: masc1
@@ -366,25 +365,46 @@ grammar: adj@adv
 а: and
 но: but
 к: to
-со: with
 из: from
-так:
-же:
+так: 
+же: 
 от: to
 может быть: maybe
-мож--<чь: inflect: -мочь
+мож--<чь: , inflect: -мочь
 о: about
-один: one
+один--: one, inflect: masc1
 еще: again
-бы:
+бы: 
 так--ой: such a, inflect: ойadj2
 себя: himself / herself
 уже: already
 да: yes
-год--: year, inflect: masc1
+год--: year, inflect: -год
 до: from
 если: if
-время--: time, inflect: masc1
+врем--я: time, inflect: -время
 рук--а: hand, inflect: fem1
-самый: most
+сам--ый: most, inflect: ыйadj
 ни: neither/nor
+стан--<ть: n/a, inflect: -стать
+даже: even
+друг--ой: other, inflect: ойadj2
+ну: 
+дел--о: , inflect: neu3
+раз--: n/a, inflect: -раз
+чтобы: 
+там: there
+словар--ь: n/a, inflect: -словарь
+ручк--а: n/a, inflect: femka2
+английск--ий: n/a, inflect: ийadj
+русск--ий: n/a, inflect: ийadj
+по-французски: n/a
+по-русски: n/a
+по-английски: n/a
+ключ--: n/a, inflect: -ключ
+скольк--о: n/a, inflect: -сколько
+слов--о: n/a, inflect: neu3
+домашн--ий: n/a, inflect: -домашний
+задани--е: n/a, inflect: neuie
+упражнени--е: n/a, inflect: neuie
+решени--е: n/a, inflect: neuie

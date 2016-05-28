@@ -19,14 +19,14 @@
 собака@nom в квартира@prep: A dog is in the flat.
 кошка@nom в квартира@prep: A cat is in the flat.
 мышь@nom в квартира@prep: A mouse is in the flat.
-что в квартира@prep ?: What is in the flat ?
+что@nom в квартира@prep ?: What is in the flat ?
 где собака@nom: Where is the dog?
 где кошка@nom: Where is the cat?
 где лошадь@nom: undefined
 где мышь@nom: Where is the mouse?
 где улица@nom: Where is the street?
 где квартира@nom: Where is the flat?
-что это ?: What is this?
+что@nom это ?: What is this?
 это собака@nom: This is a dog.
 это кошка@nom: This is a cat.
 это лошадь@pl: undefined
@@ -79,8 +79,8 @@
 ты@nom слышать@2 машина@acc на улица@prep ?: Do you hear the car in the street?
 ты@nom слышать@2 мышь@acc ?: Do you hear the mouse?
 ты@nom слышать@2 машина@acc ?: Do you hear the car?
-что ты@nom видеть@2 ?: What do you see?
-что ты@nom слышать@2 ?: What do you hear?
+что@nom ты@nom видеть@2 ?: What do you see?
+что@nom ты@nom слышать@2 ?: What do you hear?
 кто@nom ты@nom видеть@2 ?: Who do you see?
 кто@nom ты@nom встречать@2 ?: Who do you meet?
 кто@nom ты@nom слышать@2 ?: Who do you hear?
@@ -88,13 +88,13 @@
 ты@nom видеть@2 машина@acc ?: Do you see the car?
 ты@nom видеть@2 он@acc ?: Do you see him?
 ты@nom видеть@2 она@acc ?: Do you see her?
-что он@nom видеть@3 ?: What does he see?
-что он@nom слышать@3 ?: What does he hear?
+что@nom он@nom видеть@3 ?: What does he see?
+что@nom он@nom слышать@3 ?: What does he hear?
 кто@nom он@nom видеть@3 ?: Who does he see?
 кто@nom он@nom встречать@3 ?: Who does he meet?
 кто@nom он@nom слышать@3 ?: Who does he hear?
-что видеть@3 он@nom ?: What does he see?
-что видеть@3 собака@nom ?: What does the dog see?
+что@nom видеть@3 он@nom ?: What does he see?
+что@nom видеть@3 собака@nom ?: What does the dog see?
 кто@nom видеть@3 он@nom ?: Whо does he see?
 кто@nom видеть@3 собака@nom ?: Whо does the dog see?
 кто@nom видеть@3 лошадь@nom ?: Whо does the horse see?
@@ -360,10 +360,10 @@
 мама@acc любить@3 ребёнок@acc: Mom loves the child
 кто@nom он@nom любить@3 ?: Who does he love?
 кто@nom она@nom любить@3 ?: Who does she love?
-что он@nom любить@3 ?: What does he love?
-что она@nom любить@3 ?: What does she love?
+что@nom он@nom любить@3 ?: What does he love?
+что@nom она@nom любить@3 ?: What does she love?
 кто@nom ты@nom любить@2 ?: Who do you love?
-что ты@nom любить@2 ?: What do you love?
+что@nom ты@nom любить@2 ?: What do you love?
 я@nom видеть@1 ребёнок@acc: I see a child.
 это хороший@f квартира@nom: This is a good flat.
 это хороший@m телефон@nom: This is a good phone.
@@ -428,9 +428,9 @@
 кто@nom на кровать@prep: Who is on the bed?
 кто@nom на стол@prep: Who is on the table?
 кто@nom сидеть@3 на стул@prep: undefined
-что под кровать@instr: What is under the bed?
-что под стол@instr: What is under the table?
-что под стул@instr: What is under the chair?
+что@nom под кровать@instr: What is under the bed?
+что@nom под стол@instr: What is under the table?
+что@nom под стул@instr: What is under the chair?
 он@nom лежать@3 под дерево@instr в парк@prep: He lies under a tree in the park.
 на стол@prep открытый@f газета@nom: There is an open newspaper lying on the table.
 телефон@nom под газета@instr: The phone is under the magazine.
@@ -555,7 +555,7 @@
 это книга@nom хороший@f: undefined
 он@nom очень маленький@m: undefined
 где мой@n письмо@nom: undefined
-что ты@nom читать@2: undefined
+что@nom ты@nom читать@2: undefined
 я@nom писать@1 статья@acc: undefined
 в журнал@prep хороший@f статья@nom: undefined
 в газета@prep статья@nom: undefined
@@ -602,7 +602,7 @@
 какой@m свитер@acc ты@nom любить@2: undefined
 какой@accinanpl магазин@accpl ты@nom любить@2: undefined
 ты@nom любить@2 дорогой@accinanpl машина@pl: undefined
-что ты@nom писать@2: undefined
+что@nom ты@nom писать@2: undefined
 ты@nom писать@2 письмо@acc: undefined
 почему ты@nom лежать@2 под стол@instr: undefined
 почему ты@nom лежать@2 на кровать@prep: undefined
@@ -662,7 +662,7 @@
 собака@nom в комната@prep: A dog is in the room.
 кошка@nom в комната@prep: A cat is in the room.
 мышь@nom в комната@prep: A mouse is in the room.
-что в комната@prep ?: What is in the room ?
+что@nom в комната@prep ?: What is in the room ?
 где комната@nom: Where is the room?
 это мой@f комната@nom: This is my room.
 где мой@f комната@nom ?: Where is my room?
@@ -695,7 +695,7 @@
 в магазин@prep много свитер@genpl: undefined
 в библиотека@prep много книга@genpl: undefined
 в университет@prep много профессор@genpl: undefined
-что в журнал@prep сегодня: undefined
+что@nom в журнал@prep сегодня: undefined
 дверь@prep в магазин@prep открытый@pl: undefined
 почему окно@pl открытый@pl: undefined
 он@nom покупать@3 новый@pl обувь@accpl: undefined
@@ -843,8 +843,8 @@
 он@nom знать@3 где я@nom жить@1: undefined
 кто@nom знать@3 где мой@m телефон@nom: undefined
 кто@nom вы@nom: undefined
-что вы@nom читать@2pl: undefined
-что вы@nom видеть@2pl ?: undefined
+что@nom вы@nom читать@2pl: undefined
+что@nom вы@nom видеть@2pl ?: undefined
 вы@nom видеть@2pl машина@acc ?: undefined
 какой@accinanm город@acc вы@nom любить@2pl: undefined
 в какой@m день@nom вы@nom работать@2pl: undefined
@@ -855,7 +855,7 @@
 вы@nom не любить@2pl кошка@accpl: undefined
 вы@nom не любить@2pl борщ@acc: undefined
 кто@nom вы@nom любить@2pl ?: undefined
-что вы@nom любить@2pl ?: undefined
+что@nom вы@nom любить@2pl ?: undefined
 почему вы@nom я@acc не любить@2pl: undefined
 профессор@nom закрывать@3 книга@acc: undefined
 он@nom закрывать@3 магазин@acc: undefined
@@ -1087,12 +1087,12 @@
 он@nom без ошибка@genpl: undefined
 студент@pl делать@3pl ошибка@accpl: undefined
 я@nom делать@1 ошибка@acc: undefined
-что ты@nom делать@2 сегодня: undefined
+что@nom ты@nom делать@2 сегодня: undefined
 почему ты@nom это делать@2: undefined
 я@nom не делать@1 твой@accf работа@acc: undefined
 почему ты@nom делать@2 этот@accf работа@acc: undefined
 я@nom делать@1 покупок@accpl: undefined
-что ты@nom делать@2 здесь: undefined
+что@nom ты@nom делать@2 здесь: undefined
 я@nom хотеть@1 жить@inf в разный@preppl страна@preppl: undefined
 я@nom студент@nom: undefined
 они@nom давать@3pl кошка@dat еда@acc: undefined
@@ -1144,8 +1144,8 @@
 я@nom не давать@1 еда@acc собака@dat: undefined
 она@nom дарить@3 родитель@datpl книга@acc: undefined
 она@nom дарить@3 друг@dat шоколад@acc: undefined
-что вы@nom дарить@2pl профессор@dat: undefined
-что вы@nom дарить@2pl мама@dat: undefined
+что@nom вы@nom дарить@2pl профессор@dat: undefined
+что@nom вы@nom дарить@2pl мама@dat: undefined
 мама@nom дарить@3 ребёнок@dat свитер@acc: undefined
 мама@nom дарить@3 ребёнок@dat собака@acc: undefined
 она@nom дарить@3 дорогой@accinanm подарок@acc ребёнок@dat: undefined
@@ -1284,7 +1284,7 @@
 дом@nom в парк@prep очень интересный@m: undefined
 видеть@1 интересный@accf машина@acc: undefined
 у машина@gen нет дверь@genpl: undefined
-что делать@inf без математика@gen: undefined
+что@nom делать@inf без математика@gen: undefined
 она@nom он@acc не понимать@3: undefined
 у она@gen машина@nom: undefined
 у она@gen большой@f квартира@nom: undefined
@@ -1332,9 +1332,9 @@
 человек@dat нужный@shortm дом@nom: undefined
 я@nom ты@acc не помнить@1: undefined
 мама@dat нужный@shortm хороший@m друг@nom: undefined
-я@nom помнить@1 что это проблема@nom: undefined
+я@nom помнить@1 что@nom это проблема@nom: undefined
 я@dat не нужный@shortm дорогой@accinanm телефон@acc: undefined
-я@nom понимать@1 что это проблема@nom: undefined
+я@nom понимать@1 что@nom это проблема@nom: undefined
 ты@nom помнить@2 где лежать@3 журнал@acc: undefined
 ты@nom помнить@2 мой@genm друг@gen: undefined
 я@nom одалживать@1 свой@accf машина@acc родитель@datpl: undefined
@@ -1442,7 +1442,7 @@
 он@nom писать@3 письмо@accpl друг@datpl в интернет@prep: undefined
 вечером я@nom играть@1 в интернет@prep с друг@instrpl: undefined
 он@nom читать@3 журнал@accpl в интернет@prep: undefined
-вот что я@dat интересный@shortn: undefined
+вот что@nom я@dat интересный@shortn: undefined
 я@prep интересный@shortn играть@inf в интернет@prep: undefined
 я@prep скучный@shortn играть@inf в интернет@prep: undefined
 я@nom слушать@1 радио утром: undefined
@@ -1461,7 +1461,7 @@
 он@nom пить@3 каждый@m день@nom: undefined
 я@nom читать@1 каждый@accf книга@acc который@accf я@nom покупать@1: undefined
 вечером он@nom не много говорить@3: undefined
-что вы@nom говорить@2pl: undefined
+что@nom вы@nom говорить@2pl: undefined
 вечером я@nom говорить@1 с друг@instrpl: undefined
 в каждый@prepm город@prep библиотека@nom: undefined
 в каждый@prepm дом@prep собака@nom: undefined
