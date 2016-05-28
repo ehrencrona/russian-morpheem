@@ -826,7 +826,7 @@
 он@nom мой@m профессор@nom: undefined
 он@nom читать@3 мой@n письмо@acc: undefined
 письмо@nom на стол@prep: undefined
-у ты@gen много друг@genpl: undefined
+у ты@gen много друг@genpl ?: undefined
 почему у ты@gen нет собака@gen: undefined
 у ты@gen машина@nom: undefined
 у ты@gen большой@f квартира@nom: undefined
@@ -881,7 +881,7 @@
 планшет@nom белый@m: undefined
 она@nom открывать@3 книга@acc в библиотека@prep: undefined
 кошка@nom открывать@3 дверь@acc: undefined
-в квартира@dat маленький@pl окно@pl: undefined
+в квартира@prep маленький@pl окно@pl: undefined
 в магазин@prep дорогой@pl книга@pl: undefined
 дом@pl высокий@pl: undefined
 дом@pl высокий@pl: undefined
@@ -948,7 +948,7 @@
 он@nom часто трудный@m ребёнок@nom: undefined
 сегодня трудный@m день@nom в работа@prep: undefined
 она@nom читать@3 очень трудный@accinanpl книга@pl: undefined
-у ты@gen какой@f работа@nom: undefined
+у ты@gen какой@f работа@nom ?: undefined
 он@nom сейчас в работа@prep: undefined
 он@nom не в работа@prep: undefined
 я@nom не гулять@1 в парк@preppl: undefined
@@ -1292,7 +1292,7 @@
 у она@gen много друг@genpl: undefined
 это город@nom без ресторан@genpl: undefined
 дом@nom без собака@gen как библиотека@nom без книга@genpl: undefined
-я@nom жить@1 в улица@dat без машина@gen: undefined
+я@nom жить@1 на улица@prep без машина@genpl: undefined
 он@nom без машина@gen: undefined
 в университет@prep много известный@genpl профессор@genpl: undefined
 в этот@prepm магазин@prep много старый@genpl книга@genpl: undefined
@@ -1591,3 +1591,21 @@
 хороший@datm человек@dat нельзя дарить@inf плохой@accinanpl подарок@pl: undefined
 какой@datm профессор@dat ты@nom писать@2 ?: undefined
 она@nom одалживать@3 свитер@acc старый@datm друг@dat: undefined
+зачем маленький@datm университет@dat нужный@shortf большой@f библиотека@nom ?: undefined
+какой@datm: undefined
+дорогой@datm: undefined
+как ты@nom ? хороший@adv: undefined
+зачем мама@nom читать@3 газета@acc ?: undefined
+она@nom работать@3 всегда .: undefined
+она@nom работать@3 слишком много .: undefined
+весь@nom день@nom я@nom работать@1: undefined
+мой@m ребёнок@nom играть@3 всегда: undefined
+здесь всегда плохой@f погода@nom: undefined
+почему ты@nom всегда так много говорить@2 ?: undefined
+вечером всегда холодный@shortn: undefined
+студент@pl всегда читать@3pl книга@accpl .: undefined
+он@nom всегда в офис@prep .: undefined
+он@nom курить@3 всегда: undefined
+
+я@nom всегда встречать@1 мой@m профессор@nom в библиотека@prep .: undefined
+он@nom всегда покупать@3 дорогой@accinanpl подарок@accpl: undefined
