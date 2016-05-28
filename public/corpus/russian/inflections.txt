@@ -49,7 +49,7 @@ adj[adj]: m: ***, f: -ая, n: ое, accf: -ую, accanm: -ого, accn: -ое, 
 
 ыйadj[adj]: m: -ый, accinanm: -ый, accanpl: ых, accinanpl: ые, pl: -ые, genpl: -ых, datpl: -ым, accpl: -ых, instrm: -ым, instrn: -ым, instrpl: -ыми, preppl: -ых, shortpl: ы, inherit: adj
 ийadj[adj]: m: -ий, accinanm: -ий, inherit: adj
--хороший[adj]: prepm: ем, prepf: ем, prepn: ей, genf: ей, instrf: ей, datf: ей, shortm: , genm: его, datm: ему, accanm: его, nomn: ее, genn: его, datn: ему, accn: ее, inherit: ийadj
+-хороший[adj]: prepm: ем, prepf: ем, prepn: ей, genf: ей, instrf: ей, datf: ей, shortm: , genm: его, datm: ему, accanm: его, n: ее, genn: его, datn: ему, accn: ее, inherit: ийadj
 
 -этот[adj]: m: -от, f: -а, pl: -и, accf: -у, accinanm: -от, accinanpl: -и, shortm: ***, shortf: ***, shortn: ***, inherit: adj
 

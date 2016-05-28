@@ -45,7 +45,7 @@ xr.get(`/api/${lang}/corpus`)
     }
 
     corpus.words.onChangeInflection = (word: InflectedWord) => {
-        xr.put(`/api/${lang}/word/` + word.jp + '/inflection/' + word.inflection.getId(), {})
+        xr.put(`/api/${lang}/word/` + word.getId() + '/inflection/' + word.inflection.getId(), {})
     }
 
     corpus.facts.onMove = (fact: Fact, pos: number) => {

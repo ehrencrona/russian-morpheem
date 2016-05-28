@@ -20,7 +20,7 @@ grammar: masc1@nom
 grammar: masc1@prep
 grammar: ийadj@m
 планшет--: tablet, inflect: masc1
-хорош--ий: good, inflect: -хороший
+хорош--ий: good, inflect: ийadj
 grammar: ыйadj@m
 магазин--: shop, inflect: masc1
 комнат--а: room, inflect: fem1
@@ -361,3 +361,4 @@ grammar: -давать@3pl
 перед--: n/a, inflect: -человек
 все--: n/a, inflect: masc1
 весь--: n/a, inflect: masc1
+asdfs--: n/a, inflect: -человек
