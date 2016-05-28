@@ -408,3 +408,5 @@ grammar: adj@adv
 задани--е: n/a, inflect: neuie
 упражнени--е: n/a, inflect: neuie
 решени--е: n/a, inflect: neuie
+чуть-чуть: a little bit
+немного: some
