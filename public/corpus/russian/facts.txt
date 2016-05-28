@@ -361,3 +361,31 @@ grammar: -давать@3pl
 перед--: n/a, inflect: -человек
 все--: n/a, inflect: masc1
 весь--: n/a, inflect: masc1
+grammar: adj@adv
+потому что: because
+а: and
+но: but
+к: to
+со: with
+из: from
+так:
+же:
+от: to
+может быть: maybe
+мож--<чь: inflect: -мочь
+о: about
+один: one
+еще: again
+бы:
+так--ой: such a, inflect: ойadj2
+себя: himself / herself
+уже: already
+да: yes
+год--: year, inflect: masc1
+до: from
+если: if
+время--: time, inflect: masc1
+рук--а: hand, inflect: fem1
+самый: most
+ни: neither/nor
+

@@ -31,6 +31,7 @@ y-esh-et[v]: inf: ****, 1: -у, 2: -ешь, 3: -ет, inherit: v
 -писать[v]: inf: -<сать, 1pl: -ем, 2pl: -ете, 3pl: -ут, pastm: <сал, inherit: y-esh-et
 -хотеть[v]: inf: <теть, 1pl: <тим, 2pl: <тите, 3pl: <тят, pastm: <тел, inherit: y-esh-et
 -сказать[v]: inf: <зать, 2pl: и, 3pl: ите, pastm: <зал, inherit: y-esh-et
+-мочь[v]: inf: <чь, 1: <гу, 1pl: ет, 2pl: ете, 3pl: <гут, inherit: y-esh-et
 
 yo-yosh-yot[v]: inf: ****, 2: -ёшь, 3: ёт, 1pl: -ём, 2pl: -ёте, inherit: v
 -жить[v]: inf: -<ть, 1: -у, 3pl: -ут, pastm: <л, inherit: yo-yosh-yot
