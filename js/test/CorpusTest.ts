@@ -9,7 +9,7 @@ import { expect } from 'chai';
 describe('Corpus', function() {
 
     it('converts to and from JSON', (done) => {   
-        readCorpus('ru').then((corpus) => {
+        readCorpus('ru', false).then((corpus) => {
             let after = Corpus.fromJson(corpus.toJson())
 
             expect(after.facts.facts.length).to.be.greaterThan(0)

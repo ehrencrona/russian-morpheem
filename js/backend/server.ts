@@ -204,12 +204,14 @@ function registerRoutes(corpus: Corpus) {
 }
 
 Promise.all([
-    readCorpus('ru'),
-    readCorpus('lat')
+    readCorpus('ru', true),
+    readCorpus('lat', true)
 ]).then((corpora) => {
     app.use('/', express.static('public'));
 
     corpora.forEach(registerRoutes)
     
     app.listen(port)
-})
+}).catch((e) => {
+    console.error(e)
+}
