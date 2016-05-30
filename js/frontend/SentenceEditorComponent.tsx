@@ -225,7 +225,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                     
                     if (!insertMode) {
                         this.props.onWordSelect(word)
-                    }                            
+                    }
                 }
                 
                 elements.push(

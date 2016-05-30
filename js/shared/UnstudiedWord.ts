@@ -19,7 +19,7 @@ export default class UnstudiedWord {
     constructor(public jp: string, public classifier?: string) {
         this.jp = jp
         this.classifier = classifier
-        this.en = {}
+        this.en = { }
     }
 
     related(fact) {
@@ -71,6 +71,10 @@ export default class UnstudiedWord {
         var result = this.en[form]
 
         if (!result) {
+            if (form == '') {
+                return ''
+            }
+            
             throw new Error('Form ' + form + ' not present among English translations of "' + this + '", only ' + Object.keys(this.en))
         }
 

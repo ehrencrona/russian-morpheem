@@ -66,14 +66,23 @@ function registerRoutes(corpus: Corpus) {
     })
     
     app.put(`/api/${lang}/word/:word/inflection/:inflection`, (req, res) => {
-        let wordString = req.params['word']
+        let wordId = req.params['word']
         let inflectionId = req.params['inflection']
         
-        let word = corpus.words.get(wordString)
+        let inflection = corpus.inflections.get(inflectionId)
         
+        if (!inflection) {
+            throw new Error(`Could not find ${inflectionId}.`)
+        }
+
+        let word = corpus.words.get(wordId)
+
+        if (!word) {
+            throw new Error(`Could not find ${wordId}.`)
+        }
+
         if (word instanceof InflectedWord) {            
-            corpus.words.changeInflection(word, 
-                corpus.inflections.get(inflectionId))
+            corpus.words.changeInflection(word, inflection)
                 
             console.log(`Changed inflection of ${word} to ${inflectionId}.`)
         }
@@ -94,13 +103,15 @@ function registerRoutes(corpus: Corpus) {
             let word: Word
 
             if (inflection) {
-                let defaultEnding = inflection.getEnding(inflection.defaultForm)
-                
-                if (wordString.substr(wordString.length - defaultEnding.suffix.length) != defaultEnding) {
-                    throw new Error('Wrong ending.')
+                let defaultEnding = inflection.getEnding(inflection.defaultForm).suffix
+
+                let actualEnding = wordString.substr(wordString.length - defaultEnding.length)
+
+                if (actualEnding != defaultEnding) {
+                    throw new Error(`Wrong ending: ${actualEnding} rather than ${defaultEnding} in ${wordString}`)
                 } 
 
-                let stem = wordString.substr(0, wordString.length - defaultEnding.suffix.length)
+                let stem = wordString.substr(0, wordString.length - defaultEnding.length)
                 
                 word = new InflectedWord(wordString, null, 
                     inflection.defaultForm).setInflection(inflection)    
@@ -193,12 +204,14 @@ function registerRoutes(corpus: Corpus) {
 }
 
 Promise.all([
-    readCorpus('ru'),
-    readCorpus('lat')
+    readCorpus('ru', true),
+    readCorpus('lat', true)
 ]).then((corpora) => {
     app.use('/', express.static('public'));
 
     corpora.forEach(registerRoutes)
     
     app.listen(port)
+}).catch((e) => {
+    console.error(e)
 })

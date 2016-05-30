@@ -69,7 +69,7 @@ describe('IndexSentencesByFact', function() {
     })
 
     it('works on real data', function (done) {
-        readCorpus('ru').then((corpus) => {
+        readCorpus('ru', false).then((corpus) => {
             indexSentencesByFact(corpus.sentences, corpus.facts)
             
             done()

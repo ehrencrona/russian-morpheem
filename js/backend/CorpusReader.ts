@@ -9,12 +9,13 @@ import Words from '../shared/Words';
 import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
+import { watch } from 'fs';
 
 export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
 } 
 
-export default function readCorpus(lang) {
+export default function readCorpus(lang, doWatch) {
     let corpusDir = getCorpusDir(lang)
     
     return readInflectionFile(corpusDir + '/inflections.txt', lang)
@@ -28,7 +29,27 @@ export default function readCorpus(lang) {
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
                 .then((sentences: Sentences) => {
-                    return new Corpus(inflections, words, sentences, facts, lang)
+                    let result = new Corpus(inflections, words, sentences, facts, lang)
+                    
+                    if (doWatch) {
+                        for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt' ]) {                            
+                            watch(corpusDir + '/' + file, (event, filename) => {
+                                readCorpus(lang, false).then((newCorpus) => {
+                                    console.log(`Reloaded corpus ${lang}.`);
+
+                                    result.words = newCorpus.words
+                                    result.facts = newCorpus.facts
+                                    result.inflections = newCorpus.inflections
+                                    result.sentences = newCorpus.sentences
+                                })
+                                .catch((e) => {
+                                    console.log(e)
+                                })
+                            })
+                        }
+                    }
+                    
+                    return result
                 })
             })
     })
