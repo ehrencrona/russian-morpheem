@@ -148,46 +148,4 @@ export default class Inflection {
         return Object.keys(result)
     }
 
-    inflectAll(dictionaryForm: InflectedWord, excludeInherited: boolean, exclude: any): InflectedWord[] {
-        if (dictionaryForm.form != this.defaultForm) {
-            throw new Error('Wrong default form')
-        }
-
-        let result: InflectedWord[] = []
-
-        exclude = exclude || {}
-
-        let at: Inflection = this
-
-        do {
-            for (let form in at.endings) {
-                if (exclude[form]) {
-                    continue
-                }
-
-                exclude[form] = true
-
-                let inflectedWord;
-                
-                if (form == this.defaultForm) {
-                    inflectedWord = dictionaryForm
-                }
-                else {
-                    inflectedWord = this.inflect(dictionaryForm, form)
-                }
-
-                result.push(inflectedWord);
-            }
-
-            if (!excludeInherited) {
-                at = at.inherits
-            }
-            else {
-                at = null
-            }
-        }
-        while (at)
-
-        return result;
-    }
 }

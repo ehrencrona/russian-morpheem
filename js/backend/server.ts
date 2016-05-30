@@ -6,7 +6,7 @@ import readCorpus from './CorpusReader'
 import { getCorpusDir } from './CorpusReader'
 
 import Sentence from '../shared/Sentence'
-import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 import Word from '../shared/Word'
 import Corpus from '../shared/Corpus'
 
@@ -75,13 +75,13 @@ function registerRoutes(corpus: Corpus) {
             throw new Error(`Could not find ${inflectionId}.`)
         }
 
-        let word = corpus.words.get(wordId)
+        let word = corpus.facts.get(wordId)
 
         if (!word) {
             throw new Error(`Could not find ${wordId}.`)
         }
 
-        if (word instanceof InflectedWord) {            
+        if (word instanceof InflectableWord) {            
             corpus.words.changeInflection(word, inflection)
                 
             console.log(`Changed inflection of ${word} to ${inflectionId}.`)
@@ -99,33 +99,46 @@ function registerRoutes(corpus: Corpus) {
                 throw new Error('No word sent')
             }
 
-            let inflection = corpus.inflections.get(req.body.inflection)
-            let word: Word
-
-            if (inflection) {
-                let defaultEnding = inflection.getEnding(inflection.defaultForm).suffix
-
-                let actualEnding = wordString.substr(wordString.length - defaultEnding.length)
-
-                if (actualEnding != defaultEnding) {
-                    throw new Error(`Wrong ending: ${actualEnding} rather than ${defaultEnding} in ${wordString}`)
-                } 
-
-                let stem = wordString.substr(0, wordString.length - defaultEnding.length)
-                
-                word = new InflectedWord(wordString, null, 
-                    inflection.defaultForm).setInflection(inflection)    
-            }
-            else {
-                word = new Word(wordString)
-            }
+            let word = new Word(wordString)
             
-            word.setEnglish('n/a', '')
+            word.setEnglish('n/a')
 
-            corpus.words.add(word)
+            corpus.words.addWord(word)
             corpus.facts.add(word)
 
             console.log('Added word ' + word.getId())
+
+            res.status(200).send({})
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
+    })
+    
+    app.post(`/api/${lang}/inflected-word/:stem`, function(req, res) {
+        try {
+            let stem = req.params['stem']
+
+            if (!stem) {
+                throw new Error('No stem sent')
+            }
+            
+            let inflectionId = req.params['inflection']
+            let inflection = corpus.inflections.get(req.body.inflection)
+
+            if (!inflection) {
+                throw new Error(`Could not find ${inflectionId}.`)
+            }
+
+            let word = new InflectableWord(stem, inflection)    
+            
+            word.setEnglish('n/a')
+
+            corpus.words.addInflectableWord(word)
+            corpus.facts.add(word)
+
+            console.log('Added word ' + word.getId() + ' with inflection ' + inflectionId)
 
             res.status(200).send({})
         }

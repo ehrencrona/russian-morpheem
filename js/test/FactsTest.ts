@@ -17,20 +17,20 @@ describe('Facts', function() {
     let inflection =
         new Inflection('regular', 'nom', null, 
             parseEndings('nom: a, imp: o', 'fake').endings)
-            
+
     let inflections = new Inflections([ inflection ])
     
     let word = new Word('foo', 'bar').setEnglish('eng')
-    let inflectedWord = new InflectableWord('foo', inflection)
+    let inflectableWord = new InflectableWord('foo', inflection)
         .setEnglish('eng')
 
     let facts = new Facts()
         .add(inflections.getForm('regular@nom'))
         .add(word)
-        .add(inflectedWord)
+        .add(inflectableWord)
         .add(inflections.getForm('regular@imp'))
 
-    let words = new Words().add(word).add(inflectedWord.inflect('nom'))
+    let words = new Words().addWord(word).addInflectableWord(inflectableWord)
 
     it('looks up facts by index', () => {
         expect(facts.indexOf(word)).to.equal(1)
@@ -45,8 +45,8 @@ describe('Facts', function() {
         expect(after.facts[1].getId()).to.equal(word.getId());
 
         expect(after.facts[2]).to.instanceOf(InflectableWord);
-        expect(after.facts[2].getId()).to.equal(inflectedWord.getId());
-        
+        expect(after.facts[2].getId()).to.equal(inflectableWord.getId());
+
         expect(after.facts[3].getId()).to.equal('regular@imp');
     })
     

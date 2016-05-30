@@ -34,19 +34,20 @@ describe('Words', function() {
         
         let newInflection = new Inflection(
             'infl', 'nom', null, 
-            parseEndings('nom: sser, past1: ttais, past2: ttais', 'fake').endings)
-        
+            parseEndings('nom: <ter, past1: <tais, past2: <tais', 'fake').endings)
+
         words.changeInflection(w3, newInflection)
-        
-        expect(w3.stem).to.equal('pa')
+
+        expect(w3.stem).to.equal('pass')
         expect(w3.inflection).to.equal(newInflection)
-        expect(w3.jp).to.equal('passer')
+        expect(w3.getId()).to.equal('paster')
         
-        expect(words.get('passer')).to.equal(w3)
+        expect(words.get('paster')).to.equal(w3.inflect('nom'))
         expect(words.get('passais')).to.be.undefined
-        expect(oldPast.jp).to.equal('pattais')
-        expect(words.get('passer@past1')).to.equal(oldPast)
-        expect(words.get('passer@nom')).to.equal(w3)
+        expect(oldPast.jp).to.equal('pastais')
+        expect(words.get('paster@past1')).to.equal(oldPast)
+        expect(words.get('passer@past1')).to.be.undefined
+        expect(words.get('paster@nom').toString()).to.equal('paster')
     })
 
     it('retrieves all word forms', function () {
@@ -66,8 +67,8 @@ describe('Words', function() {
 
     it('converts unstudied to JSON and back', function () {
         let after = Words.fromJson(words.toJson(), inflections);
-        
-        expect(after.wordsById[w1.getId()]).to.be.instanceOf(Word)
+
+        expect(after.wordsById[w1.getId()]).to.be.instanceOf(UnstudiedWord)
 
         expect(after.get('passer')).to.be.not.null
         

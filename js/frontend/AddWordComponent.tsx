@@ -6,6 +6,7 @@ import Fact from './FactComponent';
 import Tab from './Tab';
 import Corpus from '../shared/Corpus';
 import InflectedWord from '../shared/InflectedWord';
+import InflectableWord from '../shared/InflectableWord';
 
 let React = { createElement: createElement }
 
@@ -43,13 +44,10 @@ export default class AddWordComponent extends Component<Props, State> {
             let defaultEnding = inflection.getEnding(inflection.defaultForm)
             let stem = wordString.substr(0, wordString.length-defaultEnding.suffix.length)
 
-            let word = new InflectedWord(
-                    wordString, 
-                    null, inflection.defaultForm)
-                .setInflection(inflection)
-                .setEnglish('n/a', '')
+            let word = new InflectableWord(wordString, inflection)
+                .setEnglish('n/a')
 
-            this.props.corpus.words.add(word)
+            this.props.corpus.words.addInflectableWord(word)
             this.props.corpus.facts.add(word)
 
             this.props.tab.openTab(

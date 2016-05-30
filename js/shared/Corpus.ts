@@ -12,7 +12,7 @@ export default class Corpus {
         this.sentences = sentences
         this.facts = facts
     }
-    
+
     static fromJson(json): Corpus {
         let inflections = Inflections.fromJson(json.inflections)
         let words = Words.fromJson(json.words, inflections) 
@@ -26,7 +26,7 @@ export default class Corpus {
             facts, 
             json.lang)
     }
-    
+
     toJson() {
         return {
             sentences: this.sentences.toJson(),

@@ -1,10 +1,16 @@
 
 import Grammar from './Grammar';
 import InflectionFact from './InflectionFact';
+import InflectableWord from './InflectableWord';
+import InflectedWord from './InflectedWord';
 import Fact from './Fact';
 import Inflections from './Inflections';
 import Word from './Word';
 import Words from './Words';
+
+const INFLECTION = 'i'
+const INFLECTABLE = 'ib'
+const WORD = 'w'
 
 export default class Facts {
     factsById : { [s: string]: Fact } = {}
@@ -82,10 +88,27 @@ export default class Facts {
         json.forEach((factJson) => {
             let fact 
             
-            if (factJson.type == 'inflect') {
+            if (factJson.type == INFLECTION) {
                 fact = inflections.getForm(factJson.id)
+
+                if (!fact) {
+                    throw new Error(`Unknown inflection "${factJson.id}".`)
+                }
             }
-            else if (factJson.type == 'word') {
+            else if (factJson.type == INFLECTABLE) {
+                fact = words.get(factJson.id)
+
+                if (fact instanceof InflectedWord) {
+                    fact = fact.word
+                }
+                else if (!fact) {
+                    throw new Error('Didnt find word "' +  factJson.id + '" to base inflectable on.')
+                }
+                else {
+                    throw new Error('Expected "' + factJson.id + '" to inflect')
+                }
+            }
+            else if (factJson.type == WORD) {
                 fact = words.get(factJson.id);
                 
                 if (!fact) {
@@ -107,13 +130,23 @@ export default class Facts {
             let type
             
             if (fact instanceof InflectionFact) {
-                type = 'inflect'
+                type = INFLECTION
+            }
+            else if (fact instanceof InflectableWord) {
+                type = INFLECTABLE
+
+                // this is not very satisfying. probably, 
+                // the order of loading a corpus from JSON should be refactored.
+                return {
+                    id: fact.getId() + '@' + fact.inflection.defaultForm,
+                    type: type
+                }
             }
             else if (fact instanceof Word) {
-                type = 'word'
+                type = WORD
             } 
             else {
-               throw new Error('Unknown fact type ' + fact)
+               throw new Error('Unknown fact type ' + fact.constructor.name)
             }
             
             return {

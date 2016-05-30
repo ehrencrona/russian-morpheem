@@ -2,7 +2,7 @@
 
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
-import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/Inflection'
 import Tab from './Tab'
 
@@ -14,7 +14,7 @@ let React = { createElement: createElement }
 
 interface Props {
     corpus: Corpus,
-    word: InflectedWord,
+    word: InflectableWord,
     tab: Tab,
     onChange?: () => any 
 }
@@ -29,7 +29,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            inflection: props.word.word.inflection
+            inflection: props.word.inflection
         }
     }
     
@@ -40,7 +40,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
     }
 
     changeInflection(inflection: Inflection) {
-        this.props.corpus.words.changeInflection(this.props.word.word, inflection)
+        this.props.corpus.words.changeInflection(this.props.word, inflection)
 
         this.setState({
             inflection: inflection
@@ -65,11 +65,11 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         let forms: string[]
 
         let inflection = this.state.inflection
-        let word: InflectedWord = this.props.word
+        let word: InflectableWord = this.props.word
         
         let alternativeInflections = 
             this.props.corpus.inflections.getPossibleInflections(
-                    this.props.word.word.inflect(this.state.inflection.defaultForm).jp)
+                    this.props.word.inflect(this.state.inflection.defaultForm).jp)
                 .filter((inflection) => inflection.getId() != this.state.inflection.getId())
                 .filter((inflection) => inflection.pos == this.state.inflection.pos)
         

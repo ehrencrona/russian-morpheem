@@ -6,6 +6,7 @@ import Sentence from '../shared/Sentence';
 import Fact from '../shared/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
+import InflectableWord from '../shared/InflectableWord';
 import InflectionFact from '../shared/InflectionFact';
 
 import 'drag-drop-webkit-mobile';
@@ -47,14 +48,19 @@ xr.get(`/api/${lang}/corpus`)
             .catch(handleException)
     }
     
-    corpus.words.onAdd = (word: Word) => {
-        xr.post(`/api/${lang}/word/` + word.jp , {
-            inflection: (word instanceof InflectedWord ? word.inflection.getId() : '') })
+    corpus.words.onAddWord = (word: Word) => {
+        xr.post(`/api/${lang}/word/` + word.jp, {})
             .catch(handleException)
     }
 
-    corpus.words.onChangeInflection = (word: InflectedWord) => {
-        xr.put(`/api/${lang}/word/` + word.getId() + '/inflection/' + word.inflection.getId(), {})
+    corpus.words.onAddInflectableWord = (word: InflectableWord) => {
+        xr.post(`/api/${lang}/word/` + word.stem, 
+            { inflection: word.inflection.getId() })
+            .catch(handleException)
+    }
+
+    corpus.words.onChangeInflection = (word: InflectableWord) => {
+        xr.put(`/api/${lang}/word/` + word.stem + '/inflection/' + word.inflection.getId(), {})
             .catch(handleException)
     }
 

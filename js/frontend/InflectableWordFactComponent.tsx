@@ -15,14 +15,14 @@ import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
 
 import Sentence from '../shared/Sentence'
-import Word from '../shared/Word'
+import InflectableWord from '../shared/InflectableWord'
 
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
 
 interface Props {
     corpus: Corpus,
-    fact: Word,
+    fact: InflectableWord,
     tab: Tab
 }
 
@@ -34,13 +34,11 @@ export default class WordFactComponent extends Component<Props, State> {
     addSentence() {
         let fact = this.props.fact
         
-        if (fact instanceof Word) {
-            let sentence = new Sentence([ fact ], null)
+        let sentence = new Sentence([ fact.inflect(fact.inflection.defaultForm) ], null)
 
-            this.props.corpus.sentences.add(sentence)
+        this.props.corpus.sentences.add(sentence)
 
-            this.openSentence(sentence)
-        }
+        this.openSentence(sentence)
     }
 
     openSentence(sentence: Sentence) {
@@ -51,8 +49,37 @@ export default class WordFactComponent extends Component<Props, State> {
         )
     }
 
+    openFact(fact: Fact) {
+        this.props.tab.openTab(
+            <FactComponent corpus={ this.props.corpus } fact={ fact } tab={ null }/>,
+            fact.getId(),
+            fact.getId()
+        )
+    }
+
     render() {
         let fact = this.props.fact
+
+        let inflectionComponents = <div/>
+
+        if (fact instanceof InflectedWord) {
+            let inflections
+            
+            inflectionComponents =
+                <div>                            
+                    <ChangeInflectionComponent
+                        corpus={ this.props.corpus } 
+                        tab={ this.props.tab }
+                        word={ fact }
+                        onChange={ () => inflections.forceUpdate() } />
+                    <InflectionsComponent 
+                        corpus={ this.props.corpus } 
+                        inflection={ fact.inflection } 
+                        word={ fact } 
+                        tab={ this.props.tab }
+                        ref={ (component) => inflections = component} />
+                </div>
+        }
 
         return (<div>
 
@@ -61,6 +88,8 @@ export default class WordFactComponent extends Component<Props, State> {
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
+        
+            { inflectionComponents }
             
             <SentencesWithFact corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         </div>)

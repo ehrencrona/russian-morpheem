@@ -31,7 +31,20 @@ describe('InflectableWord', function() {
             .setEnglish('eng')
 
     it('gets right ID', () => {
-        expect(inflectedWord.getId()).to.equal('fooa@nom');
+        expect(inflectedWord.getId()).to.equal('fooa');
+    })
+
+    it('gets right ID on inflections removing last char', () => {
+        let regular =
+            new Inflection('regular', 'nom', null, 
+                parseEndings('nom: <a, 1: b', 'fake').endings)
+
+        let inflectedWord = 
+            new InflectableWord('foo', regular)
+                .setEnglish('eng')
+
+        expect(inflectedWord.getId()).to.equal('foa');
+        expect(inflectedWord.inflect('1').getId()).to.equal('foa@1');
     })
 
     it('inflects inherited inflections', () => {

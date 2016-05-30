@@ -6,6 +6,7 @@ import Word from '../shared/Word'
 import Grammar from '../shared/Grammar'
 import Inflections from '../shared/Inflections'
 import Inflection from '../shared/Inflection'
+import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/InflectionFileParser'
 
 // ぎ:gi, requires: き, grammar: ktog
@@ -14,6 +15,9 @@ var inflections = new Inflections()
     
 inflections.add(new Inflection('inflection', 'nom', null, 
     parseEndings('nom: a', 'fake').endings))
+
+inflections.add(new Inflection('lastchar', 'nom', null, 
+    parseEndings('nom: <a', 'fake').endings))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {
@@ -28,7 +32,20 @@ describe('FactFileParser', function() {
             expect(word.getEnglish()).to.equal('meaning')
         }
     })
-    
+
+    it('parses inflected words', function () {
+        var facts = parser('wordd--<a:meaning, inflect: lastchar', inflections, 'ru')
+        let word = facts.facts[0]
+
+        expect(word.getId()).to.equal('worda')
+
+        expect(word).to.be.instanceOf(InflectableWord)
+
+        if (word instanceof Word) {
+            expect(word.getEnglish()).to.equal('meaning')
+        }
+    })
+
     it('parses grammar facts', function () {
         var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]

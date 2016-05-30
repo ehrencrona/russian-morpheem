@@ -86,7 +86,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
 
             if (tag == 'inflect') {
                 let inflection = inflections.getInflection(text)
-                
+
                 if (!inflection) {
                     throw new Error('Unknown inflection "' + text + '"'
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
@@ -99,7 +99,19 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     throw new Error(word.jp + ' should end with "' + defaultSuffix + '".');
                 }
 
-                fact = new InflectableWord(word.jp.substr(0, word.jp.length - defaultSuffix.length), inflection)
+                let stem = word.jp.substr(0, word.jp.length - defaultSuffix.length)
+                let i = defaultEnding.subtractFromStem
+
+                while (i > 0) {
+                    if (stem[stem.length-1] != '<') {
+                        throw new Error(word.jp + ' seems to be missing one or more <, after "' + stem + '"');
+                    }
+
+                    stem = stem.substr(0, stem.length-1)
+                    i--
+                }
+
+                fact = new InflectableWord(stem, inflection)
             }
             else if (tag == 'grammar') {
                 var requiredFact = facts.get(text)

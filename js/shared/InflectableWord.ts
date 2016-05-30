@@ -23,7 +23,7 @@ export default class InflectableWord {
         for (let form in this.inflectionByForm) {
             let oldWord = this.inflectionByForm[form]
 
-            oldWord.jp = this.inflection.getInflectedForm(this.stem, oldWord.form) 
+            oldWord.jp = inflection.getInflectedForm(this.stem, oldWord.form) 
         }
 
         this.inflection = inflection
@@ -54,8 +54,8 @@ export default class InflectableWord {
         return this.inflect(this.inflection.defaultForm).jp
     }
 
-    getJsonType() {
-        return 'inflectable'
+    static getJsonType() {
+        return 'ib'
     }
 
     setEnglish(en) {
@@ -65,17 +65,19 @@ export default class InflectableWord {
     }
 
     static fromJson(json, inflections: Inflections): InflectableWord {
-        if (json.type == 'inflectable') {
-            let inflection = inflections.get(json.inflection)
+        let inflection = inflections.get(json.inflection)
 
-            if (!inflection) {
-                throw new Error('The inflectedion ' + json.inflection + ' does not exist.')
-            }
-            
-            return new InflectableWord(
-                json.stem, inflection)
-                .setEnglish(json.en)
+        if (!inflection) {
+            throw new Error('The inflection ' + json.inflection + ' does not exist.')
         }
+
+        return new InflectableWord(
+            json.stem, inflection)
+            .setEnglish(json.en)
+    }
+    
+    toString() {
+        return this.getId() + ' (' + this.inflection.getId() + ')'
     }
 
     toJson() {
@@ -83,7 +85,7 @@ export default class InflectableWord {
             stem: this.stem,
             en: this.en,
             inflection: this.inflection.id,
-            type: this.getJsonType()
+            type: InflectableWord.getJsonType()
         }
     }
 }

@@ -2,6 +2,7 @@
 
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
+import InflectableWord from '../shared/InflectableWord'
 import InflectedWord from '../shared/InflectedWord'
 import Inflection from '../shared/Inflection'
 
@@ -43,7 +44,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
     }
     
     openFact(word: InflectedWord) {
-        let fact = this.props.corpus.facts.get(word.infinitive.getId())
+        let fact = this.props.corpus.facts.get(word.word.getId())
 
         if (fact) {            
             this.props.tab.openTab(
@@ -56,12 +57,12 @@ export default class WordsWithInflectionComponent extends Component<Props, State
     render() {
         let words: InflectedWord[] = this.props.corpus.facts.facts.filter((fact) => {
             try {
-                return fact instanceof InflectedWord && 
+                return fact instanceof InflectableWord && 
                     fact.inflection.getFact(this.props.form).inflection == this.props.inflection; 
             } catch (e) {
                 return false
             }
-        }).map((word: InflectedWord) => {
+        }).map((word: InflectableWord) => {
             return word.inflect(this.props.form)
         })
 
@@ -69,7 +70,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
         return <div className='wordsWithInflection'>
         {
             words.map((word) => {            
-                let index = this.props.corpus.facts.indexOf(word.infinitive);
+                let index = this.props.corpus.facts.indexOf(word.word);
 
                 return <div key={ word.getId() } className='clickable' onClick={ () => this.openFact(word) }>
                     <div className='index'><div className='number'>{ index + 1 }</div></div>

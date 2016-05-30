@@ -69,9 +69,9 @@ describe('Sentences', function() {
         
         let inflection = new Inflection('verb', 'inf', null, 
             parseEndings('inf: re, i: vo', 'fake').endings)
-        
+
         let io = new Word('io')
-        
+
         let drink = new InflectableWord('be', inflection)
         
         let bere = drink.inflect('inf')
@@ -79,9 +79,9 @@ describe('Sentences', function() {
         
         let facts = new Facts()
         facts.add(io)
-        facts.add(bere)
+        facts.add(drink)
         
-        let words = new Words().addWord(bere).addWord(io)
+        let words = new Words().addInflectableWord(drink).addWord(io)
         
         let before = new Sentences()
         

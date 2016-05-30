@@ -62,6 +62,10 @@ export default class Words {
     }
 
     addWord(word: Word) {
+        if (word instanceof InflectedWord) {
+            throw new Error('Use addInflectableWord for inflected words.')
+        }
+        
         this.index(word)
                 
         if (this.onAddWord) {
@@ -91,7 +95,7 @@ export default class Words {
                 delete this.wordsByString[inflectedWord.jp]
 
                 let existingInflection = this.wordsById[inflectedWord.getId()]
-                
+
                 if (existingInflection instanceof InflectedWord) {
                     wordByForm[inflectedWord.form] = existingInflection
                     delete this.wordsById[inflectedWord.getId()]
@@ -101,13 +105,12 @@ export default class Words {
                 }
             }, false)
 
-
         word.changeInflection(inflection)
 
         word.visitAllInflections(
             (inflectedWord: InflectedWord) => {
                 this.wordsByString[inflectedWord.jp] = inflectedWord
-                
+
                 let existingInflection = wordByForm[inflectedWord.form]
 
                 if (!existingInflection) {
@@ -174,8 +177,14 @@ export default class Words {
     static fromJson(json, inflections) {
         let result = new Words();
         
-        json.forEach((wordJson) => 
-            result.add(InflectedWord.fromJson(wordJson, inflections)))
+        json.forEach((wordJson) => {
+            if (wordJson.type == InflectableWord.getJsonType()) {
+                result.addInflectableWord(InflectableWord.fromJson(wordJson, inflections))
+            }
+            else {
+                result.addWord(InflectedWord.fromJson(wordJson, inflections))
+            }
+        })
         
         return result
     }
@@ -187,12 +196,17 @@ export default class Words {
             let word = this.wordsById[id]
             
             if (word instanceof InflectedWord) {
-                if (word.inflection.defaultForm !== word.form || id.indexOf('@') < 0) {
+                if (word.word.inflection.defaultForm !== word.form) {
                     continue
                 }
+                else {
+                    result.push(word.word.toJson())    
+                }
+            }
+            else {
+                result.push(word.toJson())    
             }
             
-            result.push(word.toJson())    
         }
         
         return result

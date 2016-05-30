@@ -121,8 +121,11 @@ export default class SentenceComponent extends Component<Props, State> {
             <SentenceEditorComponent
                 corpus={ this.props.corpus } 
                 words={ this.props.sentence.words }
-                onWordSelect={ (word: Word) => { 
-                    wordSearch.setWord((word instanceof InflectedWord ? word.infinitive : word)) }} 
+                onWordSelect={ (word: Word) => {
+                    if (word instanceof InflectedWord) {
+                        wordSearch.setWord(word.word) 
+                    }
+                } }
                 ref={ (ref) => { editor = ref } }
                 onSentenceChange={ (words: Word[]) => {
                     let sentence = new Sentence(words, this.state.sentence.id)

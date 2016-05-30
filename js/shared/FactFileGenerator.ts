@@ -2,7 +2,7 @@
 
 import Facts from './Facts';
 import InflectionFact from './InflectionFact';
-import InflectedWord from './InflectedWord';
+import InflectableWord from './InflectableWord';
 import Word from './Word';
 
 export default function facsToString(facts: Facts) {
@@ -12,11 +12,11 @@ export default function facsToString(facts: Facts) {
         if (fact instanceof InflectionFact) {
             res += 'grammar: ' + fact.getId() + '\n'
         }
-        else if (fact instanceof InflectedWord) {
-            let ending = fact.inflection.getEnding(fact.form)
+        else if (fact instanceof InflectableWord) {
+            let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
             
             res += fact.stem + '--' + (ending.subtractFromStem ? '<' : '') + ending.suffix + 
-                ': ' + fact.getEnglish('') + ', inflect: ' + fact.inflection.getId() + '\n'
+                ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + '\n'
         }
         else if (fact instanceof Word) {
             res += fact.jp + ': ' + fact.getEnglish('') + '\n'            

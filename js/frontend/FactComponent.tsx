@@ -7,9 +7,11 @@ import InflectionFact from '../shared/InflectionFact'
 
 import Tab from './Tab'
 
+import InflectableWordFactComponent from './InflectableWordFactComponent';
 import WordFactComponent from './WordFactComponent';
 import InflectionFactComponent from './InflectionFactComponent';
 
+import InflectableWord from '../shared/InflectableWord'
 import Word from '../shared/Word'
 
 import { Component, createElement } from 'react';
@@ -31,6 +33,9 @@ export default class FactComponent extends Component<Props, State> {
 
         if (fact instanceof Word) {
             return <WordFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />
+        }
+        else if (fact instanceof InflectableWord) {
+            return <InflectableWordFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />
         }
         else if (fact instanceof InflectionFact) {
             return <InflectionFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />

@@ -34,7 +34,7 @@ describe('Inflections', function() {
 
     it('handles inflections removing characters', function () {
         let inflection = 
-            new Inflection('скаж<зать', 'nom', null, {
+            new Inflection('скаж<зать', 'inf', null, {
                     inf: new Ending('зать', null, 1), 
                     1: new Ending('у', null, 0), 
                     past: new Ending('зал', null, 1), 
@@ -42,8 +42,7 @@ describe('Inflections', function() {
 
         let word = new InflectableWord('скаж', inflection)
 
-        expect(word.getId()).to.equal('сказать@inf')
-        expect(word.toString()).to.equal('сказать')
+        expect(word.getId()).to.equal('сказать')
 
         let past = word.inflect('past')
 
