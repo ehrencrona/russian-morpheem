@@ -14,7 +14,7 @@ export default class Words {
 
     onAddWord: (word: Word) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
-    onChangeInflection: (word: InflectableWord) => void = null
+    onChangeInflection: (word: InflectableWord, oldId: string) => void = null
 
     static PUNCTUATION = '.?!,;"'
 
@@ -29,6 +29,12 @@ export default class Words {
                 }
             }
         }
+    }
+    
+    clone(words: Words) {
+        this.wordsById = words.wordsById
+        this.wordsByString = words.wordsByString
+        this.ambiguousForms = words.ambiguousForms
     }
     
     addPunctuation() {
@@ -105,6 +111,8 @@ export default class Words {
                 }
             }, false)
 
+        let oldId = word.getId();
+
         word.changeInflection(inflection)
 
         word.visitAllInflections(
@@ -121,7 +129,7 @@ export default class Words {
             }, false)
         
         if (this.onChangeInflection) {
-            this.onChangeInflection(word)
+            this.onChangeInflection(word, oldId)
         }
     }
     

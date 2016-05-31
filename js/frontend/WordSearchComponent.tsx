@@ -111,31 +111,47 @@ export default class WordSearchComponent extends Component<Props, State> {
         let index : { [factId: string]: FactSentenceIndex } = 
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
-        let suggestions: Suggestion[] = []
         let allForms = new Set<string>()
 
         let filterPos = this.state.filterPos
         let filterString = this.state.filterString
         let corpus = this.props.corpus
 
-        function addSuggestionForWord(fact: UnstudiedWord) {
-            suggestions.push({
-                index: -1,
-                word: fact,
-                fact: fact,
-                inflection: null
-            })
-        }
+        function getFactOccurrences(fact: Fact) {
+            let fi = index[fact.getId()]
+            
+            if (!fi) {
+                return 0
+            }
+            
+            return fi.easy + fi.ok + fi.hard
+        } 
+        
+        let getSuggestions = () => {
+            let suggestions: Suggestion[] = []
 
-        if (filterPos || filterString || this.state.filterWord) {
+            function addSuggestionForWord(fact: UnstudiedWord) {
+                suggestions.push({
+                    index: -1,
+                    word: fact,
+                    fact: fact,
+                    inflection: null
+                })
+            }
+
+            if (!filterPos && !filterString) {
+                return suggestions
+            }
+
             this.props.corpus.facts.facts.forEach((fact: Fact) => {
                 if (filterPos) {
                     if (fact instanceof InflectableWord) {
-                        if (!(fact.inflection.pos == filterPos || (filterPos == NO_POS && !fact.inflection))) {
-                            return 
+                        if (!(fact.inflection.pos == filterPos || 
+                             (filterPos == NO_POS && !fact.inflection.pos))) {
+                            return
                         }
                     }
-                    else {
+                    else if (!(filterPos == NO_POS && fact instanceof UnstudiedWord)) {
                         return
                     }
                 }
@@ -181,17 +197,9 @@ export default class WordSearchComponent extends Component<Props, State> {
                     suggestions.splice(0, 0, exactMatch)
                 }
             }
+            
+            return suggestions
         }
-
-        function getFactOccurrences(fact: Fact) {
-            let fi = index[fact.getId()]
-            
-            if (!fi) {
-                return 0
-            }
-            
-            return fi.easy + fi.ok + fi.hard
-        } 
 
         let factIndexToElement = (suggestion : Suggestion) => {
             let index = this.props.corpus.facts.indexOf(suggestion.word)
@@ -237,12 +245,14 @@ export default class WordSearchComponent extends Component<Props, State> {
         
         let filterWord = this.state.filterWord
         
+        let suggestions = getSuggestions()
+        
         return (<div className='wordSearch'>
             <div className='filter'>
                 <input type='text' autoCapitalize='off' value={ this.state.filterString } onChange={ (event) => {
                     let target = event.target
-                    
-                    if (target instanceof HTMLInputElement) {                        
+
+                    if (target instanceof HTMLInputElement) {
                         this.setState({
                             filterString: target.value,
                             filterWord: null
@@ -273,7 +283,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             <div className='suggestions'>
 
             {
-                (filterWord && filterWord instanceof InflectedWord ?
+                (filterWord && filterWord instanceof InflectableWord ?
                 <div>
                     <div className='inflections'>
                         <div className='inflectionName'>

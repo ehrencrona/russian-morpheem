@@ -54,13 +54,13 @@ xr.get(`/api/${lang}/corpus`)
     }
 
     corpus.words.onAddInflectableWord = (word: InflectableWord) => {
-        xr.post(`/api/${lang}/word/` + word.stem, 
+        xr.post(`/api/${lang}/inflected-word/` + word.stem, 
             { inflection: word.inflection.getId() })
             .catch(handleException)
     }
 
     corpus.words.onChangeInflection = (word: InflectableWord) => {
-        xr.put(`/api/${lang}/word/` + word.stem + '/inflection/' + word.inflection.getId(), {})
+        xr.put(`/api/${lang}/word/` + word.getId() + '/inflection/' + word.inflection.getId(), {})
             .catch(handleException)
     }
 

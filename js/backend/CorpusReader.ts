@@ -30,21 +30,23 @@ export default function readCorpus(lang, doWatch) {
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
                 .then((sentences: Sentences) => {
                     let result = new Corpus(inflections, words, sentences, facts, lang)
-                    
+
                     if (doWatch) {
+                        let lastChange
+                        
                         for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt' ]) {                            
                             watch(corpusDir + '/' + file, (event, filename) => {
-                                readCorpus(lang, false).then((newCorpus) => {
-                                    console.log(`Reloaded corpus ${lang}.`);
+                                let t = new Date().getTime()
 
-                                    result.words = newCorpus.words
-                                    result.facts = newCorpus.facts
-                                    result.inflections = newCorpus.inflections
-                                    result.sentences = newCorpus.sentences
-                                })
-                                .catch((e) => {
-                                    console.log(e)
-                                })
+                                if (lastChange && t - lastChange < 2000) {
+                                    return
+                                }
+
+                                lastChange = t
+
+                                if (result.onChangeOnDisk) {
+                                    result.onChangeOnDisk()
+                                }
                             })
                         }
                     }

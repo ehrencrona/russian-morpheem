@@ -22,6 +22,12 @@ export default class Facts {
 
     constructor() {
     }
+    
+    clone(facts: Facts) {
+        this.factsById = facts.factsById
+        this.facts = facts.facts
+        this.factIndexById = facts.factIndexById
+    }
 
     get(id) {
         return this.factsById[id]

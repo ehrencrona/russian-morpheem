@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
+    let lastSave
 
     let corpusDir = getCorpusDir(corpus.lang)
 
@@ -199,11 +200,15 @@ function registerRoutes(corpus: Corpus) {
     })
 
     function saveSentences() {
+        lastSave = new Date().getTime()
+
         writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words)
         .catch((e) => console.error(e.stack))
     }
 
     function saveFacts() {
+        lastSave = new Date().getTime()
+        
         writeFactFile(corpusDir + '/facts.txt', corpus.facts)
         .catch((e) => console.error(e.stack))
     }
@@ -214,6 +219,24 @@ function registerRoutes(corpus: Corpus) {
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
     corpus.words.onChangeInflection = saveFacts
+    
+    corpus.onChangeOnDisk = () => {
+        let t = new Date().getTime()
+        
+console.log('did i write this?',t - lastSave)
+        if (lastSave && t - lastSave < 1000) {
+            return
+        }
+
+        readCorpus(lang, false).then((newCorpus) => {
+            console.log(`Reloaded corpus ${lang}.`);
+
+            corpus.clone(newCorpus)
+        })
+        .catch((e) => {
+            console.log(e)
+        })
+    }
 }
 
 Promise.all([

@@ -17,7 +17,12 @@ export default class Sentences {
 
     constructor() {
     }
-    
+
+    clone(sentences: Sentences) {
+        this.sentenceById = sentences.sentenceById
+        this.sentences = sentences.sentences
+    }
+
     get(id: number) {
         let sentence = this.sentenceById[id]
         

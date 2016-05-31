@@ -72,6 +72,8 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
                     this.props.word.inflect(this.state.inflection.defaultForm).jp)
                 .filter((inflection) => inflection.getId() != this.state.inflection.getId())
                 .filter((inflection) => inflection.pos == this.state.inflection.pos)
+                .filter((inflection) => inflection.getEnding(inflection.defaultForm) ==
+                    this.state.inflection.getEnding(inflection.defaultForm))
         
         return (
             <div className='inflections'>

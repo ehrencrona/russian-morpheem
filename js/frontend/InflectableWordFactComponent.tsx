@@ -59,27 +59,22 @@ export default class WordFactComponent extends Component<Props, State> {
 
     render() {
         let fact = this.props.fact
-
-        let inflectionComponents = <div/>
-
-        if (fact instanceof InflectedWord) {
-            let inflections
-            
-            inflectionComponents =
-                <div>                            
-                    <ChangeInflectionComponent
-                        corpus={ this.props.corpus } 
-                        tab={ this.props.tab }
-                        word={ fact }
-                        onChange={ () => inflections.forceUpdate() } />
-                    <InflectionsComponent 
-                        corpus={ this.props.corpus } 
-                        inflection={ fact.inflection } 
-                        word={ fact } 
-                        tab={ this.props.tab }
-                        ref={ (component) => inflections = component} />
-                </div>
-        }
+        let inflections
+        
+        let inflectionComponents =
+            <div>                            
+                <ChangeInflectionComponent
+                    corpus={ this.props.corpus } 
+                    tab={ this.props.tab }
+                    word={ fact }
+                    onChange={ () => inflections.forceUpdate() } />
+                <InflectionsComponent 
+                    corpus={ this.props.corpus } 
+                    inflection={ fact.inflection } 
+                    word={ fact } 
+                    tab={ this.props.tab }
+                    ref={ (component) => inflections = component} />
+            </div>
 
         return (<div>
 

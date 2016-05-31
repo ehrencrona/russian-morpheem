@@ -12,6 +12,11 @@ export default class Inflections {
         }
     }
 
+    clone(inflections: Inflections) {
+        this.inflections = inflections.inflections
+        this.inflectionsById = inflections.inflectionsById    
+    }
+    
     static fromJson(json): Inflections {
         let result = new Inflections()
         

@@ -4,6 +4,8 @@ import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 
 export default class Corpus {
+    onChangeOnDisk: () => any
+    
     constructor(
         public inflections: Inflections, public words: Words, 
         public sentences: Sentences, public facts: Facts, public lang: string) {
@@ -25,6 +27,13 @@ export default class Corpus {
             sentences,
             facts, 
             json.lang)
+    }
+
+    clone(otherCorpus: Corpus) {
+        this.words.clone(otherCorpus.words)
+        this.facts.clone(otherCorpus.facts)
+        this.inflections.clone(otherCorpus.inflections)
+        this.sentences.clone(otherCorpus.sentences)
     }
 
     toJson() {
