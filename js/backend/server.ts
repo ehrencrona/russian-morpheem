@@ -223,8 +223,7 @@ function registerRoutes(corpus: Corpus) {
     corpus.onChangeOnDisk = () => {
         let t = new Date().getTime()
         
-console.log('did i write this?',t - lastSave)
-        if (lastSave && t - lastSave < 1000) {
+        if (lastSave && t - lastSave < 5000) {
             return
         }
 
