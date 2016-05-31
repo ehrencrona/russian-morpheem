@@ -11,7 +11,12 @@ export default function readInflectionFile(fileName, lang: string) {
                 return reject(err)
             }
 
-            resolve(parseInflectionFile(body, lang))
+            try {
+                resolve(parseInflectionFile(body, lang))
+            }
+            catch (e) {
+                reject(e)
+            }
         })
     })
 }

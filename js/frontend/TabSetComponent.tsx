@@ -22,6 +22,7 @@ let React = { createElement: createElement }
 
 export default class TabSetComponent extends Component<Props, State> {
     lastTabIds: string[] = []
+    lock: any
     
     constructor(props) {
         super(props)

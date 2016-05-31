@@ -3,6 +3,7 @@
 import * as express from "express"
 import 'source-map-support/register'
 import readCorpus from './CorpusReader'
+import { watchForChanges } from './CorpusReader'
 import { getCorpusDir } from './CorpusReader'
 
 import Sentence from '../shared/Sentence'
@@ -15,10 +16,19 @@ import writeFactFile from '../backend/FactFileWriter'
 
 var app = express()
 var bodyParser = require('body-parser')
+var passport = require('passport')
 
 var port = process.env.PORT || 8080
 
-app.use(bodyParser.json());
+var jwt = require('express-jwt')
+
+var jwtCheck = jwt({
+  secret: new Buffer('RVSvUvISdOTFLypEic_VLRZIB82wVwZH-ffK6FZRtv3F_V8BMgitGsv16Rjfvhub', 'base64'),
+  audience: 'BcdEIFVbZCfkNbO1GlL7dqS2ghOIfHBk'
+})
+
+app.use('/api', jwtCheck)
+app.use(bodyParser.json())
 
 function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
@@ -27,8 +37,7 @@ function registerRoutes(corpus: Corpus) {
     let corpusDir = getCorpusDir(corpus.lang)
 
     app.get(`/api/${lang}/corpus`, function(req, res) {
-        res.status(200)
-            .send(corpus.toJson())
+        res.status(200).send(corpus.toJson())
     })
 
     app.put(`/api/${lang}/fact/:pos/:id`, function(req, res) {
@@ -156,7 +165,7 @@ function registerRoutes(corpus: Corpus) {
             sentence.id = null
 
             corpus.sentences.add(sentence)
-            
+
             console.log('Added ' + sentence + ' (' + sentence.id + ')')
             
             res.status(200).send({ id: sentence.id })
@@ -180,7 +189,7 @@ function registerRoutes(corpus: Corpus) {
     })
 
     app.put(`/api/${lang}/sentence/:id`, function(req, res) {
-        try {            
+        try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
             if (sentence.id != req.params['id']) {
@@ -227,7 +236,7 @@ function registerRoutes(corpus: Corpus) {
             return
         }
 
-        readCorpus(lang, false).then((newCorpus) => {
+        readCorpus(lang, false).then((newCorpus: Corpus) => {
             console.log(`Reloaded corpus ${lang}.`);
 
             corpus.clone(newCorpus)
@@ -239,7 +248,15 @@ function registerRoutes(corpus: Corpus) {
 }
 
 Promise.all([
-    readCorpus('ru', true),
+    readCorpus('ru', true).catch((e) => {
+        console.log(e.stack)
+
+        let corpus = Corpus.createEmpty('ru')
+
+        watchForChanges(corpus)
+
+        return corpus
+    }),
     readCorpus('lat', true)
 ]).then((corpora) => {
     app.use('/', express.static('public'));

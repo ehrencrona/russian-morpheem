@@ -15,6 +15,27 @@ export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
 } 
 
+export function watchForChanges(corpus: Corpus) {
+    let corpusDir = getCorpusDir(corpus.lang)
+    let lastChange
+
+    for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt' ]) {                            
+        watch(corpusDir + '/' + file, (event, filename) => {
+            let t = new Date().getTime()
+
+            if (lastChange && t - lastChange < 2000) {
+                return
+            }
+
+            lastChange = t
+
+            if (corpus.onChangeOnDisk) {
+                corpus.onChangeOnDisk()
+            }
+        })
+    }
+}
+
 export default function readCorpus(lang, doWatch) {
     let corpusDir = getCorpusDir(lang)
     
@@ -29,30 +50,15 @@ export default function readCorpus(lang, doWatch) {
 
                 return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
                 .then((sentences: Sentences) => {
-                    let result = new Corpus(inflections, words, sentences, facts, lang)
-
-                    if (doWatch) {
-                        let lastChange
-                        
-                        for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt' ]) {                            
-                            watch(corpusDir + '/' + file, (event, filename) => {
-                                let t = new Date().getTime()
-
-                                if (lastChange && t - lastChange < 2000) {
-                                    return
-                                }
-
-                                lastChange = t
-
-                                if (result.onChangeOnDisk) {
-                                    result.onChangeOnDisk()
-                                }
-                            })
-                        }
-                    }
-                    
-                    return result
+                    return new Corpus(inflections, words, sentences, facts, lang)
                 })
             })
+    })
+    .then((corpus: Corpus) => {
+        if (doWatch) {
+            watchForChanges(corpus)
+        }
+
+        return corpus
     })
 }

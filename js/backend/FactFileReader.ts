@@ -13,7 +13,12 @@ export default function readFactFile(fileName: string, inflections: Inflections,
                 return reject(err)
             }
 
-            resolve(parseFactFile(body, inflections, lang))
+            try {
+                resolve(parseFactFile(body, inflections, lang))
+            }
+            catch (e) {
+                reject(e)
+            }
         })
     });
 }

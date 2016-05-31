@@ -13,7 +13,12 @@ export default function readSentenceFile(fileName, words: Words, facts: Facts) {
                 return reject(err)
             }
 
-            resolve(parseSentenceFile(body, words, facts))
+            try {
+                resolve(parseSentenceFile(body, words, facts))
+            }
+            catch (e) {
+                reject(e)
+            }
         })
     })
 }

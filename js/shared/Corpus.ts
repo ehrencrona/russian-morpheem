@@ -6,6 +6,18 @@ import Inflections from '../shared/Inflections';
 export default class Corpus {
     onChangeOnDisk: () => any
     
+    static createEmpty(lang: string) {
+        let facts = new Facts()
+        
+        return new Corpus(
+            new Inflections([]),
+            new Words(facts),
+            new Sentences(),
+            facts,
+            lang
+        )
+    }
+    
     constructor(
         public inflections: Inflections, public words: Words, 
         public sentences: Sentences, public facts: Facts, public lang: string) {
