@@ -11,9 +11,10 @@ export default class Sentence {
     english: string
     required: Fact[]
     
-    constructor(public words: Word[], public id: number) {
+    constructor(public words: Word[], public id: number, public author?: string) {
         this.words = words
         this.id = id
+        this.author = author
     }
     
     static fromJson(json, facts, words) {

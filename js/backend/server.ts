@@ -30,6 +30,12 @@ var jwtCheck = jwt({
 app.use('/api', jwtCheck)
 app.use(bodyParser.json())
 
+function getAuthor(req) {
+    if (req.user && req.user.sub) {
+        return req.user.sub.split('|')[1]
+    }
+}
+
 function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
     let lastSave
@@ -161,6 +167,7 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/sentence`, function(req, res) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+            sentence.author = getAuthor(req)
 
             sentence.id = null
 
@@ -191,6 +198,7 @@ function registerRoutes(corpus: Corpus) {
     app.put(`/api/${lang}/sentence/:id`, function(req, res) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+            sentence.author = getAuthor(req)
 
             if (sentence.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');

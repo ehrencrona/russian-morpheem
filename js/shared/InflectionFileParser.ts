@@ -3,6 +3,7 @@
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 import Ending from './Ending'
+import { formExists } from '../shared/InflectionForms'
 
 interface Endings {
     default: string, 
@@ -10,19 +11,19 @@ interface Endings {
     inherits: string
 }
 
-export function parseEndings(str, lang): Endings {
+export function parseEndings(str: string, lang?: string, pos?: string): Endings {
     let result : { [s: string]: Ending } = {}
     let inherits
     let defaultForm 
-    
-    for (let pair of str.split(',')) {
-        let elements = pair.split(':')
 
-        if (elements.length != 2) {
-            throw new Error('Expected "' + pair + '" to be of the form <form>:<ending>, e.g. "gen: -y"')
+    for (let pair of str.split(',')) {
+        let elements = pair.trim().split(/:? +/)
+
+        if (elements.length > 2) {
+            throw new Error('Expected "' + pair + '" to be of the form <form> <ending>, e.g. "gen y"')
         }
 
-        let endingString = elements[1].trim()
+        let endingString = (elements[1] || '').trim()
 
         if (endingString[0] == '-') {
             endingString = endingString.substr(1)
@@ -33,7 +34,11 @@ export function parseEndings(str, lang): Endings {
         if (form == 'inherit') {
             inherits = endingString
         }
-        else {  
+        else {
+            if (lang && !formExists(lang, pos, form)) {
+                console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang}.`)
+            }
+
             let ending
             let relativeTo
             let suffix = endingString
@@ -50,7 +55,7 @@ export function parseEndings(str, lang): Endings {
             }
 
             if (lang == 'ru' && suffix.match(/[a-z]/)) {
-                throw new Error(ending + ' in ' + str + ' contains Latin characters.')
+                throw new Error(ending + ' in ' + str + ' ("' + suffix + '") contains Latin characters.')
             }
 
             ending = new Ending(
@@ -69,7 +74,7 @@ export function parseEndings(str, lang): Endings {
     return { default: defaultForm, endings: result, inherits: inherits }
 }
 
-export default function parseInflectionFile(data, lang: string) {
+export default function parseInflectionFile(data, lang?: string) {
     let inflections = [];
     let inflectionById = {};
 
@@ -98,13 +103,13 @@ export default function parseInflectionFile(data, lang: string) {
         
         let rightSide = line.substr(i + 1)
 
-        let endings = parseEndings(rightSide, lang)
+        let endings = parseEndings(rightSide, lang, pos)
 
         let inflection
 
         if (endings.inherits) {
             let parent = inflectionById[endings.inherits]
-            
+
             if (parent) {
                 inflection = new Inflection(id, parent.defaultForm, pos, endings.endings)
                 

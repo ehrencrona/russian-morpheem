@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import parser from '../shared/SentenceFileParser'
 import { sentenceToString } from '../shared/SentenceFileGenerator'
@@ -26,9 +26,12 @@ describe('SentenceFileGenerator', function() {
         words.addWord(new Word('b', '1'))
         words.addWord(new Word('b', '2'))
 
-        let original = 'a b[1] b[2]: english'
+        let facts = new Facts()
+        facts.add(new Grammar('grammar'))
 
-        var sentences: Sentences = parser(original, words, new Facts())
+        let original = 'a b[1] b[2] (author: ae, requires: grammar): english'
+
+        var sentences: Sentences = parser(original, words, facts)
 
         let generated = sentenceToString(sentences.sentences[0], words)
 

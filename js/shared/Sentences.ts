@@ -112,9 +112,13 @@ export default class Sentences {
     store(sentence: Sentence) {
         this.updateChangedId(sentence)
 
-        if (!this.sentenceById[sentence.getId()]) {
+        let storedSentence = this.sentenceById[sentence.getId()] 
+
+        if (!storedSentence) {
             throw new Error('Unknown sentence "' + sentence.getId() + '"')
         }
+
+        sentence.author = storedSentence.author
 
         this.sentenceById[sentence.getId()] = sentence
 

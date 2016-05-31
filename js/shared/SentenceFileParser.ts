@@ -60,13 +60,14 @@ function parseLineToElements(line, parseSentenceToWords) {
     }
 
     var japanese = m[1]
-    var english = m[3]
     var tags = m[2]
+    var english = m[3]
 
     var result = {
         tags: [],
         words: undefined,
-        english: undefined
+        english: undefined,
+        author: undefined
     }
 
     if (tags) {
@@ -103,37 +104,13 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
         if (name == 'requires') {
             sentence.requiresFact(facts.get(value))
         }
+        
+        if (name == 'author') {
+            sentence.author = value
+        }
     }
-    
+
     return sentence
-}
-
-function expandLine(line, lineNumber) {
-    let regex = /\(([^)]+,[^)]+)\)/g;
-    let elements = line.split(regex)
-    
-    if (elements.length == 1) {
-        return elements
-    }
-    else if (elements.length == 5) {
-        let ma = elements[1].split(',');
-        let na = elements[3].split(',');
-
-        if (ma.length != na.length) {
-            throw new Error(lineNumber + ': ' + elements[1] + ' has a different number of words than ' + elements[3]);
-        }
-        
-        let result = []
-        
-        for (let i = 0; i < ma.length; i++) {
-            result.push(elements[0] + ma[i].trim() + elements[2] + na[i].trim() + elements[4])
-        }
-        
-        return result;
-    }
-    else {
-        throw new Error(lineNumber + ': "' + line + '" contains an unexpected number of parenthesized blocks. There should be one in the target language and one in the translation.')
-    }
 }
 
 /**
@@ -152,9 +129,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts): Sen
             continue
         }
 
-        for (let expandedLine of expandLine(line, lineNumber)) {
-            sentences.add(parseLine(expandedLine, words, facts, lineNumber, sentenceIndex++))
-        }
+        sentences.add(parseLine(line, words, facts, lineNumber, sentenceIndex++))
     }
 
     return sentences

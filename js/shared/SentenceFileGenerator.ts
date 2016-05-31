@@ -11,8 +11,19 @@ function wordToString(word: Word, words: Words) {
 }
 
 export function sentenceToString(sentence: Sentence, words: Words) {
+    let tags = []
+    
+    if (sentence.author) {
+        tags.push('author: ' + sentence.author)
+    } 
+    
+    sentence.required.forEach((fact) => 
+        tags.push('requires: ' + fact.getId()))
+
     return sentence.words.map((word) => 
-        wordToString(word, words)).join(' ') + ': ' + sentence.en()
+        wordToString(word, words)).join(' ') 
+            + (tags.length ? ' (' + tags.join(', ') + ')' : '')  
+            + ': ' + sentence.en()
 }
 
 export default function sentencesToString(sentences: Sentences, words: Words) {
@@ -26,7 +37,7 @@ export default function sentencesToString(sentences: Sentences, words: Words) {
         }
 
         res += sentenceToString(sentence, words) + '\n'
-        
+
         lineNumber++
     })
     

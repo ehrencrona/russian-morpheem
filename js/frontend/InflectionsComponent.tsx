@@ -13,6 +13,7 @@ import getLanguage from './getLanguage'
 
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
+import INFLECTION_FORMS from '../shared/InflectionForms'
 
 interface Props {
     corpus: Corpus,
@@ -29,83 +30,6 @@ interface State {
 
 let React = { createElement: createElement }
 
-let FIELDS = 
-{
-    lat: {
-        verb: {
-            cols: [ 'singular', 'plural', 'passive sg', 'passive pl' ],
-            rows: [ 'infinitive', '1st person', '2nd person', '3rd person'],
-            forms: [ 
-                ['inf'], ['1', '1pl', 'pass1', 'pass1pl'], 
-                ['2', '2pl', 'pass2', 'pass2pl'], ['3', '3pl', 'pass3', 'pass3pl'] ]  
-        } ,
-
-        adj: {
-            cols: [ 'masc sg', 'masc pl', 'fem sg', 'fem pl', 'n sg', 'n pl' ], 
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'abl', 'voc' ],
-            forms: [                
-                [ 'nomm', 'nommpl', 'nomf', 'nomfpl', 'nomn', 'nomnpl' ],
-                [ 'genm', 'genmpl', 'genf', 'genfpl', 'genn', 'gennpl' ],
-                [ 'datm', 'datmpl', 'datf', 'datfpl', 'datn', 'datnpl' ],
-                [ 'accm', 'accmpl', 'accf', 'accfpl', 'accn', 'accnpl' ],
-                [ 'ablm', 'ablmpl', 'ablf', 'ablfpl', 'abln', 'ablnpl' ],
-                [ 'vocm', 'vocmpl', 'vocf', 'vocfpl', 'vocn', 'vocnpl' ]
-            ]
-        },
-
-        n: {
-            cols: [ 'singular', 'plural' ], 
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'abl', 'voc' ],
-            forms: [        
-                ['nom','pl'],
-                ['gen','genpl'],
-                ['dat','datpl'],
-                ['acc','accpl'],
-                ['abl','ablpl'],
-                ['voc','vocpl']
-            ]
-        }
-    },
-    ru: {
-        v: {
-            cols: [ 'singular', 'plural' ],
-            rows: [ 'infinitive', '1st person', '2nd person', '3rd person', 'past'],
-            forms: [ ['inf', ''], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'], [ ['pastm', 'pastn', 'pastf'], 'pastpl' ]]
-        } ,
-        adj: {
-            cols: [ 'm sg', 'n sg', 'f sg', 'plural' ],
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short', 'adv' ],
-            forms: [
-                ['m','n','f','pl'],
-                ['genm','genn','genf','genpl'],
-                ['datm','datn','datf','datpl'],
-                [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
-                ['instrm','instrn','instrf','instrpl'],
-                ['prepm','prepn','prepf','preppl'],
-                ['shortm', 'shortn', 'shortf', 'shortpl'],
-                ['adv']
-            ]
-        },
-        
-        n: {
-            cols: [ 'singular', 'plural' ], 
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-            forms: [        
-                ['nom','pl'],
-                ['gen','genpl'],
-                ['dat','datpl'],
-                ['acc','accpl'],
-                ['instr','instrpl'],
-                ['prep','preppl']
-            ]
-        },
-        pron: {
-            cols: [ '' ],
-            rows: [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-            forms: [ ['nom'], ['gen'], ['dat'], ['acc'], ['instr'], ['prep'] ]
-        }
-    }
-}
 
 export default class InflectionsComponent extends Component<Props, State> {
     constructor(props) {
@@ -224,7 +148,7 @@ export default class InflectionsComponent extends Component<Props, State> {
             }
         }
         
-        let table = FIELDS[getLanguage()][this.state.inflection.pos]
+        let table = INFLECTION_FORMS[getLanguage()][this.state.inflection.pos]
         
         if (!table) {
             console.log('Unknown PoS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())

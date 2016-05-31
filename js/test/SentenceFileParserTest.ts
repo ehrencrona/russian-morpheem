@@ -35,9 +35,10 @@ describe('SentenceFileParser', function() {
         let facts = new Facts()
         facts.add(new Grammar('grammar'))
 
-        var sentences = parser('a (requires: grammar): english', words, facts)
+        var sentences = parser('a (requires: grammar, author: ae): english', words, facts)
         let sentence = sentences.sentences[0]
 
+        expect(sentence.author).to.equal('ae')
         expect(sentence.words[0]).to.equal(a)
         expect(sentence.required[0].getId()).to.equal('grammar')
     })
