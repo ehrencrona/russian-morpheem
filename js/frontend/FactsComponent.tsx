@@ -4,6 +4,7 @@ import {Component,createElement} from 'react'
 import Corpus from '../shared/Corpus'
 import InflectedWord from '../shared/InflectedWord'
 import InflectionFact from '../shared/InflectionFact'
+
 import Fact from '../shared/Fact'
 import Sentence from '../shared/Sentence'
 
@@ -124,7 +125,9 @@ export default class FactsComponent extends Component<Props, State> {
                     <WordSearchComponent 
                         corpus={ this.props.corpus }
                         tab={ this.props.tab } 
-                        onWordSelect={ (word) => { this.openFact(word) } } />
+                        onWordSelect={ (word) => { 
+                            this.openFact((word instanceof InflectedWord ? word.word : word)) 
+                        } } />
     
                     :            
 

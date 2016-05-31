@@ -61,7 +61,13 @@ export default class WordFactComponent extends Component<Props, State> {
         let fact = this.props.fact
         let inflections
         
-        let inflectionComponents =
+        return (<div>
+
+            <div className='buttonBar'>
+                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+
+                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+            </div>
             <div>                            
                 <ChangeInflectionComponent
                     corpus={ this.props.corpus } 
@@ -75,17 +81,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     tab={ this.props.tab }
                     ref={ (component) => inflections = component} />
             </div>
-
-        return (<div>
-
-            <div className='buttonBar'>
-                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
-
-                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
-            </div>
-        
-            { inflectionComponents }
-            
+    
             <SentencesWithFact corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         </div>)
     }

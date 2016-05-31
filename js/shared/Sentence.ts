@@ -17,9 +17,20 @@ export default class Sentence {
     }
     
     static fromJson(json, facts, words) {
+        let data = {
+            id: json[0],
+            words: json[1],
+            english: json[2],
+            requires: json[3]
+        }
+
+        if (data.english == 'undefined') {
+            delete data.english
+        }
+
         let sentence =
             new Sentence(
-                json.words.map((wordId) => { 
+                data.words.map((wordId) => { 
                     let word = words.get(wordId)
 
                     if (!word) {
@@ -27,11 +38,11 @@ export default class Sentence {
                     }
 
                     return word
-                 }), json.id)
-                .setEnglish(json.english)
+                 }), data.id)
+                .setEnglish(data.english)
 
-        if (json.requires) {    
-            json.requires.forEach((factId) => 
+        if (data.requires) {    
+            data.requires.forEach((factId) => 
                 sentence.requiresFact(facts.get(factId))
             )
         }
@@ -40,12 +51,12 @@ export default class Sentence {
     }
     
     toJson() {
-        return {
-            id: this.id,
-            words: this.words.map((word) => word.getId()),
-            english: this.english,
-            requires: ( this.required ? this.required.map((fact) => fact.getId()) : undefined )
-        }
+        return [            
+            this.id,
+            this.words.map((word) => word.getId()),
+            this.english,
+            ( this.required ? this.required.map((fact) => fact.getId()) : undefined )
+        ]
     }
 
     getId(): number {
@@ -57,7 +68,9 @@ export default class Sentence {
     }
 
     setEnglish(en) {
-        this.english = en
+        if (en !== 'undefined') {
+            this.english = en
+        }
         
         return this
     }
