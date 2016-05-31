@@ -463,6 +463,10 @@ ul {
     }
 }
 
+ul.stats {
+    margin: (4 * $unit) 0;
+}
+
 .addWord {
     display: flex;
     padding: 2 * $unit;

@@ -300,6 +300,9 @@ ul {
     top: -2px;
     margin-left: 1px; }
 
+ul.stats {
+  margin: 16px 0; }
+
 .addWord {
   display: flex;
   padding: 8px;

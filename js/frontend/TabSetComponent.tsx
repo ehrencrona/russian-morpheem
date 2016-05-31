@@ -2,6 +2,7 @@
 
 import {Component, cloneElement, createElement} from 'react';
 import Facts from './FactsComponent';
+import StatsComponent from './StatsComponent';
 import Fact from './FactComponent';
 import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
@@ -34,7 +35,9 @@ export default class TabSetComponent extends Component<Props, State> {
         this.state = {
             tabs: [
                 new Tab('Facts', 'facts',
-                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this)
+                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
+                new Tab('Stats', 'stats',
+                    <StatsComponent corpus={ this.props.corpus }></StatsComponent>, this)
             ],
             first: 0
         } 
