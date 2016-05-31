@@ -29,7 +29,6 @@ interface State {
 let React = { createElement: createElement }
 
 interface Inflection {
-    index: number,
     fact: Fact,
     form: string
 }
@@ -70,40 +69,89 @@ export default class WordSearchComponent extends Component<Props, State> {
         }
     }
     
-    findMatchingInflections(word: InflectableWord, filter: string): UnstudiedWord[] {
+    findMatchingInflections(word: InflectableWord, filter: string): Suggestion[] {
         let i = Math.min(filter.length, word.stem.length)
 
-        let result: UnstudiedWord[] = []
+        let exactMatches: UnstudiedWord[] = []
         let prefixMatch: InflectedWord
+        let prefixIsDefault
 
         if (word.stem.substr(0, i) == filter.substr(0, i)) {
-            word.visitAllInflections((inflection: InflectedWord) => {
-                if (inflection.toString() == filter) {
-                    result.push(inflection)
+            word.visitAllInflections((inflected: InflectedWord) => {
+                if (inflected.toString() == filter) {
+                    exactMatches.push(inflected)
                 }
-                else if (inflection.toString().substr(0, filter.length) == filter) {
-                    prefixMatch = inflection
+                else if (inflected.toString().substr(0, filter.length) == filter && !prefixIsDefault) {
+                    prefixMatch = inflected
+                    prefixIsDefault = inflected.form == word.inflection.defaultForm
                 }
             }, false)
         }
-        
-        if (result.length && prefixMatch) {
-            result.push(prefixMatch)
+
+        if (!exactMatches.length && prefixMatch) {
+            if (prefixIsDefault) {
+                return [ this.inflectableWordToSuggestion(word) ]
+            }
+            else {
+                return [ this.wordToSuggestion(prefixMatch) ]
+            }
         }
-        
-        return result
+        else {
+            return exactMatches.map((word) => this.wordToSuggestion(word))
+        }
     }
     
-    wordsMatchingFilterString(fact, filter: string): UnstudiedWord[] {
-        if (fact instanceof UnstudiedWord && 
-            fact.toString().substr(0, filter.length) == filter) {
-            return [ fact ]
+    wordToSuggestion(word: UnstudiedWord): Suggestion {
+        let inflection
+        let index
+        let fact: Fact
+
+        if (word instanceof InflectedWord) {
+            let inflectionFact = word.word.inflection.getFact(word.form)
+
+            inflection = {
+                form: word.form,
+                fact: inflectionFact
+            }
+
+            index = this.props.corpus.facts.indexOf(word.word)
+            fact = word.word
+        }
+        else {
+            index = this.props.corpus.facts.indexOf(word)
+            fact = word
         }
 
+        return {
+            index: index,
+            word: word,
+            fact: fact,
+            inflection: inflection
+        }
+    } 
+    
+    inflectableWordToSuggestion(word: InflectableWord): Suggestion {
+        let index = this.props.corpus.facts.indexOf(word)
+        let fact: Fact
+
+        return {
+            index: index,
+            word: word.inflect(word.inflection.defaultForm),
+            fact: word,
+            inflection: null
+        }
+    } 
+           
+    wordsMatchingFilterString(fact, filter: string): Suggestion[] {
+        if (fact instanceof UnstudiedWord && 
+            fact.toString().substr(0, filter.length) == filter) {
+            return [ this.wordToSuggestion(fact) ]
+        }
+        
         if (fact instanceof InflectableWord) {
             return this.findMatchingInflections(fact, filter)
         }
-        
+
         return []
     }
     
@@ -127,17 +175,10 @@ export default class WordSearchComponent extends Component<Props, State> {
             return fi.easy + fi.ok + fi.hard
         } 
         
+        let facts = this.props.corpus.facts
+        
         let getSuggestions = () => {
             let suggestions: Suggestion[] = []
-
-            function addSuggestionForWord(fact: UnstudiedWord) {
-                suggestions.push({
-                    index: -1,
-                    word: fact,
-                    fact: fact,
-                    inflection: null
-                })
-            }
 
             if (!filterPos && !filterString) {
                 return suggestions
@@ -159,38 +200,24 @@ export default class WordSearchComponent extends Component<Props, State> {
                 if (this.state.filterWord) {
                     if (fact instanceof InflectableWord && this.state.filterWord.getId() == fact.getId()) {                            
                         fact.visitAllInflections((inflected: InflectedWord) => {
-                            let inflectionFact = fact.inflection.getFact(inflected.form)
-                            
-                            let suggestion: Suggestion = {
-                                index: this.props.corpus.facts.indexOf(fact),
-                                word: inflected,
-                                fact: fact,
-                                inflection: {
-                                    form: inflected.form,
-                                    fact: inflectionFact,
-                                    index: this.props.corpus.facts.indexOf(inflectionFact)
-                                }
-                            }
-                            
-                            suggestions.push(suggestion)
+                            suggestions.push(this.wordToSuggestion(inflected))
                         }, false)
                     }
                 }
                 else if (filterString) {
-                    this.wordsMatchingFilterString(fact, filterString)
-                        .forEach(addSuggestionForWord)
+                    suggestions = suggestions.concat(this.wordsMatchingFilterString(fact, filterString)) 
                 }
                 else if (fact instanceof UnstudiedWord) {
-                    addSuggestionForWord(fact)
+                    suggestions.push(this.wordToSuggestion(fact))
                 }
                 else if (fact instanceof InflectableWord) {
-                    addSuggestionForWord(fact.inflect(fact.inflection.defaultForm))
+                    suggestions.push(this.inflectableWordToSuggestion(fact))
                 }
             })
 
             if (filterString) {
-                let i = suggestions.findIndex((s) => s.fact.toString() == filterString)
-                
+                let i = suggestions.findIndex((s) => s.word.toString() == filterString)
+
                 if (i >= 0) {
                     let exactMatch = suggestions.splice(i, 1)[0]
                     
@@ -208,7 +235,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 index = Math.max(index,
                     this.props.corpus.facts.indexOf(suggestion.inflection.fact)
                 ) 
-            }
+            } 
             
             let onClick = () => {
                 this.selectSuggestion(suggestion)
@@ -234,7 +261,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                     :
                     <div/>) }
-                <div className='word'>{suggestion.word.toString()}</div>
+                <div className='word'>{ suggestion.word.toString() }</div>
                 { suggestion.inflection ?
                     <div className='form'>{suggestion.inflection.form }</div>
                     :
@@ -246,7 +273,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         let filterWord = this.state.filterWord
         
         let suggestions = getSuggestions()
-        
+    
         return (<div className='wordSearch'>
             <div className='filter'>
                 <input type='text' autoCapitalize='off' value={ this.state.filterString } onChange={ (event) => {
