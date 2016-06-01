@@ -257,8 +257,8 @@ export default class WordSearchComponent extends Component<Props, State> {
                         }
                     }
                 }>
-                { (index >= 0 ?
-                    <div className='index'><div className='number'>{ index + 1 }</div></div>
+                { (suggestion.index >= 0 ?
+                    <div className='index'><div className='number'>{ suggestion.index + 1 }</div></div>
                     :
                     <div/>) }
                 <div className='word'>{ suggestion.word.toString() }</div>
