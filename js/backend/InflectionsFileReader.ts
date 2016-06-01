@@ -2,9 +2,9 @@
 "use strict";
 
 import { readFile } from 'fs';
-import parseInflectionFile from '../shared/InflectionFileParser';
+import parseInflectionsFile from '../shared/InflectionsFileParser';
 
-export default function readInflectionFile(fileName, lang: string) {
+export default function readInflectionsFile(fileName, lang: string) {
     return new Promise((resolve, reject) => {        
         readFile(fileName, 'utf8', function (err, body) {
             if (err) {
@@ -12,7 +12,7 @@ export default function readInflectionFile(fileName, lang: string) {
             }
 
             try {
-                resolve(parseInflectionFile(body, lang))
+                resolve(parseInflectionsFile(body, lang))
             }
             catch (e) {
                 reject(e)

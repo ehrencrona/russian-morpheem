@@ -16,7 +16,7 @@ import Word from '../shared/Word'
 import Facts from '../shared/Facts'
 import Ending from '../shared/Ending'
 
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 import { expect } from 'chai';
 
 describe('IndexSentencesByFact', function() {

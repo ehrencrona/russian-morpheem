@@ -9,7 +9,7 @@ import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectableWord from '../shared/InflectableWord';
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 
 import { expect } from 'chai';
 

@@ -40,11 +40,11 @@ export default class AddWordComponent extends Component<Props, State> {
         if (wordString) {
             let inflection = this.props.corpus.inflections.getInflection(
                 this.state.inflection)
-            
-            let defaultEnding = inflection.getEnding(inflection.defaultForm)
-            let stem = wordString.substr(0, wordString.length-defaultEnding.suffix.length)
 
-            let word = new InflectableWord(wordString, inflection)
+            let defaultEnding = inflection.getEnding(inflection.defaultForm)
+            let stem = wordString.substr(0, wordString.length - defaultEnding.suffix.length)
+
+            let word = new InflectableWord(stem, inflection)
                 .setEnglish('n/a')
 
             this.props.corpus.words.addInflectableWord(word)

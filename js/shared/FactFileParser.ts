@@ -111,7 +111,10 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     i--
                 }
 
-                fact = new InflectableWord(stem, inflection)
+                let iw = new InflectableWord(stem, inflection)
+                iw.en = word.getEnglish('')
+                
+                fact = iw
             }
             else if (tag == 'grammar') {
                 var requiredFact = facts.get(text)

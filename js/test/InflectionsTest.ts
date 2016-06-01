@@ -6,7 +6,7 @@ import Inflection from '../shared/Inflection';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import Ending from '../shared/Ending';
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 
 import { expect } from 'chai';
 

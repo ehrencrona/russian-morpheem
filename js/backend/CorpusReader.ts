@@ -1,6 +1,6 @@
 'use strict'
 
-import readInflectionFile from './InflectionFileReader';
+import readInflectionsFile from './InflectionsFileReader';
 import readFactFile from './FactFileReader';
 import SentenceFileReader from './SentenceFileReader';
 import Facts from '../shared/Facts';
@@ -39,7 +39,7 @@ export function watchForChanges(corpus: Corpus) {
 export default function readCorpus(lang, doWatch) {
     let corpusDir = getCorpusDir(lang)
     
-    return readInflectionFile(corpusDir + '/inflections.txt', lang)
+    return readInflectionsFile(corpusDir + '/inflections.txt', lang)
     .then((inflections: Inflections) => {
         return readFactFile(corpusDir + '/facts.txt', inflections, lang)        
             .then((facts: Facts) => {

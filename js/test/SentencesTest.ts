@@ -11,7 +11,7 @@ import Ending from '../shared/Ending'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
 import Facts from '../shared/Facts'
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 
 import { expect } from 'chai';
 

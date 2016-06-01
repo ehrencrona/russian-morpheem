@@ -30,6 +30,10 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
         }
 
         let form = elements[0].trim()
+        
+        if (form[form.length-1] == ':') {
+            form = form.substr(0, form.length-1)
+        }
 
         if (form == 'inherit') {
             inherits = endingString
@@ -55,7 +59,7 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
             }
 
             if (lang == 'ru' && suffix.match(/[a-z]/)) {
-                throw new Error(ending + ' in ' + str + ' ("' + suffix + '") contains Latin characters.')
+                throw new Error(form + ' in ' + str + ' ("' + suffix + '") contains Latin characters.')
             }
 
             ending = new Ending(
@@ -74,7 +78,7 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
     return { default: defaultForm, endings: result, inherits: inherits }
 }
 
-export default function parseInflectionFile(data, lang?: string) {
+export default function parseInflectionsFile(data, lang?: string) {
     let inflections = [];
     let inflectionById = {};
 

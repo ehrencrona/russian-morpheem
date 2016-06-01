@@ -14,7 +14,7 @@ import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Facts from '../shared/Facts'
 import Grammar from '../shared/Grammar'
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 
 describe('SentenceFileGenerator', function() {
     it('generates same string as the read one', function () {

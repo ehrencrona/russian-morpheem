@@ -7,7 +7,7 @@ import Grammar from '../shared/Grammar'
 import Inflections from '../shared/Inflections'
 import Inflection from '../shared/Inflection'
 import InflectableWord from '../shared/InflectableWord'
-import { parseEndings } from '../shared/InflectionFileParser'
+import { parseEndings } from '../shared/InflectionsFileParser'
 
 // ぎ:gi, requires: き, grammar: ktog
 
@@ -28,9 +28,7 @@ describe('FactFileParser', function() {
 
         expect(word).to.be.instanceOf(Word)
 
-        if (word instanceof Word) {
-            expect(word.getEnglish()).to.equal('meaning')
-        }
+        expect((<Word> word).getEnglish()).to.equal('meaning')
     })
 
     it('parses inflected words', function () {
@@ -41,9 +39,7 @@ describe('FactFileParser', function() {
 
         expect(word).to.be.instanceOf(InflectableWord)
 
-        if (word instanceof Word) {
-            expect(word.getEnglish()).to.equal('meaning')
-        }
+        expect((<InflectableWord> word).en).to.equal('meaning')
     })
 
     it('parses grammar facts', function () {

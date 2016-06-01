@@ -20,14 +20,17 @@ var passport = require('passport')
 
 var port = process.env.PORT || 8080
 
-var jwt = require('express-jwt')
+if (process.env.ENV != 'dev') {
+    var jwt = require('express-jwt')
 
-var jwtCheck = jwt({
-  secret: new Buffer('RVSvUvISdOTFLypEic_VLRZIB82wVwZH-ffK6FZRtv3F_V8BMgitGsv16Rjfvhub', 'base64'),
-  audience: 'BcdEIFVbZCfkNbO1GlL7dqS2ghOIfHBk'
-})
+    var jwtCheck = jwt({
+        secret: new Buffer('RVSvUvISdOTFLypEic_VLRZIB82wVwZH-ffK6FZRtv3F_V8BMgitGsv16Rjfvhub', 'base64'),
+        audience: 'BcdEIFVbZCfkNbO1GlL7dqS2ghOIfHBk'
+    })
 
-app.use('/api', jwtCheck)
+    app.use('/api', jwtCheck)
+}
+
 app.use(bodyParser.json())
 
 function getAuthor(req) {
