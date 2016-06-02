@@ -100,7 +100,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 </div>
 
                 <span className='clickable'>
-                    <FactNameComponent fact={ fact } corpus={ this.props.corpus} />
+                    <FactNameComponent fact={ fact } index={ index } corpus={ this.props.corpus} />
                     
                     { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
                 </span>

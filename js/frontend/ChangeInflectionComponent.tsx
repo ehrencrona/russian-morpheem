@@ -67,13 +67,21 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         let inflection = this.state.inflection
         let word: InflectableWord = this.props.word
         
-        let alternativeInflections = 
-            this.props.corpus.inflections.getPossibleInflections(
-                    this.props.word.inflect(this.state.inflection.defaultForm).jp)
-                .filter((inflection) => inflection.getId() != this.state.inflection.getId())
-                .filter((inflection) => inflection.pos == this.state.inflection.pos)
-                .filter((inflection) => inflection.getEnding(inflection.defaultForm) ==
-                    this.state.inflection.getEnding(inflection.defaultForm))
+        let alternativeInflections
+        
+        try {
+            alternativeInflections = 
+                this.props.corpus.inflections.getPossibleInflections(
+                        this.props.word.inflect(this.state.inflection.defaultForm).jp)
+                    .filter((inflection) => inflection.getId() != this.state.inflection.getId())
+                    .filter((inflection) => inflection.pos == this.state.inflection.pos)
+                    .filter((inflection) => inflection.getEnding(inflection.defaultForm) ==
+                        this.state.inflection.getEnding(inflection.defaultForm))
+        }
+        catch (e) {
+            // no default form.
+            alternativeInflections = []
+        }
         
         return (
             <div className='inflections'>

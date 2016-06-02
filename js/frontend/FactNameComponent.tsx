@@ -15,6 +15,7 @@ import { Component, createElement } from 'react';
 interface Props {
     corpus: Corpus,
     fact: Fact,
+    index: number
 }
 
 interface State {
@@ -44,13 +45,18 @@ export default class FactNameComponent extends Component<Props, State> {
 
         let result: InflectedWord[] = []
 
-        this.props.corpus.facts.facts.forEach((fact) => {
+        let facts = this.props.corpus.facts.facts
+        let until = Math.min(facts.length, this.props.index + 10)
+
+        for (let i = 0; i < until; i++) {
+            let fact = facts[i]
+            
             if (result.length < 3 &&
                 fact instanceof InflectableWord && 
                 inflectionIds.has(fact.inflection.id)) {
                 result.push(fact.inflect(forFact.form))
             } 
-        })
+        }
 
         return result
     }

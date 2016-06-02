@@ -98,7 +98,7 @@ export default class SentenceComponent extends Component<Props, State> {
         let factIndexToElement = (factIndex : FactIndex) => 
             <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact) }>
                 <div className='index'><div className='number'>{ factIndex.index + 1 }</div></div>
-                <FactNameComponent fact={ factIndex.fact } corpus={ this.props.corpus} />
+                <FactNameComponent fact={ factIndex.fact } index={ factIndex.index } corpus={ this.props.corpus} />
             </li>
 
         let editor: SentenceEditorComponent

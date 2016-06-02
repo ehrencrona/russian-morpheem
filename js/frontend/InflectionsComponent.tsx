@@ -147,7 +147,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                 </div>
             }
         }
-        
+
         let table = INFLECTION_FORMS[getLanguage()][this.state.inflection.pos]
         
         if (!table) {
