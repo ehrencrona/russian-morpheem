@@ -21,14 +21,16 @@ interface State {
 
 let React = { createElement: createElement }
 
+const TOKEN_ITEM = 'userToken'
+
 export default class LoginContainer extends Component<Props, State> {
     lock: Auth0Lock
-    
+        
     constructor(props) {
         super(props)
 
         this.state = {
-            bypass: document.location.hostname == 'localhost'
+            bypass: document.location.hostname == 'localhostt'
         }
     }
 
@@ -43,7 +45,7 @@ export default class LoginContainer extends Component<Props, State> {
             if (idToken) {
                 let xrArgs = { 
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('userToken')
+                        'Authorization': 'Bearer ' + localStorage.getItem(TOKEN_ITEM)
                     }
                 }
 
@@ -63,25 +65,33 @@ export default class LoginContainer extends Component<Props, State> {
         .then((xhr) => {
             let corpus = Corpus.fromJson(xhr.data)
             
-            listenForChanges(corpus, xrArgs)
-            
+            listenForChanges(corpus, xrArgs, () => {
+                localStorage.removeItem(TOKEN_ITEM)
+                this.setState({ corpus: null })
+            })
+
             this.setState({ corpus: corpus })
+        })
+        .catch((e) => {
+            if (e.status == 401) {
+                localStorage.removeItem(TOKEN_ITEM)
+            }
         })
     }
 
     getIdToken() {
-        var idToken = localStorage.getItem('userToken')
-        var authHash = this.lock.parseHash(window.location.hash)
+        var idToken = localStorage.getItem(TOKEN_ITEM)
         
-        if (!idToken && authHash) {
-            if (authHash.id_token) {
+        if (!idToken) {
+            var authHash = this.lock.parseHash(window.location.hash)
+            
+            if (authHash && authHash.id_token) {
                 idToken = authHash.id_token
-                localStorage.setItem('userToken', authHash.id_token)
+                localStorage.setItem(TOKEN_ITEM, authHash.id_token)
             }
 
-            if (authHash.error) {
+            if (authHash && authHash.error) {
                 console.log("Error signing in", authHash)
-                return null
             }
         }
 

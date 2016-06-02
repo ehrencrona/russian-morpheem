@@ -15,7 +15,7 @@ let handleException = (e) => {
 
 const lang = getLanguage()
 
-export default function listenForChanges(corpus: Corpus, xrArgs) {
+export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized: () => any) {
     if (xrArgs.headers) {
         xrArgs.headers = Object.assign(xrArgs.headers, 
             { 
