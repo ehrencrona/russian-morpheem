@@ -19,6 +19,8 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
             continue
         }
 
+        token = token.replace(/_/g, ' ')
+
         let word = words.get(token)
 
         if (!word) {

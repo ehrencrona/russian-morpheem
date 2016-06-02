@@ -7,7 +7,7 @@ import Words from './Words';
 import Facts from './Facts';
 
 function wordToString(word: Word, words: Words) {
-    return word.getId()   
+    return word.getId().replace(/ /g, '_')   
 }
 
 export function sentenceToString(sentence: Sentence, words: Words) {
