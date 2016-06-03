@@ -1,8 +1,15 @@
 import Inflection from './Inflection';
 
+export interface GeneratedInflection {
+    stem: string,
+    inflection: Inflection
+}
+
 export default class Inflections {
     inflectionsById : { [s: string]: Inflection }
     inflections: Inflection[] = []
+
+    onAdd: (inflection: Inflection) => void = null
     
     constructor(inflections? : Inflection[]) {
         this.inflectionsById = {}
@@ -64,6 +71,10 @@ export default class Inflections {
         
         this.inflectionsById[inflection.getId()] = inflection
         this.inflections.push(inflection)
+        
+        if (this.onAdd) {
+            this.onAdd(inflection)
+        }
     }
     
     getInflection(id) {
@@ -104,5 +115,14 @@ export default class Inflections {
         }
         
         return result
+    }
+
+    generateInflectionForWord(word: string): Promise<GeneratedInflection> {
+        return Promise.resolve(
+            {
+                inflection: this.getPossibleInflections(word)[0],
+                stem: 'n/a'
+            }
+        )
     }
 }

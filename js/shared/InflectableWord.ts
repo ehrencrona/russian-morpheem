@@ -36,6 +36,10 @@ export default class InflectableWord {
         if (!result) {
             let jp = this.inflection.getInflectedForm(this.stem, form)
             
+            if (jp == null) {
+                return
+            }
+            
             result = new InflectedWord(jp, form, this)
         }
 

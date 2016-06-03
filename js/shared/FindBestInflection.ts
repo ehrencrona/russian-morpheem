@@ -8,7 +8,14 @@ import INFLECTION_FORMS from './InflectionForms'
 interface BestInflection {
     stem: string,
     inflection: Inflection,
-    wrongForms: string[]
+    wrongForms: string[],
+    rightForms: number
+}
+
+interface GeneratedInflection {
+    inflection: Inflection,
+    stem: string,
+    isNew: boolean
 }
 
 export function findPotentialStems(words: { [form: string]: string }, inflection: Inflection) {
@@ -38,19 +45,41 @@ export function findPotentialStems(words: { [form: string]: string }, inflection
 export function getWrongForms(stem, words: { [form: string]: string }, inflection: Inflection) {
     let inflectableWord = new InflectableWord(stem, inflection)
     let wrongForms = []
-    
+    let right = 0, missing = 0
+
     for (let form in words) {
         let word = words[form]
+
+        let ending = inflection.getEnding(form)
+        let inflected: string
         
-        if (word != inflectableWord.inflect(form).jp) {
+        if (!ending) {
+            inflected = ''
+        }
+        else if (!ending.relativeTo) {
+            inflected = inflectableWord.inflect(form).jp
+        }
+        else {
+            // assuming we fixed the relative to form, would this form still be broken?
+            inflected = inflection.addSuffix(
+                words[ending.relativeTo], ending)
+        }
+
+        if (!inflected) {
+            missing++
+        }
+        else if (word != inflected) {
             wrongForms.push(form)
         }
+        else {
+            right++
+        }
     }
-    
-    return wrongForms
+
+    return { wrongForms: wrongForms, right: right, missing: missing }
 }
 
-export default function findBestInflection(words: { [form: string]: string }, pos, inflections: Inflections): BestInflection {
+export default function findBestExistingInflection(words: { [form: string]: string }, pos, inflections: Inflections): BestInflection {
     let best: BestInflection
         
     for (let inflection of inflections.inflections) {
@@ -58,17 +87,19 @@ export default function findBestInflection(words: { [form: string]: string }, po
             let potentialStems = findPotentialStems(words, inflection)
 
             let lowestWrong = 999
+
             for (let candidateStem of potentialStems) {
-                let wrongForms = getWrongForms(candidateStem, words, inflection)
-                
+                let wf = getWrongForms(candidateStem, words, inflection)
+                let wrongForms = wf.wrongForms
+                let right = wf.right
                 let wrong = wrongForms.length
-                let right = Object.keys(inflection.endings).length - wrong
-                
+
                 if (right >= wrong && (!best || wrong < best.wrongForms.length)) {
                     best = {
                         stem: candidateStem,
                         inflection: inflection,
-                        wrongForms: wrongForms
+                        wrongForms: wrongForms,
+                        rightForms: right
                     }
                 }
             }
@@ -80,7 +111,7 @@ export default function findBestInflection(words: { [form: string]: string }, po
 
 export function generateEnding(stem, word) {
     let lastSimilar
-    
+
     for (lastSimilar = 0; lastSimilar < Math.min(stem.length, word.length); lastSimilar++) {
         if (stem[lastSimilar] != word[lastSimilar]) {
             break
@@ -95,55 +126,116 @@ export function generateEnding(stem, word) {
     return new Ending(suffix, null, substractFromStem)
 }
 
-
-interface SuitableInflection {
-    inflection: Inflection,
-    isNew: boolean
+function mostCommon(strings: string[]) {
+    let counts : { [str: string] : number } = {}
+    let highest = 0
+    
+    strings.forEach((string) => {
+        let count = counts[string]
+        
+        if (count) {
+            count++
+        } 
+        else {
+            count = 1
+        }
+        
+        if (count > highest) {
+            highest = count
+        }
+        
+        counts[string] = count
+    })
+    
+    return {
+        str: Object.keys(counts).find((str) => counts[str] == highest),
+        count: highest
+    }
 }
 
-export function getSuitableInflection(words: { [form: string]: string }, pos, lang, inflections: Inflections): SuitableInflection  {
-    let best = findBestInflection(words, pos, inflections)
+export function findStem(words: { [form: string]: string }) {
+    let wordArray: string[] = Object.keys(words).map((form) => words[form])
     
+    let shortestLength = wordArray.reduce(
+        (val, word) => Math.min(word.length, val), 999)
+    
+    let stemLength = 0
+    let stem = ''
+    
+    for (let i = 0; i < shortestLength; i++) {
+        let mc = mostCommon(wordArray.map((word) => word.substr(0, i+1)))
+
+        if (mc.count < wordArray.length / 2) {
+            break
+        }
+
+        stemLength = i+1;
+        stem = mc.str
+    }
+
+    return stem
+}
+
+function buildInflection(id, stem, forms: string[], words: { [form: string]: string }, defaultForm: string, pos: string) {
+    let endings: { [s: string]: Ending } = {}
+
+    for (let form of forms) {
+        if (words[form] != null) {
+            endings[form] = generateEnding(stem, words[form])
+        }
+    }
+
+    return new Inflection(id, defaultForm, pos, endings)
+}
+
+export function generateInflection(words: { [form: string]: string }, pos: string, lang: string, inflections: Inflections): GeneratedInflection  {
+    let best = findBestExistingInflection(words, pos, inflections)
+
     if (best && best.wrongForms.length == 0) {
         return {
             inflection: best.inflection,
+            stem: best.stem,
             isNew: false
         }
     }
-    else {
-        let defaultForm
-        let wrongForms
-        
-        if (best) {
-            defaultForm = best.inflection.defaultForm
-            wrongForms = best.wrongForms
-        }
-        else {
-            defaultForm = INFLECTION_FORMS[lang][pos].allForms[0]
-            wrongForms = Object.keys(words)
-        }
-        
+    else if (best) {
+        let defaultForm = best.inflection.defaultForm
+        let wrongForms = best.wrongForms
+
         let dictionaryForm = words[defaultForm]
-        
+
         if (!dictionaryForm) {
             throw new Error(`The form "${ defaultForm }" was not specified.`)
         }
 
-        let endings: { [s: string]: Ending } = {}
-        
-        for (let form of wrongForms) {
-            endings[form] = generateEnding(best.stem, words[form])
-        }
-
-        let inflection = new Inflection('-' + dictionaryForm, defaultForm, pos, endings)
-
-        if (best) {
-            inflection.inherit(best.inflection)
-        }
+        let inflection = buildInflection('-' + dictionaryForm, best.stem, best.wrongForms, words, defaultForm, pos)
+        inflection.inherit(best.inflection)
 
         return {
             inflection: inflection,
+            stem: best.stem,
             isNew: true
         }
     }
-}
+    else {
+        let allForms = INFLECTION_FORMS[lang][pos].allForms
+        
+        let defaultForm = allForms[0]
+        let wrongForms = allForms
+
+        let dictionaryForm = words[defaultForm]
+
+        if (!dictionaryForm) {
+            throw new Error(`The form "${ defaultForm }" was not specified.`)
+        }
+
+        let stem = findStem(words)
+
+        let inflection = buildInflection('-' + dictionaryForm, stem, allForms, words, defaultForm, pos)
+
+        return {
+            inflection: inflection,
+            stem: stem,
+            isNew: true
+        }
+    }}

@@ -99,10 +99,6 @@ export default class Inflection {
         else if (this.inherits) {                
             return this.inherits.getEnding(form)
         }
-        else {
-            throw new Error('Inflection ' + this.id + 
-                ' (or one of its parents) does not contain the form "' + form + '".');
-        }
     }
     
     hasForm(form) {
@@ -122,11 +118,19 @@ export default class Inflection {
     getInflectedForm(stem: string, form: string) {
         let ending = this.getEnding(form)
 
-        let suffix = ending.suffix
+        if (!ending) {
+            return
+        }
 
         if (ending.relativeTo) {
             stem = this.getInflectedForm(stem, ending.relativeTo)
         }
+
+        return this.addSuffix(stem, ending)
+    }
+    
+    addSuffix(stem: string, ending: Ending) {
+        let suffix = ending.suffix
 
         if (ending.subtractFromStem > 0) {
             stem = stem.substr(0, stem.length - ending.subtractFromStem)

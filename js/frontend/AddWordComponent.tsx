@@ -7,6 +7,7 @@ import Tab from './Tab';
 import Corpus from '../shared/Corpus';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
+import NoSuchWordError from '../shared/NoSuchWordError'
 
 let React = { createElement: createElement }
 
@@ -38,37 +39,37 @@ export default class AddWordComponent extends Component<Props, State> {
         let wordString = this.state.word
         
         if (wordString) {
-            let inflection = this.props.corpus.inflections.getInflection(
-                this.state.inflection)
+            this.props.corpus.inflections.generateInflectionForWord(wordString)
+                .catch((e) => {
+                    if (e instanceof NoSuchWordError) {
+                        alert('Unknown word.')
+                    }
+                    else {
+                        alert('Something went wrong: ' + e)
+                    }
+                })
+                .then((inflection) => {
+                    if (!inflection) {
+                        return
+                    }
+                    
+                    let word = new InflectableWord(inflection.stem, inflection.inflection)
 
-            let defaultEnding = inflection.getEnding(inflection.defaultForm)
-            let stem = wordString.substr(0, wordString.length - defaultEnding.suffix.length)
+                    this.props.corpus.words.addInflectableWord(word)
+                    this.props.corpus.facts.add(word)
 
-            let word = new InflectableWord(stem, inflection)
-                .setEnglish('n/a')
-
-            this.props.corpus.words.addInflectableWord(word)
-            this.props.corpus.facts.add(word)
-
-            this.props.tab.openTab(
-                <Fact fact={ word } corpus={ this.props.corpus } tab={ null }/>,
-                word.toString(),
-                word.getId()
-            )
-                            
-            this.props.onClose();
+                    this.props.tab.openTab(
+                        <Fact fact={ word } corpus={ this.props.corpus } tab={ null }/>,
+                        word.toString(),
+                        word.getId()
+                    )
+                                    
+                    this.props.onClose();
+                })
         }
-    }
-
-    updateInflections(word) {
-        let best = this.props.corpus.inflections.getBestInflection(word);
-        
-        this.setState({ inflection: best.id })
     }
     
     render() {
-        let possible = this.props.corpus.inflections.getPossibleInflections(this.state.word);
-
         return <div className='addWord'>
             <input type='text' 
                 ref={ (input) => this.word = input }
@@ -77,8 +78,6 @@ export default class AddWordComponent extends Component<Props, State> {
 
                         if (target instanceof HTMLInputElement) {                        
                             this.setState({ word: target.value })
-                            
-                            this.updateInflections(target.value)
                         }
                     }
                 }
@@ -87,23 +86,6 @@ export default class AddWordComponent extends Component<Props, State> {
                         this.submit() 
                     }}
                 } />                
-            <select
-                onChange={ (event) => {
-                        let target = event.target
-                        
-                        if (target instanceof HTMLSelectElement) {
-                            this.setState({ inflection: target.value })
-                        }
-                    }
-                }
-                value={ this.state.inflection }>
-                {
-                    possible.map((inflection) => 
-                        <option key={ inflection.id } value={ inflection.id }>{
-                            inflection.id + ' (' + inflection.pos + ')' }</option>
-                    )
-                }
-            </select>
             
             <div className='button' onClick={ () => this.submit() }>Add</div>
         </div>;

@@ -3,10 +3,15 @@
 
 import TabSetComponent from './TabSetComponent'
 import { Component, createElement } from 'react'
+
 import Corpus from '../shared/Corpus'
+import Word from '../shared/Word'
+
 import xr from 'xr'
+
 import getLanguage from './getLanguage'
 import listenForChanges from './listenForChanges'
+import generateInflectionForWord from './generateInflectionForWord'
 
 const lang = getLanguage()
 
@@ -69,6 +74,9 @@ export default class LoginContainer extends Component<Props, State> {
                 localStorage.removeItem(TOKEN_ITEM)
                 this.setState({ corpus: null })
             })
+
+            corpus.inflections.generateInflectionForWord = 
+                (word: string) => generateInflectionForWord(word, corpus, xrArgs)
 
             this.setState({ corpus: corpus })
         })

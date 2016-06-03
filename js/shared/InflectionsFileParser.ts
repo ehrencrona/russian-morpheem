@@ -25,10 +25,6 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
 
         let endingString = (elements[1] || '').trim()
 
-        if (endingString[0] == '-') {
-            endingString = endingString.substr(1)
-        }
-
         let form = elements[0].trim()
         
         if (form[form.length-1] == ':') {
@@ -39,6 +35,10 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
             inherits = endingString
         }
         else {
+            if (endingString[0] == '-') {
+                endingString = endingString.substr(1)
+            }
+
             if (lang && !formExists(lang, pos, form)) {
                 console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang}.`)
             }

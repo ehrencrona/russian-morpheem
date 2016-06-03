@@ -1,4 +1,4 @@
-"use strict";
+/// <reference path="../../typings/express.d.ts"/>
 
 import * as express from "express"
 import 'source-map-support/register'
@@ -12,7 +12,11 @@ import Word from '../shared/Word'
 import Corpus from '../shared/Corpus'
 
 import writeSentenceFile from '../backend/SentenceFileWriter'
+import writeInflectionsFile from '../backend/InflectionsFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
+import getInflections from './InflectionDatabase'
+import NoSuchWordError from '../shared/NoSuchWordError'
+import { generateInflection } from '../shared/FindBestInflection'
 
 var app = express()
 var bodyParser = require('body-parser')
@@ -30,6 +34,14 @@ if (process.env.ENV != 'dev') {
 
     app.use('/api', jwtCheck)
 }
+
+var redis = require('node-redis')
+
+let client = redis.createClient()
+
+client.on('error', function (err) {
+    console.log('Error ' + err);
+})
 
 app.use(bodyParser.json())
 
@@ -110,6 +122,60 @@ function registerRoutes(corpus: Corpus) {
         }
     })
 
+    app.post(`/api/${lang}/inflection-for/:word`, function(req, res) {
+        try {
+            let wordString = req.params['word']
+
+            if (!wordString) {
+                throw new Error('No word sent')
+            }
+
+            getInflections(wordString, client)
+            .catch((e) => {
+                if (e instanceof NoSuchWordError) {
+                    res.status(404).send({
+                        error: 'unknown'
+                    })
+                }
+                else {
+                    console.error(e.stack)
+                    res.status(500).send(e)
+                }
+            })
+            .then((gotInflections) => {
+                // caught above
+                if (!gotInflections) {
+                    return
+                }
+
+                let forms = gotInflections.forms
+
+                let generated = generateInflection(forms, gotInflections.pos, lang, corpus.inflections)
+                let inflection = generated.inflection
+
+                if (generated.isNew) {
+                    corpus.inflections.add(inflection)
+                }
+
+                res.status(200).send({
+                    isNew: generated.isNew,
+                    id: generated.inflection.id,
+                    inflection: generated.inflection.toJson(),
+                    stem: generated.stem    
+                })
+            })
+            .catch((e) => {
+                console.log(e.stack)
+                
+                res.status(500).send({})
+            })
+        }
+        catch (e) {
+            res.status(500).send(e)
+            console.error(e.stack)
+        }
+    })
+    
     app.post(`/api/${lang}/word/:word`, function(req, res) {
         try {
             let wordString = req.params['word']
@@ -143,8 +209,8 @@ function registerRoutes(corpus: Corpus) {
                 throw new Error('No stem sent')
             }
             
-            let inflectionId = req.params['inflection']
-            let inflection = corpus.inflections.get(req.body.inflection)
+            let inflectionId = req.body.inflection
+            let inflection = corpus.inflections.get(inflectionId)
 
             if (!inflection) {
                 throw new Error(`Could not find ${inflectionId}.`)
@@ -233,13 +299,21 @@ function registerRoutes(corpus: Corpus) {
         .catch((e) => console.error(e.stack))
     }
 
+    function saveInflections() {
+        lastSave = new Date().getTime()
+        
+        writeInflectionsFile(corpusDir + '/inflections.txt', corpus.inflections, lang)
+        .catch((e) => console.error(e.stack))
+    }
+
     corpus.sentences.onAdd = saveSentences
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
     corpus.words.onChangeInflection = saveFacts
-    
+    corpus.inflections.onAdd = saveInflections
+
     corpus.onChangeOnDisk = () => {
         let t = new Date().getTime()
         
