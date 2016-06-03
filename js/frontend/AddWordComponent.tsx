@@ -39,6 +39,18 @@ export default class AddWordComponent extends Component<Props, State> {
         let wordString = this.state.word
         
         if (wordString) {
+            let existingFact = this.props.corpus.facts.get(wordString)
+            
+            if (existingFact) {
+                this.props.tab.openTab(
+                    <Fact fact={ existingFact } corpus={ this.props.corpus } tab={ null }/>,
+                    existingFact.toString(),
+                    existingFact.getId()
+                )
+
+                return
+            }
+            
             this.props.corpus.inflections.generateInflectionForWord(wordString)
                 .catch((e) => {
                     if (e instanceof NoSuchWordError) {
