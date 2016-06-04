@@ -49,12 +49,9 @@ lineReader.on('line', (line) => {
 					forms: {}
 				}
 			}
-			else if (!(word.pos == 'v' && !word.forms['inf'])) {
-				
-				// store
-				
+			else if (!(word.pos == 'v' && !word.forms['inf'])) {				
 				let defaultForm = INFLECTION_FORMS['ru'][word.pos].allForms[0]
-				
+
 				let dictForm = word.forms[ defaultForm ]
 				
 				if (dictForm) {
@@ -75,9 +72,8 @@ lineReader.on('line', (line) => {
 				}
 			}
 		}
-
 	}
-	
+
 	let cols = line.split('\t')
 	
 	if (cols.length == 2) {
@@ -99,10 +95,12 @@ lineReader.on('line', (line) => {
 			
 			word.pos = pos
 
-			let formMapping = FORM_MAPPING[pos].find((mapping) => cols[1].indexOf(mapping[0]) >= 0)
+			if (!EXCLUDE.find((term) => cols[1].indexOf(term) >= 0)) {				
+				let formMapping = FORM_MAPPING[pos].find((mapping) => cols[1].indexOf(mapping[0]) >= 0)
 
-			if (formMapping) {
-				word.forms[formMapping[1]] = cols[0].toLowerCase()
+				if (formMapping) {
+					word.forms[formMapping[1]] = cols[0].toLowerCase()
+				}
 			}
 		}		
 	}
@@ -122,6 +120,11 @@ const POS_MAPPING = [
 	[ 'ADJF', 'adj' ],
 	[ 'VERB', 'v' ],
 	[ 'INFN', 'v' ]
+]
+
+const EXCLUDE = [
+	'V-oy',
+	'V-ey'
 ]
 
 const FORM_MAPPING = {
@@ -176,7 +179,7 @@ const FORM_MAPPING = {
 		['sing,datv', 'dat'],
 		['sing,accs', 'acc'],
 		['sing,ablt', 'instr'],
-		['sing,loct', 'prepl'],
+		['sing,loct', 'preppl'],
 		['plur,nomn', 'pl'],
 		['plur,gent', 'genpl'],
 		['plur,datv', 'datpl'],

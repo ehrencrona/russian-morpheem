@@ -9,6 +9,7 @@ interface BestInflection {
     stem: string,
     inflection: Inflection,
     wrongForms: string[],
+    missingForms: string[],
     rightForms: number
 }
 
@@ -45,7 +46,7 @@ export function findPotentialStems(words: { [form: string]: string }, inflection
 export function getWrongForms(stem, words: { [form: string]: string }, inflection: Inflection) {
     let inflectableWord = new InflectableWord(stem, inflection)
     let wrongForms = []
-    let right = 0, missing = 0
+    let right = 0, missingForms = []
 
     for (let form in words) {
         let word = words[form]
@@ -66,7 +67,7 @@ export function getWrongForms(stem, words: { [form: string]: string }, inflectio
         }
 
         if (!inflected) {
-            missing++
+            missingForms.push(form)
         }
         else if (word != inflected) {
             wrongForms.push(form)
@@ -76,7 +77,7 @@ export function getWrongForms(stem, words: { [form: string]: string }, inflectio
         }
     }
 
-    return { wrongForms: wrongForms, right: right, missing: missing }
+    return { wrongForms: wrongForms, right: right, missingForms: missingForms }
 }
 
 export default function findBestExistingInflection(words: { [form: string]: string }, pos, inflections: Inflections): BestInflection {
@@ -94,11 +95,12 @@ export default function findBestExistingInflection(words: { [form: string]: stri
                 let right = wf.right
                 let wrong = wrongForms.length
 
-                if (right >= wrong && (!best || wrong < best.wrongForms.length)) {
+                if (right >= wrong && (!best || right > best.rightForms)) {
                     best = {
                         stem: candidateStem,
                         inflection: inflection,
                         wrongForms: wrongForms,
+                        missingForms: wf.missingForms,
                         rightForms: right
                     }
                 }
@@ -191,7 +193,9 @@ function buildInflection(id, stem, forms: string[], words: { [form: string]: str
 export function generateInflection(words: { [form: string]: string }, pos: string, lang: string, inflections: Inflections): GeneratedInflection  {
     let best = findBestExistingInflection(words, pos, inflections)
 
-    if (best && best.wrongForms.length == 0) {
+console.log('best', best)
+
+    if (best && best.wrongForms.length == 0 && best.missingForms.length == 0) {
         return {
             inflection: best.inflection,
             stem: best.stem,
@@ -200,7 +204,6 @@ export function generateInflection(words: { [form: string]: string }, pos: strin
     }
     else if (best) {
         let defaultForm = best.inflection.defaultForm
-        let wrongForms = best.wrongForms
 
         let dictionaryForm = words[defaultForm]
 
@@ -208,7 +211,7 @@ export function generateInflection(words: { [form: string]: string }, pos: strin
             throw new Error(`The form "${ defaultForm }" was not specified.`)
         }
 
-        let inflection = buildInflection('-' + dictionaryForm, best.stem, best.wrongForms, words, defaultForm, pos)
+        let inflection = buildInflection('-' + dictionaryForm, best.stem, best.wrongForms.concat(best.missingForms), words, defaultForm, pos)
         inflection.inherit(best.inflection)
 
         return {

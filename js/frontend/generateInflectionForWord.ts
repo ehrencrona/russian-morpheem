@@ -21,7 +21,7 @@ interface Response {
 export default function generateInflectionForWord(word: string, corpus: Corpus, xrArgs): Promise<GeneratedInflection> {
     if (xrArgs.headers) {
         xrArgs.headers = Object.assign(xrArgs.headers, 
-            { 
+            {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             })

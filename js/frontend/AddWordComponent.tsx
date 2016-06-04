@@ -1,10 +1,12 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import Facts from './FactsComponent';
-import Fact from './FactComponent';
+import FactsComponent from './FactsComponent';
+import FactComponent from './FactComponent';
 import Tab from './Tab';
+import Fact from '../shared/Fact';
 import Corpus from '../shared/Corpus';
+import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import NoSuchWordError from '../shared/NoSuchWordError'
@@ -35,26 +37,36 @@ export default class AddWordComponent extends Component<Props, State> {
         this.word.focus();
     }
     
+    openFact(word: Fact) {
+        this.props.tab.openTab(
+            <FactComponent fact={ word } corpus={ this.props.corpus } tab={ null }/>,
+            word.toString(),
+            word.getId()
+        )
+    }
+    
     submit() {
+        let corpus = this.props.corpus
         let wordString = this.state.word
         
         if (wordString) {
-            let existingFact = this.props.corpus.facts.get(wordString)
+            let existingFact = corpus.facts.get(wordString)
             
             if (existingFact) {
-                this.props.tab.openTab(
-                    <Fact fact={ existingFact } corpus={ this.props.corpus } tab={ null }/>,
-                    existingFact.toString(),
-                    existingFact.getId()
-                )
+                this.openFact(existingFact)
 
                 return
             }
             
-            this.props.corpus.inflections.generateInflectionForWord(wordString)
+            corpus.inflections.generateInflectionForWord(wordString)
                 .catch((e) => {
                     if (e instanceof NoSuchWordError) {
-                        alert('Unknown word.')
+                        let word = new Word(wordString)
+                        
+                        corpus.words.addWord(word)
+                        corpus.facts.add(word)
+
+                        this.openFact(word)
                     }
                     else {
                         alert('Something went wrong: ' + e)
@@ -67,14 +79,10 @@ export default class AddWordComponent extends Component<Props, State> {
                     
                     let word = new InflectableWord(inflection.stem, inflection.inflection)
 
-                    this.props.corpus.words.addInflectableWord(word)
-                    this.props.corpus.facts.add(word)
+                    corpus.words.addInflectableWord(word)
+                    corpus.facts.add(word)
 
-                    this.props.tab.openTab(
-                        <Fact fact={ word } corpus={ this.props.corpus } tab={ null }/>,
-                        word.toString(),
-                        word.getId()
-                    )
+                    this.openFact(word)
                                     
                     this.props.onClose();
                 })
@@ -97,7 +105,7 @@ export default class AddWordComponent extends Component<Props, State> {
                     if (event.charCode == 13) {
                         this.submit() 
                     }}
-                } />                
+                } />
             
             <div className='button' onClick={ () => this.submit() }>Add</div>
         </div>;
