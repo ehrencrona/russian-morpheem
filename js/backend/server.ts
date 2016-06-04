@@ -321,14 +321,16 @@ function registerRoutes(corpus: Corpus) {
             return
         }
 
-        readCorpus(lang, false).then((newCorpus: Corpus) => {
-            console.log(`Reloaded corpus ${lang}.`);
+        setTimeout(() => {            
+            readCorpus(lang, false).then((newCorpus: Corpus) => {
+                console.log(`Reloaded corpus ${lang}.`);
 
-            corpus.clone(newCorpus)
-        })
-        .catch((e) => {
-            console.log(e)
-        })
+                corpus.clone(newCorpus)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+        }, 200)
     }
 }
 

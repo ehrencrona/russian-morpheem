@@ -73,6 +73,8 @@ export default class Inflections {
         this.inflections.push(inflection)
         
         if (this.onAdd) {
+            console.log('Added inflection ' + inflection.id)
+            
             this.onAdd(inflection)
         }
     }

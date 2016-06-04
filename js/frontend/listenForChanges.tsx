@@ -30,7 +30,7 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
     }
 
     corpus.sentences.onDelete = (sentence: Sentence) => {
-        xr.del(`/api/${lang}/sentence/` + sentence.getId(), {}, xrArgs)        
+        xr.del(`/api/${lang}/sentence/` + sentence.getId(), xrArgs)        
             .catch(handleException)
     }
 

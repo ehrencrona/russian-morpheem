@@ -193,8 +193,6 @@ function buildInflection(id, stem, forms: string[], words: { [form: string]: str
 export function generateInflection(words: { [form: string]: string }, pos: string, lang: string, inflections: Inflections): GeneratedInflection  {
     let best = findBestExistingInflection(words, pos, inflections)
 
-console.log('best', best)
-
     if (best && best.wrongForms.length == 0 && best.missingForms.length == 0) {
         return {
             inflection: best.inflection,
