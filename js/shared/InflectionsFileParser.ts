@@ -4,6 +4,7 @@ import Inflection from './Inflection'
 import Inflections from './Inflections'
 import Ending from './Ending'
 import { formExists } from '../shared/InflectionForms'
+import INFLECTION_FORMS from '../shared/InflectionForms'
 
 interface Endings {
     default: string, 
@@ -100,6 +101,12 @@ export default function parseInflectionsFile(data, lang?: string) {
         if (m) {
             id = m[1]
             pos = m[2]
+
+            let forms = INFLECTION_FORMS[lang][pos]
+            
+            if (!forms) {
+                throw new Error(`Unknown PoS ${pos} in language ${lang} for inflection ${id}.`)
+            }
         }
         else {
             id = line.substr(0, i)

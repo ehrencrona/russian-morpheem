@@ -15,7 +15,7 @@ export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
 } 
 
-export function watchForChanges(corpus: Corpus) {
+export function watchForChangesOnDisk(corpus: Corpus) {
     let corpusDir = getCorpusDir(corpus.lang)
     let lastChange
 
@@ -56,7 +56,7 @@ export default function readCorpus(lang, doWatch) {
     })
     .then((corpus: Corpus) => {
         if (doWatch) {
-            watchForChanges(corpus)
+            watchForChangesOnDisk(corpus)
         }
 
         return corpus

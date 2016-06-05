@@ -1,7 +1,7 @@
 // https://github.com/mranney/node_redis
 
 declare module 'node-redis' {
-	export function createClient(port_arg, host_arg, options: any) : RedisClient;
+	export function createClient(port_arg?, host_arg?, options?: any) : RedisClient;
 	export function print(err: Error, reply: any);
 	export var debug_mode: boolean;
 	
@@ -17,6 +17,7 @@ declare module 'node-redis' {
 	
 		end();
 
+		on(even: string, callback: (param: any) => void)
 		// Connection (http://redis.io/commands#connection)
 		auth(password: string, callback?: (err: Error, reply: any) => void);
 		ping(callback?: (err: Error, reply: number) => void);
