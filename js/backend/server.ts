@@ -12,7 +12,7 @@ import Word from '../shared/Word'
 import Corpus from '../shared/Corpus'
 
 import NoSuchWordError from '../shared/NoSuchWordError'
-import { generateInflection } from '../shared/FindBestInflection'
+import { generateInflection } from '../shared/GenerateInflection'
 
 import addFact from './route/addFact';
 import setFact from './route/setFact';

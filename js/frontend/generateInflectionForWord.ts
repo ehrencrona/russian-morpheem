@@ -12,10 +12,14 @@ let handleException = (e) => {
 }
 
 interface Response {
+    inflected: boolean
     isNew: boolean,
     id: string,
     inflection: any,
     stem: string
+}
+
+export class NotInflectedError {    
 }
 
 export default function generateInflectionForWord(word: string, corpus: Corpus, xrArgs): Promise<GeneratedInflection> {
@@ -43,8 +47,12 @@ export default function generateInflectionForWord(word: string, corpus: Corpus, 
             if (!unparsedResponse) {
                 return
             }
-            
+
             let response: Response = JSON.parse(unparsedResponse.response)
+            
+            if (!response.inflected) {
+                throw new NotInflectedError()
+            }
             
             if (response.isNew) {
                 let inflection = Inflection.fromJson(response.inflection, corpus.inflections)

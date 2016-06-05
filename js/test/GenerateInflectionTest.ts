@@ -2,14 +2,14 @@
 import Inflections from '../shared/Inflections';
 import Inflection from '../shared/Inflection';
 
-import findBestExistingInflection from '../shared/FindBestInflection';
-import { generateEnding, findStem, getWrongForms } from '../shared/FindBestInflection';
+import findBestExistingInflection from '../shared/GenerateInflection';
+import { generateEnding, findStem, getWrongForms } from '../shared/GenerateInflection';
 
 import { parseEndings } from '../shared/InflectionsFileParser'
 
 import { expect } from 'chai';
 
-describe('FindBestInflection', function() {
+describe('GenerateInflection', function() {
     it('handles simple cases', function () {
         let inflections = new Inflections([            
             new Inflection('regular', 'inf', 'ru', 
