@@ -195,7 +195,9 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
             fact.line = lineIndex
         }
 
-        facts.add(fact)
+        if (fact) {
+            facts.add(fact)
+        }
     }
 
     return facts
