@@ -170,21 +170,22 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 
                 if (!tag) {
                     fact = grammars.get(rightSide.trim())
+
+                    if (!fact) {
+                        console.warn('Unknown grammar "' + rightSide.trim() + '"'
+                            + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
+                    }
                 }
                 else if (tag == 'tag') {
-                    facts.tag(fact, text)
+                    if (fact) {
+                        facts.tag(fact, text)
+                    }
                 }
                 else {
                     throw new Error(`Unrecognized attribute "${ tag }"`
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
             })
-
-            if (!fact) {
-                console.warn('Unknown grammar "' + rightSide.trim() + '"'
-                    + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
-                continue
-            }
         }
         else {
             fact = parseLeftSideOfDefinition(leftSide)
