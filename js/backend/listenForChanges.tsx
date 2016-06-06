@@ -8,6 +8,8 @@ import writeSentenceFile from '../backend/SentenceFileWriter'
 import writeInflectionsFile from '../backend/InflectionsFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
 
+import notifySlack from './notifySlack'
+
 let lastSave
 
 export default function listenForChanges(corpus: Corpus) {    
@@ -36,7 +38,20 @@ export default function listenForChanges(corpus: Corpus) {
     let corpusDir = getCorpusDir(corpus.lang)
     let lang = corpus.lang
 
-    corpus.sentences.onAdd = saveSentences
+    corpus.sentences.onAdd = (sentence) => {
+        if (process.env.ENV != 'dev') {
+            setTimeout(() => {
+                let editedSentences = corpus.sentences.get(sentence.id)
+                
+                if (editedSentences) {
+                    notifySlack(editedSentences)
+                }
+            }, 180000)
+        }
+
+        saveSentences()
+    }
+    
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts

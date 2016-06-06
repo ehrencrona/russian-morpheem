@@ -157,8 +157,9 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
             fact = grammars.get(rightSide.trim())
 
             if (!fact) {
-                throw new Error('Unknown grammar "' + rightSide.trim() + '"'
+                console.warn('Unknown grammar "' + rightSide.trim() + '"'
                     + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
+                continue
             }
         }
         else {
