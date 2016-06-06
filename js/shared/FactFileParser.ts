@@ -169,10 +169,10 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 let text = pair[1]
                 
                 if (!tag) {
-                    fact = grammars.get(rightSide.trim())
+                    fact = grammars.get(text)
 
                     if (!fact) {
-                        console.warn('Unknown grammar "' + rightSide.trim() + '"'
+                        console.warn('Unknown grammar "' + text + '"'
                             + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                     }
                 }

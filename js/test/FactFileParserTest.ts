@@ -52,6 +52,19 @@ describe('FactFileParser', function() {
             expect(fact.id).to.equal('inflection@nom')
         }
     })
+    
+    it('parses tagged grammar facts', function () {
+        var facts = parser('grammar:inflection@nom, tag: foo', inflections, 'ru')
+        let fact = facts.facts[0]
+
+        expect(fact).to.be.instanceOf(Grammar)
+
+        if (fact instanceof Grammar) {
+            expect(fact.id).to.equal('inflection@nom')
+        }
+        
+        expect(facts.getTagsOfFact(fact)).to.deep.equal(['foo'])
+    })
 
     it('handles classifiers', function () {
         var facts = parser('word[type]:meaning', inflections, 'ru')
