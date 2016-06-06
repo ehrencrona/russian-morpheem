@@ -12,7 +12,7 @@ export default class Sentences {
     onAdd: (sentence: Sentence) => void = null
     onChange: (sentence: Sentence) => void = null
     onDelete: (sentence: Sentence) => void = null
-
+    
     nextSentenceId: number = 0
 
     constructor() {
@@ -108,7 +108,7 @@ export default class Sentences {
             sentence.id = changedId
         }
     }
-    
+
     store(sentence: Sentence) {
         this.updateChangedId(sentence)
 

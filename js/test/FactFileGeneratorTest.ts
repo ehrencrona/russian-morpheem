@@ -22,7 +22,7 @@ describe('FactFileParser', function() {
     function test(str) {
         var facts = parser(str, inflections, 'ru')
 
-        expect(factToString(facts.facts[0])).to.equal(str)
+        expect(factToString(facts.facts[0], facts)).to.equal(str)
     }
 
     it('parses word and meaning', function () {

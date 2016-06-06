@@ -6,20 +6,23 @@ import InflectionFact from './InflectionFact';
 import InflectableWord from './InflectableWord';
 import Word from './Word';
 
-export function factToString(fact: Fact) {
+export function factToString(fact: Fact, facts: Facts) {
+    let tags = facts.getTagsOfFact(fact).map((tag) => ', tag: ' + tag).join('')
+    
     if (fact instanceof InflectionFact) {
-        return 'grammar: ' + fact.getId()
+        return 'grammar: ' + fact.getId() + tags
     }
     else if (fact instanceof InflectableWord) {
         let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
         
         return fact.stem + '--' + (ending.subtractFromStem ? '<' : '') + ending.suffix + 
-            ': ' + fact.en + ', inflect: ' + fact.inflection.getId()
+            ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags
     }
     else if (fact instanceof Word) {
         return fact.jp +
             (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
-            (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '')            
+            (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '') + 
+            tags
     }
     else if (!fact) {
         return ''
@@ -30,5 +33,5 @@ export function factToString(fact: Fact) {
 }
 
 export default function factsToString(facts: Facts) {
-    return facts.facts.map(factToString).join('\n')
+    return facts.facts.map((fact) => factToString(fact, facts)).join('\n')
 }

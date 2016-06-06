@@ -11,6 +11,7 @@ import SentenceComponent from './SentenceComponent'
 import InflectionsComponent from './InflectionsComponent'
 import ChangeInflectionComponent from './ChangeInflectionComponent'
 import MoveFactButton from './MoveFactButtonComponent'
+import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
 
@@ -67,6 +68,8 @@ export default class WordFactComponent extends Component<Props, State> {
                 <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+
+                <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
             <div>                            
                 <ChangeInflectionComponent

@@ -15,8 +15,8 @@ export function sentenceToString(sentence: Sentence, words: Words) {
     
     if (sentence.author) {
         tags.push('author: ' + sentence.author)
-    } 
-
+    }
+ 
     if (sentence.required) {        
         sentence.required.forEach((fact) => 
             tags.push('requires: ' + fact.getId()))

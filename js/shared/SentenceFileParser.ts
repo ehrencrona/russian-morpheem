@@ -106,7 +106,7 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
         if (name == 'requires') {
             sentence.requiresFact(facts.get(value))
         }
-        
+
         if (name == 'author') {
             sentence.author = value
         }

@@ -23,7 +23,7 @@ export default function listenForChanges(corpus: Corpus) {
 
     function saveFacts() {
         lastSave = new Date().getTime()
-        
+
         writeFactFile(corpusDir + '/facts.txt', corpus.facts)
         .catch((e) => console.error(e.stack))
     }
@@ -56,6 +56,8 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
+    corpus.facts.onTag = saveFacts
+    corpus.facts.onUntag = saveFacts
     corpus.words.onChangeInflection = saveFacts
     corpus.inflections.onAdd = saveInflections
 

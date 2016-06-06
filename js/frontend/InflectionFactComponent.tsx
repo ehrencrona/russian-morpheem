@@ -9,6 +9,7 @@ import InflectionFact from '../shared/InflectionFact'
 import Tab from './Tab'
 import InflectionsComponent from './InflectionsComponent'
 import MoveFactButton from './MoveFactButtonComponent'
+import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
 
@@ -93,6 +94,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 { tabButton('inflection', 'Inflection') }
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
         
             { tab }

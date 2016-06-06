@@ -2,6 +2,7 @@
 
 import Word from './Word';
 import Fact from './Fact';
+import Words from './Words';
 import UnstudiedWord from './UnstudiedWord';
 
 /**
@@ -22,7 +23,8 @@ export default class Sentence {
             id: json[0],
             words: json[1],
             english: json[2],
-            requires: json[3]
+            requires: json[3],
+            tags: json[4]
         }
 
         if (data.english == 'undefined') {
@@ -116,7 +118,11 @@ export default class Sentence {
         var res = ''
 
         for (let word of this.words) {
-            res += word.toString() + ' '
+            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
+                res += ' '
+            }
+
+            res += word.toString()
         }
 
         return res

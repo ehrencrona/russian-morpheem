@@ -23,6 +23,7 @@ import addInflectedWord from './route/addInflectedWord';
 import addSentence from './route/addSentence';
 import deleteSentence from './route/deleteSentence';
 import setSentence from './route/setSentence';
+import { tag, untag } from './route/tag';
 
 var app = express()
 var bodyParser = require('body-parser')
@@ -77,6 +78,10 @@ function registerRoutes(corpus: Corpus) {
     app.delete(`/api/${lang}/sentence/:id`, deleteSentence(corpus))
 
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
+
+    app.post(`/api/${lang}/fact/:id/tag/:tag`, tag(corpus))
+
+    app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
 }
 
 Promise.all([

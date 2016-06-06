@@ -26,10 +26,12 @@ const RECENT = 'recent'
 const ALL = 'all'
 const MISSING = 'last' 
 const SEARCH = 'search'
+const TAGS = 'tags'
 
 interface State {
     add?: boolean,
-    list?: string
+    list?: string,
+    tag?: string
 }
 
 let React = { createElement: createElement }
@@ -77,6 +79,9 @@ export default class FactsComponent extends Component<Props, State> {
             return { fact: fact, index: index } 
         })
 
+        let lastTag        
+        let allFacts = this.props.corpus.facts.getAllFacts()
+
         if (this.state.list == MISSING) {
             factIndices = factIndices.filter((factIndex) => {
                 let indexEntry: FactSentenceIndex = indexOfFacts[factIndex.fact.getId()] || 
@@ -91,6 +96,20 @@ export default class FactsComponent extends Component<Props, State> {
             factIndices = factIndices
                 .filter((factIndex) =>
                     lastIds.indexOf(factIndex.fact.getId()) >= 0)
+        }
+        else if (this.state.list == TAGS) {
+            lastTag = this.state.tag || localStorage.getItem('lastTag') || allFacts[0]
+
+            if (lastTag) {                
+                let factIdSet = this.props.corpus.facts.getFactIdsWithTag(lastTag)
+                
+                factIndices = factIndices
+                    .filter((factIndex) =>
+                        factIdSet.has(factIndex.fact.getId()))
+            }
+            else {
+                factIndices = []
+            }
         }
 
         let filterButton = (id, name) =>
@@ -108,6 +127,7 @@ export default class FactsComponent extends Component<Props, State> {
                     { filterButton(ALL, 'All') }
                     { filterButton(RECENT, 'Recent') }
                     { filterButton(SEARCH, 'Search') }
+                    { filterButton(TAGS, 'Tags') }
                 </div>
 
                 {(
@@ -119,6 +139,28 @@ export default class FactsComponent extends Component<Props, State> {
                     : 
                     <div/>
                 )}
+
+                { this.state.list == TAGS ? 
+                    
+                    <select value={ lastTag } onChange={ 
+                        (element: Event) => 
+                        {
+                            let tag = (element.target as HTMLSelectElement).value
+                            this.setState({ tag: tag })
+                            localStorage.setItem('lastTag', tag)
+                        } 
+                    }>
+                    { [                      
+                        allFacts.map((tag) =>
+                            <option key={ tag } value={ tag }>{ tag }</option>  
+                        )
+                    ] }
+                    </select>
+            
+                    :
+                    
+                    []
+                }
 
                 { this.state.list == SEARCH ?
 

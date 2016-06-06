@@ -38,7 +38,6 @@ export default class MoveFactButtonComponent extends Component<Props, State> {
         (this.refs['position'] as HTMLInputElement).value = 
             (this.props.corpus.facts.indexOf(this.props.fact) + 1).toString();
 
-
         this.forceUpdate()
     }
 

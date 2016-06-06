@@ -180,13 +180,17 @@ input[type=text], input[type=number] {
 .buttonBar {
   display: flex; }
   .buttonBar > div {
-    display: flex; }
+    display: flex;
+    flex-direction: row;
+    align-items: center; }
   .buttonBar .selected {
     font-weight: bold; }
   .buttonBar input {
-    margin: 8px 0;
     width: 48px;
     text-align: right; }
+  .buttonBar select {
+    font-size: inherit;
+    font-family: inherit; }
   .buttonBar .separator {
     margin-right: 8px; }
 

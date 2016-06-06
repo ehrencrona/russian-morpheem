@@ -275,6 +275,8 @@ input[type=text], input[type=number] {
 
     > div {
         display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
     .selected {
@@ -282,11 +284,15 @@ input[type=text], input[type=number] {
     }
     
     input {
-        margin: 2 * $unit 0;
         width: 12 * $unit;
         text-align: right;
     }
     
+    select {
+        font-size: inherit;
+        font-family: inherit;
+    }
+
     .separator {
         margin-right: 2 * $unit;
     }

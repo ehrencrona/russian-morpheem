@@ -41,7 +41,17 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
             })
             .catch(handleException)
     }
-    
+
+    corpus.facts.onTag = (fact: Fact, tag: string) => {
+        xr.post(`/api/${lang}/fact/${fact.getId()}/tag/${tag}`, {}, xrArgs)
+            .catch(handleException)
+    }
+
+    corpus.facts.onUntag = (fact: Fact, tag: string) => {
+        xr.del(`/api/${lang}/fact/${fact.getId()}/tag/${tag}`, {}, xrArgs)
+            .catch(handleException)
+    }
+
     corpus.words.onAddWord = (word: Word) => {
         xr.post(`/api/${lang}/word/` + word.jp, {}, xrArgs)
             .catch(handleException)

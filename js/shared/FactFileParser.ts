@@ -66,23 +66,30 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
         }
     }
 
-    function parseRightSideOfDefinition(rightSide, word: Word): Fact {
+    function splitRightSide(rightSide) {
         let elements = rightSide.split(',').map((s) => s.trim())
-        let fact: Fact = word
 
-        for (let element of elements) {
+        return elements.map((element) => {
             let split = element.split(':').map((s) => s.trim())
             let tag
             let text
 
             if (!split[1]) {
                 // form undefined means this is the english translation
-                text = split[0]
+                return [ null, split[0] ]
             }
             else {
-                tag = split[0]
-                text = split[1]
+                return [ split[0], split[1] ]
             }
+        })
+    }
+
+    function parseRightSideOfDefinition(rightSide, word: Word): Fact {
+        let fact: Fact = word
+
+        splitRightSide(rightSide).forEach((pair) => {
+            let tag = pair[0]
+            let text = pair[1]
 
             if (tag == 'inflect') {
                 let inflection = inflections.getInflection(text)
@@ -125,10 +132,13 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
 
                 word.requiresFact(requiredFact)
             }
+            else if (tag == 'tag') {
+                facts.tag(fact, text)
+            }
             else {
                 word.setEnglish(text, tag)
             }
-        }
+        })
         
         return fact
     }
@@ -154,7 +164,21 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
         let fact;
 
         if (leftSide == 'grammar') {
-            fact = grammars.get(rightSide.trim())
+            splitRightSide(rightSide.trim()).forEach((pair) => {
+                let tag = pair[0]
+                let text = pair[1]
+                
+                if (!tag) {
+                    fact = grammars.get(rightSide.trim())
+                }
+                else if (tag == 'tag') {
+                    facts.tag(fact, text)
+                }
+                else {
+                    throw new Error(`Unrecognized attribute "${ tag }"`
+                        + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
+                }
+            })
 
             if (!fact) {
                 console.warn('Unknown grammar "' + rightSide.trim() + '"'
@@ -169,6 +193,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
 
             fact.line = lineIndex
         }
+
         facts.add(fact)
     }
 
