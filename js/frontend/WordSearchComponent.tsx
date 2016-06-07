@@ -70,23 +70,21 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
     
     findMatchingInflections(word: InflectableWord, filter: string): Suggestion[] {
-        let i = Math.min(filter.length, word.stem.length)
-
         let exactMatches: UnstudiedWord[] = []
         let prefixMatch: InflectedWord
         let prefixIsDefault
 
-        if (word.stem.substr(0, i) == filter.substr(0, i)) {
-            word.visitAllInflections((inflected: InflectedWord) => {
-                if (inflected.toString() == filter) {
-                    exactMatches.push(inflected)
-                }
-                else if (inflected.toString().substr(0, filter.length) == filter && !prefixIsDefault) {
-                    prefixMatch = inflected
-                    prefixIsDefault = inflected.form == word.inflection.defaultForm
-                }
-            }, false)
-        }
+        let i = Math.min(filter.length, word.stem.length)
+
+        word.visitAllInflections((inflected: InflectedWord) => {
+            if (inflected.toString() == filter) {
+                exactMatches.push(inflected)
+            }
+            else if (inflected.toString().substr(0, filter.length) == filter && !prefixIsDefault) {
+                prefixMatch = inflected
+                prefixIsDefault = inflected.form == word.inflection.defaultForm
+            }
+        }, false)
 
         if (!exactMatches.length && prefixMatch) {
             if (prefixIsDefault) {

@@ -46,7 +46,7 @@ export default class Facts {
     
     add(fact: Fact) {
         if (this.factsById[fact.getId()]) {
-            console.error('Duplicate fact', fact, 'and', this.factsById[fact.getId()])
+            console.error('Duplicate fact ' + fact.getId())
             return
         }
 
