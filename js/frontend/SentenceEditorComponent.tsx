@@ -34,7 +34,8 @@ interface ElementProps {
 }
 
 interface WordProps extends ElementProps {
-    word: Word
+    word: Word,
+    corpus: Corpus
 }
 
 interface WordState {
@@ -51,14 +52,19 @@ class WordComponent extends Component<WordProps, WordState> {
     }
     
     render() {
-        let form, word = this.props.word
+        let word = this.props.word
+        let words = this.props.corpus.words
+
+        let form = <div/>
         
-        if (word instanceof InflectedWord) {
-            form = <div className='form'>{ word.form }</div>     
+        if (words.ambiguousForms[word.jp]) {
+            if (word instanceof InflectedWord) {
+                form = <div className='form'>{ word.form }</div>
+            }
+            else {
+                form = <div className='form'>uninfl.</div>
+            } 
         }
-        else {
-            form = []
-        } 
 
         return <div draggable='true' className={'word' + 
             (this.props.selected ? ' selected' : '') + 
@@ -232,6 +238,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                     <WordComponent 
                         key={ index } 
                         word={ word }
+                        corpus={ this.props.corpus }
                         selected={ index == this.state.selectedIndex && !this.state.insertMode }
                         onClick={ onClick }
                         onDragStart={ (e) => { 
