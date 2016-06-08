@@ -16,7 +16,7 @@ export default function ensureEachSentenceHasAStatus(sentence: Sentence) {
 
     })
     .catch((e) => {
-        console.log(e)
+        console.log(e.stack)
     })
 
 }

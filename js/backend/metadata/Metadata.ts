@@ -51,8 +51,10 @@ export function getStatus(sentenceId: number): Promise<SentenceStatus> {
         db.collection(COLLECTION_METADATA)
             .findOne( { "sentence": sentenceId } )
             .then((doc) => {
-
-                delete doc._id
+                if (doc) {
+                    delete doc._id
+                }
+                
                 resolve(doc as SentenceStatus)
             })
             .catch((e) => reject(e))
