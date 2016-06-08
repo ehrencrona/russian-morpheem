@@ -12,6 +12,7 @@ import xr from 'xr'
 import getLanguage from './getLanguage'
 import listenForChanges from './listenForChanges'
 import generateInflectionForWord from './generateInflectionForWord'
+import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
 
 const lang = getLanguage()
 
@@ -77,6 +78,8 @@ export default class LoginContainer extends Component<Props, State> {
 
             corpus.inflections.generateInflectionForWord = 
                 (word: string) => generateInflectionForWord(word, corpus, xrArgs)
+
+            corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
 
             this.setState({ corpus: corpus })
         })

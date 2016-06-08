@@ -23,6 +23,7 @@ import addInflectedWord from './route/addInflectedWord';
 import addSentence from './route/addSentence';
 import deleteSentence from './route/deleteSentence';
 import setSentence from './route/setSentence';
+import getEvents from './route/getEvents';
 import { tag, untag } from './route/tag';
 
 var app = express()
@@ -78,6 +79,8 @@ function registerRoutes(corpus: Corpus) {
     app.delete(`/api/${lang}/sentence/:id`, deleteSentence(corpus))
 
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
+
+    app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
 
     app.post(`/api/${lang}/fact/:id/tag/:tag`, tag(corpus))
 

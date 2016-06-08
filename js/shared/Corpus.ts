@@ -1,10 +1,12 @@
-import Facts from '../shared/Facts';
-import Words from '../shared/Words';
-import Sentences from '../shared/Sentences';
-import Inflections from '../shared/Inflections';
+import Facts from '../shared/Facts'
+import Words from '../shared/Words'
+import Sentences from '../shared/Sentences'
+import Inflections from '../shared/Inflections'
+import { SentenceHistory } from '../shared/metadata/SentenceHistory'
 
 export default class Corpus {
     onChangeOnDisk: () => any
+    sentenceHistory: SentenceHistory
     
     static createEmpty(lang: string) {
         let facts = new Facts()

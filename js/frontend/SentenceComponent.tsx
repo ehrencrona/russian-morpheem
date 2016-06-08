@@ -12,6 +12,7 @@ import FactNameComponent from './FactNameComponent'
 import WordSearchComponent from './WordSearchComponent'
 import FactComponent from './FactComponent'
 import SentenceEditorComponent from './SentenceEditorComponent'
+import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
 
 import { Component, createElement } from 'react'
 
@@ -149,7 +150,12 @@ export default class SentenceComponent extends Component<Props, State> {
             {
                 sortedFacts.map(factIndexToElement)
             }
-            </ul> 
+            </ul>
+
+            <SentenceHistoryComponent 
+                corpus={ this.props.corpus }
+                sentence={ this.props.sentence }
+                />
         </div>)
     }
 }

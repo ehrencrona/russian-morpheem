@@ -3,11 +3,13 @@ import * as express from 'express'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import getAuthor from '../getAuthor'
+import { recordEdit } from '../metadata/Metadata'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+
             sentence.author = getAuthor(req)
 
             if (sentence.id != req.params['id']) {
@@ -17,6 +19,8 @@ export default function(corpus: Corpus) {
             corpus.sentences.store(sentence)
 
             console.log('Stored ' + sentence + ' (' + sentence.id + ')')
+
+            recordEdit(sentence, sentence.author)
 
             res.status(200).send({})
         }
