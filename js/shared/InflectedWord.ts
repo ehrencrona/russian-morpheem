@@ -5,6 +5,7 @@ import UnstudiedWord from './UnstudiedWord'
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 import InflectableWord from './InflectableWord'
+import Words from './Words'
 
 export default class InflectedWord extends Word {
     /**
@@ -27,6 +28,10 @@ export default class InflectedWord extends Word {
         visitor(this.word.inflection.getFact(this.form))
 
         this.word.visitFacts(visitor)
+    }
+
+    toUnambiguousString(words: Words) {
+        return this.jp + (words.ambiguousForms[this.jp] ? ' [' + this.form + ']' : '')
     }
 
     getId() {

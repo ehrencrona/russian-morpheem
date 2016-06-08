@@ -115,9 +115,6 @@ Promise.all([
     corpora.forEach(listenForChanges)
     corpora.forEach(registerRoutes)
 
-    corpora.forEach((corpus) => 
-        corpus.sentences.sentences.forEach(ensureEachSentenceHasAStatus))
-
     app.listen(port)
 }).catch((e) => {
     console.error(e)

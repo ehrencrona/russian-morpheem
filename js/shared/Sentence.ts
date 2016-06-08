@@ -1,9 +1,10 @@
 "use strict";
 
-import Word from './Word';
-import Fact from './Fact';
-import Words from './Words';
-import UnstudiedWord from './UnstudiedWord';
+import Word from './Word'
+import Fact from './Fact'
+import Words from './Words'
+import UnstudiedWord from './UnstudiedWord'
+import InflectedWord from './InflectedWord'
 
 /**
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
@@ -123,6 +124,25 @@ export default class Sentence {
             }
 
             res += word.toString()
+        }
+
+        return res
+    }
+
+    toUnambiguousString(words: Words) {
+        var res = ''
+
+        for (let word of this.words) {
+            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
+                res += ' '
+            }
+
+            if (word instanceof InflectedWord) {
+                res += word.toUnambiguousString(words)                
+            }
+            else {
+                res += word.toString()
+            }
         }
 
         return res
