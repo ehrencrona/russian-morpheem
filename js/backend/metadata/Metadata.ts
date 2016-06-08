@@ -94,7 +94,7 @@ export function recordEvent(type: string, sentence: Sentence, author: string) {
     let event = {
         sentence: sentence.id,
         date: new Date(),
-        event: 'edit',
+        event: type,
         author: author,
         text: sentence.toString()
     }
