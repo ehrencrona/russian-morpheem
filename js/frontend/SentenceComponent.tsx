@@ -13,6 +13,7 @@ import WordSearchComponent from './WordSearchComponent'
 import FactComponent from './FactComponent'
 import SentenceEditorComponent from './SentenceEditorComponent'
 import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
+import SentenceStatusComponent from './metadata/SentenceStatusComponent'
 
 import { Component, createElement } from 'react'
 
@@ -77,8 +78,14 @@ export default class SentenceComponent extends Component<Props, State> {
         for (let id in factsById) {
             let fact = factsById[id]
 
+            let index = this.props.corpus.facts.indexOf(fact)
+
+            if (index < 0) {
+                index = 99999
+            }
+
             sortedFacts.push({
-                index: this.props.corpus.facts.indexOf(fact),
+                index: index,
                 fact: fact
             })
         }
@@ -151,6 +158,11 @@ export default class SentenceComponent extends Component<Props, State> {
                 sortedFacts.map(factIndexToElement)
             }
             </ul>
+
+            <SentenceStatusComponent
+                corpus={ this.props.corpus }
+                sentence={ this.props.sentence }
+                />
 
             <SentenceHistoryComponent 
                 corpus={ this.props.corpus }

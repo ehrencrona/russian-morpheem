@@ -38,7 +38,7 @@ export default class TabSetComponent extends Component<Props, State> {
                 new Tab('Facts', 'facts',
                     <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
                 new Tab('Stats', 'stats',
-                    <StatsComponent corpus={ this.props.corpus }></StatsComponent>, this)
+                    <StatsComponent corpus={ this.props.corpus } tab={ null } ></StatsComponent>, this)
             ],
             first: 0
         } 

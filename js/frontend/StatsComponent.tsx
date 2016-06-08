@@ -4,11 +4,15 @@ import {Component,createElement} from 'react'
 import Corpus from '../shared/Corpus'
 import Word from '../shared/Word'
 import InflectableWord from '../shared/InflectableWord'
+import Tab from './Tab'
+
+import PendingSentencesComponent from './metadata/PendingSentencesComponent'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
 interface Props {
     corpus: Corpus,
+    tab: Tab
 }
 
 interface State {
@@ -53,6 +57,10 @@ export default class StatsComponent extends Component<Props, State> {
             <li> 
                 <b>{ factsWithEnoughSentences }</b> facts (<b>{ wordsWithEnoughSentences }</b> words) have enough sentences
             </li>
+
+            <PendingSentencesComponent
+                corpus={ this.props.corpus } 
+                tab={ this.props.tab } />
         </ul>
     }        
 }

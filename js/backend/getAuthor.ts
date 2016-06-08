@@ -3,7 +3,8 @@ import * as express from 'express'
 const MAPPING = {
     '574ee8e94b8e1813649d514d': 'sergei',
     '574dba05ef4942c9629eba15': 'pasha',
-    '574d8c232a7eb77e6954e56a': 'andreas'
+    '574d8c232a7eb77e6954e56a': 'andreas',
+    '5757e7500f0823ad185bfbaa': 'mark'
 }
 
 export default function getAuthor(req: express.Request) {

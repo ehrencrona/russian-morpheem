@@ -29,7 +29,7 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
             let factIndex = facts.indexOf(fact)
 
             if (factIndex < 0) {
-                return
+                factIndex == 9999999
             }
 
             if (fact.getId() == forFact.getId()) {

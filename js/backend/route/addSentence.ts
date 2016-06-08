@@ -4,7 +4,8 @@ import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
-import { recordCreate } from '../metadata/Metadata'
+import { recordCreate, setStatus } from '../metadata/Metadata'
+import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
@@ -18,6 +19,7 @@ export default function(corpus: Corpus) {
         console.log('Added ' + sentence + ' (' + sentence.id + ')')
         
         recordCreate(sentence, sentence.author)
+        setStatus(STATUS_SUBMITTED, sentence.id, sentence.author)
 
         res.status(200).send({ id: sentence.id })
     }

@@ -13,6 +13,7 @@ import Corpus from '../shared/Corpus'
 
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
+import ensureEachSentenceHasAStatus from './metadata/ensureEachSentenceHasAStatus'
 
 import addFact from './route/addFact';
 import setFact from './route/setFact';
@@ -24,6 +25,10 @@ import addSentence from './route/addSentence';
 import deleteSentence from './route/deleteSentence';
 import setSentence from './route/setSentence';
 import getEvents from './route/getEvents';
+import getStatus from './route/getStatus';
+import setStatus from './route/setStatus';
+import getPending from './route/getPending';
+
 import { tag, untag } from './route/tag';
 
 var app = express()
@@ -82,9 +87,15 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
 
+    app.get(`/api/${lang}/sentence/:id/status`, getStatus(corpus))
+
+    app.put(`/api/${lang}/sentence/:id/status`, setStatus(corpus))
+
     app.post(`/api/${lang}/fact/:id/tag/:tag`, tag(corpus))
 
     app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
+
+    app.get(`/api/${lang}/pending-sentences`, getPending(corpus))    
 }
 
 Promise.all([
@@ -103,6 +114,9 @@ Promise.all([
 
     corpora.forEach(listenForChanges)
     corpora.forEach(registerRoutes)
+
+    corpora.forEach((corpus) => 
+        corpus.sentences.sentences.forEach(ensureEachSentenceHasAStatus))
 
     app.listen(port)
 }).catch((e) => {
