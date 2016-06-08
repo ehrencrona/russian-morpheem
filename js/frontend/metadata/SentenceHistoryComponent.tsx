@@ -33,7 +33,7 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
         return (<ul>
         { (this.state.events || []).map((event: Event) => {
 
-            return <li>{ event.date }: {event.author} wrote "{ event.text }"</li>
+            return <li key={ event.date.toString() }>{ event.date }: {event.author} { event.event }: "{ event.text }"</li>
 
         }) }
         </ul>)

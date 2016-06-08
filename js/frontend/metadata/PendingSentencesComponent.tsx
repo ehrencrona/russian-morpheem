@@ -56,7 +56,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
 
             { sentences.map((sentence) => 
 
-                <li>
+                <li key={ sentence.id }>
 
                     <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ sentence.toString() }</div>
 
