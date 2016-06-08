@@ -99,7 +99,7 @@ export default class Facts {
         return result
     }
 
-    getAllFacts() {
+    getAllTags() {
         return Object.keys(this.factIdsByTag).sort()
     }
 

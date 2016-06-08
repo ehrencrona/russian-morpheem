@@ -272,11 +272,14 @@ input[type=text], input[type=number] {
 
 .buttonBar {
     display: flex;
+    flex-wrap: wrap; 
 
     > div {
         display: flex;
         flex-direction: row;
+        flex-wrap: nowrap;
         align-items: center;
+        margin-right: $unit * 2;
     }
 
     .selected {
@@ -291,10 +294,6 @@ input[type=text], input[type=number] {
     select {
         font-size: inherit;
         font-family: inherit;
-    }
-
-    .separator {
-        margin-right: 2 * $unit;
     }
 }
 
@@ -466,6 +465,27 @@ ul {
         position: relative;
         top: -2px;
         margin-left: 1px;
+    }
+}
+
+.tagFilter {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: (2 * $unit); 
+    margin-bottom: (4 * $unit); 
+
+    .tag {
+        cursor: pointer;
+        display: flex;
+        margin: $unit $unit * 2;
+    }
+
+    .tag:hover {
+        color: black;
+    }
+
+    .selected {
+        font-weight: bold;
     }
 }
 

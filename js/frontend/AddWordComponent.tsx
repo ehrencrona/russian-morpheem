@@ -1,7 +1,6 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import FactsComponent from './FactsComponent';
 import FactComponent from './FactComponent';
 import Tab from './Tab';
 import Fact from '../shared/Fact';
@@ -88,6 +87,8 @@ export default class AddWordComponent extends Component<Props, State> {
                     this.props.onClose();
                 })
         }
+
+        this.setState({ word: '' })
     }
     
     render() {

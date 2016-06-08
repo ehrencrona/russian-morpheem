@@ -178,11 +178,14 @@ input[type=text], input[type=number] {
       align-self: center; }
 
 .buttonBar {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap; }
   .buttonBar > div {
     display: flex;
     flex-direction: row;
-    align-items: center; }
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-right: 8px; }
   .buttonBar .selected {
     font-weight: bold; }
   .buttonBar input {
@@ -191,8 +194,6 @@ input[type=text], input[type=number] {
   .buttonBar select {
     font-size: inherit;
     font-family: inherit; }
-  .buttonBar .separator {
-    margin-right: 8px; }
 
 ul {
   padding: 0;
@@ -303,6 +304,20 @@ ul {
     position: relative;
     top: -2px;
     margin-left: 1px; }
+
+.tagFilter {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  margin-bottom: 16px; }
+  .tagFilter .tag {
+    cursor: pointer;
+    display: flex;
+    margin: 4px 8px; }
+  .tagFilter .tag:hover {
+    color: black; }
+  .tagFilter .selected {
+    font-weight: bold; }
 
 ul.stats {
   margin: 16px 0; }

@@ -29,7 +29,7 @@ let React = { createElement: createElement }
 
 export default class FactComponent extends Component<Props, State> {
     render() {
-        let fact = this.props.fact        
+        let fact = this.props.fact
 
         if (fact instanceof Word) {
             return <WordFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />

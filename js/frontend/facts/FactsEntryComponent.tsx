@@ -1,18 +1,18 @@
-/// <reference path="../../typings/react/react.d.ts" />
+/// <reference path="../../../typings/react/react.d.ts" />
 
 import {Component,createElement} from 'react'
-import Corpus from '../shared/Corpus'
+import Corpus from '../../shared/Corpus'
 
-import Tab from './Tab'
-import FactComponent from './FactComponent'
-import AddWordComponent from './AddWordComponent'
+import Tab from '../Tab'
+import FactComponent from '../FactComponent'
+import AddWordComponent from '../AddWordComponent'
 
-import Fact from '../shared/Fact'
-import InflectedWord from '../shared/InflectedWord'
-import InflectionFact from '../shared/InflectionFact'
-import FactNameComponent from './FactNameComponent'
+import Fact from '../../shared/Fact'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectionFact from '../../shared/InflectionFact'
+import FactNameComponent from '../FactNameComponent'
 
-import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
+import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
 
 interface Props {
     fact: Fact,

@@ -24,7 +24,7 @@ export default class TagButtonComponent extends Component<Props, State> {
         super(props)
         
         this.state = {
-            add: !this.props.corpus.facts.getAllFacts().length
+            add: !this.props.corpus.facts.getAllTags().length
         }
     }
     
@@ -41,6 +41,11 @@ export default class TagButtonComponent extends Component<Props, State> {
 
         let lastTag = localStorage.getItem('lastTag')
 
+        let existingTags = this.props.corpus.facts.getTagsOfFact(this.props.fact) 
+        let tags = this.props.corpus.facts.getAllTags().filter((tag) => existingTags.indexOf(tag) < 0)
+
+        tags.sort();
+
         return <div className='tag'>
             { this.state && this.state.add ?
                     
@@ -53,7 +58,7 @@ export default class TagButtonComponent extends Component<Props, State> {
                             this.selectTag.value == 'newTag' })
                     } >
                 { [                        
-                        this.props.corpus.facts.getAllFacts().map((tag) =>
+                        tags.map((tag) =>
                             <option key={ tag } value={ tag }>{ tag }</option>  
                         ),
                         <option key='newTag' value='newTag'>Add Tag</option>
