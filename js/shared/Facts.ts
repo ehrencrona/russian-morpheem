@@ -130,7 +130,9 @@ export default class Facts {
             this.tagsByFactIds[fact.getId()] = tags
         }
         
-        tags.push(tag)
+        if (tags.indexOf(tag) <= 0) {
+            tags.push(tag)
+        }
 
         if (this.onTag) {
             this.onTag(fact, tag )

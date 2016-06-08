@@ -15,9 +15,8 @@ import Tab from '../Tab'
 import AddWordComponent from '../AddWordComponent'
 import WordSearchComponent from '../WordSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
+import FactsMissingComponent from './FactsMissingComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
-
-import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
 
 interface Props {
     corpus: Corpus,
@@ -77,6 +76,11 @@ export default class FactsComponent extends Component<Props, State> {
 
         if (this.state.list == TAGS) {
             list = <FactsTagComponent
+                corpus={ this.props.corpus }
+                tab={ this.props.tab } />
+        }
+        else if (this.state.list == MISSING) {
+            list = <FactsMissingComponent
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
