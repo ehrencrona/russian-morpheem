@@ -55,7 +55,6 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                 this.props.corpus.sentences.get(id)
             } 
             catch (e) {
-                console.error(e)
                 return null
             }
         }).filter((s) => !!s)
