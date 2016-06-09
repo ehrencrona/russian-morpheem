@@ -6,13 +6,24 @@ import InflectedWord from './InflectedWord'
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 
+
+interface JsonFormat {
+    stem: string,
+    en: string,
+    inflection: string,
+    type: string,
+    classifier?: string
+}
+
+
 export default class InflectableWord {
     inflectionByForm : { [s: string]: InflectedWord } = {}
     en: string
 
-    constructor(public stem: string, public inflection: Inflection) {
+    constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
         this.stem = stem
         this.inflection = inflection
+        this.classifier = classifier
     }
 
     visitFacts(visitor: (Fact) => any) {
@@ -41,6 +52,8 @@ export default class InflectableWord {
             }
             
             result = new InflectedWord(jp, form, this)
+
+            result.classifier = this.classifier
         }
 
         this.inflectionByForm[form] = result
@@ -55,7 +68,13 @@ export default class InflectableWord {
     }
 
     getId() {
-        return this.inflect(this.inflection.defaultForm).jp
+        let result = this.inflect(this.inflection.defaultForm).jp
+
+        if (this.classifier) {
+            result += '[' + this.classifier + ']' 
+        }
+        
+        return result
     }
 
     static getJsonType() {
@@ -68,7 +87,15 @@ export default class InflectableWord {
         return this
     }
 
-    static fromJson(json, inflections: Inflections): InflectableWord {
+    setClassifier(classifier) {
+        this.classifier = classifier
+
+        return this
+    }
+
+    static fromJson(rawJson, inflections: Inflections): InflectableWord {
+        let json = rawJson as JsonFormat
+
         let inflection = inflections.get(json.inflection)
 
         if (!inflection) {
@@ -76,20 +103,26 @@ export default class InflectableWord {
         }
 
         return new InflectableWord(
-            json.stem, inflection)
+            json.stem, inflection, json.classifier)
             .setEnglish(json.en)
     }
-    
+
     toString() {
         return this.getId() + ' (' + this.inflection.getId() + ')'
     }
 
-    toJson() {
-        return {
+    toJson(): JsonFormat {
+        let result: JsonFormat = {
             stem: this.stem,
             en: this.en,
             inflection: this.inflection.id,
             type: InflectableWord.getJsonType()
         }
+
+        if (this.classifier) {
+            result.classifier = this.classifier
+        }
+
+        return result
     }
 }

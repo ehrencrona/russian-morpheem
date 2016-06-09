@@ -43,7 +43,13 @@ export default class UnstudiedWord {
     }
 
     getId() {
-        return this.jp;
+        let result = this.jp 
+        
+        if (this.classifier) {
+            result += '[' + this.classifier + ']' 
+        }
+        
+        return result
     }
 
     visitFacts(visitor) {

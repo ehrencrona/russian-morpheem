@@ -46,7 +46,7 @@ export default class Words {
     index(word: Word) {
         let reallyIndex = (word: Word) => {
             if (this.wordsById[word.getId()]) {
-                throw new Error('Duplicate word ' + word + '.');
+                throw new Error('Multiple words with ID ' + word.getId() + '.');
             }
             
             this.wordsById[word.getId()] = word;

@@ -82,7 +82,7 @@ class WordComponent extends Component<WordProps, WordState> {
                     this.props.onDrop(e) 
                 } } 
                 onDragStart={ this.props.onDragStart }>
-            <div>{ this.props.word.toString() }</div>
+            <div>{ this.props.word.jp }</div>
             { form }
         </div>; 
     }

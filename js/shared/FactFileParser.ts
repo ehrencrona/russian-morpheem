@@ -118,7 +118,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     i--
                 }
 
-                let iw = new InflectableWord(stem, inflection)
+                let iw = new InflectableWord(stem, inflection, word.classifier)
                 iw.en = word.getEnglish('')
                 
                 fact = iw
