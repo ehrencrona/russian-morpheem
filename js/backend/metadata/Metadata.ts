@@ -22,14 +22,17 @@ MongoClient.connect(url, function(err, connectedDb) {
 
 let eventsPending: {[id: number] : Event}  = {}
 
+const EVENT_EDIT = 'edit'
+const EVENT_CREATE = 'create'
+
 export function recordEdit(sentence: Sentence, author: string) {
     let pending = eventsPending[sentence.id]
     
-    if (pending && pending.event == 'edit') {
+    if (pending && (pending.event == EVENT_EDIT || pending.event == EVENT_CREATE)) {
         eventsPending[sentence.id].text = sentence.toString()
     }
     else {
-        recordEvent('edit', sentence, author)
+        recordEvent(EVENT_EDIT, sentence, author, true)
     }
 }
 
@@ -83,15 +86,15 @@ export function getPending(exceptAuthor: string): Promise<number[]> {
 }
 
 export function recordCreate(sentence: Sentence, author: string) {
-    recordEvent('create', sentence, author)
+    recordEvent(EVENT_CREATE, sentence, author, true)
 }
 
-export function recordEvent(type: string, sentence: Sentence, author: string) {
+export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean) {
     if (!db) {
         return
     }
 
-    let event = {
+    let event: Event = {
         sentence: sentence.id,
         date: new Date(),
         event: type,
@@ -102,10 +105,10 @@ export function recordEvent(type: string, sentence: Sentence, author: string) {
     eventsPending[sentence.id] = event
 
     setTimeout(() => {
-        db.collection(COLLECTION_EVENT).insertOne(eventsPending[sentence.id])
+        db.collection(COLLECTION_EVENT).insertOne(event)
 
         delete eventsPending[sentence.id]
-    }, 10000)
+    }, (delay ? 10000 : 0))
 }
 
 export function getEvents(sentenceId: number) {
@@ -115,7 +118,6 @@ export function getEvents(sentenceId: number) {
         let events: Event[] = []
 
         cursor.forEach((doc) => {
-            delete doc._id
             events.push(doc as Event);
         }, () => {
             resolve(events)

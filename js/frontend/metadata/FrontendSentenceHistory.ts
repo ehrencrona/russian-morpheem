@@ -17,7 +17,10 @@ export default class FrontendSentenceHistory {
     getEvents(sentenceId: number): Promise<Event[]> {
         return xr.get(`/api/${ this.lang }/sentence/` + sentenceId + '/events', {}, this.xrArgs)
         .then((xhr) => {
-            return xhr.data as Event[]
+            return xhr.data.map((event) => {
+                event.date = new Date(event.date)
+                return event
+            }) as Event[]
         })
         .catch(handleException)
     }

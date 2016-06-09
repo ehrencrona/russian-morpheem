@@ -1,9 +1,11 @@
 /// <reference path="../../../typings/react/react.d.ts" />
+/// <reference path="../../../typings/human-time.d.ts" />
 
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
+import human = require('human-time')
 
 interface Props {
     corpus: Corpus,
@@ -29,14 +31,26 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
     }
 
     render() {
-        
-        return (<ul>
-        { (this.state.events || []).map((event: Event) => {
+        if (!this.state.events || !this.state.events.length) {
+            return <div/>
+        } 
 
-            return <li key={ event.date.toString() }>{ event.date }: {event.author} { event.event }: "{ event.text }"</li>
+        return (<div>
+            <h3>History</h3>
+            <ul className='history'>
+            { (this.state.events || []).map((event: Event) => {
 
-        }) }
-        </ul>)
+                return <li key={ event._id }>
+                    <div className='date'>{ human(event.date) }, {event.author || 'unknown'}</div> 
+                    <div className='main'>
+                        <span className='event'>{event.event}</span>
+                        <span className='text'>{event.text}</span>
+                    </div>
+                </li>
+
+            }) }
+            </ul>
+        </div>)
 
     }
 

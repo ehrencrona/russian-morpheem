@@ -51,7 +51,7 @@ export default class FactsComponent extends Component<Props, State> {
         let sentence = new Sentence([ ], null)
         
         this.props.corpus.sentences.add(sentence)
-        
+
         this.props.tab.openTab(
             <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
             sentence.toString(),

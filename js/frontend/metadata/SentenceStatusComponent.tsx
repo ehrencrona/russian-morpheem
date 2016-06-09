@@ -49,8 +49,9 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             return <div/>
         }
 
-        return (<div>
+        return (<div className='status'>
 
+            <div className='current'>
             { this.state.status.status == STATUS_SUBMITTED ? 
 
                 'Verification pending' :
@@ -58,6 +59,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
                 'Accepted'
 
             }
+            </div>
 
             { this.state.status.status == STATUS_SUBMITTED ? 
 

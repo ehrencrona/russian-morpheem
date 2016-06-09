@@ -67,7 +67,10 @@ export default class WordFactComponent extends Component<Props, State> {
             <div className='buttonBar'>
                 <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
 
-                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } 
+                    onMove={ () => 
+                        (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
+                />
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
@@ -85,7 +88,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     ref={ (component) => inflections = component} />
             </div>
     
-            <SentencesWithFact corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
+            <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         </div>)
     }
 }

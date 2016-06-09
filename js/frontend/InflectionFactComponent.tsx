@@ -56,6 +56,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
         }
         else if (this.state.tab == 'sentences') {
             tab = <SentencesWithFact 
+                ref='sentencesWithFact'
                 corpus={ this.props.corpus} 
                 fact={ this.props.fact } 
                 tab={ this.props.tab } />
@@ -93,7 +94,9 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 { tabButton('sentences', 'Sentences') }
                 { tabButton('inflection', 'Inflection') }
 
-                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact }
+                    onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
+                    />
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
         
