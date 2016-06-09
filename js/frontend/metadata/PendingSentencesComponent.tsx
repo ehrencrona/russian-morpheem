@@ -50,7 +50,15 @@ export default class PendingSentencesComponent extends Component<Props, State> {
             return <div/>
         }
 
-        let sentences = this.state.sentenceIds.map((id) => this.props.corpus.sentences.get(id))
+        let sentences = this.state.sentenceIds.map((id) => {
+            try {
+                this.props.corpus.sentences.get(id)
+            } 
+            catch (e) {
+                console.error(e)
+                return null
+            }
+        }).filter((s) => !!s)
 
         return (<div>
             <h3>Pending sentences</h3>
