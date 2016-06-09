@@ -9,7 +9,8 @@ import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByF
 
 interface Props {
     corpus: Corpus,
-    fact: Fact
+    fact: Fact,
+    onMove?: () => void
 }
 
 interface State {}
@@ -39,6 +40,10 @@ export default class MoveFactButtonComponent extends Component<Props, State> {
             (this.props.corpus.facts.indexOf(this.props.fact) + 1).toString();
 
         this.forceUpdate()
+
+        if (this.props.onMove) {
+            this.props.onMove()
+        }
     }
 
     render() {

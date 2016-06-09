@@ -200,7 +200,8 @@ input[type=text], input[type=number] {
     align-items: center;
     margin-right: 8px; }
   .buttonBar .selected {
-    font-weight: bold; }
+    font-weight: bold;
+    background-color: #e95f3d; }
   .buttonBar input {
     width: 48px;
     text-align: right; }
