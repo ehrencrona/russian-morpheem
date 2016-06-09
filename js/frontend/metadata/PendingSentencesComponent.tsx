@@ -52,9 +52,10 @@ export default class PendingSentencesComponent extends Component<Props, State> {
 
         let sentences = this.state.sentenceIds.map((id) => {
             try {
-                this.props.corpus.sentences.get(id)
+                return this.props.corpus.sentences.get(id)
             } 
             catch (e) {
+                console.error(e)
                 return null
             }
         }).filter((s) => !!s)
