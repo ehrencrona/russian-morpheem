@@ -68,7 +68,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             this.setState({ filterWord: null, filterString: '' })
         }
     }
-    
+
     findMatchingInflections(word: InflectableWord, filter: string): Suggestion[] {
         let exactMatches: UnstudiedWord[] = []
         let prefixMatch: InflectedWord
@@ -77,10 +77,10 @@ export default class WordSearchComponent extends Component<Props, State> {
         let i = Math.min(filter.length, word.stem.length)
 
         word.visitAllInflections((inflected: InflectedWord) => {
-            if (inflected.toString() == filter) {
+            if (inflected.jp == filter) {
                 exactMatches.push(inflected)
             }
-            else if (inflected.toString().substr(0, filter.length) == filter && !prefixIsDefault) {
+            else if (inflected.jp.substr(0, filter.length) == filter && !prefixIsDefault) {
                 prefixMatch = inflected
                 prefixIsDefault = inflected.form == word.inflection.defaultForm
             }
@@ -142,7 +142,7 @@ export default class WordSearchComponent extends Component<Props, State> {
            
     wordsMatchingFilterString(fact, filter: string): Suggestion[] {
         if (fact instanceof UnstudiedWord && 
-            fact.toString().substr(0, filter.length) == filter) {
+            fact.jp.substr(0, filter.length) == filter) {
             return [ this.wordToSuggestion(fact) ]
         }
         
@@ -214,7 +214,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             })
 
             if (filterString) {
-                let i = suggestions.findIndex((s) => s.word.toString() == filterString)
+                let i = suggestions.findIndex((s) => s.word.jp == filterString)
 
                 if (i >= 0) {
                     let exactMatch = suggestions.splice(i, 1)[0]
@@ -234,7 +234,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                     this.props.corpus.facts.indexOf(suggestion.inflection.fact)
                 ) 
             } 
-            
+
             let onClick = () => {
                 this.selectSuggestion(suggestion)
             }
@@ -259,7 +259,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                     <div className='index'><div className='number'>{ suggestion.index + 1 }</div></div>
                     :
                     <div/>) }
-                <div className='word'>{ suggestion.word.toString() }</div>
+                <div className='word'>{ suggestion.word.jp }</div>
                 { suggestion.inflection ?
                     <div className='form'>{suggestion.inflection.form }</div>
                     :

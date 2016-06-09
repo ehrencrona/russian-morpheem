@@ -58,7 +58,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         let forms: string[] = []
         
         inflections.forEach((word: InflectedWord) => {
-            wordsByForm[word.form] = word.toString()
+            wordsByForm[word.form] = word.jp
         })
 
         return wordsByForm 

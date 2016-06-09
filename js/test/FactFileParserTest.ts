@@ -42,6 +42,21 @@ describe('FactFileParser', function() {
         expect((<InflectableWord> word).en).to.equal('meaning')
     })
 
+    it('parses classifiers', function () {
+        var facts = parser(
+            [
+                'word[a]:meaning',
+                'word[b]:meaning',
+                'iwa[a]:meaning, inflect: inflection',
+                'iwa[b]:meaning, inflect: inflection',
+            ].join('\n')
+            , inflections, 'ru')
+
+        expect(facts.facts.length).to.equal(4)
+
+        expect(facts.get('iwa[b]')).to.not.be.null
+    })
+
     it('parses grammar facts', function () {
         var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]
