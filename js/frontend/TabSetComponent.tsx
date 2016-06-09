@@ -33,15 +33,88 @@ export default class TabSetComponent extends Component<Props, State> {
             this.lastTabIds = JSON.parse(lastString)
         }
 
-        this.state = {
-            tabs: [
-                new Tab('Facts', 'facts',
-                    <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this),
-                new Tab('Stats', 'stats',
-                    <StatsComponent corpus={ this.props.corpus } tab={ null } ></StatsComponent>, this)
-            ],
+        let state: State = {
+            tabs: [],
             first: 0
         } 
+        
+        try {
+            state = this.restoreState(props.corpus) || state
+        }
+        catch (e) {
+            console.error(e.stack)
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'facts')) {
+            state.tabs.push(this.createFactsTab())
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'stats')) {
+            state.tabs.push(this.createStatsTab())
+        }
+
+        this.state = state
+    }
+
+    componentDidUpdate() {
+        this.storeTabState()
+    }
+
+    restoreState(corpus: Corpus): State {
+        let stateJson = JSON.parse(localStorage.getItem('tabState'))
+
+        if (!stateJson) {
+            return
+        }
+
+        let tabIds: string[] = stateJson.tabs || [] 
+
+        let tabs = tabIds.map((id) => {
+            let fact = corpus.facts.get(id)
+
+            if (fact) {
+                return new Tab(fact.toString(), fact.getId(), 
+                    <Fact corpus={ corpus } tab={ null } fact={ fact }/>, this)
+            }
+
+            let numericalId = parseInt(id)
+
+            if (!isNaN(numericalId)) {
+                let sentence = corpus.sentences.get(numericalId)
+
+                if (sentence) {
+                    return new Tab(sentence.toString(), id,
+                        <Sentence corpus={ corpus } sentence={ sentence } tab={null} />, this)
+                }
+            }
+
+            console.warn('Could not build tab ' + id)
+
+            if (id == 'facts') {
+                return this.createFactsTab()
+            }
+
+            if (id == 'stats') {
+                this.createStatsTab()
+            }
+
+            return null
+        }).filter((tab) => !!tab)
+
+        return {
+            tabs: tabs,
+            first: stateJson.first || 0
+        }
+    }
+
+    createFactsTab() {
+        return new Tab('Facts', 'facts',
+                <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this)
+    }
+
+    createStatsTab() {
+        return new Tab('Stats', 'stats',
+            <StatsComponent corpus={ this.props.corpus } tab={ null } ></StatsComponent>, this)
     }
 
     tabExists(id: string) {
@@ -120,6 +193,13 @@ export default class TabSetComponent extends Component<Props, State> {
             })
             e.stopPropagation()
         }
+    }
+
+    storeTabState() {
+        localStorage.setItem('tabState', JSON.stringify({
+            first: this.state.first,
+            tabs: this.state.tabs.map((tab) => tab.id)
+        }))
     }
 
     getVisibleTabs() {
