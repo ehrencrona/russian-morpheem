@@ -93,7 +93,7 @@ export default class TabSetComponent extends Component<Props, State> {
             }
 
             if (id == 'stats') {
-                this.createStatsTab()
+                return this.createStatsTab()
             }
 
             console.warn('Could not build tab ' + id)
