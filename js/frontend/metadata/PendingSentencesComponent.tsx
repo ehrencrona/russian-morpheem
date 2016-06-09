@@ -52,23 +52,28 @@ export default class PendingSentencesComponent extends Component<Props, State> {
 
         let sentences = this.state.sentenceIds.map((id) => this.props.corpus.sentences.get(id))
 
-        return (<ul>
+        return (<div>
+            <h3>Pending sentences</h3>
+            
+            <ul className='pending'>
 
-            { sentences.map((sentence) => 
+                { sentences.map((sentence) => 
 
-                <li key={ sentence.id }>
+                    <li key={ sentence.id }>
 
-                    <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ 
-                        sentence.toUnambiguousString(this.props.corpus.words) 
-                    }</div>
+                        <div className='button' onClick={ () => this.accept(sentence.id) }>Accept</div>
 
-                    <div className='button' onClick={ () => this.accept(sentence.id) }>Accept</div>
+                        <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ 
+                            sentence.toUnambiguousString(this.props.corpus.words) 
+                        }</div>
 
-                </li>
+                    </li>
 
-            ) }
+                ) }
 
-        </ul>)
+            </ul>
+            
+        </div>)
 
     }
 

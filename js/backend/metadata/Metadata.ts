@@ -118,7 +118,6 @@ export function getEvents(sentenceId: number) {
         let events: Event[] = []
 
         cursor.forEach((doc) => {
-            delete doc._id
             events.push(doc as Event);
         }, () => {
             resolve(events)
