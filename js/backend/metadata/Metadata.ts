@@ -108,7 +108,7 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
         db.collection(COLLECTION_EVENT).insertOne(event)
 
         delete eventsPending[sentence.id]
-    }, (delay ? 10000 : 0))
+    }, (delay ? 180000 : 0))
 }
 
 export function getEvents(sentenceId: number) {
