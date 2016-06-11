@@ -115,6 +115,18 @@ export default class Sentence {
         }
     }
 
+    capitalizeAndEndWithDot(sentence) {
+        if (sentence.length) {
+            if (Words.PUNCTUATION.indexOf(sentence[sentence.length-1]) < 0) {
+                sentence += '.'
+            }
+
+            sentence = sentence[0].toUpperCase() + sentence.substr(1)
+        }
+
+        return sentence
+    }
+
     toString() {
         var res = ''
 
@@ -126,14 +138,14 @@ export default class Sentence {
             res += word.toString()
         }
 
-        return res
+        return this.capitalizeAndEndWithDot(res)
     }
 
     toUnambiguousString(words: Words) {
         var res = ''
 
         for (let word of this.words) {
-            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
+            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) < 0)) {
                 res += ' '
             }
 
@@ -145,6 +157,6 @@ export default class Sentence {
             }
         }
 
-        return res
+        return this.capitalizeAndEndWithDot(res)
     }
 }
