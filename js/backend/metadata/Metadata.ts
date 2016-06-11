@@ -37,6 +37,11 @@ export function recordEdit(sentence: Sentence, author: string) {
 }
 
 export function setStatus(status: number, sentenceId: number, author?: string) {
+    if (!db) {
+        console.error(`Could not set status of ${sentenceId} to ${status} since Mongo connection failed.`)
+        return
+    }
+
     let sentenceStatus: SentenceStatus = {
         status: status,
         sentence: sentenceId
@@ -50,6 +55,10 @@ export function setStatus(status: number, sentenceId: number, author?: string) {
 }
 
 export function getStatus(sentenceId: number): Promise<SentenceStatus> {
+    if (!db) {
+        return Promise.resolve(null)
+    }
+
     return new Promise((resolve, reject) => {
         db.collection(COLLECTION_METADATA)
             .findOne( { "sentence": sentenceId } )
@@ -65,6 +74,10 @@ export function getStatus(sentenceId: number): Promise<SentenceStatus> {
 }
 
 export function getPending(exceptAuthor: string): Promise<number[]> {
+    if (!db) {
+        return Promise.resolve([])
+    }
+
     let cursor =
         db.collection(COLLECTION_METADATA)
             .find( { 
@@ -91,6 +104,7 @@ export function recordCreate(sentence: Sentence, author: string) {
 
 export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean) {
     if (!db) {
+        console.error('Could not record event since Mongo connection failed.')
         return
     }
 
@@ -111,7 +125,11 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
     }, (delay ? 180000 : 0))
 }
 
-export function getEvents(sentenceId: number) {
+export function getEvents(sentenceId: number): Promise<Event[]> {
+    if (!db) {
+        return Promise.resolve([])
+    }
+
     var cursor = db.collection(COLLECTION_EVENT).find( { "sentence": sentenceId } );
 
     return new Promise((resolve, reject) => {
