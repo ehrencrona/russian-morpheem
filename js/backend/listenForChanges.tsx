@@ -14,26 +14,42 @@ let lastSave
 
 export default function listenForChanges(corpus: Corpus) {    
 
-    function saveSentences() {
+    function delay(func: () => void) {
+        let pending: boolean
+        return () => {
+            if (pending) {
+                return
+            }
+
+            setTimeout(() => {
+                pending = false
+                func()
+            }, 15000)
+
+            pending = true
+        }
+    }
+
+    let saveSentences = delay(() => {
         lastSave = new Date().getTime()
 
         writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words)
         .catch((e) => console.error(e.stack))
-    }
+    })
 
-    function saveFacts() {
+    let saveFacts = delay(() => {
         lastSave = new Date().getTime()
 
         writeFactFile(corpusDir + '/facts.txt', corpus.facts)
         .catch((e) => console.error(e.stack))
-    }
+    })
 
-    function saveInflections() {
+    let saveInflections = delay(() => {
         lastSave = new Date().getTime()
         
         writeInflectionsFile(corpusDir + '/inflections.txt', corpus.inflections, lang)
         .catch((e) => console.error(e.stack))
-    }
+    })
 
     let corpusDir = getCorpusDir(corpus.lang)
     let lang = corpus.lang
