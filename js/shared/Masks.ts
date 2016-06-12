@@ -5,7 +5,7 @@ const MASKS = {
     adj: {
         short: (form) => form.substr(0, 4) == 'short',
         pl: pl,
-        sg: sg,
+        sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv',
         adv: (form) => form == 'adv'
     },
     n: {
