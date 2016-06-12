@@ -162,19 +162,23 @@ export default class InflectableWord {
         }
 
         if (this.mask) {
-            let posMasks = MASKS[this.inflection.pos]
-
-            let maskId = Object.keys(posMasks).find((key) => {
-                return posMasks[key] === this.mask
-            } )
-
-            if (!maskId) {
-                console.warn('Could not find the mask ' + this.mask + ' for ' + this.getId() + ' in the lists of masks.')
-            }
-
-            result.mask = maskId
+            result.mask = this.getMaskId()
         }
 
         return result
+    }
+
+    getMaskId() {
+        let posMasks = MASKS[this.inflection.pos]
+
+        let maskId = Object.keys(posMasks).find((key) => {
+            return posMasks[key] === this.mask
+        } )
+
+        if (!maskId) {
+            console.warn('Could not find the mask ' + this.mask + ' for ' + this.getId() + ' in the lists of masks.')
+        }
+
+        return maskId
     }
 }
