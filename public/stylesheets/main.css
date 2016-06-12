@@ -281,7 +281,7 @@ ul {
         margin: 0 16px;
         margin-top: 2px;
         float: right; }
-    .inflections table tbody td {
+    .inflections table tbody td.full {
       background-color: #ffdb5d; }
     .inflections table tbody td:first-child {
       font-style: italic;

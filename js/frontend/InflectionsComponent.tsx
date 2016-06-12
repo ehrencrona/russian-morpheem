@@ -178,7 +178,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                                     <td>{ table.rows[index] }</td>
                                 {
                                     forms.map((form) => {
-                                        return <td key={form.toString()}>
+                                        return <td key={form.toString()} className={ wordsByForm[form] || (typeof form == 'object' && form.length) ? 'full' : '' }>
                                             {
                                                 (typeof form == 'string' ?
                                                     (wordsByForm[form] ? formComponent(form) : '')
