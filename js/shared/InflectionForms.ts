@@ -21,7 +21,7 @@ class Forms {
         return this.allForms.indexOf(form) >= 0
     }
 }
-        
+    
 const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     lat: {
         verb: new Forms(
@@ -60,7 +60,7 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
         v: new Forms(
             [ 'singular', 'plural' ],
             [ 'infinitive', '1st person', '2nd person', '3rd person', 'past', 'imperative'],
-            [ ['inf', ''], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'], 
+            [ ['inf'], ['1', '1pl'], ['2', '2pl'], ['3', '3pl'], 
               [ ['pastm', 'pastn', 'pastf'], 'pastpl' ], [ 'impr', 'imprpl' ] ]
         ),
         adj: new Forms(

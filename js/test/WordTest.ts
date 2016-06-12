@@ -30,9 +30,9 @@ describe('Word', function() {
     it('converts studied to JSON and back', function () {
         let before = new Word('foo', 'bar').setEnglish('eng')
         let after = Word.fromJson(before.toJson(), inflections);
-        
+
         expect(after).to.be.instanceOf(Word)
-        
+
         expect(after.classifier).to.equal(before.classifier)
         expect(after.jp).to.equal(before.jp)
         expect(after.getEnglish()).to.equal(before.getEnglish())
@@ -41,12 +41,13 @@ describe('Word', function() {
     it('converts inflectable to JSON and back', function () {
         let before = new InflectableWord('foo', inflections.inflections[0])
             .setEnglish('eng')
+            .setClassifier('classified')
 
         let after = InflectableWord.fromJson(before.toJson(), inflections);
         
         expect(after).to.be.instanceOf(InflectableWord)
         
-//        expect(after.classifier).to.equal(before.classifier)
+        expect(after.classifier).to.equal(before.classifier)
         expect(after.stem).to.equal(before.stem)
         expect(after.en).to.equal(before.en)
         expect(after.inflection.id).to.equal(before.inflection.id)

@@ -187,7 +187,7 @@ export default class Facts {
                     fact = fact.word
                 }
                 else if (!fact) {
-                    throw new Error('Didnt find word "' +  factJson.id + '" to base inflectable on.')
+                    throw new Error('Didnt find word "' + factJson.id + '" to base inflectable on.')
                 }
                 else {
                     throw new Error('Expected "' + factJson.id + '" to inflect')
@@ -229,7 +229,7 @@ export default class Facts {
 
                 // this is not very satisfying. probably, 
                 // the order of loading a corpus from JSON should be refactored.
-                id = fact.getId() + '@' + fact.inflection.defaultForm
+                id = fact.getId() + '@' + fact.getDefaultInflection().form
             }
             else if (fact instanceof Word) {
                 type = WORD

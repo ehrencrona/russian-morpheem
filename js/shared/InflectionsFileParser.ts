@@ -60,7 +60,7 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
             }
 
             if (lang == 'ru' && suffix.match(/[a-z]/)) {
-                throw new Error(form + ' in ' + str + ' ("' + suffix + '") contains Latin characters.')
+                console.warn(form + ' in ' + str + ' ("' + suffix + '") contains Latin characters.')
             }
 
             ending = new Ending(

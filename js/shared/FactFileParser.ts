@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * Parses a list of facts (words and grammar) that defines the order in which the facts should be learned.
  * The file also serves to define the English translation of words. Resolves to an array consisting of Words,
@@ -15,13 +13,14 @@
  * See facts.txt for an example.
  */
 
-import Word from './Word';
-import UnstudiedWord from './UnstudiedWord';
-import InflectableWord from './InflectableWord';
-import Inflections from './Inflections';
-import Fact from './Fact';
-import Facts from './Facts';
-import Grammars from './Grammars';
+import Word from './Word'
+import UnstudiedWord from './UnstudiedWord'
+import InflectableWord from './InflectableWord'
+import Inflections from './Inflections'
+import Fact from './Fact'
+import Facts from './Facts'
+import Grammars from './Grammars'
+import MASKS from './Masks'
 
 export default function parseFactFile(data, inflections: Inflections, lang: string): Facts {
     var facts = new Facts()
@@ -134,6 +133,20 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
             }
             else if (tag == 'tag') {
                 facts.tag(fact, text)
+            }
+            else if (tag == 'mask') {
+                if (fact instanceof InflectableWord) {
+                    let mask = MASKS[fact.inflection.pos][text]
+
+                    if (!mask) {
+                        throw new Error('Unknown mask "' + text + '" in "' + rightSide + '"')
+                    }
+
+                    fact.setMask(mask)
+                }
+                else {
+                    console.error('Attempt to set mask on ' + fact.getId() + '. It is not an inflectable word. Not that the mask tag should be after the inflect tag.')
+                }
             }
             else {
                 word.setEnglish(text, tag)

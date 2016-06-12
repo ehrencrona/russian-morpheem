@@ -50,7 +50,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
             this.props.onChange()
         }
     }
-    
+
     inflectionClicked(inflection: Inflection) {
         this.props.tab.openTab(
             <InflectionsComponent 
@@ -72,7 +72,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         try {
             alternativeInflections = 
                 this.props.corpus.inflections.getPossibleInflections(
-                        this.props.word.inflect(this.state.inflection.defaultForm).jp)
+                        this.props.word.getDefaultInflection().jp)
                     .filter((inflection) => inflection.getId() != this.state.inflection.getId())
                     .filter((inflection) => inflection.pos == this.state.inflection.pos)
                     .filter((inflection) => inflection.getEnding(inflection.defaultForm) ==
