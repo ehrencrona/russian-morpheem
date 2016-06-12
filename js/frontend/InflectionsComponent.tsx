@@ -178,15 +178,32 @@ export default class InflectionsComponent extends Component<Props, State> {
                                     <td>{ table.rows[index] }</td>
                                 {
                                     forms.map((form) => {
-                                        return <td key={form.toString()} className={ wordsByForm[form] || (typeof form == 'object' && form.length) ? 'full' : '' }>
-                                            {
-                                                (typeof form == 'string' ?
-                                                    (wordsByForm[form] ? formComponent(form) : '')
-                                                    :
-                                                    form.map((form) => (wordsByForm[form] ? formComponent(form) : ''))
-                                                )
+                                        let endings
+                                        
+                                        if (typeof form == 'string') {
+                                            if (wordsByForm[form]) {
+                                                endings = formComponent(form) 
                                             }
-                                        </td>                                        
+                                        }
+                                        else {
+                                            endings = form.filter((form) => wordsByForm[form])
+                                                .map(formComponent)
+
+                                            if (!endings.length) {
+                                                endings = null
+                                            }
+                                        }
+                                        
+                                        if (endings) {
+                                            return <td key={form.toString()} className='full'>
+                                                {
+                                                    endings
+                                                }
+                                            </td>
+                                        }
+                                        else {
+                                            return <td key={form.toString()}/> 
+                                        }
                                     })                                    
                                 }
                             </tr> 
