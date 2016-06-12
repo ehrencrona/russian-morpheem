@@ -34,6 +34,10 @@ export default class InflectedWord extends Word {
         return this.jp + (words.ambiguousForms[this.jp] ? ' [' + this.form + ']' : '')
     }
 
+    getDefaultInflection() {
+        return this.word.getDefaultInflection()
+    }
+
     getId() {
         return this.word.getId() + '@' + this.form
     }

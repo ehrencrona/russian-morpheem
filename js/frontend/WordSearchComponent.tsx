@@ -82,7 +82,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             }
             else if (inflected.jp.substr(0, filter.length) == filter && !prefixIsDefault) {
                 prefixMatch = inflected
-                prefixIsDefault = inflected.form == word.inflection.defaultForm
+                prefixIsDefault = inflected === word.getDefaultInflection()
             }
         }, false)
 
@@ -134,7 +134,7 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         return {
             index: index,
-            word: word.inflect(word.inflection.defaultForm),
+            word: word.getDefaultInflection(),
             fact: word,
             inflection: null
         }

@@ -1,24 +1,25 @@
-"use strict";
-
 import Word from './Word'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import Inflection from './Inflection'
 import Inflections from './Inflections'
-
+import INFLECTION_FORMS from './InflectionForms'
+import MASKS from './Masks'
 
 interface JsonFormat {
     stem: string,
     en: string,
     inflection: string,
     type: string,
-    classifier?: string
+    classifier?: string,
+    mask?: string
 }
-
 
 export default class InflectableWord {
     inflectionByForm : { [s: string]: InflectedWord } = {}
     en: string
+    mask: (string) => boolean
+    defaultInflection: InflectedWord
 
     constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
         this.stem = stem
@@ -63,12 +64,36 @@ export default class InflectableWord {
 
     visitAllInflections(visitor: (InflectedWord) => any, excludeInherited: boolean) {
         for (let form of this.inflection.getAllForms()) {
-            visitor(this.inflect(form))
+            if (!this.mask || !this.mask(form)) {
+                visitor(this.inflect(form))
+            }
         }
     }
 
+    getDefaultInflection(): InflectedWord {
+        if (!this.defaultInflection) {
+            let defaultForm = this.inflection.defaultForm
+
+            if (this.mask && this.mask(defaultForm)) {
+                // TODO: Russian assumed
+                const LANG = 'ru'
+
+                defaultForm = INFLECTION_FORMS[LANG][this.inflection.pos].allForms.find(
+                    (form) => !this.mask(form) && this.inflection.hasForm(form))
+
+                if (!defaultForm) {
+                    throw new Error('The mask ' + this.mask + ' filtered all forms for ' + this.stem)
+                }    
+            }
+
+            this.defaultInflection = this.inflect(defaultForm)
+        }
+
+        return this.defaultInflection
+    }
+
     getId() {
-        let result = this.inflect(this.inflection.defaultForm).jp
+        let result = this.getDefaultInflection().jp
 
         if (this.classifier) {
             result += '[' + this.classifier + ']' 
@@ -93,6 +118,11 @@ export default class InflectableWord {
         return this
     }
 
+    setMask(mask: (string) => boolean) {
+        this.mask = mask
+        this.defaultInflection = null
+    }
+
     static fromJson(rawJson, inflections: Inflections): InflectableWord {
         let json = rawJson as JsonFormat
 
@@ -102,9 +132,17 @@ export default class InflectableWord {
             throw new Error('The inflection ' + json.inflection + ' does not exist.')
         }
 
-        return new InflectableWord(
+        let result = new InflectableWord(
             json.stem, inflection, json.classifier)
             .setEnglish(json.en)
+
+        if (json.mask) {
+            let posMasks = MASKS[inflection.pos]
+
+            result.setMask(posMasks[json.mask])
+        }
+
+        return result
     }
 
     toString() {
@@ -121,6 +159,20 @@ export default class InflectableWord {
 
         if (this.classifier) {
             result.classifier = this.classifier
+        }
+
+        if (this.mask) {
+            let posMasks = MASKS[this.inflection.pos]
+
+            let maskId = Object.keys(posMasks).find((key) => {
+                return posMasks[key] === this.mask
+            } )
+
+            if (!maskId) {
+                console.warn('Could not find the mask ' + this.mask + ' for ' + this.getId() + ' in the lists of masks.')
+            }
+
+            result.mask = maskId
         }
 
         return result

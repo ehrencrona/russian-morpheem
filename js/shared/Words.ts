@@ -205,7 +205,7 @@ export default class Words {
             let word = this.wordsById[id]
             
             if (word instanceof InflectedWord) {
-                if (word.word.inflection.defaultForm !== word.form) {
+                if (word.getDefaultInflection() !== word) {
                     continue
                 }
                 else {

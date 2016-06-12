@@ -35,7 +35,7 @@ export default class WordFactComponent extends Component<Props, State> {
     addSentence() {
         let fact = this.props.fact
         
-        let sentence = new Sentence([ fact.inflect(fact.inflection.defaultForm) ], null)
+        let sentence = new Sentence([ fact.getDefaultInflection() ], null)
 
         this.props.corpus.sentences.add(sentence)
 

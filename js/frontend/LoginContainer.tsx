@@ -70,7 +70,7 @@ export default class LoginContainer extends Component<Props, State> {
         xr.get(`/api/${lang}/corpus`, {}, xrArgs)
         .then((xhr) => {
             let corpus = Corpus.fromJson(xhr.data)
-            
+
             listenForChanges(corpus, xrArgs, () => {
                 localStorage.removeItem(TOKEN_ITEM)
                 this.setState({ corpus: null })
