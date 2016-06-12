@@ -16,8 +16,8 @@ export default class Words {
     onAddInflectableWord: (word: InflectableWord) => void = null
     onChangeInflection: (word: InflectableWord, oldId: string) => void = null
 
-    static PUNCTUATION = '.?!,;«»—'
-    static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,;»'
+    static PUNCTUATION = '.?!,;:«»—'
+    static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,:;»'
 
     constructor(facts?: Facts) {
         if (facts) {
