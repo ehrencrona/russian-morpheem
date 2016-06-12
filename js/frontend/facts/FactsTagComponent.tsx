@@ -51,7 +51,8 @@ export default class FactsTagComponent extends Component<Props, State> {
         }
 
         let buttonForTag = (tag) =>
-            <div className={ 'tag ' + (this.state.tag == tag ? ' selected' : '') } 
+            <div className={ 'tag ' + (this.state.tag == tag ? ' selected' : '') }
+                key={ tag }
                 onClick={ () => { 
                     this.setState({ tag: tag })
                     localStorage.setItem('lastTag', tag)    

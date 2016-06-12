@@ -16,7 +16,9 @@ export function factToString(fact: Fact, facts: Facts) {
         let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
         
         return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + ending.suffix + 
-            ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags
+            (fact.classifier ? `[${ fact.classifier }]` : '') + 
+            ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags +
+            (fact.mask ? ', mask: ' + fact.getMaskId() : '')
     }
     else if (fact instanceof Word) {
         return fact.jp +

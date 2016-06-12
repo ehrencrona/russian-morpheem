@@ -87,6 +87,17 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
                 ['instr','instrpl'],
                 ['prep','preppl']
             ]),
+        num: new Forms(
+            [ 'm sg', 'n sg', 'f sg', 'plural' ],
+            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+            [
+                ['m','n','f','pl'],
+                ['genm','genn','genf','genpl'],
+                ['datm','datn','datf','datpl'],
+                [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
+                ['instrm','instrn','instrf','instrpl'],
+                ['prepm','prepn','prepf','preppl'],
+            ]),
         pron: new Forms(
             [ ],
             [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
