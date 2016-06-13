@@ -22,9 +22,9 @@ export default class PendingSentencesComponent extends Component<Props, State> {
     chart: Chart
 
     renderGraph(canvas: HTMLCanvasElement) {
-        if (canvas) {
+        if (!canvas) {
             console.warn('no canvas?')
-            
+
             return
         }
 
