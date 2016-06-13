@@ -1,4 +1,5 @@
 import { Event } from './Event'
+import { SentencesByDate } from './SentencesByDate'
 
 export interface SentenceHistory {
 
@@ -11,5 +12,7 @@ export interface SentenceHistory {
     getPending(): Promise<number[]>
 
     addComment(comment: string, sentenceId: number)
+
+    getSentencesByDate(): Promise<SentencesByDate>
 
 }

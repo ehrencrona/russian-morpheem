@@ -24,7 +24,7 @@ function getOpenLink(sentence: Sentence) {
 }
 
 export function notifyAdd(sentence : Sentence) {
-    notify(sentence.toString() + getOpenLink(sentence), sentence.author)
+    notify(sentence.toString() + getOpenLink(sentence), getSlackOfAuthor(sentence.author))
 }
 
 export function notifyComment(comment: string, sentence : Sentence, author: string) {
@@ -43,9 +43,7 @@ export function notifyComment(comment: string, sentence : Sentence, author: stri
     })
     .catch((e) => console.error(e.stack))
     .then(() => {
-        notify('> ' + sentence.toString() + '\n' +
-            comment + getOpenLink(sentence) + 
-                Object.keys(shoutOuts).map((slack) => ' @' + slack)
-                , author)
+        notify('> ' + sentence.toString() + getOpenLink(sentence) + '\n' +
+            comment + Object.keys(shoutOuts).map((slack) => ' @' + slack), author)
     })
 }

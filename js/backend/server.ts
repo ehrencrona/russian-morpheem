@@ -29,6 +29,7 @@ import getEvents from './route/getEvents';
 import getStatus from './route/getStatus';
 import setStatus from './route/setStatus';
 import getPending from './route/getPending';
+import getSentencesByDate from './route/sentencesByDate';
 
 import { tag, untag } from './route/tag';
 
@@ -99,6 +100,9 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
 
     app.get(`/api/${lang}/pending-sentences`, getPending(corpus))    
+
+    app.get(`/api/${lang}/sentence/by-date`, getSentencesByDate(corpus))    
+        
 }
 
 Promise.all([

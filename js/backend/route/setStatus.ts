@@ -25,10 +25,14 @@ export default function(corpus: Corpus) {
             throw new Error('Unknown sentence')
         }
 
+        let author = getAuthor(req)
+
+        console.log(author.name + ' set state of ' + sentence + ' to ' + status + '.')
+ 
         if (status == STATUS_ACCEPTED) {
             setStatus(status, sentenceId)
 
-            recordEvent('accepted', sentence, getAuthor(req).name)
+            recordEvent('accepted', sentence, author.name)
 
             res.status(200).send({ status: status })
         }

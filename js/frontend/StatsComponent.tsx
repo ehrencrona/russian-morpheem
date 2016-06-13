@@ -5,6 +5,7 @@ import Corpus from '../shared/Corpus'
 import Word from '../shared/Word'
 import InflectableWord from '../shared/InflectableWord'
 import Tab from './Tab'
+import SentencesByDateComponent from './metadata/SentencesByDateComponent'
 
 import PendingSentencesComponent from './metadata/PendingSentencesComponent'
 
@@ -57,6 +58,9 @@ export default class StatsComponent extends Component<Props, State> {
             <li> 
                 <b>{ factsWithEnoughSentences }</b> facts (<b>{ wordsWithEnoughSentences }</b> words) have enough sentences
             </li>
+
+            <SentencesByDateComponent
+                corpus={ this.props.corpus }/>
 
             <PendingSentencesComponent
                 corpus={ this.props.corpus } 

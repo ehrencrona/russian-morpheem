@@ -4,6 +4,7 @@ import xr from '../xr';
 
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus } from '../../shared/metadata/SentenceStatus'
+import { SentencesByDate} from '../../shared/metadata/SentencesByDate'
 
 export default class FrontendSentenceHistory {
     constructor(public xrArgs: { [name: string]: string}, public lang: string) {
@@ -45,6 +46,14 @@ export default class FrontendSentenceHistory {
 
     addComment(comment: string, sentenceId: number) {
         return xr.post(`/api/${ this.lang }/sentence/${ sentenceId }/comment`, { text: comment }, this.xrArgs)
+        .catch(handleException)
+    }
+
+    getSentencesByDate() {
+        return xr.get(`/api/${ this.lang }/sentence/by-date`, {}, this.xrArgs)
+        .then((xhr) => {
+            return xhr.data as SentencesByDate
+        })
         .catch(handleException)
     }
 }

@@ -5,6 +5,8 @@ import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
+import { SentencesByDate } from '../../shared/metadata/SentencesByDate'
+
 const url = 'mongodb://localhost:27017/metadata';
 const COLLECTION_METADATA = 'metadata'
 const COLLECTION_EVENT = 'event'
@@ -24,7 +26,7 @@ let eventsPending: {[id: number] : Event}  = {}
 
 const EVENT_EDIT = 'edit'
 const EVENT_CREATE = 'create'
-const EVENT_DELETE = 'create'
+const EVENT_DELETE = 'delete'
 const EVENT_COMMENT = 'comment'
 
 export function recordEdit(sentence: Sentence, author: string) {
@@ -97,6 +99,49 @@ export function getPending(exceptAuthor: string): Promise<number[]> {
             }, () => {
                 resolve(ids)
             });
+    })
+}
+
+export function getSentencesByDate(): Promise<SentencesByDate> {
+    if (!db) {
+        return Promise.resolve({
+            values: {},
+            days: [],
+            authors: []    
+        })
+    }
+
+    let cursor = db.collection('sentences_by_date')
+        .find({ '_id.date': { $gt: new Date(116, 6, 1) } }).sort({ '_id.date': 1, '_id.author': 1 })
+
+    return new Promise((resolve, reject) => {
+        let ids: number[] = []
+
+        let byDate = {}
+        let authors = {}
+
+        cursor.forEach((doc) => {
+            let author = doc._id.author || 'unknown'
+            let date = doc._id.date
+            let dayNumber = Math.round(date.getTime() / 1000 / 60 / 60 / 24)
+
+            if (!byDate[dayNumber]) {
+                byDate[dayNumber] = {}
+            }
+
+            authors[author] = true
+            byDate[dayNumber][author] = doc.value
+        }, () => {
+            let days = Object.keys(byDate).sort()
+
+            let values = days.map((key) => byDate[key])
+
+            resolve({
+                values: values,
+                days: days,
+                authors: Object.keys(authors).sort()    
+            })
+        });
     })
 }
 
