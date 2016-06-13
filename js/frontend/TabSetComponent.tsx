@@ -56,14 +56,20 @@ export default class TabSetComponent extends Component<Props, State> {
         if (document.location.hash) {
             let sentenceId = parseInt(document.location.hash.substr(1))
 
-            if (!isNaN(sentenceId)) {
+            let tabIndex = state.tabs.findIndex((tab) => tab.id == sentenceId.toString())
+
+            if (tabIndex < 0 && !isNaN(sentenceId)) {
                 let tab = this.createTabForSentence(sentenceId, this.props.corpus)
 
                 if (tab) {
+                    tabIndex = state.tabs.length
                     state.tabs.push(tab)
-                    state.first = Math.max(state.tabs.length-2, 0)
                 }
-            } 
+            }
+
+            if (tabIndex >= 0) {
+                state.first = Math.max(tabIndex - 1, 0)
+            }
         }
 
         this.state = state

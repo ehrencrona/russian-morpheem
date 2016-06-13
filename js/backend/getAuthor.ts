@@ -16,6 +16,18 @@ const AUTHORS: { [id:string] : Author } = {
     '575e581bc7128f622cabe9c3': { name: 'alexey' }
 }
 
+export function getSlackOfAuthor(authorName: string) {
+    let authorId = Object.keys(AUTHORS).find((authorId) => 
+        AUTHORS[authorId].name == authorName
+    )
+
+    if (!authorId) {
+        return null
+    }
+
+    return AUTHORS[authorId].slack
+}
+
 export default function getAuthor(req: express.Request) {
     let result
 

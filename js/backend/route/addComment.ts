@@ -3,6 +3,7 @@ import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
 import { recordComment } from '../metadata/Metadata'
+import { notifyComment } from '../notifySlack'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
@@ -25,7 +26,11 @@ export default function(corpus: Corpus) {
             throw new Error('No text provided.')
         }
 
-        recordComment(comment, sentence, getAuthor(req).name)
+        let author = getAuthor(req).name
+
+        recordComment(comment, sentence, author)
+
+        notifyComment(comment, sentence, author)
 
         res.status(200).send({})
     }
