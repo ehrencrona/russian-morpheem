@@ -48,7 +48,9 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                         return {
                             data: this.state.sentencesByDate.values.map(
                                 (value: SentencesByAuthor) => {
-                                    total += value[author]
+                                    if (value[author] > 0) {
+                                        total += value[author]
+                                    }
 
                                     return total
                                 }
