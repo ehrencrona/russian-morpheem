@@ -5,13 +5,9 @@ import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import InflectionFact from '../shared/InflectionFact';
-import xr from 'xr';
+import { handleException } from './xr';
+import xr from './xr';
 import getLanguage from './getLanguage';
-
-let handleException = (e) => {
-    alert('Error while saving.')
-    console.log(e)
-}
 
 const lang = getLanguage()
 

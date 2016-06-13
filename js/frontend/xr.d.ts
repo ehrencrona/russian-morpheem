@@ -28,6 +28,10 @@ declare module "xr" {
             args?: { [name: string]: any }
         )
 
+        configure(
+            config: { [name: string]: any }
+        )
+
    }
         
     export default new XR();

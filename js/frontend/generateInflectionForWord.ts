@@ -1,15 +1,11 @@
-import xr from 'xr';
+import { handleException } from './xr';
+import xr from './xr';
 
 import Corpus from '../shared/Corpus';
 import Inflection from '../shared/Inflection';
 import { GeneratedInflection } from '../shared/Inflections';
 
 import NoSuchWordError from '../shared/NoSuchWordError'
-
-let handleException = (e) => {
-    alert('Error while calling server.')
-    console.log(e)
-}
 
 interface Response {
     inflected: boolean
