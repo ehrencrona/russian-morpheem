@@ -1,12 +1,9 @@
-import xr from 'xr';
+
+import { handleException } from '../xr';
+import xr from '../xr';
 
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus } from '../../shared/metadata/SentenceStatus'
-
-let handleException = (e) => {
-    alert('Error getting sentence metadata.')
-    console.log(e)
-}
 
 export default class FrontendSentenceHistory {
     constructor(public xrArgs: { [name: string]: string}, public lang: string) {

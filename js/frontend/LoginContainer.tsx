@@ -7,12 +7,12 @@ import { Component, createElement } from 'react'
 import Corpus from '../shared/Corpus'
 import Word from '../shared/Word'
 
-import xr from 'xr'
-
 import getLanguage from './getLanguage'
 import listenForChanges from './listenForChanges'
 import generateInflectionForWord from './generateInflectionForWord'
 import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
+import { handleException } from './xr';
+import xr from './xr';
 
 const lang = getLanguage()
 
