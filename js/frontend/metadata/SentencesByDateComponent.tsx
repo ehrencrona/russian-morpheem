@@ -22,6 +22,12 @@ export default class PendingSentencesComponent extends Component<Props, State> {
     chart: Chart
 
     renderGraph(canvas: HTMLCanvasElement) {
+        if (canvas) {
+            console.warn('no canvas?')
+            
+            return
+        }
+
         if (this.chart) {
             this.chart.destroy();
         }
