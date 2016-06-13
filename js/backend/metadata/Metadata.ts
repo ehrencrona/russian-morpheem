@@ -24,6 +24,8 @@ let eventsPending: {[id: number] : Event}  = {}
 
 const EVENT_EDIT = 'edit'
 const EVENT_CREATE = 'create'
+const EVENT_DELETE = 'create'
+const EVENT_COMMENT = 'comment'
 
 export function recordEdit(sentence: Sentence, author: string) {
     let pending = eventsPending[sentence.id]
@@ -102,7 +104,15 @@ export function recordCreate(sentence: Sentence, author: string) {
     recordEvent(EVENT_CREATE, sentence, author, true)
 }
 
-export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean) {
+export function recordDelete(sentence: Sentence, author: string) {
+    recordEvent(EVENT_DELETE, sentence, author, false)
+}
+
+export function recordComment(comment: string, sentence: Sentence, author: string) {
+    recordEvent(EVENT_COMMENT, sentence, author, false, comment)
+}
+
+export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean, message?: string) {
     if (!db) {
         console.error('Could not record event since Mongo connection failed.')
         return
@@ -113,7 +123,7 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
         date: new Date(),
         event: type,
         author: author,
-        text: sentence.toString()
+        text: message || sentence.toString()
     }
 
     eventsPending[sentence.id] = event

@@ -33,7 +33,7 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.smallFont, .index, .inflections table td .add, .history .date, .history .event {
+.smallFont, .index, .inflections table td .add, .history li .event, .history li .main .date {
   font-size: 60%;
   font-weight: 900; }
 
@@ -351,19 +351,41 @@ ul.stats {
     margin: 0;
     margin-left: 8px; }
 
-.history .date {
-  margin-top: 16px;
-  margin-bottom: 8px; }
+.comment textarea {
+  width: 100%;
+  font-size: inherit;
+  font-family: inherit; }
 
-.history .event {
-  text-transform: uppercase;
-  background-color: #4bb6ac;
-  color: #f8f9f3;
-  padding: 4px;
-  border-radius: 4px;
-  position: relative;
-  top: -1px;
-  margin-right: 4px; }
+.comment input[type=submit] {
+  border: none;
+  font-size: inherit; }
+
+.history li {
+  margin: 16px 0; }
+  .history li .event {
+    text-transform: uppercase;
+    background-color: #4bb6ac;
+    color: #f8f9f3;
+    padding: 4px;
+    border-radius: 4px;
+    position: relative;
+    margin-right: 8px; }
+  .history li .main {
+    display: flex;
+    align-items: flex-start; }
+    .history li .main .date {
+      margin-bottom: 5px; }
+    .history li .main .text {
+      border-left: 2px solid #303030;
+      padding: 2px 0;
+      padding-left: 6px;
+      margin-left: 4px; }
+      .history li .main .text p {
+        font-weight: bold;
+        margin: 0;
+        margin-bottom: 4px; }
+      .history li .main .text p:last-of-type {
+        margin-bottom: 0; }
 
 .status {
   margin: 4px 0; }

@@ -28,7 +28,7 @@ export default function(corpus: Corpus) {
         if (status == STATUS_ACCEPTED) {
             setStatus(status, sentenceId)
 
-            recordEvent('accepted', sentence, getAuthor(req))
+            recordEvent('accepted', sentence, getAuthor(req).name)
 
             res.status(200).send({ status: status })
         }

@@ -559,23 +559,60 @@ ul.stats {
     }
 }
 
-.history {
-    .date {
-        @extend .smallFont;
-        margin-top: 4 * $unit;
-        margin-bottom: 2 * $unit;
+.comment {
+    textarea {
+        width: 100%;
+        font-size: inherit;
+        font-family: inherit;
     }
 
-    .event {
-        text-transform: uppercase;
-        @extend .smallFont;
-        background-color: $color10;
-        color: $color12;
-        padding: $unit;
-        border-radius: $unit;
-        position: relative;
-        top: -1px;
-        margin-right: $unit;
+    input[type=submit] {
+        border: none;
+        font-size: inherit;
+    }
+}
+
+.history {
+    li {
+        margin: 4 * $unit 0;
+
+        .event {
+            text-transform: uppercase;
+            @extend .smallFont;
+            background-color: $color10;
+            color: $color12;
+            padding: $unit;
+            border-radius: $unit;
+            position: relative;
+            margin-right: 2 * $unit;
+        }
+
+        .main {
+            display: flex;
+            align-items: flex-start;
+
+            .date {
+                @extend .smallFont;
+                margin-bottom: $unit + 1px;
+            }
+
+            .text {
+                border-left: 2px solid $color8;
+                padding: 2px 0;
+                padding-left: 6px;
+                margin-left: $unit;
+
+                p {
+                    font-weight: bold;
+                    margin: 0;
+                    margin-bottom: $unit;
+                }
+
+                p:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 }
 

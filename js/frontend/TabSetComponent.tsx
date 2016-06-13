@@ -102,7 +102,7 @@ export default class TabSetComponent extends Component<Props, State> {
             let numericalId = parseInt(id)
 
             if (!isNaN(numericalId)) {
-                this.createTabForSentence(numericalId, corpus)
+                return this.createTabForSentence(numericalId, corpus)
             }
 
             if (id == 'facts') {

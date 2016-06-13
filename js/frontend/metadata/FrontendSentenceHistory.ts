@@ -42,4 +42,9 @@ export default class FrontendSentenceHistory {
         })
         .catch(handleException)
     }
+
+    addComment(comment: string, sentenceId: number) {
+        return xr.post(`/api/${ this.lang }/sentence/${ sentenceId }/comment`, { text: comment }, this.xrArgs)
+        .catch(handleException)
+    }
 }

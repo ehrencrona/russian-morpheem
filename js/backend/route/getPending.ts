@@ -7,7 +7,7 @@ import getAuthor from '../getAuthor'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
-        getPending(getAuthor(req))
+        getPending(getAuthor(req).name)
             .then((sentenceIds: number[]) => {
                 res.status(200).send(sentenceIds)
             })

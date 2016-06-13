@@ -10,7 +10,7 @@ export default function(corpus: Corpus) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
-            sentence.author = getAuthor(req)
+            sentence.author = getAuthor(req).name
 
             if (sentence.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');

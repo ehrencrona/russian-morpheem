@@ -10,13 +10,13 @@ import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
         let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
-        sentence.author = getAuthor(req)
+        sentence.author = getAuthor(req).name
 
         sentence.id = null
 
         corpus.sentences.add(sentence)
 
-        console.log('Added ' + sentence + ' (' + sentence.id + ')')
+        console.log(sentence.author + ' added ' + sentence + ' (' + sentence.id + ')')
         
         recordCreate(sentence, sentence.author)
         setStatus(STATUS_SUBMITTED, sentence.id, sentence.author)

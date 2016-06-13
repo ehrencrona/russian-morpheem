@@ -8,7 +8,7 @@ import writeSentenceFile from '../backend/SentenceFileWriter'
 import writeInflectionsFile from '../backend/InflectionsFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
 
-import notifySlack from './notifySlack'
+import { notifyAdd } from './notifySlack'
 
 let lastSave
 
@@ -60,7 +60,7 @@ export default function listenForChanges(corpus: Corpus) {
                 let editedSentences = corpus.sentences.get(sentence.id)
                 
                 if (editedSentences) {
-                    notifySlack(editedSentences)
+                    notifyAdd(editedSentences)
                 }
             }, 180000)
         }

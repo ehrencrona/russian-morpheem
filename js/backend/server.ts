@@ -22,6 +22,7 @@ import inflectionFor from './route/inflectionFor';
 import addWord from './route/addWord';
 import addInflectedWord from './route/addInflectedWord';
 import addSentence from './route/addSentence';
+import addComment from './route/addComment';
 import deleteSentence from './route/deleteSentence';
 import setSentence from './route/setSentence';
 import getEvents from './route/getEvents';
@@ -86,6 +87,8 @@ function registerRoutes(corpus: Corpus) {
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
+
+    app.post(`/api/${lang}/sentence/:id/comment`, addComment(corpus))
 
     app.get(`/api/${lang}/sentence/:id/status`, getStatus(corpus))
 
