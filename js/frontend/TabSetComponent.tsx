@@ -53,11 +53,33 @@ export default class TabSetComponent extends Component<Props, State> {
             state.tabs.push(this.createStatsTab())
         }
 
+        if (document.location.hash) {
+            let sentenceId = parseInt(document.location.hash.substr(1))
+
+            if (!isNaN(sentenceId)) {
+                let tab = this.createTabForSentence(sentenceId, this.props.corpus)
+
+                if (tab) {
+                    state.tabs.push(tab)
+                    state.first = Math.max(state.tabs.length-2, 0)
+                }
+            } 
+        }
+
         this.state = state
     }
 
     componentDidUpdate() {
         this.storeTabState()
+    }
+
+    createTabForSentence(id: number, corpus: Corpus) {
+        let sentence = corpus.sentences.get(id)
+
+        if (sentence) {
+            return new Tab(sentence.toString(), id.toString(),
+                <Sentence corpus={ corpus } sentence={ sentence } tab={null} />, this)
+        }
     }
 
     restoreState(corpus: Corpus): State {
@@ -80,12 +102,7 @@ export default class TabSetComponent extends Component<Props, State> {
             let numericalId = parseInt(id)
 
             if (!isNaN(numericalId)) {
-                let sentence = corpus.sentences.get(numericalId)
-
-                if (sentence) {
-                    return new Tab(sentence.toString(), id,
-                        <Sentence corpus={ corpus } sentence={ sentence } tab={null} />, this)
-                }
+                this.createTabForSentence(numericalId, corpus)
             }
 
             if (id == 'facts') {
