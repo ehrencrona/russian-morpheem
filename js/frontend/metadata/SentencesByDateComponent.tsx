@@ -37,7 +37,7 @@ function toTransparentRgb(hexColor) {
     let g = parseInt(hexColor.substr(2,2), 16)
     let b = parseInt(hexColor.substr(4,2), 16)
 
-    return `rgba(${r},${g},${b},0.4)`
+    return `rgba(${r},${g},${b},0.1)`
 }
 
 export default class PendingSentencesComponent extends Component<Props, State> {
@@ -76,7 +76,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                         let total = 0
 
                         return {
-                            borderColor: '#808080',
+                            borderColor: COLORS[index % COLORS.length],
                             borderWidth: 2,
                             backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
                             data: this.state.sentencesByDate.values.map(
