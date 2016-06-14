@@ -76,7 +76,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                         let total = 0
 
                         return {
-                            borderColor: COLORS[index % COLORS.length],
+                            borderColor: '#' + COLORS[index % COLORS.length],
                             borderWidth: 2,
                             backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
                             data: this.state.sentencesByDate.values.map(
