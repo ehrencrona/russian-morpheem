@@ -9,17 +9,17 @@ import { Chart } from 'chart.js';
 import human = require('human-time')
 
 const COLORS = [
-    '#31c8c7',
-    '#f0af33',
-    '#766db0',
-    '#2CAAA9',
-    '#ff5f3b',
-    '#ffd02a',
-    '#d03a3e',
-    '#303030',
-    '#4bb6ac',
-    '#f8f7f5',
-    '#e95f3d'
+    '31c8c7',
+    'f0af33',
+    '766db0',
+    '2CAAA9',
+    'ff5f3b',
+    'ffd02a',
+    'd03a3e',
+    '303030',
+    '4bb6ac',
+    'f8f7f5',
+    'e95f3d'
 ]
 
 interface Props {
@@ -31,6 +31,14 @@ interface State {
 }
 
 let React = { createElement: createElement }
+
+function toTransparentRgb(hexColor) {
+    let r = parseInt(hexColor.substr(0,2), 16)
+    let g = parseInt(hexColor.substr(2,2), 16)
+    let b = parseInt(hexColor.substr(4,2), 16)
+
+    return `rgba(${r},${g},${b},0.2)`
+}
 
 export default class PendingSentencesComponent extends Component<Props, State> {
     chart: Chart
@@ -68,7 +76,9 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                         let total = 0
 
                         return {
-                            backgroundColor: COLORS[index % COLORS.length],
+                            borderColor: '#808080',
+                            borderWidth: 2,
+                            backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
                             data: this.state.sentencesByDate.values.map(
                                 (value: SentencesByAuthor) => {
                                     if (value[author] > 0) {
