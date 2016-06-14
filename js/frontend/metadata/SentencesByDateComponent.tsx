@@ -37,7 +37,7 @@ function toTransparentRgb(hexColor) {
     let g = parseInt(hexColor.substr(2,2), 16)
     let b = parseInt(hexColor.substr(4,2), 16)
 
-    return `rgba(${r},${g},${b},0.2)`
+    return `rgba(${r},${g},${b},0.4)`
 }
 
 export default class PendingSentencesComponent extends Component<Props, State> {
