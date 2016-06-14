@@ -80,12 +80,19 @@ export default class TabSetComponent extends Component<Props, State> {
     }
 
     createTabForSentence(id: number, corpus: Corpus) {
-        let sentence = corpus.sentences.get(id)
-
-        if (sentence) {
-            return new Tab(sentence.toString(), id.toString(),
-                <Sentence corpus={ corpus } sentence={ sentence } tab={null} />, this)
+        let sentence
+        
+        try {
+            sentence = corpus.sentences.get(id)
         }
+        catch (e) {
+            alert('This sentence seems to have been deleted.')
+
+            return 
+        }
+
+        return new Tab(sentence.toString(), id.toString(),
+            <Sentence corpus={ corpus } sentence={ sentence } tab={null} />, this)
     }
 
     restoreState(corpus: Corpus): State {

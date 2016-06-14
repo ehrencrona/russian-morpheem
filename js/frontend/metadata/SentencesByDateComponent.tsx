@@ -8,6 +8,20 @@ import Corpus from '../../shared/Corpus'
 import { Chart } from 'chart.js';
 import human = require('human-time')
 
+const COLORS = [
+    '#31c8c7',
+    '#f0af33',
+    '#766db0',
+    '#2CAAA9',
+    '#ff5f3b',
+    '#ffd02a',
+    '#d03a3e',
+    '#303030',
+    '#4bb6ac',
+    '#f8f7f5',
+    '#e95f3d'
+]
+
 interface Props {
     corpus: Corpus
 }
@@ -32,20 +46,29 @@ export default class PendingSentencesComponent extends Component<Props, State> {
             this.chart.destroy();
         }
 
+        let lastDay = new Date().getTime() - 24 * 60 * 60 * 1000
+
         let chartData = {
             type: 'line',
             data: {
                 labels: this.state.sentencesByDate.days.map((day) => {
                     let date = new Date(day * 24 * 60 * 60 * 1000)
 
-                    return human(date)
+                    let result = human(date)
+
+                    if (date.getTime() > lastDay) {
+                        result = 'today'
+                    }
+
+                    return result
                 }),
                 datasets: 
-                    this.state.sentencesByDate.authors.map((author) =>
+                    this.state.sentencesByDate.authors.map((author, index) =>
                     {
                         let total = 0
 
                         return {
+                            backgroundColor: COLORS[index % COLORS.length],
                             data: this.state.sentencesByDate.values.map(
                                 (value: SentencesByAuthor) => {
                                     if (value[author] > 0) {

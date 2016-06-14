@@ -122,6 +122,12 @@ export function getSentencesByDate(): Promise<SentencesByDate> {
 
         cursor.forEach((doc) => {
             let author = doc._id.author || 'unknown'
+
+            // probably an unmadded user ID
+            if (author.length > 12) {
+                return    
+            }
+
             let date = doc._id.date
             let dayNumber = Math.round(date.getTime() / 1000 / 60 / 60 / 24)
 
