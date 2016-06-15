@@ -1,6 +1,6 @@
 /// <reference path="../../../typings/modules/mongodb/index.d.ts" />
 
-import { MongoClient, MongoError, Db } from 'mongodb'
+import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
@@ -24,10 +24,10 @@ MongoClient.connect(url, function(err, connectedDb) {
 
 let eventsPending: {[id: number] : Event}  = {}
 
-const EVENT_EDIT = 'edit'
-const EVENT_CREATE = 'create'
-const EVENT_DELETE = 'delete'
-const EVENT_COMMENT = 'comment'
+export const EVENT_EDIT = 'edit'
+export const EVENT_CREATE = 'create'
+export const EVENT_DELETE = 'delete'
+export const EVENT_COMMENT = 'comment'
 
 export function recordEdit(sentence: Sentence, author: string) {
     let pending = eventsPending[sentence.id]
@@ -190,13 +190,7 @@ function oneDayAgo() {
     return new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
 }
 
-export function getEvents(sentenceId: number): Promise<Event[]> {
-    if (!db) {
-        return Promise.resolve([])
-    }
-
-    var cursor = db.collection(COLLECTION_EVENT).find( { "sentence": sentenceId } );
-
+function returnAllEvents(cursor: Cursor) {
     return new Promise((resolve, reject) => {
         let events: Event[] = []
 
@@ -208,28 +202,32 @@ export function getEvents(sentenceId: number): Promise<Event[]> {
     })
 }
 
-export function getLatestSentenceIds(author?: string): Promise<number[]> {
+export function getEventsForSentence(sentenceId: number): Promise<Event[]> {
     if (!db) {
         return Promise.resolve([])
     }
 
-    let query: any = { date: { $gt: oneDayAgo() }, event: EVENT_CREATE }
+    return returnAllEvents(
+        db.collection(COLLECTION_EVENT).find( { "sentence": sentenceId } ))
+}
+
+export function getLatestEvents(type?: string, author?: string): Promise<number[]> {
+    if (!db) {
+        return Promise.resolve([])
+    }
+
+    let query: any = { date: { $gt: oneDayAgo() } }
+
+    if (type) {
+        query.event = type
+    }
 
     if (author) {
         query.author = author
     }
 
-    return new Promise((resolve, reject) => {
-        db.collection(COLLECTION_EVENT).distinct( 'sentence', 
-            query,
-            (error: MongoError, result: number[]) => {
-                if (error) {
-                    reject(error)
-                }
-                else {
-                    resolve(result.reverse().slice(0, 100))
-                }
-            }
-        )
-    })
+    return returnAllEvents(
+        db.collection(COLLECTION_EVENT).find(query)
+            .sort({ '_id.date': -1 })
+            .limit(100))
 }

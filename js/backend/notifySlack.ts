@@ -2,7 +2,7 @@
 
 import { post } from 'request';
 import Sentence from '../shared/Sentence'
-import { getEvents } from './metadata/Metadata'
+import { getEventsForSentence } from './metadata/Metadata'
 import { getSlackOfAuthor } from './getAuthor'
 
 export function notify(message: string, author: string) {
@@ -30,7 +30,7 @@ export function notifyAdd(sentence : Sentence) {
 export function notifyComment(comment: string, sentence : Sentence, author: string) {
     let shoutOuts: { [name: string] : boolean } = {}
 
-    getEvents(sentence.id).then((events) => {
+    getEventsForSentence(sentence.id).then((events) => {
         events.forEach((event) => {
             if (event.author != author) {
                 let slack = getSlackOfAuthor(event.author)

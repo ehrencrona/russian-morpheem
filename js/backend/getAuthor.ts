@@ -51,3 +51,7 @@ export default function getAuthor(req: express.Request) {
 
     return result
 }
+
+export function getAllAuthors(): string[] {
+    return Object.keys(AUTHORS).map((id) => AUTHORS[id].name)
+}

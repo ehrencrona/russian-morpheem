@@ -13,17 +13,6 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         this.lang = lang
     }
 
-    getEvents(sentenceId: number): Promise<Event[]> {
-        return xr.get(`/api/${ this.lang }/sentence/` + sentenceId + '/events', {}, this.xrArgs)
-        .then((xhr) => {
-            return xhr.data.map((event) => {
-                event.date = new Date(event.date)
-                return event
-            }) as Event[]
-        })
-        .catch(handleException)
-    }
-
     setStatus(status: number, sentenceId: number) {
         return xr.put(`/api/${ this.lang }/sentence/` + sentenceId + '/status', { status: status }, this.xrArgs)
         .catch(handleException)
@@ -37,10 +26,18 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         .catch(handleException)
     }
 
-    getIdList(url) {
+    getIdList(url): Promise<number[]> {
         return xr.get(`/api/${ this.lang }/${ url }`, {}, this.xrArgs)
         .then((xhr) => {
             return xhr.data as number[]
+        })
+        .catch(handleException)
+    }
+
+    getEventList(url): Promise<Event[]> {
+        return xr.get(`/api/${ this.lang }/${ url }`, {}, this.xrArgs)
+        .then((xhr) => {
+            return xhr.data as Event[]
         })
         .catch(handleException)
     }
@@ -49,12 +46,23 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         return this.getIdList('sentence/pending')
     }
 
-    getLatestSentences() {
-        return this.getIdList('sentence/latest')
+    getEventsForSentence(sentenceId: number): Promise<Event[]> {
+        return xr.get(`/api/${ this.lang }/sentence/` + sentenceId + '/events', {}, this.xrArgs)
+        .then((xhr) => {
+            return xhr.data.map((event) => {
+                event.date = new Date(event.date)
+                return event
+            }) as Event[]
+        })
+        .catch(handleException)
     }
 
-    getMyLatestSentences() {
-        return this.getIdList('sentence/my-latest')
+    getLatestEvents(author?: string, type?: string): Promise<Event[]> {
+        return this.getEventList('event/latest' + (author ? '/' + author : '/null') + (type ? '/' + type : '/null'))
+    }
+
+    getMyLatestEvents(type?: string): Promise<Event[]> {
+        return this.getEventList('event/latest/my/' + type)
     }
 
     addComment(comment: string, sentenceId: number) {

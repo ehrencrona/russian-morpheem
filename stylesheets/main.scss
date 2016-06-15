@@ -585,6 +585,8 @@ ul.stats {
             border-radius: $unit;
             position: relative;
             margin-right: 2 * $unit;
+            min-width: 6em;
+            text-align: center;
         }
 
         .main {

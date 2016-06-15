@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { getEvents } from '../metadata/Metadata'
+import { getEventsForSentence } from '../metadata/Metadata'
 import Corpus from '../../shared/Corpus'
 
 export default function(corpus: Corpus) {
@@ -11,7 +11,7 @@ export default function(corpus: Corpus) {
             throw new Error('No sentence ID')
         }
 
-        getEvents(sentenceId)
+        getEventsForSentence(sentenceId)
             .then((events) => {
                 res.status(200).send(events)
             })

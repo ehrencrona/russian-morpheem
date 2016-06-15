@@ -1,11 +1,23 @@
 import * as express from 'express'
 
-import { getLatestSentenceIds } from '../metadata/Metadata'
+import { getLatestEvents } from '../metadata/Metadata'
 import Corpus from '../../shared/Corpus'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
-        getLatestSentenceIds()
+        let type = req.params.type
+
+        if (type == 'all') {
+            type = null
+        }
+
+        let author = req.params.author
+
+        if (author == 'all') {
+            author = null
+        }
+
+        getLatestEvents(type, author)
             .then((sentenceIds: number[]) => {
                 res.status(200).send(sentenceIds)
             })

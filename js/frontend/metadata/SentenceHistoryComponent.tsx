@@ -33,7 +33,7 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
     }
 
     loadEvents() {
-        this.props.corpus.sentenceHistory.getEvents(this.props.sentence.id)
+        this.props.corpus.sentenceHistory.getEventsForSentence(this.props.sentence.id)
         .then((events: Event[]) => this.setState({ events: events.reverse() }))
     }
 

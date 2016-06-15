@@ -29,8 +29,8 @@ import getEvents from './route/getEvents';
 import getStatus from './route/getStatus';
 import setStatus from './route/setStatus';
 import getPendingSentences from './route/getPendingSentences';
-import getLatestSentences from './route/getLatestSentences';
-import getMyLatestSentences from './route/getMyLatestSentences';
+import getLatestEvents from './route/getLatestEvents';
+import getMyLatestEvents from './route/getMyLatestEvents';
 import getSentencesByDate from './route/sentencesByDate';
 
 import { tag, untag } from './route/tag';
@@ -102,10 +102,14 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
 
     app.get(`/api/${lang}/sentence/pending`, getPendingSentences(corpus))    
+    
+    app.get(`/api/${lang}/event/latest/my/:type`, getMyLatestEvents(corpus))
 
-    app.get(`/api/${lang}/sentence/latest`, getLatestSentences(corpus))    
+    app.get(`/api/${lang}/event/latest/my`, getMyLatestEvents(corpus))
 
-    app.get(`/api/${lang}/sentence/my-latest`, getMyLatestSentences(corpus))    
+    app.get(`/api/${lang}/event/latest/:author/:type`, getLatestEvents(corpus))    
+
+    app.get(`/api/${lang}/event/latest`, getLatestEvents(corpus))    
 
     app.get(`/api/${lang}/sentence/by-date`, getSentencesByDate(corpus))    
         
