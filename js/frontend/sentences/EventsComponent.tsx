@@ -6,7 +6,9 @@ import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import Tab from '../Tab'
 import SentenceComponent from '../SentenceComponent'
+
 import human = require('human-time')
+import marked = require('marked')
 
 interface Props {
     corpus: Corpus,
@@ -59,8 +61,13 @@ export default class EventsComponent extends Component<Props, State> {
                                     { human(new Date(eventAndSentence.event.date.toString())) },&nbsp;
                                     { eventAndSentence.event.author || 'Unknown' }
                                 </div>
-                                <div className='clickable' onClick={ () => this.openSentence(eventAndSentence.sentence) } >{ 
-                                    eventAndSentence.sentence.toUnambiguousString(this.props.corpus.words) 
+                                <div className='clickable' onClick={ () => this.openSentence(eventAndSentence.sentence) } >
+                                { 
+                                    eventAndSentence.event.event == 'comment' ?
+                                        <div dangerouslySetInnerHTML={ { __html: marked(eventAndSentence.event.text)} }/>
+                                    :
+                                        eventAndSentence.sentence.toUnambiguousString(this.props.corpus.words)
+
                                 }
                                 </div>
                             </div>

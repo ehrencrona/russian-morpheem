@@ -6,7 +6,13 @@ import getAuthor from '../getAuthor'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
-        getLatestEvents(req.params.type, getAuthor(req).name)
+        let type = req.params.type
+
+        if (type == 'all') {
+            type = null
+        }
+
+        getLatestEvents(type, getAuthor(req).name)
             .then((events) => {
                 res.status(200).send(events)
             })
