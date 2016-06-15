@@ -228,6 +228,6 @@ export function getLatestEvents(type?: string, author?: string): Promise<number[
 
     return returnAllEvents(
         db.collection(COLLECTION_EVENT).find(query)
-            .sort({ '_id.date': -1 })
+            .sort({ 'date': -1 })
             .limit(100))
 }
