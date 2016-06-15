@@ -5,8 +5,9 @@ import xr from '../xr';
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus } from '../../shared/metadata/SentenceStatus'
 import { SentencesByDate} from '../../shared/metadata/SentencesByDate'
+import { SentenceHistory} from '../../shared/metadata/SentenceHistory'
 
-export default class FrontendSentenceHistory {
+export default class FrontendSentenceHistory implements SentenceHistory {
     constructor(public xrArgs: { [name: string]: string}, public lang: string) {
         this.xrArgs = xrArgs
         this.lang = lang
@@ -36,12 +37,24 @@ export default class FrontendSentenceHistory {
         .catch(handleException)
     }
 
-    getPending() {
-        return xr.get(`/api/${ this.lang }/pending-sentences`, {}, this.xrArgs)
+    getIdList(url) {
+        return xr.get(`/api/${ this.lang }/${ url }`, {}, this.xrArgs)
         .then((xhr) => {
             return xhr.data as number[]
         })
         .catch(handleException)
+    }
+
+    getPendingSentences() {
+        return this.getIdList('sentence/pending')
+    }
+
+    getLatestSentences() {
+        return this.getIdList('sentence/latest')
+    }
+
+    getMyLatestSentences() {
+        return this.getIdList('sentence/my-latest')
     }
 
     addComment(comment: string, sentenceId: number) {

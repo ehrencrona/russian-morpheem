@@ -1,6 +1,6 @@
 /// <reference path="../../../typings/modules/mongodb/index.d.ts" />
 
-import { MongoClient, Db } from 'mongodb'
+import { MongoClient, MongoError, Db } from 'mongodb'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
@@ -123,7 +123,7 @@ export function getSentencesByDate(): Promise<SentencesByDate> {
         cursor.forEach((doc) => {
             let author = doc._id.author || 'unknown'
 
-            // probably an unmadded user ID
+            // probably an unmapped user ID
             if (author.length > 12) {
                 return    
             }
@@ -186,6 +186,10 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
     }, (delay ? 180000 : 0))
 }
 
+function oneDayAgo() {
+    return new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+}
+
 export function getEvents(sentenceId: number): Promise<Event[]> {
     if (!db) {
         return Promise.resolve([])
@@ -201,5 +205,31 @@ export function getEvents(sentenceId: number): Promise<Event[]> {
         }, () => {
             resolve(events)
         });
+    })
+}
+
+export function getLatestSentenceIds(author?: string): Promise<number[]> {
+    if (!db) {
+        return Promise.resolve([])
+    }
+
+    let query: any = { date: { $gt: oneDayAgo() }, event: EVENT_CREATE }
+
+    if (author) {
+        query.author = author
+    }
+
+    return new Promise((resolve, reject) => {
+        db.collection(COLLECTION_EVENT).distinct( 'sentence', 
+            query,
+            (error: MongoError, result: number[]) => {
+                if (error) {
+                    reject(error)
+                }
+                else {
+                    resolve(result.reverse().slice(0, 100))
+                }
+            }
+        )
     })
 }

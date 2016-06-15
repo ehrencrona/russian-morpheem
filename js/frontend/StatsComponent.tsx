@@ -7,8 +7,6 @@ import InflectableWord from '../shared/InflectableWord'
 import Tab from './Tab'
 import SentencesByDateComponent from './metadata/SentencesByDateComponent'
 
-import PendingSentencesComponent from './metadata/PendingSentencesComponent'
-
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
 
 interface Props {
@@ -61,10 +59,6 @@ export default class StatsComponent extends Component<Props, State> {
 
             <SentencesByDateComponent
                 corpus={ this.props.corpus }/>
-
-            <PendingSentencesComponent
-                corpus={ this.props.corpus } 
-                tab={ this.props.tab } />
         </ul>
     }        
 }

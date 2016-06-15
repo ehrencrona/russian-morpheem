@@ -8,6 +8,7 @@ import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
 import Tab from './Tab';
 import TabComponent from './TabComponent';
+import SentencesComponent from './sentences/SentencesComponent';
 
 interface Props {
     corpus: Corpus
@@ -47,6 +48,10 @@ export default class TabSetComponent extends Component<Props, State> {
 
         if (!state.tabs.find((tab) => tab.id == 'facts')) {
             state.tabs.push(this.createFactsTab())
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'sentences')) {
+            state.tabs.push(this.createSentencesTab())
         }
 
         if (!state.tabs.find((tab) => tab.id == 'stats')) {
@@ -126,6 +131,10 @@ export default class TabSetComponent extends Component<Props, State> {
                 return this.createStatsTab()
             }
 
+            if (id == 'sentences') {
+                return this.createSentencesTab()
+            }
+
             console.warn('Could not build tab ' + id)
 
             return null
@@ -140,6 +149,11 @@ export default class TabSetComponent extends Component<Props, State> {
     createFactsTab() {
         return new Tab('Facts', 'facts',
                 <Facts corpus={ this.props.corpus } tab={ null }></Facts>, this)
+    }
+
+    createSentencesTab() {
+        return new Tab('Sentences', 'sentences',
+            <SentencesComponent corpus={ this.props.corpus } tab={ null } ></SentencesComponent>, this)
     }
 
     createStatsTab() {

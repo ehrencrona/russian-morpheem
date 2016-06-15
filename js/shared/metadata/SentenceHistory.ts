@@ -9,7 +9,11 @@ export interface SentenceHistory {
 
     getStatus(sentenceId: number)
     
-    getPending(): Promise<number[]>
+    getPendingSentences(): Promise<number[]>
+
+    getLatestSentences(): Promise<number[]>
+
+    getMyLatestSentences(): Promise<number[]>
 
     addComment(comment: string, sentenceId: number)
 
