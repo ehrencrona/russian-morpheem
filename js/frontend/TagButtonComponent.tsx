@@ -49,7 +49,7 @@ export default class TagButtonComponent extends Component<Props, State> {
         return <div className='tag'>
             { this.state && this.state.add ?
                     
-                <input type='text' ref={ (element) => { if (element) element.focus(); this.addTag = element } }/>
+                <input type='text' autoCapitalize='off' ref={ (element) => { if (element) element.focus(); this.addTag = element } }/>
                 
                 :
                 

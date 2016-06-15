@@ -6,6 +6,7 @@ import Corpus from '../../shared/Corpus'
 import Tab from '../Tab'
 import PendingSentencesComponent from './PendingSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
+import NewsfeedComponent from './NewsfeedComponent'
 
 interface Props {
     corpus: Corpus,
@@ -15,6 +16,7 @@ interface Props {
 const LATEST = 'latest'
 const MY_LATEST = 'my-latest'
 const PENDING = 'pending'
+const NEWSFEED = 'newsfeed'
 
 interface State {
     list?: string,
@@ -27,7 +29,7 @@ export default class SentencesComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            list: LATEST
+            list: NEWSFEED
         }
     }
     
@@ -57,10 +59,17 @@ export default class SentencesComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
+        else if (this.state.list == NEWSFEED) {
+            list = <NewsfeedComponent
+                tab={ this.props.tab }
+                corpus={ this.props.corpus }
+                key='newsfeed'/>
+        }
 
         return (<div>
                 <div className='buttonBar'>
                     <div>
+                        { filterButton(NEWSFEED, 'Newsfeed') }
                         { filterButton(LATEST, 'Latest') }
                         { filterButton(MY_LATEST, 'My latest') }
                         { filterButton(PENDING, 'Pending') }

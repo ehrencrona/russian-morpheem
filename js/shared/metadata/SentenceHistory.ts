@@ -19,4 +19,6 @@ export interface SentenceHistory {
 
     getSentencesByDate(): Promise<SentencesByDate>
 
+    getNewsfeed(): Promise<Event[]>
+
 }

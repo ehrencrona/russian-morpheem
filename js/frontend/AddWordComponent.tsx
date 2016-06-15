@@ -67,6 +67,9 @@ export default class AddWordComponent extends Component<Props, State> {
                         corpus.facts.add(word)
 
                         this.openFact(word)
+
+                        this.props.onClose();
+                        this.word.value = ''
                     }
                     else {
                         alert('Something went wrong: ' + e)
@@ -85,15 +88,15 @@ export default class AddWordComponent extends Component<Props, State> {
                     this.openFact(word)
                                     
                     this.props.onClose();
+                    this.word.value = ''
                 })
         }
 
-        this.setState({ word: '' })
     }
     
     render() {
         return <div className='addWord'>
-            <input type='text' 
+            <input type='text' autoCapitalize='off' 
                 ref={ (input) => this.word = input }
                 onChange={ (event) => {
                         let target = event.target

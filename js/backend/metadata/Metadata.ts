@@ -174,15 +174,23 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
         date: new Date(),
         event: type,
         author: author,
-        text: message || sentence.toString()
+        text: message || sentence.toString(),
+        notify: []
     }
 
     eventsPending[sentence.id] = event
 
     setTimeout(() => {
-        db.collection(COLLECTION_EVENT).insertOne(event)
+        getAllAuthorsInvolved(sentence.id)
+        .then((authorsInvolved) => {
+            event.notify = authorsInvolved.filter((involvedAuthor) => involvedAuthor != author)
 
-        delete eventsPending[sentence.id]
+            db.collection(COLLECTION_EVENT).insertOne(event)
+
+            if (eventsPending[sentence.id] === event) {
+                delete eventsPending[sentence.id]
+            }
+        })
     }, (delay ? 180000 : 0))
 }
 
@@ -190,7 +198,7 @@ function oneDayAgo() {
     return new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
 }
 
-function returnAllEvents(cursor: Cursor) {
+function returnAllEvents(cursor: Cursor): Promise<Event[]> {
     return new Promise((resolve, reject) => {
         let events: Event[] = []
 
@@ -208,10 +216,14 @@ export function getEventsForSentence(sentenceId: number): Promise<Event[]> {
     }
 
     return returnAllEvents(
-        db.collection(COLLECTION_EVENT).find( { "sentence": sentenceId } ))
+        db.collection(COLLECTION_EVENT).find( { sentence: sentenceId } ))
 }
 
-export function getLatestEvents(type?: string, author?: string): Promise<number[]> {
+export function getAllAuthorsInvolved(sentenceId: number) {
+    return db.collection(COLLECTION_EVENT).distinct('author', { sentence: sentenceId } )
+}
+
+export function getLatestEvents(type?: string, author?: string): Promise<Event[]> {
     if (!db) {
         return Promise.resolve([])
     }
@@ -230,4 +242,13 @@ export function getLatestEvents(type?: string, author?: string): Promise<number[
         db.collection(COLLECTION_EVENT).find(query)
             .sort({ 'date': -1 })
             .limit(100))
+}
+
+export function getNewsfeed(forAuthor: string): Promise<Event[]> {
+    if (!db) {
+        return Promise.resolve([])
+    }
+
+    return returnAllEvents(
+        db.collection(COLLECTION_EVENT).find( { notify: forAuthor } ))
 }

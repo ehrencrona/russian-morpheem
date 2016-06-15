@@ -28,9 +28,9 @@ const ALL = 'all'
 const MISSING = 'last' 
 const SEARCH = 'search'
 const TAGS = 'tags'
+const ADD_WORD = 'addWord'
 
 interface State {
-    add?: boolean,
     list?: string,
     tag?: string
 }
@@ -43,7 +43,6 @@ export default class FactsComponent extends Component<Props, State> {
 
         this.state = {
             list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : MISSING),
-            add: false
         }
     }
     
@@ -108,12 +107,18 @@ export default class FactsComponent extends Component<Props, State> {
                 }
                 tab={ this.props.tab } />
         }
+        else if (this.state.list == ADD_WORD) {
+            list = <AddWordComponent 
+                corpus={ this.props.corpus } 
+                onClose={ () => this.setState({ list: RECENT }) }
+                tab={ this.props.tab }/>
+        }
 
         return (<div>
                 <div className='buttonBar'>
                     <div>
-                        <div className='button' onClick={ () => { this.setState({ add: !this.state.add }) }}>+ Word</div>
                         <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
+                        { filterButton(ADD_WORD, '+ Word') }
                     </div>
 
                     <div>
@@ -125,18 +130,9 @@ export default class FactsComponent extends Component<Props, State> {
                     </div>
                 </div>
 
-                {(
-                    this.state.add ?
-
-                    <AddWordComponent 
-                        corpus={ this.props.corpus } 
-                        onClose={ () => this.setState({ add: false }) }
-                        tab={ this.props.tab }/>
-
-                    : 
-
+                {
                     list
-                )}
+                }
             </div>)
     }
 }

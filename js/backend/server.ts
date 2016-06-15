@@ -32,6 +32,7 @@ import getPendingSentences from './route/getPendingSentences';
 import getLatestEvents from './route/getLatestEvents';
 import getMyLatestEvents from './route/getMyLatestEvents';
 import getSentencesByDate from './route/sentencesByDate';
+import getNewsfeed from './route/getNewsfeed';
 
 import { tag, untag } from './route/tag';
 
@@ -110,6 +111,8 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/api/${lang}/event/latest/:author/:type`, getLatestEvents(corpus))    
 
     app.get(`/api/${lang}/event/latest`, getLatestEvents(corpus))    
+
+    app.get(`/api/${lang}/event/newsfeed`, getNewsfeed(corpus))    
 
     app.get(`/api/${lang}/sentence/by-date`, getSentencesByDate(corpus))    
         

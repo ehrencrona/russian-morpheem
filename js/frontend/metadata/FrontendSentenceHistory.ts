@@ -65,6 +65,10 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         return this.getEventList('event/latest/my/' + type)
     }
 
+    getNewsfeed(): Promise<Event[]> {
+        return this.getEventList('event/newsfeed')
+    }
+
     addComment(comment: string, sentenceId: number) {
         return xr.post(`/api/${ this.lang }/sentence/${ sentenceId }/comment`, { text: comment }, this.xrArgs)
         .catch(handleException)
