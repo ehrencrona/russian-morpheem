@@ -24,11 +24,11 @@ function getOpenLink(sentence: Sentence) {
 }
 
 export function notifyAdd(sentence : Sentence) {
-    notify(sentence.toString() + getOpenLink(sentence), getSlackOfAuthor(sentence.author))
+    notify(sentence.toString() + getOpenLink(sentence), sentence.author)
 }
 
 export function notifyComment(comment: string, sentence : Sentence, author: string) {
-    let shoutOuts: { [name: string] : boolean } = {}
+    let shoutOuts: { [name: string] : string } = {}
 
     getEventsForSentence(sentence.id).then((events) => {
         events.forEach((event) => {
@@ -36,7 +36,7 @@ export function notifyComment(comment: string, sentence : Sentence, author: stri
                 let slack = getSlackOfAuthor(event.author)
 
                 if (slack) {
-                    shoutOuts[slack] = true
+                    shoutOuts[slack.name] = slack.id
                 }
             }
         })
@@ -44,6 +44,7 @@ export function notifyComment(comment: string, sentence : Sentence, author: stri
     .catch((e) => console.error(e.stack))
     .then(() => {
         notify('> ' + sentence.toString() + getOpenLink(sentence) + '\n' +
-            comment + Object.keys(shoutOuts).map((slack) => ' @' + slack), author)
+            comment + Object.keys(shoutOuts).map((slackName) => 
+                ` <@${shoutOuts[slackName]}|${slackName}>`), author)
     })
 }
