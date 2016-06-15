@@ -29,17 +29,6 @@ export const EVENT_CREATE = 'create'
 export const EVENT_DELETE = 'delete'
 export const EVENT_COMMENT = 'comment'
 
-export function recordEdit(sentence: Sentence, author: string) {
-    let pending = eventsPending[sentence.id]
-    
-    if (pending && (pending.event == EVENT_EDIT || pending.event == EVENT_CREATE)) {
-        eventsPending[sentence.id].text = sentence.toString()
-    }
-    else {
-        recordEvent(EVENT_EDIT, sentence, author, true)
-    }
-}
-
 export function setStatus(status: number, sentenceId: number, author?: string) {
     if (!db) {
         console.error(`Could not set status of ${sentenceId} to ${status} since Mongo connection failed.`)
@@ -161,6 +150,17 @@ export function recordDelete(sentence: Sentence, author: string) {
 
 export function recordComment(comment: string, sentence: Sentence, author: string) {
     recordEvent(EVENT_COMMENT, sentence, author, false, comment)
+}
+
+export function recordEdit(sentence: Sentence, author: string) {
+    let pending = eventsPending[sentence.id]
+    
+    if (pending && pending.author == author && (pending.event == EVENT_EDIT || pending.event == EVENT_CREATE)) {
+        eventsPending[sentence.id].text = sentence.toString()
+    }
+    else {
+        recordEvent(EVENT_EDIT, sentence, author, true)
+    }
 }
 
 export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean, message?: string) {

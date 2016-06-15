@@ -34,7 +34,7 @@ const EVENT_TYPE_ALL = 'all'
 
 let React = { createElement: createElement }
 
-export default class LatestSentencesComponent extends Component<Props, State> {
+export default class LatestEventsComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
         this.state = {

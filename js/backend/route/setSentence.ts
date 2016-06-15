@@ -10,8 +10,6 @@ export default function(corpus: Corpus) {
         try {
             let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
-            sentence.author = getAuthor(req).name
-
             if (sentence.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');
             }
@@ -20,7 +18,7 @@ export default function(corpus: Corpus) {
 
             console.log('Stored ' + sentence + ' (' + sentence.id + ')')
 
-            recordEdit(sentence, sentence.author)
+            recordEdit(sentence, getAuthor(req).name)
 
             res.status(200).send({})
         }

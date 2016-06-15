@@ -209,6 +209,9 @@ input[type=text], input[type=number] {
     font-size: inherit;
     font-family: inherit; }
 
+.buttonBar.right {
+  float: right; }
+
 ul {
   padding: 0;
   margin: 0; }

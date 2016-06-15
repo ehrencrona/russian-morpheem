@@ -113,10 +113,11 @@ export default class SentenceComponent extends Component<Props, State> {
         let wordSearch: WordSearchComponent
 
         return (<div>
-            <div className='buttonBar'>
+            <div className='buttonBar right'>
                 <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
-                <div className='button' onClick={ () => this.delete() }>Delete</div>
-                
+                <div className='button' onClick={ () => this.delete() }>Delete</div>                
+            </div>
+            <div className='buttonBar'>
                 {
                     Words.PUNCTUATION.split('').map((char) => 
                         <div className='button' key={ char } onClick={ () => editor.setWord(

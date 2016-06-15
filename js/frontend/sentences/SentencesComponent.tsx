@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 
 import Tab from '../Tab'
 import PendingSentencesComponent from './PendingSentencesComponent'
-import LatestSentencesComponent from './LatestSentencesComponent'
+import LatestEventsComponent from './LatestEventsComponent'
 
 interface Props {
     corpus: Corpus,
@@ -44,14 +44,14 @@ export default class SentencesComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.list == LATEST) {
-            list = <LatestSentencesComponent
+            list = <LatestEventsComponent
                 key='latest'
                 my={ false }
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
         else if (this.state.list == MY_LATEST) {
-            list = <LatestSentencesComponent
+            list = <LatestEventsComponent
                 key='my-latest'
                 my={ true }
                 corpus={ this.props.corpus }
