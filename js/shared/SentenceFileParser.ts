@@ -52,13 +52,14 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
  *   english: 'English sentence'
  * }
  */
-function parseLineToElements(line, parseSentenceToWords) {
+function parseLineToElements(line, parseSentenceToWords, lineNumber) {
     var r = /([^(:]*)(?:\((.*)\))? *:(.*)/
 
     var m = r.exec(line)
 
     if (!m) {
-        throw new Error('Every line should have the form <japanese> (requires: grammar): <english>. (The requires part is optional). "' + line + '" does not follow this convention.')
+        throw new Error('Every line should have the form <japanese> (requires: grammar): <english>. (The requires part is optional). "' + line + '" does not follow this convention.'
+            + '\n    at (/projects/morpheem-jp/public/corpus/russian/sentences.txt:' + lineNumber + ':1)')
     }
 
     var japanese = m[1]
@@ -92,7 +93,7 @@ function parseLineToElements(line, parseSentenceToWords) {
 }
 
 function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenceIndex: number) {
-    var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber))
+    var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber), lineNumber)
     
     let english = elements.english, tags = elements.tags;
     var sentence = new Sentence(elements.words, Math.max(sentenceIndex, lineNumber-1))

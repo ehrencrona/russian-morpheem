@@ -14,7 +14,11 @@ export default function readSentenceFile(fileName, words: Words, facts: Facts) {
             }
 
             try {
-                resolve(parseSentenceFile(body, words, facts))
+                let sentences = parseSentenceFile(body, words, facts)
+
+                console.log('Read ' + sentences.sentences.length + ' sentences.')
+
+                resolve(sentences)
             }
             catch (e) {
                 reject(e)

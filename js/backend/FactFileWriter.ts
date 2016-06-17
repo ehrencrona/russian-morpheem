@@ -8,6 +8,10 @@ import Facts from '../shared/Facts';
 import Sentences from '../shared/Sentences';
 
 export default function writeFactFile(fileName, facts: Facts) {
+    if (facts.facts.length < 5) {
+        throw new Error('Refusing to write empty file.')
+    }
+
     return new Promise((resolve, reject) => {
         writeFile(fileName, factsToString(facts), { encoding: 'utf8' }, (err) => {
             if (err) {

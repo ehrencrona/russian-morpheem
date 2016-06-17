@@ -145,6 +145,13 @@ export default class Words {
     }
     
     getSimilarTo(token) {
+        let exactMatches = Object.keys(this.wordsById).map((id) => this.wordsById[id]).filter((word) => word.jp == token).map((word) => word.getId())        
+
+        if (exactMatches.length) {
+            return exactMatches
+        }
+        
+        
         let sameLetter = Object.keys(this.wordsById).filter((word) => word[0] == token[0])
 
         let byMatchLength = sameLetter.map((word) => {

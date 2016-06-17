@@ -250,5 +250,5 @@ export function getNewsfeed(forAuthor: string): Promise<Event[]> {
     }
 
     return returnAllEvents(
-        db.collection(COLLECTION_EVENT).find( { notify: forAuthor } ))
+        db.collection(COLLECTION_EVENT).find( { notify: forAuthor } ).sort({ '_id.date': -1 }))
 }
