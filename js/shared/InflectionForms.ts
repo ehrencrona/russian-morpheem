@@ -65,7 +65,7 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
         ),
         adj: new Forms(
             [ 'm sg', 'n sg', 'f sg', 'plural' ],
-            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short', 'adv' ],
+            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'short', 'adv', 'comp' ],
             [
                 ['m','n','f','pl'],
                 ['genm','genn','genf','genpl'],
@@ -74,7 +74,8 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
                 ['instrm','instrn','instrf','instrpl'],
                 ['prepm','prepn','prepf','preppl'],
                 ['shortm', 'shortn', 'shortf', 'shortpl'],
-                ['adv']
+                ['adv'],
+                ['comp']
             ]),
         n: new Forms(
             [ 'singular', 'plural' ], 
