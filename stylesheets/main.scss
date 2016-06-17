@@ -331,7 +331,7 @@ input[type=text], input[type=number] {
     }
     
     input {
-        width: 12 * $unit;
+        width: 15 * $unit;
         text-align: right;
     }
     
@@ -370,7 +370,7 @@ ul {
     text-align: center;
     position: relative;
     top: -0.20em;
-    width: 2em;
+    width: 2.6em;
     height: 2em;
 
     .number {

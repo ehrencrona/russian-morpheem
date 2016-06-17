@@ -203,7 +203,7 @@ input[type=text], input[type=number] {
     font-weight: bold;
     background-color: #e95f3d; }
   .buttonBar input {
-    width: 48px;
+    width: 60px;
     text-align: right; }
   .buttonBar select {
     font-size: inherit;
@@ -231,7 +231,7 @@ ul {
   text-align: center;
   position: relative;
   top: -0.20em;
-  width: 2em;
+  width: 2.6em;
   height: 2em; }
   .index .number, .inflections table td .add .number {
     height: 100%;
