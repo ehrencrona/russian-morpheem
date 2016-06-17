@@ -127,7 +127,7 @@ export default class Sentence {
         return sentence
     }
 
-    toString() {
+    toString(old?: boolean) {
         var res = ''
 
         for (let word of this.words) {
@@ -138,6 +138,10 @@ export default class Sentence {
             res += word.toString()
         }
 
+        if (old)
+
+        return res
+        
         return this.capitalizeAndEndWithDot(res)
     }
 

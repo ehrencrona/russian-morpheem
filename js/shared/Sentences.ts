@@ -79,7 +79,7 @@ export default class Sentences {
     }
 
     add(sentence: Sentence) {
-        if (sentence.getId() == undefined) {
+        if (sentence.id == undefined) {
             sentence.id = this.nextSentenceId++
         }
 

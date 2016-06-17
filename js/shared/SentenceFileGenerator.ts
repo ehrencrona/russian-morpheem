@@ -28,7 +28,7 @@ export function sentenceToString(sentence: Sentence, words: Words) {
         en = ''
     }
 
-    return sentence.words.map((word) => 
+    return sentence.id + ' ' + sentence.words.map((word) => 
         wordToString(word, words)).join(' ') 
             + (tags.length ? ' (' + tags.join(', ') + ')' : '')  
             + ': ' + en

@@ -53,7 +53,7 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
  * }
  */
 function parseLineToElements(line, parseSentenceToWords, lineNumber) {
-    var r = /([^(:]*)(?:\((.*)\))? *:(.*)/
+    var r = /((\d+) )?([^(:]*)(?:\((.*)\))? *:(.*)/
 
     var m = r.exec(line)
 
@@ -62,15 +62,17 @@ function parseLineToElements(line, parseSentenceToWords, lineNumber) {
             + '\n    at (/projects/morpheem-jp/public/corpus/russian/sentences.txt:' + lineNumber + ':1)')
     }
 
-    var japanese = m[1]
-    var tags = m[2]
-    var english = m[3]
+    var id = m[2] ? parseInt(m[2]) : null
+    var japanese = m[3]
+    var tags = m[4]
+    var english = m[5]
 
     var result = {
         tags: [],
         words: undefined,
         english: undefined,
-        author: undefined
+        author: undefined,
+        id: id
     }
 
     if (tags) {
@@ -97,6 +99,8 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
     
     let english = elements.english, tags = elements.tags;
     var sentence = new Sentence(elements.words, Math.max(sentenceIndex, lineNumber-1))
+
+    sentence.id = elements.id
 
     sentence.setEnglish(english)
 
