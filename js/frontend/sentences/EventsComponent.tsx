@@ -37,15 +37,13 @@ export default class EventsComponent extends Component<Props, State> {
 
     render() {        
         let eventAndSentences = this.props.events.map((event) => {
-            try {
+            let sentence = this.props.corpus.sentences.get(event.sentence)
+
+            if (sentence) {
                 return {
-                    sentence: this.props.corpus.sentences.get(event.sentence),
+                    sentence: sentence,
                     event: event
                 }
-            } 
-            catch (e) {
-                console.error(e)
-                return null
             }
         }).filter((s) => !!s)
 
