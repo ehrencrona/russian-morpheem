@@ -45,6 +45,9 @@ export default class EventsComponent extends Component<Props, State> {
                     event: event
                 }
             }
+            else {
+                console.log('did not find sentence', event.sentence)
+            }
         }).filter((s) => !!s)
 
         return (
