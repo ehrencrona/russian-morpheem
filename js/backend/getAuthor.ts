@@ -17,7 +17,10 @@ const AUTHORS: { [id:string] : Author } = {
     '575ad452aab86c9b292433f7': { name: 'phaina', slack: { name: 'anphisa', id: 'U1FSERRK8' }},
     '575bd929aab86c9b29244929': { name: 'adam', slack: { name: 'agjohnst', id: 'U1G5WLATV' }},
     '575e581bc7128f622cabe9c3': { name: 'alexey' },
-    '57600b40fed5bb9c12fd2f43': { name: 'will', slack: { name: 'willhaughton', id: 'U1GP3FN85' }}
+    '57600b40fed5bb9c12fd2f43': { name: 'will', slack: { name: 'willhaughton', id: 'U1GP3FN85' }},
+    '5765156738fcbd5b47b17a93': {
+        name: 'eoghan'
+    }
 }
 
 export function getSlackOfAuthor(authorName: string): { name: string, id: string } {

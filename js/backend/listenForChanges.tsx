@@ -57,10 +57,10 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.sentences.onAdd = (sentence) => {
         if (process.env.ENV != 'dev') {
             setTimeout(() => {
-                let editedSentences = corpus.sentences.get(sentence.id)
+                let editedSentence = corpus.sentences.get(sentence.id)
                 
-                if (editedSentences) {
-                    notifyAdd(editedSentences)
+                if (editedSentence) {
+                    notifyAdd(editedSentence)
                 }
             }, 180000)
         }

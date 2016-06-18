@@ -26,10 +26,6 @@ export default class Sentences {
     get(id: number) {
         let sentence = this.sentenceById[id]
         
-        if (!sentence) {
-            throw new Error(`Unknown sentence ${ id }`)
-        }
-
         return sentence;
     }
 
