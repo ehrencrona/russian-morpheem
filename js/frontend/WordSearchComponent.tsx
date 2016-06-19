@@ -80,7 +80,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             if (inflected.jp == filter) {
                 exactMatches.push(inflected)
             }
-            else if (inflected.jp.substr(0, filter.length) == filter && !prefixIsDefault) {
+            else if (inflected.jp.substr(0, filter.length).toLowerCase() == filter && !prefixIsDefault) {
                 prefixMatch = inflected
                 prefixIsDefault = inflected === word.getDefaultInflection()
             }
@@ -142,7 +142,7 @@ export default class WordSearchComponent extends Component<Props, State> {
            
     wordsMatchingFilterString(fact, filter: string): Suggestion[] {
         if (fact instanceof UnstudiedWord && 
-            fact.jp.substr(0, filter.length) == filter) {
+            fact.jp.substr(0, filter.length).toLowerCase() == filter) {
             return [ this.wordToSuggestion(fact) ]
         }
         
@@ -160,7 +160,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         let allForms = new Set<string>()
 
         let filterPos = this.state.filterPos
-        let filterString = this.state.filterString
+        let filterString = this.state.filterString.toLowerCase()
         let corpus = this.props.corpus
 
         function getFactOccurrences(fact: Fact) {
@@ -182,7 +182,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 return suggestions
             }
 
-            this.props.corpus.facts.facts.forEach((fact: Fact) => {
+            let filterFact = (filterString) => (fact: Fact) => {
                 if (filterPos) {
                     if (fact instanceof InflectableWord) {
                         if (!(fact.inflection.pos == filterPos || 
@@ -211,10 +211,24 @@ export default class WordSearchComponent extends Component<Props, State> {
                 else if (fact instanceof InflectableWord) {
                     suggestions.push(this.inflectableWordToSuggestion(fact))
                 }
-            })
+            }
+
+            this.props.corpus.facts.facts.forEach(filterFact(filterString))
+
+            if (!suggestions.length) {
+                this.state.filterString.toLowerCase().split(/[ ,.!\?]/).forEach((word) => {
+                    word = word.trim()
+
+                    if (word) {
+                        this.props.corpus.facts.facts.forEach(filterFact(word))
+                    }
+                })
+            }
+
+            this.props.corpus.words.getPunctuationWords().forEach(filterFact(filterString))
 
             if (filterString) {
-                let i = suggestions.findIndex((s) => s.word.jp == filterString)
+                let i = suggestions.findIndex((s) => s.word.jp.toLowerCase() == filterString)
 
                 if (i >= 0) {
                     let exactMatch = suggestions.splice(i, 1)[0]

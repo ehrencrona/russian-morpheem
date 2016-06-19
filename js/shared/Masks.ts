@@ -3,9 +3,10 @@ const sg = (form) => form.substr(form.length-2) != 'pl'
 
 const MASKS = {
     adj: {
-        short: (form) => form.substr(0, 4) == 'short',
+        short: (form) => form.substr(0, 5) == 'short',
+        nonstd: (form) => form.substr(0, 5) == 'short' || form == 'adv' || form == 'comp',
         pl: pl,
-        sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv',
+        sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
         adv: (form) => form == 'adv'
     },
     num: {

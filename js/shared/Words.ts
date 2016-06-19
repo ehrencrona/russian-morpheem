@@ -37,11 +37,16 @@ export default class Words {
         this.wordsByString = words.wordsByString
         this.ambiguousForms = words.ambiguousForms
     }
-    
+
+    getPunctuationWords() {
+        return Words.PUNCTUATION.split('').map((char) =>
+            new UnstudiedWord(char, null))
+    }
+
     addPunctuation() {
-        for (let i = 0; i < Words.PUNCTUATION.length; i++) {
-            this.addWord(new UnstudiedWord(Words.PUNCTUATION[i], null))
-        }
+        this.getPunctuationWords().forEach((word) =>
+            this.addWord(word)
+        )
     }
 
     index(word: Word) {
