@@ -100,14 +100,14 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
                 ['prepm','prepn','prepf','preppl'],
             ]),
         prep: new Forms(
-            [ 'normal', 'alternative' ], 
+            [ ], 
             [ ],
             [ [ 'std', 'alt', 'alt2' ] ]
         ),
         pron: new Forms(
             [ ],
             [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-            [ ['nom'], ['gen'], ['dat'], ['acc'], ['instr'], ['prep'] ]
+            [ ['nom', 'nomalt'], ['gen', 'genalt'], ['dat', 'datalt'], ['acc', 'accalt'], ['instr', 'instralt'], ['prep', 'prepalt'] ]
         )
     }
 }
