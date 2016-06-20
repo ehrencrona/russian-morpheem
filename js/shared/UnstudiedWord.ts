@@ -102,11 +102,8 @@ export default class UnstudiedWord {
         return this
     }
 
-    /**
-     * This is the form used in sentence files (SentenceFileReader)
-     */
     toString() {
-        return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
+        return this.jp
     }
     
     static fromJson(json, inflections: Inflections): UnstudiedWord {

@@ -18,7 +18,7 @@ export default function(corpus: Corpus) {
 
             console.log('Stored ' + sentence + ' (' + sentence.id + ')')
 
-            recordEdit(sentence, getAuthor(req).name)
+            recordEdit(sentence, getAuthor(req).name, corpus.words)
 
             res.status(200).send({})
         }

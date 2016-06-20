@@ -19,7 +19,7 @@ export default function(corpus: Corpus) {
 
         console.log(author.name + ' deleted ' + sentence + ' (' + sentence.id + ')')
 
-        recordDelete(sentence, author.name)
+        recordDelete(sentence, author.name, corpus.words)
 
         res.status(200).send({ })
     }

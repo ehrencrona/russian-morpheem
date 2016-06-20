@@ -17,11 +17,20 @@ interface Props {
 }
 
 interface State {
+    startIndex: number
 }
 
 let React = { createElement: createElement }
 
-export default class FilteredFactsListComponent extends Component<Props, State> {    
+const PAGE_SIZE = 200
+
+export default class FilteredFactsListComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+        
+        this.state = { startIndex: 0 }
+    }
+
     openFact(fact: Fact) {
         this.props.tab.openTab(
             <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ this.props.tab }/>,
@@ -41,23 +50,46 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         factIndices = factIndices.filter(this.props.filter)
 
         return (
-            <ul className='facts'>
-            {
-                factIndices.map((factIndex) => {
-                    let fact = factIndex.fact
-                                                
-                    return <FactsEntryComponent
-                        key={ fact.getId() }
-                        fact={ fact }
-                        index={ factIndex.index }
-                        indexOfFacts={ indexOfFacts }
-                        corpus={ this.props.corpus }
-                        tab={ this.props.tab }
-                        onMove={ () => this.forceUpdate() }
-                        />
-                })
-            }
-            </ul>
+            <div>
+                { (
+                    factIndices.length > PAGE_SIZE ?
+
+                        <ul className='paging'>{
+
+                        Array.from(' '.repeat(Math.ceil(factIndices.length / PAGE_SIZE))).map(
+                            (unused, pageIndex) => {
+                                return <li className={ (pageIndex * PAGE_SIZE == this.state.startIndex ? 'current' : '')} 
+                                    onClick={ () => this.setState({ startIndex: pageIndex * PAGE_SIZE })}>{ 
+                                    (pageIndex * PAGE_SIZE) + ' - ' + 
+                                        Math.min((pageIndex+1) * PAGE_SIZE - 1, factIndices.length)}</li>
+                            }
+                        )
+
+                        }</ul>
+
+                    :
+
+                    <div/>
+                ) }
+
+                <ul className='facts'>
+                {
+                    factIndices.slice(this.state.startIndex, this.state.startIndex + PAGE_SIZE).map((factIndex) => {
+                        let fact = factIndex.fact
+                                                    
+                        return <FactsEntryComponent
+                            key={ fact.getId() }
+                            fact={ fact }
+                            index={ factIndex.index }
+                            indexOfFacts={ indexOfFacts }
+                            corpus={ this.props.corpus }
+                            tab={ this.props.tab }
+                            onMove={ () => this.forceUpdate() }
+                            />
+                    })
+                }
+                </ul>
+            </div>
         )
     }
 }

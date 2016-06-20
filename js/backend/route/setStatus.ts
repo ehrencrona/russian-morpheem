@@ -32,7 +32,7 @@ export default function(corpus: Corpus) {
         if (status == STATUS_ACCEPTED) {
             setStatus(status, sentenceId)
 
-            recordEvent('accepted', sentence, author.name)
+            recordEvent('accepted', sentence, author.name, corpus.words)
 
             res.status(200).send({ status: status })
         }

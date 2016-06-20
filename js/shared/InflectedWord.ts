@@ -31,7 +31,8 @@ export default class InflectedWord extends Word {
     }
 
     toUnambiguousString(words: Words) {
-        return this.jp + (words.ambiguousForms[this.jp] ? ' [' + this.form + ']' : '')
+        return this.jp + (words.ambiguousForms[this.jp] ? 
+            ' [' + (this.classifier || this.form) + ']' : '')
     }
 
     getDefaultInflection() {

@@ -4,6 +4,7 @@ import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
+import Words from '../../shared/Words'
 
 import { SentencesByDate } from '../../shared/metadata/SentencesByDate'
 
@@ -140,30 +141,30 @@ export function getSentencesByDate(): Promise<SentencesByDate> {
     })
 }
 
-export function recordCreate(sentence: Sentence, author: string) {
-    recordEvent(EVENT_CREATE, sentence, author, true)
+export function recordCreate(sentence: Sentence, author: string, words: Words) {
+    recordEvent(EVENT_CREATE, sentence, author, words, true)
 }
 
-export function recordDelete(sentence: Sentence, author: string) {
-    recordEvent(EVENT_DELETE, sentence, author, false)
+export function recordDelete(sentence: Sentence, author: string, words: Words) {
+    recordEvent(EVENT_DELETE, sentence, author, words, false)
 }
 
-export function recordComment(comment: string, sentence: Sentence, author: string) {
-    recordEvent(EVENT_COMMENT, sentence, author, false, comment)
+export function recordComment(comment: string, sentence: Sentence, author: string, words: Words) {
+    recordEvent(EVENT_COMMENT, sentence, author, words, false, comment)
 }
 
-export function recordEdit(sentence: Sentence, author: string) {
+export function recordEdit(sentence: Sentence, author: string, words: Words) {
     let pending = eventsPending[sentence.id]
     
     if (pending && pending.author == author && (pending.event == EVENT_EDIT || pending.event == EVENT_CREATE)) {
         eventsPending[sentence.id].text = sentence.toString()
     }
     else {
-        recordEvent(EVENT_EDIT, sentence, author, true)
+        recordEvent(EVENT_EDIT, sentence, author, words, true)
     }
 }
 
-export function recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean, message?: string) {
+export function recordEvent(type: string, sentence: Sentence, author: string, words: Words, delay?: boolean, message?: string) {
     if (!db) {
         console.error('Could not record event since Mongo connection failed.')
         return
@@ -174,7 +175,7 @@ export function recordEvent(type: string, sentence: Sentence, author: string, de
         date: new Date(),
         event: type,
         author: author,
-        text: message || sentence.toString(),
+        text: message || sentence.toUnambiguousString(words),
         notify: []
     }
 

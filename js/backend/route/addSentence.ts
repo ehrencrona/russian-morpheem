@@ -18,7 +18,7 @@ export default function(corpus: Corpus) {
 
         console.log(sentence.author + ' added ' + sentence + ' (' + sentence.id + ')')
         
-        recordCreate(sentence, sentence.author)
+        recordCreate(sentence, sentence.author, corpus.words)
         setStatus(STATUS_SUBMITTED, sentence.id, sentence.author)
 
         res.status(200).send({ id: sentence.id })

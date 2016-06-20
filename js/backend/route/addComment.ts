@@ -28,7 +28,7 @@ export default function(corpus: Corpus) {
 
         let author = getAuthor(req).name
 
-        recordComment(comment, sentence, author)
+        recordComment(comment, sentence, author, corpus.words)
 
         notifyComment(comment, sentence, author)
 
