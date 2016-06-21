@@ -14,6 +14,7 @@ import FactComponent from './FactComponent'
 import SentenceEditorComponent from './SentenceEditorComponent'
 import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
 import SentenceStatusComponent from './metadata/SentenceStatusComponent'
+import SentenceTranslationComponent from './SentenceTranslationComponent'
 
 import { Component, createElement } from 'react'
 
@@ -161,6 +162,11 @@ export default class SentenceComponent extends Component<Props, State> {
             </ul>
 
             <SentenceStatusComponent
+                corpus={ this.props.corpus }
+                sentence={ this.props.sentence }
+                />
+
+            <SentenceTranslationComponent
                 corpus={ this.props.corpus }
                 sentence={ this.props.sentence }
                 />

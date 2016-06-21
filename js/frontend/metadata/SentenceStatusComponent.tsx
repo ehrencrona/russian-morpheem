@@ -11,7 +11,8 @@ interface Props {
 }
 
 interface State {
-    status?: SentenceStatus
+    status?: SentenceStatus,
+    canAccept?: boolean
 }
 
 let React = { createElement: createElement }
@@ -28,7 +29,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             this.props.sentence.id
         )
         .then((status) => {
-            this.setState({ status: status })
+            this.setState({ status: status.status, canAccept: status.canAccept })
         })
     }
 
@@ -50,7 +51,6 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
 
         return (<div className='status'>
-
             <div className='current'>
             { this.state.status.status == STATUS_SUBMITTED ? 
 
@@ -61,7 +61,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             }
             </div>
 
-            { this.state.status.status == STATUS_SUBMITTED ? 
+            { this.state.status.status == STATUS_SUBMITTED && this.state.canAccept ? 
 
                 <div className='button' onClick={ () => this.accept() }>Accept</div>
 

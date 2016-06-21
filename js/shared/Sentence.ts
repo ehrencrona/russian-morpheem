@@ -5,6 +5,7 @@ import Fact from './Fact'
 import Words from './Words'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
+import htmlEscape from './util/htmlEscape'
 
 /**
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
@@ -115,48 +116,64 @@ export default class Sentence {
         }
     }
 
-    capitalizeAndEndWithDot(sentence) {
-        if (sentence.length) {
-            if (Words.PUNCTUATION.indexOf(sentence[sentence.length-1]) < 0) {
-                sentence += '.'
-            }
-
-            sentence = sentence[0].toUpperCase() + sentence.substr(1)
-        }
-
-        return sentence
-    }
-
-    toString() {
-        var res = ''
+    innerToString(wordToString: (word: UnstudiedWord, first: boolean) => string) {
+        let res = ''
+        let capitalize = true 
 
         for (let word of this.words) {
             if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
                 res += ' '
             }
 
-            res += word.toString()
+            let wordString = wordToString(word, res.length == 0)
+
+            if (capitalize) {
+                wordString = wordString[0].toUpperCase() + wordString.substr(1)
+            }
+
+            res += wordString
+
+            capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
         }
-        
-        return this.capitalizeAndEndWithDot(res)
+
+        if (this.words.length && Words.PUNCTUATION.indexOf(this.words[this.words.length-1].jp) < 0) {
+            res += '.'
+        }
+
+        return res
+    }
+
+    toString() {
+        return this.innerToString((word) => word.toString())
+    }
+
+    toUnambiguousHtml(words: Words) {
+        return this.innerToString((word, first) => {
+            if (word.jp == '—' && !first) {
+                return '<br>—'
+            }
+
+            let result
+
+            if (word instanceof InflectedWord) {
+                result = word.toUnambiguousHtml(words)                
+            }
+            else {
+                result = htmlEscape(word.toString())
+            }
+
+            return result
+        })
     }
 
     toUnambiguousString(words: Words) {
-        var res = ''
-
-        for (let word of this.words) {
-            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) < 0)) {
-                res += ' '
-            }
-
+        return this.innerToString((word) => {
             if (word instanceof InflectedWord) {
-                res += word.toUnambiguousString(words)                
+                return word.toUnambiguousString(words)                
             }
             else {
-                res += word.toString()
+                return word.toString()
             }
-        }
-
-        return this.capitalizeAndEndWithDot(res)
+        })
     }
 }

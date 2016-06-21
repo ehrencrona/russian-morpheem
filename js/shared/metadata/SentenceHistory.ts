@@ -1,11 +1,17 @@
 import { Event } from './Event'
 import { SentencesByDate } from './SentencesByDate'
+import { SentenceStatus } from './SentenceStatus'
+
+interface SentenceStatusResponse {
+    canAccept: boolean,
+    status: SentenceStatus
+}
 
 export interface SentenceHistory {
 
     setStatus(status: number, sentenceId: number)
 
-    getStatus(sentenceId: number)
+    getStatus(sentenceId: number): Promise<SentenceStatusResponse>
     
     getPendingSentences(): Promise<number[]>
 

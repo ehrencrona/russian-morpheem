@@ -10,7 +10,7 @@ export default class Words {
     wordsByString : { [s: string]: Word } = {}
     wordsById : { [s: string]: Word } = {}
     
-    ambiguousForms = {}
+    ambiguousForms : { [s: string]: Word[] } = {}
 
     onAddWord: (word: Word) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
@@ -18,6 +18,7 @@ export default class Words {
 
     static PUNCTUATION = '.?!,;:«»—'
     static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,:;»'
+    static SENTENCE_ENDINGS = '.?!—'
 
     constructor(facts?: Facts) {
         if (facts) {
@@ -61,7 +62,15 @@ export default class Words {
 
             if (!this.ambiguousForms[str]) {
                 if (this.wordsByString[str]) {
-                    this.ambiguousForms[str] = true
+                    let ambiguous = this.ambiguousForms[str]
+                    
+                    if (!ambiguous) {
+                        ambiguous = []
+                        this.ambiguousForms[str] = ambiguous
+                    } 
+                    
+                    ambiguous.push(word)
+
                     delete this.wordsByString[str]
                 }
                 else {

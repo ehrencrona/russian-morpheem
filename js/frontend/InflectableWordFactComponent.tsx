@@ -14,6 +14,7 @@ import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
+import ExternalSentences from './ExternalSentencesComponent';
 
 import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
@@ -27,11 +28,21 @@ interface Props {
     tab: Tab
 }
 
-interface State {}
+interface State {
+    tab: string
+}
 
 let React = { createElement: createElement }
 
 export default class WordFactComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+        
+        this.state = {
+            tab: 'inflection'
+        }
+    }
+
     addSentence() {
         let fact = this.props.fact
         
@@ -62,19 +73,14 @@ export default class WordFactComponent extends Component<Props, State> {
         let fact = this.props.fact
         let inflections
         
-        return (<div>
+        let tabButton = (id, name) =>
+            <div className={ 'button ' + (this.state.tab == id ? ' selected' : '') } 
+                onClick={ () => { this.setState({ tab: id }) }}>{ name }</div>
 
-            <div className='buttonBar'>
-                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+        let tab;    
 
-                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } 
-                    onMove={ () => 
-                        (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
-                />
-
-                <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
-            </div>
-            <div>                            
+        if (this.state.tab == 'inflection') {
+            tab = <div>                            
                 <ChangeInflectionComponent
                     corpus={ this.props.corpus } 
                     tab={ this.props.tab }
@@ -87,8 +93,35 @@ export default class WordFactComponent extends Component<Props, State> {
                     tab={ this.props.tab }
                     ref={ (component) => inflections = component} />
             </div>
-    
-            <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
+        }
+        else if (this.state.tab == 'sentences') {
+            tab = <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
+        }
+        else {
+            tab = <ExternalSentences corpus={ this.props.corpus} fact={ this.props.fact } />
+        }
+
+        return (<div>
+
+            <div className='buttonBar'>
+                <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
+
+                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } 
+                    onMove={ () => 
+                        (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
+                />
+
+                <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
+            </div>
+
+            <div className='buttonBar'>
+                { tabButton('inflection', 'Inflection') }
+                { tabButton('sentences', 'Sentences') }
+                { tabButton('import', 'Import') }
+            </div>
+
+            {tab}
+
         </div>)
     }
 }

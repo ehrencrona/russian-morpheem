@@ -3,10 +3,12 @@ import Words from '../shared/Words'
 import Sentences from '../shared/Sentences'
 import Inflections from '../shared/Inflections'
 import { SentenceHistory } from '../shared/metadata/SentenceHistory'
+import { ExternalCorpus } from '../shared/external/ExternalCorpus'
 
 export default class Corpus {
     onChangeOnDisk: () => any
     sentenceHistory: SentenceHistory
+    externalCorpus: ExternalCorpus
     
     static createEmpty(lang: string) {
         let facts = new Facts()

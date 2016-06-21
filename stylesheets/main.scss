@@ -515,6 +515,21 @@ ul {
     }
 }
 
+.externalSentence {
+    span {
+        margin-right: $unit;
+    }
+
+    .match {
+        font-weight: bold;
+    }
+
+    .missing {
+        color: $color7;
+        font-style: italic;
+    }
+}
+
 .paging {
     display: flex;
     flex-wrap: wrap;
@@ -630,6 +645,11 @@ ul.stats {
                 padding: 2px 0;
                 padding-left: 6px;
                 margin-left: $unit;
+
+                .form {
+                    color: #808080;
+                    font-size: 80%;
+                }
 
                 p {
                     font-weight: bold;

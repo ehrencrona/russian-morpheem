@@ -11,6 +11,7 @@ import InflectionsComponent from './InflectionsComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
+import ExternalSentencesComponent from './ExternalSentencesComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
 
 import Sentence from '../shared/Sentence'
@@ -86,6 +87,9 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 return result
             })
         }
+        else if (this.state.tab == 'import') {
+            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } />
+        }
 
         return (<div>
 
@@ -93,6 +97,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 { tabButton('words', 'Words') }
                 { tabButton('sentences', 'Sentences') }
                 { tabButton('inflection', 'Inflection') }
+                { tabButton('import', 'Import') }
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact }
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 

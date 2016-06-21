@@ -14,6 +14,7 @@ import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
+import ExternalSentencesComponent from './ExternalSentencesComponent';
 
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
@@ -27,11 +28,21 @@ interface Props {
     tab: Tab
 }
 
-interface State {}
+interface State {
+    tab: string
+}
 
 let React = { createElement: createElement }
 
 export default class WordFactComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+        
+        this.state = {
+            tab: 'sentences'
+        }
+    }
+
     addSentence() {
         let fact = this.props.fact
         
@@ -55,16 +66,36 @@ export default class WordFactComponent extends Component<Props, State> {
     render() {
         let fact = this.props.fact
 
+        let tabButton = (id, name) =>
+            <div className={ 'button ' + (this.state.tab == id ? ' selected' : '') } 
+                onClick={ () => { this.setState({ tab: id }) }}>{ name }</div>
+
+        let tab;    
+
+        if (this.state.tab == 'sentences') {
+            tab = <SentencesWithFact 
+                ref='sentencesWithFact'
+                corpus={ this.props.corpus} 
+                fact={ this.props.fact } 
+                tab={ this.props.tab } />
+        }
+        else if (this.state.tab == 'import') {
+            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } />
+        }
+
         return (<div>
 
-            <div className='buttonBar'>
+            <div className='buttonBar'>                
+                { tabButton('sentences', 'Sentences') }
+                { tabButton('import', 'Import') }
+
                 <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
-            
-            <SentencesWithFact corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
+
+            { tab }
         </div>)
     }
 }

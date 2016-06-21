@@ -116,6 +116,10 @@ export default class Sentences {
 
         sentence.author = storedSentence.author
 
+        if (!sentence.en && storedSentence.en) {
+            sentence.en = storedSentence.en
+        }
+
         this.sentenceById[sentence.getId()] = sentence
 
         this.sentences.find((storedSentence, index) => {

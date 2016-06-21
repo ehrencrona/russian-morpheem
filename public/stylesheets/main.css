@@ -321,6 +321,16 @@ ul {
     top: -2px;
     margin-left: 1px; }
 
+.externalSentence span {
+  margin-right: 4px; }
+
+.externalSentence .match {
+  font-weight: bold; }
+
+.externalSentence .missing {
+  color: #d03a3e;
+  font-style: italic; }
+
 .paging {
   display: flex;
   flex-wrap: wrap;
@@ -402,6 +412,9 @@ ul.stats {
       padding: 2px 0;
       padding-left: 6px;
       margin-left: 4px; }
+      .history li .main .text .form {
+        color: #808080;
+        font-size: 80%; }
       .history li .main .text p {
         font-weight: bold;
         margin: 0;

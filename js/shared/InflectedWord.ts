@@ -6,6 +6,7 @@ import Inflection from './Inflection'
 import Inflections from './Inflections'
 import InflectableWord from './InflectableWord'
 import Words from './Words'
+import htmlEscape from './util/htmlEscape'
 
 export default class InflectedWord extends Word {
     /**
@@ -33,6 +34,11 @@ export default class InflectedWord extends Word {
     toUnambiguousString(words: Words) {
         return this.jp + (words.ambiguousForms[this.jp] ? 
             ' [' + (this.classifier || this.form) + ']' : '')
+    }
+
+    toUnambiguousHtml(words: Words) {
+        return htmlEscape(this.jp) + (words.ambiguousForms[this.jp] ? 
+            ' <span class="form">' + (this.classifier || this.form) + '</span>' : '')
     }
 
     getDefaultInflection() {

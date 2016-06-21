@@ -35,47 +35,47 @@ export default class EventsComponent extends Component<Props, State> {
         )
     }
 
+    renderEventAndSentence(eventAndSentence: EventAndSentence) {
+        let html
+
+        if (eventAndSentence.event.event == 'comment' || !eventAndSentence.sentence) {
+            html = marked(eventAndSentence.event.text)
+        }
+        else {
+            html = eventAndSentence.sentence.toUnambiguousHtml(this.props.corpus.words)
+        }
+
+        return <li key={ eventAndSentence.event._id }>
+            <div className='main'>
+                <div className='event'>{ eventAndSentence.event.event }</div>
+                <div className='text'>
+                    <div className='date'>
+                        { human(new Date(eventAndSentence.event.date.toString())) },&nbsp;
+                        { eventAndSentence.event.author || 'Unknown' }
+                    </div>
+                    { (eventAndSentence.sentence ? 
+                        <div className='clickable' onClick={ () => this.openSentence(eventAndSentence.sentence) } >
+                            <div dangerouslySetInnerHTML={ { __html: html } }/>
+                        </div>
+                        :
+                        <div dangerouslySetInnerHTML={ { __html: html } }/>
+                    )}
+                </div>
+            </div>
+        </li>
+    } 
+
     render() {        
         let eventAndSentences = this.props.events.map((event) => {
-            let sentence = this.props.corpus.sentences.get(event.sentence)
-
-            if (sentence) {
-                return {
-                    sentence: sentence,
-                    event: event
-                }
+            return {
+                sentence: this.props.corpus.sentences.get(event.sentence),
+                event: event
             }
-            else {
-                console.log('did not find sentence', event.sentence)
-            }
-        }).filter((s) => !!s)
+        })
 
         return (
             <ul className='history'>
-                { eventAndSentences.map((eventAndSentence) => 
-
-                    <li key={ eventAndSentence.event._id }>
-                        <div className='main'>
-                            <div className='event'>{ eventAndSentence.event.event }</div>
-                            <div className='text'>
-                                <div className='date'>
-                                    { human(new Date(eventAndSentence.event.date.toString())) },&nbsp;
-                                    { eventAndSentence.event.author || 'Unknown' }
-                                </div>
-                                <div className='clickable' onClick={ () => this.openSentence(eventAndSentence.sentence) } >
-                                { 
-                                    eventAndSentence.event.event == 'comment' ?
-                                        <div dangerouslySetInnerHTML={ { __html: marked(eventAndSentence.event.text)} }/>
-                                    :
-                                        eventAndSentence.sentence.toUnambiguousString(this.props.corpus.words)
-
-                                }
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                ) }
+                { eventAndSentences.map((eas) => this.renderEventAndSentence(eas)) }
             </ul>)
     }
 }

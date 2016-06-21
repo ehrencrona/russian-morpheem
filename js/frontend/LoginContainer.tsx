@@ -10,8 +10,10 @@ import Word from '../shared/Word'
 import getLanguage from './getLanguage'
 import listenForChanges from './listenForChanges'
 import generateInflectionForWord from './generateInflectionForWord'
+
 import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
-import { handleException } from './xr';
+import FrontendExternalCorpus from './external/FrontendExternalCorpus'
+
 import xr from './xr';
 
 const lang = getLanguage()
@@ -80,6 +82,7 @@ export default class LoginContainer extends Component<Props, State> {
                 (word: string) => generateInflectionForWord(word, corpus, xrArgs)
 
             corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
+            corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus.lang)
 
             this.setState({ corpus: corpus })
         })

@@ -33,6 +33,7 @@ import getLatestEvents from './route/getLatestEvents';
 import getMyLatestEvents from './route/getMyLatestEvents';
 import getSentencesByDate from './route/sentencesByDate';
 import getNewsfeed from './route/getNewsfeed';
+import getExternalSentences from './route/getExternalSentences';
 
 import { tag, untag } from './route/tag';
 
@@ -76,6 +77,8 @@ function registerRoutes(corpus: Corpus) {
 
     app.post(`/api/${lang}/fact/:id`, addFact(corpus))
     
+    app.get(`/api/${lang}/fact/:fact/external`, getExternalSentences(corpus))
+
     app.put(`/api/${lang}/word/:word/inflection/:inflection`, setInflection(corpus))
 
     app.post(`/api/${lang}/inflection-for/:word`, inflectionFor(corpus))

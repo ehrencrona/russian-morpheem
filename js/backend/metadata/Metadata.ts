@@ -195,8 +195,8 @@ export function recordEvent(type: string, sentence: Sentence, author: string, wo
     }, (delay ? 180000 : 0))
 }
 
-function oneDayAgo() {
-    return new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+function someTimeAgo() {
+    return new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 }
 
 function returnAllEvents(cursor: Cursor): Promise<Event[]> {
@@ -229,7 +229,7 @@ export function getLatestEvents(type?: string, author?: string): Promise<Event[]
         return Promise.resolve([])
     }
 
-    let query: any = { date: { $gt: oneDayAgo() } }
+    let query: any = { date: { $gt: someTimeAgo() } }
 
     if (type) {
         query.event = type
