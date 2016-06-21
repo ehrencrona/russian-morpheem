@@ -16,7 +16,7 @@ export default function(corpus: Corpus) {
         getStatus(sentenceId)
             .then((status: SentenceStatus) => {
                 res.status(200).send({
-                    canAccept: getAuthor(req) != status.author,
+                    canAccept: getAuthor(req).name != status.author,
                     status: status
                 })
             })
