@@ -60,22 +60,19 @@ export default class Words {
 
             let str = word.jp;
 
-            if (!this.ambiguousForms[str]) {
-                if (this.wordsByString[str]) {
-                    let ambiguous = this.ambiguousForms[str]
-                    
-                    if (!ambiguous) {
-                        ambiguous = []
-                        this.ambiguousForms[str] = ambiguous
-                    } 
-                    
-                    ambiguous.push(word)
+            let ambiguous = this.ambiguousForms[str]
 
-                    delete this.wordsByString[str]
-                }
-                else {
-                    this.wordsByString[str] = word;
-                }
+            if (ambiguous) {
+                ambiguous.push(word)
+            }
+            else if (this.wordsByString[str]) {
+                ambiguous = [ word, this.wordsByString[str] ]
+                this.ambiguousForms[str] = ambiguous
+
+                delete this.wordsByString[str]
+            }
+            else {
+                this.wordsByString[str] = word;
             }
         }
         

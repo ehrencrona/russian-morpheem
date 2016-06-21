@@ -6,6 +6,7 @@ import Word from '../shared/Word'
 import Words from '../shared/Words'
 import InflectedWord from '../shared/InflectedWord'
 import Sentence from '../shared/Sentence'
+import { MISSING_INDEX } from '../shared/Facts'
 import Tab from './Tab'
 
 import FactNameComponent from './FactNameComponent'
@@ -106,7 +107,13 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let factIndexToElement = (factIndex : FactIndex) => 
             <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact) }>
-                <div className='index'><div className='number'>{ factIndex.index + 1 }</div></div>
+
+                <div className={ 'index' + (factIndex.index == MISSING_INDEX ? ' missing' : '') }>
+                    <div className='number' >
+                        { factIndex.index == MISSING_INDEX ? 'n/a' : factIndex.index + 1 }
+                    </div>
+                </div>
+
                 <FactNameComponent fact={ factIndex.fact } index={ factIndex.index } corpus={ this.props.corpus} />
             </li>
 

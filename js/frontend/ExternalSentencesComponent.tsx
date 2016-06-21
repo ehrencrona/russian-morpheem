@@ -2,6 +2,7 @@
 
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/Fact'
+import { MISSING_INDEX } from '../shared/Facts'
 import Sentence from '../shared/Sentence'
 import UnstudiedWord from '../shared/UnstudiedWord'
 import { ExternalSentence } from '../shared/external/ExternalSentence'
@@ -17,29 +18,66 @@ interface Props {
 }
 
 interface State {
-    sentences: ParsedSentence[]
+    complete: ParsedSentence[],
+    incomplete: ParsedSentence[]
 }
 
 interface ParsedSentence {
     words: ParsedWord[],
-    sentence: ExternalSentence
+    sentence: ExternalSentence,
+    difficulty: number
 }
 
 let React = { createElement: createElement }
 
+function isComplete(parsed: ParsedSentence) {
+    return !parsed.words.find((word) => typeof word == 'string')
+}
+
 export default class ExternalSentencesComponent extends Component<Props, State> {
-    componentDidMount() {
-        this.props.corpus.externalCorpus.getExternalSentences(this.props.fact).then((sentences) => 
-            this.setState({
-                sentences:
-                    sentences.map((sentence) => {
-                        return {
-                            sentence: sentence,
-                            words: parseSentenceToWords(sentence, this.props.corpus)
+    getDifficulty(words: ParsedWord[]) {
+        let facts = this.props.corpus.facts
+
+        let result = 0
+
+        words.forEach((word) => {
+            if (typeof word != 'string') {
+                let wordAlternatives = word as UnstudiedWord[]
+
+                wordAlternatives.forEach((wordAlternative) => {
+                    wordAlternative.visitFacts((fact) => {
+                        let i = facts.indexOf(fact)
+
+                        if (i > result) {
+                            result = i
                         }
                     })
+                })
+            }
+        })
+
+        return result
+    }
+
+    componentDidMount() {
+        this.props.corpus.externalCorpus.getExternalSentences(this.props.fact).then((sentences) => {
+
+            let parsed = sentences.map((sentence) => {
+                let words = parseSentenceToWords(sentence, this.props.corpus)
+
+                return {
+                    sentence: sentence,
+                    words: words,
+                    difficulty: this.getDifficulty(words)
+                }
+            }).sort((s1, s2) => s1.difficulty - s2.difficulty)
+
+            this.setState({
+                complete: parsed.filter((parsed) => isComplete(parsed)),
+                incomplete: parsed.filter((parsed) => !isComplete(parsed))
             })
-        )
+
+        })
     }
 
     render() {
@@ -47,40 +85,69 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
             return <div/>
         }
 
-        return (<div>
-            <h3>Tatoeba</h3>            
-            <ul>
-            {
-                this.state.sentences.map((sentence) => 
-                    <li key={ sentence.sentence.id } className='externalSentence'>
-                        <div className='sentence'>{ 
-                            sentence.words.map((word: ParsedWord, index) => {
-                                if (typeof word == 'string') {
-                                    return <span key={ index } className='missing'>{ word }</span>
-                                }
-                                else {
-                                    let uw = (word as UnstudiedWord[])[0]
-                                    let match = false
+        let sentenceToComponent = (sentence: ParsedSentence) => {
+            return <li key={ sentence.sentence.id } className='externalSentence'>
+                <div className={ 'index' + (sentence.difficulty == MISSING_INDEX ? ' missing' : '') }>
+                    <div className='number' >
+                        { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }
+                    </div>
+                </div>
+
+                <div className='main'>
+                    <div className='sentence'>{
+                        sentence.words.map((word: ParsedWord, index) => {
+                            if (typeof word == 'string') {
+                                return <span key={ index } className='missing'>{ word }</span>
+                            }
+                            else {
+                                let anyMatch = false
+                                let allMatch = true
+                                
+                                let potentialWords = word as UnstudiedWord[];
+
+                                potentialWords.forEach((uw) => {
+                                    let thisMatch = false
 
                                     uw.visitFacts((fact) => {
                                         if (fact.getId() == this.props.fact.getId()) {
-                                            match = true
+                                            thisMatch = true
                                         }
                                     })
 
-                                    if (match) {
-                                        return <span key={ index } className='match'>{ uw.toString() }</span>
-                                    }
-                                    else {
-                                        return <span key={ index }>{ uw.toString() }</span>
-                                    }
-                                }
-                            })
-                        }</div>
+                                    allMatch = allMatch && thisMatch
+                                    anyMatch = anyMatch || thisMatch
+                                })
 
-                        <div><i>{ sentence.sentence.en }</i></div>
-                    </li>
-                )
+                                let uw = potentialWords[0] 
+
+                                if (anyMatch) {
+                                    return <span key={ index } className={ 'match' + (!allMatch ? ' ambiguous' : '' ) }>
+                                        { uw.toString() }
+                                    </span>
+                                }
+                                else {
+                                    return <span key={ index }>{ uw.toString() }</span>
+                                }
+                            }
+                        })
+                    }</div>
+
+                    <div className="en">{ sentence.sentence.en }</div>
+                </div>
+            </li>
+        }
+
+        return (<div>
+            <h3>Complete</h3>
+            <ul>
+            {
+                this.state.complete.map((sentence) => sentenceToComponent(sentence))
+            }
+            </ul>
+            <h3>Words missing</h3>
+            <ul>
+            {
+                this.state.incomplete.map((sentence) => sentenceToComponent(sentence))
             }
             </ul>
         </div>);

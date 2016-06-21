@@ -28,10 +28,6 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
         sentence.visitFacts((fact) => {
             let factIndex = facts.indexOf(fact)
 
-            if (factIndex < 0) {
-                factIndex == 9999999
-            }
-
             if (fact.getId() == forFact.getId()) {
                 found = true
             }

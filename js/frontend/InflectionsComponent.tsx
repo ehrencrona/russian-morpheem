@@ -14,6 +14,7 @@ import getLanguage from './getLanguage'
 import { Component, createElement } from 'react';
 import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
 import INFLECTION_FORMS from '../shared/InflectionForms'
+import { MISSING_INDEX } from '../shared/Facts'
 
 interface Props {
     corpus: Corpus,
@@ -132,7 +133,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                 return <div key={form}/>
             }
 
-            if (index > 0) {
+            if (index < MISSING_INDEX) {
                 className += ' clickable'
 
                 return <div key={form} className={ className } onClick={ 

@@ -39,9 +39,21 @@ function tokenize(sentence) {
 
     var words = []
     var word = ''
+    let isQuoted = false
 
     function foundWord(word) {
         if (word.length > 0) {
+            // replace minus as a word with semi-long dash
+            if (word == '-') {
+                word = '–'
+            }
+
+            if (word == '"') {
+                word = (isQuoted ? '»' : '«')
+
+                isQuoted = !isQuoted
+            }
+
             words.push(word)
         }
     }
@@ -74,7 +86,8 @@ function isWordCharacter(ch) {
         (ch >= 'a' && ch <= 'z') ||
         (ch >= 'Ѐ' && ch <= 'ӿ') ||
         (ch >= 'À' && ch <= 'ö') ||
-        (ch >= 'Ā' && ch <= 'ſ');
+        (ch >= 'Ā' && ch <= 'ſ') ||
+        ch == '-';
 
     return res
 }

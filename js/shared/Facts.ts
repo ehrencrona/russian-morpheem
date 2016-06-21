@@ -18,6 +18,8 @@ interface JsonFormat {
     tags?: string[]
 }
 
+export const MISSING_INDEX = 9999998
+
 export default class Facts {
     factsById : { [s: string]: Fact } = {}
     facts : Fact[] = []
@@ -93,7 +95,7 @@ export default class Facts {
         let result = this.factIndexById[fact.getId()]
         
         if (result === undefined) {
-            return -1
+            return MISSING_INDEX
         }
         
         return result

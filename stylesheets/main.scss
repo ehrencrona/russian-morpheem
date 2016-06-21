@@ -379,6 +379,11 @@ ul {
         align-items: center;
         justify-content: center;
     }
+
+}
+
+.index.missing {
+    background-color: $color5;
 }
 
 .formName {
@@ -516,17 +521,45 @@ ul {
 }
 
 .externalSentence {
-    span {
-        margin-right: $unit;
+    margin: 2 * $unit 0;
+    display: flex;
+
+    .index {
+        margin-top: 2px;
+        margin-right: 2 * $unit;
     }
 
-    .match {
-        font-weight: bold;
+    .main {
+        .sentence {
+            display: block;
+
+            span {
+                display: inline-block;
+                margin-right: $unit;
+            }
+
+            .match {
+                color: darken($color10, 10%);
+                font-weight: bold;
+            }
+
+            .ambiguous:after {
+                color: lighten($color10, 20%);
+                font-weight: bold;
+                content: ' (?)';
+            }
+
+            .missing {
+                font-style: italic;
+                border-bottom: dotted 2px $color5;
+            }
+        }
     }
 
-    .missing {
-        color: $color7;
-        font-style: italic;
+    .en {
+        margin-top: $unit;
+        margin-bottom: $unit;
+        @extend .smallFont;
     }
 }
 

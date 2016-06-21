@@ -33,7 +33,7 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.smallFont, .index, .inflections table td .add, .history li .event, .history li .main .date {
+.smallFont, .index, .inflections table td .add, .externalSentence .en, .history li .event, .history li .main .date {
   font-size: 60%;
   font-weight: 900; }
 
@@ -239,6 +239,9 @@ ul {
     align-items: center;
     justify-content: center; }
 
+.index.missing, .inflections table td .missing.add {
+  background-color: #ff5f3b; }
+
 .formName {
   padding-top: 8px; }
   .formName .label {
@@ -321,15 +324,30 @@ ul {
     top: -2px;
     margin-left: 1px; }
 
-.externalSentence span {
-  margin-right: 4px; }
-
-.externalSentence .match {
-  font-weight: bold; }
-
-.externalSentence .missing {
-  color: #d03a3e;
-  font-style: italic; }
+.externalSentence {
+  margin: 8px 0;
+  display: flex; }
+  .externalSentence .index, .externalSentence .inflections table td .add, .inflections table td .externalSentence .add {
+    margin-top: 2px;
+    margin-right: 8px; }
+  .externalSentence .main .sentence {
+    display: block; }
+    .externalSentence .main .sentence span {
+      display: inline-block;
+      margin-right: 4px; }
+    .externalSentence .main .sentence .match {
+      color: #3b938a;
+      font-weight: bold; }
+    .externalSentence .main .sentence .ambiguous:after {
+      color: #94d3cd;
+      font-weight: bold;
+      content: ' (?)'; }
+    .externalSentence .main .sentence .missing {
+      font-style: italic;
+      border-bottom: dotted 2px #ff5f3b; }
+  .externalSentence .en {
+    margin-top: 4px;
+    margin-bottom: 4px; }
 
 .paging {
   display: flex;
