@@ -17,6 +17,7 @@ import WordSearchComponent from '../WordSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
 import FactsMissingComponent from './FactsMissingComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
+import MissingFactsListComponent from './MissingFactsListComponent'
 
 interface Props {
     corpus: Corpus,
@@ -25,10 +26,11 @@ interface Props {
 
 const RECENT = 'recent'
 const ALL = 'all'
-const MISSING = 'last' 
+const INCOMPLETE = 'incomplete' 
 const SEARCH = 'search'
 const TAGS = 'tags'
 const ADD_WORD = 'addWord'
+const MISSING = 'missing'
 
 interface State {
     list?: string,
@@ -42,7 +44,7 @@ export default class FactsComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : MISSING),
+            list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : INCOMPLETE),
         }
     }
     
@@ -78,7 +80,7 @@ export default class FactsComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
-        else if (this.state.list == MISSING) {
+        else if (this.state.list == INCOMPLETE) {
             list = <FactsMissingComponent
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
@@ -107,6 +109,13 @@ export default class FactsComponent extends Component<Props, State> {
                 }
                 tab={ this.props.tab } />
         }
+        else if (this.state.list == MISSING) {
+            let lastIds = this.props.tab.tabSet.getLastTabIds()
+
+            list = <MissingFactsListComponent
+                corpus={ this.props.corpus }
+                tab={ this.props.tab } />
+        }
         else if (this.state.list == ADD_WORD) {
             list = <AddWordComponent 
                 corpus={ this.props.corpus } 
@@ -122,10 +131,11 @@ export default class FactsComponent extends Component<Props, State> {
                     </div>
 
                     <div>
-                        { filterButton(MISSING, 'Missing') }
+                        { filterButton(INCOMPLETE, 'Incomplete') }
                         { filterButton(ALL, 'All') }
                         { filterButton(RECENT, 'Recent') }
                         { filterButton(SEARCH, 'Search') }
+                        { filterButton(MISSING, 'Missing') }
                         { filterButton(TAGS, 'Tags') }
                     </div>
                 </div>

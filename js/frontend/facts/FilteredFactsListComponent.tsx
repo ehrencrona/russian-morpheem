@@ -61,7 +61,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                                 return <li className={ (pageIndex * PAGE_SIZE == this.state.startIndex ? 'current' : '')} 
                                     onClick={ () => this.setState({ startIndex: pageIndex * PAGE_SIZE })}>{ 
                                     (pageIndex * PAGE_SIZE) + ' - ' + 
-                                        Math.min((pageIndex+1) * PAGE_SIZE - 1, factIndices.length)}</li>
+                                        Math.min((pageIndex + 1) * PAGE_SIZE - 1, factIndices.length)}</li>
                             }
                         )
 

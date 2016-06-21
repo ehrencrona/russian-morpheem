@@ -129,7 +129,6 @@ export default function parseInflectionsFile(data, lang?: string) {
             else {
                 throw new Error('Inheriting unknown inflection "' + endings.inherits.trim() + '"')
             }
-
         }
         else {
             inflection = new Inflection(id, endings.default, pos, endings.endings)

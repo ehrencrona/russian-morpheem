@@ -51,9 +51,22 @@ export default class Inflection {
     
     inherit(inflection) {
         this.inherits = inflection
-        
+
+        function isFormSame(i1: Ending, i2: Ending, inflection: Inflection) {
+
+            if (i2.relativeTo && !i2.subtractFromStem) {
+                i2 = inflection.getEnding(i2.relativeTo)
+            }
+
+            return i1.suffix == i2.suffix &&
+                i1.relativeTo == i2.relativeTo &&
+                i1.subtractFromStem == i2.subtractFromStem
+        }
+
         for (let form in this.endings) {
-            if (this.endings[form] == inflection.endings[form]) {
+            let inheritedEnding = inflection.getEnding(form)
+
+            if (inheritedEnding && isFormSame(this.endings[form], inheritedEnding, inflection)) {
                 console.log('Form ' + form + ' of ' + this.id + ' is same as inherited value.')
 
                 delete this.endings[form]

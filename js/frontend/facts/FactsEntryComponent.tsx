@@ -13,6 +13,7 @@ import InflectionFact from '../../shared/InflectionFact'
 import FactNameComponent from '../FactNameComponent'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
+import { MISSING_INDEX } from '../../shared/Facts' 
 
 interface Props {
     fact: Fact,
@@ -20,7 +21,7 @@ interface Props {
     index: number,
     corpus: Corpus,
     tab: Tab,
-    onMove?: () => any,
+    onMove?: () => any
 }
 
 interface State {
@@ -91,12 +92,12 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 onClick={ (e) => this.onClick(e) }>
                 
                 <div 
-                    className='index'                            
-                    draggable='true'
+                    className={ 'index' + (index == MISSING_INDEX ? ' missing' : '') }                            
+                    draggable={ index != MISSING_INDEX }
                     onDragStart={ (e) => { 
                         e.dataTransfer.setData('text', JSON.stringify( { fact: fact.getId(), index: index } ));
                     } }>
-                    <div className='number'>{ index + 1 }</div>
+                    <div className='number'>{ index == MISSING_INDEX ? 'n/a' : index + 1 }</div>
                 </div>
 
                 <span className='clickable'>
