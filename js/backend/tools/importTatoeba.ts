@@ -21,7 +21,7 @@ let found = 0
 
 let unknownCountByWord = {}
 
-function process(ts: TatoebaSentence, corpus: Corpus) {
+function process(ts: TatoebaSentence, corpus: Corpus): Promise<any> {
     let known: UnstudiedWord[] = []
     let unknown: string[] = []
 
@@ -61,7 +61,6 @@ function process(ts: TatoebaSentence, corpus: Corpus) {
         let factIds: { [ id: string ]: boolean } = {} 
 
         known.forEach((word) => {
-
             word.visitFacts((fact) => {
                 factIds[fact.getId()] = true
             })
@@ -69,15 +68,26 @@ function process(ts: TatoebaSentence, corpus: Corpus) {
 
         sentence.facts = Object.keys(factIds)
 
-        storeSentence(sentence)
-
         found++
+
+        if (found % 100 == 0) {
+            console.log(found + ' stored...')
+        }
+
+        return storeSentence(sentence)
     }
+    else {
+        return Promise.resolve()
+    }
+}
+
+function wait() {
+    return new Promise((resolve, reject) => setTimeout(resolve(), 200))
 }
 
 readCorpus('ru', false)
 .then((corpus) => {
-    readFile('/projects/morpheem-jp/data/tatoeba-sentences-ru.json', function(error, body) {
+    readFile('data/tatoeba-sentences-ru.json', function(error, body) {
         if (error) {
             throw error
         }
@@ -88,6 +98,8 @@ readCorpus('ru', false)
 
         let lastSentence
 
+        let p: Promise<any> = Promise.resolve()
+
         sentences.forEach((sentence, i) => {
             if (lastSentence && lastSentence.ru == sentence.ru) {
                 return
@@ -95,22 +107,21 @@ readCorpus('ru', false)
 
             lastSentence = sentence
 
-            process(sentence, corpus)
-
-            if (found % 10000 == 0) {
-                console.log(found + ' found...')
-            }
+            p = p.then(() => process(sentence, corpus))
+                .then(wait)
         })
         
-        let lastCount 
+        p.then(() => {
+            let lastCount 
 
-        Object.keys(unknownCountByWord).map((key)=> unknownCountByWord[key]).sort().reverse().slice(0, 30).forEach((count) => {
-            if (count != lastCount) {
-                console.log(count, Object.keys(unknownCountByWord).filter((key) => unknownCountByWord[key] == count))
-                lastCount = count
-            }
+            Object.keys(unknownCountByWord).map((key)=> unknownCountByWord[key]).sort().reverse().slice(0, 30).forEach((count) => {
+                if (count != lastCount) {
+                    console.log(count, Object.keys(unknownCountByWord).filter((key) => unknownCountByWord[key] == count))
+                    lastCount = count
+                }
+            })
+
+            console.log(found + ' found.')
         })
-
-        console.log(found + ' found.')
     })
 })

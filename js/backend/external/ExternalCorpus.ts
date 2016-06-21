@@ -24,13 +24,19 @@ MongoClient.connect(url, function(err, connectedDb) {
 let eventsPending: {[id: number] : Event}  = {}
 
 export function storeSentence(sentence: ExternalSentence) {
-    db.collection(COLLECTION).updateOne(
-        { 
-            source: sentence.source,
-            id: sentence.id
-        }, 
-        sentence, 
-        { upsert: true })
+
+    return new Promise((resolve, reject) => {
+        db.collection(COLLECTION).updateOne(
+            { 
+                source: sentence.source,
+                id: sentence.id
+            }, 
+            sentence, 
+            { upsert: true })
+            .then(() => resolve())
+            .catch(() => reject())
+    })
+    
 }
 
 export function getSentencesForFact(fact: Fact) {
