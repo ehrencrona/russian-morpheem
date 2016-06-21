@@ -49,7 +49,9 @@ export default class MissingFactsListComponent extends Component<Props, State> {
         let indexOfFacts : { [factId: string]: FactSentenceIndex } =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
-        let factIds = Object.keys(factsById)
+        let factIds = Object.keys(factsById).sort((id1, id2) => 
+            factsById[id1].form.localeCompare(factsById[id2].form)
+        )
 
         return <ul className='facts'>
             { 

@@ -76,8 +76,9 @@ export default class FactsEntryComponent extends Component<Props, State> {
         let indexEntry: FactSentenceIndex = indexOfFacts[fact.getId()] || 
             { ok: 0, easy: 0, hard: 0, factIndex: 0 }
 
-        let left = 8 - (indexEntry.easy + indexEntry.ok)
-        
+        let easyLeft = 8 - (indexEntry.easy + indexEntry.ok)
+        let left = easyLeft - indexEntry.hard
+
         return ( 
             <li 
                 className={ this.state.dragTarget ? 'drag-target' : '' }
@@ -103,7 +104,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 <span className='clickable'>
                     <FactNameComponent fact={ fact } index={ index } corpus={ this.props.corpus} />
                     
-                    { ( left > 0 ? <span className='insufficient'>{ `+${left}` }</span> : '') }
+                    { ( easyLeft > 0 ? <span className='insufficient'>{ `+${easyLeft}` + (left > 0 ? '!' : '') }</span> : '') }
                 </span>
             </li>
         )

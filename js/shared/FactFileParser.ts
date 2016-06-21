@@ -17,6 +17,7 @@ import Word from './Word'
 import UnstudiedWord from './UnstudiedWord'
 import InflectableWord from './InflectableWord'
 import Inflections from './Inflections'
+import InflectionFact from './InflectionFact'
 import Fact from './Fact'
 import Facts from './Facts'
 import Grammars from './Grammars'
@@ -187,6 +188,24 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     if (!fact) {
                         console.warn('Unknown grammar "' + text + '"'
                             + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
+                    }
+
+                    if (fact instanceof InflectionFact) {
+                        if (fact.form.substr(0, 3) == 'acc') {
+                            facts.tag(fact, 'accusative')
+                        }
+                        if (fact.form.substr(0, 3) == 'dat') {
+                            facts.tag(fact, 'dative')
+                        }
+                        if (fact.form.substr(0, 3) == 'gen') {
+                            facts.tag(fact, 'genitive')
+                        }
+                        if (fact.form.substr(0, 5) == 'instr') {
+                            facts.tag(fact, 'instrumental')
+                        }
+                        if (fact.form.substr(0, 4) == 'prep') {
+                            facts.tag(fact, 'prepositional')
+                        }
                     }
                 }
                 else if (tag == 'tag') {
