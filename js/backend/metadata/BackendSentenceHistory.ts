@@ -211,23 +211,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
                 }
             })
         }, 
-        
-        
-        
-        
-        
-        
-        
-        0 * 
-        
-        
-        (delay ? 180000 : 0)
-        
-        
-        
-        
-        
-        )
+        (delay ? 180000 : 0))
     }
 
     someTimeAgo() {
