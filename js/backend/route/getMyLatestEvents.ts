@@ -1,6 +1,5 @@
 import * as express from 'express'
 
-import { getLatestEvents, EVENT_CREATE } from '../metadata/Metadata'
 import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
@@ -12,7 +11,7 @@ export default function(corpus: Corpus) {
             type = null
         }
 
-        getLatestEvents(type, getAuthor(req).name)
+        corpus.sentenceHistory.getLatestEvents(type, getAuthor(req).name)
             .then((events) => {
                 res.status(200).send(events)
             })

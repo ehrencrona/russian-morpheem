@@ -1,7 +1,6 @@
 import * as express from 'express'
 
-import { setStatus, recordEvent } from '../metadata/Metadata'
-import { SentenceStatus, STATUS_ACCEPTED } from '../../shared/metadata/SentenceStatus'
+import { STATUS_ACCEPTED } from '../../shared/metadata/SentenceStatus'
 import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
@@ -13,7 +12,7 @@ export default function(corpus: Corpus) {
             throw new Error('No sentence ID')
         }
 
-        let status = parseInt(req.body.status) 
+        let status: number = parseInt(req.body.status) 
 
         if (isNaN(status)) {
             throw new Error('No status')
@@ -30,9 +29,9 @@ export default function(corpus: Corpus) {
         console.log(author.name + ' set state of ' + sentence + ' to ' + status + '.')
  
         if (status == STATUS_ACCEPTED) {
-            setStatus(status, sentenceId)
+            corpus.sentenceHistory.setStatus({ status: status }, sentenceId)
 
-            recordEvent('accepted', sentence, author.name, corpus.words)
+            corpus.sentenceHistory.recordAccept(sentence, author.name)
 
             res.status(200).send({ status: status })
         }

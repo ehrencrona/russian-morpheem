@@ -7,6 +7,7 @@ import { Event } from '../../shared/metadata/Event'
 import Tab from '../Tab'
 import EventsComponent from './EventsComponent'
 import { getAllAuthors } from '../../backend/getAuthor'
+import { AUTHOR_ME } from '../../frontend/metadata/FrontendSentenceHistory'
 
 interface Props {
     corpus: Corpus,
@@ -45,7 +46,8 @@ export default class LatestEventsComponent extends Component<Props, State> {
         this.setState({ author: author, eventType: eventType });
 
         (this.props.my ?
-            this.props.corpus.sentenceHistory.getMyLatestEvents(
+            this.props.corpus.sentenceHistory.getLatestEvents(
+                AUTHOR_ME,
                 eventType)
             :
             this.props.corpus.sentenceHistory.getLatestEvents(

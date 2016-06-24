@@ -3,6 +3,7 @@
 import Word from './Word'
 import Fact from './Fact'
 import Words from './Words'
+import Facts from './Facts'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'
@@ -19,8 +20,8 @@ export default class Sentence {
         this.id = id
         this.author = author
     }
-    
-    static fromJson(json, facts, words) {
+
+    static fromJson(json, facts: Facts, words: Words) {
         let data = {
             id: json[0],
             words: json[1],

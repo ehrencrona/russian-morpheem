@@ -88,7 +88,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
             })
         }
         else if (this.state.tab == 'import') {
-            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } />
+            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } tab={ this.props.tab } />
         }
 
         return (<div>

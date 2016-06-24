@@ -3,7 +3,7 @@
 import { RedisClient } from 'node-redis'
 import NoSuchWordError from '../shared/NoSuchWordError'
 
-interface InflectionInDatabase {
+export interface InflectionInDatabase {
     forms: { [s: string]: string },
     pos: string
 }

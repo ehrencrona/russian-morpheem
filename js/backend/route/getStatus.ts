@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { getStatus } from '../metadata/Metadata'
+import { SentenceStatusResponse } from '../../shared/metadata/SentenceHistory'
 import { SentenceStatus } from '../../shared/metadata/SentenceStatus'
 import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
@@ -13,11 +13,11 @@ export default function(corpus: Corpus) {
             throw new Error('No sentence ID')
         }
 
-        getStatus(sentenceId)
-            .then((status: SentenceStatus) => {
+        corpus.sentenceHistory.getStatus(sentenceId)
+            .then((status: SentenceStatusResponse) => {
                 res.status(200).send({
-                    canAccept: getAuthor(req).name != status.author,
-                    status: status
+                    canAccept: status.canAccept && getAuthor(req).name != status.status.author,
+                    status: status.status
                 })
             })
             .catch((e) => {

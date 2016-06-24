@@ -2,7 +2,7 @@
 
 import { post } from 'request';
 import Sentence from '../shared/Sentence'
-import { getEventsForSentence } from './metadata/Metadata'
+import Corpus from '../shared/Corpus'
 import { getSlackOfAuthor } from './getAuthor'
 
 export function notify(message: string, author: string) {
@@ -27,10 +27,10 @@ export function notifyAdd(sentence : Sentence) {
     notify(sentence.toString() + getOpenLink(sentence), sentence.author)
 }
 
-export function notifyComment(comment: string, sentence : Sentence, author: string) {
+export function notifyComment(comment: string, sentence : Sentence, author: string, corpus: Corpus) {
     let shoutOuts: { [name: string] : string } = {}
 
-    getEventsForSentence(sentence.id).then((events) => {
+    corpus.sentenceHistory.getEventsForSentence(sentence.id).then((events) => {
         events.forEach((event) => {
             if (event.author != author) {
                 let slack = getSlackOfAuthor(event.author)

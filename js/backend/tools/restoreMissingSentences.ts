@@ -1,6 +1,5 @@
 
 
-import { getEventsForSentence } from '../metadata/Metadata'
 import readCorpus from '../CorpusReader'
 
 readCorpus('ru', false)
@@ -11,7 +10,7 @@ console.log('corpus', corpus.sentences.sentences.length)
 
     for (let i = 0; i < 3605; i++) {
 
-        p = p.then(() => getEventsForSentence(i))
+        p = p.then(() => corpus.sentenceHistory.getEventsForSentence(i))
         .then((events) => {
             let lastEvent = events.reverse().find((event) => event.event != 'comment')
 

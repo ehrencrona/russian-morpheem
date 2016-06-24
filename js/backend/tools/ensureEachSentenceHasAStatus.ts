@@ -1,18 +1,18 @@
 
-import { getStatus, setStatus, recordEvent } from './Metadata'
 import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
+import BackendSentenceHistory from '../../backend/metadata/BackendSentenceHistory'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 
 export default function ensureEachSentenceHasAStatus(sentence: Sentence, corpus: Corpus) {
 
-    getStatus(sentence.id)
+    corpus.sentenceHistory.getStatus(sentence.id)
     .then((status) => {
 
         if (!status || status.status == null) {
-            setStatus(STATUS_SUBMITTED, sentence.id, sentence.author)
-            recordEvent('import', sentence, sentence.author, corpus.words)
+            corpus.sentenceHistory.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
+            (corpus.sentenceHistory as BackendSentenceHistory).recordEvent('import', sentence, sentence.author)
         }
 
     })

@@ -80,7 +80,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.tab == 'import') {
-            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } />
+            tab = <ExternalSentencesComponent corpus={ this.props.corpus } fact={ this.props.fact } tab={ this.props.tab } />
         }
 
         return (<div>

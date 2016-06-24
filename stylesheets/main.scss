@@ -523,10 +523,17 @@ ul {
 .externalSentence {
     margin: 2 * $unit 0;
     display: flex;
+    align-items: flex-start;
 
     .index {
         margin-top: 2px;
         margin-right: 2 * $unit;
+    }
+
+    .button {
+        display: inline-block;
+        margin: 0;
+        margin-right: $unit;
     }
 
     .main {

@@ -1,15 +1,15 @@
-/// <reference path="../../typings/node-4.d.ts"/>
-/// <reference path="../../typings/redis.d.ts"/>
+/// <reference path="../../../typings/node-4.d.ts"/>
+/// <reference path="../../../typings/redis.d.ts"/>
 
 import { createReadStream } from 'fs'
 import { createInterface } from 'readline'
 
 import 'source-map-support/register'
 
-import INFLECTION_FORMS from '../shared/InflectionForms'
+import INFLECTION_FORMS from '../../shared/InflectionForms'
 
 var lineReader = createInterface({
-	input: createReadStream('./dict.opcorpora.txt')
+	input: createReadStream('data/dict.opcorpora.txt')
 });
 
 interface Word {
@@ -33,98 +33,126 @@ client.on('ready', function (err) {
 
 let word: Word
 
-word = {
-	pos: null,
-	forms: {}
-}
+let wordsByDefaultForm: { [ word: string ] : Word } = {}
 
 let lineCount = 0
 
+function resetWord() {
+	word = {
+		pos: null,
+		forms: {}
+	}
+}
+
+function wordEnded() {
+	if (!INFLECTION_FORMS['ru'][word.pos]) {
+		return
+	}
+
+	let defaultForm = INFLECTION_FORMS['ru'][word.pos].allForms[0]
+
+	let existingWord = wordsByDefaultForm[defaultForm]
+
+	if (existingWord) {
+		if (word.pos != existingWord.pos) {
+			console.log(defaultForm + ' exists twice: as ' + word.pos + 
+				' and ' + existingWord.pos)
+		}
+	}
+	else {
+		wordsByDefaultForm[defaultForm] = word
+	}
+
+	let dictForm = word.forms[ defaultForm ]
+
+	if (dictForm) {
+		for (let form in word.forms) {
+			client.hset(dictForm, form, word.forms[form])
+		}
+
+		client.hset(dictForm, 'pos', word.pos)					
+		
+		if (found++ % 10000 == 0) {
+			console.log(found + '...')
+		}
+	}
+	resetWord()
+}
+
+function foundForm(inflection: string, theirPos: string, theirForm: string) {
+	let mapping = POS_MAPPING.find((mapping) => mapping[0] == theirPos)
+
+	if (mapping) {
+		let pos = mapping[1]
+
+		if (word.pos && word.pos != pos) {
+			resetWord()
+
+			console.warn(`PoS changed from ${word.pos} to ${pos} on line ${lineCount}`)
+		}
+		
+		word.pos = pos
+
+		if (!EXCLUDE.find((term) => theirForm.indexOf(term) >= 0)) {				
+			let formMapping = FORM_MAPPING[pos].find((mapping) => theirForm.indexOf(mapping[0]) >= 0)
+
+			if (formMapping) {
+				word.forms[formMapping[1]] = inflection.toLowerCase()
+			}
+		}
+	}		
+}
+
+resetWord()
+
 lineReader.on('line', (line) => {
-	if (line == '') {
-		if (word.pos) {
-			if (!Object.keys(word.forms).length) {
-				word = {
-					pos: null,
-					forms: {}
-				}
-			}
-			else if (!(word.pos == 'v' && !word.forms['inf'])) {				
-				let defaultForm = INFLECTION_FORMS['ru'][word.pos].allForms[0]
 
-				let dictForm = word.forms[ defaultForm ]
-				
-				if (dictForm) {
-					for (let form in word.forms) {
-						client.hset(dictForm, form, word.forms[form])
-					}
-
-					client.hset(dictForm, 'pos', word.pos)					
-					
-					if (found++ % 10000 == 0) {
-						console.log(found + '...')
-					}
-				}
-
-				word = {
-					pos: null,
-					forms: {}
-				}
-			}
+	if (line == '' && word.pos) {
+		if (!Object.keys(word.forms).length) {
+			resetWord()
+		}
+		else if (!(word.pos == 'v' && !word.forms['inf'])) {
+			wordEnded()
 		}
 	}
 
 	let cols = line.split('\t')
-	
+
 	if (cols.length == 2) {
-		let theirPos = cols[1].split(',')[0]
+		let theirPos = cols[1].split(/[, ]/)[0]
+		let inflection = cols[0]
+		let theirForm = cols[1]
 
-		let mapping = POS_MAPPING.find((mapping) => mapping[0] == theirPos)
-
-		if (mapping) {
-			let pos = mapping[1]
-
-			if (word.pos && word.pos != pos) {
-				word = {
-					pos: null,
-					forms: {}
-				}
-				
-				console.warn(`PoS changed from ${word.pos} to ${pos} on line ${lineCount}`)
-			}
-			
-			word.pos = pos
-
-			if (!EXCLUDE.find((term) => cols[1].indexOf(term) >= 0)) {				
-				let formMapping = FORM_MAPPING[pos].find((mapping) => cols[1].indexOf(mapping[0]) >= 0)
-
-				if (formMapping) {
-					word.forms[formMapping[1]] = cols[0].toLowerCase()
-				}
-			}
-		}		
+		foundForm(inflection, theirPos, theirForm)
 	}
 	
 	lineCount++
 })
 
-lineReader.on('end', () => {
+lineReader.on('close', () => {
+	if (!Object.keys(word.forms).length) {
+		wordEnded()
+	}
+
 	console.log('done')
 	client.quit();
 	client.on('end', () => process.exit(0))
 })
 
-
 const POS_MAPPING = [
 	[ 'NOUN', 'n' ],
 	[ 'ADJF', 'adj' ],
+	[ 'COMP', 'adj' ],
 	[ 'VERB', 'v' ],
 	[ 'INFN', 'v' ]
 ]
 
 const EXCLUDE = [
 	'V-oy',
-	'V-ey'
+	'V-ey',
+	'Erro',
+	'Dist',
+	'Infr'
 ]
 
 const FORM_MAPPING = {
@@ -147,7 +175,10 @@ const FORM_MAPPING = {
 		['sing,past,indc', 'pastn'],
 		['plur,past,indc', 'pastpl'],
 		['sing,impr,excl', 'impr'],
-		['plur,impr,excl', 'imprpl']
+		['plur,impr,excl', 'imprpl'],
+		['Qual masc,sing', 'shortm'],
+		['Qual femn,sing', 'shortf'],
+		['Qual plur', 'shortpl']
 	], 
 	
 	adj: [
@@ -176,7 +207,8 @@ const FORM_MAPPING = {
 		['anim,plur,accs', 'accanpl'],
 		['inan,plur,accs', 'accinanpl'],
 		['plur,ablt', 'instrpl'],
-		['plur,loct', 'preppl'],		
+		['plur,loct', 'preppl'],
+		['COMP', 'comp']
 	],
 	
 	n: [

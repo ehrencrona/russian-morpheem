@@ -326,10 +326,15 @@ ul {
 
 .externalSentence {
   margin: 8px 0;
-  display: flex; }
+  display: flex;
+  align-items: flex-start; }
   .externalSentence .index, .externalSentence .inflections table td .add, .inflections table td .externalSentence .add {
     margin-top: 2px;
     margin-right: 8px; }
+  .externalSentence .button, .externalSentence .tab-header .tab-close, .tab-header .externalSentence .tab-close {
+    display: inline-block;
+    margin: 0;
+    margin-right: 4px; }
   .externalSentence .main .sentence {
     display: block; }
     .externalSentence .main .sentence span {

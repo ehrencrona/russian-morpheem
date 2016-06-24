@@ -2,7 +2,6 @@ import * as express from 'express'
 import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
-import { recordComment } from '../metadata/Metadata'
 import { notifyComment } from '../notifySlack'
 
 export default function(corpus: Corpus) {
@@ -28,9 +27,9 @@ export default function(corpus: Corpus) {
 
         let author = getAuthor(req).name
 
-        recordComment(comment, sentence, author, corpus.words)
+        corpus.sentenceHistory.recordComment(comment, sentence, author)
 
-        notifyComment(comment, sentence, author)
+        notifyComment(comment, sentence, author, corpus)
 
         res.status(200).send({})
     }

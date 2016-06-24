@@ -35,7 +35,7 @@ export function getSlackOfAuthor(authorName: string): { name: string, id: string
     return AUTHORS[authorId].slack
 }
 
-export default function getAuthor(req: express.Request) {
+export default function getAuthor(req: express.Request): Author {
     let result
 
     if (req.user && req.user.sub) {

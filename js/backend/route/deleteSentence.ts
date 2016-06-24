@@ -1,7 +1,6 @@
 import * as express from 'express'
 import getAuthor from '../getAuthor'
 
-import { recordDelete, setStatus } from '../metadata/Metadata'
 import Corpus from '../../shared/Corpus'
 import Word from '../../shared/Word'
 
@@ -19,7 +18,7 @@ export default function(corpus: Corpus) {
 
         console.log(author.name + ' deleted ' + sentence + ' (' + sentence.id + ')')
 
-        recordDelete(sentence, author.name, corpus.words)
+        corpus.sentenceHistory.recordDelete(sentence, author.name)
 
         res.status(200).send({ })
     }

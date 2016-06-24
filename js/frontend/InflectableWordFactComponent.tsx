@@ -98,7 +98,7 @@ export default class WordFactComponent extends Component<Props, State> {
             tab = <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         }
         else {
-            tab = <ExternalSentences corpus={ this.props.corpus} fact={ this.props.fact } />
+            tab = <ExternalSentences corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         }
 
         return (<div>

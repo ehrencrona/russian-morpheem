@@ -13,7 +13,6 @@ import Corpus from '../shared/Corpus'
 
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
-import ensureEachSentenceHasAStatus from './metadata/ensureEachSentenceHasAStatus'
 
 import addFact from './route/addFact';
 import setFact from './route/setFact';
@@ -34,6 +33,7 @@ import getMyLatestEvents from './route/getMyLatestEvents';
 import getSentencesByDate from './route/sentencesByDate';
 import getNewsfeed from './route/getNewsfeed';
 import getExternalSentences from './route/getExternalSentences';
+import importExternalSentence from './route/importExternalSentence';
 
 import { tag, untag } from './route/tag';
 
@@ -95,6 +95,8 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
 
+    app.post(`/api/${lang}/sentence/external/:source/:externalid`, importExternalSentence(corpus))
+        
     app.post(`/api/${lang}/sentence/:id/comment`, addComment(corpus))
 
     app.get(`/api/${lang}/sentence/:id/status`, getStatus(corpus))

@@ -74,7 +74,7 @@ export default class Sentences {
         }
     }
 
-    add(sentence: Sentence) {
+    add(sentence: Sentence, suppressEvent?: boolean) {
         if (sentence.id == undefined) {
             sentence.id = this.nextSentenceId++
         }
@@ -89,8 +89,8 @@ export default class Sentences {
         if (sentence.getId() >= this.nextSentenceId) {
             this.nextSentenceId = sentence.getId() + 1
         }
-        
-        if (this.onAdd) {
+
+        if (this.onAdd && !suppressEvent) {
             this.onAdd(sentence)
         }
         

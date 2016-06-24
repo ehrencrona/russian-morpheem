@@ -10,6 +10,7 @@ import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
 import Inflections from '../shared/Inflections';
 import { watch } from 'fs';
+import BackendSentenceHistory from './metadata/BackendSentenceHistory';
 
 export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
@@ -55,6 +56,8 @@ export default function readCorpus(lang, doWatch) {
             })
     })
     .then((corpus: Corpus) => {
+        corpus.sentenceHistory = new BackendSentenceHistory(corpus.words)
+
         if (doWatch) {
             watchForChangesOnDisk(corpus)
         }

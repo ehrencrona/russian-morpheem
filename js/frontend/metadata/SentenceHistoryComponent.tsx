@@ -4,6 +4,7 @@
 
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
+import { AUTHOR_ME } from '../../frontend/metadata/FrontendSentenceHistory'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import human = require('human-time')
@@ -47,7 +48,7 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
         let textField = this.refs['commentTextField'] as HTMLTextAreaElement
         let history = this.props.corpus.sentenceHistory
 
-        history.addComment(textField.value, this.props.sentence.id)
+        history.recordComment(textField.value, this.props.sentence, AUTHOR_ME)
             .then(() => {
                 this.loadEvents()
 

@@ -11,10 +11,12 @@ import { parseSentenceToWords, ParsedWord } from '../shared/external/parseSenten
 import { Component, createElement } from 'react';
 
 import SentenceComponent from './SentenceComponent'
+import Tab from './Tab'
 
 interface Props {
     corpus: Corpus,
-    fact: Fact
+    fact: Fact,
+    tab: Tab
 }
 
 interface State {
@@ -80,6 +82,17 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
         })
     }
 
+    importSentence(externalSentence: ExternalSentence) {
+        this.props.corpus.externalCorpus.importSentence(externalSentence)
+        .then((sentence) => {
+            this.props.tab.openTab(
+                <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
+                sentence.toString(),
+                sentence.id.toString()
+            )
+        })
+    }
+
     render() {
         if (!this.state) {
             return <div/>
@@ -93,6 +106,8 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
                     </div>
                 </div>
 
+                <div className='button' onClick={ () => this.importSentence(sentence.sentence) } >Add</div>
+                
                 <div className='main'>
                     <div className='sentence'>{
                         sentence.words.map((word: ParsedWord, index) => {

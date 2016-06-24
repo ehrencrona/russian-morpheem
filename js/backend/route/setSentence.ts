@@ -3,7 +3,6 @@ import * as express from 'express'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import getAuthor from '../getAuthor'
-import { recordEdit } from '../metadata/Metadata'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
@@ -18,7 +17,7 @@ export default function(corpus: Corpus) {
 
             console.log('Stored ' + sentence + ' (' + sentence.id + ')')
 
-            recordEdit(sentence, getAuthor(req).name, corpus.words)
+            corpus.sentenceHistory.recordEdit(sentence, getAuthor(req).name)
 
             res.status(200).send({})
         }

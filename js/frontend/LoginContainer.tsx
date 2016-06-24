@@ -82,7 +82,7 @@ export default class LoginContainer extends Component<Props, State> {
                 (word: string) => generateInflectionForWord(word, corpus, xrArgs)
 
             corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
-            corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus.lang)
+            corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus)
 
             this.setState({ corpus: corpus })
         })

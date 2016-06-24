@@ -39,6 +39,20 @@ export function storeSentence(sentence: ExternalSentence) {
     
 }
 
+export function getExternalSentence(id: number, source: string) {
+    return new Promise((resolve, reject) => 
+        db.collection(COLLECTION).findOne(
+            { 
+                // todo: resolve if this is a number or a string
+                id: id.toString(),
+                source: source
+            })
+            .then((doc) => {
+                resolve(doc as ExternalSentence)
+            })
+            .catch((e) => reject(e)))
+}
+
 export function getSentencesForFact(fact: Fact) {
     let cursor = db.collection(COLLECTION).find(
         { 
