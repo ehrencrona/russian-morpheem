@@ -36,6 +36,8 @@ export default function(corpus: Corpus) {
 
                 let sentence = new Sentence(words, null, getAuthor(req).name)
 
+                sentence.setEnglish(externalSentence.en)
+
                 corpus.sentences.add(sentence)
 
                 corpus.sentenceHistory.setStatus(
