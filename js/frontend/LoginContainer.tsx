@@ -38,7 +38,7 @@ export default class LoginContainer extends Component<Props, State> {
         super(props)
 
         this.state = {
-            bypass: document.location.hostname == 'localhostt'
+            bypass: document.location.hostname == 'localhost'
         }
     }
 

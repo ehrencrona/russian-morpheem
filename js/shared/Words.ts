@@ -20,6 +20,8 @@ export default class Words {
     static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,:;»'
     static SENTENCE_ENDINGS = '.?!—'
 
+    sortedWords: Word[]
+
     constructor(facts?: Facts) {
         if (facts) {
             for (let fact of facts.facts) {
@@ -77,6 +79,38 @@ export default class Words {
         }
         
         reallyIndex(word)
+
+        this.sortedWords = null
+    }
+
+    wordsStartingWith(prefix: string): Word[] {
+        if (!this.sortedWords) {
+            this.sortedWords = 
+                Object.keys(this.wordsById)
+                .map((id) => 
+                    this.wordsById[id])
+                .sort((w1: Word, w2: Word) => 
+                    w1.jp.toLowerCase().localeCompare(w2.jp.toLowerCase())
+                )
+        }
+
+        prefix = prefix.toLowerCase()
+
+        let i = this.sortedWords.findIndex((w: Word) => 
+            w.jp.toLowerCase().localeCompare(prefix) >= 0
+        )
+
+        let result = []
+
+        if (i >= 0) {
+            while (i < this.sortedWords.length &&
+                    this.sortedWords[i].jp.toLowerCase().substr(0, prefix.length) == prefix) {
+                result.push(this.sortedWords[i])
+                i++
+            }
+        }
+
+        return result
     }
 
     addWord(word: Word) {
@@ -143,6 +177,8 @@ export default class Words {
         if (this.onChangeInflection) {
             this.onChangeInflection(word, oldId)
         }
+
+        this.sortedWords = null
     }
     
     get(id: string): Word {

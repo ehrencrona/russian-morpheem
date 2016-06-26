@@ -213,16 +213,27 @@ export default class WordSearchComponent extends Component<Props, State> {
                 }
             }
 
-            this.props.corpus.facts.facts.forEach(filterFact(filterString))
+            if (filterString && !filterPos && !this.state.filterWord) {
+console.log('wordsStartingWith')
+                suggestions = this.props.corpus.words.wordsStartingWith(filterString)
+                    .map((word) => this.wordToSuggestion(word))
+            }
+            else {
+                this.props.corpus.facts.facts.forEach(filterFact(filterString))
+            }
 
             if (!suggestions.length) {
-                this.state.filterString.toLowerCase().split(/[ ,.!\?]/).forEach((word) => {
-                    word = word.trim()
+                let searchWords = this.state.filterString.toLowerCase().split(/[ ,.!\?]/)
 
-                    if (word) {
-                        this.props.corpus.facts.facts.forEach(filterFact(word))
-                    }
-                })
+                if (searchWords.length > 1) {
+                    searchWords.forEach((word) => {
+                        word = word.trim()
+
+                        if (word) {
+                            this.props.corpus.facts.facts.forEach(filterFact(word))
+                        }
+                    })
+                }
             }
 
             this.props.corpus.words.getPunctuationWords().forEach(filterFact(filterString))

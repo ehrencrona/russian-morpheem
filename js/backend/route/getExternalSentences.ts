@@ -11,7 +11,7 @@ export default function(corpus: Corpus) {
         let fact = corpus.facts.get(req.params.fact)
 
         if (!fact) {
-            throw new Error('No such fact.')            
+            throw new Error(`No such fact "${req.params.fact}".`)
         }
 
         getSentencesForFact(fact)
