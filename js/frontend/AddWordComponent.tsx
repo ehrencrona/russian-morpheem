@@ -9,7 +9,7 @@ import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import NoSuchWordError from '../shared/NoSuchWordError'
-import { NotInflectedError } from './generateInflectionForWord'
+import { NotInflectedError } from '../shared/Inflections';
 
 let React = { createElement: createElement }
 
@@ -58,7 +58,7 @@ export default class AddWordComponent extends Component<Props, State> {
                 return
             }
             
-            corpus.inflections.generateInflectionForWord(wordString)
+            corpus.inflections.generateInflectionForWord(wordString, corpus)
                 .catch((e) => {
                     if (e instanceof NoSuchWordError || e instanceof NotInflectedError) {
                         let word = new Word(wordString)

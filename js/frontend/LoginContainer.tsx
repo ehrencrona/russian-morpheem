@@ -4,12 +4,11 @@
 import TabSetComponent from './TabSetComponent'
 import { Component, createElement } from 'react'
 
-import Corpus from '../shared/Corpus'
+import Corpus from './corpus/FrontendCorpus'
 import Word from '../shared/Word'
 
 import getLanguage from './getLanguage'
 import listenForChanges from './listenForChanges'
-import generateInflectionForWord from './generateInflectionForWord'
 
 import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
 import FrontendExternalCorpus from './external/FrontendExternalCorpus'
@@ -73,13 +72,12 @@ export default class LoginContainer extends Component<Props, State> {
         .then((xhr) => {
             let corpus = Corpus.fromJson(xhr.data)
 
+            corpus.setXrArgs(xrArgs)
+
             listenForChanges(corpus, xrArgs, () => {
                 localStorage.removeItem(TOKEN_ITEM)
                 this.setState({ corpus: null })
             })
-
-            corpus.inflections.generateInflectionForWord = 
-                (word: string) => generateInflectionForWord(word, corpus, xrArgs)
 
             corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
             corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus)

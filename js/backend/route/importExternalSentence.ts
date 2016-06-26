@@ -38,22 +38,23 @@ export default function(corpus: Corpus) {
 
                 sentence.setEnglish(externalSentence.en)
 
-                corpus.sentences.add(sentence)
+                return corpus.sentences.add(sentence)
+                .then((sentence: Sentence) => {
+                    corpus.sentenceHistory.setStatus(
+                        {
+                            status: STATUS_SUBMITTED, 
+                            author: sentence.author,
+                            source: externalSentence.source,
+                            externalId: externalSentence.id 
+                        }, sentence.id)
 
-                corpus.sentenceHistory.setStatus(
-                    {
-                        status: STATUS_SUBMITTED, 
-                        author: sentence.author,
-                        source: externalSentence.source,
-                        externalId: externalSentence.id 
-                    }, sentence.id)
+                    corpus.sentenceHistory.recordImport(sentence, sentence.author)
 
-                corpus.sentenceHistory.recordImport(sentence, sentence.author)
+                    console.log(sentence.author + ' imported ' + sentence + 
+                        ' (' + externalSentence.source + ', ' + externalSentence.id + ') as ' + sentence.id + '.')
 
-                console.log(sentence.author + ' imported ' + sentence + 
-                    ' (' + externalSentence.source + ', ' + externalSentence.id + ') as ' + sentence.id + '.')
-
-                res.status(200).send(sentence.toJson())
+                    res.status(200).send(sentence.toJson())
+                })
             })
             .catch((e) => {
                 console.error(e.stack)

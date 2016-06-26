@@ -1,4 +1,8 @@
 import Inflection from './Inflection';
+import Corpus from './Corpus';
+
+export class NotInflectedError {    
+}
 
 export interface GeneratedInflection {
     stem: string,
@@ -24,14 +28,12 @@ export default class Inflections {
         this.inflectionsById = inflections.inflectionsById    
     }
     
-    static fromJson(json): Inflections {
-        let result = new Inflections()
-        
+    fromJson(json): Inflections {
         for (let inflectionJson of json) {
-            result.add(Inflection.fromJson(inflectionJson, result))
+            this.add(Inflection.fromJson(inflectionJson, this))
         } 
         
-        return result
+        return this
     }
 
     get(id) {
@@ -119,7 +121,7 @@ export default class Inflections {
         return result
     }
 
-    generateInflectionForWord(word: string): Promise<GeneratedInflection> {
+    generateInflectionForWord(word: string, corpus: Corpus): Promise<GeneratedInflection> {
         return Promise.resolve(
             {
                 inflection: this.getPossibleInflections(word)[0],

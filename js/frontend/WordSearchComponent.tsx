@@ -214,7 +214,6 @@ export default class WordSearchComponent extends Component<Props, State> {
             }
 
             if (filterString && !filterPos && !this.state.filterWord) {
-console.log('wordsStartingWith')
                 suggestions = this.props.corpus.words.wordsStartingWith(filterString)
                     .map((word) => this.wordToSuggestion(word))
             }

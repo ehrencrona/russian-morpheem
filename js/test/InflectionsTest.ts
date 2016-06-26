@@ -22,7 +22,7 @@ describe('Inflections', function() {
 
         before.inflections[1].inherit(before.inflections[0]);
         
-        let after = Inflections.fromJson(before.toJson());
+        let after = new Inflections().fromJson(before.toJson());
          
         expect(after.inflections.length).to.equal(2);
 

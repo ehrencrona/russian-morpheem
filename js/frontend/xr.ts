@@ -15,7 +15,11 @@ xr.configure({
 export default xr;
 
 export function handleException(e) {
-    alert('Cannot reach the server. Status code: ' + e.status)
+    let message = 'Cannot reach the server. Status code: ' + e.status
+    
+    alert(message)
 
     console.log(e)
+
+    return Promise.reject(message)
 }

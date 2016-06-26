@@ -45,7 +45,7 @@ export default class InflectableWord {
         // maintain object identity to make things easier when changing inflection
         let result = this.inflectionByForm[form]
 
-        if (!result) {
+        if (!result && !(this.mask && this.mask(form))) {
             let jp = this.inflection.getInflectedForm(this.stem, form)
             
             if (jp == null) {

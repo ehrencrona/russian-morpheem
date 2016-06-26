@@ -31,11 +31,6 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
     }
 
     corpus.sentences.onAdd = (sentence: Sentence) => {
-        xr.post(`/api/${lang}/sentence`, sentence.toJson(), xrArgs)
-            .then((res) => {
-                corpus.sentences.changeId(sentence.id, res.data.id)
-            })
-            .catch(handleException)
     }
 
     corpus.facts.onTag = (fact: Fact, tag: string) => {

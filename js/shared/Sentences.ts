@@ -7,8 +7,6 @@ export default class Sentences {
     sentenceById : { [id: number]: Sentence } = {}
     sentences : Sentence[] = []
 
-    changedIdByOldId : { [id: number]: number } = {}
-
     onAdd: (sentence: Sentence) => void = null
     onChange: (sentence: Sentence) => void = null
     onDelete: (sentence: Sentence) => void = null
@@ -29,37 +27,7 @@ export default class Sentences {
         return sentence;
     }
 
-    changeId(fromId: number, toId: number) {
-        if (fromId == toId) {
-            return
-        }
-
-        let sentence = this.get(fromId)
-
-        if (!sentence) {
-            throw new Error('ID to change from did not exist.')
-        }
-
-        if (this.sentenceById[toId]) {
-            throw new Error(`Sentence ${ toId } already existed`)
-        }
-        
-        if (this.changedIdByOldId[fromId]) {
-            throw new Error(`Sentence ${ fromId } had already been renamed`)
-        }
-        
-        this.changedIdByOldId[fromId] = toId
-        this.sentenceById[toId] = sentence
-        sentence.id = toId
-
-        if (toId >= this.nextSentenceId) {
-            this.nextSentenceId = sentence.getId() + 1
-        }
-    }
-
     remove(sentence: Sentence) {
-        this.updateChangedId(sentence)
-
         if (!this.sentenceById[sentence.id]) {
             throw new Error(`Unknown sentence ${ sentence.id }`)
         }
@@ -74,7 +42,7 @@ export default class Sentences {
         }
     }
 
-    add(sentence: Sentence, suppressEvent?: boolean) {
+    add(sentence: Sentence) {
         if (sentence.id == undefined) {
             sentence.id = this.nextSentenceId++
         }
@@ -90,24 +58,14 @@ export default class Sentences {
             this.nextSentenceId = sentence.getId() + 1
         }
 
-        if (this.onAdd && !suppressEvent) {
+        if (this.onAdd) {
             this.onAdd(sentence)
         }
         
-        return this
-    }
-
-    updateChangedId(sentence: Sentence) {
-        let changedId = this.changedIdByOldId[sentence.id]
-
-        if (changedId) {
-            sentence.id = changedId
-        }
+        return Promise.resolve(sentence)
     }
 
     store(sentence: Sentence) {
-        this.updateChangedId(sentence)
-
         let storedSentence = this.sentenceById[sentence.getId()] 
 
         if (!storedSentence) {
@@ -135,14 +93,12 @@ export default class Sentences {
         }
     }
 
-    static fromJson(json, facts: Facts, words: Words) {
-        let sentences = new Sentences()
-
+    fromJson(json, facts: Facts, words: Words) {
         json.forEach((sentenceJson) => {
-            sentences.add(Sentence.fromJson(sentenceJson, facts, words))
+            this.add(Sentence.fromJson(sentenceJson, facts, words))
         })
 
-        return sentences
+        return this
     }
     
     toJson() {

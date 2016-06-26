@@ -16,7 +16,7 @@ export default function(corpus: Corpus) {
         corpus.sentences.add(sentence)
 
         console.log(sentence.author + ' added ' + sentence + ' (' + sentence.id + ')')
-        
+
         corpus.sentenceHistory.recordCreate(sentence, sentence.author)
         corpus.sentenceHistory.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
 

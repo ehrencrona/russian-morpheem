@@ -64,7 +64,8 @@ export default class WordsWithInflectionComponent extends Component<Props, State
             }
         }).map((word: InflectableWord) => {
             return word.inflect(this.props.form)
-        })
+            // inflect may return null if the form is masked
+        }).filter((word) => !!word)
 
 
         return <div className='wordsWithInflection'>
