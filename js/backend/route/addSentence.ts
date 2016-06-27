@@ -14,12 +14,14 @@ export default function(corpus: Corpus) {
         sentence.id = null
 
         corpus.sentences.add(sentence)
+        .then((sentence) => {
+            console.log(sentence.author + ' added ' + sentence + ' (' + sentence.id + ')')
 
-        console.log(sentence.author + ' added ' + sentence + ' (' + sentence.id + ')')
+            corpus.sentenceHistory.recordCreate(sentence, sentence.author)
+            corpus.sentenceHistory.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
 
-        corpus.sentenceHistory.recordCreate(sentence, sentence.author)
-        corpus.sentenceHistory.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
-
-        res.status(200).send({ id: sentence.id })
+            res.status(200).send({ id: sentence.id })
+        })
+        .catch((e) => res.status(500).send(e.toString()))
     }
 }

@@ -50,8 +50,7 @@ export default class WordFactComponent extends Component<Props, State> {
             let sentence = new Sentence([ fact ], null)
 
             this.props.corpus.sentences.add(sentence)
-
-            this.openSentence(sentence)
+            .then((sentence) => this.openSentence(sentence))
         }
     }
 

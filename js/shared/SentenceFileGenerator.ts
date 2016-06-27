@@ -22,7 +22,7 @@ export function sentenceToString(sentence: Sentence, words: Words) {
             tags.push('requires: ' + fact.getId()))
     }
 
-    let en = sentence.en()
+    let en = sentence.en().trim()
     
     if (!en || en == 'undefined' || en == 'null') {
         en = ''

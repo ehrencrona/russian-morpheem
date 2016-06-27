@@ -49,8 +49,7 @@ export default class WordFactComponent extends Component<Props, State> {
         let sentence = new Sentence([ fact.getDefaultInflection() ], null)
 
         this.props.corpus.sentences.add(sentence)
-
-        this.openSentence(sentence)
+        .then((sentence) => this.openSentence(sentence))
     }
 
     openSentence(sentence: Sentence) {

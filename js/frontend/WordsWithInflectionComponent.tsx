@@ -31,8 +31,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
         let sentence = new Sentence([ word ], null)
 
         this.props.corpus.sentences.add(sentence)
-
-        this.openSentence(sentence)
+        .then((sentence) => this.openSentence(sentence))
     }
 
     openSentence(sentence: Sentence) {

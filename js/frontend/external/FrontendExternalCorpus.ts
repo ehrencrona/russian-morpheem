@@ -30,9 +30,7 @@ export default class FrontendExternalCorpus implements ExternalCorpus {
         .then((xhr) => {
             let sentence = Sentence.fromJson(xhr.data, this.corpus.facts, this.corpus.words)
 
-            this.corpus.sentences.add(sentence)
-
-            return sentence
+            return this.corpus.sentences.add(sentence)
         })
         .catch(handleException)
     }
