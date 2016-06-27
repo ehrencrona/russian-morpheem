@@ -106,6 +106,8 @@ export default class FactsEntryComponent extends Component<Props, State> {
                     
                     { ( easyLeft > 0 ? <span className='insufficient'>{ (left > 0 ?  `+${left}!` :  `+${easyLeft}`) }</span> : '') }
                 </span>
+
+                { this.props.children }
             </li>
         )
     }

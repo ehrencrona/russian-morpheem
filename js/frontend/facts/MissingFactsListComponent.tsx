@@ -33,6 +33,12 @@ export default class MissingFactsListComponent extends Component<Props, State> {
         this.state = { }
     }
 
+    add(fact: Fact) {
+        this.props.corpus.facts.add(fact)
+
+        this.forceUpdate()
+    }
+
     render() {
         let factsById: { [id:string]: InflectionFact } = {} 
         
@@ -62,7 +68,9 @@ export default class MissingFactsListComponent extends Component<Props, State> {
                         indexOfFacts={ indexOfFacts }
                         index={ MISSING_INDEX }
                         corpus={ this.props.corpus }
-                        tab={ this.props.tab } />)
+                        tab={ this.props.tab } >
+                        <div className='button' onClick={ () => this.add(factsById[factId])}>Add</div>
+                    </FactsEntryComponent>)
             } 
         </ul>        
     }
