@@ -83,14 +83,14 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
                     
             <h3>Easy</h3> 
             
-            <ul>
+            <ul className='sentencesWithFact'>
             { index.easy.sort(byDifficulty).map(toSentence) }
             { index.ok.sort(byDifficulty).map(toSentence) }
             </ul>
 
             <h3>Hard</h3> 
             
-            <ul>
+            <ul className='sentencesWithFact'>
             { index.hard.sort(byDifficulty).map(toSentence) }
             </ul>
         </div>);
