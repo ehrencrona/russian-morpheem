@@ -104,7 +104,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
                 <span className='clickable'>
                     <FactNameComponent fact={ fact } index={ index } corpus={ this.props.corpus} />
                     
-                    { ( easyLeft > 0 ? <span className='insufficient'>{ `+${easyLeft}` + (left > 0 ? '!' : '') }</span> : '') }
+                    { ( easyLeft > 0 ? <span className='insufficient'>{ (left > 0 ?  `+${left}!` :  `+${easyLeft}`) }</span> : '') }
                 </span>
             </li>
         )
