@@ -20,7 +20,6 @@ import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
 
 import { Component, createElement } from 'react';
-import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
 
 interface Props {
     corpus: Corpus,

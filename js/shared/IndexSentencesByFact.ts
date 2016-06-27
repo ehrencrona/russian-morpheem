@@ -6,10 +6,15 @@ import Fact from './Fact';
 
 let OK_INTERVAL = 10  
 
+export interface SentenceDifficulty {
+    sentence: Sentence,
+    difficulty: number
+}
+
 export interface FactSentences {
-    easy: Sentence[],
-    ok: Sentence[],
-    hard: Sentence[]
+    easy: SentenceDifficulty[],
+    ok: SentenceDifficulty[],
+    hard: SentenceDifficulty[]
 }
 
 export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts: Facts, okInterval?: number): FactSentences {
@@ -38,7 +43,7 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
         })
     
         if (found) {
-            let list
+            let list: SentenceDifficulty[]
             
             if (hardestIndex == forFactIndex) {
                 list = result.easy
@@ -50,7 +55,7 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
                 list = result.hard
             }
             
-            list.push(sentence)
+            list.push({ sentence: sentence, difficulty: hardestIndex })
         }
     })
     

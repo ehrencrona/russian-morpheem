@@ -17,7 +17,7 @@ export default class FrontendSentences extends Sentences {
     }
 
     add(sentence: Sentence) {
-        if (sentence.id == null) {
+        if (sentence.id != null) {
             super.add(sentence)
 
             return Promise.resolve(sentence)

@@ -29,7 +29,7 @@ export default class FrontendInflections extends Inflections {
                     'Content-Type': 'application/json',
                 })
         }
-        
+
         return xr.post(`/api/${corpus.lang}/inflection-for/${word}`, {}, this.xrArgs)
             .catch((e) => {
                 if (e.status == 404) {

@@ -12,7 +12,6 @@ import Word from '../shared/Word'
 import getLanguage from './getLanguage'
 
 import { Component, createElement } from 'react';
-import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
 import INFLECTION_FORMS from '../shared/InflectionForms'
 import { MISSING_INDEX } from '../shared/Facts'
 

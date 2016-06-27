@@ -5,8 +5,6 @@ import Fact from '../shared/Fact'
 
 import { Component, createElement } from 'react';
 
-import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
-
 interface Props {
     corpus: Corpus,
     fact: Fact,

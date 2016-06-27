@@ -5,8 +5,9 @@ import Fact from '../shared/Fact'
 import Sentence from '../shared/Sentence'
 
 import { Component, createElement } from 'react';
+import { MISSING_INDEX } from '../shared/Facts'
 
-import { findSentencesForFact, FactSentences } from '../shared/IndexSentencesByFact'
+import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/IndexSentencesByFact'
 import Tab from './Tab'
 import SentenceComponent from './SentenceComponent'
 
@@ -60,11 +61,22 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
         let index : FactSentences =
             findSentencesForFact(fact, this.props.corpus.sentences, this.props.corpus.facts)
 
-        let toSentence = (sentence) => {
+        let toSentence = (sentence: SentenceDifficulty) => {
             return <li 
-                key={ sentence.id }
+                key={ sentence.sentence.id }
                 className='clickable'
-                onClick={ () => this.openSentence(sentence) }>{ sentence.toString() }</li>
+                onClick={ () => this.openSentence(sentence.sentence) }>
+                    <div className={ 'index' + (sentence.difficulty == MISSING_INDEX ? ' missing' : '') }>
+                        <div className='number' >
+                            { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }
+                        </div>
+                    </div>
+                    { sentence.sentence.toString() }
+                </li>
+        }
+
+        let byDifficulty = (s1: SentenceDifficulty, s2: SentenceDifficulty) => {
+            return s1.difficulty - s2.difficulty
         }
 
         return (<div>
@@ -72,14 +84,14 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
             <h3>Easy</h3> 
             
             <ul>
-            { index.easy.map(toSentence) }
-            { index.ok.map(toSentence) }
+            { index.easy.sort(byDifficulty).map(toSentence) }
+            { index.ok.sort(byDifficulty).map(toSentence) }
             </ul>
 
             <h3>Hard</h3> 
             
             <ul>
-            { index.hard.map(toSentence) }
+            { index.hard.sort(byDifficulty).map(toSentence) }
             </ul>
         </div>);
     }
