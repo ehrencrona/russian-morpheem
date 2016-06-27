@@ -25,7 +25,8 @@ function inflectionToString(inflection: Inflection, lang: string) {
     let forms = INFLECTION_FORMS[lang][inflection.pos]
     
     if (!forms) {
-        throw new Error(`Unknown PoS ${inflection.pos} in language ${lang} for inflection ${inflection.id}.`)
+        console.error(`Unknown PoS ${inflection.pos} in language ${lang} for inflection ${inflection.id}. It will not be stored.`)
+        return
     }
     
     let endings = []

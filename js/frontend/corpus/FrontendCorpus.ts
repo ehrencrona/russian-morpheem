@@ -23,7 +23,8 @@ export default class FrontendCorpus extends Corpus {
     }
 
     setXrArgs(xrArgs: { [header: string]: string }) {
-        (this.sentences as Sentences).xrArgs = xrArgs
+        (this.sentences as Sentences).xrArgs = xrArgs;
+        (this.inflections as Inflections).xrArgs = xrArgs
     }
 
 }

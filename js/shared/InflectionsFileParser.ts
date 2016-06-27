@@ -12,7 +12,7 @@ interface Endings {
     inherits: string
 }
 
-export function parseEndings(str: string, lang?: string, pos?: string): Endings {
+export function parseEndings(str: string, lang?: string, pos?: string, id?: string): Endings {
     let result : { [s: string]: Ending } = {}
     let inherits
     let defaultForm 
@@ -21,7 +21,7 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
         let elements = pair.trim().split(/:? +/)
 
         if (elements.length > 2) {
-            throw new Error('Expected "' + pair + '" to be of the form <form> <ending>, e.g. "gen y"')
+            throw new Error('Expected "' + pair + '" in ' + id + ' to be of the form <form> <ending>, e.g. "gen y"')
         }
 
         let endingString = (elements[1] || '').trim()
@@ -41,7 +41,7 @@ export function parseEndings(str: string, lang?: string, pos?: string): Endings 
             }
 
             if (lang && !formExists(lang, pos, form)) {
-                console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang} when parsing ending string "${endingString}".`)
+                console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang} when parsing "${id}".`)
             }
 
             let ending
@@ -114,7 +114,7 @@ export default function parseInflectionsFile(data, lang?: string) {
         
         let rightSide = line.substr(i + 1)
 
-        let endings = parseEndings(rightSide, lang, pos)
+        let endings = parseEndings(rightSide, lang, pos, id)
 
         let inflection
 
