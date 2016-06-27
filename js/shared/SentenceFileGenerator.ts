@@ -22,11 +22,13 @@ export function sentenceToString(sentence: Sentence, words: Words) {
             tags.push('requires: ' + fact.getId()))
     }
 
-    let en = sentence.en().trim()
+    let en = sentence.en()
     
     if (!en || en == 'undefined' || en == 'null') {
         en = ''
     }
+
+    en = en.trim()
 
     return sentence.id + ' ' + sentence.words.map((word) => 
         wordToString(word, words)).join(' ') 
