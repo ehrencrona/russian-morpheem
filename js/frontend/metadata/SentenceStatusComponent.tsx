@@ -35,7 +35,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
     accept() {
         this.props.corpus.sentenceHistory.setStatus(
-            STATUS_ACCEPTED,
+            { status: STATUS_ACCEPTED },
             this.props.sentence.id
         )
 

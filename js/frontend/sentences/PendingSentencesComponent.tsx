@@ -29,7 +29,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
 
     accept(sentenceId: number) {
         this.props.corpus.sentenceHistory.setStatus(
-            STATUS_ACCEPTED,
+            { status: STATUS_ACCEPTED },
             sentenceId
         )
 

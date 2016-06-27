@@ -1,6 +1,6 @@
 export interface SentenceStatus {
     author?: string,
-    status?: number,
+    status: number,
     sentence?: number,
     source?: string,
     externalId?: number
