@@ -106,8 +106,8 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         throw new Error('Unsupported in frontend.')
     }
 
-    getSentencesByDate() {
-        return xr.get(`/api/${ this.lang }/sentence/by-date`, {}, this.xrArgs)
+    getEventsByDate(eventType: string) {
+        return xr.get(`/api/${ this.lang }/event/by-date/${ eventType }`, {}, this.xrArgs)
         .then((xhr) => {
             return xhr.data as SentencesByDate
         })

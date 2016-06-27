@@ -101,7 +101,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
         })
     }
 
-    getSentencesByDate(): Promise<SentencesByDate> {
+    getEventsByDate(eventType): Promise<SentencesByDate> {
         if (!db) {
             return Promise.resolve({
                 values: {},
@@ -110,8 +110,25 @@ export default class BackendSentenceHistory implements SentenceHistory {
             })
         }
 
-        let cursor = db.collection('sentences_by_date')
-            .find({ '_id.date': { $gt: new Date(116, 6, 1) } }).sort({ '_id.date': 1, '_id.author': 1 })
+        let collection
+
+        if (eventType == EVENT_CREATE) {
+            collection = 'sentences_by_date'
+        }
+        else if (eventType == EVENT_ACCEPT) {
+            collection = 'accepts_by_date'
+        }
+        else if (eventType == EVENT_IMPORT) {
+            collection = 'imports_by_date'
+        }
+        else {
+            throw new Error('Unhandled event type')
+        }
+
+        let oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+
+        let cursor = db.collection(collection)
+            .find({ '_id.date': { $gt: oneWeekAgo } }).sort({ '_id.date': 1, '_id.author': 1 })
 
         return new Promise((resolve, reject) => {
             let ids: number[] = []

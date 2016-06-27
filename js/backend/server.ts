@@ -30,7 +30,7 @@ import setStatus from './route/setStatus';
 import getPendingSentences from './route/getPendingSentences';
 import getLatestEvents from './route/getLatestEvents';
 import getMyLatestEvents from './route/getMyLatestEvents';
-import getSentencesByDate from './route/sentencesByDate';
+import getEventsByDate from './route/eventsByDate';
 import getNewsfeed from './route/getNewsfeed';
 import getExternalSentences from './route/getExternalSentences';
 import importExternalSentence from './route/importExternalSentence';
@@ -119,7 +119,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/${lang}/event/newsfeed`, getNewsfeed(corpus))    
 
-    app.get(`/api/${lang}/sentence/by-date`, getSentencesByDate(corpus))    
+    app.get(`/api/${lang}/event/by-date/:eventType`, getEventsByDate(corpus))    
         
 }
 

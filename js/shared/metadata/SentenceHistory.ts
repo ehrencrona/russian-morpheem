@@ -32,7 +32,7 @@ export interface SentenceHistory {
 
     recordImport(sentence: Sentence, author: string)
 
-    getSentencesByDate(): Promise<SentencesByDate>
+    getEventsByDate(eventType: string): Promise<SentencesByDate>
 
     getNewsfeed(author?: string): Promise<Event[]>
 

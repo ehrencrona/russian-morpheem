@@ -27,7 +27,8 @@ interface Props {
 }
 
 interface State {
-    sentencesByDate: SentencesByDate
+    sentencesByDate?: SentencesByDate,
+    eventType?: string
 }
 
 let React = { createElement: createElement }
@@ -42,6 +43,14 @@ function toTransparentRgb(hexColor) {
 
 export default class PendingSentencesComponent extends Component<Props, State> {
     chart: Chart
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            eventType: 'create'
+        }
+    }
 
     renderGraph(canvas: HTMLCanvasElement) {
         if (!canvas) {
@@ -98,8 +107,12 @@ export default class PendingSentencesComponent extends Component<Props, State> {
     }
 
     componentDidMount() {
-        this.props.corpus.sentenceHistory.getSentencesByDate().then(
-            (sentencesByDate) => this.setState({ sentencesByDate: sentencesByDate }))
+        this.load(this.state.eventType)
+    }
+
+    load(eventType: string) {
+        this.props.corpus.sentenceHistory.getEventsByDate(eventType).then(
+            (sentencesByDate) => this.setState({ eventType: eventType, sentencesByDate: sentencesByDate }))
             .catch((e) => console.error(e.stack))
     }
 
@@ -108,6 +121,20 @@ export default class PendingSentencesComponent extends Component<Props, State> {
             return <div/>
         }
 
-        return <canvas ref={ (canvas) => this.renderGraph(canvas) }></canvas>
+        let filterButton = (id, name) =>
+            <div className={ 'button ' + (this.state.eventType == id ? ' selected' : '') } 
+                onClick={ () => { this.load( id ) }}>{ name }</div>
+
+        return <div>
+
+                <div className='buttonBar'>
+                    { filterButton( 'create', 'Written') }
+                    { filterButton( 'accept', 'Accepted') }
+                    { filterButton( 'importExternal', 'Imported') }
+                </div>
+            
+            <canvas ref={ (canvas) => this.renderGraph(canvas) }></canvas>
+
+        </div>
     }
 }
