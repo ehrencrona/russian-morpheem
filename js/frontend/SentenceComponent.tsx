@@ -53,10 +53,12 @@ export default class SentenceComponent extends Component<Props, State> {
         let sentence = new Sentence(this.props.sentence.words.slice(0), null).setEnglish(this.props.sentence.en())
 
         this.props.corpus.sentences.add(sentence)
+        .then((sentence) => {
+            this.props.tab.openTab(
+                <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null } />, 
+                sentence.toString(), sentence.getId().toString())
+        })
 
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null } />, 
-            sentence.toString(), sentence.getId().toString())
     }
 
     delete() {
