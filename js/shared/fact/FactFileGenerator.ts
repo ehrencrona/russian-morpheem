@@ -14,8 +14,9 @@ export function factToString(fact: Fact, facts: Facts) {
     }
     else if (fact instanceof InflectableWord) {
         let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
-        
-        return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + ending.suffix + 
+        let suffix = fact.inflection.getSuffix(ending, fact.stem)
+
+        return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + suffix + 
             (fact.classifier ? `[${ fact.classifier }]` : '') + 
             ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags +
             (fact.mask ? ', mask: ' + fact.getMaskId() : '')

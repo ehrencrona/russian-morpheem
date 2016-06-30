@@ -136,13 +136,7 @@ export default class Inflection {
         }
     }
 
-    getInflectedForm(stem: string, form: string) {
-        let ending = this.getEnding(form)
-
-        if (!ending) {
-            return
-        }
-
+    getSuffix(ending: Ending, stem: string) {
         let suffix = ending.suffix
 
         this.visitTransforms((transform: Transform) => {
@@ -150,6 +144,18 @@ export default class Inflection {
                 suffix = transform.apply(suffix)
             }
         })
+
+        return suffix
+    }
+
+    getInflectedForm(stem: string, form: string) {
+        let ending = this.getEnding(form)
+
+        if (!ending) {
+            return
+        }
+
+        let suffix = this.getSuffix(ending, stem)
 
         if (ending.relativeTo) {
             stem = this.getInflectedForm(stem, ending.relativeTo)
