@@ -15,7 +15,7 @@ import Tab from '../Tab'
 import AddWordComponent from '../AddWordComponent'
 import WordSearchComponent from '../WordSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
-import FactsMissingComponent from './FactsMissingComponent'
+import IncompleteFactsListComponent from './IncompleteFactsListComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
 import MissingFactsListComponent from './MissingFactsListComponent'
 
@@ -83,7 +83,7 @@ export default class FactsComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.list == INCOMPLETE) {
-            list = <FactsMissingComponent
+            list = <IncompleteFactsListComponent
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }

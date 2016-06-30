@@ -31,7 +31,7 @@ export default class FactsMissingComponent extends Component<Props, State> {
             let indexEntry: FactSentenceIndex = indexOfFacts[factIndex.fact.getId()] || 		
                 { ok: 0, easy: 0, hard: 0, factIndex: 0 }		
                     
-            return indexEntry.easy + indexEntry.ok < 8		
+            return indexEntry.easy + indexEntry.ok + indexEntry.hard < 8		
         }
 
         return (
