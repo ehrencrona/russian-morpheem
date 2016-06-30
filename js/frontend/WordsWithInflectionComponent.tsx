@@ -1,7 +1,7 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import Fact from '../shared/Fact'
+import Fact from '../shared/fact/Fact'
 import InflectableWord from '../shared/InflectableWord'
 import InflectedWord from '../shared/InflectedWord'
 import Inflection from '../shared/Inflection'

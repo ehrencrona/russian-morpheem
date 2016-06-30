@@ -45,7 +45,15 @@ function inflectionToString(inflection: Inflection, lang: string) {
         inherit = ', inherit ' + inflection.inherits.id
     }
     
-    return `${inflection.id}[${inflection.pos}]: ${ endings.join(', ') }${ inherit }`
+    let transformString = ''
+
+    if (inflection.transforms.length) {
+        inflection.transforms.forEach((transform) => {
+            transformString = ', transform ' + transform.getId() 
+        })
+    }
+
+    return `${inflection.id}[${inflection.pos}]: ${ endings.join(', ') }${ inherit }${ transformString }`
 }
 
 export default function inflectionsToString(inflections: Inflections, lang: string) {

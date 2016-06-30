@@ -1,4 +1,4 @@
-import parser from '../shared/FactFileParser'
+import parser from '../shared/fact/FactFileParser'
 
 import { expect } from 'chai';
 

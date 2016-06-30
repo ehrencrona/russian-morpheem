@@ -2,9 +2,9 @@
 
 import Fact from './Fact';
 import Facts from './Facts';
-import InflectionFact from './InflectionFact';
-import InflectableWord from './InflectableWord';
-import Word from './Word';
+import InflectionFact from '../InflectionFact';
+import InflectableWord from '../InflectableWord';
+import Word from '../Word';
 
 export function factToString(fact: Fact, facts: Facts) {
     let tags = facts.getTagsOfFact(fact).map((tag) => ', tag: ' + tag).join('')

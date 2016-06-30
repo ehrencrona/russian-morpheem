@@ -5,12 +5,15 @@ import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
 import Grammar from './Grammar'
 import Ending from './Ending'
+import { Transform } from './Transform'
+import allTransforms from './Transforms'
 
 /** 
   * Describes a way of inflecting a word (by adding endings to a stem). Also serves as Fact. 
   */
 export default class Inflection {
     inherits: Inflection
+    transforms: Transform[] = []
 
     constructor(public id, public defaultForm, public pos, public endings: { [s: string]: Ending }) {
         this.id = id
@@ -32,6 +35,10 @@ export default class Inflection {
             result.inherit(parent)
         }
         
+        if (json.transforms) {
+            result.transforms = json.transforms.map((id) => allTransforms.get(id))
+        }
+
         return result
     }
 
@@ -41,7 +48,8 @@ export default class Inflection {
             defaultForm: this.defaultForm,
             pos: this.pos,
             endings: this.endings,
-            inherits: (this.inherits ? this.inherits.id : undefined)
+            inherits: (this.inherits ? this.inherits.id : undefined),
+            transforms: (this.transforms.length ? this.transforms.map((transform) => transform.getId()) : undefined)
         }
     }
 
@@ -135,16 +143,34 @@ export default class Inflection {
             return
         }
 
+        let suffix = ending.suffix
+
+        this.visitTransforms((transform: Transform) => {
+            if (transform.isApplicable(stem, suffix)) {
+                suffix = transform.apply(suffix)
+            }
+        })
+
         if (ending.relativeTo) {
             stem = this.getInflectedForm(stem, ending.relativeTo)
         }
 
-        return this.addSuffix(stem, ending)
+        return this.addSuffix(stem, ending, suffix)
     }
-    
-    addSuffix(stem: string, ending: Ending) {
-        let suffix = ending.suffix
 
+    visitTransforms(visitor: (Transform) => void) {
+        let at: Inflection = this
+         
+        do {
+            at.transforms.forEach((transform) => visitor(transform))
+
+            at = at.inherits 
+        } while (at)
+
+        return at
+    }
+
+    addSuffix(stem: string, ending: Ending, suffix: string) {
         if (ending.subtractFromStem > 0) {
             stem = stem.substr(0, stem.length - ending.subtractFromStem)
         }

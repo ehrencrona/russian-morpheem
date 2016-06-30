@@ -1,12 +1,12 @@
 
-import Grammar from './Grammar';
-import InflectionFact from './InflectionFact';
-import InflectableWord from './InflectableWord';
-import InflectedWord from './InflectedWord';
+import Grammar from '../Grammar';
+import InflectionFact from '../InflectionFact';
+import InflectableWord from '../InflectableWord';
+import InflectedWord from '../InflectedWord';
 import Fact from './Fact';
-import Inflections from './Inflections';
-import Word from './Word';
-import Words from './Words';
+import Inflections from '../Inflections';
+import Word from '../Word';
+import Words from '../Words';
 
 const INFLECTION = 'i'
 const INFLECTABLE = 'ib'

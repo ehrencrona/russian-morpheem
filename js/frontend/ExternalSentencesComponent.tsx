@@ -1,8 +1,8 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import Fact from '../shared/Fact'
-import { MISSING_INDEX } from '../shared/Facts'
+import Fact from '../shared/fact/Fact'
+import { MISSING_INDEX } from '../shared/fact/Facts'
 import Sentence from '../shared/Sentence'
 import UnstudiedWord from '../shared/UnstudiedWord'
 import { ExternalSentence } from '../shared/external/ExternalSentence'

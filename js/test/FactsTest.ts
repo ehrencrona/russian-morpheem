@@ -4,7 +4,7 @@
 import Inflections from '../shared/Inflections';
 import Inflection from '../shared/Inflection';
 
-import Facts from '../shared/Facts';
+import Facts from '../shared/fact/Facts';
 import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';

@@ -1,7 +1,7 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import Fact from '../shared/Fact'
+import Fact from '../shared/fact/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/Inflection'
@@ -13,7 +13,7 @@ import getLanguage from './getLanguage'
 
 import { Component, createElement } from 'react';
 import INFLECTION_FORMS from '../shared/InflectionForms'
-import { MISSING_INDEX } from '../shared/Facts'
+import { MISSING_INDEX } from '../shared/fact/Facts'
 
 interface Props {
     corpus: Corpus,

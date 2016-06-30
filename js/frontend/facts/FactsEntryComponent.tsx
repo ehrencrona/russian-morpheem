@@ -7,13 +7,13 @@ import Tab from '../Tab'
 import FactComponent from '../FactComponent'
 import AddWordComponent from '../AddWordComponent'
 
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/InflectionFact'
 import FactNameComponent from '../FactNameComponent'
 
 import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
-import { MISSING_INDEX } from '../../shared/Facts' 
+import { MISSING_INDEX } from '../../shared/fact/Facts' 
 
 interface Props {
     fact: Fact,

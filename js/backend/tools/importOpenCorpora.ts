@@ -1,7 +1,7 @@
 /// <reference path="../../../typings/node-4.d.ts"/>
 /// <reference path="../../../typings/redis.d.ts"/>
 
-import { createReadStream } from 'fs'
+import { createReadStream, readFileSync } from 'fs'
 import { createInterface } from 'readline'
 
 import 'source-map-support/register'
@@ -103,41 +103,61 @@ function foundForm(inflection: string, theirPos: string, theirForm: string) {
 	}		
 }
 
-resetWord()
+function applyErrata() {
+	let errata = JSON.parse(readFileSync('data/dict.opcorpora.errata.json').toString())
 
-lineReader.on('line', (line) => {
+	errata.forEach((erratum) => {
+console.log(erratum)
 
-	if (line == '' && word.pos) {
-		if (!Object.keys(word.forms).length) {
-			resetWord()
+		if (typeof erratum.dictWord != 'string' ||
+			typeof erratum.form != 'string' ||
+			typeof erratum.word != 'string') {
+			console.error('Erratum', erratum, 'invalid.')
 		}
-		else if (!(word.pos == 'v' && !word.forms['inf'])) {
+
+		client.hset(erratum.dictWord, erratum.form, erratum.word)
+	})
+}
+
+function importOpenCorpora() {
+	resetWord()
+
+	lineReader.on('line', (line) => {
+
+		if (line == '' && word.pos) {
+			if (!Object.keys(word.forms).length) {
+				resetWord()
+			}
+			else if (!(word.pos == 'v' && !word.forms['inf'])) {
+				wordEnded()
+			}
+		}
+
+		let cols = line.split('\t')
+
+		if (cols.length == 2) {
+			let theirPos = cols[1].split(/[, ]/)[0]
+			let inflection = cols[0]
+			let theirForm = cols[1]
+
+			foundForm(inflection, theirPos, theirForm)
+		}
+		
+		lineCount++
+	})
+
+	lineReader.on('close', () => {
+		if (!Object.keys(word.forms).length) {
 			wordEnded()
 		}
-	}
 
-	let cols = line.split('\t')
+		console.log('done')
+		client.quit();
+		client.on('end', () => process.exit(0))
+	})
+}
 
-	if (cols.length == 2) {
-		let theirPos = cols[1].split(/[, ]/)[0]
-		let inflection = cols[0]
-		let theirForm = cols[1]
-
-		foundForm(inflection, theirPos, theirForm)
-	}
-	
-	lineCount++
-})
-
-lineReader.on('close', () => {
-	if (!Object.keys(word.forms).length) {
-		wordEnded()
-	}
-
-	console.log('done')
-	client.quit();
-	client.on('end', () => process.exit(0))
-})
+applyErrata()
 
 const POS_MAPPING = [
 	[ 'NOUN', 'n' ],

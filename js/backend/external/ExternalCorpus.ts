@@ -3,7 +3,7 @@
 import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
 
 import Words from '../../shared/Words'
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 
 import { ExternalSentence } from '../../shared/external/ExternalSentence'
 

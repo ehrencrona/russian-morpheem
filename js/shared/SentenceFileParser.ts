@@ -3,7 +3,7 @@
 import Sentence from './Sentence';
 import Sentences from './Sentences';
 import Words from './Words';
-import Facts from './Facts';
+import Facts from './fact/Facts';
 
 /**
  * Parses a Japanese sentence (words delimited by spaces) into Words.

@@ -1,12 +1,12 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import Fact from '../shared/Fact'
+import Fact from '../shared/fact/Fact'
 import Word from '../shared/Word'
 import Words from '../shared/Words'
 import InflectedWord from '../shared/InflectedWord'
 import Sentence from '../shared/Sentence'
-import { MISSING_INDEX } from '../shared/Facts'
+import { MISSING_INDEX } from '../shared/fact/Facts'
 import Tab from './Tab'
 
 import FactNameComponent from './FactNameComponent'

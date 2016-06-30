@@ -13,7 +13,7 @@ import Sentence from '../shared/Sentence'
 import Sentences from '../shared/Sentences'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
-import Facts from '../shared/Facts'
+import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
 
 import { parseEndings } from '../shared/InflectionsFileParser'

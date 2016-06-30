@@ -1,0 +1,117 @@
+[
+
+    {
+        "dictWord": "ехать",
+        "form": "impr",
+        "word": "ехай"
+    },
+
+    {
+        "dictWord": "имя",
+        "form": "gen",
+        "word": "имени"
+    },
+
+    {
+        "dictWord": "курица",
+        "form": "pl",
+        "word": "курицы"
+    },
+
+    {
+        "dictWord": "сто",
+        "form": "datpl",
+        "word": "ста"
+    },
+
+    {
+        "dictWord": "сто",
+        "form": "genpl",
+        "word": "ста"
+    },
+
+    {
+        "dictWord": "сто",
+        "form": "instrpl",
+        "word": "ста"
+    },
+
+    {
+        "dictWord": "сто",
+        "form": "preppl",
+        "word": "ста"
+    },
+
+    {
+        "dictWord": "тысяча",
+        "form": "instpl",
+        "word": "тысячью"
+    },
+
+    {
+        "dictWord": "кошка",
+        "form": "accpl",
+        "word": "кошек"
+    },
+
+    {
+        "dictWord": "имя",
+        "form": "gen",
+        "word": "имени"
+    },
+
+    {
+        "dictWord": "смотреть",
+        "form": "impr",
+        "word": "смотри"
+    },
+
+    {
+        "dictWord": "мороз",
+        "form": "dat",
+        "word": "морозу"
+    },
+
+    {
+        "dictWord": "мороз",
+        "form": "gen",
+        "word": "мороза"
+    },
+
+    {
+        "dictWord": "мороз",
+        "form": "prep",
+        "word": "морозе"
+    },
+
+    {
+        "dictWord": "мороз",
+        "form": "instr",
+        "word": "морозом"
+    },
+
+    {
+        "dictWord": "дочь",
+        "form": "instrpl",
+        "word": "дочерями"
+    },
+
+    {
+        "dictWord": "быть",
+        "form": "1",
+        "word": "есть"
+    },
+
+    {
+        "dictWord": "быть",
+        "form": "3",
+        "word": "будет"
+    },
+
+    {
+        "dictWord": "ехать",
+        "form": "imprpl",
+        "word": "ехайте"
+    }
+
+]

@@ -1,6 +1,6 @@
 
 import Sentence from './Sentence';
-import Facts from './Facts';
+import Facts from './fact/Facts';
 import Words from './Words';
 
 export default class Sentences {

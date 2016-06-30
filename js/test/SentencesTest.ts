@@ -10,7 +10,7 @@ import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
-import Facts from '../shared/Facts'
+import Facts from '../shared/fact/Facts'
 import { parseEndings } from '../shared/InflectionsFileParser'
 
 import { expect } from 'chai';

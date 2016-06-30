@@ -4,7 +4,7 @@
 import { writeFile } from 'fs';
 import sentencesToString from '../shared/SentenceFileGenerator';
 import Words from '../shared/Words';
-import Facts from '../shared/Facts';
+import Facts from '../shared/fact/Facts';
 import Sentences from '../shared/Sentences';
 
 export default function writeSentenceFile(fileName, sentences: Sentences, words: Words) {

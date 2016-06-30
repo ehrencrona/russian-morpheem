@@ -3,7 +3,7 @@
 var _ = require('underscore')
 
 import Fact from './Fact';
-import Word from './Word';
+import Word from '../Word';
 
 var MAX_SIMULTANEOUS_STUDY = 10
 var EASY_REPETITIONS = 5

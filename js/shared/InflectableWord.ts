@@ -98,7 +98,7 @@ export default class InflectableWord {
         if (this.classifier) {
             result += '[' + this.classifier + ']' 
         }
-        
+
         return result
     }
 

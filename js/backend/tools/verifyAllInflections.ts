@@ -36,7 +36,7 @@ interface FormStats {
 let statsByForm: { [ inflectionAndForm : string ] : FormStats } = {}
 
 let ignore = [
-    'мороженое', 'я', 'интернет', 'болеть', 'человек', 'ребёнок', 'весь', 'год'
+    'мороженое', 'я', 'интернет', 'болеть', 'человек', 'ребёнок', 'весь', 'год', 'мороза'
 ]
 
 let ignoreByWord = {}
@@ -50,7 +50,6 @@ readCorpus('ru', false)
     let p = Promise.resolve()
 
     corpus.facts.facts.forEach((fact) => {
-
         if (fact instanceof InflectableWord) {
             let defaultForm = fact.getDefaultInflection().jp
 
@@ -109,13 +108,11 @@ readCorpus('ru', false)
             })
 
         }
-
     })
 
     return p
 })
 .then(() => {
-
     function dotdot(array: string[]) {
         if (array.length > 4) {
             return array.slice(0, 4).join(', ') + '...'

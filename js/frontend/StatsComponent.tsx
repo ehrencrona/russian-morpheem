@@ -28,12 +28,13 @@ export default class StatsComponent extends Component<Props, State> {
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
         let factsWithEnoughSentences = 0, wordsWithEnoughSentences = 0
+        let factsWithEnoughEasySentences = 0, wordsWithEnoughEasySentences = 0
         let words = 0
 
         for (let fact of corpus.facts.facts) {
             let i = indexOfFacts[fact.getId()]
 
-            if (i && i.easy + i.ok >= 8) {
+            if (i && i.hard + i.easy + i.ok >= 8) {
                 factsWithEnoughSentences++
 
                 if (fact instanceof Word || fact instanceof InflectableWord) {
@@ -41,6 +42,14 @@ export default class StatsComponent extends Component<Props, State> {
                 }
             }
             
+            if (i && i.easy + i.ok >= 8) {
+                factsWithEnoughEasySentences++
+
+                if (fact instanceof Word || fact instanceof InflectableWord) {
+                    wordsWithEnoughEasySentences++
+                }
+            }
+
             if (fact instanceof Word || fact instanceof InflectableWord) {
                 words++
             }
@@ -55,6 +64,9 @@ export default class StatsComponent extends Component<Props, State> {
             </li>
             <li> 
                 <b>{ factsWithEnoughSentences }</b> facts (<b>{ wordsWithEnoughSentences }</b> words) have enough sentences
+            </li>
+            <li> 
+                <b>{ factsWithEnoughEasySentences }</b> facts (<b>{ wordsWithEnoughEasySentences }</b> words) have enough easy sentences
             </li>
 
             <SentencesByDateComponent

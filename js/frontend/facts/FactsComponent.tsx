@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/InflectionFact'
 
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 
 import { FactIndex } from './FactIndex'

@@ -1,6 +1,6 @@
 import Corpus from '../shared/Corpus';
 import Sentence from '../shared/Sentence';
-import Fact from '../shared/Fact';
+import Fact from '../shared/fact/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';

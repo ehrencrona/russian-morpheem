@@ -6,7 +6,7 @@ import { expect } from 'chai';
 
 import Word from '../shared/Word'
 import Words from '../shared/Words'
-import Facts from '../shared/Facts'
+import Facts from '../shared/fact/Facts'
 import Grammar from '../shared/Grammar'
 
 describe('SentenceFileParser', function() {

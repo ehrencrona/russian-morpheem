@@ -1,4 +1,4 @@
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 
 export interface FactIndex {
     fact: Fact,

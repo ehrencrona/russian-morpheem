@@ -8,7 +8,7 @@ import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
 import Tab from './Tab';
 import TabComponent from './TabComponent';
-import SentencesComponent from './sentences/SentencesComponent';
+import SentencesComponent from './sentence/SentencesComponent';
 
 interface Props {
     corpus: Corpus

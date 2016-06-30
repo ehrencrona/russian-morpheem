@@ -4,7 +4,7 @@ import xr from '../xr';
 
 import { ExternalSentence } from '../../shared/external/ExternalSentence'
 import { ExternalCorpus } from '../../shared/external/ExternalCorpus'
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 

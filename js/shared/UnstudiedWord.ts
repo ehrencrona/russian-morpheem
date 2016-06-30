@@ -1,6 +1,6 @@
 "use strict";
 
-import Fact from './Fact';
+import Fact from './fact/Fact';
 import Inflections from './Inflections'
 
 /**

@@ -1,7 +1,7 @@
 import readCorpus from '../CorpusReader'
 
 import Corpus from '../../shared/Corpus'
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 import UnstudiedWord from '../../shared/UnstudiedWord'
 
 import { readFile } from 'fs'

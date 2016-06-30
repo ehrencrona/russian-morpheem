@@ -2,7 +2,7 @@
 "use strict";
 
 import { readFile } from 'fs';
-import parseFactFile from '../shared/FactFileParser';
+import parseFactFile from '../shared/fact/FactFileParser';
 
 import Inflections from '../shared/Inflections';
 

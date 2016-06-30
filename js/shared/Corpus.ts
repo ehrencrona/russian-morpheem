@@ -1,4 +1,4 @@
-import Facts from '../shared/Facts'
+import Facts from '../shared/fact/Facts'
 import Words from '../shared/Words'
 import Sentences from '../shared/Sentences'
 import Inflections from '../shared/Inflections'

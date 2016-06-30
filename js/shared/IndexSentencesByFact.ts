@@ -1,8 +1,8 @@
 import Sentences from './Sentences';
 import Sentence from './Sentence';
 import InflectableWord from './InflectableWord';
-import Facts from './Facts';
-import Fact from './Fact';
+import Facts from './fact/Facts';
+import Fact from './fact/Fact';
 
 let OK_INTERVAL = 10  
 

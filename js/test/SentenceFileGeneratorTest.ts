@@ -12,7 +12,7 @@ import Inflection from '../shared/Inflection'
 import Inflections from '../shared/Inflections'
 import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
-import Facts from '../shared/Facts'
+import Facts from '../shared/fact/Facts'
 import Grammar from '../shared/Grammar'
 import { parseEndings } from '../shared/InflectionsFileParser'
 

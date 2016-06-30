@@ -2,9 +2,9 @@
 "use strict";
 
 import { writeFile } from 'fs';
-import factsToString from '../shared/FactFileGenerator';
+import factsToString from '../shared/fact/FactFileGenerator';
 import Words from '../shared/Words';
-import Facts from '../shared/Facts';
+import Facts from '../shared/fact/Facts';
 import Sentences from '../shared/Sentences';
 
 export default function writeFactFile(fileName, facts: Facts) {

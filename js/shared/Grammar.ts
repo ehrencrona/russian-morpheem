@@ -1,6 +1,6 @@
 "use strict";
 
-import Fact from './Fact';
+import Fact from './fact/Fact';
 
 /**
  * Represents a piece of grammar knowledge. It has an ID and is associated as a precondition of other facts (words or grammar)

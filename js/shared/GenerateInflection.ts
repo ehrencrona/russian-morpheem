@@ -63,7 +63,7 @@ export function getWrongForms(stem, words: { [form: string]: string }, inflectio
         else {
             // assuming we fixed the relative to form, would this form still be broken?
             inflected = inflection.addSuffix(
-                words[ending.relativeTo], ending)
+                words[ending.relativeTo], ending, ending.suffix)
         }
 
         if (!inflected) {

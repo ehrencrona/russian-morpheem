@@ -3,19 +3,23 @@
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 import Ending from './Ending'
+import { Transform } from './Transform'
+import allTransforms from './Transforms'
 import { formExists } from '../shared/InflectionForms'
 import INFLECTION_FORMS from '../shared/InflectionForms'
 
 interface Endings {
     default: string, 
     endings: { [s: string]: Ending },
-    inherits: string
+    inherits: string,
+    transforms: Transform[]
 }
 
 export function parseEndings(str: string, lang?: string, pos?: string, id?: string): Endings {
     let result : { [s: string]: Ending } = {}
     let inherits
     let defaultForm 
+    let transforms: Transform[] = []
 
     for (let pair of str.split(',')) {
         let elements = pair.trim().split(/:? +/)
@@ -34,6 +38,15 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
 
         if (form == 'inherit') {
             inherits = endingString
+        }
+        else if (form == 'transform') {
+            let transform = allTransforms.get(endingString)
+
+            if (!transform) {
+                throw new Error(`Unknown transform ${endingString}`)
+            }
+
+            transforms.push(transform)
         }
         else {
             if (endingString[0] == '-') {
@@ -72,11 +85,15 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
                 defaultForm = form
             }
             
+            if (result[form]) {
+                console.warn(`Form ${ form } is defined twice for ${ id }.`)
+            }
+
             result[form] = ending
         }            
     }
 
-    return { default: defaultForm, endings: result, inherits: inherits }
+    return { default: defaultForm, endings: result, inherits: inherits, transforms: transforms }
 }
 
 export default function parseInflectionsFile(data, lang?: string) {
@@ -133,6 +150,8 @@ export default function parseInflectionsFile(data, lang?: string) {
         else {
             inflection = new Inflection(id, endings.default, pos, endings.endings)
         }
+
+        inflection.transforms = endings.transforms
 
         inflectionById[id] = inflection
         inflections.push(inflection)

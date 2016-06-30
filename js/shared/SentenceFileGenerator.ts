@@ -4,7 +4,7 @@ import Sentence from './Sentence';
 import Sentences from './Sentences';
 import Word from './Word';
 import Words from './Words';
-import Facts from './Facts';
+import Facts from './fact/Facts';
 
 function wordToString(word: Word, words: Words) {
     return word.getId().replace(/ /g, '_')   

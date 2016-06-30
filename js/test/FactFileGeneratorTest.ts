@@ -1,7 +1,7 @@
 
-import parser from '../shared/FactFileParser'
-import { factToString } from '../shared/FactFileGenerator'
-import factsToString from '../shared/FactFileGenerator'
+import parser from '../shared/fact/FactFileParser'
+import { factToString } from '../shared/fact/FactFileGenerator'
+import factsToString from '../shared/fact/FactFileGenerator'
 import { expect } from 'chai';
 
 import Inflections from '../shared/Inflections'

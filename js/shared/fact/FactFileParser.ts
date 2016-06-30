@@ -13,15 +13,16 @@
  * See facts.txt for an example.
  */
 
-import Word from './Word'
-import UnstudiedWord from './UnstudiedWord'
-import InflectableWord from './InflectableWord'
-import Inflections from './Inflections'
-import InflectionFact from './InflectionFact'
+import Word from '../Word'
+import UnstudiedWord from '../UnstudiedWord'
+import InflectableWord from '../InflectableWord'
+import Inflections from '../Inflections'
+import InflectionFact from '../InflectionFact'
 import Fact from './Fact'
 import Facts from './Facts'
-import Grammars from './Grammars'
-import MASKS from './Masks'
+import Grammars from '../Grammars'
+import MASKS from '../Masks'
+import { Transform } from '../Transform'
 
 export default function parseFactFile(data, inflections: Inflections, lang: string): Facts {
     var facts = new Facts()
@@ -101,12 +102,18 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 
                 let defaultEnding = inflection.getEnding(inflection.defaultForm)
                 let defaultSuffix = defaultEnding.suffix
+                let stem = word.jp.substr(0, word.jp.length - defaultSuffix.length)
+
+                inflection.visitTransforms((transform: Transform) => {
+                    if (transform.isApplicable(stem, defaultSuffix)) {
+                        defaultSuffix = transform.apply(defaultSuffix)
+                    }
+                })
 
                 if (word.jp.substr(word.jp.length - defaultSuffix.length) != defaultSuffix) {
                     throw new Error(word.jp + ' should end with "' + defaultSuffix + '".');
                 }
 
-                let stem = word.jp.substr(0, word.jp.length - defaultSuffix.length)
                 let i = defaultEnding.subtractFromStem
 
                 while (i > 0) {
@@ -191,6 +198,9 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                     }
 
                     if (fact instanceof InflectionFact) {
+                        if (fact.inflection.pos == 'v') {
+                            facts.tag(fact, 'verb')
+                        }
                         if (fact.form.substr(0, 3) == 'acc') {
                             facts.tag(fact, 'accusative')
                         }

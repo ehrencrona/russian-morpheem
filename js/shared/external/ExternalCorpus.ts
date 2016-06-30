@@ -1,7 +1,7 @@
 
 import { ExternalSentence } from './ExternalSentence'
 import Sentence from '../Sentence'
-import Fact from '../Fact'
+import Fact from '../fact/Fact'
 
 export interface ExternalCorpus {
     getExternalSentences(fact: Fact): Promise<ExternalSentence[]>

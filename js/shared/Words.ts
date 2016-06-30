@@ -3,7 +3,7 @@ import Word from './Word'
 import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
 import Inflection from './Inflection'
-import Facts from './Facts'
+import Facts from './fact/Facts'
 import UnstudiedWord from './UnstudiedWord';
 
 export default class Words {

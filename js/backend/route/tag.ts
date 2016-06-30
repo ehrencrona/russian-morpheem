@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
-import Fact from '../../shared/Fact'
+import Fact from '../../shared/fact/Fact'
 
 function handle(corpus: Corpus, method: (fact: Fact, tag: string) => void) {
     return (req: express.Request, res: express.Response) => {

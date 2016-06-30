@@ -1,11 +1,11 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import Corpus from '../shared/Corpus'
-import Fact from '../shared/Fact'
+import Fact from '../shared/fact/Fact'
 import Sentence from '../shared/Sentence'
 
 import { Component, createElement } from 'react';
-import { MISSING_INDEX } from '../shared/Facts'
+import { MISSING_INDEX } from '../shared/fact/Facts'
 
 import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/IndexSentencesByFact'
 import Tab from './Tab'

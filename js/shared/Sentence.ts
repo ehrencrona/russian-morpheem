@@ -1,9 +1,9 @@
 "use strict";
 
 import Word from './Word'
-import Fact from './Fact'
+import Fact from './fact/Fact'
 import Words from './Words'
-import Facts from './Facts'
+import Facts from './fact/Facts'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'

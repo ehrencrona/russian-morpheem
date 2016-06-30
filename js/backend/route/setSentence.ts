@@ -15,9 +15,11 @@ export default function(corpus: Corpus) {
 
             corpus.sentences.store(sentence)
 
-            console.log('Stored ' + sentence + ' (' + sentence.id + ')')
+            let author = getAuthor(req).name
 
-            corpus.sentenceHistory.recordEdit(sentence, getAuthor(req).name)
+            console.log('Stored ' + sentence + ' (' + sentence.id + ') by ' + author)
+
+            corpus.sentenceHistory.recordEdit(sentence, author)
 
             res.status(200).send({})
         }
