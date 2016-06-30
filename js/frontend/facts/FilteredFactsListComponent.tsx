@@ -6,6 +6,11 @@ import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
+
+import InflectionFact from '../../shared/InflectionFact'
+import UnstudiedWord from '../../shared/UnstudiedWord'
+import InflectableWord from '../../shared/InflectableWord'
+
 import Tab from '../Tab'
 
 import { FactIndex } from './FactIndex'
@@ -17,7 +22,9 @@ interface Props {
 }
 
 interface State {
-    startIndex: number
+    startIndex?: number,
+    showInflectionFact?: boolean,
+    showWords?: boolean
 }
 
 let React = { createElement: createElement }
@@ -27,8 +34,8 @@ const PAGE_SIZE = 200
 export default class FilteredFactsListComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
-        
-        this.state = { startIndex: 0 }
+
+        this.state = { startIndex: 0, showInflectionFact: true, showWords: true }
     }
 
     openFact(fact: Fact) {
@@ -47,10 +54,30 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
             return { fact: fact, index: index } 
         })
 
+        if (!this.state.showInflectionFact || !this.state.showWords) {
+            factIndices = factIndices.filter((index) => {
+                return (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
+                    (this.state.showWords && (index.fact instanceof UnstudiedWord || index.fact instanceof InflectableWord)) 
+            })
+        }
+
         factIndices = factIndices.filter(this.props.filter)
 
         return (
             <div>
+                <ul className='formFilter'>
+                    <li className={ (this.state.showInflectionFact ? 'active' : '') } 
+                        onClick={ () => this.setState({ showInflectionFact: !this.state.showInflectionFact }) }>
+                        Forms
+                    </li>
+
+                    <li className={ (this.state.showWords ? 'active' : '') } 
+                        onClick={ () => this.setState({ showWords: !this.state.showWords }) }>
+                        Words
+                    </li>
+                </ul>
+
+
                 { (
                     factIndices.length > PAGE_SIZE ?
 

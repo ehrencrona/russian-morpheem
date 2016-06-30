@@ -85,7 +85,7 @@ export default class LoginContainer extends Component<Props, State> {
             this.setState({ corpus: corpus })
         })
         .catch((e) => {
-            console.log('While loading corpus: ', e)
+            console.log('While loading corpus: ', e.stack)
             
             if (e.status == 401) {
                 localStorage.removeItem(TOKEN_ITEM)

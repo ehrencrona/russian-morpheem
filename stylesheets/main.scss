@@ -509,6 +509,11 @@ ul {
         font-style: italic;
     }
 
+    .hard {
+        color: darken($color15, 15%);
+        font-style: italic;
+    }
+
     .button {
         display: inline-block;
         position: relative;
@@ -612,6 +617,33 @@ ul {
     }
 
     li:hover, .current {
+        background-color: $color13;
+        border-color: $color13;
+        color: $color9;
+    }
+}
+
+.formFilter {
+    display: flex;
+    flex-wrap: wrap;
+
+    margin-bottom: 2 * $unit;
+
+    li:hover {
+        cursor: pointer; 
+    }
+    
+    li {
+        margin-right: 4 * $unit;
+        color: $color4;
+        border: 1px solid $color4;
+        border-radius: $unit;
+        padding: $unit;
+        padding-bottom: $unit - 1px;
+        margin: 2 * $unit;
+    }
+    
+    .active {
         background-color: $color13;
         border-color: $color13;
         color: $color9;

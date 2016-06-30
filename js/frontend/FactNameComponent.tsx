@@ -22,6 +22,7 @@ interface State {
 }
 
 let React = { createElement: createElement }
+const SHOW_COUNT = 3
 
 export default class FactNameComponent extends Component<Props, State> {
 
@@ -43,22 +44,30 @@ export default class FactNameComponent extends Component<Props, State> {
             }
         })
 
-        let result: InflectedWord[] = []
+        let easy: InflectedWord[] = [], hard: InflectedWord[] = []
+        let more = false
+        let foundCount = 0
 
         let facts = this.props.corpus.facts.facts
-        let until = Math.min(facts.length, this.props.index + 10)
 
-        for (let i = 0; i < until; i++) {
+        for (let i = 0; i < facts.length && foundCount <= SHOW_COUNT; i++) {
             let fact = facts[i]
             
-            if (result.length < 3 &&
-                fact instanceof InflectableWord && 
+            if (fact instanceof InflectableWord && 
                 inflectionIds.has(fact.inflection.id)) {
-                result.push(fact.inflect(forFact.form))
-            } 
+                
+                if (foundCount == SHOW_COUNT) {
+                    more = true
+                }
+                else {
+                    (i > this.props.index + 10 ? hard : easy).push(fact.inflect(forFact.form))
+                }
+
+                foundCount++
+            }
         }
 
-        return result
+        return { easy: easy, hard: hard, more: more }
     }
 
     render() {
@@ -71,7 +80,9 @@ export default class FactNameComponent extends Component<Props, State> {
             
         if (examples && fact instanceof InflectionFact) { 
             return <span>
-                { examples.join(', ') + (examples.length == 3 ? '...' : '') } 
+                { examples.easy.join(', ') } 
+                { examples.hard.length ? <span className='hard'>{ (examples.easy.length ? ', ' : '') + examples.hard.join(', ') }</span>  : '' } 
+                { (examples.more ? '...' : '') } 
                 <span className='form'>{ fact.form }</span>
             </span>
         }

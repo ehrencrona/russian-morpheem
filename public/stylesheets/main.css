@@ -315,6 +315,9 @@ ul {
   .facts .form {
     margin-left: 4px;
     font-style: italic; }
+  .facts .hard {
+    color: #a0a0a0;
+    font-style: italic; }
   .facts .button, .facts .tab-header .tab-close, .tab-header .facts .tab-close {
     display: inline-block;
     position: relative;
@@ -383,6 +386,25 @@ ul {
     padding-bottom: 3px;
     margin: 8px; }
   .paging li:hover, .paging .current {
+    background-color: #e95f3d;
+    border-color: #e95f3d;
+    color: #f8f7f5; }
+
+.formFilter {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 8px; }
+  .formFilter li:hover {
+    cursor: pointer; }
+  .formFilter li {
+    margin-right: 16px;
+    color: #766db0;
+    border: 1px solid #766db0;
+    border-radius: 4px;
+    padding: 4px;
+    padding-bottom: 3px;
+    margin: 8px; }
+  .formFilter .active {
     background-color: #e95f3d;
     border-color: #e95f3d;
     color: #f8f7f5; }
