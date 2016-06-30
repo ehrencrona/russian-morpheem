@@ -82,7 +82,7 @@ function process(ts: TatoebaSentence, corpus: Corpus): Promise<any> {
 }
 
 function wait() {
-    return new Promise((resolve, reject) => setTimeout(resolve(), 200))
+    return new Promise((resolve, reject) => setTimeout(resolve, 200))
 }
 
 readCorpus('ru', false)
