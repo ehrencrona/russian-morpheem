@@ -95,7 +95,7 @@ readCorpus('ru', false)
                         }
                     }
 
-                }, false)
+                })
 
             })
             .catch((e) => {

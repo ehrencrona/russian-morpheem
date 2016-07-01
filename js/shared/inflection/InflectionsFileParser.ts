@@ -11,13 +11,13 @@ import INFLECTION_FORMS from './InflectionForms'
 interface Endings {
     default: string, 
     endings: { [s: string]: Ending },
-    inherits: string,
+    inherits: string[],
     transforms: Transform[]
 }
 
 export function parseEndings(str: string, lang?: string, pos?: string, id?: string): Endings {
     let result : { [s: string]: Ending } = {}
-    let inherits
+    let inherits: string[] = []
     let defaultForm 
     let transforms: Transform[] = []
 
@@ -37,7 +37,7 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
         }
 
         if (form == 'inherit') {
-            inherits = endingString
+            inherits.push(endingString)
         }
         else if (form == 'transform') {
             let transform = allTransforms.get(endingString)
@@ -133,23 +133,21 @@ export default function parseInflectionsFile(data, lang?: string) {
 
         let endings = parseEndings(rightSide, lang, pos, id)
 
-        let inflection
+        let defaultForm = INFLECTION_FORMS[lang][pos].allForms[0]
 
-        if (endings.inherits) {
-            let parent = inflectionById[endings.inherits]
+        let inflection = new Inflection(id, defaultForm, pos, endings.endings)
 
-            if (parent) {
-                inflection = new Inflection(id, parent.defaultForm, pos, endings.endings)
-                
-                inflection.inherit(parent)
+        endings.inherits.forEach((parentId) => {
+            let parent = inflectionById[parentId]
+
+            if (!parent) {
+                throw new Error('Inheriting unknown inflection "' + parentId + '"')
             }
-            else {
-                throw new Error('Inheriting unknown inflection "' + endings.inherits.trim() + '"')
-            }
-        }
-        else {
-            inflection = new Inflection(id, endings.default, pos, endings.endings)
-        }
+
+            inflection.inherit(parent)  
+        })
+
+        inflection.defaultForm = INFLECTION_FORMS[lang][pos].allForms.find((form) => inflection.hasForm(form))
 
         inflection.transforms = endings.transforms
 

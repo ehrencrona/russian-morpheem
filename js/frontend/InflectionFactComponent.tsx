@@ -65,11 +65,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
             let inflections = [];
             let at = fact.inflection;
             
-            while (at) {
-                inflections.push(at)
-                
-                at = at.inherits
-            }
+            at.visitParents((inflection) => inflections.push(inflection))
             
             let hideForms = {}
 

@@ -9,12 +9,14 @@ describe('InflectionsFileGenerator', function() {
     it('generates same string as the read one', function () {
         
         let file = 'verbs[v]: inf ш, pastm л, pastf pastm-<ла\n' +
-            'specials[v]: inf <у, inherit verbs'
+            'exception[v]: impr ь\n' +
+            'exceptedVerb[v]: inherit exception, inherit verbs\n' +
+            'specials[v]: inf <у, inherit exceptedVerb'
 
         expect(inflectionsToString(parseInflectionsFile(file, 'ru'), 'ru')).to.equal(file)              
     })
 
-    it('handles transofrms', function () {
+    it('handles transforms', function () {
         
         let file = 'verbs[adj]: m ый, transform yToI'
 

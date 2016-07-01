@@ -46,15 +46,20 @@ export default class InflectableWord {
         let result = this.inflectionByForm[form]
 
         if (!result && !(this.mask && this.mask(form))) {
-            let jp = this.inflection.getInflectedForm(this.stem, form)
-            
-            if (jp == null) {
-                return
-            }
-            
-            result = new InflectedWord(jp, form, this)
+            try {
+                let jp = this.inflection.getInflectedForm(this.stem, form)
+                
+                if (jp == null) {
+                    return
+                }
 
-            result.classifier = this.classifier
+                result = new InflectedWord(jp, form, this)
+
+                result.classifier = this.classifier
+            }
+            catch (e) {
+                throw new Error(`While inflecting ${this.stem}: ${e}`)
+            }
         }
 
         this.inflectionByForm[form] = result
@@ -62,7 +67,7 @@ export default class InflectableWord {
         return result
     }
 
-    visitAllInflections(visitor: (InflectedWord) => any, excludeInherited: boolean) {
+    visitAllInflections(visitor: (InflectedWord) => any) {
         for (let form of this.inflection.getAllForms()) {
             if (!this.mask || !this.mask(form)) {
                 visitor(this.inflect(form))

@@ -25,27 +25,11 @@ interface Props {
 }
 
 interface State {
-    inflection?: Inflection
 }
 
 let React = { createElement: createElement }
 
-
 export default class InflectionsComponent extends Component<Props, State> {
-    constructor(props) {
-        super(props)
-        
-        this.state = {
-            inflection: props.inflection
-        }
-    }
-    
-    componentWillReceiveProps(newProps) {
-        this.setState({
-            inflection: newProps.inflection
-        })    
-    }
-    
     getWordsByForm(word: InflectableWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
@@ -53,7 +37,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         
         word.visitAllInflections((inflected: InflectedWord) => { 
             inflections.push(inflected)    
-        }, false)
+        })
 
         let forms: string[] = []
         
@@ -83,20 +67,12 @@ export default class InflectionsComponent extends Component<Props, State> {
     }
     
     openForm(form) {
-        let fact = this.state.inflection.getFact(form)
+        let fact = this.props.inflection.getFact(form)
 
         this.props.tab.openTab(
             <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
                 fact={ fact }/>, fact.getId(), fact.getId()
         ) 
-    }
-    
-    changeInflection(inflection: Inflection) {
-        this.props.corpus.words.changeInflection(this.props.word, inflection)
-
-        this.setState({
-            inflection: inflection
-        })
     }
     
     addFact(form: string) {
@@ -111,7 +87,7 @@ export default class InflectionsComponent extends Component<Props, State> {
         let wordsByForm: { [ form:string]: string}
         let forms: string[]
 
-        let inflection = this.state.inflection
+        let inflection = this.props.inflection
         let word: InflectableWord = this.props.word
 
         if (!word) {
@@ -121,11 +97,11 @@ export default class InflectionsComponent extends Component<Props, State> {
         wordsByForm = this.getWordsByForm(word)
 
         let formComponent = (form) => {
-            let fact = this.state.inflection.getFact(form)
+            let fact = this.props.inflection.getFact(form)
             let index = this.props.corpus.facts.indexOf(fact)
 
             let className = 'form'
-            let inherited = !this.state.inflection.endings[form]
+            let inherited = !this.props.inflection.endings[form]
             
             if ((!this.props.word && inherited) ||
                 (this.props.hideForms && this.props.hideForms[form] != undefined)) {
@@ -148,15 +124,12 @@ export default class InflectionsComponent extends Component<Props, State> {
             }
         }
 
-        let table = INFLECTION_FORMS[getLanguage()][this.state.inflection.pos]
+        let table = INFLECTION_FORMS[getLanguage()][this.props.inflection.pos]
         
         if (!table) {
-            console.log('Unknown PoS ' + this.state.inflection.pos + ' of ' + this.state.inflection.getId())
+            console.log('Unknown PoS ' + this.props.inflection.pos + ' of ' + this.props.inflection.getId())
             return <div/>;
         }
-
-        let children = this.props.corpus.inflections.inflections.filter(
-            (other) => this.props.inflection == other.inherits)
 
         return (
             <div className='inflections'>

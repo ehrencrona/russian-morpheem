@@ -32,10 +32,16 @@ describe('Facts', function() {
 
     let words = new Words().addWord(word).addInflectableWord(inflectableWord)
 
+    it('words work', () => {
+console.log(words.wordsById)
+
+        expect(words.get('fooa@nom')).to.not.be.undefined;
+    })
+
     it('looks up facts by index', () => {
         expect(facts.indexOf(word)).to.equal(1)
     })
-    
+
     it('handles JSON conversion', () => {
         let after = Facts.fromJson(facts.toJson(), inflections, words)
 

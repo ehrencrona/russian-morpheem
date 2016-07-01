@@ -17,20 +17,24 @@ describe('Inflections', function() {
         let before = new Inflections([            
             new Inflection('regular', 'nom', 'n', 
                 parseEndings('nom: а', 'ru', 'n').endings),
+            new Inflection('funny', 'nom', 'n', 
+                parseEndings('acc: ц', 'ru', 'n').endings),
             new Inflection('irregular', 'nom', 'n', 
                 parseEndings('nom: в', 'ru', 'n').endings)
         ])
 
-        before.inflections[1].inherit(before.inflections[0]);
+        before.inflections[2].inherit(before.inflections[0]);
+        before.inflections[2].inherit(before.inflections[1]);
         
         let after = new Inflections().fromJson(before.toJson());
          
-        expect(after.inflections.length).to.equal(2);
+        expect(after.inflections.length).to.equal(3);
 
         expect(after.inflections[0].id).to.equal('regular');
         expect(after.inflections[0].defaultForm).to.equal('nom');
 
-        expect(after.inflections[1].inherits.id).to.equal('regular');
+        expect(after.inflections[2].inherits[0].id).to.equal('regular');
+        expect(after.inflections[2].inherits[1].id).to.equal('funny');
     })
 
     it('handles inflections removing characters', function () {

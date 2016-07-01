@@ -53,32 +53,28 @@ export default class Words {
     }
 
     index(word: Word) {
-        let reallyIndex = (word: Word) => {
-            if (this.wordsById[word.getId()]) {
-                throw new Error('Multiple words with ID ' + word.getId() + '.');
-            }
-            
-            this.wordsById[word.getId()] = word;
-
-            let str = word.jp;
-
-            let ambiguous = this.ambiguousForms[str]
-
-            if (ambiguous) {
-                ambiguous.push(word)
-            }
-            else if (this.wordsByString[str]) {
-                ambiguous = [ word, this.wordsByString[str] ]
-                this.ambiguousForms[str] = ambiguous
-
-                delete this.wordsByString[str]
-            }
-            else {
-                this.wordsByString[str] = word;
-            }
+        if (this.wordsById[word.getId()]) {
+            throw new Error('Multiple words with ID ' + word.getId() + '.');
         }
         
-        reallyIndex(word)
+        this.wordsById[word.getId()] = word;
+
+        let str = word.jp;
+
+        let ambiguous = this.ambiguousForms[str]
+
+        if (ambiguous) {
+            ambiguous.push(word)
+        }
+        else if (this.wordsByString[str]) {
+            ambiguous = [ word, this.wordsByString[str] ]
+            this.ambiguousForms[str] = ambiguous
+
+            delete this.wordsByString[str]
+        }
+        else {
+            this.wordsByString[str] = word;
+        }
 
         this.sortedWords = null
     }
@@ -128,8 +124,8 @@ export default class Words {
     }
 
     addInflectableWord(word: InflectableWord) {
-        word.visitAllInflections((word: InflectedWord) => 
-            this.index(word), false
+        word.visitAllInflections((word: InflectedWord) =>
+            this.index(word)
         )
 
         if (this.onAddInflectableWord) {
@@ -155,7 +151,7 @@ export default class Words {
                 else {
                     throw new Error('Did not know about ' + inflectedWord.getId())
                 }
-            }, false)
+            })
 
         let oldId = word.getId();
 
@@ -172,7 +168,7 @@ export default class Words {
                 }
 
                 this.wordsById[inflectedWord.getId()] = existingInflection
-            }, false)
+            })
         
         if (this.onChangeInflection) {
             this.onChangeInflection(word, oldId)

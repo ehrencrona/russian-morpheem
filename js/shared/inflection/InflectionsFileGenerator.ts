@@ -41,8 +41,14 @@ function inflectionToString(inflection: Inflection, lang: string) {
 
     let inherit = ''
     
-    if (inflection.inherits) {
-        inherit = ', inherit ' + inflection.inherits.id
+    if (inflection.inherits.length) {
+        inflection.inherits.forEach((parent) => 
+            inherit += ', inherit ' + parent.id
+        )
+
+        if (!endings.length) {
+            inherit = inherit.substr(2)
+        }
     }
     
     let transformString = ''

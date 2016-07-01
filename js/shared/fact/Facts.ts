@@ -47,6 +47,16 @@ export default class Facts {
     }
     
     add(fact: Fact) {
+        if (!fact.getId()) {
+            console.error('Fact', fact, 'had no ID')
+            return
+        }
+
+        if (fact.getId() == 'undefined') {
+            console.error('Fact', fact, 'had ID "undefined" (as string)')
+            return
+        }
+
         if (this.factsById[fact.getId()]) {
             console.error('Duplicate fact ' + fact.getId())
             return

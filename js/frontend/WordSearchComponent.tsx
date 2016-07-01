@@ -85,7 +85,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 prefixMatch = inflected
                 prefixIsDefault = inflected === word.getDefaultInflection()
             }
-        }, false)
+        })
 
         if (!exactMatches.length && prefixMatch) {
             if (prefixIsDefault) {
@@ -181,7 +181,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 if (fact instanceof InflectableWord && this.state.filterWord.getId() == fact.getId()) {                            
                     fact.visitAllInflections((inflected: InflectedWord) => {
                         suggestions.push(this.wordToSuggestion(inflected))
-                    }, false)
+                    })
                 }
             }
             else if (filterString) {

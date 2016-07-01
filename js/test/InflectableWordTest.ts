@@ -34,6 +34,14 @@ describe('InflectableWord', function() {
         expect(inflectableWord.getId()).to.equal('fooa');
     })
 
+    it('visits all inflections', () => {
+        let count = 0
+
+        inflectableWord.visitAllInflections((visitor) => count++)
+
+        expect(count).to.equal(3);
+    })
+
     it('gets right ID on inflections removing last char', () => {
         let regular =
             new Inflection('regular', 'inf', 'v', 
@@ -60,7 +68,7 @@ describe('InflectableWord', function() {
         inflectableWord.visitAllInflections((inflection) => {
             all[inflection.form] = inflection
             count++
-        }, false)
+        })
         
         expect(count).to.equal(3)
         

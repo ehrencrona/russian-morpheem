@@ -8,33 +8,46 @@ import Ending from '../Ending'
 import { Transform } from '../Transform'
 import allTransforms from '../Transforms'
 
+type Endings = { [s: string]: Ending }
+
+interface InflectionJson {
+    id: string,
+    defaultForm: string,
+    pos: string,
+    endings: Endings,
+    inherits?: string[],
+    transforms?: string[]
+}
+
 /** 
   * Describes a way of inflecting a word (by adding endings to a stem). Also serves as Fact. 
   */
 export default class Inflection {
-    inherits: Inflection
+    inherits: Inflection[] = []
     transforms: Transform[] = []
 
-    constructor(public id, public defaultForm, public pos, public endings: { [s: string]: Ending }) {
+    constructor(public id, public defaultForm, public pos, public endings: Endings) {
         this.id = id
         this.pos = pos
         this.defaultForm = defaultForm
         this.endings = endings
     } 
 
-    static fromJson(json, inflections: Inflections) {
+    static fromJson(json: InflectionJson, inflections: Inflections) {
         let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings)
         
         if (json.inherits) {
-            let parent = inflections.get(json.inherits)
+            json.inherits.forEach((inheritId) => {
+                let parent = inflections.get(inheritId)
 
-            if (!parent) {
-                throw new Error('Unknown parent ' + json.inherits)
-            }
+                if (!parent) {
+                    throw new Error('Unknown parent ' + inheritId)
+                }
 
-            result.inherit(parent)
+                result.inherit(parent)
+            })
         }
-        
+
         if (json.transforms) {
             result.transforms = json.transforms.map((id) => allTransforms.get(id))
         }
@@ -42,13 +55,13 @@ export default class Inflection {
         return result
     }
 
-    toJson() {
+    toJson(): InflectionJson {
         return {
             id: this.id,
             defaultForm: this.defaultForm,
             pos: this.pos,
             endings: this.endings,
-            inherits: (this.inherits ? this.inherits.id : undefined),
+            inherits: (this.inherits.length ? this.inherits.map((inflection) => inflection.id) : undefined),
             transforms: (this.transforms.length ? this.transforms.map((transform) => transform.getId()) : undefined)
         }
     }
@@ -57,8 +70,8 @@ export default class Inflection {
         return this.id;
     }
     
-    inherit(inflection) {
-        this.inherits = inflection
+    inherit(inflection: Inflection) {
+        this.inherits.push(inflection)
 
         function isFormSame(i1: Ending, i2: Ending, inflection: Inflection) {
 
@@ -96,15 +109,22 @@ export default class Inflection {
         }
     }
 
+    fromFirstParent(map: (Inflection) => any) {
+        for (let parent of this.inherits) {
+            let result = map(parent) 
+
+            if (result) {
+                return result
+            }
+        }
+    }
+
     getFact(form): InflectionFact {
         if (this.endings[form] != null) {
             return new InflectionFact(this.id + '@' + form, this, form)
         }
-        else if (this.inherits) {                
-            return this.inherits.getFact(form)
-        }
         else {
-            throw new Error('Unknown form ' + form + ' in ' + this.id)
+            return this.fromFirstParent((parent) => parent.getFact(form))
         }
     }
     
@@ -112,8 +132,8 @@ export default class Inflection {
         if (this.endings[form] != null) {
             return this.id
         }
-        else if (this.inherits) {                
-            return this.inherits.getInflectionId(form)
+        else {                
+            return this.fromFirstParent((parent) => parent.getInflectionId(form))
         }
     }
 
@@ -123,8 +143,8 @@ export default class Inflection {
         if (result !== undefined) {
             return result
         }
-        else if (this.inherits) {                
-            return this.inherits.getEnding(form)
+        else {                
+            return this.fromFirstParent((parent) => parent.getEnding(form))
         }
     }
     
@@ -134,11 +154,8 @@ export default class Inflection {
         if (result !== undefined) {
             return true
         }
-        else if (this.inherits) {
-            return this.inherits.hasForm(form)
-        }
         else {
-            return false
+            return this.fromFirstParent((parent) => parent.hasForm(form))
         }
     }
 
@@ -165,21 +182,27 @@ export default class Inflection {
 
         if (ending.relativeTo) {
             stem = this.getInflectedForm(stem, ending.relativeTo)
+
+            if (stem == null) {
+                throw new Error(`The form ${ending.relativeTo} that ${form} was relative to in ${this.id} did not exist.`)
+            }
         }
 
         return this.addSuffix(stem, ending, suffix)
     }
 
+    visitParents(visitor: (Inflection) => void) {
+        visitor(this)
+
+        this.inherits.forEach((parent) => {
+            parent.visitParents(visitor)            
+        })
+    }
+
     visitTransforms(visitor: (Transform) => void) {
-        let at: Inflection = this
-         
-        do {
-            at.transforms.forEach((transform) => visitor(transform))
-
-            at = at.inherits 
-        } while (at)
-
-        return at
+        this.visitParents((inflection: Inflection) => {
+            inflection.transforms.forEach((transform) => visitor(transform))
+        })
     }
 
     addSuffix(stem: string, ending: Ending, suffix: string) {
@@ -192,13 +215,9 @@ export default class Inflection {
 
     getAllForms(): string[] {
         let result = {}
-        let at: Inflection = this
 
-        do {
-            Object.assign(result, at.endings)
-            
-            at = at.inherits
-        } while (at)
+        this.visitParents((inflection: Inflection) =>
+            Object.assign(result, inflection.endings))
         
         return Object.keys(result)
     }
