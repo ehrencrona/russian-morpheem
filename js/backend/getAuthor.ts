@@ -20,6 +20,12 @@ const AUTHORS: { [id:string] : Author } = {
     '57600b40fed5bb9c12fd2f43': { name: 'will', slack: { name: 'willhaughton', id: 'U1GP3FN85' }},
     '5765156738fcbd5b47b17a93': {
         name: 'eoghan'
+    },
+    '5770d4aa0096f1396ff7f740': {
+        name: 'kees'
+    },
+    '57767c6a934728da6af8ea09': {
+        name: 'ian'
     }
 }
 
