@@ -123,22 +123,19 @@ function registerRoutes(corpus: Corpus) {
         
 }
 
-Promise.all([
-    readCorpus('ru', true).catch((e) => {
-        console.log(e.stack)
+readCorpus('ru', true).catch((e) => {
+    console.log(e.stack)
 
-        let corpus = Corpus.createEmpty('ru')
+    let corpus = Corpus.createEmpty('ru')
 
-        watchForChangesOnDisk(corpus)
+    watchForChangesOnDisk(corpus)
 
-        return corpus
-    }),
-    readCorpus('lat', true)
-]).then((corpora) => {
+    return corpus
+}).then((corpus) => {
     app.use('/', express.static('public'));
 
-    corpora.forEach(listenForChanges)
-    corpora.forEach(registerRoutes)
+    listenForChanges(corpus)
+    registerRoutes(corpus)
 
     app.listen(port)
 }).catch((e) => {
