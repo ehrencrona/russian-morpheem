@@ -2,7 +2,7 @@
 
 interface Fact {
     getId(): string,
-    visitFacts(visistor: (Fact) => any): any
+    visitFacts(visitor: (Fact) => any): any
 }
 
 export default Fact

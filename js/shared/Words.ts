@@ -14,8 +14,7 @@ export default class Words {
 
     onAddWord: (word: Word) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
-    onChangeInflection: (word: InflectableWord, oldId: string) => void = null
-
+    
     static PUNCTUATION = '.?!,;:«»—'
     static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,:;»'
     static SENTENCE_ENDINGS = '.?!—'
@@ -135,48 +134,6 @@ export default class Words {
         return this
     }
 
-    changeInflection(word: InflectableWord, inflection: Inflection) {
-        let wordByForm: { [s: string]: InflectedWord }  = {}
-
-        word.visitAllInflections(
-            (inflectedWord: InflectedWord) => {
-                delete this.wordsByString[inflectedWord.jp]
-
-                let existingInflection = this.wordsById[inflectedWord.getId()]
-
-                if (existingInflection instanceof InflectedWord) {
-                    wordByForm[inflectedWord.form] = existingInflection
-                    delete this.wordsById[inflectedWord.getId()]
-                }
-                else {
-                    throw new Error('Did not know about ' + inflectedWord.getId())
-                }
-            })
-
-        let oldId = word.getId();
-
-        word.changeInflection(inflection)
-
-        word.visitAllInflections(
-            (inflectedWord: InflectedWord) => {
-                this.wordsByString[inflectedWord.jp] = inflectedWord
-
-                let existingInflection = wordByForm[inflectedWord.form]
-
-                if (!existingInflection) {
-                    throw new Error('New form ' + inflectedWord.form)
-                }
-
-                this.wordsById[inflectedWord.getId()] = existingInflection
-            })
-        
-        if (this.onChangeInflection) {
-            this.onChangeInflection(word, oldId)
-        }
-
-        this.sortedWords = null
-    }
-    
     get(id: string): Word {
         let result = this.wordsByString[id]
         

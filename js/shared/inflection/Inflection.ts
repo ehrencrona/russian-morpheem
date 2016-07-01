@@ -5,7 +5,7 @@ import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
 import Grammar from '../Grammar'
 import Ending from '../Ending'
-import { Transform } from '../Transform'
+import Transform from '../Transform'
 import allTransforms from '../Transforms'
 
 type Endings = { [s: string]: Ending }
@@ -161,14 +161,16 @@ export default class Inflection {
 
     getSuffix(ending: Ending, stem: string) {
         let suffix = ending.suffix
+        let transforms: Transform[] = []
 
         this.visitTransforms((transform: Transform) => {
             if (transform.isApplicable(stem, suffix)) {
                 suffix = transform.apply(suffix)
+                transforms.push(transform)
             }
         })
 
-        return suffix
+        return { suffix: suffix, transforms: transforms }
     }
 
     getInflectedForm(stem: string, form: string) {
@@ -178,17 +180,25 @@ export default class Inflection {
             return
         }
 
-        let suffix = this.getSuffix(ending, stem)
+        let transformedSuffix = this.getSuffix(ending, stem)
+
+        let transforms = transformedSuffix.transforms
 
         if (ending.relativeTo) {
-            stem = this.getInflectedForm(stem, ending.relativeTo)
+            let inflectedRelative = this.getInflectedForm(stem, ending.relativeTo)
+
+            stem = inflectedRelative.form
+            transforms = transforms.concat(inflectedRelative.transforms)
 
             if (stem == null) {
                 throw new Error(`The form ${ending.relativeTo} that ${form} was relative to in ${this.id} did not exist.`)
             }
         }
 
-        return this.addSuffix(stem, ending, suffix)
+        return { 
+            form: this.addSuffix(stem, ending, transformedSuffix.suffix),
+            transforms: transforms 
+        }
     }
 
     visitParents(visitor: (Inflection) => void) {

@@ -1,14 +1,18 @@
 
 import InflectedWord from '../shared/InflectedWord'
-import { Transform } from './Transform'
+import Transform from './Transform'
 
-class EndingTransform implements Transform {
+export class EndingTransform implements Transform {
 
     constructor(public from: string, public to: string, public after: string, public id: string) {
         this.from = from
         this.to = to
         this.after = after
         this.id = id
+    }
+    
+    visitFacts(visitor: (Fact) => any) {
+        visitor(this)
     }
 
     isApplicable(stem: string, ending: string) {
@@ -34,6 +38,10 @@ class Transforms {
 
     get(id: string): Transform {
         return TRANSFORM_BY_ID[id]
+    }
+
+    visitAll(visitor: (Transform) => void): Transform[] {
+        return Object.keys(TRANSFORM_BY_ID).map((key) => this.get(key))
     }
 
 }

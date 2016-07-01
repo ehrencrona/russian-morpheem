@@ -43,7 +43,7 @@ export function notifyComment(comment: string, sentence : Sentence, author: stri
     })
     .catch((e) => console.error(e.stack))
     .then(() => {
-        notify('> ' + sentence.toString() + getOpenLink(sentence) + '\n' +
+        notify('> ' + sentence.toUnambiguousString(corpus.words) + getOpenLink(sentence) + '\n' +
             comment + Object.keys(shoutOuts).map((slackName) => 
                 ` <@${shoutOuts[slackName]}|${slackName}>`), author)
     })

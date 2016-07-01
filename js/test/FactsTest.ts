@@ -9,6 +9,8 @@ import Words from '../shared/Words';
 import Word from '../shared/Word';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectableWord from '../shared/InflectableWord';
+
+import transforms from '../shared/Transforms';
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 import { expect } from 'chai';
@@ -29,14 +31,9 @@ describe('Facts', function() {
         .add(word)
         .add(inflectableWord)
         .add(inflections.getForm('regular@imp'))
+        .add(transforms.get('yToI'))
 
     let words = new Words().addWord(word).addInflectableWord(inflectableWord)
-
-    it('words work', () => {
-console.log(words.wordsById)
-
-        expect(words.get('fooa@nom')).to.not.be.undefined;
-    })
 
     it('looks up facts by index', () => {
         expect(facts.indexOf(word)).to.equal(1)

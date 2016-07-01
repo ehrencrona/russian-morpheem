@@ -31,29 +31,22 @@ export default class InflectableWord {
         visitor(this)
     }
 
-    changeInflection(inflection: Inflection) {
-        for (let form in this.inflectionByForm) {
-            let oldWord = this.inflectionByForm[form]
-
-            oldWord.jp = inflection.getInflectedForm(this.stem, oldWord.form) 
-        }
-
-        this.inflection = inflection
-    }
-
     inflect(form: string): InflectedWord {
         // maintain object identity to make things easier when changing inflection
         let result = this.inflectionByForm[form]
 
         if (!result && !(this.mask && this.mask(form))) {
             try {
-                let jp = this.inflection.getInflectedForm(this.stem, form)
+                let inflected = this.inflection.getInflectedForm(this.stem, form)
                 
-                if (jp == null) {
+                if (inflected == null) {
                     return
                 }
 
-                result = new InflectedWord(jp, form, this)
+                result = new InflectedWord(inflected.form, form, this)
+
+                inflected.transforms.forEach((transform) => 
+                    result.requiresFact(transform))
 
                 result.classifier = this.classifier
             }

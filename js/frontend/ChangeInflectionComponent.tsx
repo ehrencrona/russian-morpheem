@@ -20,8 +20,6 @@ interface Props {
 }
 
 interface State {
-    inflection?: Inflection,
-    change?: boolean
 }
 
 export default class ChangeInflectionComponent extends Component<Props, State> {
@@ -39,18 +37,6 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         })    
     }
 
-    changeInflection(inflection: Inflection) {
-        this.props.corpus.words.changeInflection(this.props.word, inflection)
-
-        this.setState({
-            inflection: inflection
-        })
-        
-        if (this.props.onChange) {
-            this.props.onChange()
-        }
-    }
-
     inflectionClicked(inflection: Inflection) {
         this.props.tab.openTab(
             <InflectionsComponent 
@@ -64,57 +50,19 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
         let wordsByForm: { [ form:string]: string}
         let forms: string[]
 
-        let inflection = this.state.inflection
+        let inflection = this.props.word.inflection
         let word: InflectableWord = this.props.word
-        
-        let alternativeInflections
-        
-        try {
-            alternativeInflections = 
-                this.props.corpus.inflections.getPossibleInflections(
-                        this.props.word.getDefaultInflection().jp)
-                    .filter((inflection) => inflection.getId() != this.state.inflection.getId())
-                    .filter((inflection) => inflection.pos == this.state.inflection.pos)
-                    .filter((inflection) => inflection.getEnding(inflection.defaultForm) ==
-                        this.state.inflection.getEnding(inflection.defaultForm))
-        }
-        catch (e) {
-            // no default form.
-            alternativeInflections = []
-        }
         
         return (
             <div className='inflections'>
                 <div className='inflectionName'>
                     inflects as&nbsp;
                     
-                    <span className='name'>
+                    <span className='name clickable' onClick={ () => this.inflectionClicked(inflection) }>
                         { inflection.id }
                         { (inflection.pos ? ' (' + inflection.pos + ')' : '') }
                     </span>
-    
-                    { (this.props.word && alternativeInflections.length ? 
-                        <div className='button' onClick={ () => this.setState({ change: !this.state.change })}>
-                            { (this.state.change ? 'Done' : 'Change') }</div>
-                        :
-                        <div/>) }
                 </div>
-                { (this.state.change ?
-                   
-                    <div className='buttonBar'>{
-                        alternativeInflections.map((inflection) =>
-                            <div className='button' key={ inflection.getId() } 
-                                onClick={ () => { this.changeInflection(inflection) } }>{ inflection.getId()
-                                    + (inflection.pos ? ' (' + inflection.pos + ')' : '')    
-                                }</div>
-                        )
-                    }</div>
-
-                :
-
-                <div/>
-                   
-                ) }
             </div>)
     }
 }

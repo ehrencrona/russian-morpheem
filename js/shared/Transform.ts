@@ -1,7 +1,8 @@
 
 import InflectedWord from '../shared/InflectedWord'
+import Fact from './fact/Fact'
 
-export interface Transform {
+interface Transform extends Fact {
 
     isApplicable(stem: string, suffix: string) 
 
@@ -10,3 +11,5 @@ export interface Transform {
     getId(): string
 
 }
+
+export default Transform

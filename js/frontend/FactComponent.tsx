@@ -7,14 +7,16 @@ import InflectionFact from '../shared/inflection/InflectionFact'
 
 import Tab from './Tab'
 
-import InflectableWordFactComponent from './InflectableWordFactComponent';
-import WordFactComponent from './WordFactComponent';
-import InflectionFactComponent from './InflectionFactComponent';
+import InflectableWordFactComponent from './InflectableWordFactComponent'
+import WordFactComponent from './WordFactComponent'
+import InflectionFactComponent from './InflectionFactComponent'
+import TransformFactComponent from './TransformFactComponent'
 
 import InflectableWord from '../shared/InflectableWord'
 import Word from '../shared/Word'
+import { EndingTransform } from '../shared/Transforms'
 
-import { Component, createElement } from 'react';
+import { Component, createElement } from 'react'
 
 interface Props {
     corpus: Corpus,
@@ -31,13 +33,16 @@ export default class FactComponent extends Component<Props, State> {
         let fact = this.props.fact
 
         if (fact instanceof Word) {
-            return <WordFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />
+            return <WordFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
         else if (fact instanceof InflectableWord) {
-            return <InflectableWordFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />
+            return <InflectableWordFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
         else if (fact instanceof InflectionFact) {
-            return <InflectionFactComponent corpus={ this.props.corpus } fact={fact} tab={ this.props.tab } />
+            return <InflectionFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        }
+        else if (fact instanceof EndingTransform) {
+            return <TransformFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
     }
 }

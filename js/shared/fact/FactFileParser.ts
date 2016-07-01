@@ -22,7 +22,8 @@ import Fact from './Fact'
 import Facts from './Facts'
 import Grammars from '../Grammars'
 import MASKS from '../Masks'
-import { Transform } from '../Transform'
+import transforms from '../Transforms'
+import Transform from '../Transform'
 
 export default function parseFactFile(data, inflections: Inflections, lang: string): Facts {
     var facts = new Facts()
@@ -233,6 +234,13 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                         + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
             })
+        }
+        else if (leftSide == 'transform') {
+            fact = transforms.get(rightSide.trim())
+
+            if (!fact) {
+                throw new Error(`Unknwn transform "${rightSide}"`)
+            }
         }
         else {
             fact = parseLeftSideOfDefinition(leftSide)

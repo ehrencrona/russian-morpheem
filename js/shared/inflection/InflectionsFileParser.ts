@@ -3,7 +3,7 @@
 import Inflection from './Inflection'
 import Inflections from './Inflections'
 import Ending from '../Ending'
-import { Transform } from '../Transform'
+import Transform from '../Transform'
 import allTransforms from '../Transforms'
 import { formExists } from './InflectionForms'
 import INFLECTION_FORMS from './InflectionForms'

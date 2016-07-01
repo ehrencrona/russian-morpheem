@@ -54,11 +54,6 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
             .catch(handleException)
     }
 
-    corpus.words.onChangeInflection = (word: InflectableWord) => {
-        xr.put(`/api/${lang}/word/` + word.getId() + '/inflection/' + word.inflection.getId(), {}, xrArgs)
-            .catch(handleException)
-    }
-
     corpus.facts.onMove = (fact: Fact, pos: number) => {
         xr.put(`/api/${lang}/fact/${pos}/${ fact.getId() }`, {}, xrArgs)
             .catch(handleException)

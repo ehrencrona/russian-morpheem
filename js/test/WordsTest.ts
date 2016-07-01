@@ -29,27 +29,6 @@ describe('Words', function() {
         words = new Words().addWord(w1).addWord(w2).addInflectableWord(w3)
     })
 
-    it('handles changing inflections', function() {
-        let oldPast = words.get('passer@past1')
-        
-        let newInflection = new Inflection(
-            'infl', 'nom', null, 
-            parseEndings('nom: <ter, past1: <tais, past2: <tais', 'fake').endings)
-
-        words.changeInflection(w3, newInflection)
-
-        expect(w3.stem).to.equal('pass')
-        expect(w3.inflection).to.equal(newInflection)
-        expect(w3.getId()).to.equal('paster')
-        
-        expect(words.get('paster')).to.equal(w3.inflect('nom'))
-        expect(words.get('passais')).to.be.undefined
-        expect(oldPast.jp).to.equal('pastais')
-        expect(words.get('paster@past1')).to.equal(oldPast)
-        expect(words.get('passer@past1')).to.be.undefined
-        expect(words.get('paster@nom').toString()).to.equal('paster')
-    })
-
     it('retrieves all word forms', function () {
         expect(words.get('passer')).to.be.not.null
         

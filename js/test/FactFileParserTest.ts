@@ -7,6 +7,7 @@ import Grammar from '../shared/Grammar'
 import Inflections from '../shared/inflection/Inflections'
 import Inflection from '../shared/inflection/Inflection'
 import InflectableWord from '../shared/InflectableWord'
+import { EndingTransform } from '../shared/Transforms'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 var inflections = new Inflections()
@@ -77,6 +78,15 @@ describe('FactFileParser', function() {
         }
         
         expect(facts.getTagsOfFact(fact)).to.deep.equal(['foo'])
+    })
+    
+    it('parses transform facts', function () {
+        var facts = parser('transform: yToI', inflections, 'ru')
+        let fact = facts.facts[0]
+
+        expect(fact).to.be.instanceOf(EndingTransform)
+
+        expect(fact.getId()).to.equal('yToI')
     })
 
     it('handles classifiers', function () {

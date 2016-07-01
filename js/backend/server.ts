@@ -16,7 +16,6 @@ import { generateInflection } from '../shared/GenerateInflection'
 
 import addFact from './route/addFact';
 import setFact from './route/setFact';
-import setInflection from './route/setInflection';
 import inflectionFor from './route/inflectionFor';
 import addWord from './route/addWord';
 import addInflectedWord from './route/addInflectedWord';
@@ -78,8 +77,6 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/fact/:id`, addFact(corpus))
     
     app.get(`/api/${lang}/fact/:fact/external`, getExternalSentences(corpus))
-
-    app.put(`/api/${lang}/word/:word/inflection/:inflection`, setInflection(corpus))
 
     app.post(`/api/${lang}/inflection-for/:word`, inflectionFor(corpus))
     

@@ -7,10 +7,13 @@ import Fact from './Fact';
 import Inflections from '../inflection/Inflections';
 import Word from '../Word';
 import Words from '../Words';
+import { EndingTransform } from '../Transforms'
+import transforms from '../Transforms'
 
 const INFLECTION = 'i'
 const INFLECTABLE = 'ib'
 const WORD = 'w'
+const TRANSFORM = 't'
 
 interface JsonFormat {
     id: string,
@@ -212,6 +215,13 @@ export default class Facts {
                     throw new Error(`Unknown word "${factJson.id}". Did you mean "${words.getSimilarTo(factJson.id)}"`)
                 }
             }
+            else if (factJson.type == TRANSFORM) {
+                fact = transforms.get(factJson.id);
+                
+                if (!fact) {
+                    throw new Error(`Unknown word "${factJson.id}". Did you mean "${words.getSimilarTo(factJson.id)}"`)
+                }
+            }
             else {
                 throw new Error(`Unknown fact type "${factJson.type}""`)
             }
@@ -245,6 +255,9 @@ export default class Facts {
             }
             else if (fact instanceof Word) {
                 type = WORD
+            } 
+            else if (fact instanceof EndingTransform) {
+                type = TRANSFORM
             } 
             else {
                throw new Error('Unknown fact type ' + fact.constructor.name)
