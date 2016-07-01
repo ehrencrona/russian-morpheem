@@ -1,11 +1,11 @@
 
-import Inflections from '../shared/Inflections';
-import Inflection from '../shared/Inflection';
+import Inflections from '../shared/inflection/Inflections';
+import Inflection from '../shared/inflection/Inflection';
 
 import findBestExistingInflection from '../shared/GenerateInflection';
 import { generateEnding, findStem, getWrongForms } from '../shared/GenerateInflection';
 
-import { parseEndings } from '../shared/InflectionsFileParser'
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 import { expect } from 'chai';
 

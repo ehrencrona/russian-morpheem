@@ -1,9 +1,9 @@
 
-import Inflection from './Inflection'
+import Inflection from './inflection/Inflection'
 import Ending from './Ending'
-import Inflections from './Inflections'
+import Inflections from './inflection/Inflections'
 import InflectableWord from './InflectableWord'
-import INFLECTION_FORMS from './InflectionForms'
+import INFLECTION_FORMS from './inflection/InflectionForms'
 
 interface BestInflection {
     stem: string,

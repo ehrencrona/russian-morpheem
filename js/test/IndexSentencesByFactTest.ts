@@ -3,8 +3,8 @@
 
 import { findSentencesForFact, indexSentencesByFact } from '../shared/IndexSentencesByFact'
 
-import Inflections from '../shared/Inflections'
-import Inflection from '../shared/Inflection'
+import Inflections from '../shared/inflection/Inflections'
+import Inflection from '../shared/inflection/Inflection'
 import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
 
@@ -16,7 +16,7 @@ import Word from '../shared/Word'
 import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
 
-import { parseEndings } from '../shared/InflectionsFileParser'
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import { expect } from 'chai';
 
 describe('IndexSentencesByFact', function() {

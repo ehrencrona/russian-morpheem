@@ -4,12 +4,10 @@ import { expect } from 'chai';
 
 import Word from '../shared/Word'
 import Grammar from '../shared/Grammar'
-import Inflections from '../shared/Inflections'
-import Inflection from '../shared/Inflection'
+import Inflections from '../shared/inflection/Inflections'
+import Inflection from '../shared/inflection/Inflection'
 import InflectableWord from '../shared/InflectableWord'
-import { parseEndings } from '../shared/InflectionsFileParser'
-
-// ぎ:gi, requires: き, grammar: ktog
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 var inflections = new Inflections()
     

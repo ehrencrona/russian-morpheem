@@ -1,12 +1,12 @@
 'use strict'
 
-import InflectedWord from './InflectedWord'
+import InflectedWord from '../InflectedWord'
 import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
-import Grammar from './Grammar'
-import Ending from './Ending'
-import { Transform } from './Transform'
-import allTransforms from './Transforms'
+import Grammar from '../Grammar'
+import Ending from '../Ending'
+import { Transform } from '../Transform'
+import allTransforms from '../Transforms'
 
 /** 
   * Describes a way of inflecting a word (by adding endings to a stem). Also serves as Fact. 
@@ -81,6 +81,12 @@ export default class Inflection {
             }
         }
         
+        return this
+    }
+
+    addTransform(transform: Transform) {
+        this.transforms.push(transform)
+
         return this
     }
 

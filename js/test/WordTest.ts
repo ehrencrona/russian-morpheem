@@ -1,13 +1,13 @@
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
-import Inflection from '../shared/Inflection'
-import Inflections from '../shared/Inflections'
+import Inflection from '../shared/inflection/Inflection'
+import Inflections from '../shared/inflection/Inflections'
 import Word from '../shared/Word'
 import Ending from '../shared/Ending'
 import UnstudiedWord from '../shared/UnstudiedWord'
 import InflectableWord from '../shared/InflectableWord'
-import { parseEndings } from '../shared/InflectionsFileParser'
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 import { expect } from 'chai';
 

@@ -6,7 +6,7 @@ import { createInterface } from 'readline'
 
 import 'source-map-support/register'
 
-import INFLECTION_FORMS from '../../shared/InflectionForms'
+import INFLECTION_FORMS from '../../shared/inflection/InflectionForms'
 
 var lineReader = createInterface({
 	input: createReadStream('data/dict.opcorpora.txt')

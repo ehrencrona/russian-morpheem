@@ -1,6 +1,6 @@
 'use strict'
 
-import Grammar from './Grammar'
+import Grammar from '../Grammar'
 import Inflection from './Inflection'
 
 export default class InflectionFact extends Grammar {

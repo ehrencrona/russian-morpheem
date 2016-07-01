@@ -9,7 +9,7 @@ import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import NoSuchWordError from '../shared/NoSuchWordError'
-import { NotInflectedError } from '../shared/Inflections';
+import { NotInflectedError } from '../shared/inflection/Inflections';
 
 let React = { createElement: createElement }
 

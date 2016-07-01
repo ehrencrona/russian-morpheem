@@ -2,7 +2,7 @@
 
 import Fact from './Fact';
 import Facts from './Facts';
-import InflectionFact from '../InflectionFact';
+import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import Word from '../Word';
 

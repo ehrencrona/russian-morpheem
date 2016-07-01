@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import Corpus from '../../shared/Corpus'
 import InflectableWord from '../../shared/InflectableWord'
-import getInflections from '../InflectionDatabase'
+import getInflections from '../inflection/InflectionDatabase'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {

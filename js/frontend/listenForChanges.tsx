@@ -4,7 +4,7 @@ import Fact from '../shared/fact/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
-import InflectionFact from '../shared/InflectionFact';
+import InflectionFact from '../shared/inflection/InflectionFact';
 import { handleException } from './xr';
 import xr from './xr';
 import getLanguage from './getLanguage';

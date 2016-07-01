@@ -7,7 +7,7 @@ import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 
-import InflectionFact from '../../shared/InflectionFact'
+import InflectionFact from '../../shared/inflection/InflectionFact'
 import UnstudiedWord from '../../shared/UnstudiedWord'
 import InflectableWord from '../../shared/InflectableWord'
 

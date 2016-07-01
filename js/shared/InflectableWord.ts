@@ -1,9 +1,9 @@
 import Word from './Word'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
-import Inflection from './Inflection'
-import Inflections from './Inflections'
-import INFLECTION_FORMS from './InflectionForms'
+import Inflection from './inflection/Inflection'
+import Inflections from './inflection/Inflections'
+import INFLECTION_FORMS from './inflection/InflectionForms'
 import MASKS from './Masks'
 
 interface JsonFormat {

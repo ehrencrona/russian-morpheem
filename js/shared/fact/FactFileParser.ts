@@ -16,8 +16,8 @@
 import Word from '../Word'
 import UnstudiedWord from '../UnstudiedWord'
 import InflectableWord from '../InflectableWord'
-import Inflections from '../Inflections'
-import InflectionFact from '../InflectionFact'
+import Inflections from '../inflection/Inflections'
+import InflectionFact from '../inflection/InflectionFact'
 import Fact from './Fact'
 import Facts from './Facts'
 import Grammars from '../Grammars'
@@ -101,6 +101,11 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 }
                 
                 let defaultEnding = inflection.getEnding(inflection.defaultForm)
+
+                if (!defaultEnding) {
+                    throw new Error(`The inflection ${inflection.id} must have the default form ${inflection.defaultForm}.`)
+                }
+
                 let defaultSuffix = defaultEnding.suffix
                 let stem = word.jp.substr(0, word.jp.length - defaultSuffix.length)
 

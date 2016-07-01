@@ -1,8 +1,8 @@
-/// <reference path="../../typings/node-4.d.ts"/>
+/// <reference path="../../../typings/node-4.d.ts"/>
 "use strict";
 
 import { readFile } from 'fs';
-import parseInflectionsFile from '../shared/InflectionsFileParser';
+import parseInflectionsFile from '../../shared/inflection/InflectionsFileParser';
 
 export default function readInflectionsFile(fileName, lang: string) {
     return new Promise((resolve, reject) => {        

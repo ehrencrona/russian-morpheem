@@ -5,7 +5,7 @@ import readCorpus from './CorpusReader'
 import { getCorpusDir } from './CorpusReader'
 
 import writeSentenceFile from '../backend/SentenceFileWriter'
-import writeInflectionsFile from '../backend/InflectionsFileWriter'
+import writeInflectionsFile from '../backend/inflection/InflectionsFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
 
 import { notifyAdd } from './notifySlack'

@@ -3,7 +3,7 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import InflectableWord from '../shared/InflectableWord'
-import Inflection from '../shared/Inflection'
+import Inflection from '../shared/inflection/Inflection'
 import Tab from './Tab'
 
 import InflectionsComponent from './InflectionsComponent'

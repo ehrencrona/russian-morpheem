@@ -1,7 +1,7 @@
 "use strict";
 
 import UnstudiedWord from './UnstudiedWord';
-import Inflections from './Inflections'
+import Inflections from './inflection/Inflections'
 
 /**
  * A word has a Japanese spelling, an English translation an optional list of grammar that is required to understand it.

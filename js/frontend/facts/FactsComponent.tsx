@@ -3,7 +3,7 @@
 import {Component,createElement} from 'react'
 import Corpus from '../../shared/Corpus'
 import InflectedWord from '../../shared/InflectedWord'
-import InflectionFact from '../../shared/InflectionFact'
+import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'

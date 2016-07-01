@@ -7,7 +7,7 @@ import FactsEntryComponent from './FactsEntryComponent'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
-import InflectionFact from '../../shared/InflectionFact'
+import InflectionFact from '../../shared/inflection/InflectionFact'
 import InflectableWord from '../../shared/InflectableWord'
 import Tab from '../Tab'
 

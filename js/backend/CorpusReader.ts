@@ -1,6 +1,6 @@
 'use strict'
 
-import readInflectionsFile from './InflectionsFileReader';
+import readInflectionsFile from './inflection/InflectionsFileReader';
 import readFactFile from './FactFileReader';
 import SentenceFileReader from './SentenceFileReader';
 import Facts from '../shared/fact/Facts';
@@ -8,7 +8,7 @@ import Corpus from '../shared/Corpus';
 import Words from '../shared/Words';
 import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
-import Inflections from '../shared/Inflections';
+import Inflections from '../shared/inflection/Inflections';
 import { watch } from 'fs';
 import BackendSentenceHistory from './metadata/BackendSentenceHistory';
 

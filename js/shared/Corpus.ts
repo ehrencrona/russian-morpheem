@@ -1,7 +1,7 @@
 import Facts from '../shared/fact/Facts'
 import Words from '../shared/Words'
 import Sentences from '../shared/Sentences'
-import Inflections from '../shared/Inflections'
+import Inflections from '../shared/inflection/Inflections'
 import { SentenceHistory } from '../shared/metadata/SentenceHistory'
 import { ExternalCorpus } from '../shared/external/ExternalCorpus'
 

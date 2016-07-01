@@ -2,9 +2,9 @@
 
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
-import Inflection from '../shared/Inflection'
+import Inflection from '../shared/inflection/Inflection'
 
-import InflectionFact from '../shared/InflectionFact'
+import InflectionFact from '../shared/inflection/InflectionFact'
 
 import Tab from './Tab'
 import InflectionsComponent from './InflectionsComponent'

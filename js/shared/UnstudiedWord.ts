@@ -1,7 +1,7 @@
 "use strict";
 
 import Fact from './fact/Fact';
-import Inflections from './Inflections'
+import Inflections from './inflection/Inflections'
 
 /**
  * An UnstudiedWord is a Word that is not a fact, i.e. it is not studied in its own right. Typically, all unstudied words

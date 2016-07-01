@@ -4,7 +4,7 @@
 import { readFile } from 'fs';
 import parseFactFile from '../shared/fact/FactFileParser';
 
-import Inflections from '../shared/Inflections';
+import Inflections from '../shared/inflection/Inflections';
 
 export default function readFactFile(fileName: string, inflections: Inflections, lang: string) {
     return new Promise((resolve, reject) => {        

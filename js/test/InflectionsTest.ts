@@ -1,12 +1,13 @@
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
-import Inflections from '../shared/Inflections';
-import Inflection from '../shared/Inflection';
+import Inflections from '../shared/inflection/Inflections';
+import Inflection from '../shared/inflection/Inflection';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import Ending from '../shared/Ending';
-import { parseEndings } from '../shared/InflectionsFileParser'
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
+import Transforms from '../shared/Transforms'
 
 import { expect } from 'chai';
 
@@ -14,10 +15,10 @@ describe('Inflections', function() {
     it('handles JSON conversion', function () {
 
         let before = new Inflections([            
-            new Inflection('regular', 'nom', null, 
-                parseEndings('nom: a', 'fake').endings),
-            new Inflection('irregular', 'nom', null, 
-                parseEndings('nom: b', 'fake').endings)
+            new Inflection('regular', 'nom', 'n', 
+                parseEndings('nom: а', 'ru', 'n').endings),
+            new Inflection('irregular', 'nom', 'n', 
+                parseEndings('nom: в', 'ru', 'n').endings)
         ])
 
         before.inflections[1].inherit(before.inflections[0]);
@@ -34,7 +35,7 @@ describe('Inflections', function() {
 
     it('handles inflections removing characters', function () {
         let inflection = 
-            new Inflection('скаж<зать', 'inf', null, {
+            new Inflection('скаж<зать', 'inf', 'v', {
                     inf: new Ending('зать', null, 1), 
                     1: new Ending('у', null, 0), 
                     past: new Ending('зал', null, 1), 
@@ -67,16 +68,28 @@ describe('Inflections', function() {
 
     it('handles relative inflections', function () {
         let inflection = 
-            new Inflection('сказать', 'nom', null, 
-                parseEndings('inf: ать, pastm: ал, pastf: pastm-а', 'fake').endings)
+            new Inflection('сказать', 'nom', 'v', 
+                parseEndings('inf: ать, pastm: ал, pastf: pastm-а', 'ru', 'v').endings)
 
         let word = new InflectableWord('сказ', inflection)
 
         expect(word.inflect('pastf').toString()).to.equal('сказала')
 
-        let child = new Inflection('бегать', 'nom', null, {}).inherit(inflection)
+        let child = new Inflection('бегать', 'nom', 'v', {}).inherit(inflection)
         word = new InflectableWord('бег', child)
 
         expect(word.inflect('pastf').toString()).to.equal('бегала')
 
-    })})
+    })
+
+    it('handles transforms', function () {
+        let inflection = 
+            new Inflection('adj', 'm', 'adj', 
+                parseEndings('m ый', 'ru', 'adj').endings).addTransform(Transforms.get('yToI'))
+
+        let word = new InflectableWord('маленьк', inflection)
+
+        expect(word.getDefaultInflection().toString()).to.equal('маленький')
+
+    })
+})

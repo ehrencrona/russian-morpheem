@@ -8,13 +8,13 @@ import { expect } from 'chai';
 import Word from '../shared/Word'
 import Words from '../shared/Words'
 import InflectableWord from '../shared/InflectableWord'
-import Inflection from '../shared/Inflection'
-import Inflections from '../shared/Inflections'
+import Inflection from '../shared/inflection/Inflection'
+import Inflections from '../shared/inflection/Inflections'
 import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Facts from '../shared/fact/Facts'
 import Grammar from '../shared/Grammar'
-import { parseEndings } from '../shared/InflectionsFileParser'
+import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 describe('SentenceFileGenerator', function() {
     it('generates same string as the read one', function () {
@@ -29,7 +29,7 @@ describe('SentenceFileGenerator', function() {
         let facts = new Facts()
         facts.add(new Grammar('grammar'))
 
-        let original = 'a b[1] b[2] (author: ae, requires: grammar): english'
+        let original = '0 a b[1] b[2] (author: ae, requires: grammar): english'
 
         var sentences: Sentences = parser(original, words, facts)
 

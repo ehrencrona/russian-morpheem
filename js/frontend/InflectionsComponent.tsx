@@ -4,7 +4,7 @@ import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
-import Inflection from '../shared/Inflection'
+import Inflection from '../shared/inflection/Inflection'
 
 import Tab from './Tab'
 import FactComponent from './FactComponent'
@@ -12,7 +12,7 @@ import Word from '../shared/Word'
 import getLanguage from './getLanguage'
 
 import { Component, createElement } from 'react';
-import INFLECTION_FORMS from '../shared/InflectionForms'
+import INFLECTION_FORMS from '../shared/inflection/InflectionForms'
 import { MISSING_INDEX } from '../shared/fact/Facts'
 
 interface Props {

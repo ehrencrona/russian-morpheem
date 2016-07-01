@@ -2,11 +2,11 @@
 
 import Inflection from './Inflection'
 import Inflections from './Inflections'
-import Ending from './Ending'
-import { Transform } from './Transform'
-import allTransforms from './Transforms'
-import { formExists } from '../shared/InflectionForms'
-import INFLECTION_FORMS from '../shared/InflectionForms'
+import Ending from '../Ending'
+import { Transform } from '../Transform'
+import allTransforms from '../Transforms'
+import { formExists } from './InflectionForms'
+import INFLECTION_FORMS from './InflectionForms'
 
 interface Endings {
     default: string, 

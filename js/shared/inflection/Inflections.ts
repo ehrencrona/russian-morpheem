@@ -1,5 +1,5 @@
 import Inflection from './Inflection';
-import Corpus from './Corpus';
+import Corpus from '../Corpus';
 
 export class NotInflectedError {    
 }

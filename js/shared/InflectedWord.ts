@@ -2,8 +2,8 @@
 
 import Word from './Word'
 import UnstudiedWord from './UnstudiedWord'
-import Inflection from './Inflection'
-import Inflections from './Inflections'
+import Inflection from './inflection/Inflection'
+import Inflections from './inflection/Inflections'
 import InflectableWord from './InflectableWord'
 import Words from './Words'
 import htmlEscape from './util/htmlEscape'

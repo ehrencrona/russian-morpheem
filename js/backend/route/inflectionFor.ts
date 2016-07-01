@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import Corpus from '../../shared/Corpus'
 import InflectableWord from '../../shared/InflectableWord'
-import getInflections from '../InflectionDatabase'
+import getInflections from '../inflection/InflectionDatabase'
 import { generateInflection } from '../../shared/GenerateInflection'
 import NoSuchWordError from '../../shared/NoSuchWordError'
 

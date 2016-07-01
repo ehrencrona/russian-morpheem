@@ -2,8 +2,8 @@
 
 import Inflections from './Inflections'
 import Inflection from './Inflection'
-import Ending from './Ending'
-import INFLECTION_FORMS from '../shared/InflectionForms'
+import Ending from '../Ending'
+import INFLECTION_FORMS from './InflectionForms'
 
 function endingToString(ending: Ending) {
     let result = ''

@@ -2,10 +2,10 @@
 
 var redis = require('node-redis')
 
-import INFLECTION_FORMS from '../../shared/InflectionForms'
+import INFLECTION_FORMS from '../../shared/inflection/InflectionForms'
 import readCorpus from '../CorpusReader'
-import getInflections from '../InflectionDatabase'
-import { InflectionInDatabase } from '../InflectionDatabase'
+import getInflections from '../inflection/InflectionDatabase'
+import { InflectionInDatabase } from '../inflection/InflectionDatabase'
 import InflectableWord from '../../shared/InflectableWord'
 import InflectedWord from '../../shared/InflectedWord'
 import NoSuchWordError from '../../shared/NoSuchWordError'

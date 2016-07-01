@@ -2,7 +2,7 @@
 import Word from './Word'
 import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
-import Inflection from './Inflection'
+import Inflection from './inflection/Inflection'
 import Facts from './fact/Facts'
 import UnstudiedWord from './UnstudiedWord';
 

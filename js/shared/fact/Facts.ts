@@ -1,10 +1,10 @@
 
 import Grammar from '../Grammar';
-import InflectionFact from '../InflectionFact';
+import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import InflectedWord from '../InflectedWord';
 import Fact from './Fact';
-import Inflections from '../Inflections';
+import Inflections from '../inflection/Inflections';
 import Word from '../Word';
 import Words from '../Words';
 
