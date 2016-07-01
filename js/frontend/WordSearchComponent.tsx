@@ -12,6 +12,7 @@ import InflectionsComponent from './InflectionsComponent';
 import { Component, createElement } from 'react';
 
 let NO_POS = 'none'
+const MAX_SUGGESTIONS = 20
 
 interface Props {
     corpus: Corpus,
@@ -152,7 +153,127 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         return []
     }
-    
+
+    getSuggestions() {
+        let filterPos = this.state.filterPos
+        let filterString = this.state.filterString.toLowerCase()
+
+        let suggestions: Suggestion[] = []
+
+        if (!filterPos && !filterString) {
+            return suggestions
+        }
+
+        let filterFact = (filterString) => (fact: Fact) => {
+            if (filterPos) {
+                if (fact instanceof InflectableWord) {
+                    if (!(fact.inflection.pos == filterPos || 
+                            (filterPos == NO_POS && !fact.inflection.pos))) {
+                        return
+                    }
+                }
+                else if (!(filterPos == NO_POS && fact instanceof UnstudiedWord)) {
+                    return
+                }
+            }
+
+            if (this.state.filterWord) {
+                if (fact instanceof InflectableWord && this.state.filterWord.getId() == fact.getId()) {                            
+                    fact.visitAllInflections((inflected: InflectedWord) => {
+                        suggestions.push(this.wordToSuggestion(inflected))
+                    }, false)
+                }
+            }
+            else if (filterString) {
+                suggestions = suggestions.concat(this.wordsMatchingFilterString(fact, filterString)) 
+            }
+            else if (fact instanceof UnstudiedWord) {
+                suggestions.push(this.wordToSuggestion(fact))
+            }
+            else if (fact instanceof InflectableWord) {
+                suggestions.push(this.inflectableWordToSuggestion(fact))
+            }
+        }
+
+        if (filterString && !filterPos && !this.state.filterWord) {
+            suggestions = this.props.corpus.words.wordsStartingWith(filterString)
+                .map((word) => this.wordToSuggestion(word))
+        }
+        else {
+            this.props.corpus.facts.facts.forEach(filterFact(filterString))
+        }
+
+        if (!suggestions.length) {
+            let searchWords = this.state.filterString.toLowerCase().split(/[ ,.!\?]/)
+
+            if (searchWords.length > 1) {
+                searchWords.forEach((word) => {
+                    word = word.trim()
+
+                    if (word) {
+                        this.props.corpus.facts.facts.forEach(filterFact(word))
+                    }
+                })
+            }
+        }
+
+        this.props.corpus.words.getPunctuationWords().forEach(filterFact(filterString))
+
+        if (filterString) {
+            let i = suggestions.findIndex((s) => s.word.jp.toLowerCase() == filterString)
+
+            if (i >= 0) {
+                let exactMatch = suggestions.splice(i, 1)[0]
+                
+                suggestions.splice(0, 0, exactMatch)
+            }
+        }
+        
+        return suggestions
+    }
+
+    factIndexToElement(suggestion : Suggestion) {
+        let index = this.props.corpus.facts.indexOf(suggestion.word)
+        
+        if (suggestion.inflection) {
+            index = Math.max(index,
+                this.props.corpus.facts.indexOf(suggestion.inflection.fact)
+            ) 
+        } 
+
+        let onClick = () => {
+            this.selectSuggestion(suggestion)
+        }
+
+        return <div key={ suggestion.word.getId() } 
+            draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
+            className='suggestion'
+            onClick={ onClick } 
+            onDragStart={ (e) => {
+                e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
+            } }
+            onDrop={
+                (e) => {
+                    let drag = JSON.parse(e.dataTransfer.getData('text'))
+                    
+                    if (drag.word == suggestion.word.getId()) {
+                        onClick()
+                    }
+                }
+            }>
+            { (suggestion.index >= 0 ?
+                <div className='index'><div className='number'>{ suggestion.index + 1 }</div></div>
+                :
+                <div/>) }
+            <div className='word'>{ suggestion.word.jp }</div>
+            { suggestion.inflection ?
+                <div className='form'>{suggestion.inflection.form }</div>
+                :
+                []
+            }
+        </div>
+    }
+        
     render() {
         let index : { [factId: string]: FactSentenceIndex } = 
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
@@ -175,126 +296,9 @@ export default class WordSearchComponent extends Component<Props, State> {
         
         let facts = this.props.corpus.facts
         
-        let getSuggestions = () => {
-            let suggestions: Suggestion[] = []
-
-            if (!filterPos && !filterString) {
-                return suggestions
-            }
-
-            let filterFact = (filterString) => (fact: Fact) => {
-                if (filterPos) {
-                    if (fact instanceof InflectableWord) {
-                        if (!(fact.inflection.pos == filterPos || 
-                             (filterPos == NO_POS && !fact.inflection.pos))) {
-                            return
-                        }
-                    }
-                    else if (!(filterPos == NO_POS && fact instanceof UnstudiedWord)) {
-                        return
-                    }
-                }
-
-                if (this.state.filterWord) {
-                    if (fact instanceof InflectableWord && this.state.filterWord.getId() == fact.getId()) {                            
-                        fact.visitAllInflections((inflected: InflectedWord) => {
-                            suggestions.push(this.wordToSuggestion(inflected))
-                        }, false)
-                    }
-                }
-                else if (filterString) {
-                    suggestions = suggestions.concat(this.wordsMatchingFilterString(fact, filterString)) 
-                }
-                else if (fact instanceof UnstudiedWord) {
-                    suggestions.push(this.wordToSuggestion(fact))
-                }
-                else if (fact instanceof InflectableWord) {
-                    suggestions.push(this.inflectableWordToSuggestion(fact))
-                }
-            }
-
-            if (filterString && !filterPos && !this.state.filterWord) {
-                suggestions = this.props.corpus.words.wordsStartingWith(filterString)
-                    .map((word) => this.wordToSuggestion(word))
-            }
-            else {
-                this.props.corpus.facts.facts.forEach(filterFact(filterString))
-            }
-
-            if (!suggestions.length) {
-                let searchWords = this.state.filterString.toLowerCase().split(/[ ,.!\?]/)
-
-                if (searchWords.length > 1) {
-                    searchWords.forEach((word) => {
-                        word = word.trim()
-
-                        if (word) {
-                            this.props.corpus.facts.facts.forEach(filterFact(word))
-                        }
-                    })
-                }
-            }
-
-            this.props.corpus.words.getPunctuationWords().forEach(filterFact(filterString))
-
-            if (filterString) {
-                let i = suggestions.findIndex((s) => s.word.jp.toLowerCase() == filterString)
-
-                if (i >= 0) {
-                    let exactMatch = suggestions.splice(i, 1)[0]
-                    
-                    suggestions.splice(0, 0, exactMatch)
-                }
-            }
-            
-            return suggestions
-        }
-
-        let factIndexToElement = (suggestion : Suggestion) => {
-            let index = this.props.corpus.facts.indexOf(suggestion.word)
-            
-            if (suggestion.inflection) {
-                index = Math.max(index,
-                    this.props.corpus.facts.indexOf(suggestion.inflection.fact)
-                ) 
-            } 
-
-            let onClick = () => {
-                this.selectSuggestion(suggestion)
-            }
-
-            return <div key={ suggestion.word.getId() } 
-                draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
-                className='suggestion'
-                onClick={ onClick } 
-                onDragStart={ (e) => {
-                    e.dataTransfer.setData('text', JSON.stringify( { word: suggestion.word.getId() } ));
-                } }
-                onDrop={
-                    (e) => {
-                        let drag = JSON.parse(e.dataTransfer.getData('text'))
-                        
-                        if (drag.word == suggestion.word.getId()) {
-                            onClick()
-                        }
-                    }
-                }>
-                { (suggestion.index >= 0 ?
-                    <div className='index'><div className='number'>{ suggestion.index + 1 }</div></div>
-                    :
-                    <div/>) }
-                <div className='word'>{ suggestion.word.jp }</div>
-                { suggestion.inflection ?
-                    <div className='form'>{suggestion.inflection.form }</div>
-                    :
-                    []
-                }
-            </div>
-        }
-        
         let filterWord = this.state.filterWord
         
-        let suggestions = getSuggestions()
+        let suggestions = this.getSuggestions().slice(0, MAX_SUGGESTIONS)
     
         return (<div className='wordSearch'>
             <div className='filter'>
@@ -332,7 +336,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             <div className='suggestions'>
 
             {
-                (filterWord && filterWord instanceof InflectableWord ?
+                filterWord && filterWord instanceof InflectableWord ?
                 <div>
                     <div className='inflections'>
                         <div className='inflectionName'>
@@ -354,9 +358,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 
                 :
                 
-                suggestions.map(factIndexToElement)
-
-                )
+                suggestions.map((suggestion) => this.factIndexToElement(suggestion))
             }
             </div>
         </div>)
