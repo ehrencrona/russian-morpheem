@@ -67,9 +67,9 @@ export default class BackendSentenceHistory implements SentenceHistory {
                     if (!doc) {
                         return reject(new Error('Unknown sentence ' + sentenceId + '.'))
                     }
-                    
+
                     delete doc._id
-                    
+
                     resolve({ canAccept: true, status: doc as SentenceStatus })
                 })
                 .catch((e) => reject(e))
@@ -289,4 +289,20 @@ export default class BackendSentenceHistory implements SentenceHistory {
         return this.returnAllEvents(
             db.collection(COLLECTION_EVENT).find( { notify: forAuthor } ).sort({ 'date': -1 }))
     }
+
+    getExistingExternalIds(externalIds: string[]) {
+        return new Promise((resolve, reject) => {
+            db.collection(COLLECTION_METADATA).distinct('externalId', {
+                externalId: { $in: externalIds } 
+            }, (error, existingIds: string[]) => {
+                if (error) {
+                    reject(error)
+                }
+                else {
+                    resolve(existingIds)
+                }
+            })
+        })
+    }
+
 }

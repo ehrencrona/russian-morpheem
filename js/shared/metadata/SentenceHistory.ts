@@ -36,4 +36,5 @@ export interface SentenceHistory {
 
     getNewsfeed(author?: string): Promise<Event[]>
 
+    getExistingExternalIds(externalIds: string[]): Promise<string[]>
 }

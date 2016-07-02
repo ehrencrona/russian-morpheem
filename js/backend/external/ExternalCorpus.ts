@@ -6,7 +6,6 @@ import Words from '../../shared/Words'
 import Fact from '../../shared/fact/Fact'
 
 import { ExternalSentence } from '../../shared/external/ExternalSentence'
-
 const url = 'mongodb://localhost:27017/external-corpus';
 const COLLECTION = 'sentences'
 
@@ -68,7 +67,7 @@ export function getSentencesForFact(fact: Fact) {
                 sentences.push(doc as ExternalSentence);
             }, () => {
                 resolve(sentences)
-            });
+            })
     })
 }
 

@@ -106,6 +106,10 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         throw new Error('Unsupported in frontend.')
     }
 
+    getExistingExternalIds(externalIds: string[]): Promise<string[]> {
+        throw new Error('Unsupported in frontend.')
+    }
+
     getEventsByDate(eventType: string) {
         return xr.get(`/api/${ this.lang }/event/by-date/${ eventType }`, {}, this.xrArgs)
         .then((xhr) => {

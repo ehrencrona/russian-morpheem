@@ -15,8 +15,16 @@ export default function(corpus: Corpus) {
         }
 
         getSentencesForFact(fact)
-            .then((sentences: ExternalSentence) => {
-                res.status(200).send(sentences)
+            .then((sentences: ExternalSentence[]) => {
+                corpus.sentenceHistory
+                    .getExistingExternalIds(sentences.map((sentence) => sentence.id.toString()))
+                    .then((existingIds) => {
+                        sentences = sentences.filter((sentence) =>
+                            existingIds.indexOf(sentence.id.toString()) < 0
+                        )
+                        
+                        res.status(200).send(sentences)
+                    })
             })
             .catch((e) => {
                 console.error(e.stack)

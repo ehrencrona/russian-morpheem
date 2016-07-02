@@ -85,6 +85,11 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
     importSentence(externalSentence: ExternalSentence) {
         this.props.corpus.externalCorpus.importSentence(externalSentence)
         .then((sentence) => {
+            this.setState({
+                complete: this.state.complete.filter((s) => s.sentence.id != externalSentence.id),
+                incomplete: this.state.incomplete.filter((s) => s.sentence.id != externalSentence.id)
+            })
+
             this.props.tab.openTab(
                 <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
                 sentence.toString(),
