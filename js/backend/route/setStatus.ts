@@ -39,6 +39,9 @@ export default function(corpus: Corpus) {
 
                     res.status(200).send({ status: status })
                 })
+                .catch((e) =>
+                    res.status(500).send(e)
+                )
         }
         else {
             throw new Error('Unknown status.')

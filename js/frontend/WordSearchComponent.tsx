@@ -266,8 +266,13 @@ export default class WordSearchComponent extends Component<Props, State> {
                 :
                 <div/>) }
             <div className='word'>{ suggestion.word.jp }</div>
+            { suggestion.word.classifier ?
+                <div className='form'>{ suggestion.word.classifier }</div>
+                :
+                []
+            }
             { suggestion.inflection ?
-                <div className='form'>{suggestion.inflection.form }</div>
+                <div className='form'>{ suggestion.inflection.form }</div>
                 :
                 []
             }

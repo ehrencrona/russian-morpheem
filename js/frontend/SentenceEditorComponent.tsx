@@ -55,15 +55,29 @@ class WordComponent extends Component<WordProps, WordState> {
         let word = this.props.word
         let words = this.props.corpus.words
 
-        let form = <div/>
+        let formTag = <div/>
         
-        if (words.ambiguousForms[word.jp]) {
-            if (word instanceof InflectedWord) {
-                form = <div className='form'>{ word.form }</div>
+        let homonyms = words.ambiguousForms[word.jp]
+
+        if (homonyms) {
+            let form
+
+            if (!homonyms.find((otherWord) => otherWord.classifier == word.classifier)) {
+                form = word.classifier
+            }
+            else if (word instanceof InflectedWord) {
+                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && otherWord.form == word.form)) {
+                    form = word.form
+                }
+                else {
+                    form = word.form + (word.classifier ? ', ' + word.classifier : '') 
+                }
             }
             else {
-                form = <div className='form'>uninfl.</div>
+                form = (word.classifier ? word.classifier : 'uninfl.')
             } 
+
+            formTag = <div className='form'>{ form }</div>
         }
 
         return <div draggable='true' className={'word' + 
@@ -83,7 +97,7 @@ class WordComponent extends Component<WordProps, WordState> {
                 } } 
                 onDragStart={ this.props.onDragStart }>
             <div>{ this.props.word.jp }</div>
-            { form }
+            { formTag }
         </div>; 
     }
 
