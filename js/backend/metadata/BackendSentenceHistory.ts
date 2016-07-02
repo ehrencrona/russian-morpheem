@@ -168,38 +168,38 @@ export default class BackendSentenceHistory implements SentenceHistory {
     }
 
     recordCreate(sentence: Sentence, author: string) {
-        this.recordEvent(EVENT_CREATE, sentence, author, this.words, true)
+        this.recordEvent(EVENT_CREATE, sentence, author, true)
         this.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
     }
 
     recordDelete(sentence: Sentence, author: string) {
-        this.recordEvent(EVENT_DELETE, sentence, author, this.words, false)
+        this.recordEvent(EVENT_DELETE, sentence, author, false)
     }
 
     recordComment(comment: string, sentence: Sentence, author: string) {
-        this.recordEvent(EVENT_COMMENT, sentence, author, this.words, false, comment)
+        this.recordEvent(EVENT_COMMENT, sentence, author, false, comment)
     }
 
     recordAccept(sentence: Sentence, author: string) {
-        this.recordEvent(EVENT_ACCEPT, sentence, author, this.words, false)
+        this.recordEvent(EVENT_ACCEPT, sentence, author, false)
     }
 
     recordImport(sentence: Sentence, author: string) {
-        this.recordEvent(EVENT_IMPORT, sentence, author, this.words, false)
+        this.recordEvent(EVENT_IMPORT, sentence, author, false)
     }
 
     recordEdit(sentence: Sentence, author: string) {
         let pending = eventsPending[sentence.id]
-        
+
         if (pending && pending.author == author && (pending.event == EVENT_EDIT || pending.event == EVENT_CREATE)) {
-            eventsPending[sentence.id].text = sentence.toString()
+            eventsPending[sentence.id].text = sentence.toUnambiguousString(this.words)
         }
         else {
-            this.recordEvent(EVENT_EDIT, sentence, author, this.words, true)
+            this.recordEvent(EVENT_EDIT, sentence, author, true)
         }
     }
 
-    recordEvent(type: string, sentence: Sentence, author: string, words: Words, delay?: boolean, message?: string) {
+    recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean, message?: string) {
         if (!db) {
             console.error('Could not record event since Mongo connection failed.')
             return
@@ -210,25 +210,26 @@ export default class BackendSentenceHistory implements SentenceHistory {
             date: new Date(),
             event: type,
             author: author,
-            text: message || sentence.toUnambiguousString(words),
+            text: message || sentence.toUnambiguousString(this.words),
             notify: []
         }
 
         eventsPending[sentence.id] = event
 
-        setTimeout(() => {
-            this.getAllAuthorsInvolved(sentence.id)
+        this.getAllAuthorsInvolved(sentence.id)
             .then((authorsInvolved) => {
                 event.notify = authorsInvolved.filter((involvedAuthor) => involvedAuthor != author)
 
-                db.collection(COLLECTION_EVENT).insertOne(event)
+                setTimeout(() => {
+                        db.collection(COLLECTION_EVENT).insertOne(event)
 
-                if (eventsPending[sentence.id] === event) {
-                    delete eventsPending[sentence.id]
-                }
+                        if (eventsPending[sentence.id] === event) {
+                            delete eventsPending[sentence.id]
+                        }
+                    }, 
+                    (delay ? 180000 : 0)
+                )
             })
-        }, 
-        (delay ? 180000 : 0))
     }
 
     someTimeAgo() {

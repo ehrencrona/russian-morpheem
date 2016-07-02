@@ -29,11 +29,16 @@ export default function(corpus: Corpus) {
         console.log(author.name + ' set state of ' + sentence + ' to ' + status + '.')
  
         if (status == STATUS_ACCEPTED) {
-            corpus.sentenceHistory.setStatus({ status: status }, sentenceId)
+            corpus.sentenceHistory.getStatus(sentence.id)
+                .then((metadata) => {
+                    if (metadata.status.status != status) {
+                        corpus.sentenceHistory.setStatus({ status: status }, sentenceId)
 
-            corpus.sentenceHistory.recordAccept(sentence, author.name)
+                        corpus.sentenceHistory.recordAccept(sentence, author.name)
+                    }
 
-            res.status(200).send({ status: status })
+                    res.status(200).send({ status: status })
+                })
         }
         else {
             throw new Error('Unknown status.')
