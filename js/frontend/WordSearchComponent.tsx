@@ -56,7 +56,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
     
     setWord(word: InflectableWord) {
-        this.setState({ filterWord: word, filterPos: null, filterString: null })
+        this.setState({ filterWord: word, filterPos: null, filterString: '' })
     }
 
     setFilterString(string: string) {
