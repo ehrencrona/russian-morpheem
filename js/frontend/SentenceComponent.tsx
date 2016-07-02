@@ -5,6 +5,7 @@ import Fact from '../shared/fact/Fact'
 import Word from '../shared/Word'
 import Words from '../shared/Words'
 import InflectedWord from '../shared/InflectedWord'
+import UnparsedWord from '../shared/UnparsedWord';
 import Sentence from '../shared/Sentence'
 import { MISSING_INDEX } from '../shared/fact/Facts'
 import Tab from './Tab'
@@ -143,6 +144,12 @@ export default class SentenceComponent extends Component<Props, State> {
                 onWordSelect={ (word: Word) => {
                     if (word instanceof InflectedWord) {
                         wordSearch.setWord(word.word) 
+                    }
+                    else if (word instanceof UnparsedWord) {
+                        wordSearch.setFilterString(word.jp)
+                    }
+                    else {
+                        wordSearch.clearFilters()
                     }
                 } }
                 ref={ (ref) => { editor = ref } }

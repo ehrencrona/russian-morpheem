@@ -3,6 +3,7 @@
 import Corpus from '../shared/Corpus';
 import Fact from '../shared/fact/Fact';
 import UnstudiedWord from '../shared/UnstudiedWord';
+import UnparsedWord from '../shared/UnparsedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import Tab from './Tab'
@@ -55,7 +56,11 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
     
     setWord(word: InflectableWord) {
-        this.setState({ filterWord: word, filterPos: null })
+        this.setState({ filterWord: word, filterPos: null, filterString: null })
+    }
+
+    setFilterString(string: string) {
+        this.setState({ filterString: string, filterWord: null, filterPos: null })
     }
 
     selectSuggestion(suggestion: Suggestion) {
@@ -320,8 +325,16 @@ export default class WordSearchComponent extends Component<Props, State> {
                 
                 onKeyPress={
                     (event) => {
-                        if (event.charCode == 13 && suggestions.length) {
-                            this.selectSuggestion(suggestions[0])
+                        if (event.charCode == 13) {
+                            let wordString = this.state.filterString.trim()
+
+                            if (suggestions.length == 1) {
+                                this.selectSuggestion(suggestions[0])
+                            }
+                            else if (wordString) {
+                                this.props.onWordSelect(new UnparsedWord(wordString))
+                                this.setState({ filterWord: null, filterString: '' })
+                            }
                         }
                     }
                 }/>

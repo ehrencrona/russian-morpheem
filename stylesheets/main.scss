@@ -222,6 +222,19 @@ input[type=text], input[type=number] {
         font-size: 1.5rem;
     }
 
+    .word.unparsed {
+        background-color: $color5;
+    }
+
+    .word.selected {
+        background-color: $color-bg-inverted;
+        color: $color-fg-inverted;
+
+        .form {
+            color: darken($color-fg-inverted, 10%);
+        }
+    }
+
     .word.drag-target {
         border-left: $unit solid $color-fg;
     }
@@ -238,15 +251,6 @@ input[type=text], input[type=number] {
         margin-bottom: 2 * $unit;
         background-color: $color-bg-inverted;
         color: $color-fg-inverted;
-    }
-
-    .selected {
-        background-color: $color-bg-inverted;
-        color: $color-fg-inverted;
-
-        .form {
-            color: darken($color-fg-inverted, 10%);
-        }
     }
 
     .sentenceEnd {
@@ -779,6 +783,11 @@ ul.stats {
     li {
         display: flex;
         align-items: center;
+    }
+
+    .unacceptable {
+        background-color: $color11;
+        @extend .button;
     }
 }
 

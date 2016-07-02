@@ -7,6 +7,7 @@ import Facts from './fact/Facts'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'
+import UnparsedWord from './UnparsedWord'
 
 /**
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
@@ -176,5 +177,9 @@ export default class Sentence {
                 return word.toString()
             }
         })
+    }
+
+    canAccept() {
+        return !this.words.find((word) => word instanceof UnparsedWord)
     }
 }

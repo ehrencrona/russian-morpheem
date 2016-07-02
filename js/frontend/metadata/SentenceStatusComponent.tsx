@@ -34,6 +34,10 @@ export default class SentenceStatusComponent extends Component<Props, State> {
     }
 
     accept() {
+        if (!this.props.sentence.canAccept()) {
+            return
+        }
+
         this.props.corpus.sentenceHistory.setStatus(
             { status: STATUS_ACCEPTED },
             this.props.sentence.id
@@ -61,7 +65,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             }
             </div>
 
-            { this.state.status.status == STATUS_SUBMITTED && this.state.canAccept ? 
+            { this.state.status.status == STATUS_SUBMITTED && this.state.canAccept && this.props.sentence.canAccept() ? 
 
                 <div className='button' onClick={ () => this.accept() }>Accept</div>
 

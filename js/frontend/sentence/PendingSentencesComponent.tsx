@@ -59,9 +59,12 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                 { sentences.map((sentence) => 
 
                     <li key={ sentence.id }>
-
-                        <div className='button' onClick={ () => this.accept(sentence.id) }>Accept</div>
-
+                        { 
+                            sentence.canAccept() ? 
+                                <div className='button' onClick={ () => this.accept(sentence.id) }>Accept</div>
+                                :
+                                <div className='unacceptable'>Not ready</div>
+                        }
                         <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ 
                             sentence.toUnambiguousString(this.props.corpus.words) 
                         }</div>

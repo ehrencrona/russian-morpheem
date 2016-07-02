@@ -4,6 +4,7 @@ import Corpus from '../shared/Corpus';
 import Fact from '../shared/fact/Fact';
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
+import UnparsedWord from '../shared/UnparsedWord';
 import Sentence from '../shared/Sentence';
 
 import { Component, cloneElement, createElement } from 'react';
@@ -73,7 +74,7 @@ class WordComponent extends Component<WordProps, WordState> {
                     form = word.form + (word.classifier ? ', ' + word.classifier : '') 
                 }
             }
-            else {
+            else if (!(word instanceof UnparsedWord)) {
                 form = (word.classifier ? word.classifier : 'uninfl.')
             } 
 
@@ -81,6 +82,7 @@ class WordComponent extends Component<WordProps, WordState> {
         }
 
         return <div draggable='true' className={'word' + 
+            (word instanceof UnparsedWord ? ' unparsed' : '') + 
             (this.props.selected ? ' selected' : '') + 
             (this.state.dragTarget ? ' drag-target' : '')} 
                 onClick={ this.props.onClick }
@@ -96,7 +98,7 @@ class WordComponent extends Component<WordProps, WordState> {
                     this.props.onDrop(e) 
                 } } 
                 onDragStart={ this.props.onDragStart }>
-            <div>{ this.props.word.jp }</div>
+            <div>{ (word instanceof UnparsedWord ? '"' + word.jp + '"' : word.jp) }</div>
             { formTag }
         </div>; 
     }

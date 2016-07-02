@@ -6,6 +6,7 @@ import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import { parseSentenceToWords } from '../../shared/external/parseSentenceToWords'
 import Sentence from '../../shared/Sentence'
 import UnstudiedWord from '../../shared/UnstudiedWord'
+import UnparsedWord from '../../shared/UnparsedWord'
 import getAuthor from '../getAuthor'
 
 import Corpus from '../../shared/Corpus'
@@ -29,9 +30,18 @@ export default function(corpus: Corpus) {
                 let parsedWords = parseSentenceToWords(externalSentence, corpus)
 
                 let words = parsedWords
-                    .filter((parsedWord) => typeof parsedWord == 'object')
-                    .map((wordAlternatives: UnstudiedWord[]) => {
-                        return wordAlternatives[0]
+                    .map((parsedWord) => {
+                        let wordAlternatives: UnstudiedWord[] = parsedWord as UnstudiedWord[] 
+
+                        if (typeof parsedWord == 'object' && wordAlternatives.length == 1) {
+                            return wordAlternatives[0]
+                        }
+                        else if (typeof parsedWord == 'object') {
+                            return new UnparsedWord(wordAlternatives[0].jp)
+                        }
+                        else {
+                            return new UnparsedWord(parsedWord as string)
+                        }
                     })
 
                 let sentence = new Sentence(words, null, getAuthor(req).name)

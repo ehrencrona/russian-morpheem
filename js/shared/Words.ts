@@ -4,7 +4,8 @@ import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
 import Inflection from './inflection/Inflection'
 import Facts from './fact/Facts'
-import UnstudiedWord from './UnstudiedWord';
+import UnstudiedWord from './UnstudiedWord'
+import UnparsedWord from './UnparsedWord'
 
 export default class Words {
     wordsByString : { [s: string]: Word } = {}
@@ -139,6 +140,10 @@ export default class Words {
         
         if (result) {
             return result
+        }
+
+        if (id[0] == '"' && id[id.length-1] == '"') {
+            return new UnparsedWord(id.substr(1, id.length-2))
         }
 
         return this.wordsById[id]
