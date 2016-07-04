@@ -26,7 +26,14 @@ const AUTHORS: { [id:string] : Author } = {
     },
     '57767c6a934728da6af8ea09': {
         name: 'ian'
+    },
+    '5778d1a0d81e492529d42c22': {
+        name: 'ctane@reddit'
+    },
+    '5778d276d81e492529d42c34': {
+        name: 'mai'
     }
+    
 }
 
 export function getSlackOfAuthor(authorName: string): { name: string, id: string } {

@@ -180,6 +180,6 @@ export default class Sentence {
     }
 
     canAccept() {
-        return !this.words.find((word) => word instanceof UnparsedWord)
+        return this.words.length && !this.words.find((word) => word instanceof UnparsedWord)
     }
 }

@@ -5,6 +5,7 @@ import Facts from './Facts';
 import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import Word from '../Word';
+import { EndingTransform } from '../Transforms'
 
 export function factToString(fact: Fact, facts: Facts) {
     let tags = facts.getTagsOfFact(fact).map((tag) => ', tag: ' + tag).join('')
@@ -26,6 +27,9 @@ export function factToString(fact: Fact, facts: Facts) {
             (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
             (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '') + 
             tags
+    }
+    else if (fact instanceof EndingTransform) {
+        return 'transform: ' + fact.getId()
     }
     else if (!fact) {
         return ''
