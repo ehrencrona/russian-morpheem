@@ -34,6 +34,9 @@ import getNewsfeed from './route/getNewsfeed';
 import getExternalSentences from './route/getExternalSentences';
 import importExternalSentence from './route/importExternalSentence';
 
+import registerExposures from './route/registerExposures'
+import getExposures from './route/getExposures'
+
 import { tag, untag } from './route/tag';
 
 var app = express()
@@ -117,7 +120,11 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/api/${lang}/event/newsfeed`, getNewsfeed(corpus))    
 
     app.get(`/api/${lang}/event/by-date/:eventType`, getEventsByDate(corpus))    
-        
+
+    app.post(`/api/${lang}/exposure`, registerExposures(corpus))    
+
+    app.get(`/api/${lang}/exposure`, getExposures(corpus))    
+
 }
 
 readCorpus('ru', true).catch((e) => {

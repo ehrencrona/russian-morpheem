@@ -56,4 +56,8 @@ describe('FactFileParser', function() {
     it('parses transformed word', function () {
         test('маленьк--ий: small, inflect: yToI')
     })
+
+    it('parses transform facts', function () {
+        test('transform: yToI')
+    })
 })

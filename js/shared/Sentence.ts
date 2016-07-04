@@ -1,6 +1,5 @@
 "use strict";
 
-import Word from './Word'
 import Fact from './fact/Fact'
 import Words from './Words'
 import Facts from './fact/Facts'
@@ -16,7 +15,7 @@ export default class Sentence {
     english: string
     required: Fact[]
     
-    constructor(public words: Word[], public id: number, public author?: string) {
+    constructor(public words: UnstudiedWord[], public id: number, public author?: string) {
         this.words = words
         this.id = id
         this.author = author
@@ -169,14 +168,9 @@ export default class Sentence {
     }
 
     toUnambiguousString(words: Words) {
-        return this.innerToString((word) => {
-            if (word instanceof InflectedWord) {
-                return word.toUnambiguousString(words)                
-            }
-            else {
-                return word.toString()
-            }
-        })
+        return this.innerToString((word) =>
+            word.toUnambiguousString(words)                
+        )
     }
 
     canAccept() {

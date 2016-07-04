@@ -2,6 +2,7 @@
 
 import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
+import Words from './Words'
 
 /**
  * An UnstudiedWord is a Word that is not a fact, i.e. it is not studied in its own right. Typically, all unstudied words
@@ -121,5 +122,10 @@ export default class UnstudiedWord {
     
     getJsonType() {
         return 'unstudied'
+    }
+
+    toUnambiguousString(words: Words) {
+        return this.jp + (words.ambiguousForms[this.jp] ? 
+            ' [' + (this.classifier || 'uninfl.') + ']' : '')
     }
 }

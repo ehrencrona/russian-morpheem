@@ -328,7 +328,13 @@ export default class WordSearchComponent extends Component<Props, State> {
                         if (event.charCode == 13) {
                             let wordString = this.state.filterString.trim()
 
-                            if (suggestions.length == 1) {
+                            if (!wordString || !suggestions.length) {
+                                return
+                            }
+
+                            let firstInexact = suggestions.findIndex((suggestion) => suggestion.word.jp != wordString)
+
+                            if (firstInexact < 0 || firstInexact == 1) {
                                 this.selectSuggestion(suggestions[0])
                             }
                             else if (wordString) {
