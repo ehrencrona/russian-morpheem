@@ -138,6 +138,8 @@ export default class UnstudiedWord {
             else {
                 form = (this.classifier ? this.classifier : 'uninfl.')
             }
+
+            return form
         }
     } 
 }

@@ -32,8 +32,9 @@ export default class InflectedWord extends Word {
     }
 
     toUnambiguousString(words: Words) {
-        return this.jp + (words.ambiguousForms[this.jp] ? 
-            ' [' + (this.classifier || this.form) + ']' : '')
+        let disambiguation = this.getDisambiguation(words)
+
+        return this.jp + (disambiguation ? ' [' + disambiguation + ']' : '')
     }
 
     toUnambiguousHtml(words: Words) {
@@ -58,6 +59,8 @@ export default class InflectedWord extends Word {
                     form = this.form + (this.classifier ? ', ' + this.classifier : '') 
                 }
             }
+
+            return form
         }
     } 
 
