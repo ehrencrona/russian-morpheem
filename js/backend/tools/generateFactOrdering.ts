@@ -1,5 +1,5 @@
 
-import { indexSentencesByFact, FactSentenceIndex } from  '../../shared/indexSentencesByFact'
+import { indexSentencesByFact, FactSentenceIndex } from  '../../shared/IndexSentencesByFact'
 
 import readCorpus from '../CorpusReader'
 import InflectionFact from '../../shared/inflection/InflectionFact'
