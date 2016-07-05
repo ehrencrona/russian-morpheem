@@ -21,11 +21,19 @@ const AUTHORS: { [id:string] : Author } = {
     '57600b40fed5bb9c12fd2f43': { numericalId: 8, name: 'will', slack: { name: 'willhaughton', id: 'U1GP3FN85' }},
     '5765156738fcbd5b47b17a93': {
         numericalId: 9,
-        name: 'eoghan'
+        name: 'eoghan',
+        slack: {
+            name: 'eoghan',
+            id: 'U1JJX5YR0'
+        }
     },
     '5770d4aa0096f1396ff7f740': {
         numericalId: 10,
-        name: 'kees'
+        name: 'kees',
+        slack: {
+            name: 'kjk',
+            id: 'U1NMRBPGX'
+        }
     },
     '57767c6a934728da6af8ea09': {
         numericalId: 11,
@@ -33,7 +41,11 @@ const AUTHORS: { [id:string] : Author } = {
     },
     '5778d1a0d81e492529d42c22': {
         numericalId: 12,
-        name: 'ctane@reddit'
+        name: 'ctane@reddit',
+        slack: {
+            name: 'kippie',
+            id: 'U1NE5G9EV'
+        }
     },
     '5778d276d81e492529d42c34': {
         numericalId: 13,
@@ -41,7 +53,11 @@ const AUTHORS: { [id:string] : Author } = {
     },
     '577a92e678d7535f50eb8ddf': {
         numericalId: 14,
-        name: 'nani'
+        name: 'nani',
+        slack: {
+            name: 'nani',
+            id: 'U1NRX075J'
+        }
     },
     '577b54032d57c7c1137a18f5': {
         numericalId: 15,

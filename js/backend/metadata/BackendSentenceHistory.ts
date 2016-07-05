@@ -2,9 +2,10 @@
 
 import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
 import Sentence from '../../shared/Sentence'
+import Sentences from '../../shared/Sentences'
 import { Event } from '../../shared/metadata/Event'
 import { SentenceHistory, SentenceStatusResponse } from '../../shared/metadata/SentenceHistory' 
-import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
+import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED, STATUS_DELETED } from '../../shared/metadata/SentenceStatus'
 import Words from '../../shared/Words'
 
 import { SentencesByDate } from '../../shared/metadata/SentencesByDate'
@@ -47,12 +48,19 @@ export default class BackendSentenceHistory implements SentenceHistory {
 
         status.sentence = sentenceId
 
-        db.collection(COLLECTION_METADATA).updateOne({ sentence: sentenceId }, status, { upsert: true },
-            (error, result) => {
-                if (error) {
-                    console.error('While updating status: ', error)
-                }
-            })
+        return new Promise((resolve, reject) => {
+            db.collection(COLLECTION_METADATA).updateOne({ sentence: sentenceId }, status, { upsert: true },
+                (error, result) => {
+                    if (error) {
+                        console.error('While updating status: ', error)
+
+                        reject(error)
+                    }
+                    else {
+                        resolve()
+                    }
+                })
+        })
     }
 
     getStatus(sentenceId: number): Promise<SentenceStatusResponse> {
@@ -97,6 +105,35 @@ export default class BackendSentenceHistory implements SentenceHistory {
                     ids.push((doc as SentenceStatus).sentence);
                 }, () => {
                     resolve(ids)
+                });
+        })
+    }
+
+    markDeletedSentencesAsSuch(sentences: Sentences): Promise<number[]> {
+        if (!db) {
+            return Promise.resolve([])
+        }
+
+        let cursor =
+            db.collection(COLLECTION_METADATA)
+                .find( { 
+                    status: { $ne: STATUS_DELETED },
+                } )
+
+        let promises = []
+
+        return new Promise((resolve, reject) => {            
+            cursor
+                .forEach((doc) => {
+                    let sentenceId = (doc as SentenceStatus).sentence
+                    
+                    if (!sentences.get(sentenceId)) {
+                        console.log(sentenceId + ' has been deleted')
+                    }
+
+                    promises.push(this.setStatus({ status: STATUS_DELETED }, sentenceId))
+                }, () => {
+                    Promise.all(promises).then(resolve)
                 });
         })
     }
@@ -174,6 +211,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
 
     recordDelete(sentence: Sentence, author: string) {
         this.recordEvent(EVENT_DELETE, sentence, author, false)
+        this.setStatus({ status: STATUS_DELETED }, sentence.id)
     }
 
     recordComment(comment: string, sentence: Sentence, author: string) {
