@@ -129,9 +129,8 @@ export default class BackendSentenceHistory implements SentenceHistory {
                     
                     if (!sentences.get(sentenceId)) {
                         console.log(sentenceId + ' has been deleted')
+                        promises.push(this.setStatus({ status: STATUS_DELETED }, sentenceId))
                     }
-
-                    promises.push(this.setStatus({ status: STATUS_DELETED }, sentenceId))
                 }, () => {
                     Promise.all(promises).then(resolve)
                 });
