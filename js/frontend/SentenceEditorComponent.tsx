@@ -58,27 +58,10 @@ class WordComponent extends Component<WordProps, WordState> {
 
         let formTag = <div/>
         
-        let homonyms = words.ambiguousForms[word.jp]
+        let disambiguation = word.getDisambiguation(words)
 
-        if (homonyms) {
-            let form
-
-            if (!homonyms.find((otherWord) => otherWord.classifier == word.classifier)) {
-                form = word.classifier
-            }
-            else if (word instanceof InflectedWord) {
-                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && otherWord.form == word.form)) {
-                    form = word.form
-                }
-                else {
-                    form = word.form + (word.classifier ? ', ' + word.classifier : '') 
-                }
-            }
-            else if (!(word instanceof UnparsedWord)) {
-                form = (word.classifier ? word.classifier : 'uninfl.')
-            } 
-
-            formTag = <div className='form'>{ form }</div>
+        if (disambiguation) {
+            formTag = <div className='form'>{ disambiguation }</div>
         }
 
         return <div draggable='true' className={'word' + 

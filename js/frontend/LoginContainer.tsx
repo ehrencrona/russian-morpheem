@@ -1,10 +1,10 @@
 /// <reference path="../../typings/react/react.d.ts" />
 /// <reference path="./auth0.d.ts" />
 
-import TabSetComponent from './TabSetComponent'
-import { Component, createElement } from 'react'
+import { Component, createElement, Factory } from 'react'
 
-import Corpus from './corpus/FrontendCorpus'
+import FrontendCorpus from './corpus/FrontendCorpus'
+import Corpus from '../shared/Corpus'
 import Word from '../shared/Word'
 
 import getLanguage from './getLanguage'
@@ -17,7 +17,13 @@ import xr from './xr';
 
 const lang = getLanguage()
 
+interface BuiltProps {
+    corpus: Corpus
+    xrArgs: { [arg: string] : string }
+}
+
 interface Props {
+    factory: Factory<BuiltProps>
 }
 
 interface State {
@@ -32,12 +38,13 @@ const TOKEN_ITEM = 'userToken'
 
 export default class LoginContainer extends Component<Props, State> {
     lock: Auth0Lock
+    xrArgs: { [arg: string] : string }
         
     constructor(props) {
         super(props)
 
         this.state = {
-            bypass: document.location.hostname == 'localhost'
+            bypass: document.location.hostname == 'jjlocalhost'
         }
     }
 
@@ -68,9 +75,11 @@ export default class LoginContainer extends Component<Props, State> {
     }
 
     loadCorpus(xrArgs) {
+        this.xrArgs = xrArgs
+
         xr.get(`/api/${lang}/corpus`, {}, xrArgs)
         .then((xhr) => {
-            let corpus = Corpus.fromJson(xhr.data)
+            let corpus = FrontendCorpus.fromJson(xhr.data)
 
             corpus.setXrArgs(xrArgs)
 
@@ -89,6 +98,7 @@ export default class LoginContainer extends Component<Props, State> {
             
             if (e.status == 401) {
                 localStorage.removeItem(TOKEN_ITEM)
+                this.lock.show()
             }
         })
     }
@@ -114,7 +124,7 @@ export default class LoginContainer extends Component<Props, State> {
 
     render() {
         if ((this.state.bypass || this.state.idToken) && this.state.corpus) {
-            return <TabSetComponent corpus={ this.state.corpus } />
+            return this.props.factory({ corpus: this.state.corpus, xrArgs: this.xrArgs })
         }
         else {
             return <div/>

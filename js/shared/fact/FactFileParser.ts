@@ -88,6 +88,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
 
     function parseRightSideOfDefinition(rightSide, word: Word): Fact {
         let fact: Fact = word
+        let en = ''
 
         splitRightSide(rightSide).forEach((pair) => {
             let tag = pair[0]
@@ -163,7 +164,13 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 }
             }
             else {
-                word.setEnglish(text, tag)
+                if (en) {
+                    en += ', '
+                }
+
+                en += text
+
+                word.setEnglish(en, tag)
             }
         })
         

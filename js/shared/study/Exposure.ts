@@ -9,6 +9,7 @@ export interface Exposure {
     type: number
     skill: number
     user: number
+    sentence: number
 }
 
 export default Exposure

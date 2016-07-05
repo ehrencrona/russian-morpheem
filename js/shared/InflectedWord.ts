@@ -41,6 +41,26 @@ export default class InflectedWord extends Word {
             ' <span class="form">' + (this.classifier || this.form) + '</span>' : '')
     }
 
+    getDisambiguation(words: Words) {
+        let homonyms = words.ambiguousForms[this.jp]
+
+        if (homonyms) {
+            let form
+
+            if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
+                form = this.classifier
+            }
+            else {
+                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && otherWord.form == this.form)) {
+                    form = this.form
+                }
+                else {
+                    form = this.form + (this.classifier ? ', ' + this.classifier : '') 
+                }
+            }
+        }
+    } 
+
     getDefaultInflection() {
         return this.word.getDefaultInflection()
     }

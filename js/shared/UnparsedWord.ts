@@ -1,6 +1,7 @@
 
 import UnstudiedWord from './UnstudiedWord'
 import Words from './Words'
+import htmlEscape from './util/htmlEscape'
 
 export default class UnparsedWord extends UnstudiedWord {
 
@@ -10,6 +11,14 @@ export default class UnparsedWord extends UnstudiedWord {
 
     toUnambiguousString(words: Words) {
         return this.toString()
+    }
+
+    toUnambiguousHtml(words: Words) {
+        return '"' + htmlEscape(this.jp) + '"'
+    } 
+
+    getDisambiguation(words: Words) {
+        return
     }
 
     toString() {

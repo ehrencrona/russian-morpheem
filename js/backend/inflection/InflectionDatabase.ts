@@ -1,6 +1,8 @@
 /// <reference path="../../../typings/redis.d.ts"/>
 
 import { RedisClient } from 'node-redis'
+import { createClient } from 'node-redis'
+
 import NoSuchWordError from '../../shared/NoSuchWordError'
 
 export interface InflectionInDatabase {

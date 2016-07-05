@@ -10,6 +10,7 @@ import { Exposure, SKILL_KNEW, SKILL_DIDNT_KNOW, SKILL_UNCLEAR } from '../shared
 function expose(factId: string, knew: boolean): Exposure {
     return {
         fact: factId,
+        sentence: 4711,
         user: 4711,
         skill: (knew ? SKILL_KNEW : SKILL_DIDNT_KNOW),
         time: new Date(),
@@ -56,6 +57,8 @@ describe('LeitnerKnowledge', () => {
 
         expect(knowledge.deckOfFact(facts.get('word1'))).to.equal(1)
 
+        expect(knowledge.size).to.equal(1)
+
     })
 
 
@@ -76,15 +79,21 @@ describe('LeitnerKnowledge', () => {
         expect(knowledge.deckOfFact(facts.get('word1'))).to.equal(-1)
         expect(knowledge.isKnown(facts.get('word1'))).to.be.true
 
+        expect(knowledge.size).to.equal(0)
+
         knowledge.processExposures([ expose('word1', false) ])
 
         expect(knowledge.deckOfFact(facts.get('word1'))).to.equal(DECK_COUNT-1)
         expect(knowledge.isKnown(facts.get('word1'))).to.be.false
 
+        expect(knowledge.size).to.equal(1)
+
         knowledge.processExposures([ expose('word1', true) ])
 
         expect(knowledge.deckOfFact(facts.get('word1'))).to.equal(-1)
         expect(knowledge.isKnown(facts.get('word1'))).to.be.true
+        expect(knowledge.size).to.equal(0)
+
 
     })
 })

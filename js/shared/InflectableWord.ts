@@ -104,6 +104,10 @@ export default class InflectableWord {
         return 'ib'
     }
 
+    getEnglish() {
+        return this.en
+    }
+
     setEnglish(en) {
         this.en = en
         

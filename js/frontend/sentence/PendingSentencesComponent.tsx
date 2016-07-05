@@ -44,6 +44,15 @@ export default class PendingSentencesComponent extends Component<Props, State> {
         )
     }
 
+    neverEmpty(str: string) {
+        if (!str.trim()) {
+            return '<Empty sentence>'
+        }
+        else {
+            return str
+        }
+    }
+
     render() {        
         if (!this.state || !this.state.sentenceIds) {
             return <div/>
@@ -66,7 +75,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                                 <div className='unacceptable'>Not ready</div>
                         }
                         <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ 
-                            sentence.toUnambiguousString(this.props.corpus.words) 
+                            this.neverEmpty(sentence.toUnambiguousString(this.props.corpus.words)) 
                         }</div>
 
                     </li>

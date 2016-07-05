@@ -45,6 +45,10 @@ export default class EventsComponent extends Component<Props, State> {
             html = eventAndSentence.sentence.toUnambiguousHtml(this.props.corpus.words)
         }
 
+        if (!html.trim()) {
+            html = '&gt;Empty sentence&lt;'
+        }
+
         return <li key={ eventAndSentence.event._id }>
             <div className='main'>
                 <div className='event'>{ eventAndSentence.event.event }</div>

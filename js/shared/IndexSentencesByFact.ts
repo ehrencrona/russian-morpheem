@@ -69,7 +69,9 @@ export interface FactSentenceIndex {
     factIndex: number 
 }
 
-export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number): { [factId: string]: FactSentenceIndex } {
+export type SentenceCountByFact = { [factId: string]: FactSentenceIndex }; 
+
+export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number): SentenceCountByFact {
     let result : { [factId: string]: FactSentenceIndex } = {}
     
     if (okInterval == undefined) {

@@ -34,6 +34,10 @@ declare module 'node-redis' {
 
 		hgetall(key: string, callback: (err: any, reply: Buffer[]) => any)
 
+		lrange(key: string, start: number, stop: number, callback: (err: any, reply: Buffer[]) => any)
+
+		rpush(key:string, ...values)
+
 		/*
 		commands = set_union([
 			"get", "set", "setnx", "setex", "append", "strlen", "del", "exists", "setbit", "getbit", "setrange", "getrange", "substr",

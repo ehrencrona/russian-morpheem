@@ -2,21 +2,35 @@
 /// <reference path="../../typings/react/react-dom.d.ts" />
 
 import LoginContainer from './LoginContainer'
+import StudyComponent from './study/StudyComponent'
+import TabSetComponent from './TabSetComponent'
 
 import 'drag-drop-webkit-mobile';
 import xr from 'xr';
 
 import {render} from 'react-dom';
-import {createElement} from 'react';
+import {createElement, createFactory} from 'react';
 
 let React = { createElement: createElement }
 
-var element = document.getElementById('react-root');
+function renderIntoId(component, elementId) {
+    var element = document.getElementById(elementId);
 
-if (element) {
-    render((
-        <LoginContainer/>
-        ),
-        element
-    );
+    if (element) {
+        render((
+            component
+            ),
+            element
+        );
+    }
 }
+
+renderIntoId(
+    <LoginContainer factory={ createFactory(TabSetComponent) }/>,
+    'react-root'
+)
+
+renderIntoId(
+    <LoginContainer factory={ createFactory(StudyComponent) }/>,
+    'react-study-root'
+)

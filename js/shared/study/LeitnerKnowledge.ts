@@ -21,6 +21,7 @@ export class LeitnerKnowledge {
 
     decks: Deck[] = []
     deckByFact: { [factId: string]: Deck } = {}
+    size: number = 0
 
     constructor(public facts: Facts) {
         this.facts = facts
@@ -69,6 +70,7 @@ export class LeitnerKnowledge {
 
                     deck.facts.push(fact)
                     this.deckByFact[exposure.fact] = deck
+                    this.size++
                 }
             }
             else {
@@ -89,6 +91,7 @@ export class LeitnerKnowledge {
 
                 if (oldIndex >= 0) {
                     oldDeck.facts.splice(oldIndex, 1)
+                    this.size--
                 }
                 else {
                     console.error('Could not find fact in old deck.')
@@ -96,6 +99,7 @@ export class LeitnerKnowledge {
 
                 if (newDeck) {
                     newDeck.facts.push(fact)
+                    this.size++
                 }
                 else {
                     this.known.add(exposure.fact)

@@ -93,11 +93,6 @@ export default class UnstudiedWord {
             form = ''
         }
 
-        if (this.en[form]) {
-            throw new Error(this + ' already had the English translation "' + this.en[form] +
-                '" in form "' + form + '". Attempting to add another translation "' + en + '"')
-        }
-
         this.en[form] = en
 
         return this
@@ -125,7 +120,24 @@ export default class UnstudiedWord {
     }
 
     toUnambiguousString(words: Words) {
-        return this.jp + (words.ambiguousForms[this.jp] ? 
-            ' [' + (this.classifier || 'uninfl.') + ']' : '')
+        let disambiguation = this.getDisambiguation(words)
+
+        return this.jp + (disambiguation ? 
+            ' [' + disambiguation + ']' : '')
     }
+
+    getDisambiguation(words: Words) {
+        let homonyms = words.ambiguousForms[this.jp]
+
+        if (homonyms) {
+            let form
+
+            if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
+                form = this.classifier
+            }
+            else {
+                form = (this.classifier ? this.classifier : 'uninfl.')
+            }
+        }
+    } 
 }

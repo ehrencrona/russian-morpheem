@@ -72,6 +72,7 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
     corpus.facts.onAdd = saveFacts
+    corpus.facts.onRemove = saveFacts
     corpus.facts.onTag = saveFacts
     corpus.facts.onUntag = saveFacts
     corpus.inflections.onAdd = saveInflections

@@ -33,6 +33,7 @@ export default class Facts {
     
     onMove: (fact: Fact, newIndex: number) => void = null
     onAdd: (fact: Fact) => void = null
+    onRemove: (fact: Fact) => void = null
     onTag: (fact: Fact, tag: string) => void = null
     onUntag: (fact: Fact, tag: string) => void = null
 
@@ -75,7 +76,24 @@ export default class Facts {
 
         return this
     }
-    
+        
+    remove(fact: Fact) {
+        if (!this.factsById[fact.getId()]) {
+            console.error('Unknown fact ' + fact.getId())
+            return
+        }
+
+        delete this.factsById[fact.getId()]
+        delete this.factIndexById[fact.getId()]
+        this.facts = this.facts.filter((existingFact) => existingFact.getId() != fact.getId())
+        
+        if (this.onRemove) {
+            this.onRemove(fact)
+        }
+
+        return this
+    }
+
     move(fact: Fact, pos: number) {
         let from = this.indexOf(fact)
         
