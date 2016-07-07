@@ -93,6 +93,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
             return <StudyComponent 
                 sentence={ this.state.sentence }
                 fact={ this.state.fact } 
+                corpus={ this.props.corpus }
                 factKnowledge={ this.factKnowledge }
                 onAnswer={ (exposures) => this.onAnswer(exposures)} />
             

@@ -44,7 +44,7 @@ export let FORM_NAMES = {
     pl: 'plural',
 
     nom: 'nominative',
-    gen: 'geninitive', 
+    gen: 'genitive', 
     dat: 'dative',
     acc: 'accusative',
     instr: 'instrumental',

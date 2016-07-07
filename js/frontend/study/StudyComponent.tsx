@@ -17,14 +17,17 @@ import UnstudiedWord from '../../shared/UnstudiedWord'
 import UnknownFact from './UnknownFact'
 import UnknownFactComponent from './UnknownFactComponent'
 import Fact from '../../shared/fact/Fact'
+import Words from '../../shared/Words'
 
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 
+import LeitnerKnowledgeInspectorComponent from './LeitnerKnowledgeInspectorComponent'
 import FrontendExposures from './FrontendExposures'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 
 interface Props {
     sentence: Sentence,
+    corpus: Corpus,
     fact: InflectionFact,
     factKnowledge: LeitnerKnowledge,
     onAnswer: (exposures: Exposure[]) => void
@@ -33,7 +36,8 @@ interface Props {
 interface State {
     unknownFacts?: UnknownFact[],
     knownFacts?: UnknownFact[],
-    stage?: Stage 
+    stage?: Stage,
+    showDecks?: boolean
 }
 
 let React = { createElement: createElement }
@@ -117,7 +121,9 @@ export default class StudyComponent extends Component<Props, State> {
             }, Knowledge.KNEW))
         })
 
-        console.log('Sending exposures: ' + exposures.map((exp) => exp.fact + ': ' + exp.knew).join(', '))
+        console.log('Sending exposures: ' + 
+            exposures.map((exp) => exp.fact + ': ' + 
+                (exp.knew == Knowledge.KNEW ? 'knew' : 'didnt know') + ' (skill ' + exp.skill + ')').join(', '))
 
         this.props.onAnswer(exposures)
     }
@@ -193,13 +199,24 @@ export default class StudyComponent extends Component<Props, State> {
         let studiedWord: UnstudiedWord
 
         let reveal = this.state.stage !== Stage.TEST
+        let capitalize = true
+
+        let words = this.props.sentence.words.slice(0)
+
+        if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
+            words.push(this.props.corpus.words.get('.'))
+        }
 
         return <div className='study'>
-                <div className='sentenceId'>(#{ this.props.sentence.id})</div>
+                <div className='sentenceId'>
+                    (<a href={ 'http://grammar.ru.morpheem.com/#' + this.props.sentence.id }>
+                        #{ this.props.sentence.id})
+                    </a>)
+                </div>
 
                 <div className='sentence'>
                 { 
-                    this.props.sentence.words.map((word, index) => {
+                    words.map((word, index) => {
                         let explain = () => {
                             this.unknownWord(word)
 
@@ -208,23 +225,49 @@ export default class StudyComponent extends Component<Props, State> {
                             }
                         }
 
+
+                        let className = ''
+                        let text = word.jp
+                        
+                        let nextWord = words[index+1]
+
+                        if (nextWord && (nextWord.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(nextWord.jp) < 0)) {
+                            className = 'space'
+                        }
+                        else {
+                            className = 'nospace'
+                        }
+
+                        let formHint
+
                         if (word instanceof InflectedWord &&
                             this.isStudiedForm(word)) {
                             studiedWord = word
 
                             if (reveal) {
-                                return <div key={index} className='word revealed' onClick={ explain } >{ word.jp }</div> 
+                                className += ' revealed' 
                             }
                             else {
-                                return <div key={index} className='word nominalized' onClick={ explain }>{ word.getDefaultInflection().jp }</div> 
+                                className += ' nominalized' 
+                                text = word.getDefaultInflection().jp 
                             }
 
                         }
-                        else {
 
-                            return <div key={index} className='word' onClick={ explain }>{ word.jp }</div>
-
+                        if (capitalize) {
+                            text = text[0].toUpperCase() + text.substr(1)
                         }
+
+                        capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
+                        
+                        return <div key={ index } className={ 'word ' + className } onClick={ explain }>
+                                <div>{ text }</div>
+                            { (formHint ?
+                                <div className='form'>{ formHint }</div>
+                                :
+                                <div></div>                                
+                            ) }
+                        </div>
                     })
                 }
                 </div>
@@ -253,38 +296,82 @@ export default class StudyComponent extends Component<Props, State> {
                     )
                 ) }
 
-                <h3>I didn't know</h3>
-                <ul className='unknown'>
-                {
-                    (this.state.unknownFacts).map((unknownFact) => 
-                        <UnknownFactComponent 
-                            key={ unknownFact.fact.getId() }
-                            hiddenFact={ (reveal ? null : this.props.fact) }
-                            fact={ unknownFact.fact } 
-                            unknownFact={ unknownFact } 
-                            factKnowledge={ this.props.factKnowledge } 
-                            onKnew={ (fact: UnknownFact) => this.known(fact) }
-                            known={ true }
-                        />)
-                }
-                </ul>
+                { (this.state.knownFacts.length || this.state.unknownFacts.length ? 
 
-                <h3>I knew</h3>
-                <ul className='unknown'>
+                    <div>
+                        <h3>I didn't know</h3>
+                        <ul className='unknown'>
+                        {
+                            (this.state.unknownFacts).map((unknownFact) => 
+                                <UnknownFactComponent 
+                                    key={ unknownFact.fact.getId() }
+                                    hiddenFact={ (reveal ? null : this.props.fact) }
+                                    fact={ unknownFact.fact } 
+                                    unknownFact={ unknownFact } 
+                                    factKnowledge={ this.props.factKnowledge } 
+                                    onKnew={ (fact: UnknownFact) => this.known(fact) }
+                                    known={ true }
+                                />)
+                        }
+                        </ul>
+                    </div>
+                    
+                 : 
+
+                    <div/>
+                )}
+
+                { (this.state.knownFacts.length ? 
+
+                    <div>
+                        <h3>I knew</h3>
+                        <ul className='unknown'>
+                        {
+                            (this.state.knownFacts).map((unknownFact) => 
+                                <UnknownFactComponent 
+                                    key={ unknownFact.fact.getId() }
+                                    hiddenFact={ (reveal ? null : this.props.fact) }
+                                    fact={ unknownFact.fact } 
+                                    unknownFact={ unknownFact } 
+                                    factKnowledge={ this.props.factKnowledge } 
+                                    onKnew={ (fact: UnknownFact) => this.unknown(fact) }
+                                    known={ false }
+                                />)
+                        }
+                        </ul>
+                    </div>
+
+                    :
+
+                    <div/>
+                )}
+
                 {
-                    (this.state.knownFacts).map((unknownFact) => 
-                        <UnknownFactComponent 
-                            key={ unknownFact.fact.getId() }
-                            hiddenFact={ (reveal ? null : this.props.fact) }
-                            fact={ unknownFact.fact } 
-                            unknownFact={ unknownFact } 
-                            factKnowledge={ this.props.factKnowledge } 
-                            onKnew={ (fact: UnknownFact) => this.unknown(fact) }
-                            known={ false }
-                        />)
+                    (this.state.showDecks ?
+
+                        <div>
+
+                            <div className='debugButtonBar'>
+                                <div className='button' onClick={ () => this.setState({ showDecks: false }) }>Close</div>
+                            </div>
+
+                            <LeitnerKnowledgeInspectorComponent 
+                                knowledge={ this.props.factKnowledge }
+                                currentFact={ this.props.fact }/>
+
+                        </div>                    
+                    
+                    :
+
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>What am I studying?</div>
+                        </div>
+
+                    )
                 }
-                </ul>
+
             </div>
+            
     }
 }
 

@@ -837,7 +837,19 @@ h3 {
         flex-wrap: wrap;
 
         .word {
+            cursor: pointer;
+        }
+
+        .word.space {
             margin-right: 0.4em;
+        }
+
+        .word.nospace {
+            page-break-after: avoid;
+        }
+
+        .word:hover {
+            color: $color4;
         }
 
         .word.nominalized {
@@ -846,6 +858,12 @@ h3 {
             padding: 0 0.15em;
             border-radius: 0.1em;
             margin-right: 0.2em;
+            display: flex;
+
+            .form {
+                font-size: 60%;
+                display: block;
+            }
         }
 
         .word.revealed {
@@ -886,10 +904,31 @@ h3 {
                 padding: $unit 2 * $unit;
                 font-size: 80%; 
                 font-weight: bold;
+                cursor: pointer;
             }
 
             .iKnew:hover {
                 background-color: darken($color2, 5%)
+            }
+        }
+    }
+
+    .debugButtonBar {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+    }
+
+    .knowledgeInspector {
+        display: flex;
+        align-content: stretch;
+        flex-wrap: wrap;
+
+        .deck {
+            flex-grow: 1;
+
+            li.current {
+                font-weight: bold;
             }
         }
     }

@@ -6,8 +6,8 @@ export enum Knowledge {
 
 export enum Skill {
     RECOGNITION = 0,
-    PRODUCTION = 1,
-    PICKING = 2
+    PICKING = 1,
+    PRODUCTION = 2
 }
 
 export interface Exposure {

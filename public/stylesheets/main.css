@@ -534,13 +534,23 @@ h3 {
   display: flex;
   flex-wrap: wrap; }
   .study .sentence .word {
+    cursor: pointer; }
+  .study .sentence .word.space {
     margin-right: 0.4em; }
+  .study .sentence .word.nospace {
+    page-break-after: avoid; }
+  .study .sentence .word:hover {
+    color: #766db0; }
   .study .sentence .word.nominalized {
     color: #d03a3e;
     background-color: #ffd02a;
     padding: 0 0.15em;
     border-radius: 0.1em;
-    margin-right: 0.2em; }
+    margin-right: 0.2em;
+    display: flex; }
+    .study .sentence .word.nominalized .form {
+      font-size: 60%;
+      display: block; }
   .study .sentence .word.revealed {
     font-weight: bold; }
 
@@ -568,6 +578,21 @@ h3 {
       color: #f8f7f5;
       padding: 4px 8px;
       font-size: 80%;
-      font-weight: bold; }
+      font-weight: bold;
+      cursor: pointer; }
     .study ul.unknown li .iKnew:hover {
       background-color: #279695; }
+
+.study .debugButtonBar {
+  position: fixed;
+  bottom: 0;
+  right: 0; }
+
+.study .knowledgeInspector {
+  display: flex;
+  align-content: stretch;
+  flex-wrap: wrap; }
+  .study .knowledgeInspector .deck {
+    flex-grow: 1; }
+    .study .knowledgeInspector .deck li.current {
+      font-weight: bold; }

@@ -49,7 +49,6 @@ export class LeitnerKnowledge {
             let oldDeck = this.deckByFact[exposure.fact]
 
             if (exposure.knew == Knowledge.MAYBE) {
-console.log('unclear' + exposure.fact)
                 return
             }
 
@@ -65,7 +64,6 @@ console.log('unclear' + exposure.fact)
             }
 
             if (!oldDeck) {
-console.log('wasnt studying ' + exposure.fact)
                 if (exposure.knew == Knowledge.DIDNT_KNOW) {
                     let wasKnown = this.known.has(exposure.fact)
 
@@ -88,14 +86,11 @@ console.log('wasnt studying ' + exposure.fact)
 
                 if (exposure.knew == Knowledge.DIDNT_KNOW) {
                     newDeck = oldDeck.previous
-console.log('wrong ' + exposure.fact)
-
                     if (!newDeck) {
                         return
                     }
                 }
                 else {
-console.log('right ' + exposure.fact)
                     newDeck = oldDeck.next
                 }
 
@@ -114,7 +109,6 @@ console.log('right ' + exposure.fact)
                     this.size++
                 }
                 else {
-console.log('learned ' + exposure.fact)
                     this.known.add(exposure.fact)
                 }
 
