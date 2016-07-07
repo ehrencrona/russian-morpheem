@@ -76,6 +76,12 @@ input[type=text], input[type=number] {
     border: 2px solid darken($color-bg-light, 10%);;
 }
 
+.border-box-sizing {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .smallFont {
     font-size: 60%;
     font-weight: 900;
@@ -255,6 +261,14 @@ input[type=text], input[type=number] {
 
     .sentenceEnd {
         flex-grow: 1;
+    }
+}
+
+.sentenceTranslation {    
+    input {
+        @extend .border-box-sizing;
+        width: 100%;
+        padding: $unit;
     }
 }
 
@@ -803,4 +817,80 @@ h3 {
 
     color: $color8;
     background-color: $color6-light;
+}
+
+.study {
+    .sentenceId {
+        margin: 2 * $unit;
+        text-align: right;
+        font-size: 80%; 
+    }
+
+    .buttonBar {
+        justify-content: center;
+    }
+
+    .sentence {
+        margin: 1em;
+        font-size: 5em;
+        display: flex;
+        flex-wrap: wrap;
+
+        .word {
+            margin-right: 0.4em;
+        }
+
+        .word.nominalized {
+            color: $color7;
+            background-color: $color6;
+            padding: 0 0.15em;
+            border-radius: 0.1em;
+            margin-right: 0.2em;
+        }
+
+        .word.revealed {
+            font-weight: bold;
+        }
+    }
+
+    ul.unknown {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+
+        li {
+            @extend .border-box-sizing;
+            padding: 2 * $unit;
+            width: 25%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            .content {
+                background-color: $color1;
+                flex-grow: 1;
+
+                padding: 2 * $unit;
+                text-align: center;
+
+                strong {
+                    white-space: nowrap;
+                }
+            }
+
+            .iKnew {
+                text-align: right;
+                background-color: $color2;
+                color: $color9;
+                padding: $unit 2 * $unit;
+                font-size: 80%; 
+                font-weight: bold;
+            }
+
+            .iKnew:hover {
+                background-color: darken($color2, 5%)
+            }
+        }
+    }
 }

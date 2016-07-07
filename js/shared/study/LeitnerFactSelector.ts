@@ -27,9 +27,11 @@ export default class LeitnerFactSelector {
             maxScore += deckScore(index)  
         })
 
-        if (this.knowledge.size < MAX_PARALLEL_STUDY_COUNT) {
-            maxScore *= 1 + NEW_FACT_RATE
-        }
+        let chanceOfNewFact = (1 + NEW_FACT_RATE) * Math.max(MAX_PARALLEL_STUDY_COUNT - this.knowledge.size, 0)
+        
+console.log('pick new with chance', chanceOfNewFact)
+
+        maxScore *= chanceOfNewFact 
 
         let score = Math.random() * maxScore
 
@@ -38,6 +40,7 @@ export default class LeitnerFactSelector {
 
             return score < 0
         })
+console.log('score left', score)
 
         if (deck) {
             return deck.facts[Math.floor(deck.facts.length * Math.random())]
@@ -50,7 +53,7 @@ export default class LeitnerFactSelector {
 
     getNewFact(): Fact {
 
-        return this.facts.find((fact) => !this.knowledge.isKnown(fact))
+        return this.facts.find((fact) => !this.knowledge.isKnown(fact) && !this.knowledge.isStudying(fact))
 
     }
 

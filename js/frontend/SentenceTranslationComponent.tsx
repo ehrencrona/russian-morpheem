@@ -3,6 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../shared/Corpus'
 import Sentence from '../shared/Sentence'
+import Sentences from '../shared/Sentences'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../shared/metadata/SentenceStatus'
 
 interface Props {
@@ -17,10 +18,21 @@ let React = { createElement: createElement }
 
 export default class SentenceTranslationComponent extends Component<Props, State> {
 
+    save(english: string) {
+        let sentence = this.props.sentence
+
+        if (english != sentence.english) {
+            sentence.english = english.trim()
+            this.props.corpus.sentences.store(sentence)
+        }
+    }
+
     render() {
-        return <div>
+        return <div className='sentenceTranslation'>
             <h3>English</h3>
-            { this.props.sentence.english }
+
+            <input type='text' defaultValue={ this.props.sentence.english } 
+                onBlur={ (e) => this.save((e.target as HTMLInputElement).value) }/> 
         </div>        
     }
 

@@ -187,11 +187,17 @@ export default class Inflection {
         if (ending.relativeTo) {
             let inflectedRelative = this.getInflectedForm(stem, ending.relativeTo)
 
-            stem = inflectedRelative.form
-            transforms = transforms.concat(inflectedRelative.transforms)
+            if (inflectedRelative) {
+                stem = inflectedRelative.form
+                transforms = transforms.concat(inflectedRelative.transforms)
 
-            if (stem == null) {
-                throw new Error(`The form ${ending.relativeTo} that ${form} was relative to in ${this.id} did not exist.`)
+                if (stem == null) {
+                    throw new Error(`The form ${ending.relativeTo} that ${form} was relative to in ${this.id} did not exist.`)
+                }
+            }
+            else {
+                console.warn(this.id + '@' + form + ' refers to undefined form ' + ending.relativeTo)
+                stem = ''
             }
         }
 

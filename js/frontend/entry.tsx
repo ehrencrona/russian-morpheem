@@ -2,7 +2,7 @@
 /// <reference path="../../typings/react/react-dom.d.ts" />
 
 import LoginContainer from './LoginContainer'
-import StudyComponent from './study/StudyComponent'
+import StudyContainerComponent from './study/StudyContainerComponent'
 import TabSetComponent from './TabSetComponent'
 
 import 'drag-drop-webkit-mobile';
@@ -31,6 +31,6 @@ renderIntoId(
 )
 
 renderIntoId(
-    <LoginContainer factory={ createFactory(StudyComponent) }/>,
+    <LoginContainer factory={ createFactory(StudyContainerComponent) }/>,
     'react-study-root'
 )

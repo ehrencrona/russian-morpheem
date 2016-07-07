@@ -132,6 +132,8 @@ export default class UnstudiedWord {
         if (homonyms) {
             let form
 
+            homonyms = homonyms.filter((other) => other !== this)
+
             if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
                 form = this.classifier
             }
@@ -142,4 +144,8 @@ export default class UnstudiedWord {
             return form
         }
     } 
+
+    toText() {
+        return this.jp
+    }
 }

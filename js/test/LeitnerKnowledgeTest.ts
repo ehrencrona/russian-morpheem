@@ -5,16 +5,16 @@ import { LeitnerKnowledge, DECK_COUNT } from '../shared/study/LeitnerKnowledge'
 import Facts from '../shared/fact/Facts';
 import Word from '../shared/Word';
 
-import { Exposure, SKILL_KNEW, SKILL_DIDNT_KNOW, SKILL_UNCLEAR } from '../shared/study/Exposure'
+import { Exposure, Knowledge } from '../shared/study/Exposure'
 
 function expose(factId: string, knew: boolean): Exposure {
     return {
         fact: factId,
         sentence: 4711,
         user: 4711,
-        skill: (knew ? SKILL_KNEW : SKILL_DIDNT_KNOW),
+        knew: (knew ? Knowledge.KNEW : Knowledge.DIDNT_KNOW),
         time: new Date(),
-        type: 0
+        skill: 0
     }
 }
 

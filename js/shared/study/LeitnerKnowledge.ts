@@ -2,7 +2,7 @@
 import Corpus from '../Corpus'
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
-import { Exposure, SKILL_KNEW, SKILL_DIDNT_KNOW, SKILL_UNCLEAR } from '../study/Exposure'
+import { Exposure, Knowledge } from '../study/Exposure'
 
 export const DECK_COUNT = 7
 
@@ -22,6 +22,7 @@ export class LeitnerKnowledge {
     decks: Deck[] = []
     deckByFact: { [factId: string]: Deck } = {}
     size: number = 0
+    factFilter: (fact: Fact) => boolean = (fact) => true
 
     constructor(public facts: Facts) {
         this.facts = facts
@@ -47,11 +48,16 @@ export class LeitnerKnowledge {
 
             let oldDeck = this.deckByFact[exposure.fact]
 
-            if (exposure.skill == SKILL_UNCLEAR) {
+            if (exposure.knew == Knowledge.MAYBE) {
+console.log('unclear' + exposure.fact)
                 return
             }
 
             let fact = this.facts.get(exposure.fact)
+
+            if (!this.factFilter(fact)) {
+                return
+            }
 
             if (!fact) {
                 console.warn(`Unknown fact ${exposure.fact}.`)
@@ -59,7 +65,8 @@ export class LeitnerKnowledge {
             }
 
             if (!oldDeck) {
-                if (exposure.skill == SKILL_DIDNT_KNOW) {
+console.log('wasnt studying ' + exposure.fact)
+                if (exposure.knew == Knowledge.DIDNT_KNOW) {
                     let wasKnown = this.known.has(exposure.fact)
 
                     if (wasKnown) {
@@ -72,18 +79,23 @@ export class LeitnerKnowledge {
                     this.deckByFact[exposure.fact] = deck
                     this.size++
                 }
+                else {
+                    this.known.add(exposure.fact)
+                }
             }
             else {
                 let newDeck: Deck 
 
-                if (exposure.skill == SKILL_DIDNT_KNOW) {
+                if (exposure.knew == Knowledge.DIDNT_KNOW) {
                     newDeck = oldDeck.previous
+console.log('wrong ' + exposure.fact)
 
                     if (!newDeck) {
                         return
                     }
                 }
                 else {
+console.log('right ' + exposure.fact)
                     newDeck = oldDeck.next
                 }
 
@@ -102,6 +114,7 @@ export class LeitnerKnowledge {
                     this.size++
                 }
                 else {
+console.log('learned ' + exposure.fact)
                     this.known.add(exposure.fact)
                 }
 
@@ -114,6 +127,10 @@ export class LeitnerKnowledge {
 
     isKnown(fact: Fact) {
         return this.known.has(fact.getId())
+    }
+
+    isStudying(fact: Fact) {
+        return this.deckOfFact(fact) >= 0
     }
 
     deckOfFact(fact: Fact): number {

@@ -19,7 +19,7 @@ export default class FrontendExposures implements Exposures {
     getExposures(userId: number): Promise<Exposure[]> {
         return xr.get(`/api/${ this.lang }/exposure`, {}, this.xrArgs)
         .then((xhr) => {
-            return xhr.data as Exposure[]
+            return xhr.data.map(convertDate) as Exposure[]
         })
         .catch(handleException)
     }
@@ -28,4 +28,9 @@ export default class FrontendExposures implements Exposures {
         throw new Error('Unsupported')
     }
 
+}
+
+function convertDate(entry) {
+    entry.time = new Date(entry.time)
+    return entry
 }

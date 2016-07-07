@@ -42,11 +42,11 @@ export default class EventsComponent extends Component<Props, State> {
             html = marked(eventAndSentence.event.text)
         }
         else {
-            html = eventAndSentence.sentence.toUnambiguousHtml(this.props.corpus.words)
+            html = eventAndSentence.event.text
         }
 
         if (!html.trim()) {
-            html = '&gt;Empty sentence&lt;'
+            html = '&lt;Empty sentence&gt;'
         }
 
         return <li key={ eventAndSentence.event._id }>

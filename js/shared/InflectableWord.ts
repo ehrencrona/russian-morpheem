@@ -48,6 +48,8 @@ export default class InflectableWord {
                 inflected.transforms.forEach((transform) => 
                     result.requiresFact(transform))
 
+                result.setEnglish(this.getEnglish())
+
                 result.classifier = this.classifier
             }
             catch (e) {
@@ -182,5 +184,9 @@ export default class InflectableWord {
         }
 
         return maskId
+    }
+
+    toText() {
+        return this.getDefaultInflection().toText()
     }
 }

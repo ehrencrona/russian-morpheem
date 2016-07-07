@@ -122,7 +122,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
                             else {
                                 let anyMatch = false
                                 let allMatch = true
-                                
+
                                 let potentialWords = word as UnstudiedWord[];
 
                                 potentialWords.forEach((uw) => {

@@ -21,41 +21,64 @@ class Forms {
         return this.allForms.indexOf(form) >= 0
     }
 }
+
+export let FORM_NAMES = {
+
+    1: 'first person (I)',
+    2: 'second person (you)',
+    3: 'third person (s/he, it)',
+    '1pl': 'first person plural (we)',
+    '2pl': 'second person plural (you)',
+    '3pl': 'third person plural (they)',
+    'pastm': 'masculine past',
+    'pastn': 'neuter past',
+    'pastf': 'feminine past',
+    'impr': 'imperative',
+    'imprpl': 'imperative plural',
+
+    inf: 'infinitive',
     
+    m: 'masculine',
+    f: 'feminine',
+    n: 'neuter',
+    pl: 'plural',
+
+    nom: 'nominative',
+    gen: 'geninitive', 
+    dat: 'dative',
+    acc: 'accusative',
+    instr: 'instrumental',
+    prep: 'prepositional',
+
+    adv: 'adverb',
+    comp: 'comparative',
+
+    accanm: 'accusative masculine animate',
+    accinanm: 'accusative masculine inanimate',
+
+    accanpl: 'accusative masculine animate plural',
+    accinanpl: 'accusative masculine inanimate plural',
+
+    shortf: 'short form feminine',
+    shortn: 'short form neuter',
+    shortm: 'short form masculine',
+    shortpl: 'short form plural',
+
+    alt: 'alternative form',
+    'alt2': 'alternative form'
+}
+
+const CASES = [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ]
+
+CASES.forEach((form) => {
+    FORM_NAMES[form + 'pl'] = FORM_NAMES[form] + ' plural' 
+    FORM_NAMES[form + 'm'] = FORM_NAMES[form] + ' masculine' 
+    FORM_NAMES[form + 'n'] = FORM_NAMES[form] + ' neuter' 
+    FORM_NAMES[form + 'f'] = FORM_NAMES[form] + ' feminine'
+    FORM_NAMES[form + 'alt'] = FORM_NAMES[form] + ' alternative form'
+})
+
 const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
-    lat: {
-        verb: new Forms(
-            [ 'singular', 'plural', 'passive sg', 'passive pl' ],
-            [ 'infinitive', '1st person', '2nd person', '3rd person' ],
-            [ 
-                ['inf'], ['1', '1pl', 'pass1', 'pass1pl'], 
-                ['2', '2pl', 'pass2', 'pass2pl'], ['3', '3pl', 'pass3', 'pass3pl'] 
-            ]),
-
-        adj: new Forms(
-            [ 'masc sg', 'masc pl', 'fem sg', 'fem pl', 'n sg', 'n pl' ], 
-            [ 'nom', 'gen', 'dat', 'acc', 'abl', 'voc' ],
-            [                
-                [ 'nomm', 'nommpl', 'nomf', 'nomfpl', 'nomn', 'nomnpl' ],
-                [ 'genm', 'genmpl', 'genf', 'genfpl', 'genn', 'gennpl' ],
-                [ 'datm', 'datmpl', 'datf', 'datfpl', 'datn', 'datnpl' ],
-                [ 'accm', 'accmpl', 'accf', 'accfpl', 'accn', 'accnpl' ],
-                [ 'ablm', 'ablmpl', 'ablf', 'ablfpl', 'abln', 'ablnpl' ],
-                [ 'vocm', 'vocmpl', 'vocf', 'vocfpl', 'vocn', 'vocnpl' ]
-            ]),
-
-        n: new Forms(
-            [ 'singular', 'plural' ], 
-            [ 'nom', 'gen', 'dat', 'acc', 'abl', 'voc' ],
-            [        
-                ['nom','pl'],
-                ['gen','genpl'],
-                ['dat','datpl'],
-                ['acc','accpl'],
-                ['abl','ablpl'],
-                ['voc','vocpl']
-            ])
-    },
     ru: {
         v: new Forms(
             [ 'singular', 'plural' ],
