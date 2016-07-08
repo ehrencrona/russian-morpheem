@@ -21,6 +21,11 @@ export default class Sentence {
         this.author = author
     }
 
+    equals(other: Sentence) {
+        return this.words.length == other.words.length &&
+            !this.words.find((word, index) => word.getId() != other.words[index].getId())
+    }
+
     static fromJson(json, facts: Facts, words: Words) {
         let data = {
             id: json[0],

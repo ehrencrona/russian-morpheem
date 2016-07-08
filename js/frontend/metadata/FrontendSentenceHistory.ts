@@ -106,6 +106,10 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         throw new Error('Unsupported in frontend.')
     }
 
+    recordTranslate(sentence: Sentence, author: string) {
+        throw new Error('Unsupported in frontend.')
+    }
+
     getExistingExternalIds(externalIds: string[]): Promise<string[]> {
         throw new Error('Unsupported in frontend.')
     }

@@ -46,33 +46,37 @@ export default class InflectedWord extends Word {
         let homonyms = words.ambiguousForms[this.jp]
 
         if (homonyms) {
-            let form
+            let disambiguation
 
             homonyms = homonyms.filter((other) => other !== this)
 
             if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
-                form = this.classifier
+                disambiguation = this.classifier
+            }
+            else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
+                    otherWord.form == this.form)) {
+                disambiguation = this.form
             }
             else {
-                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && otherWord.form == this.form)) {
-                    form = this.form
+                let defaultInflection = this.word.getDefaultInflection().jp
+
+                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
+                    otherWord.word.getDefaultInflection().jp == defaultInflection)) {
+                    disambiguation = defaultInflection
+                } 
+                else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
+                    otherWord.word.getDefaultInflection().jp == defaultInflection && 
+                    otherWord.form == this.form)) {
+                    disambiguation = this.form + ', ' + defaultInflection
                 }
                 else {
-                    let defaultInflection = this.word.getDefaultInflection().jp
+                    console.warn(this + ' is ambiguous no matter what.', this.getId(), homonyms.map((w) => w.getId()))
 
-                    if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
-                        otherWord.word.getDefaultInflection().jp == defaultInflection)) {
-                        form = defaultInflection
-                    } 
-                    else {
-                        console.warn(this + ' is ambiguous no matter what.', this.getId(), homonyms.map((w) => w.getId()))
-
-                        form = this.form + (this.classifier ? ', ' + this.classifier : '') 
-                    }
+                    disambiguation = this.form + (this.classifier ? ', ' + this.classifier : '') 
                 }
             }
 
-            return form
+            return disambiguation
         }
     } 
 

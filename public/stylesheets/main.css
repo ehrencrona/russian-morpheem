@@ -533,26 +533,25 @@ h3 {
   font-size: 5em;
   display: flex;
   flex-wrap: wrap; }
-  .study .sentence .word {
-    cursor: pointer; }
-  .study .sentence .word.space {
+  .study .sentence .group {
+    display: flex;
     margin-right: 0.4em; }
-  .study .sentence .word.nospace {
-    page-break-after: avoid; }
-  .study .sentence .word:hover {
-    color: #766db0; }
-  .study .sentence .word.nominalized {
-    color: #d03a3e;
-    background-color: #ffd02a;
-    padding: 0 0.15em;
-    border-radius: 0.1em;
-    margin-right: 0.2em;
-    display: flex; }
-    .study .sentence .word.nominalized .form {
-      font-size: 60%;
-      display: block; }
-  .study .sentence .word.revealed {
-    font-weight: bold; }
+    .study .sentence .group .word {
+      cursor: pointer; }
+    .study .sentence .group .word:hover {
+      color: #766db0; }
+    .study .sentence .group .word.nominalized {
+      color: #d03a3e;
+      background-color: #ffd02a;
+      padding: 0 0.15em;
+      border-radius: 0.1em;
+      margin-right: 0.2em;
+      display: flex; }
+      .study .sentence .group .word.nominalized .form {
+        font-size: 60%;
+        display: block; }
+    .study .sentence .group .word.revealed {
+      font-weight: bold; }
 
 .study ul.unknown {
   display: flex;

@@ -207,6 +207,17 @@ export default class StudyComponent extends Component<Props, State> {
             words.push(this.props.corpus.words.get('.'))
         }
 
+        let groupedWords: UnstudiedWord[][] = []
+
+        words.forEach((word) => {
+            if (isWordWithSpaceBefore(word)) {
+                groupedWords.push([word])
+            }
+            else {
+                groupedWords[groupedWords.length-1].push(word)
+            }
+        })
+
         return <div className='study'>
                 <div className='sentenceId'>
                     (<a href={ 'http://grammar.ru.morpheem.com/#' + this.props.sentence.id }>
@@ -216,58 +227,53 @@ export default class StudyComponent extends Component<Props, State> {
 
                 <div className='sentence'>
                 { 
-                    words.map((word, index) => {
-                        let explain = () => {
-                            this.unknownWord(word)
+                    groupedWords.map((words) => {
+                        return <div className='group'>
+                        {
+                            words.map((word, index) => {
+                                let explain = () => {
+                                    this.unknownWord(word)
 
-                            if (word === studiedWord && this.state.stage == Stage.REVEAL) {
-                                this.setState({ stage: Stage.CONFIRM })
-                            }
+                                    if (word === studiedWord && this.state.stage == Stage.REVEAL) {
+                                        this.setState({ stage: Stage.CONFIRM })
+                                    }
+                                }
+
+                                let className = ''
+                                let text = word.jp
+
+                                let formHint
+
+                                if (word instanceof InflectedWord &&
+                                    this.isStudiedForm(word)) {
+                                    studiedWord = word
+
+                                    if (reveal) {
+                                        className += ' revealed' 
+                                    }
+                                    else {
+                                        className += ' nominalized' 
+                                        text = word.getDefaultInflection().jp 
+                                    }
+                                }
+
+                                if (capitalize) {
+                                    text = text[0].toUpperCase() + text.substr(1)
+                                }
+
+                                capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
+                                
+                                return <div key={ index } className={ 'word ' + className } onClick={ explain }>
+                                        <div>{ text }</div>
+                                    { (formHint ?
+                                        <div className='form'>{ formHint }</div>
+                                        :
+                                        <div></div>                                
+                                    ) }
+                                </div>
+                            })
                         }
-
-
-                        let className = ''
-                        let text = word.jp
-                        
-                        let nextWord = words[index+1]
-
-                        if (nextWord && (nextWord.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(nextWord.jp) < 0)) {
-                            className = 'space'
-                        }
-                        else {
-                            className = 'nospace'
-                        }
-
-                        let formHint
-
-                        if (word instanceof InflectedWord &&
-                            this.isStudiedForm(word)) {
-                            studiedWord = word
-
-                            if (reveal) {
-                                className += ' revealed' 
-                            }
-                            else {
-                                className += ' nominalized' 
-                                text = word.getDefaultInflection().jp 
-                            }
-
-                        }
-
-                        if (capitalize) {
-                            text = text[0].toUpperCase() + text.substr(1)
-                        }
-
-                        capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
-                        
-                        return <div key={ index } className={ 'word ' + className } onClick={ explain }>
-                                <div>{ text }</div>
-                            { (formHint ?
-                                <div className='form'>{ formHint }</div>
-                                :
-                                <div></div>                                
-                            ) }
-                        </div>
+                        </div>                        
                     })
                 }
                 </div>
@@ -387,4 +393,8 @@ function getWordMeaningFactId(word: UnstudiedWord) {
 
 function excludeFact(exclude: UnknownFact, array: UnknownFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
+}
+
+function isWordWithSpaceBefore(word: UnstudiedWord) {
+    return (word.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) < 0)
 }

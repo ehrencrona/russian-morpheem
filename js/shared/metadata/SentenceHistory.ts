@@ -32,6 +32,8 @@ export interface SentenceHistory {
 
     recordImport(sentence: Sentence, author: string)
 
+    recordTranslate(sentence: Sentence, author: string)
+
     getEventsByDate(eventType: string): Promise<SentencesByDate>
 
     getNewsfeed(author?: string): Promise<Event[]>

@@ -12,6 +12,8 @@ import { notifyAdd } from './notifySlack'
 
 let lastSave
 
+export let storeSuccess = true
+
 export default function listenForChanges(corpus: Corpus) {    
 
     function delay(func: () => void) {
@@ -30,25 +32,37 @@ export default function listenForChanges(corpus: Corpus) {
         }
     }
 
+    function handleWriteError(e) {
+        console.error(e.stack)
+        storeSuccess = false
+    }
+
+    function handleWriteSuccess() {
+        storeSuccess = true
+    }
+
     let saveSentences = delay(() => {
         lastSave = new Date().getTime()
 
         writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words)
-        .catch((e) => console.error(e.stack))
+        .then(handleWriteSuccess)
+        .catch(handleWriteError)
     })
 
     let saveFacts = delay(() => {
         lastSave = new Date().getTime()
 
         writeFactFile(corpusDir + '/facts.txt', corpus.facts)
-        .catch((e) => console.error(e.stack))
+        .then(handleWriteSuccess)
+        .catch(handleWriteError)
     })
 
     let saveInflections = delay(() => {
         lastSave = new Date().getTime()
         
         writeInflectionsFile(corpusDir + '/inflections.txt', corpus.inflections, lang)
-        .catch((e) => console.error(e.stack))
+        .then(handleWriteSuccess)
+        .catch(handleWriteError)
     })
 
     let corpusDir = getCorpusDir(corpus.lang)

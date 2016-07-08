@@ -33,6 +33,7 @@ export const EVENT_DELETE = 'delete'
 export const EVENT_COMMENT = 'comment'
 export const EVENT_ACCEPT = 'accept'
 export const EVENT_IMPORT = 'importExternal'
+export const EVENT_TRANSLATE = 'translate'
 
 export default class BackendSentenceHistory implements SentenceHistory {
 
@@ -234,6 +235,10 @@ export default class BackendSentenceHistory implements SentenceHistory {
         else {
             this.recordEvent(EVENT_EDIT, sentence, author, true)
         }
+    }
+
+    recordTranslate(sentence: Sentence, author: string) {
+        this.recordEvent(EVENT_TRANSLATE, sentence, author, false, sentence.en())
     }
 
     recordEvent(type: string, sentence: Sentence, author: string, delay?: boolean, message?: string) {

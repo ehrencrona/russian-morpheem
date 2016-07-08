@@ -836,39 +836,37 @@ h3 {
         display: flex;
         flex-wrap: wrap;
 
-        .word {
-            cursor: pointer;
-        }
-
-        .word.space {
-            margin-right: 0.4em;
-        }
-
-        .word.nospace {
-            page-break-after: avoid;
-        }
-
-        .word:hover {
-            color: $color4;
-        }
-
-        .word.nominalized {
-            color: $color7;
-            background-color: $color6;
-            padding: 0 0.15em;
-            border-radius: 0.1em;
-            margin-right: 0.2em;
+        .group {
             display: flex;
+            margin-right: 0.4em;
 
-            .form {
-                font-size: 60%;
-                display: block;
+            .word {
+                cursor: pointer;
+            }
+
+            .word:hover {
+                color: $color4;
+            }
+
+            .word.nominalized {
+                color: $color7;
+                background-color: $color6;
+                padding: 0 0.15em;
+                border-radius: 0.1em;
+                margin-right: 0.2em;
+                display: flex;
+
+                .form {
+                    font-size: 60%;
+                    display: block;
+                }
+            }
+
+            .word.revealed {
+                font-weight: bold;
             }
         }
 
-        .word.revealed {
-            font-weight: bold;
-        }
     }
 
     ul.unknown {

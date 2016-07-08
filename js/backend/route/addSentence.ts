@@ -5,9 +5,16 @@ import Corpus from '../../shared/Corpus'
 import getAuthor from '../getAuthor'
 
 import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
+import { storeSuccess } from '../listenForChanges'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
+        if (!storeSuccess) {
+            res.status(304).send('Server cannot store data.');
+            console.error('Refused storing due to error state.')
+            return
+        }
+
         let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
 
         sentence.author = getAuthor(req).name

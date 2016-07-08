@@ -250,6 +250,8 @@ export default class WordSearchComponent extends Component<Props, State> {
             this.selectSuggestion(suggestion)
         }
 
+        let disambiguation = suggestion.word.getDisambiguation(this.props.corpus.words)
+
         return <div key={ suggestion.word.getId() } 
             draggable={ !!(suggestion.inflection || !(suggestion.word instanceof InflectedWord)) } 
             className='suggestion'
@@ -271,13 +273,8 @@ export default class WordSearchComponent extends Component<Props, State> {
                 :
                 <div/>) }
             <div className='word'>{ suggestion.word.jp }</div>
-            { suggestion.word.classifier ?
-                <div className='form'>{ suggestion.word.classifier }</div>
-                :
-                []
-            }
-            { suggestion.inflection ?
-                <div className='form'>{ suggestion.inflection.form }</div>
+            { disambiguation ?
+                <div className='form'>{ disambiguation }</div>
                 :
                 []
             }
