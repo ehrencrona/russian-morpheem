@@ -25,28 +25,31 @@ export default class LeitnerKnowledgeInspectorComponent extends Component<Props,
 
 
     render() {
+        let known = this.props.knowledge.known
 
-        return <div className='knowledgeInspector'>{
-                this.props.knowledge.decks.map((deck, index) => {
+        return <div className='knowledgeInspector'>
+                <div className='decks'>{
+                    this.props.knowledge.decks.map((deck, index) => {
 
-                    return <div className='deck'>
-                        <h3>Deck #{ index + 1 }</h3>
-                        <ul>
-                        {
-                            deck.facts.map((fact) => 
+                        return <div className='deck' key={index}>
+                            <h3>Deck #{ index + 1 }</h3>
+                            <ul>
+                            {
+                                deck.facts.map((fact) => 
 
-                                <li className={ this.props.currentFact && fact.getId() == this.props.currentFact.getId() ? 'current' : '' }>
-                                    { fact.getId() }
-                                </li>
+                                    <li key={ fact.getId() } className={ this.props.currentFact && fact.getId() == this.props.currentFact.getId() ? 'current' : '' }>
+                                        { fact.getId() }
+                                    </li>
 
-                            )
+                                )
 
-                        }
-                        </ul>
-                    </div>
+                            }
+                            </ul>
+                        </div>
 
-                })
-            }</div>
+                    })
+                }</div>
+            </div>
     }
 
 }

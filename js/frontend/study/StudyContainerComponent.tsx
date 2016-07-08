@@ -18,6 +18,7 @@ import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 
 import StudyComponent from './StudyComponent'
+import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 
 interface Props {
     corpus: Corpus,
@@ -36,6 +37,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     exposures: FrontendExposures
     factKnowledge: LeitnerKnowledge
     sentenceKnowledge: LastSawSentenceKnowledge
+    trivialKnowledge: TrivialKnowledge
 
     constructor(props) {
         super(props)
@@ -64,25 +66,28 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.exposures = new FrontendExposures(this.props.xrArgs, this.props.corpus.lang)
         this.factKnowledge = new LeitnerKnowledge(this.props.corpus.facts)
         this.sentenceKnowledge = new LastSawSentenceKnowledge()
+        this.trivialKnowledge = new TrivialKnowledge()
 
         this.factKnowledge.factFilter = isStudiedFact
 
         this.exposures
             .getExposures(-1)
             .then((exposures) => {                
-                this.factKnowledge.processExposures(exposures)
-                this.sentenceKnowledge.processExposures(exposures)
+                this.processExposures(exposures)
 
                 this.chooseSentence()
             })
-        
+    }
+
+    processExposures(exposures: Exposure[]) {
+        this.factKnowledge.processExposures(exposures)
+        this.sentenceKnowledge.processExposures(exposures)
+        this.trivialKnowledge.processExposures(exposures)
     }
 
     onAnswer(exposures: Exposure[]) {
         this.exposures.registerExposures(exposures)
-
-        this.factKnowledge.processExposures(exposures)
-        this.sentenceKnowledge.processExposures(exposures)
+        this.processExposures(exposures)
 
         this.chooseSentence()
     }
@@ -95,6 +100,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
                 fact={ this.state.fact } 
                 corpus={ this.props.corpus }
                 factKnowledge={ this.factKnowledge }
+                trivialKnowledge={ this.trivialKnowledge }
                 onAnswer={ (exposures) => this.onAnswer(exposures)} />
             
         }

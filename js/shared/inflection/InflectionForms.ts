@@ -22,61 +22,145 @@ class Forms {
     }
 }
 
-export let FORM_NAMES = {
-
-    1: 'first person (I)',
-    2: 'second person (you)',
-    3: 'third person (s/he, it)',
-    '1pl': 'first person plural (we)',
-    '2pl': 'second person plural (you)',
-    '3pl': 'third person plural (they)',
-    'pastm': 'masculine past',
-    'pastn': 'neuter past',
-    'pastf': 'feminine past',
-    'impr': 'imperative',
-    'imprpl': 'imperative plural',
-
-    inf: 'infinitive',
-    
-    m: 'masculine',
-    f: 'feminine',
-    n: 'neuter',
-    pl: 'plural',
-
-    nom: 'nominative',
-    gen: 'genitive', 
-    dat: 'dative',
-    acc: 'accusative',
-    instr: 'instrumental',
-    prep: 'prepositional',
-
-    adv: 'adverb',
-    comp: 'comparative',
-
-    accanm: 'accusative masculine animate',
-    accinanm: 'accusative masculine inanimate',
-
-    accanpl: 'accusative masculine animate plural',
-    accinanpl: 'accusative masculine inanimate plural',
-
-    shortf: 'short form feminine',
-    shortn: 'short form neuter',
-    shortm: 'short form masculine',
-    shortpl: 'short form plural',
-
-    alt: 'alternative form',
-    'alt2': 'alternative form'
+export enum Gender {
+    M, N, F
 }
 
-const CASES = [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ]
+export enum Tense {
+    PRESENT, PAST
+}
 
-CASES.forEach((form) => {
-    FORM_NAMES[form + 'pl'] = FORM_NAMES[form] + ' plural' 
-    FORM_NAMES[form + 'm'] = FORM_NAMES[form] + ' masculine' 
-    FORM_NAMES[form + 'n'] = FORM_NAMES[form] + ' neuter' 
-    FORM_NAMES[form + 'f'] = FORM_NAMES[form] + ' feminine'
-    FORM_NAMES[form + 'alt'] = FORM_NAMES[form] + ' alternative form'
-})
+export enum GrammaticalCase {
+    NOM, GEN, DAT, ACC, INSTR, PREP
+}
+
+export enum Person {
+    FIRST, SECOND, THIRD
+}
+
+export enum Animateness {
+    INANIMATE, ANIMATE
+}
+
+export enum Number {
+    SINGULAR, PLURAL
+}
+
+interface FormComponents {
+    gender?: Gender, 
+    tense?: Tense, 
+    grammaticalCase?: GrammaticalCase, 
+    animate?: Animateness, 
+    number?: Number, 
+    person?: Person 
+}
+
+export class InflectionForm {
+    gender: Gender
+    tense: Tense
+    grammaticalCase: GrammaticalCase 
+    animate: Animateness
+    number: Number
+    person: Person
+
+    constructor(public id: string, public name: string, used: FormComponents) {
+        this.id = id
+        this.name = name
+        this.gender = used.gender
+        this.tense = used.tense
+        this.grammaticalCase = used.grammaticalCase
+        this.animate = used.animate
+        this.number = used.number
+        this.person = used.person
+    }
+
+}
+
+export let FORMS: { [id: string]: InflectionForm } = {}
+
+function addForm(id: string, name: string, components: FormComponents) {
+    FORMS[id] = new InflectionForm(id, name, components)
+}
+
+
+addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),
+addForm('2', 'second person (you)', { person: Person.SECOND, number: Number.SINGULAR, tense: Tense.PRESENT }),
+addForm('3', 'third person (s/he, it)', { person: Person.THIRD, number: Number.SINGULAR, tense: Tense.PRESENT }),
+addForm('1pl', 'first person plural (we)', { person: Person.FIRST, number: Number.PLURAL, tense: Tense.PRESENT }),
+addForm('2pl', 'second person plural (you)', { person: Person.SECOND, number: Number.PLURAL, tense: Tense.PRESENT }),
+addForm('3pl', 'third person plural (they)', { person: Person.THIRD, number: Number.PLURAL, tense: Tense.PRESENT }),
+addForm('pastm', 'masculine past', { gender: Gender.M, number: Number.SINGULAR, tense: Tense.PAST })
+addForm('pastn', 'neuter past', { gender: Gender.N, number: Number.SINGULAR, tense: Tense.PAST })
+addForm('pastf', 'feminine past', { gender: Gender.F, number: Number.SINGULAR, tense: Tense.PAST })
+addForm('impr', 'imperative', { number: Number.SINGULAR })
+addForm('imprpl', 'imperative plural', { number: Number.PLURAL })
+addForm('inf', 'infinitive', {})
+
+addForm('m', 'masculine', { gender: Gender.M })
+addForm('f', 'feminine', { gender: Gender.F })
+addForm('n', 'neuter', { gender: Gender.N })
+addForm('pl', 'plural', { number: Number.PLURAL })
+
+addForm('nom', 'nominative', { grammaticalCase: GrammaticalCase.NOM, number: Number.SINGULAR })
+addForm('gen', 'genitive', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR })
+addForm('dat', 'dative', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR })
+addForm('acc', 'accusative', { grammaticalCase: GrammaticalCase.ACC, number: Number.SINGULAR })
+addForm('instr', 'instrumental', { grammaticalCase: GrammaticalCase.INSTR, number: Number.SINGULAR })
+addForm('prep', 'prepositional', { grammaticalCase: GrammaticalCase.PREP, number: Number.SINGULAR })
+
+addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
+addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })
+addForm('accf', 'accusative feminine', { grammaticalCase: GrammaticalCase.ACC, number: Number.SINGULAR, gender: Gender.F })
+addForm('instrf', 'instrumental feminine', { grammaticalCase: GrammaticalCase.INSTR, number: Number.SINGULAR, gender: Gender.F })
+addForm('prepf', 'prepositional feminine', { grammaticalCase: GrammaticalCase.PREP, number: Number.SINGULAR, gender: Gender.F })
+
+addForm('genn', 'genitive neuter', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.N })
+addForm('datn', 'dative neuter', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.N })
+addForm('accn', 'accusative neuter', { grammaticalCase: GrammaticalCase.ACC, number: Number.SINGULAR, gender: Gender.N })
+addForm('instrn', 'instrumental neuter', { grammaticalCase: GrammaticalCase.INSTR, number: Number.SINGULAR, gender: Gender.N })
+addForm('prepn', 'prepositional neuter', { grammaticalCase: GrammaticalCase.PREP, number: Number.SINGULAR, gender: Gender.N })
+
+addForm('genm', 'genitive masculine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.M })
+addForm('datm', 'dative masculine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.M })
+addForm('accanm', 'accusative masculine animate', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.ANIMATE, number: Number.SINGULAR })
+addForm('accinanm', 'accusative masculine inanimate', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.INANIMATE, number: Number.SINGULAR })
+addForm('instrm', 'instrumental masculine', { grammaticalCase: GrammaticalCase.INSTR, number: Number.SINGULAR, gender: Gender.M })
+addForm('prepm', 'prepositional masculine', { grammaticalCase: GrammaticalCase.PREP, number: Number.SINGULAR, gender: Gender.M })
+
+addForm('pl', 'nominative plural', { grammaticalCase: GrammaticalCase.NOM, number: Number.PLURAL })
+addForm('genpl', 'genitive plural', { grammaticalCase: GrammaticalCase.GEN, number: Number.PLURAL })
+addForm('datpl', 'dative plural', { grammaticalCase: GrammaticalCase.DAT, number: Number.PLURAL })
+addForm('accpl', 'accusative plural', { grammaticalCase: GrammaticalCase.ACC, number: Number.PLURAL })
+addForm('accanpl', 'accusative masculine animate plural', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.ANIMATE, number: Number.PLURAL })
+addForm('accinanpl', 'accusative masculine inanimate plural', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.INANIMATE, number: Number.PLURAL })
+addForm('instrpl', 'instrumental plural', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
+addForm('preppl', 'prepositional plural', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
+
+addForm('adv', 'adverb', {})
+addForm('comp', 'comparative', {})
+
+addForm('shortf', 'short form feminine', { gender: Gender.F, number: Number.SINGULAR })
+addForm('shortn', 'short form neuter', { gender: Gender.N, number: Number.SINGULAR })
+addForm('shortm', 'short form masculine', { gender: Gender.M, number: Number.SINGULAR })
+addForm('shortpl', 'short form plural', { number: Number.PLURAL })
+
+addForm('alt', 'alternative form', {})
+addForm('alt2', 'alternative form', {})
+addForm('std', 'standard form', {})
+
+export function getFormName(formId: string) {
+    
+    let form = FORMS[formId]
+
+    if (form) {
+        return form.name
+    }
+    else {
+        console.warn('Unknown form ' + formId + '.')
+
+        return formId
+    }
+}
 
 const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     ru: {
@@ -127,11 +211,22 @@ const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
             [ ],
             [ [ 'std', 'alt', 'alt2' ] ]
         ),
-        pron: new Forms(
+        case: new Forms(
             [ ],
             [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
             [ ['nom', 'nomalt'], ['gen', 'genalt'], ['dat', 'datalt'], ['acc', 'accalt'], ['instr', 'instralt'], ['prep', 'prepalt'] ]
-        )
+        ),
+        pron: new Forms(
+            [ 'singular', 'plural' ], 
+            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
+            [        
+                [ [ 'nom', 'nomalt'], [ 'pl', 'plalt' ]],
+                [ [ 'gen', 'genalt'], [ 'genpl', 'genplalt' ]],
+                [ [ 'dat', 'datalt'], [ 'datpl', 'datplalt' ]],
+                [ [ 'acc', 'accalt'], [ 'accpl', 'accplalt' ]],
+                [ [ 'instr', 'instralt'], [ 'instrpl', 'instrplalt' ]],
+                [ [ 'prep', 'prepalt'], [ 'preppl', 'prepplalt' ]]
+            ]),
     }
 }
 

@@ -6,7 +6,6 @@ import InflectedWord from '../../shared/InflectedWord'
 import Translatable from '../../shared/Translatable'
 
 import UnknownFact from './UnknownFact'
-import { FORM_NAMES } from '../../shared/inflection/InflectionForms' 
 
 import { FactComponentProps } from './UnknownFactComponent'
 

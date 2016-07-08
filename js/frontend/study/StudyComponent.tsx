@@ -6,7 +6,6 @@ import Corpus from '../../shared/Corpus'
 import { findSentencesForFact } from '../../shared/IndexSentencesByFact'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import { FORM_NAMES } from '../../shared/inflection/InflectionForms'
 
 import Sentence from '../../shared/Sentence'
 
@@ -14,22 +13,31 @@ import InflectableWord from '../../shared/InflectableWord'
 import InflectedWord from '../../shared/InflectedWord'
 import UnstudiedWord from '../../shared/UnstudiedWord'
 
-import UnknownFact from './UnknownFact'
-import UnknownFactComponent from './UnknownFactComponent'
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
 
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
+import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
+import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
+
+import { FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
+
+import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 
 import LeitnerKnowledgeInspectorComponent from './LeitnerKnowledgeInspectorComponent'
+import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
+
+import UnknownFact from './UnknownFact'
+import UnknownFactComponent from './UnknownFactComponent'
 import FrontendExposures from './FrontendExposures'
-import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
+
 
 interface Props {
     sentence: Sentence,
     corpus: Corpus,
     fact: InflectionFact,
     factKnowledge: LeitnerKnowledge,
+    trivialKnowledge: TrivialKnowledge,
     onAnswer: (exposures: Exposure[]) => void
 }
 
@@ -38,6 +46,7 @@ interface State {
     knownFacts?: UnknownFact[],
     stage?: Stage,
     showDecks?: boolean
+    showComments?: boolean
 }
 
 let React = { createElement: createElement }
@@ -70,7 +79,6 @@ export default class StudyComponent extends Component<Props, State> {
 
         return word instanceof InflectedWord &&
             word.form == form &&
-            word.word.inflection.pos == this.props.fact.inflection.pos &&
             word.word.inflection.getEnding(form) === this.props.fact.inflection.getEnding(form)
     }
 
@@ -128,8 +136,9 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
-    unknownWord(word: UnstudiedWord) {
-        let facts: UnknownFact[] = []
+    explainWord(word: UnstudiedWord) {
+        let known: UnknownFact[] = [], 
+            unknown: UnknownFact[] = []
 
         word.visitFacts((fact: Fact) => {
             if (fact instanceof InflectionFact && 
@@ -137,38 +146,29 @@ export default class StudyComponent extends Component<Props, State> {
                 return
             }
 
-            facts.push({
+            (this.props.trivialKnowledge.isKnown(fact) ?
+                known :
+                unknown).push({
                 fact: fact,
                 word: word
             })
         })
 
-        this.unknown(...facts)
+        this.addFacts(known, unknown)
     }
 
-    unknown(...facts: UnknownFact[]) {
+    addFacts(addKnown: UnknownFact[], addUnknown: UnknownFact[]) {
         let unknown = this.state.unknownFacts
         let known = this.state.knownFacts 
 
-        facts.forEach((fact) => unknown = excludeFact(fact, unknown))
-        facts.forEach((fact) => known = excludeFact(fact, known))
+        let addAll = addKnown.concat(addUnknown)
+
+        addAll.forEach((fact) => unknown = excludeFact(fact, unknown))
+        addAll.forEach((fact) => known = excludeFact(fact, known))
 
         this.setState({
-            unknownFacts: unknown.concat(facts),
-            knownFacts: known
-        })
-    }
-
-    known(...facts: UnknownFact[]) {
-        let unknown = this.state.unknownFacts
-        let known = this.state.knownFacts 
-
-        facts.forEach((fact) => unknown = excludeFact(fact, unknown))
-        facts.forEach((fact) => known = excludeFact(fact, known))
-
-        this.setState({
-            unknownFacts: unknown,
-            knownFacts: known.concat(facts)
+            unknownFacts: unknown.concat(addUnknown),
+            knownFacts: known.concat(addKnown)
         })
     }
 
@@ -186,13 +186,81 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     iWasWrong(studiedWord) {
-        this.unknown(...this.unknownFactsFromFact(this.props.fact, studiedWord))
+        this.addFacts([], this.unknownFactsFromFact(this.props.fact, studiedWord))
 
         this.setState({ stage: Stage.CONFIRM })
     }
 
     iWasRight(studiedWord) {
         this.next(...this.unknownFactsFromFact(this.props.fact, studiedWord))
+    }
+
+    getFormHint() {
+        let form = FORMS[this.props.fact.form] 
+
+        if (!form) {
+            console.warn(`Unknown form ${this.props.fact.form}.`)
+            return ''
+        }
+
+        let targetTense = form.tense
+        let targetNumber = form.number
+        let targetGender = form.gender
+
+        let tenseHintNeeded = !!targetTense
+        let numberHintNeeded = !!targetNumber
+
+        // we will need to know the gender of nouns for this to work, we don't yet.
+        let genderHintNeeded = false
+
+        this.props.sentence.words.forEach((word) => {
+
+            if (word instanceof InflectedWord && !this.isStudiedForm(word)) {
+                let form = FORMS[word.form]
+
+                if (!form) {
+                    console.warn(`Unknown form ${word.form}.`)
+                    return
+                }
+
+                if (tenseHintNeeded && form.tense && form.tense == targetTense) {
+                    tenseHintNeeded = false
+                }
+
+                if (numberHintNeeded && form.number && form.number == targetNumber) {
+                    numberHintNeeded = false
+                }
+
+                if (genderHintNeeded && form.gender && form.gender == targetGender) {
+                    genderHintNeeded = false
+                }
+            }
+
+        })
+
+        let result = ''
+
+        if (tenseHintNeeded) {
+            result += (targetTense == Tense.PAST ? 'past' : 'present') 
+        }
+
+        if (numberHintNeeded) {
+            if (result) {
+                result += ', '
+            }
+
+            result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
+        }
+
+        if (genderHintNeeded) {
+            if (result) {
+                result += ', '
+            }
+
+            result += (targetGender == Gender.M ? 'masculine' : (targetGender == Gender.N ? 'neuter' : 'feminine')) 
+        }
+
+        return result         
     }
 
     render() {
@@ -220,19 +288,19 @@ export default class StudyComponent extends Component<Props, State> {
 
         return <div className='study'>
                 <div className='sentenceId'>
-                    (<a href={ 'http://grammar.ru.morpheem.com/#' + this.props.sentence.id }>
+                    (<a href={ 'http://grammar.ru.morpheem.com/#' + this.props.sentence.id } target='backend'>
                         #{ this.props.sentence.id})
                     </a>)
                 </div>
 
                 <div className='sentence'>
                 { 
-                    groupedWords.map((words) => {
-                        return <div className='group'>
+                    groupedWords.map((words, index) => {
+                        return <div className='group' key={ index }>
                         {
                             words.map((word, index) => {
                                 let explain = () => {
-                                    this.unknownWord(word)
+                                    this.explainWord(word)
 
                                     if (word === studiedWord && this.state.stage == Stage.REVEAL) {
                                         this.setState({ stage: Stage.CONFIRM })
@@ -247,6 +315,10 @@ export default class StudyComponent extends Component<Props, State> {
                                 if (word instanceof InflectedWord &&
                                     this.isStudiedForm(word)) {
                                     studiedWord = word
+
+                                    if (this.state.stage == Stage.TEST) {
+                                        formHint = this.getFormHint() 
+                                    }
 
                                     if (reveal) {
                                         className += ' revealed' 
@@ -315,7 +387,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
                                     factKnowledge={ this.props.factKnowledge } 
-                                    onKnew={ (fact: UnknownFact) => this.known(fact) }
+                                    onKnew={ (fact: UnknownFact) => this.addFacts([ fact ], []) }
                                     known={ true }
                                 />)
                         }
@@ -340,7 +412,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
                                     factKnowledge={ this.props.factKnowledge } 
-                                    onKnew={ (fact: UnknownFact) => this.unknown(fact) }
+                                    onKnew={ (fact: UnknownFact) => this.addFacts([], [ fact ]) }
                                     known={ false }
                                 />)
                         }
@@ -351,6 +423,26 @@ export default class StudyComponent extends Component<Props, State> {
 
                     <div/>
                 )}
+
+                {
+                    (this.state.showComments ?
+
+                    <div>
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showComments: false }) }>Close</div>
+                        </div>
+
+                        <SentenceHistoryComponent 
+                            corpus={ this.props.corpus }
+                            sentence={ this.props.sentence }
+                            commentBoxOpen={ true }
+                            />
+                    </div>
+                        
+                        :
+
+                    <div/>)
+                }
 
                 {
                     (this.state.showDecks ?
@@ -365,15 +457,37 @@ export default class StudyComponent extends Component<Props, State> {
                                 knowledge={ this.props.factKnowledge }
                                 currentFact={ this.props.fact }/>
 
+                            <TrivialKnowledgeInspectorComponent
+                                knowledge={ this.props.trivialKnowledge } />
+
                         </div>                    
                     
                     :
 
-                        <div className='debugButtonBar'>
-                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>What am I studying?</div>
-                        </div>
+                        <div/>
 
                     )
+                }
+
+                {
+
+                    (!this.state.showComments && !this.state.showDecks ? 
+                    
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showComments: true }) }>
+                                Comment
+                            </div>
+                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
+                                What am I studying?
+                            </div>
+                        </div>
+
+                    :
+                    
+                        <div/>
+                    
+                    )
+
                 }
 
             </div>

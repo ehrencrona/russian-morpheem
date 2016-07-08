@@ -143,7 +143,7 @@ export default class Inflection {
         if (result !== undefined) {
             return result
         }
-        else {                
+        else {
             return this.fromFirstParent((parent) => parent.getEnding(form))
         }
     }

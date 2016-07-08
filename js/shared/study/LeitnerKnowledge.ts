@@ -6,6 +6,8 @@ import { Exposure, Knowledge } from '../study/Exposure'
 
 export const DECK_COUNT = 7
 
+export const TRIVIAL_LIMIT = 3
+
 interface Deck {
 
     index: number,
@@ -17,7 +19,7 @@ interface Deck {
 }
 
 export class LeitnerKnowledge {
-    known: Set<string> = new Set()
+    known: { [ factId: string ]: number } = {}
 
     decks: Deck[] = []
     deckByFact: { [factId: string]: Deck } = {}
@@ -40,7 +42,6 @@ export class LeitnerKnowledge {
             }
         }
     }
-
 
     processExposures(exposures: Exposure[]) {
 
@@ -65,10 +66,10 @@ export class LeitnerKnowledge {
 
             if (!oldDeck) {
                 if (exposure.knew == Knowledge.DIDNT_KNOW) {
-                    let wasKnown = this.known.has(exposure.fact)
+                    let wasKnown = this.known[exposure.fact]
 
                     if (wasKnown) {
-                        this.known.delete(exposure.fact)
+                        delete this.known[exposure.fact]
                     }
 
                     let deck = (wasKnown ? this.decks[DECK_COUNT-1] : this.decks[0])
@@ -78,7 +79,7 @@ export class LeitnerKnowledge {
                     this.size++
                 }
                 else {
-                    this.known.add(exposure.fact)
+                    this.known[exposure.fact] = (this.known[exposure.fact] || 0) + 1
                 }
             }
             else {
@@ -109,7 +110,7 @@ export class LeitnerKnowledge {
                     this.size++
                 }
                 else {
-                    this.known.add(exposure.fact)
+                    this.known[exposure.fact] = 1
                 }
 
                 this.deckByFact[fact.getId()] = newDeck
@@ -120,7 +121,11 @@ export class LeitnerKnowledge {
     }
 
     isKnown(fact: Fact) {
-        return this.known.has(fact.getId())
+        return this.known[fact.getId()]
+    }
+
+    isTrivial(fact: Fact) {
+        return this.known[fact.getId()] >= TRIVIAL_LIMIT
     }
 
     isStudying(fact: Fact) {

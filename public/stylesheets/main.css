@@ -546,9 +546,12 @@ h3 {
       padding: 0 0.15em;
       border-radius: 0.1em;
       margin-right: 0.2em;
-      display: flex; }
+      display: flex;
+      align-items: center; }
       .study .sentence .group .word.nominalized .form {
-        font-size: 60%;
+        color: #f8f7f5;
+        margin-left: 0.4em;
+        font-size: 40%;
         display: block; }
     .study .sentence .group .word.revealed {
       font-weight: bold; }
@@ -587,11 +590,11 @@ h3 {
   bottom: 0;
   right: 0; }
 
-.study .knowledgeInspector {
+.study .knowledgeInspector .decks {
   display: flex;
   align-content: stretch;
   flex-wrap: wrap; }
-  .study .knowledgeInspector .deck {
+  .study .knowledgeInspector .decks .deck {
     flex-grow: 1; }
-    .study .knowledgeInspector .deck li.current {
+    .study .knowledgeInspector .decks .deck li.current {
       font-weight: bold; }

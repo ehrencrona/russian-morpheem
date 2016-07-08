@@ -855,9 +855,12 @@ h3 {
                 border-radius: 0.1em;
                 margin-right: 0.2em;
                 display: flex;
+                align-items: center;
 
                 .form {
-                    font-size: 60%;
+                    color: $color9;
+                    margin-left: 0.4em;
+                    font-size: 40%;
                     display: block;
                 }
             }
@@ -918,15 +921,17 @@ h3 {
     }
 
     .knowledgeInspector {
-        display: flex;
-        align-content: stretch;
-        flex-wrap: wrap;
+        .decks {
+            display: flex;
+            align-content: stretch;
+            flex-wrap: wrap;
+            
+            .deck {
+                flex-grow: 1;
 
-        .deck {
-            flex-grow: 1;
-
-            li.current {
-                font-weight: bold;
+                li.current {
+                    font-weight: bold;
+                }
             }
         }
     }

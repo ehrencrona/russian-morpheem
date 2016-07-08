@@ -12,7 +12,8 @@ import marked = require('marked')
 
 interface Props {
     corpus: Corpus,
-    sentence: Sentence
+    sentence: Sentence,
+    commentBoxOpen?: boolean
 }
 
 interface State {
@@ -26,7 +27,9 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            commentOpen: props.commentBoxOpen
+        }
     }
 
     componentDidMount() {
