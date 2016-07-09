@@ -331,7 +331,7 @@ export default class WordSearchComponent extends Component<Props, State> {
 
                             let firstInexact = suggestions.findIndex((suggestion) => suggestion.word.jp != wordString)
 
-                            if (firstInexact < 0 || firstInexact == 1) {
+                            if (firstInexact < 0 || firstInexact == 1 || suggestions.length == 1) {
                                 this.selectSuggestion(suggestions[0])
                             }
                             else if (wordString) {
