@@ -77,7 +77,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
                 :
 
-                (this.state.status.status != STATUS_ACCEPTED ?
+                (this.state.status.status != STATUS_SUBMITTED ?
 
                     <div className='button' onClick={ () => this.resubmit() }>Resubmit</div>
 
