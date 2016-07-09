@@ -48,6 +48,12 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         this.setState({ status: this.state.status })
     }
 
+    resubmit() {
+        this.state.status.status = STATUS_SUBMITTED
+
+        this.setState({ status: this.state.status })
+    }
+
     render() {
         
         if (!this.state.status) {
@@ -71,7 +77,14 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
                 :
 
-                <div/>
+                (this.state.status.status != STATUS_ACCEPTED ?
+
+                    <div className='button' onClick={ () => this.resubmit() }>Resubmit</div>
+
+                    :
+
+                    <div/>)
+                
             }
 
         </div>)
