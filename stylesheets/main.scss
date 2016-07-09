@@ -877,7 +877,7 @@ h3 {
         flex-wrap: wrap;
         align-items: stretch;
 
-        li {
+        > li {
             @extend .border-box-sizing;
             padding: 2 * $unit;
             width: 25%;
@@ -935,4 +935,35 @@ h3 {
             }
         }
     }
+
 }
+
+    .overlayContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0,0,0,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .overlay {
+            padding: 4 * $unit;
+            flex-grow: 0;
+            flex-shrink: 0;
+            display: inline-block;
+            background-color: white;
+            text-align: left;
+        }
+
+        ul {
+            display: block;
+
+            li {
+                list-style-type: circle;
+                margin-left: 1.5em;
+            }
+        }
+    }

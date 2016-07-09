@@ -386,6 +386,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     hiddenFact={ (reveal ? null : this.props.fact) }
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
+                                    corpus={ this.props.corpus }
                                     factKnowledge={ this.props.factKnowledge } 
                                     onKnew={ (fact: UnknownFact) => this.addFacts([ fact ], []) }
                                     known={ true }
@@ -411,6 +412,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     hiddenFact={ (reveal ? null : this.props.fact) }
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
+                                    corpus={ this.props.corpus }
                                     factKnowledge={ this.props.factKnowledge } 
                                     onKnew={ (fact: UnknownFact) => this.addFacts([], [ fact ]) }
                                     known={ false }

@@ -94,7 +94,6 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
     render() {
         if (this.state.sentence) {
-
             return <StudyComponent 
                 sentence={ this.state.sentence }
                 fact={ this.state.fact } 

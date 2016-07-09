@@ -21,6 +21,7 @@ import EndingTransformFactComponent from './EndingTransformFactComponent'
 
 export interface FactComponentProps<FactType> {
     factKnowledge: LeitnerKnowledge,
+    corpus: Corpus,
     unknownFact: UnknownFact,
     fact: FactType,
 }
@@ -41,24 +42,28 @@ let unknownFactComponent = (props: Props) => {
     if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
         content = <DesiredFormFactComponent 
             fact={ fact as InflectionFact } 
+            corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
             unknownFact={ props.unknownFact } />
     }
     else if (fact instanceof InflectionFact) {
         content = <InflectionFactComponent 
             fact={ fact } 
+            corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
             unknownFact={ props.unknownFact } />
     }
     else if (fact instanceof InflectableWord || fact instanceof UnstudiedWord) {
         content = <WordFactComponent 
             fact={ fact } 
+            corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
             unknownFact={ props.unknownFact } />
     }
     else if (fact instanceof EndingTransform) {
         content = <EndingTransformFactComponent 
             fact={ fact } 
+            corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
             unknownFact={ props.unknownFact } />
     }
@@ -70,6 +75,7 @@ let unknownFactComponent = (props: Props) => {
 
     return <li>
             <div className='content'>{ content }</div>
+
             <div className='iKnew' onClick={ () => props.onKnew(props.unknownFact) }>{
                 !props.known ?
                     'I didn\'t know that' :
