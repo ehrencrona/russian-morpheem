@@ -12,32 +12,50 @@ interface Endings {
     default: string, 
     endings: { [s: string]: Ending },
     inherits: string[],
-    transforms: Transform[]
+    transforms: Transform[],
+    description: string
 }
 
 export function parseEndings(str: string, lang?: string, pos?: string, id?: string): Endings {
     let result : { [s: string]: Ending } = {}
     let inherits: string[] = []
     let defaultForm 
+    let description 
     let transforms: Transform[] = []
 
-    for (let pair of str.split(',')) {
-        let elements = pair.trim().split(/:? +/)
+    if (str.trim()[0] == '"') {
+        let descstr = str.trim()
 
-        if (elements.length > 2) {
+        let i = descstr.indexOf('"', 1)
+
+        if (i == -1) {
+            throw new Error('The description in ' + id + ' was never ended with a quotation mark.')
+        }
+
+        description = descstr.substr(1, i-1)
+
+        str = descstr.substr(i+1)
+    }
+
+    for (let pair of str.split(',')) {
+        let delimiter = pair.match(/ *(\w+):? +/)
+
+        if (!delimiter) {
             throw new Error('Expected "' + pair + '" in ' + id + ' to be of the form <form> <ending>, e.g. "gen y"')
         }
 
-        let endingString = (elements[1] || '').trim()
+        let endingString = pair.substr(delimiter.index + delimiter[0].length).trim()
+        let form = delimiter[1]
 
-        let form = elements[0].trim()
-        
-        if (form[form.length-1] == ':') {
-            form = form.substr(0, form.length-1)
+        if (!form) {
+            throw new Error(`Found form empty string in "${pair}" in ${id}`)
         }
 
         if (form == 'inherit') {
             inherits.push(endingString)
+        }
+        else if (form == 'describe') {
+            description = endingString
         }
         else if (form == 'transform') {
             let transform = allTransforms.get(endingString)
@@ -93,7 +111,7 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
         }            
     }
 
-    return { default: defaultForm, endings: result, inherits: inherits, transforms: transforms }
+    return { default: defaultForm, endings: result, inherits: inherits, transforms: transforms, description: description }
 }
 
 export default function parseInflectionsFile(data, lang?: string) {
@@ -135,7 +153,7 @@ export default function parseInflectionsFile(data, lang?: string) {
 
         let defaultForm = INFLECTION_FORMS[lang][pos].allForms[0]
 
-        let inflection = new Inflection(id, defaultForm, pos, endings.endings)
+        let inflection = new Inflection(id, defaultForm, pos, endings.endings, endings.description)
 
         endings.inherits.forEach((parentId) => {
             let parent = inflectionById[parentId]

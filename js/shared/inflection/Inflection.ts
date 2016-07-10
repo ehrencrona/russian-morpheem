@@ -16,7 +16,8 @@ interface InflectionJson {
     pos: string,
     endings: Endings,
     inherits?: string[],
-    transforms?: string[]
+    transforms?: string[],
+    description?: string
 }
 
 /** 
@@ -26,15 +27,16 @@ export default class Inflection {
     inherits: Inflection[] = []
     transforms: Transform[] = []
 
-    constructor(public id, public defaultForm, public pos, public endings: Endings) {
+    constructor(public id, public defaultForm, public pos, public endings: Endings, public description?: string) {
         this.id = id
         this.pos = pos
         this.defaultForm = defaultForm
         this.endings = endings
+        this.description = description
     } 
 
     static fromJson(json: InflectionJson, inflections: Inflections) {
-        let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings)
+        let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings, json.description)
         
         if (json.inherits) {
             json.inherits.forEach((inheritId) => {
@@ -62,7 +64,8 @@ export default class Inflection {
             pos: this.pos,
             endings: this.endings,
             inherits: (this.inherits.length ? this.inherits.map((inflection) => inflection.id) : undefined),
-            transforms: (this.transforms.length ? this.transforms.map((transform) => transform.getId()) : undefined)
+            transforms: (this.transforms.length ? this.transforms.map((transform) => transform.getId()) : undefined),
+            description: this.description
         }
     }
 

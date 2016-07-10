@@ -16,9 +16,12 @@ import Sentence from '../../shared/Sentence'
 import Exposure from '../../shared/study/Exposure'
 import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
+import InflectedWord from '../../shared/InflectedWord'
 
 import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
+
+import ExplainFormComponent  from './ExplainFormComponent'
 
 interface Props {
     corpus: Corpus,
@@ -94,6 +97,25 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
     render() {
         if (this.state.sentence) {
+
+
+            let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
+
+            knowledge.known['fem@genpl'] = 9;
+            knowledge.known['femka2@genpl'] = 9;
+            knowledge.known['neu@genpl'] = 9;
+            knowledge.known['-mascь@genpl'] = 9;
+
+if (true==true) {
+    return                <ExplainFormComponent 
+                        corpus={ this.props.corpus } 
+                        word={ this.props.corpus.words.get('встречать@pastpl') as InflectedWord } 
+                        knowledge={ knowledge }
+                        onClose={ () => { } } 
+                    />
+
+}
+
             return <StudyComponent 
                 sentence={ this.state.sentence }
                 fact={ this.state.fact } 

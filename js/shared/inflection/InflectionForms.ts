@@ -92,6 +92,7 @@ addForm('3pl', 'third person plural (they)', { person: Person.THIRD, number: Num
 addForm('pastm', 'masculine past', { gender: Gender.M, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastn', 'neuter past', { gender: Gender.N, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastf', 'feminine past', { gender: Gender.F, number: Number.SINGULAR, tense: Tense.PAST })
+addForm('pastpl', 'past plural', { number: Number.PLURAL, tense: Tense.PAST })
 addForm('impr', 'imperative', { number: Number.SINGULAR })
 addForm('imprpl', 'imperative plural', { number: Number.PLURAL })
 addForm('inf', 'infinitive', {})

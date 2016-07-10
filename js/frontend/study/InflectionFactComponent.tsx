@@ -22,8 +22,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
         let word = this.props.unknownFact.word
 
         if (word instanceof InflectedWord) {
-            return <div><strong>{ word.jp }</strong> is the 
-                <strong>{ getFormName(word.form) }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong>
+            return <div><strong>{ word.jp }</strong> is the <strong>{ getFormName(word.form) }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong>
                 
                 {
                     this.state && this.state.explain ?

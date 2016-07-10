@@ -24,7 +24,7 @@ interface Props {
 interface State {}
 
 export default class ExplainFormComponent extends Component<Props, State> {
-    getExamples(form: string, inflection: Inflection) {
+    getExamplesUsingInflection(form: string, inflection: Inflection) {
         let corpus = this.props.corpus
 
         let inflectionIds = new Set()
@@ -47,6 +47,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
             
             if (fact instanceof InflectableWord && 
                 !!fact.inflect(form) &&
+                fact !== this.props.word.word &&
                 inflectionIds.has(fact.inflection.id)) {
                 let list: InflectableWord[]
 
@@ -70,12 +71,47 @@ export default class ExplainFormComponent extends Component<Props, State> {
         return studying.concat(known).concat(trivial).concat(unknown)
     }
 
+    filterOnlySameDefaultSuffix(words: InflectableWord[], form: string, inflection: Inflection) {
+        let inflectionId = inflection.getInflectionId(form) 
+
+        let defaultSuffix = inflection.getEnding(inflection.defaultForm).suffix
+        return words.filter((word) => word.inflection.getEnding(word.inflection.defaultForm).suffix == defaultSuffix)
+    }
+
+    filterOnlyDifferentDefaultSuffix(words: InflectableWord[], form: string, inflection: Inflection) {
+        let inflectionId = inflection.getInflectionId(form) 
+        let allDefaultSuffixes = 
+            new Set(words.map((w) =>{
+                return w.inflection.getEnding(w.inflection.defaultForm).suffix
+            } ))  
+
+        allDefaultSuffixes.delete(inflection.getEnding(inflection.defaultForm).suffix)
+
+        // only one example of each default suffix
+        return words.filter((word) => {
+            let defaultSuffix = word.inflection.getEnding(word.inflection.defaultForm).suffix
+
+            if (allDefaultSuffixes.has(defaultSuffix)) {
+                allDefaultSuffixes.delete(defaultSuffix)
+
+                return true
+            }
+            else {
+                return false
+            }
+        })
+    }
+
     getHomonymForms() {
         let homonyms = this.props.corpus.words.ambiguousForms[this.props.word.jp]
 
+        let word = this.props.word
+        let ending = word.word.inflection.getEnding(word.form)
+        
         if (homonyms) {
             return homonyms.slice(0).filter((w) => w !== this.props.word)
                 .filter((w) => w instanceof InflectedWord && w.word === this.props.word.word)
+                .filter((w: InflectedWord) => w.form != ending.relativeTo)
                 .map((w) => (w as InflectedWord).form)
         }
         else {
@@ -147,97 +183,211 @@ export default class ExplainFormComponent extends Component<Props, State> {
             .filter((i) => !!i.endings[this.props.word.form])
     }
 
-    sortInflectionsByKnowledge(inflections: Inflection[], form: string) {
-        let known = [], unknown = []
+    filterInflectionsByKnowledge(inflections: Inflection[], form: string) {
+        let known = []
 
         inflections.forEach((inflection) => {
             let fact = inflection.getFact(form) 
+
             if (this.props.knowledge.isKnown(fact) || this.props.knowledge.isStudying(fact)) {
                 known.push(inflection)
             }
-            else {
-                unknown.push(inflection)
-            }
         })
 
-        return known.concat(unknown)
+        return known
     }
 
-    examplesOfInflection(inflection: Inflection) {
-        return  <ul>
+    showHowInflectionFormsForm(word: InflectableWord) {
+        return <li key={ word.getId() }>{ word.getDefaultInflection().jp } → { word.inflect(this.props.word.form).toString() } </li>
+    }
 
-                {
+    describeFormation(word: InflectedWord) {
+        let inflection = word.word.inflection
+        let form = word.form
+        let ending = inflection.getEnding(form)
+        let fromForm: string = ending.relativeTo || inflection.defaultForm
+        let fromEnding = inflection.getEnding(fromForm)
+        let fromWord = word.word.inflect(fromForm)
 
-                    this.getExamples(this.props.word.form, inflection)
-                        .filter((w) => w !== this.props.word.word).slice(0, 3).map((word) =>
+        return <div>
+            { (!ending.relativeTo && fromEnding.suffix == ending.suffix) ||
+                (ending.relativeTo && !ending.suffix) ?
+
+                <p>
+                    <strong>
+                        { word.word.getDefaultInflection().jp }
+                    </strong> in the <strong>
+                        { getFormName(form) }
+                    </strong> is identical to the <strong>
+                        { getFormName(fromForm) }
+                    </strong>.
+                </p>
+
+                :
+
+                <p>
+                    <strong>
+                        { word.word.getDefaultInflection().jp }
+                    </strong> forms the <strong>
+                        { getFormName(form) }
+                    </strong> from the <strong>
+                        { getFormName(fromForm) }
+                    </strong> 
                     
-                        <li key={ word.getId() }>{ word.getDefaultInflection().jp } → { word.inflect(this.props.word.form).toString() }</li>
+                    {
+                        ending.relativeTo ?
+                        ' (' + word.word.inflect(fromForm).jp + ')':
+                        ''
+                    } by 
                     
-                    )
+                    { !ending.relativeTo ?
+                    
+                        <span> replacing <strong>
+                                { (ending.subtractFromStem ? word.word.stem.substr(-ending.subtractFromStem) : '') + fromEnding.suffix }
+                            </strong> with <strong>
+                                { ending.suffix }
+                            </strong>
+                        </span>
 
-                }
+                        :
 
-            </ul> 
+                        (ending.subtractFromStem > 0 ? 
+                            <span> replacing <strong>
+                                    { fromWord.jp.substr(-ending.subtractFromStem) }
+                                </strong> with <strong>
+                                    { ending.suffix }
+                                </strong>
+                            </span>
+                            :
+                            <span> adding <strong>
+                                    { ending.suffix }
+                                </strong>
+                            </span>
+                        )
+                    }
+                    {' '}to give <strong>
+                        { word.jp }
+                    </strong>.
+                </p>
+
+            }
+
+        </div>
     }
 
     render() {
-        let form = this.props.word.form
+        let word = this.props.word
+        let form = word.form
+        let inflection = word.word.inflection
+        let corpus = this.props.corpus
+
+        let otherExamplesOfInflection = 
+            this.getExamplesUsingInflection(this.props.word.form, inflection)
+
+        let sameDefaultSuffix = 
+            this.filterOnlySameDefaultSuffix(otherExamplesOfInflection, this.props.word.form, inflection)
+
+        let differentDefaultSuffix = 
+            this.filterOnlyDifferentDefaultSuffix(otherExamplesOfInflection, this.props.word.form, inflection)
+
+        let inflectionOfForm = corpus.inflections.get(inflection.getInflectionId(form))
+
+        let differentDefault
+
+        let ending = inflection.getEnding(form)
 
         return <div className='overlayContainer'>
 
             <div className='overlay'>
 
-                {   this.getHomonymForms().length ? 
+                <h3>The { getFormName(form) }</h3>
+
+                <div> 
+                    {
+                        this.describeFormation(word)
+                    }
+                </div>
+
+                <div>
+                    {
+                        sameDefaultSuffix.length ?
+                            <div>
+                                <p>
+                                    { inflectionOfForm.description ? 'Most ' + inflectionOfForm.description : 'These words' } work the same way:
+                                </p>
+
+                                {
+                                    sameDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))
+                                }
+                            </div>
+                            :
+                            <div/>
+                    }
+                
+                </div>
+
+                <div>                
+                    {
+                        differentDefaultSuffix.length ?
+                            <div>
+                                <p>
+                                    The following words work the same way, but starting from different stems:
+                                </p>
+
+                                {
+                                    differentDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))          
+                                }
+                            </div>
+                            :
+                            <div/>
+                    }
+                </div>
+
+                {
+
+                    this.filterInflectionsByKnowledge(this.sortInflectionsByDistance(word.word.inflection), form)
+                        .filter((inflection) => this.getExamplesUsingInflection(word.form, inflection).length > 1)
+                        .slice(0, 2)
+                        .map((inflection) => 
+                        <div key={ inflection.id }>
+                            <p>
+                                { inflection.description ? capitalize(inflection.description) : 'These words' } form it the following way:
+                            </p>
+
+                            {
+                                this.getExamplesUsingInflection(word.form, inflection)
+                                    .slice(0, 2)
+                                    .map((word) => this.showHowInflectionFormsForm(word))
+                            }
+                        
+                        </div>
+                    )
+
+                }
+
+                <div>
+                {
+                    ending.relativeTo ? 
+                        this.describeFormation(word.word.inflect(ending.relativeTo))
+                        :
+                        <div/>
+                }
+                </div>
+
+                {
+                    this.getHomonymForms().length ? 
 
                     <p>
 
-                        <strong>{ this.props.word.jp }</strong> is also the 
-
-                        {
-                            ' ' + this.getHomonymForms().map(getFormName).join(', ') + ' '
-                        }
-
-                        of <strong>{ this.props.word.word.getDefaultInflection().jp }</strong>.
+                        <strong>{ word.jp }</strong> is also the <strong>{
+                            this.getHomonymForms().map(getFormName).join(', ')
+                        }</strong> form.
 
                     </p>
 
                     : 
 
                     <div/>
-
-                }
-
-
-                <div>
-                    <p>
-                        <strong>{ this.props.word.jp }</strong> forms the  
-                        <strong>{ ' ' + getFormName(form) + ' '}</strong> in the same way as:
-                    </p>
-
-                    {
-                        this.examplesOfInflection(this.props.word.word.inflection)
-                    }
-                
-                </div>
-
-                {
-
-                    this.sortInflectionsByKnowledge(this.sortInflectionsByDistance(this.props.word.word.inflection).slice(0, 3), form)
-                        .filter((inflection) => this.getExamples(this.props.word.form, inflection).length > 1)
-                        .map((inflection) => 
-                        <div key={ inflection.id }>
-                            <p>
-                                Compare the following way of forming the   
-                                <strong>{ ' ' + getFormName(form) + ' '}</strong>:
-                            </p>
-
-                            {
-                                this.examplesOfInflection(inflection)
-                            }
-                        
-                        </div>
-                    )
-
                 }
 
                 <div className='buttonBar'>
@@ -251,4 +401,8 @@ export default class ExplainFormComponent extends Component<Props, State> {
         </div>
 
     }
+}
+
+function capitalize(str: string) {
+    return str[0].toUpperCase() + str.substr(1)
 }
