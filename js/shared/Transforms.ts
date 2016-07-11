@@ -31,7 +31,9 @@ export class EndingTransform implements Transform {
 }
 
 const TRANSFORM_BY_ID = {
-    yToI: new EndingTransform('ы', 'и', 'кгшщхчжь', 'yToI')
+    yToI: new EndingTransform('ы', 'и', 'кгшщхчжь', 'yToI'),
+    ioToY: new EndingTransform('ю', 'у', 'кгшщхчж', 'ioToY'),
+    yaToA: new EndingTransform('я', 'а', 'кгшщхчж', 'yaToA'),
 }
 
 class Transforms {

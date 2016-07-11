@@ -80,6 +80,10 @@ export default class Inflection {
 
             if (i2.relativeTo && !i2.subtractFromStem) {
                 i2 = inflection.getEnding(i2.relativeTo)
+
+                if (!i2) {
+                    return !i1 
+                }
             }
 
             return i1.suffix == i2.suffix &&
