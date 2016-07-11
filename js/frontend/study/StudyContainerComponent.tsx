@@ -22,6 +22,7 @@ import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 
 import ExplainFormComponent  from './ExplainFormComponent'
+import ForgettingStats from './ForgettingStats'
 
 interface Props {
     corpus: Corpus,
@@ -41,6 +42,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     factKnowledge: LeitnerKnowledge
     sentenceKnowledge: LastSawSentenceKnowledge
     trivialKnowledge: TrivialKnowledge
+    forgettingStats: ForgettingStats
 
     constructor(props) {
         super(props)
@@ -70,6 +72,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.factKnowledge = new LeitnerKnowledge(this.props.corpus.facts)
         this.sentenceKnowledge = new LastSawSentenceKnowledge()
         this.trivialKnowledge = new TrivialKnowledge()
+        this.forgettingStats = new ForgettingStats(this.props.corpus)
 
         this.factKnowledge.factFilter = isStudiedFact
 
@@ -86,6 +89,9 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.factKnowledge.processExposures(exposures)
         this.sentenceKnowledge.processExposures(exposures)
         this.trivialKnowledge.processExposures(exposures)
+        this.forgettingStats.processExposures(exposures)
+
+        this.forgettingStats.print()
     }
 
     onAnswer(exposures: Exposure[]) {
@@ -107,7 +113,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         return <ExplainFormComponent 
             corpus={ this.props.corpus }
             knowledge={ knowledge }
-            word={ this.props.corpus.words.get('кошка@pl') as InflectedWord }
+            word={ this.props.corpus.words.get('писать@3pl') as InflectedWord }
             onClose={ () => {} }
             onSelect={ () => {} }
             />
