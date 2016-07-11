@@ -15,7 +15,7 @@ interface IntervalStats {
 
 type StatsForRepetition = IntervalStats[];
 
-const MAX_REP = 8
+const MAX_REP = 16
 const MAX_INTERVAL = 7
 
 export default class ForgettingStats {
@@ -72,7 +72,9 @@ export default class ForgettingStats {
                     interval = MAX_INTERVAL
                 }
 
-                let stat = this.intervals[Math.min(stats.exposureCount, MAX_REP)-1][interval]
+                let exposureCount = Math.floor((Math.min(stats.exposureCount, MAX_REP)-1) / 2)
+
+                let stat = this.intervals[exposureCount][interval]
 
                 if (exposure.knew == Knowledge.KNEW) {
                     stat.known++
