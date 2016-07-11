@@ -27,32 +27,6 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
             let suggestions = words.getSimilarTo(token);
             let split = token.split('@');
 
-
-            // TODO: remove soon.
-            if (split[0] == 'мы' || split[0] == 'вы' || split[0] == 'они') {
-
-                const MAP = {
-                    nom: 'pl',
-                    gen: 'genpl',
-                    acc: 'accpl',
-                    dat: 'datpl',
-                    instr: 'instrpl',
-                    prep: 'preppl',
-                    genalt: 'genplalt',
-                    accalt: 'accplalt',
-                    datalt: 'datplalt',
-                    instralt: 'instrplalt',
-                    prepalt: 'prepplalt',
-                }
-
-                split[1] = MAP[split[1]]
-
-                token = split.join('@')
-
-                word = words.get(token)
-            }
-
-            if (!word)
             throw new Error(lineNumber + ': Unknown word "' + token + '" in "' + sentence + '".' + 
                 (suggestions.length ? ' Did you mean any of ' + suggestions + '?' : '') +
                 (split[0].match(/[a-z]/) ? ' Note that the word contains Latin characters' : '') +

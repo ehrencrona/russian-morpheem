@@ -59,7 +59,13 @@ function inflectionToString(inflection: Inflection, lang: string) {
         })
     }
 
-    return `${inflection.id}[${inflection.pos}]: ${ endings.join(', ') }${ inherit }${ transformString }`
+    let description = ''
+
+    if (inflection.description) {
+        description = '"' + inflection.description + '" '
+    }
+
+    return `${inflection.id}[${inflection.pos}]: ${ description }${ endings.join(', ') }${ inherit }${ transformString }`
 }
 
 export default function inflectionsToString(inflections: Inflections, lang: string) {

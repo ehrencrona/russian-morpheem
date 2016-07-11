@@ -22,4 +22,11 @@ describe('InflectionsFileGenerator', function() {
 
         expect(inflectionsToString(parseInflectionsFile(file, 'ru'), 'ru')).to.equal(file)              
     })
+
+    it('handles descriptions', function () {
+        
+        let file = 'verbs[adj]: "best verbs" m ый, transform yToI'
+
+        expect(inflectionsToString(parseInflectionsFile(file, 'ru'), 'ru')).to.equal(file)              
+    })
 })
