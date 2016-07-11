@@ -107,7 +107,6 @@ function applyErrata() {
 	let errata = JSON.parse(readFileSync('data/dict.opcorpora.errata.json').toString())
 
 	errata.forEach((erratum) => {
-console.log(erratum)
 
 		if (typeof erratum.dictWord != 'string' ||
 			typeof erratum.form != 'string' ||

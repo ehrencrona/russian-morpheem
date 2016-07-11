@@ -65,6 +65,7 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
             word={ this.props.word }
             allowAdd={ true }
             onSelect={ (form) => this.onSelect(form) }
+            onAdd={ (form) => this.addFact(form) }
             hideForms={ this.props.hideForms } 
             />
 
