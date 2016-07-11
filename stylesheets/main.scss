@@ -898,18 +898,29 @@ h3 {
                 }
             }
 
-            .iKnew {
-                text-align: right;
-                background-color: $color2;
-                color: $color9;
-                padding: $unit 2 * $unit;
-                font-size: 80%; 
-                font-weight: bold;
-                cursor: pointer;
-            }
+            > .buttonBar {
+                .button {
+                    border-radius: 0;
+                    margin: 0;
+                    flex-grow: 1;
+                    display: block;
+                    text-align: left;
 
-            .iKnew:hover {
-                background-color: darken($color2, 5%)
+                    background-color: $color2;
+                    color: $color9;
+                    padding: $unit 2 * $unit;
+                    font-size: 80%; 
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+
+                .button.iKnew {
+                    text-align: right;
+                }
+
+                .button:hover {
+                    background-color: darken($color2, 5%)
+                }
             }
         }
     }
@@ -938,32 +949,57 @@ h3 {
 
 }
 
-    .overlayContainer {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(0,0,0,0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+$overlayPadding: 4 * $unit;
 
-        .overlay {
-            padding: 4 * $unit;
-            flex-grow: 0;
-            flex-shrink: 0;
-            display: inline-block;
-            background-color: white;
-            text-align: left;
-        }
+.overlayContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        ul {
-            display: block;
+    .overlay {
+        padding: $overlayPadding;
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: inline-block;
+        background-color: white;
+        text-align: left;
+    }
 
-            li {
-                list-style-type: circle;
-                margin-left: 1.5em;
-            }
+    ul {
+        display: block;
+
+        li {
+            list-style-type: circle;
+            margin-left: 1.5em;
         }
     }
+
+    .tabs {
+        display: flex;
+        margin: -$overlayPadding;
+        margin-bottom: $overlayPadding;
+
+        .tab {
+            width: 50%;
+            cursor: pointer;
+
+            h3 {
+                margin: 0;
+            } 
+        }
+
+        .tab.current {
+            cursor: inherit;
+
+            h3 {
+                background-color: inherit;    
+            } 
+        }
+    }
+}

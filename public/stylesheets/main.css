@@ -574,15 +574,21 @@ h3 {
       text-align: center; }
       .study ul.unknown > li .content strong {
         white-space: nowrap; }
-    .study ul.unknown > li .iKnew {
-      text-align: right;
+    .study ul.unknown > li > .buttonBar .button, .study ul.unknown > li > .buttonBar .tab-header .tab-close, .tab-header .study ul.unknown > li > .buttonBar .tab-close, .study ul.unknown > li > .buttonBar .pending .unacceptable, .pending .study ul.unknown > li > .buttonBar .unacceptable {
+      border-radius: 0;
+      margin: 0;
+      flex-grow: 1;
+      display: block;
+      text-align: left;
       background-color: #2CAAA9;
       color: #f8f7f5;
       padding: 4px 8px;
       font-size: 80%;
       font-weight: bold;
       cursor: pointer; }
-    .study ul.unknown > li .iKnew:hover {
+    .study ul.unknown > li > .buttonBar .button.iKnew, .study ul.unknown > li > .buttonBar .tab-header .iKnew.tab-close, .tab-header .study ul.unknown > li > .buttonBar .iKnew.tab-close, .study ul.unknown > li > .buttonBar .pending .iKnew.unacceptable, .pending .study ul.unknown > li > .buttonBar .iKnew.unacceptable {
+      text-align: right; }
+    .study ul.unknown > li > .buttonBar .button:hover, .study ul.unknown > li > .buttonBar .tab-header .tab-close:hover, .tab-header .study ul.unknown > li > .buttonBar .tab-close:hover, .study ul.unknown > li > .buttonBar .pending .unacceptable:hover, .pending .study ul.unknown > li > .buttonBar .unacceptable:hover {
       background-color: #279695; }
 
 .study .debugButtonBar {
@@ -621,3 +627,16 @@ h3 {
     .overlayContainer ul li {
       list-style-type: circle;
       margin-left: 1.5em; }
+  .overlayContainer .tabs {
+    display: flex;
+    margin: -16px;
+    margin-bottom: 16px; }
+    .overlayContainer .tabs .tab {
+      width: 50%;
+      cursor: pointer; }
+      .overlayContainer .tabs .tab h3 {
+        margin: 0; }
+    .overlayContainer .tabs .tab.current {
+      cursor: inherit; }
+      .overlayContainer .tabs .tab.current h3 {
+        background-color: inherit; }

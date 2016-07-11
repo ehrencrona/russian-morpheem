@@ -140,9 +140,16 @@ export default class StudyComponent extends Component<Props, State> {
         let known: UnknownFact[] = [], 
             unknown: UnknownFact[] = []
 
+        let inflection
+
+        if (word instanceof InflectedWord) {
+            inflection = word.word.inflection
+        }
+
         word.visitFacts((fact: Fact) => {
-            if (fact instanceof InflectionFact && 
-                fact.form == fact.inflection.defaultForm) {
+            if (inflection &&
+                fact instanceof InflectionFact && 
+                fact.form == inflection.defaultForm) {
                 return
             }
 

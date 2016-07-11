@@ -106,16 +106,6 @@ export default class StudyContainerComponent extends Component<Props, State> {
             knowledge.known['neu@genpl'] = 9;
             knowledge.known['-mascь@genpl'] = 9;
 
-if (true==true) {
-    return                <ExplainFormComponent 
-                        corpus={ this.props.corpus } 
-                        word={ this.props.corpus.words.get('встречать@pastpl') as InflectedWord } 
-                        knowledge={ knowledge }
-                        onClose={ () => { } } 
-                    />
-
-}
-
             return <StudyComponent 
                 sentence={ this.state.sentence }
                 fact={ this.state.fact } 

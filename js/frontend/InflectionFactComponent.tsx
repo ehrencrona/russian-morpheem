@@ -7,7 +7,7 @@ import Inflection from '../shared/inflection/Inflection'
 import InflectionFact from '../shared/inflection/InflectionFact'
 
 import Tab from './Tab'
-import InflectionsComponent from './InflectionsComponent'
+import InflectionsContainerComponent from './InflectionsContainerComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
@@ -72,7 +72,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
             tab = inflections.map((inflection: Inflection) => {                
                 let result = <div>
                     <h3>{ inflection.id }</h3>
-                    <InflectionsComponent corpus={ this.props.corpus } 
+                    <InflectionsContainerComponent corpus={ this.props.corpus } 
                         inflection={ inflection } tab={ this.props.tab } 
                         hideForms={ Object.assign({}, hideForms) } />
                 </div>

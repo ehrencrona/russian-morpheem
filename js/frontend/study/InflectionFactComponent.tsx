@@ -14,10 +14,23 @@ import ExplainFormComponent from './ExplainFormComponent'
 let React = { createElement: createElement }
 
 interface State {
-    explain: boolean
+    explain?: boolean,
+    explainWord?: InflectedWord
 }
 
 export default class InflectionFactComponent extends Component<FactComponentProps<InflectionFact>, State> {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            explainWord: this.props.unknownFact.word as InflectedWord
+        }
+    }
+
+    explain() {
+        this.setState({ explain: true }) 
+    }
+
     render() {
         let word = this.props.unknownFact.word
 
@@ -25,18 +38,19 @@ export default class InflectionFactComponent extends Component<FactComponentProp
             return <div><strong>{ word.jp }</strong> is the <strong>{ getFormName(word.form) }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong>
                 
                 {
-                    this.state && this.state.explain ?
+                    this.state.explain ?
 
                     <ExplainFormComponent 
                         corpus={ this.props.corpus } 
-                        word={ word } 
+                        word={ this.state.explainWord } 
                         knowledge={ this.props.factKnowledge }
-                        onClose={ () => { this.setState({ explain: false })} } 
+                        onClose={ () => this.setState({ explain: false }) }
+                        onSelect={ (word) => this.setState({ explainWord: word })} 
                     />
 
                     :
 
-                    <div clasName='clickable' onClick={ () => this.setState({ explain: true }) }>Explain</div>
+                    <div/>
                 }
         
             </div>

@@ -38,6 +38,8 @@ let unknownFactComponent = (props: Props) => {
     let fact = props.unknownFact.fact
 
     let content
+    let explainable
+    let canExplain = false
 
     if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
         content = <DesiredFormFactComponent 
@@ -47,11 +49,14 @@ let unknownFactComponent = (props: Props) => {
             unknownFact={ props.unknownFact } />
     }
     else if (fact instanceof InflectionFact) {
+        canExplain = true
+
         content = <InflectionFactComponent 
             fact={ fact } 
             corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
-            unknownFact={ props.unknownFact } />
+            unknownFact={ props.unknownFact }
+            ref={ (child) => explainable = child  } />
     }
     else if (fact instanceof InflectableWord || fact instanceof UnstudiedWord) {
         content = <WordFactComponent 
@@ -76,11 +81,18 @@ let unknownFactComponent = (props: Props) => {
     return <li>
             <div className='content'>{ content }</div>
 
-            <div className='iKnew' onClick={ () => props.onKnew(props.unknownFact) }>{
-                !props.known ?
-                    'I didn\'t know that' :
-                    'I knew that'
-            }</div>
+            <div className='buttonBar'>
+                { canExplain ?
+                    <div className='button' onClick={ () => explainable.explain() }>Explain</div>
+                    :
+                    []
+                }
+                <div className='button iKnew' onClick={ () => props.onKnew(props.unknownFact) }>{
+                    !props.known ?
+                        'I didn\'t know that' :
+                        'I knew that'
+                }</div>
+            </div>
         </li>
 }
 

@@ -3,6 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
+import InflectionsContainerComponent from '../InflectionsComponent'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 
@@ -19,11 +20,24 @@ interface Props {
     word: InflectedWord,
     knowledge: LeitnerKnowledge,
     onClose: () => void
+    onSelect: (word: InflectedWord) => void
 }
 
-interface State {}
+enum Tab {
+    FORM, INFLECTION
+}
+
+interface State {
+    tab: Tab
+}
 
 export default class ExplainFormComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+
+        this.state = { tab: Tab.FORM }
+    }
+
     getExamplesUsingInflection(form: string, inflection: Inflection) {
         let corpus = this.props.corpus
 
@@ -198,7 +212,12 @@ export default class ExplainFormComponent extends Component<Props, State> {
     }
 
     showHowInflectionFormsForm(word: InflectableWord) {
-        return <li key={ word.getId() }>{ word.getDefaultInflection().jp } → { word.inflect(this.props.word.form).toString() } </li>
+        let inflected = word.inflect(this.props.word.form)
+
+        return <li key={ word.getId() }>{ word.getDefaultInflection().jp } →&nbsp; 
+            <span className='clickable' onClick={ () => this.props.onSelect(inflected) }>
+                { inflected.toString() }
+            </span> </li>
     }
 
     describeFormation(word: InflectedWord) {
@@ -208,6 +227,16 @@ export default class ExplainFormComponent extends Component<Props, State> {
         let fromForm: string = ending.relativeTo || inflection.defaultForm
         let fromEnding = inflection.getEnding(fromForm)
         let fromWord = word.word.inflect(fromForm)
+
+        if (fromForm == form) {
+            return <p>
+                <strong>
+                    { word.word.getDefaultInflection().jp }
+                </strong> is the <strong>
+                    { getFormName(form) }
+                </strong> form, which is the basic form of the word. You will find it listed under this form in dictionaries. 
+            </p>
+        }
 
         return <div>
             { (!ending.relativeTo && fromEnding.suffix == ending.suffix) ||
@@ -275,7 +304,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
         </div>
     }
 
-    render() {
+    renderForm() {
         let word = this.props.word
         let form = word.form
         let inflection = word.word.inflection
@@ -296,12 +325,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
         let ending = inflection.getEnding(form)
 
-        return <div className='overlayContainer'>
-
-            <div className='overlay'>
-
-                <h3>The { getFormName(form) }</h3>
-
+        return <div>
                 <div> 
                     {
                         this.describeFormation(word)
@@ -313,12 +337,15 @@ export default class ExplainFormComponent extends Component<Props, State> {
                         sameDefaultSuffix.length ?
                             <div>
                                 <p>
-                                    { inflectionOfForm.description ? 'Most ' + inflectionOfForm.description : 'These words' } work the same way:
+                                    { inflectionOfForm.description ? 'Most ' + inflectionOfForm.description : 'These words' } 
+                                    { form == word.word.inflection.defaultForm ? ' have the same ending.' : ' work the same way' }
                                 </p>
 
-                                {
-                                    sameDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))
-                                }
+                                <ul>
+                                    {
+                                        sameDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))
+                                    }
+                                </ul>
                             </div>
                             :
                             <div/>
@@ -334,9 +361,11 @@ export default class ExplainFormComponent extends Component<Props, State> {
                                     The following words work the same way, but starting from different stems:
                                 </p>
 
-                                {
-                                    differentDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))          
-                                }
+                                <ul>
+                                    {
+                                        differentDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))          
+                                    }
+                                </ul>
                             </div>
                             :
                             <div/>
@@ -351,15 +380,17 @@ export default class ExplainFormComponent extends Component<Props, State> {
                         .map((inflection) => 
                         <div key={ inflection.id }>
                             <p>
-                                { inflection.description ? capitalize(inflection.description) : 'These words' } form it the following way:
+                                { inflection.description ? 'Most ' + inflection.description : 'These words' } form it the following way:
                             </p>
 
-                            {
-                                this.getExamplesUsingInflection(word.form, inflection)
-                                    .slice(0, 2)
-                                    .map((word) => this.showHowInflectionFormsForm(word))
-                            }
-                        
+                            <ul>
+                                {
+                                    this.getExamplesUsingInflection(word.form, inflection)
+                                        .slice(0, 2)
+                                        .map((word) => this.showHowInflectionFormsForm(word))
+                                }
+                            </ul>
+
                         </div>
                     )
 
@@ -380,7 +411,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                     <p>
 
                         <strong>{ word.jp }</strong> is also the <strong>{
-                            this.getHomonymForms().map(getFormName).join(', ')
+                            joinWithAnd(this.getHomonymForms().map(getFormName))
                         }</strong> form.
 
                     </p>
@@ -389,6 +420,48 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
                     <div/>
                 }
+            </div>
+    }
+
+    renderInflection() {
+
+        return <InflectionsContainerComponent 
+            corpus={ this.props.corpus}
+            word={ this.props.word.word }
+            allowAdd={ false }
+            inflection={ this.props.word.word.inflection } 
+            onSelect={ (form) => this.props.onSelect(this.props.word.word.inflect(form)) }/>
+
+    }
+
+    render() {
+        let word = this.props.word
+        let form = word.form
+        let inflection = word.word.inflection
+        let corpus = this.props.corpus
+
+        return <div className='overlayContainer'>
+
+            <div className='overlay'>
+
+                <div className='tabs'>
+                    <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
+                            onClick={ () => this.setState({ tab: Tab.FORM }) }>
+                        <h3>The { getFormName(form) }</h3>
+                    </div>
+                    <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
+                            onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
+                        <h3>{ word.getDefaultInflection().jp }</h3>
+                    </div>
+                </div>
+
+                { this.state.tab == Tab.FORM ?
+
+                    this.renderForm() 
+                
+                    :
+                
+                    this.renderInflection()}
 
                 <div className='buttonBar'>
 
@@ -405,4 +478,16 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
 function capitalize(str: string) {
     return str[0].toUpperCase() + str.substr(1)
+}
+
+function joinWithAnd(arr: string[]) {
+    if (!arr.length) {
+        return ''
+    }
+    else if (arr.length == 1) {
+        return arr[0]
+    }
+    else {
+        return arr.slice(0, arr.length-1).join(', ') + ' and ' + arr[arr.length-1]
+    }
 }

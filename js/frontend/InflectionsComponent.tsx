@@ -6,7 +6,6 @@ import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
 
-import Tab from './Tab'
 import FactComponent from './FactComponent'
 import Word from '../shared/Word'
 import getLanguage from './getLanguage'
@@ -18,9 +17,10 @@ import { MISSING_INDEX } from '../shared/fact/Facts'
 interface Props {
     corpus: Corpus,
     inflection: Inflection,
-    tab: Tab,
+    allowAdd?: boolean,
     word?: InflectableWord,
-    onSelect?: (word: Word) => any
+    onSelect?: (form: string) => any
+    onAdd?: (form: string) => any
     hideForms?: Object
 }
 
@@ -46,41 +46,6 @@ export default class InflectionsComponent extends Component<Props, State> {
         })
 
         return wordsByForm 
-    }
-
-    inflectionClicked(inflection: Inflection) {
-        this.props.tab.openTab(
-            <InflectionsComponent 
-                corpus={ this.props.corpus } 
-                tab={ this.props.tab } 
-                inflection={ inflection }/>, 
-            inflection.getId(), inflection.getId())
-    }
-
-    formClicked(form) {
-        if (this.props.word && this.props.onSelect) {
-            this.props.onSelect(this.props.word.inflect(form))
-        }
-        else {
-            this.openForm(form)
-        }
-    }
-    
-    openForm(form) {
-        let fact = this.props.inflection.getFact(form)
-
-        this.props.tab.openTab(
-            <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
-                fact={ fact }/>, fact.getId(), fact.getId()
-        ) 
-    }
-    
-    addFact(form: string) {
-        let fact = this.props.inflection.getFact(form)
-        
-        this.props.corpus.facts.add(fact)
-        
-        this.forceUpdate()
     }
 
     render() {
@@ -112,14 +77,19 @@ export default class InflectionsComponent extends Component<Props, State> {
                 className += ' clickable'
 
                 return <div key={form} className={ className } onClick={ 
-                    () => this.formClicked(form) }>
+                    () => this.props.onSelect && this.props.onSelect(form) }>
                     { wordsByForm[form] } 
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                 </div>
             }
             else {
                 return <div key={form} className={ className }>{ wordsByForm[form] }
-                    <div className='add' onClick={ () => this.addFact(form) }><div className='number'>add</div></div>
+                    { this.props.allowAdd != false ?
+                        <div className='add' onClick={ () => this.props.onAdd && this.props.onAdd(form) }>
+                            <div className='number'>add</div></div>
+                        :
+                        <div/>
+                    }
                 </div>
             }
         }

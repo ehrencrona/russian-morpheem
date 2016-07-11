@@ -6,7 +6,7 @@ import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
 import Tab from './Tab'
 
-import InflectionsComponent from './InflectionsComponent'
+import InflectionsContainerComponent from './InflectionsContainerComponent'
 import { Component, createElement } from 'react';
 import { FactSentences } from '../shared/IndexSentencesByFact'
 
@@ -39,7 +39,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
 
     inflectionClicked(inflection: Inflection) {
         this.props.tab.openTab(
-            <InflectionsComponent 
+            <InflectionsContainerComponent 
                 corpus={ this.props.corpus } 
                 tab={ this.props.tab } 
                 inflection={ inflection }/>, 

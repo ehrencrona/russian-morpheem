@@ -8,7 +8,7 @@ import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import Tab from './Tab'
 import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
-import InflectionsComponent from './InflectionsComponent';
+import InflectionsContainerComponent from './InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
 
@@ -365,7 +365,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                         </div>
                     </div>
 
-                    <InflectionsComponent 
+                    <InflectionsContainerComponent 
                         corpus={ this.props.corpus }
                         tab={ this.props.tab }
                         inflection={ filterWord.inflection }

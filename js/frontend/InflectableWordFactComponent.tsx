@@ -8,7 +8,7 @@ import InflectionFact from '../shared/inflection/InflectionFact'
 import Tab from './Tab'
 import FactComponent from './FactComponent'
 import SentenceComponent from './SentenceComponent'
-import InflectionsComponent from './InflectionsComponent'
+import InflectionsContainerComponent from './InflectionsContainerComponent'
 import ChangeInflectionComponent from './ChangeInflectionComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
@@ -84,7 +84,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     tab={ this.props.tab }
                     word={ fact }
                     onChange={ () => inflections.forceUpdate() } />
-                <InflectionsComponent 
+                <InflectionsContainerComponent 
                     corpus={ this.props.corpus } 
                     inflection={ fact.inflection } 
                     word={ fact } 
