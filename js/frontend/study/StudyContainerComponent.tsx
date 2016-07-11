@@ -109,7 +109,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         knowledge.known['neu@genpl'] = 9;
         knowledge.known['-mascь@genpl'] = 9;
 
-        if (0==0)
+        if (0==1)
         return <ExplainFormComponent 
             corpus={ this.props.corpus }
             knowledge={ knowledge }
