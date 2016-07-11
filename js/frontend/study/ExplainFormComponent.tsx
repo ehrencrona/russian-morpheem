@@ -6,12 +6,15 @@ import Corpus from '../../shared/Corpus'
 import InflectionsContainerComponent from '../InflectionsComponent'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
+import Fact from '../../shared/fact/Fact'
 
 import Inflection from '../../shared/inflection/Inflection'
 import Ending from '../../shared/Ending'
 import { getFormName } from '../../shared/inflection/InflectionForms' 
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
+import Transform from '../../shared/Transform'
+import { EndingTransform } from '../../shared/Transforms'
 
 let React = { createElement: createElement }
 
@@ -211,22 +214,34 @@ export default class ExplainFormComponent extends Component<Props, State> {
         return known
     }
 
-    showHowInflectionFormsForm(word: InflectableWord) {
+    showHowInflectionFormsForm(word: InflectableWord, transforms: Transform[]) {
         let inflected = word.inflect(this.props.word.form)
+
+        let transform = getTransform(inflected)
+
+        if (transform && !transforms.find((t) => t.getId() == transform.id)) {
+            transforms.push(transform)
+        }
 
         return <li key={ word.getId() }>{ word.getDefaultInflection().jp } →&nbsp; 
             <span className='clickable' onClick={ () => this.props.onSelect(inflected) }>
-                { inflected.toString() }
+                { inflected.toString() }{ transform ? '*' : '' }
             </span> </li>
     }
 
-    describeFormation(word: InflectedWord) {
+    describeFormation(word: InflectedWord, transforms: Transform[]) {
         let inflection = word.word.inflection
         let form = word.form
         let ending = inflection.getEnding(form)
         let fromForm: string = ending.relativeTo || inflection.defaultForm
         let fromEnding = inflection.getEnding(fromForm)
         let fromWord = word.word.inflect(fromForm)
+
+        let transform = getTransform(word)
+
+        if (transform && !transforms.find((t) => t.getId() == transform.id)) {
+            transforms.push(transform)
+        }
 
         if (fromForm == form) {
             return <p>
@@ -295,7 +310,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                         )
                     }
                     {' '}to give <strong>
-                        { word.jp }
+                        { word.jp }{ transform ? '*' : '' }
                     </strong>.
                 </p>
 
@@ -323,12 +338,14 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
         let differentDefault
 
+        let transforms = []
+
         let ending = inflection.getEnding(form)
 
         return <div>
                 <div> 
                     {
-                        this.describeFormation(word)
+                        this.describeFormation(word, transforms)
                     }
                 </div>
 
@@ -343,7 +360,8 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
                                 <ul>
                                     {
-                                        sameDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))
+                                        sameDefaultSuffix.slice(0, 3).map((word) => 
+                                            this.showHowInflectionFormsForm(word, transforms))
                                     }
                                 </ul>
                             </div>
@@ -363,7 +381,8 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
                                 <ul>
                                     {
-                                        differentDefaultSuffix.slice(0, 3).map((word) => this.showHowInflectionFormsForm(word))          
+                                        differentDefaultSuffix.slice(0, 3).map((word) => 
+                                            this.showHowInflectionFormsForm(word, transforms))          
                                     }
                                 </ul>
                             </div>
@@ -387,7 +406,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                                 {
                                     this.getExamplesUsingInflection(word.form, inflection)
                                         .slice(0, 2)
-                                        .map((word) => this.showHowInflectionFormsForm(word))
+                                        .map((word) => this.showHowInflectionFormsForm(word, transforms))
                                 }
                             </ul>
 
@@ -399,7 +418,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                 <div>
                 {
                     ending.relativeTo ? 
-                        this.describeFormation(word.word.inflect(ending.relativeTo))
+                        this.describeFormation(word.word.inflect(ending.relativeTo), transforms)
                         :
                         <div/>
                 }
@@ -417,6 +436,27 @@ export default class ExplainFormComponent extends Component<Props, State> {
                     </p>
 
                     : 
+
+                    <div/>
+                }
+
+                {
+
+                    transforms.length ?
+
+                    transforms.map((transform) => 
+                        <div> 
+                            *) <strong>
+                                { transform.from }
+                            </strong> is replaced with <strong>
+                                { transform.to }
+                            </strong> after <strong>
+                                { transform.after.split('').join(', ') }
+                            </strong>
+                        </div>
+                    )
+
+                    :
 
                     <div/>
                 }
@@ -490,4 +530,16 @@ function joinWithAnd(arr: string[]) {
     else {
         return arr.slice(0, arr.length-1).join(', ') + ' and ' + arr[arr.length-1]
     }
+}
+
+function getTransform(fact: Fact) {
+    let result
+
+    fact.visitFacts((fact) => {
+        if (fact instanceof EndingTransform) {
+            result = fact 
+        }
+    })
+
+    return result
 }

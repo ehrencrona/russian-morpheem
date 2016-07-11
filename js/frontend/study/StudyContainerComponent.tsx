@@ -96,16 +96,23 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     render() {
+        let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
+
+        knowledge.known['fem@genpl'] = 9;
+        knowledge.known['femka2@genpl'] = 9;
+        knowledge.known['neu@genpl'] = 9;
+        knowledge.known['-mascь@genpl'] = 9;
+
+        if (0==0)
+        return <ExplainFormComponent 
+            corpus={ this.props.corpus }
+            knowledge={ knowledge }
+            word={ this.props.corpus.words.get('кошка@pl') as InflectedWord }
+            onClose={ () => {} }
+            onSelect={ () => {} }
+            />
+
         if (this.state.sentence) {
-
-
-            let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
-
-            knowledge.known['fem@genpl'] = 9;
-            knowledge.known['femka2@genpl'] = 9;
-            knowledge.known['neu@genpl'] = 9;
-            knowledge.known['-mascь@genpl'] = 9;
-
             return <StudyComponent 
                 sentence={ this.state.sentence }
                 fact={ this.state.fact } 

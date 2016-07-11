@@ -113,11 +113,66 @@
         "form": "imprpl",
         "word": "ехайте"
     },
+
+    {
+        "dictWord": "цветок",
+        "form": "pl",
+        "word": "цвети"
+    },
+
+    {
+        "dictWord": "цветок",
+        "form": "accpl",
+        "word": "цвети"
+    },
     
     {
+        "dictWord": "зуб",
+        "form": "genpl",
+        "word": "зубов"
+    },
+    
+    {
+        "dictWord": "зуб",
+        "form": "accpl",
+        "word": "зубы"
+    },
+    
+    {
+        "dictWord": "зуб",
+        "form": "datpl",
+        "word": "зубам"
+    },
+    
+    {
+        "dictWord": "зуб",
+        "form": "instrpl",
+        "word": "зубами"
+    },
+    
+    {
+        "dictWord": "зуб",
+        "form": "preppl",
+        "word": "зубах"
+    },
+
+    {
+        "dictWord": "зуб",
+        "form": "pl",
+        "word": "зубы"
+    },
+
+    {
+        "dictWord": "язык",
+        "form": "preppl",
+        "word": "языках"
+    },
+
+
+    {
         "dictWord": "ехать",
-        "form": "imprpl",
-        "word": "ехайте"
+        "form": "impr",
+        "word": "поезжай"
     }
 
 ]
