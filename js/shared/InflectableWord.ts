@@ -6,7 +6,7 @@ import Inflections from './inflection/Inflections'
 import INFLECTION_FORMS from './inflection/InflectionForms'
 import MASKS from './Masks'
 
-interface JsonFormat {
+export interface JsonFormat {
     stem: string,
     en: string,
     inflection: string,
@@ -131,9 +131,7 @@ export default class InflectableWord {
         this.defaultInflection = null
     }
 
-    static fromJson(rawJson, inflections: Inflections): InflectableWord {
-        let json = rawJson as JsonFormat
-
+    static fromJson(json: JsonFormat, inflections: Inflections): InflectableWord {
         let inflection = inflections.get(json.inflection)
 
         if (!inflection) {

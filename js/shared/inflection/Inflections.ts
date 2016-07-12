@@ -1,6 +1,10 @@
 import Inflection from './Inflection';
 import Corpus from '../Corpus';
 
+import { JsonFormat as InflectionJsonFormat } from './Inflection'
+
+export type JsonFormat = InflectionJsonFormat[]
+
 export class NotInflectedError {    
 }
 
@@ -28,7 +32,7 @@ export default class Inflections {
         this.inflectionsById = inflections.inflectionsById    
     }
     
-    fromJson(json): Inflections {
+    fromJson(json: JsonFormat): Inflections {
         for (let inflectionJson of json) {
             this.add(Inflection.fromJson(inflectionJson, this))
         } 
@@ -111,7 +115,7 @@ export default class Inflections {
         })
     }
 
-    toJson() {
+    toJson(): JsonFormat {
         let result = []
         
         for (let id in this.inflectionsById) {

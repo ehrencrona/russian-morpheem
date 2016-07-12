@@ -1,15 +1,18 @@
 import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
 import Words from '../../shared/Words'
+import Phrases from '../../shared/phrase/Phrases'
 import Sentences from './FrontendSentences'
 import Inflections from './FrontendInflections'
+import { JsonFormat } from '../../shared/Corpus'
 
 export default class FrontendCorpus extends Corpus {
 
-    static fromJson(json): FrontendCorpus {
+    static fromJson(json: JsonFormat): FrontendCorpus {
         let inflections = new Inflections().fromJson(json.inflections)
         let words = Words.fromJson(json.words, inflections) 
-        let facts = Facts.fromJson(json.facts, inflections, words)
+        let phrases = Phrases.fromJson(json.phrases, words)
+        let facts = Facts.fromJson(json.facts, inflections, words, phrases)
         let sentences = new Sentences(json.lang)
         
         sentences.fromJson(json.sentences, facts, words)
@@ -19,6 +22,7 @@ export default class FrontendCorpus extends Corpus {
             words,
             sentences,
             facts, 
+            phrases,
             json.lang)
     }
 

@@ -5,9 +5,9 @@ import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 
-type AnyWord = InflectableWord | Word
+export type AnyWord = InflectableWord | Word
 
-export default class ExactWordMatch implements WordMatch {
+export class ExactWordMatch implements WordMatch {
     constructor(public word : AnyWord) {
         this.word = word
     }
@@ -32,3 +32,5 @@ export default class ExactWordMatch implements WordMatch {
         return result
     }
 }
+
+export default ExactWordMatch

@@ -3,6 +3,8 @@
 import UnstudiedWord from './UnstudiedWord';
 import Inflections from './inflection/Inflections'
 
+import { JsonFormat } from './UnstudiedWord'
+
 /**
  * A word has a Japanese spelling, an English translation an optional list of grammar that is required to understand it.
  */
@@ -13,7 +15,7 @@ export default class Word extends UnstudiedWord {
         this.visitRequired(visitor)
     }
 
-    static fromJson(json, inflections: Inflections): UnstudiedWord {
+    static fromJson(json: JsonFormat, inflections: Inflections): UnstudiedWord {
         if (json.type == 'word') {
             return new Word(json.target, json.classifier).setEnglish(json.en)
         }

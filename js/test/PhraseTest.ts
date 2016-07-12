@@ -9,7 +9,6 @@ import Words from '../shared/Words'
 import Corpus from '../shared/Corpus'
 import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
-import Sentences from '../shared/Sentences'
 import UnstudiedWord from '../shared/UnstudiedWord'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
@@ -25,27 +24,23 @@ let inflections = new Inflections([
 describe('Phrase', function() {
     let w1, w2: Word, w3: InflectableWord, words: Words, facts: Facts, corpus: Corpus
     
-    beforeEach(() => {        
-        w1 = new UnstudiedWord('в', 'loc')
-        w2 = new UnstudiedWord('в', 'dir')
-        w3 = new InflectableWord('библиотек', inflections.inflections[0])
-        
-        facts = new Facts()
+    w1 = new UnstudiedWord('в', 'loc')
+    w2 = new UnstudiedWord('в', 'dir')
+    w3 = new InflectableWord('библиотек', inflections.inflections[0])
+    
+    words = new Words()
+    words.addWord(w1)
+    words.addWord(w2)
+    words.addInflectableWord(w3)
 
-        facts.add(w1)
-        facts.add(w2)
-        facts.add(w3)
+    facts = new Facts()
+    facts.add(w3)
 
-        words = new Words(facts)
-
-        facts.tag(w3, 'location')
-
-        corpus = new Corpus(inflections, words, new Sentences(), facts, 'ru')
-    })
+    facts.tag(w3, 'location')
 
     it('converts to str and back', function () {
         function testStr(originalStr: string) {
-            let phrase = Phrase.fromString('foo', originalStr, corpus)
+            let phrase = Phrase.fromString('foo', originalStr, words)
 
             expect(phrase.toString()).to.equal(originalStr)
         }
@@ -56,15 +51,15 @@ describe('Phrase', function() {
     })
 
     it('matches', function () {
-        let words = [
+        let wordArray = [
             w1, w3.inflect('prep')
         ]
 
         function testMatch(phraseStr: string) {
-            let phrase = Phrase.fromString('foo', phraseStr, corpus)
+            let phrase = Phrase.fromString('foo', phraseStr, words)
 
-            expect(phrase.match(words)).to.be.not.undefined
-            expect(phrase.match(words).length).to.equal(2)
+            expect(phrase.match(wordArray, facts)).to.be.not.undefined
+            expect(phrase.match(wordArray, facts).length).to.equal(2)
         }
 
         testMatch('в[loc]@ библиотека@prep')

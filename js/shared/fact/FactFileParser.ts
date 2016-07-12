@@ -20,20 +20,37 @@ import Inflections from '../inflection/Inflections'
 import InflectionFact from '../inflection/InflectionFact'
 import Fact from './Fact'
 import Facts from './Facts'
+import Phrases from '../phrase/Phrases'
 import Grammars from '../Grammars'
+import Corpus from '../Corpus'
 import MASKS from '../Masks'
 import transforms from '../Transforms'
 import Transform from '../Transform'
+import Phrase from '../phrase/Phrase'
 
-export default function parseFactFile(data, inflections: Inflections, lang: string): Facts {
-    var facts = new Facts()
-    var grammars = new Grammars(inflections)
+class PhraseFact implements Fact {
+    constructor(public id: string) {
+        this.id = id
+    }
+
+    getId() {
+        return this.id
+    }
+
+    visitFacts(visitor: (Fact) => any) {
+        visitor(this)
+    }
+}
+
+export function parseFactFile(data, inflections: Inflections, lang: string): Facts {
+    let facts = new Facts()
+    let grammars = new Grammars(inflections)
 
     function parseWordAndClassifier(jpWord) {
         let classifier
         let m = jpWord.match(/(.*)\[(.*)\]/)
 
-        var text
+        let text
 
         if (m) {
             text = m[1]
@@ -46,10 +63,10 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
         return {classifier: classifier, word: text}
     }
 
-    function parseLeftSideOfDefinition(leftSide): Fact {
+    function parseLeftSideOfDefinition(leftSide): UnstudiedWord {
         let elements = leftSide.split(',').map((s) => s.trim())
 
-        var parseResult = parseWordAndClassifier(elements[0])
+        let parseResult = parseWordAndClassifier(elements[0])
 
         let stemAndEnding = parseResult.word.split('--');
         let inflected = stemAndEnding.length == 2;
@@ -138,7 +155,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
                 fact = iw
             }
             else if (tag == 'grammar') {
-                var requiredFact = facts.get(text)
+                let requiredFact = facts.get(text)
 
                 if (!requiredFact) {
                     throw new Error('Unknown required fact "' + text + '" in "' + rightSide + '"')
@@ -195,7 +212,7 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
         let leftSide = line.substr(0, i)
         let rightSide = line.substr(i + 1)
 
-        let fact;
+        let fact: Fact;
 
         if (leftSide == 'grammar') {
             splitRightSide(rightSide.trim()).forEach((pair) => {
@@ -246,15 +263,23 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
             fact = transforms.get(rightSide.trim())
 
             if (!fact) {
-                throw new Error(`Unknwn transform "${rightSide}"`)
+                throw new Error(`Unknown transform "${rightSide}"`)
             }
         }
+        else if (leftSide == 'phrase') {
+            let phraseId = rightSide.trim()
+            
+            if (!phraseId || phraseId.indexOf(' ') >= 0) {
+                throw new Error(`${phraseId} does not look like a phrase ID.`)
+            }
+
+            fact = new PhraseFact(phraseId)
+        }
         else {
-            fact = parseLeftSideOfDefinition(leftSide)
+            let word = parseLeftSideOfDefinition(leftSide)
 
-            fact = parseRightSideOfDefinition(rightSide, fact)
+            fact = parseRightSideOfDefinition(rightSide, word)
 
-            fact.line = lineIndex
         }
 
         if (fact) {
@@ -264,3 +289,19 @@ export default function parseFactFile(data, inflections: Inflections, lang: stri
 
     return facts
 }
+
+export function resolvePhrases(facts: Facts, phrases: Phrases) {
+    facts.facts.forEach((fact) => {
+        if (fact instanceof PhraseFact) {
+            let phrase = phrases.get(fact.getId())
+
+            if (!phrase) {
+                throw new Error(`Unknown phrase ${ fact.getId() }`)
+            }
+
+            facts.replace(fact, phrase)
+        }
+    })
+}
+
+export default parseFactFile

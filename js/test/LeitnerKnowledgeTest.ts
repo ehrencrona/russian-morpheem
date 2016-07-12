@@ -77,7 +77,7 @@ describe('LeitnerKnowledge', () => {
         knowledge.processExposures(exposures)
 
         expect(knowledge.deckOfFact(facts.get('word1'))).to.equal(-1)
-        expect(knowledge.isKnown(facts.get('word1'))).to.be.true
+        expect(knowledge.isKnown(facts.get('word1'))).to.equal(4)
 
         expect(knowledge.size).to.equal(0)
 

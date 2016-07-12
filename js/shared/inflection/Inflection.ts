@@ -10,7 +10,7 @@ import allTransforms from '../Transforms'
 
 type Endings = { [s: string]: Ending }
 
-interface InflectionJson {
+export interface JsonFormat {
     id: string,
     defaultForm: string,
     pos: string,
@@ -35,7 +35,7 @@ export default class Inflection {
         this.description = description
     } 
 
-    static fromJson(json: InflectionJson, inflections: Inflections) {
+    static fromJson(json: JsonFormat, inflections: Inflections) {
         let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings, json.description)
         
         if (json.inherits) {
@@ -57,7 +57,7 @@ export default class Inflection {
         return result
     }
 
-    toJson(): InflectionJson {
+    toJson(): JsonFormat {
         return {
             id: this.id,
             defaultForm: this.defaultForm,

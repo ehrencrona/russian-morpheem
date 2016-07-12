@@ -7,6 +7,9 @@ import Fact from './Fact';
 import Inflections from '../inflection/Inflections';
 import Word from '../Word';
 import Words from '../Words';
+import Corpus from '../Corpus';
+import Phrase from '../phrase/Phrase';
+import Phrases from '../phrase/Phrases';
 import { EndingTransform } from '../Transforms'
 import transforms from '../Transforms'
 
@@ -14,12 +17,15 @@ const INFLECTION = 'i'
 const INFLECTABLE = 'ib'
 const WORD = 'w'
 const TRANSFORM = 't'
+const PHRASE = 'p'
 
-interface JsonFormat {
+export interface FactJsonFormat {
     id: string,
     type: string,
     tags?: string[]
 }
+
+export type JsonFormat = FactJsonFormat[]
 
 export const MISSING_INDEX = 9999998
 
@@ -76,7 +82,16 @@ export default class Facts {
 
         return this
     }
-        
+
+    replace(fact: Fact, withFact: Fact) {
+        if (withFact.getId() != fact.getId()) {
+            throw new Error('Cannot replace with different ID')
+        }
+
+        this.factsById[fact.getId()] = withFact
+        this.facts[this.indexOf(fact)] = withFact
+    }
+
     remove(fact: Fact) {
         if (!this.factsById[fact.getId()]) {
             console.error('Unknown fact ' + fact.getId())
@@ -200,10 +215,10 @@ export default class Facts {
         return this.tagsByFactIds[fact.getId()] || []
     }
     
-    static fromJson(json, inflections: Inflections, words: Words) {
+    static fromJson(json, inflections: Inflections, words: Words, phrases: Phrases) {
         let facts = new Facts()
         
-        json.forEach((factJson: JsonFormat) => {
+        json.forEach((factJson: FactJsonFormat) => {
             let fact 
             
             if (factJson.type == INFLECTION) {
@@ -233,6 +248,13 @@ export default class Facts {
                     throw new Error(`Unknown word "${factJson.id}". Did you mean "${words.getSimilarTo(factJson.id)}"`)
                 }
             }
+            else if (factJson.type == PHRASE) {
+                fact = phrases.get(factJson.id)
+
+                if (!fact) {
+                    throw new Error(`Unknown phrase "${factJson.id}".`)
+                }
+            }
             else if (factJson.type == TRANSFORM) {
                 fact = transforms.get(factJson.id);
                 
@@ -258,6 +280,8 @@ export default class Facts {
     toJson() {
         return this.facts.map((fact) => {
             let type
+            let data
+            let description
             
             let id = fact.getId()
             
@@ -276,16 +300,19 @@ export default class Facts {
             } 
             else if (fact instanceof EndingTransform) {
                 type = TRANSFORM
-            } 
+            }
+            else if (fact instanceof Phrase) {
+                type = PHRASE
+            }
             else {
                throw new Error('Unknown fact type ' + fact.constructor.name)
             }
             
-            let result: JsonFormat = {
+            let result: FactJsonFormat = {
                 id: id,
                 type: type
             }
-            
+
             let tags = this.getTagsOfFact(fact)
 
             if (tags.length) {

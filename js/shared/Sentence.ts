@@ -8,6 +8,8 @@ import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'
 import UnparsedWord from './UnparsedWord'
 
+export type JsonFormat = (number | string | string[])[]
+
 /**
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
  */
@@ -26,7 +28,7 @@ export default class Sentence {
             !this.words.find((word, index) => word.getId() != other.words[index].getId())
     }
 
-    static fromJson(json, facts: Facts, words: Words) {
+    static fromJson(json: JsonFormat, facts: Facts, words: Words) {
         let data = {
             id: json[0],
             words: json[1],
@@ -41,7 +43,7 @@ export default class Sentence {
 
         let sentence =
             new Sentence(
-                data.words.map((wordId) => { 
+                (data.words as string[]).map((wordId) => { 
                     let word = words.get(wordId)
 
                     if (!word) {
@@ -49,11 +51,11 @@ export default class Sentence {
                     }
 
                     return word
-                 }), data.id)
+                 }), data.id as number)
                 .setEnglish(data.english)
 
         if (data.requires) {    
-            data.requires.forEach((factId) => 
+            (data.requires as string[]).forEach((factId) => 
                 sentence.requiresFact(facts.get(factId))
             )
         }
@@ -61,8 +63,8 @@ export default class Sentence {
         return sentence        
     }
     
-    toJson() {
-        return [            
+    toJson(): JsonFormat {
+        return [
             this.id,
             this.words.map((word) => word.getId()),
             this.english,

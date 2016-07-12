@@ -6,7 +6,11 @@ import Inflection from '../shared/inflection/Inflection';
 
 import Facts from '../shared/fact/Facts';
 import Words from '../shared/Words';
+import Corpus from '../shared/Corpus';
+import Sentences from '../shared/Sentences';
 import Word from '../shared/Word';
+import Phrase from '../shared/phrase/Phrase';
+import Phrases from '../shared/phrase/Phrases';
 import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectableWord from '../shared/InflectableWord';
 
@@ -26,21 +30,26 @@ describe('Facts', function() {
     let inflectableWord = new InflectableWord('foo', inflection)
         .setEnglish('eng')
 
+    let phrase = new Phrase('phraseId', [])
+    let phrases = new Phrases().add(phrase)
+
     let facts = new Facts()
         .add(inflections.getForm('regular@nom'))
         .add(word)
         .add(inflectableWord)
         .add(inflections.getForm('regular@imp'))
         .add(transforms.get('yToI'))
+        .add(phrase)
 
     let words = new Words().addWord(word).addInflectableWord(inflectableWord)
+
 
     it('looks up facts by index', () => {
         expect(facts.indexOf(word)).to.equal(1)
     })
 
     it('handles JSON conversion', () => {
-        let after = Facts.fromJson(facts.toJson(), inflections, words)
+        let after = Facts.fromJson(facts.toJson(), inflections, words, phrases)
 
         expect(after.facts[0].getId()).to.equal('regular@nom');
 
@@ -51,6 +60,9 @@ describe('Facts', function() {
         expect(after.facts[2].getId()).to.equal(inflectableWord.getId());
 
         expect(after.facts[3].getId()).to.equal('regular@imp');
+
+        expect(after.facts[4].getId()).to.equal('yToI');
+        expect(after.facts[5].getId()).to.equal('phraseId');
     })
     
     it('can move facts', () => {

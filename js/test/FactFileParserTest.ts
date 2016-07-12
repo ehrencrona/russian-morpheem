@@ -1,4 +1,4 @@
-import parser from '../shared/fact/FactFileParser'
+import { parseFactFile as parser } from '../shared/fact/FactFileParser'
 
 import { expect } from 'chai';
 
@@ -6,12 +6,16 @@ import Word from '../shared/Word'
 import Grammar from '../shared/Grammar'
 import Inflections from '../shared/inflection/Inflections'
 import Inflection from '../shared/inflection/Inflection'
+import Words from '../shared/Words'
+import Sentences from '../shared/Sentences'
+import Facts from '../shared/fact/Facts'
+import Corpus from '../shared/Corpus'
 import InflectableWord from '../shared/InflectableWord'
 import { EndingTransform } from '../shared/Transforms'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 var inflections = new Inflections()
-    
+
 inflections.add(new Inflection('inflection', 'nom', null, 
     parseEndings('nom: a', 'fake').endings))
 
@@ -55,7 +59,7 @@ describe('FactFileParser', function() {
 
         expect(facts.get('iwa[b]')).to.not.be.null
     })
-
+    
     it('parses grammar facts', function () {
         var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]

@@ -1,9 +1,10 @@
 
 import WordMatch from './WordMatch'
-import ExactWordMatch from './ExactWordMatch'
+import { ExactWordMatch, AnyWord } from './ExactWordMatch'
 import CaseWordMatch from './CaseWordMatch'
 import TagWordMatch from './TagWordMatch'
-import Corpus from '../Corpus'
+import Words from '../Words'
+import Facts from '../fact/Facts'
 import Word from '../Word'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
@@ -18,23 +19,19 @@ export default class PhraseMatch {
         }
     }
 
-    match(words: Word[]): Word[] {
+    match(words: Word[], facts: Facts): Word[] {
         for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
             let at = i
             let found = true
 
             for (let j = 0; j < this.wordMatches.length; j++) {
-                let match = this.wordMatches[j].matches(words.slice(at))
+                let match = this.wordMatches[j].matches(words.slice(at), facts)
 
                 if (!match) {
-console.log(this.wordMatches[j] , ' did not match ', words[at])
                     found = false
                     break
                 }
-else {
-    console.log(this.wordMatches[j] , ' did match ', words[at], match)
 
-}
                 at += match
             }
 
@@ -44,20 +41,23 @@ else {
         }
     }
 
-    static fromString(str: string, corpus: Corpus) {
+    static fromString(line: string, words: Words) {
         let wordMatches: WordMatch[] = []
         
-        str.split(' ').forEach((str) => {
+        line.split(' ').forEach((str) => {
             let match: WordMatch
 
             if (str[0] == '@') {
-
                 let caseStr = str.substr(1)
+
+                if (FORMS[caseStr] == null) {
+                    throw new Error(`Unknown form "${caseStr}" on line "${line}". Should be acc, gen, nom, dat, instr or prep.`)
+                }
 
                 let grammaticalCase = FORMS[caseStr].grammaticalCase
 
                 if (grammaticalCase == null) {
-                    throw new Error(`Unknown case "${caseStr}". Should be acc, gen, nom, dat, instr or prep.`)
+                    throw new Error(`"${caseStr}" is not a case but some other form. Should be acc, gen, nom, dat, instr or prep.`)
                 }
                 
                 match = new CaseWordMatch(grammaticalCase, caseStr)
@@ -65,33 +65,25 @@ else {
             else if (str.indexOf('@') > 0) {
 
                 let wordStr
-                let word
+                let word: AnyWord
                 
                 if (str[str.length-1] == '@') {
                     wordStr = str.substr(0, str.length-1)
                     
-                    let fact = corpus.facts.get(wordStr) 
+                    word = words.get(wordStr) 
                     
-                    if (fact instanceof InflectableWord || fact instanceof UnstudiedWord) {
-                        word = fact
-                    }
-                    else {
-                        if (!fact) {
-                            throw new Error(`"${wordStr}" is not a known fact.`)
-                        }
-                        else {
-                            throw new Error(`"${wordStr}" does not seem to be a word but some other fact.`)
-                        }
+                    if (!word) {
+                        word = words.inflectableWordsById[wordStr] 
                     }
                 }
                 else {
                     wordStr = str
 
-                    word = corpus.words.get(wordStr)
+                    word = words.get(wordStr)
                 }
 
                 if (!word) {
-                    throw new Error(`Unknown word "${wordStr}". did you mean ${corpus.words.getSimilarTo(wordStr)}?`)
+                    throw new Error(`Unknown word "${ wordStr }". did you mean ${ words.getSimilarTo(wordStr) }?`)
                 }
 
                 match = new ExactWordMatch(word)
@@ -99,11 +91,7 @@ else {
             else if (str.substr(0, 4) == 'tag:') {
                 let tagStr = str.substr(4)
 
-                if (!corpus.facts.getFactIdsWithTag(tagStr).size) {
-                    throw new Error(`Unknown or empty tag "${tagStr}".`)
-                }
-
-    	        match = new TagWordMatch(tagStr, corpus.facts)
+    	        match = new TagWordMatch(tagStr)
             }
             else {
                 throw new Error(`Unknown word match "${str}". Should either be @case for a case, word@ for a word or tag:tagName for a tag.`)

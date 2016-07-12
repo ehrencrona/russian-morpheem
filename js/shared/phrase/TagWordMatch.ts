@@ -7,12 +7,11 @@ import InflectedWord from '../InflectedWord'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 
 export default class TagWordMatch implements WordMatch {
-    constructor(public tag : string, public facts: Facts) {
-        this.facts = facts
+    constructor(public tag : string) {
         this.tag = tag
     }
 
-    matches(words: Word[]) {
+    matches(words: Word[], facts: Facts) {
         for (let i = 0; i < words.length; i++) {
             let word = words[i]
 
@@ -22,7 +21,7 @@ export default class TagWordMatch implements WordMatch {
                 fact = word.word
             }
 
-            let tags = this.facts.getTagsOfFact(fact)
+            let tags = facts.getTagsOfFact(fact)
 
             if (tags.indexOf(this.tag) < 0) {
                 return i

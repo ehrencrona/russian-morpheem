@@ -7,9 +7,15 @@ import Facts from './fact/Facts'
 import UnstudiedWord from './UnstudiedWord'
 import UnparsedWord from './UnparsedWord'
 
+import { JsonFormat as InflectableWordJsonFormat } from './InflectableWord'
+import { JsonFormat as WordJsonFormat } from './UnstudiedWord'
+
+export type JsonFormat = (InflectableWordJsonFormat | WordJsonFormat)[]
+
 export default class Words {
     wordsByString : { [s: string]: Word } = {}
     wordsById : { [s: string]: Word } = {}
+    inflectableWordsById : { [s: string]: InflectableWord } = {}
     
     ambiguousForms : { [s: string]: Word[] } = {}
 
@@ -132,6 +138,8 @@ export default class Words {
             this.onAddInflectableWord(word)
         }
 
+        this.inflectableWordsById[word.getId()]
+
         return this
     }
 
@@ -195,24 +203,25 @@ export default class Words {
         return suggestions
     }
        
-    static fromJson(json, inflections) {
+    static fromJson(json: JsonFormat, inflections) {
         let result = new Words();
         
         json.forEach((wordJson) => {
             if (wordJson.type == InflectableWord.getJsonType()) {
-                result.addInflectableWord(InflectableWord.fromJson(wordJson, inflections))
+                result.addInflectableWord(
+                    InflectableWord.fromJson(wordJson as InflectableWordJsonFormat, inflections))
             }
             else {
-                result.addWord(InflectedWord.fromJson(wordJson, inflections))
+                result.addWord(InflectedWord.fromJson(wordJson as WordJsonFormat, inflections))
             }
         })
         
         return result
     }
     
-    toJson() {        
-        let result = []
-        
+    toJson(): JsonFormat {        
+        let result: JsonFormat = []
+
         for (let id in this.wordsById) {
             let word = this.wordsById[id]
             

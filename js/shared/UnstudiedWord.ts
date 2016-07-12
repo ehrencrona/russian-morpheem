@@ -4,6 +4,13 @@ import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
 import Words from './Words'
 
+export interface JsonFormat {
+    target: string,
+    en: string,
+    classifier: string,
+    type: string    
+}
+
 /**
  * An UnstudiedWord is a Word that is not a fact, i.e. it is not studied in its own right. Typically, all unstudied words
  * require grammar rules that represent the real knowledge required. An example might be the construct "<noun>は<noun>がある"
@@ -102,11 +109,11 @@ export default class UnstudiedWord {
         return this.jp
     }
     
-    static fromJson(json, inflections: Inflections): UnstudiedWord {
+    static fromJson(json: JsonFormat, inflections: Inflections): UnstudiedWord {
         return new UnstudiedWord(json.target, json.classifier).setEnglish(json.en)
     }
     
-    toJson(): any {
+    toJson(): JsonFormat {
         return {
             target: this.jp,
             en: this.en[''],

@@ -3,6 +3,10 @@ import Sentence from './Sentence';
 import Facts from './fact/Facts';
 import Words from './Words';
 
+import { JsonFormat as SentenceJsonFormat } from './Sentence'
+
+export type JsonFormat = SentenceJsonFormat[] 
+
 export default class Sentences {
     sentenceById : { [id: number]: Sentence } = {}
     sentences : Sentence[] = []
@@ -93,7 +97,7 @@ export default class Sentences {
         }
     }
 
-    fromJson(json, facts: Facts, words: Words) {
+    fromJson(json: JsonFormat, facts: Facts, words: Words) {
         json.forEach((sentenceJson) => {
             this.add(Sentence.fromJson(sentenceJson, facts, words))
         })
@@ -101,7 +105,7 @@ export default class Sentences {
         return this
     }
     
-    toJson() {
+    toJson(): JsonFormat {
         return this.sentences.map((sentence) => sentence.toJson())
     }
 }

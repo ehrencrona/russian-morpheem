@@ -2,12 +2,15 @@
 
 import readInflectionsFile from './inflection/InflectionsFileReader';
 import readFactFile from './FactFileReader';
+import { resolvePhrases } from '../shared/fact/FactFileParser'
+import readPhraseFile from './PhraseFileReader';
 import SentenceFileReader from './SentenceFileReader';
 import Facts from '../shared/fact/Facts';
 import Corpus from '../shared/Corpus';
 import Words from '../shared/Words';
 import Sentence from '../shared/Sentence';
 import Sentences from '../shared/Sentences';
+import Phrases from '../shared/phrase/Phrases'
 import Inflections from '../shared/inflection/Inflections';
 import { watch } from 'fs';
 import BackendSentenceHistory from './metadata/BackendSentenceHistory';
@@ -49,10 +52,15 @@ export default function readCorpus(lang, doWatch) {
                 let words = new Words(facts)                
                 words.addPunctuation()
 
-                return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
-                .then((sentences: Sentences) => {
-                    return new Corpus(inflections, words, sentences, facts, lang)
-                })
+                return readPhraseFile(corpusDir + '/phrases.txt', words, lang)
+                    .then((phrases: Phrases) => {
+                        resolvePhrases(facts, phrases)
+
+                        return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
+                        .then((sentences: Sentences) => {
+                            return new Corpus(inflections, words, sentences, facts, phrases, lang)
+                        })
+                    })
             })
     })
     .then((corpus: Corpus) => {
