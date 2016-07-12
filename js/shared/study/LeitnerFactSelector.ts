@@ -28,7 +28,7 @@ console.log(index+ ': '+ deckScore(index))
             maxScore += deckScore(index)  
         })
 
-        let chanceOfNewFact = (1 + NEW_FACT_RATE) * Math.max(MAX_PARALLEL_STUDY_COUNT - this.knowledge.size, 0)
+        let chanceOfNewFact = (1 + NEW_FACT_RATE) * Math.max(MAX_PARALLEL_STUDY_COUNT - this.knowledge.size, 1)
         
         maxScore *= chanceOfNewFact 
 
