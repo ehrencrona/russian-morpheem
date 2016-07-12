@@ -78,7 +78,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         this.exposures
             .getExposures(-1)
-            .then((exposures) => {                
+            .then((exposures) => {
                 this.processExposures(exposures)
 
                 this.chooseSentence()
@@ -102,21 +102,22 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     render() {
-        let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
+        if (0==1) {
+            let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
 
-        knowledge.known['fem@genpl'] = 9;
-        knowledge.known['femka2@genpl'] = 9;
-        knowledge.known['neu@genpl'] = 9;
-        knowledge.known['-mascь@genpl'] = 9;
+            knowledge.known['fem@genpl'] = 9;
+            knowledge.known['femka2@genpl'] = 9;
+            knowledge.known['neu@genpl'] = 9;
+            knowledge.known['-mascь@genpl'] = 9;
 
-        if (0==1)
-        return <ExplainFormComponent 
-            corpus={ this.props.corpus }
-            knowledge={ knowledge }
-            word={ this.props.corpus.words.get('писать@3pl') as InflectedWord }
-            onClose={ () => {} }
-            onSelect={ () => {} }
-            />
+            return <ExplainFormComponent 
+                corpus={ this.props.corpus }
+                knowledge={ knowledge }
+                word={ this.props.corpus.words.get('писать@3pl') as InflectedWord }
+                onClose={ () => {} }
+                onSelect={ () => {} }
+                />
+        }
 
         if (this.state.sentence) {
             return <StudyComponent 

@@ -137,6 +137,18 @@ addForm('accinanpl', 'accusative masculine inanimate plural', { grammaticalCase:
 addForm('instrpl', 'instrumental plural', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
 addForm('preppl', 'prepositional plural', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
 
+addForm('genplalt', 'genitive plural alternative form', { grammaticalCase: GrammaticalCase.GEN, number: Number.PLURAL })
+addForm('datplalt', 'dative plural alternative form', { grammaticalCase: GrammaticalCase.DAT, number: Number.PLURAL })
+addForm('accplalt', 'accusative plural alternative form', { grammaticalCase: GrammaticalCase.ACC, number: Number.PLURAL })
+addForm('instrplalt', 'instrumental plural alternative form', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
+addForm('prepplalt', 'prepositional plural alternative form', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
+
+addForm('genalt', 'genitive plural alternative form', { grammaticalCase: GrammaticalCase.GEN, number: Number.PLURAL })
+addForm('datalt', 'dative plural alternative form', { grammaticalCase: GrammaticalCase.DAT, number: Number.PLURAL })
+addForm('accalt', 'accusative plural alternative form', { grammaticalCase: GrammaticalCase.ACC, number: Number.PLURAL })
+addForm('instralt', 'instrumental plural alternative form', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
+addForm('prepalt', 'prepositional plural alternative form', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
+
 addForm('adv', 'adverb', {})
 addForm('comp', 'comparative', {})
 

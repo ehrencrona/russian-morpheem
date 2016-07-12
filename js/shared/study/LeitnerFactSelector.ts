@@ -24,23 +24,22 @@ export default class LeitnerFactSelector {
             ((deckCount - deckIndex) / deckCount * 2 + 1) * this.knowledge.decks[deckIndex].facts.length
 
         this.knowledge.decks.forEach((deck, index) => {
+console.log(index+ ': '+ deckScore(index))            
             maxScore += deckScore(index)  
         })
 
         let chanceOfNewFact = (1 + NEW_FACT_RATE) * Math.max(MAX_PARALLEL_STUDY_COUNT - this.knowledge.size, 0)
         
-console.log('pick new with chance', chanceOfNewFact)
-
         maxScore *= chanceOfNewFact 
 
         let score = Math.random() * maxScore
-
+console.log('score ' + score + ' / ' + maxScore)
         let deck = this.knowledge.decks.find((deck, index) => {
             score -= deckScore(index)
 
             return score < 0
         })
-console.log('score left', score)
+console.log('deck ' + this.knowledge.decks.findIndex((d) => d==deck) + ', score left ' + score)
 
         if (deck) {
             return deck.facts[Math.floor(deck.facts.length * Math.random())]
