@@ -31,16 +31,19 @@ export default class OldestSentenceSelector {
                 age = 1
             }
 
+console.log(age, sentenceDiff.sentence.toString())
+
             let score 
 
             if (age == 1) {
-                let difficulty = sentenceDiff.difficulty / this.facts.facts.length
+                let difficulty = Math.min(sentenceDiff.difficulty, this.facts.facts.length) / this.facts.facts.length
 
                 score = age + 1 - difficulty
             }
             else {
                 score = age
             }
+
 
             if (score > highestScore) {
                 chosenSentence = sentenceDiff.sentence
