@@ -175,7 +175,7 @@ export function getFormName(formId: string) {
     }
 }
 
-const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
+export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     ru: {
         v: new Forms(
             [ 'singular', 'plural' ],

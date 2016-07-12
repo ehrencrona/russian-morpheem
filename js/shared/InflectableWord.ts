@@ -87,6 +87,10 @@ export default class InflectableWord {
             }
 
             this.defaultInflection = this.inflect(defaultForm)
+
+            if (!this.defaultInflection) {
+                throw new Error(`The default inflection ${defaultForm} of the inflection ${this.inflection.id} for ${this.stem} did not exist.`)
+            }
         }
 
         return this.defaultInflection
