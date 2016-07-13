@@ -70,6 +70,23 @@ export default class PhraseMatch {
                 
                 match = new CaseWordMatch(grammaticalCase, caseStr)
             }
+            else if (str.substr(0, 4) == 'tag:') {
+                let els = str.substr(4).split('@')
+
+                let tagStr = els[0]
+
+                let form 
+                
+                if (els[1]) {
+                    form = FORMS[els[1]]
+
+                    if (!form) {
+                        throw new Error(`"${ els[1] } was not recognized as a form. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
+                    }
+                }
+
+    	        match = new TagWordMatch(tagStr, form)
+            }
             else if (str.indexOf('@') > 0) {
                 let wordStr
                 let word: AnyWord
@@ -97,11 +114,6 @@ export default class PhraseMatch {
             }
             else if (str == 'any') {
                 match = new WildcardMatch()
-            }
-            else if (str.substr(0, 4) == 'tag:') {
-                let tagStr = str.substr(4)
-
-    	        match = new TagWordMatch(tagStr)
             }
             else {
                 throw new Error(`Unknown word match "${str}". Should either be @case for a case, word@ for a word or tag:tagName for a tag.`)
