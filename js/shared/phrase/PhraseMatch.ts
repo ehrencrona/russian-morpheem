@@ -1,5 +1,6 @@
 
 import WordMatch from './WordMatch'
+import WildcardMatch from './WildcardMatch'
 import { ExactWordMatch, AnyWord } from './ExactWordMatch'
 import CaseWordMatch from './CaseWordMatch'
 import TagWordMatch from './TagWordMatch'
@@ -13,30 +14,33 @@ import UnstudiedWord from '../UnstudiedWord'
 export default class PhraseMatch {
     constructor(public wordMatches: WordMatch[]) {
         this.wordMatches = wordMatches
-
-        if (!this.wordMatches.length || !this.wordMatches[0]) {
-            throw new Error(`No word matches specified.`)
-        }
     }
 
     match(words: Word[], facts: Facts): Word[] {
         for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
             let at = i
             let found = true
+            let result: Word[] = []
 
             for (let j = 0; j < this.wordMatches.length; j++) {
-                let match = this.wordMatches[j].matches(words.slice(at), facts)
+                let wordMatch = this.wordMatches[j]
+
+                let match = wordMatch.matches(words, at, this.wordMatches, j, facts)
 
                 if (!match) {
                     found = false
                     break
                 }
 
+                if (!(wordMatch instanceof WildcardMatch)) {
+                    result = result.concat(words.slice(at, at + match))
+                }
+
                 at += match
             }
 
             if (found) {
-                return words.slice(i, at)
+                return result
             }
         }
     }
@@ -45,6 +49,10 @@ export default class PhraseMatch {
         let wordMatches: WordMatch[] = []
         
         line.split(' ').forEach((str) => {
+            if (!str) {
+                return
+            }
+
             let match: WordMatch
 
             if (str[0] == '@') {
@@ -63,17 +71,16 @@ export default class PhraseMatch {
                 match = new CaseWordMatch(grammaticalCase, caseStr)
             }
             else if (str.indexOf('@') > 0) {
-
                 let wordStr
                 let word: AnyWord
                 
                 if (str[str.length-1] == '@') {
                     wordStr = str.substr(0, str.length-1)
                     
-                    word = words.get(wordStr) 
+                    word = words.inflectableWordsById[wordStr] 
                     
                     if (!word) {
-                        word = words.inflectableWordsById[wordStr] 
+                        word = words.get(wordStr) 
                     }
                 }
                 else {
@@ -83,10 +90,13 @@ export default class PhraseMatch {
                 }
 
                 if (!word) {
-                    throw new Error(`Unknown word "${ wordStr }". did you mean ${ words.getSimilarTo(wordStr) }?`)
+                    throw new Error(`Unknown word "${ wordStr }". did you mean ${ words.getSimilarTo(wordStr).join(', ') }?`)
                 }
 
                 match = new ExactWordMatch(word)
+            }
+            else if (str == 'any') {
+                match = new WildcardMatch()
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let tagStr = str.substr(4)

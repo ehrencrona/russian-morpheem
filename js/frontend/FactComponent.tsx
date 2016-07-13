@@ -9,7 +9,7 @@ import Phrase from '../shared/phrase/Phrase'
 import Tab from './Tab'
 
 import InflectableWordFactComponent from './InflectableWordFactComponent'
-import PhraseFactComponent from './PhraseFactComponent'
+import PhraseFactComponent from './phrase/PhraseFactComponent'
 import WordFactComponent from './WordFactComponent'
 import InflectionFactComponent from './InflectionFactComponent'
 import TransformFactComponent from './TransformFactComponent'

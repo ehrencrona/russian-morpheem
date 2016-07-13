@@ -14,25 +14,26 @@ import Corpus from '../shared/Corpus'
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
 
-import addFact from './route/addFact';
-import setFact from './route/setFact';
-import inflectionFor from './route/inflectionFor';
-import addWord from './route/addWord';
-import addInflectedWord from './route/addInflectedWord';
-import addSentence from './route/addSentence';
-import addComment from './route/addComment';
-import deleteSentence from './route/deleteSentence';
-import setSentence from './route/setSentence';
-import getEvents from './route/getEvents';
-import getStatus from './route/getStatus';
-import setStatus from './route/setStatus';
-import getPendingSentences from './route/getPendingSentences';
-import getLatestEvents from './route/getLatestEvents';
-import getMyLatestEvents from './route/getMyLatestEvents';
-import getEventsByDate from './route/eventsByDate';
-import getNewsfeed from './route/getNewsfeed';
-import getExternalSentences from './route/getExternalSentences';
-import importExternalSentence from './route/importExternalSentence';
+import addFact from './route/addFact'
+import setFact from './route/setFact'
+import inflectionFor from './route/inflectionFor'
+import addWord from './route/addWord'
+import addInflectedWord from './route/addInflectedWord'
+import addSentence from './route/addSentence'
+import addComment from './route/addComment'
+import deleteSentence from './route/deleteSentence'
+import setSentence from './route/setSentence'
+import setPhrase from './route/setPhrase'
+import getEvents from './route/getEvents'
+import getStatus from './route/getStatus'
+import setStatus from './route/setStatus'
+import getPendingSentences from './route/getPendingSentences'
+import getLatestEvents from './route/getLatestEvents'
+import getMyLatestEvents from './route/getMyLatestEvents'
+import getEventsByDate from './route/eventsByDate'
+import getNewsfeed from './route/getNewsfeed'
+import getExternalSentences from './route/getExternalSentences'
+import importExternalSentence from './route/importExternalSentence'
 
 import registerExposures from './route/registerExposures'
 import getExposures from './route/getExposures'
@@ -102,6 +103,8 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/api/${lang}/sentence/:id/status`, getStatus(corpus))
 
     app.put(`/api/${lang}/sentence/:id/status`, setStatus(corpus))
+
+    app.put(`/api/${lang}/phrase/:id`, setPhrase(corpus))
 
     app.post(`/api/${lang}/fact/:id/tag/:tag`, tag(corpus))
 

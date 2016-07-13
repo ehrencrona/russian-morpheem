@@ -7,6 +7,8 @@ import Tab from '../Tab'
 import PendingSentencesComponent from './PendingSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'
+import SentenceComponent from '../SentenceComponent'
+import Sentence from '../../shared/Sentence'
 
 interface Props {
     corpus: Corpus,
@@ -33,6 +35,19 @@ export default class SentencesComponent extends Component<Props, State> {
         }
     }
     
+    addSentence() {
+        let sentence = new Sentence([ ], null)
+        
+        this.props.corpus.sentences.add(sentence)
+        .then((sentence) => {
+            this.props.tab.openTab(
+                <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
+                sentence.toString(),
+                sentence.id.toString()
+            )
+        })
+    }
+
     render() {
         let filterButton = (id, name) =>
             <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
@@ -69,6 +84,8 @@ export default class SentencesComponent extends Component<Props, State> {
         return (<div>
                 <div className='buttonBar'>
                     <div>
+                        <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
+
                         { filterButton(NEWSFEED, 'Newsfeed') }
                         { filterButton(LATEST, 'Latest') }
                         { filterButton(MY_LATEST, 'My latest') }

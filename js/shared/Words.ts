@@ -138,7 +138,7 @@ export default class Words {
             this.onAddInflectableWord(word)
         }
 
-        this.inflectableWordsById[word.getId()]
+        this.inflectableWordsById[word.getId()] = word
 
         return this
     }

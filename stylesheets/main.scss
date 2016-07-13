@@ -568,6 +568,40 @@ ul {
     }
 }
 
+.phrase {
+    .error {
+        color: $color7;
+        font-weight: bold;
+    }
+
+    .pattern {
+        .field {
+            padding: 2 * $unit 0;
+
+            .label {
+                @extend .smallFont;
+                margin-bottom: $unit;
+            }
+
+            input {
+                @extend .border-box-sizing;
+                width: 100%
+            }
+        }
+    }
+}
+
+.findPhraseSentences {
+    li {
+        margin: 2 * $unit 0;
+
+        .match {
+            color: darken($color10, 10%);
+            font-weight: bold;
+        }
+    }
+}
+
 .externalSentence {
     margin: 2 * $unit 0;
     display: flex;
@@ -713,6 +747,23 @@ ul.stats {
     .button {
         margin: 0;
         margin-left: 2 * $unit;
+    }
+}
+
+.addPhrase {
+    @extend .addWord;
+
+    flex-wrap: wrap;
+
+    .label {
+        margin-top: 6px;
+        margin-right: 2 * $unit;
+    }
+
+    .description {
+        @extend .smallFont;
+        margin-top: 2 * $unit;
+        width: 100%;
     }
 }
 

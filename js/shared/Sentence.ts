@@ -1,5 +1,3 @@
-"use strict";
-
 import Fact from './fact/Fact'
 import Words from './Words'
 import Facts from './fact/Facts'

@@ -6,13 +6,12 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import Fact from '../../shared/fact/Fact'
-import Sentence from '../../shared/Sentence'
 
 import { FactIndex } from './FactIndex'
 import FactComponent from '../FactComponent'
-import SentenceComponent from '../SentenceComponent'
 import Tab from '../Tab'
 import AddWordComponent from '../AddWordComponent'
+import AddPhraseComponent from '../AddPhraseComponent'
 import WordSearchComponent from '../WordSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
 import IncompleteFactsListComponent from './IncompleteFactsListComponent'
@@ -29,8 +28,10 @@ const ALL = 'all'
 const INCOMPLETE = 'incomplete' 
 const SEARCH = 'search'
 const TAGS = 'tags'
-const ADD_WORD = 'addWord'
 const MISSING = 'missing'
+
+const ADD_WORD = 'addWord'
+const ADD_PHRASE = 'addPhrase'
 
 interface State {
     list?: string,
@@ -46,20 +47,6 @@ export default class FactsComponent extends Component<Props, State> {
         this.state = {
             list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : INCOMPLETE),
         }
-    }
-    
-    addSentence() {
-        let sentence = new Sentence([ ], null)
-        
-        this.props.corpus.sentences.add(sentence)
-        .then((sentence) => {
-            this.props.tab.openTab(
-                <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-                sentence.toString(),
-                sentence.id.toString()
-            )
-        })
-
     }
     
     openFact(fact: Fact) {
@@ -124,12 +111,18 @@ export default class FactsComponent extends Component<Props, State> {
                 onClose={ () => this.setState({ list: RECENT }) }
                 tab={ this.props.tab }/>
         }
+        else if (this.state.list == ADD_PHRASE) {
+            list = <AddPhraseComponent 
+                corpus={ this.props.corpus } 
+                onClose={ () => this.setState({ list: RECENT }) }
+                tab={ this.props.tab }/>
+        }
 
         return (<div>
                 <div className='buttonBar'>
                     <div>
-                        <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
                         { filterButton(ADD_WORD, '+ Word') }
+                        { filterButton(ADD_PHRASE, '+ Phrase') }
                     </div>
 
                     <div>

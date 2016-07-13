@@ -72,6 +72,7 @@ export default class Corpus {
         this.facts.clone(otherCorpus.facts)
         this.inflections.clone(otherCorpus.inflections)
         this.sentences.clone(otherCorpus.sentences)
+        this.phrases.clone(otherCorpus.phrases)
     }
 
     toJson() {

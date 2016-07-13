@@ -5,8 +5,9 @@ import readCorpus from './CorpusReader'
 import { getCorpusDir } from './CorpusReader'
 
 import writeSentenceFile from '../backend/SentenceFileWriter'
-import writeInflectionsFile from '../backend/inflection/InflectionsFileWriter'
+import writeInflectionFile from '../backend/inflection/InflectionFileWriter'
 import writeFactFile from '../backend/FactFileWriter'
+import writePhraseFile from '../backend/PhraseFileWriter'
 
 import { notifyAdd } from './notifySlack'
 
@@ -18,6 +19,7 @@ export default function listenForChanges(corpus: Corpus) {
 
     function delay(func: () => void) {
         let pending: boolean
+
         return () => {
             if (pending) {
                 return
@@ -25,7 +27,12 @@ export default function listenForChanges(corpus: Corpus) {
 
             setTimeout(() => {
                 pending = false
-                func()
+                try {
+                    func()
+                }
+                catch (e) {
+                    console.error(e.stack)
+                }
             }, 15000)
 
             pending = true
@@ -41,30 +48,28 @@ export default function listenForChanges(corpus: Corpus) {
         storeSuccess = true
     }
 
-    let saveSentences = delay(() => {
-        lastSave = new Date().getTime()
+    function save(saveOperation: () => Promise<any>) {
+        return delay(() => {
+            lastSave = new Date().getTime()
 
-        writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words)
-        .then(handleWriteSuccess)
-        .catch(handleWriteError)
-    })
+            saveOperation()
+            .then(handleWriteSuccess)
+            .catch(handleWriteError)
+        })
+    }
 
-    let saveFacts = delay(() => {
-        lastSave = new Date().getTime()
+    let saveSentences = 
+        save(() => writeSentenceFile(corpusDir + '/sentences.txt', corpus.sentences, corpus.words))
 
-        writeFactFile(corpusDir + '/facts.txt', corpus.facts)
-        .then(handleWriteSuccess)
-        .catch(handleWriteError)
-    })
+    let saveFacts = 
+        save(() => writeFactFile(corpusDir + '/facts.txt', corpus.facts))
 
-    let saveInflections = delay(() => {
-        lastSave = new Date().getTime()
+    let saveInflections = 
+        save(() => writeInflectionFile(corpusDir + '/inflections.txt', corpus.inflections, lang))
+
+    let savePhrases = 
+        save(() => writePhraseFile(corpusDir + '/phrases.txt', corpus.phrases))
         
-        writeInflectionsFile(corpusDir + '/inflections.txt', corpus.inflections, lang)
-        .then(handleWriteSuccess)
-        .catch(handleWriteError)
-    })
-
     let corpusDir = getCorpusDir(corpus.lang)
     let lang = corpus.lang
 
@@ -90,6 +95,7 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.facts.onTag = saveFacts
     corpus.facts.onUntag = saveFacts
     corpus.inflections.onAdd = saveInflections
+    corpus.phrases.onChange = savePhrases
 
     corpus.onChangeOnDisk = () => {
         let t = new Date().getTime()
@@ -110,4 +116,3 @@ export default function listenForChanges(corpus: Corpus) {
         }, 200)
     }
 }
-

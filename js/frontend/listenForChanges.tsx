@@ -1,6 +1,7 @@
 import Corpus from '../shared/Corpus';
 import Sentence from '../shared/Sentence';
 import Fact from '../shared/fact/Fact';
+import Phrase from '../shared/phrase/Phrase'
 import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
@@ -31,6 +32,11 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
     }
 
     corpus.sentences.onAdd = (sentence: Sentence) => {
+    }
+
+    corpus.phrases.onChange = (phrase: Phrase) => {
+        xr.put(`/api/${lang}/phrase/${phrase.getId()}`, phrase.toJson(), xrArgs)
+            .catch(handleException)
     }
 
     corpus.facts.onTag = (fact: Fact, tag: string) => {

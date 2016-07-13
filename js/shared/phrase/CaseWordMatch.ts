@@ -10,18 +10,18 @@ export default class CaseWordMatch implements WordMatch {
         this.caseStr = caseStr
     }
 
-    matches(words: Word[]) {
-        for (let i = 0; i < words.length; i++) {
+    matches(words: Word[], wordPosition: number): number {
+        for (let i = wordPosition; i < words.length; i++) {
             let word = words[i]
 
             if (!(word instanceof InflectedWord) || 
                 !FORMS[word.form] ||
                 FORMS[word.form].grammaticalCase != this.grammaticalCase) {
-                return i
+                return i - wordPosition
             }
         }
 
-        return words.length
+        return words.length - wordPosition
     }
 
     toString() {

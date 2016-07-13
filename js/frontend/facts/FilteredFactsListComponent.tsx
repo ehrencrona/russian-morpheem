@@ -6,6 +6,7 @@ import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
+import Phrase from '../../shared/phrase/Phrase'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import UnstudiedWord from '../../shared/UnstudiedWord'
@@ -24,7 +25,8 @@ interface Props {
 interface State {
     startIndex?: number,
     showInflectionFact?: boolean,
-    showWords?: boolean
+    showWords?: boolean,
+    showPhrases?: boolean
 }
 
 let React = { createElement: createElement }
@@ -35,7 +37,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
     constructor(props) {
         super(props)
 
-        this.state = { startIndex: 0, showInflectionFact: true, showWords: true }
+        this.state = { startIndex: 0, showInflectionFact: true, showWords: true, showPhrases: true }
     }
 
     openFact(fact: Fact) {
@@ -57,7 +59,8 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         if (!this.state.showInflectionFact || !this.state.showWords) {
             factIndices = factIndices.filter((index) => {
                 return (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
-                    (this.state.showWords && (index.fact instanceof UnstudiedWord || index.fact instanceof InflectableWord)) 
+                    (this.state.showWords && (index.fact instanceof UnstudiedWord || index.fact instanceof InflectableWord)) ||
+                    (this.state.showPhrases && index.fact instanceof Phrase) 
             })
         }
 
@@ -74,6 +77,11 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                     <li className={ (this.state.showWords ? 'active' : '') } 
                         onClick={ () => this.setState({ showWords: !this.state.showWords }) }>
                         Words
+                    </li>
+
+                    <li className={ (this.state.showPhrases ? 'active' : '') } 
+                        onClick={ () => this.setState({ showPhrases: !this.state.showPhrases }) }>
+                        Phrases
                     </li>
                 </ul>
 

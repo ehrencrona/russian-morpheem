@@ -11,8 +11,9 @@ export default class TagWordMatch implements WordMatch {
         this.tag = tag
     }
 
-    matches(words: Word[], facts: Facts) {
-        for (let i = 0; i < words.length; i++) {
+    matches(words: Word[], wordPosition: number, matches: WordMatch[], 
+        matchPosition: number, facts: Facts): number {
+        for (let i = wordPosition; i < words.length; i++) {
             let word = words[i]
 
             let fact: Fact = word as Fact
@@ -24,11 +25,11 @@ export default class TagWordMatch implements WordMatch {
             let tags = facts.getTagsOfFact(fact)
 
             if (tags.indexOf(this.tag) < 0) {
-                return i
+                return i - wordPosition
             }
         }
 
-        return words.length
+        return words.length - wordPosition
     }
 
     toString() {

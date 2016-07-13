@@ -12,14 +12,22 @@ export class ExactWordMatch implements WordMatch {
         this.word = word
     }
 
-    matches(words: Word[]) {
-        if (words.length &&
-            words[0].getId() == this.word.getId()) {
-            return 1
+    matches(words: Word[], wordPosition: number): number {
+        let firstWord = words[wordPosition]
+        let match = false
+
+        if (firstWord) {
+            if (this.word instanceof InflectableWord) {
+                match =
+                    firstWord instanceof InflectedWord &&
+                    this.word.getId() == firstWord.word.getId()
+            }
+            else {
+                match = firstWord.getId() == this.word.getId()
+            }
         }
-        else {
-            return 0
-        }
+
+        return (match ? 1 : 0)
     }
 
     toString() {

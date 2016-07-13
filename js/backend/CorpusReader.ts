@@ -1,6 +1,6 @@
 'use strict'
 
-import readInflectionsFile from './inflection/InflectionsFileReader';
+import readInflectionsFile from './inflection/InflectionFileReader';
 import readFactFile from './FactFileReader';
 import { resolvePhrases } from '../shared/fact/FactFileParser'
 import readPhraseFile from './PhraseFileReader';

@@ -3,6 +3,7 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import Inflection from '../shared/inflection/Inflection'
+import Phrase from '../shared/phrase/Phrase'
 
 import InflectionFact from '../shared/inflection/InflectionFact'
 import InflectedWord from '../shared/InflectedWord'
@@ -77,7 +78,7 @@ export default class FactNameComponent extends Component<Props, State> {
         if (fact instanceof InflectionFact) {
             examples = this.getExamples(fact)
         }
-            
+
         if (examples && fact instanceof InflectionFact) { 
             return <span>
                 { examples.easy.join(', ') } 
@@ -85,6 +86,9 @@ export default class FactNameComponent extends Component<Props, State> {
                 { (examples.more ? '...' : '') } 
                 <span className='form'>{ fact.form }</span>
             </span>
+        }
+        else if (fact instanceof Phrase) {
+            return <span>{ fact.description || fact.getId() }</span>
         }
         else {
             let name = fact.getId();
