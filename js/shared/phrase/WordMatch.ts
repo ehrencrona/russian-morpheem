@@ -8,6 +8,7 @@ interface WordMatch {
     matches(words: Word[], wordPosition: number, matches: WordMatch[], 
         matchPosition: number, facts: Facts): number
 
+    allowEmptyMatch(): boolean
 }
 
 export default WordMatch

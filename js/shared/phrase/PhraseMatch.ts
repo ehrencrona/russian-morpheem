@@ -5,7 +5,7 @@ import { ExactWordMatch, AnyWord } from './ExactWordMatch'
 import FormWordMatch from './FormWordMatch'
 import TagWordMatch from './TagWordMatch'
 import PoSWordMatch from './PoSWordMatch'
-import { POS_NAMES } from './PoSWordMatch'
+import { QUANTIFIERS, POS_NAMES } from './PoSWordMatch'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
@@ -30,7 +30,7 @@ export default class PhraseMatch {
 
                 let match = wordMatch.matches(words, at, this.wordMatches, j, facts)
 
-                if (!match) {
+                if (!match && !wordMatch.allowEmptyMatch()) {
                     found = false
                     break
                 }
@@ -72,7 +72,10 @@ export default class PhraseMatch {
                 match = new FormWordMatch(FORMS[caseStr], caseStr)
             }
             else if (POS_NAMES[str]) {
-                match = new PoSWordMatch(POS_NAMES[str])
+                match = new PoSWordMatch(POS_NAMES[str], str)
+            }
+            else if (POS_NAMES[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
+                match = new PoSWordMatch(POS_NAMES[str.substr(0, str.length-1)], str.substr(0, str.length-1), str[str.length-1])
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let els = str.substr(4).split('@')

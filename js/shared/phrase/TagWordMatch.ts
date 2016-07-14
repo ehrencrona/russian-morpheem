@@ -50,6 +50,10 @@ export default class TagWordMatch implements WordMatch {
         return words.length - wordPosition
     }
 
+    allowEmptyMatch() {
+        return false
+    }
+
     toString() {
         return 'tag:' + this.tag.replace(' ', '_')
     }

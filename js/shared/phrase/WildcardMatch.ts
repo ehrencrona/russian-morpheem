@@ -21,6 +21,10 @@ export default class WildcardMatch implements WordMatch {
         return 0
     }
 
+    allowEmptyMatch() {
+        return true
+    }
+
     toString() {
         return 'any'
     }

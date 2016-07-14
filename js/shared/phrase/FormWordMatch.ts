@@ -35,6 +35,10 @@ export default class FormWordMatch implements WordMatch {
         return words.length - wordPosition
     }
 
+    allowEmptyMatch() {
+        return false
+    }
+
     toString() {
         return this.formStr
     }

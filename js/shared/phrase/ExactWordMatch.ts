@@ -30,6 +30,10 @@ export class ExactWordMatch implements WordMatch {
         return (match ? 1 : 0)
     }
 
+    allowEmptyMatch() {
+        return false
+    }
+
     toString() {
         let result = this.word.getId()
         
