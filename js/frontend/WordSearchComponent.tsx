@@ -13,7 +13,7 @@ import InflectionsContainerComponent from './InflectionsContainerComponent';
 import { Component, createElement } from 'react';
 
 let NO_POS = 'none'
-const MAX_SUGGESTIONS = 20
+const MAX_SUGGESTIONS = 50
 
 interface Props {
     corpus: Corpus,

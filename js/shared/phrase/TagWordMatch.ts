@@ -55,6 +55,6 @@ export default class TagWordMatch implements WordMatch {
     }
 
     toString() {
-        return 'tag:' + this.tag.replace(' ', '_')
+        return 'tag:' + this.tag.replace(' ', '_') + (this.form ? '@' + this.form.id : '')
     }
 }
