@@ -568,6 +568,18 @@ ul {
     }
 }
 
+.searchSentences {
+    input {
+        @extend .border-box-sizing;
+        width: 100%
+    }
+
+    .error {
+        color: $color7;
+        font-weight: bold;
+    }
+}
+
 .phrase {
     .error {
         color: $color7;

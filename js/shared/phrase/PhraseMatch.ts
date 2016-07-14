@@ -91,10 +91,17 @@ export default class PhraseMatch {
 
     	        match = new TagWordMatch(tagStr, form)
             }
-            else if (str.indexOf('@') > 0) {
+            else if (str == 'any') {
+                match = new WildcardMatch()
+            }
+            else if (str.indexOf('@') > 0 || words.inflectableWordsById[str] || words.get(str)) {
                 let wordStr
                 let word: AnyWord
                 
+                if (str.indexOf('@') < 0) {
+                    str += '@'
+                }
+
                 if (str[str.length-1] == '@') {
                     wordStr = str.substr(0, str.length-1)
                     
@@ -115,9 +122,6 @@ export default class PhraseMatch {
                 }
 
                 match = new ExactWordMatch(word)
-            }
-            else if (str == 'any') {
-                match = new WildcardMatch()
             }
             else {
                 throw new Error(`Unknown word match "${str}". Should either be a form, a part of speach (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)

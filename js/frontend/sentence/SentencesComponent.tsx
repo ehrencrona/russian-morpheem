@@ -8,6 +8,7 @@ import PendingSentencesComponent from './PendingSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'
 import SentenceComponent from '../SentenceComponent'
+import SearchSentencesComponent from './SearchSentencesComponent'
 import Sentence from '../../shared/Sentence'
 
 interface Props {
@@ -19,6 +20,7 @@ const LATEST = 'latest'
 const MY_LATEST = 'my-latest'
 const PENDING = 'pending'
 const NEWSFEED = 'newsfeed'
+const SEARCH = 'search'
 
 interface State {
     list?: string,
@@ -55,8 +57,15 @@ export default class SentencesComponent extends Component<Props, State> {
 
         let list
 
-        if (this.state.list == PENDING) {
-            list = <PendingSentencesComponent
+        if (this.state.list == NEWSFEED) {
+            list = <NewsfeedComponent
+                tab={ this.props.tab }
+                corpus={ this.props.corpus }
+                key='newsfeed'/>
+        }
+        else if (this.state.list == SEARCH) {
+            list = <SearchSentencesComponent
+                key='search'
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
@@ -74,11 +83,10 @@ export default class SentencesComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
-        else if (this.state.list == NEWSFEED) {
-            list = <NewsfeedComponent
-                tab={ this.props.tab }
+        else if (this.state.list == PENDING) {
+            list = <PendingSentencesComponent
                 corpus={ this.props.corpus }
-                key='newsfeed'/>
+                tab={ this.props.tab } />
         }
 
         return (<div>
@@ -87,6 +95,7 @@ export default class SentencesComponent extends Component<Props, State> {
                         <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
 
                         { filterButton(NEWSFEED, 'Newsfeed') }
+                        { filterButton(SEARCH, 'Search') }
                         { filterButton(LATEST, 'Latest') }
                         { filterButton(MY_LATEST, 'My latest') }
                         { filterButton(PENDING, 'Pending') }

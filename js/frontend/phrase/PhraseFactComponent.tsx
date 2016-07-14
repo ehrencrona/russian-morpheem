@@ -57,7 +57,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
         else {
             tab = <FindPhraseComponent 
                 corpus={ this.props.corpus } 
-                phrase={ fact } 
+                match={ fact.patterns[0] } 
                 tab={ this.props.tab } />
         }
 

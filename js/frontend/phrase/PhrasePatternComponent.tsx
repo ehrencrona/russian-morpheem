@@ -69,7 +69,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                     Name
                 </div>
             
-                <input type='text' defaultValue={ phrase.description } 
+                <input type='text' autoCapitalize='off' defaultValue={ phrase.description } 
                     onBlur={ (e) => this.changeDescription((e.target as HTMLInputElement).value) }/>
             </div>
 
@@ -78,7 +78,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                     Pattern
                 </div>
             
-                <input type='text' defaultValue={ phrase.patterns[0] && phrase.patterns[0].toString() } 
+                <input type='text' autoCapitalize='off' defaultValue={ phrase.patterns[0] && phrase.patterns[0].toString() } 
                     onBlur={ (e) => this.changePattern((e.target as HTMLInputElement).value) }/>
             </div>
 

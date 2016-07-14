@@ -11,7 +11,7 @@ import SentenceComponent from '../SentenceComponent'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
-import Phrase from '../../shared/phrase/Phrase'
+import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import htmlEscape from '../../shared/util/htmlEscape'
 
 import { MISSING_INDEX } from '../../shared/fact/Facts'
@@ -19,7 +19,7 @@ import { Component, createElement } from 'react';
 
 interface Props {
     corpus: Corpus,
-    phrase: Phrase,
+    match: PhraseMatch,
     tab: Tab
 }
 
@@ -67,12 +67,12 @@ export default class FindPhraseComponent extends Component<Props, State> {
 
     render() {
 
-        let phrase = this.props.phrase
+        let match = this.props.match
 
         let matches: Match[] = []
 
         this.props.corpus.sentences.sentences.forEach((sentence) => {
-            let words = phrase.match(sentence.words, this.props.corpus.facts)
+            let words = match.match(sentence.words, this.props.corpus.facts)
 
             if (words && words.length) {
                 matches.push({
