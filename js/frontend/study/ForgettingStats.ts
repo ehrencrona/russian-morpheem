@@ -66,7 +66,14 @@ export default class ForgettingStats {
                 }
             }
             else {
-                let interval = Math.round(Math.log((exposure.time.getTime() - stats.lastExposure.getTime()) / 1000 / 2))
+                let timeSince = exposure.time.getTime() - stats.lastExposure.getTime()
+
+                if (timeSince < 0) {
+                    console.warn(`Time is going backwards, from ${ stats.lastExposure } to  ${ exposure.time }.`)
+                    return
+                }
+
+                let interval = Math.round(Math.log(timeSince / 1000 / 2))
 
                 if (interval > MAX_INTERVAL) {
                     interval = MAX_INTERVAL
