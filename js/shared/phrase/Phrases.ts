@@ -2,6 +2,7 @@ import Phrase from './Phrase';
 
 import { JsonFormat as PhraseJsonFormat } from './Phrase'
 import Words from '../Words'
+import Inflections from '../inflection/Inflections'
 import PhraseMatch from './PhraseMatch'
 
 export type JsonFormat = PhraseJsonFormat[]
@@ -53,11 +54,11 @@ export default class Phrases {
         return this.phraseById[id];
     }
 
-    static fromJson(json, words: Words): Phrases {
+    static fromJson(json, words: Words, inflections: Inflections): Phrases {
         let result = new Phrases();
 
         (json as JsonFormat).forEach((phraseJson: PhraseJsonFormat) => 
-            result.add(Phrase.fromJson(phraseJson, words)))
+            result.add(Phrase.fromJson(phraseJson, words, inflections)))
 
         return result
     }

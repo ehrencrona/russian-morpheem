@@ -18,6 +18,7 @@ export default class Inflections {
     inflections: Inflection[] = []
 
     onAdd: (inflection: Inflection) => void = null
+    allPos: string[]
     
     constructor(inflections? : Inflection[]) {
         this.inflectionsById = {}
@@ -45,15 +46,19 @@ export default class Inflections {
     }
 
     getAllPos(): string[] {
-        let all : { [s: string]: boolean } = {}
+        if (!this.allPos) {
+            let all : { [s: string]: boolean } = {}
 
-        this.inflections.forEach((inflection) => {
-            if (inflection.pos) {
-                all[inflection.pos] = true
-            }
-        })
-        
-        return Object.keys(all)
+            this.inflections.forEach((inflection) => {
+                if (inflection.pos) {
+                    all[inflection.pos] = true
+                }
+            })
+            
+            this.allPos = Object.keys(all)
+        }
+
+        return this.allPos
     }
     
     getForm(formId) {
@@ -83,6 +88,8 @@ export default class Inflections {
             
             this.onAdd(inflection)
         }
+
+        this.allPos = null
     }
     
     getInflection(id) {

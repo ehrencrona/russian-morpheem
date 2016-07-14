@@ -52,7 +52,7 @@ export default class Corpus {
     static fromJson(json): Corpus {
         let inflections = new Inflections().fromJson(json.inflections)
         let words = Words.fromJson(json.words, inflections)
-        let phrases = Phrases.fromJson(json.phrases, words) 
+        let phrases = Phrases.fromJson(json.phrases, words, inflections) 
         let facts = Facts.fromJson(json.facts, inflections, words, phrases)
         let sentences = new Sentences()
 

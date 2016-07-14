@@ -2,9 +2,12 @@
 import WordMatch from './WordMatch'
 import WildcardMatch from './WildcardMatch'
 import { ExactWordMatch, AnyWord } from './ExactWordMatch'
-import CaseWordMatch from './CaseWordMatch'
+import FormWordMatch from './FormWordMatch'
 import TagWordMatch from './TagWordMatch'
+import PoSWordMatch from './PoSWordMatch'
+import { POS_NAMES } from './PoSWordMatch'
 import Words from '../Words'
+import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
 import Word from '../Word'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
@@ -45,7 +48,7 @@ export default class PhraseMatch {
         }
     }
 
-    static fromString(line: string, words: Words) {
+    static fromString(line: string, words: Words, inflections: Inflections) {
         let wordMatches: WordMatch[] = []
         
         line.split(' ').forEach((str) => {
@@ -55,20 +58,21 @@ export default class PhraseMatch {
 
             let match: WordMatch
 
-            if (str[0] == '@') {
-                let caseStr = str.substr(1)
+            if (str[0] == '@' || FORMS[str]) {
+                let caseStr = str
+
+                if (caseStr[0] == '@') {
+                    caseStr = caseStr.substr(1)
+                }
 
                 if (FORMS[caseStr] == null) {
-                    throw new Error(`Unknown form "${caseStr}" on line "${line}". Should be acc, gen, nom, dat, instr or prep.`)
+                    throw new Error(`Unknown form "${caseStr}" on line "${line}". Should be one of ${ Object.keys(FORMS).join(', ') }.`)
                 }
 
-                let grammaticalCase = FORMS[caseStr].grammaticalCase
-
-                if (grammaticalCase == null) {
-                    throw new Error(`"${caseStr}" is not a case but some other form. Should be acc, gen, nom, dat, instr or prep.`)
-                }
-                
-                match = new CaseWordMatch(grammaticalCase, caseStr)
+                match = new FormWordMatch(FORMS[caseStr], caseStr)
+            }
+            else if (POS_NAMES[str]) {
+                match = new PoSWordMatch(POS_NAMES[str])
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let els = str.substr(4).split('@')
@@ -116,7 +120,7 @@ export default class PhraseMatch {
                 match = new WildcardMatch()
             }
             else {
-                throw new Error(`Unknown word match "${str}". Should either be @case for a case, word@ for a word or tag:tagName for a tag.`)
+                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speach (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
             }
 
             wordMatches.push(match)

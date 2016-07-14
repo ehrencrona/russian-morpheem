@@ -52,7 +52,7 @@ export default function readCorpus(lang, doWatch) {
                 let words = new Words(facts)                
                 words.addPunctuation()
 
-                return readPhraseFile(corpusDir + '/phrases.txt', words, lang)
+                return readPhraseFile(corpusDir + '/phrases.txt', words, inflections, lang)
                     .then((phrases: Phrases) => {
                         resolvePhrases(facts, phrases)
 

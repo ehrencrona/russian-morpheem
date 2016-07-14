@@ -15,7 +15,7 @@ export default function(corpus: Corpus) {
         }
 
         try {
-            let phrase = Phrase.fromJson(req.body, corpus.words)
+            let phrase = Phrase.fromJson(req.body, corpus.words, corpus.inflections)
 
             if (phrase.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');

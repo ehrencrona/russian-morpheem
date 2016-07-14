@@ -17,7 +17,7 @@ import Phrase from '../shared/phrase/Phrase'
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', null, 
+    new Inflection('infl', 'nom', 'n', 
         parseEndings('nom а, prep е', 'ru', 'n').endings)
 ])
 
@@ -40,13 +40,13 @@ describe('Phrase', function() {
 
     it('converts to str and back', function () {
         function testStr(originalStr: string) {
-            let phrase = Phrase.fromString('foo', originalStr, words)
+            let phrase = Phrase.fromString('foo', originalStr, words, inflections)
 
             expect(phrase.toString()).to.equal(originalStr)
         }
 
         testStr('в[loc]@ библиотека@prep')
-        testStr('в[dir]@ @prep')
+        testStr('в[dir]@ prep')
         testStr('в[loc]@ tag:location')
     })
 
@@ -56,15 +56,16 @@ describe('Phrase', function() {
         ]
 
         function testMatch(phraseStr: string) {
-            let phrase = Phrase.fromString('foo', phraseStr, words)
+            let phrase = Phrase.fromString('foo', phraseStr, words, inflections)
 
             expect(phrase.match(wordArray, facts)).to.be.not.undefined
             expect(phrase.match(wordArray, facts).length).to.equal(2)
         }
 
         testMatch('в[loc]@ библиотека@prep')
-        testMatch('в[loc]@ @prep')
+        testMatch('в[loc]@ prep')
         testMatch('в[loc]@ tag:location')
+        testMatch('в[loc]@ noun')
     })
 
 })

@@ -3,6 +3,7 @@ import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import PhraseMatch from './PhraseMatch'
 import Words from '../Words'
+import Inflections from '../inflection/Inflections'
 import Word from '../Word'
 
 export interface JsonFormat {
@@ -19,11 +20,11 @@ export default class Phrase implements Fact {
         this.patterns = patterns
     }
 
-    static fromString(id: string, str: string, words: Words) {
+    static fromString(id: string, str: string, words: Words, inflections: Inflections) {
         return new Phrase(
             id,
             str.split(',').map((str) => 
-                PhraseMatch.fromString(str.trim(), words)))
+                PhraseMatch.fromString(str.trim(), words, inflections)))
     }
 
     match(words: Word[], facts: Facts): Word[] {
@@ -56,11 +57,11 @@ export default class Phrase implements Fact {
         }
     }
 
-    static fromJson(json: JsonFormat, words: Words): Phrase {
+    static fromJson(json: JsonFormat, words: Words, inflections: Inflections): Phrase {
         let result = new Phrase(
             json.id,
             json.patterns.map((str) => 
-                PhraseMatch.fromString(str, words))
+                PhraseMatch.fromString(str, words, inflections))
         )
 
         result.description = json.description

@@ -39,7 +39,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         let pattern
 
         try {
-            pattern = PhraseMatch.fromString(newPattern.trim(), this.props.corpus.words)
+            pattern = PhraseMatch.fromString(newPattern.trim(), 
+                this.props.corpus.words, this.props.corpus.inflections)
 
             this.props.corpus.phrases.setPattern(this.props.phrase, [ pattern ])
 

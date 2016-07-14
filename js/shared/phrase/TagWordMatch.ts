@@ -32,7 +32,7 @@ export default class TagWordMatch implements WordMatch {
 
                     if ((this.form.grammaticalCase && this.form.grammaticalCase != wordForm.grammaticalCase) ||
                         (this.form.gender && this.form.gender != wordForm.gender) ||
-                        (this.form.number && this.form.tense != wordForm.tense) ||
+                        (this.form.number && this.form.number != wordForm.number) ||
                         (this.form.tense && this.form.tense != wordForm.tense)) {
                         return i - wordPosition 
                     }

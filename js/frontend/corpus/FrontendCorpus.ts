@@ -11,7 +11,7 @@ export default class FrontendCorpus extends Corpus {
     static fromJson(json: JsonFormat): FrontendCorpus {
         let inflections = new Inflections().fromJson(json.inflections)
         let words = Words.fromJson(json.words, inflections) 
-        let phrases = Phrases.fromJson(json.phrases, words)
+        let phrases = Phrases.fromJson(json.phrases, words, inflections)
         let facts = Facts.fromJson(json.facts, inflections, words, phrases)
         let sentences = new Sentences(json.lang)
         

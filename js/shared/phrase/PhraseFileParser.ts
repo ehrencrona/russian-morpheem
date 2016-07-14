@@ -3,8 +3,9 @@
 import Words from '../Words'
 import Phrase from './Phrase'
 import Phrases from './Phrases'
+import Inflections from '../inflection/Inflections'
 
-export default function parsePhraseFile(data, words: Words): Phrases {
+export default function parsePhraseFile(data, words: Words, inflections: Inflections): Phrases {
     let phrases = new Phrases()
 
     let lineIndex = 0
@@ -25,7 +26,7 @@ export default function parsePhraseFile(data, words: Words): Phrases {
 
         let phrase = Phrase.fromString(
             line.substr(0, i).trim(), line.substr(j+1).trim(), 
-            words)
+            words, inflections)
 
         phrase.description = line.substr(i+3, j-i-3)
 
