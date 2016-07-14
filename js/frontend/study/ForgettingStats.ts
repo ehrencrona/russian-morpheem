@@ -73,7 +73,7 @@ export default class ForgettingStats {
                     return
                 }
 
-                let interval = Math.round(Math.log(timeSince / 1000 / 2))
+                let interval = Math.round(Math.log(Math.max(timeSince / 1000 / 2, 1)))
 
                 if (interval > MAX_INTERVAL) {
                     interval = MAX_INTERVAL
