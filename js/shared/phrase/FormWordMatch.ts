@@ -23,6 +23,8 @@ export default class FormWordMatch implements WordMatch {
                     (form.grammaticalCase && form.grammaticalCase != wordForm.grammaticalCase) ||
                     (form.gender && form.gender != wordForm.gender) ||
                     (form.number && form.number != wordForm.number) ||
+                    (form.adjectiveForm && form.adjectiveForm != wordForm.adjectiveForm) ||
+                    (form.comparison && form.comparison != wordForm.comparison) ||
                     (form.tense && form.tense != wordForm.tense)) {
                     return i - wordPosition
                 }

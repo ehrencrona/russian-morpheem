@@ -15,8 +15,10 @@ import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import DesiredFormFactComponent from './DesiredFormFactComponent'
+import DesiredWordFactComponent from './DesiredWordFactComponent'
 import InflectionFactComponent from './InflectionFactComponent'
 import WordFactComponent from './WordFactComponent'
+import { TranslatableFact } from './WordFactComponent'
 import EndingTransformFactComponent from './EndingTransformFactComponent'
 
 export interface FactComponentProps<FactType> {
@@ -24,12 +26,13 @@ export interface FactComponentProps<FactType> {
     corpus: Corpus,
     unknownFact: UnknownFact,
     fact: FactType,
+    hiddenFact: Fact
 }
 
 interface Props extends FactComponentProps<Fact> {
     onKnew: (fact: UnknownFact) => void,
     known: boolean,
-    hiddenFact: InflectionFact
+    hiddenFact: Fact
 }
 
 let React = { createElement: createElement }
@@ -42,11 +45,22 @@ let unknownFactComponent = (props: Props) => {
     let canExplain = false
 
     if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
-        content = <DesiredFormFactComponent 
-            fact={ fact as InflectionFact } 
-            corpus={ props.corpus }
-            factKnowledge={ props.factKnowledge } 
-            unknownFact={ props.unknownFact } />
+        if (fact instanceof InflectionFact) {
+            content = <DesiredFormFactComponent 
+                fact={ fact } 
+                corpus={ props.corpus }
+                factKnowledge={ props.factKnowledge }
+                hiddenFact={ props.hiddenFact }
+                unknownFact={ props.unknownFact } />
+        }
+        else if (fact instanceof InflectableWord || fact instanceof Word) {
+            content = <DesiredWordFactComponent 
+                fact={ fact } 
+                corpus={ props.corpus }
+                factKnowledge={ props.factKnowledge } 
+                hiddenFact={ props.hiddenFact }
+                unknownFact={ props.unknownFact } />
+        }
     }
     else if (fact instanceof InflectionFact) {
         canExplain = true
@@ -55,6 +69,7 @@ let unknownFactComponent = (props: Props) => {
             fact={ fact } 
             corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
+            hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact }
             ref={ (child) => explainable = child  } />
     }
@@ -63,6 +78,7 @@ let unknownFactComponent = (props: Props) => {
             fact={ fact } 
             corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
+            hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact } />
     }
     else if (fact instanceof EndingTransform) {
@@ -70,6 +86,7 @@ let unknownFactComponent = (props: Props) => {
             fact={ fact } 
             corpus={ props.corpus }
             factKnowledge={ props.factKnowledge } 
+            hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact } />
     }
     else {

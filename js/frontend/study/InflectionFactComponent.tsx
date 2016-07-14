@@ -35,24 +35,32 @@ export default class InflectionFactComponent extends Component<FactComponentProp
         let word = this.props.unknownFact.word
 
         if (word instanceof InflectedWord) {
-            return <div><strong>{ word.jp }</strong> is the <strong>{ getFormName(word.form) }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong>
+            let desc
+
+            if (this.props.hiddenFact && word.word.getId() == this.props.hiddenFact.getId()) {
+                desc = <div>You are looking for the <strong>{ getFormName(word.form) }</strong></div>
+            } 
+            else {
+                desc = <div><strong>{ word.jp }</strong> is the <strong>{ getFormName(word.form) }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong></div>
+            }
                 
+            return <div>
+                { desc }
                 {
-                    this.state.explain ?
+                        this.state.explain ?
 
-                    <ExplainFormComponent 
-                        corpus={ this.props.corpus } 
-                        word={ this.state.explainWord } 
-                        knowledge={ this.props.factKnowledge }
-                        onClose={ () => this.setState({ explain: false }) }
-                        onSelect={ (word) => this.setState({ explainWord: word })} 
-                    />
+                        <ExplainFormComponent 
+                            corpus={ this.props.corpus } 
+                            word={ this.state.explainWord } 
+                            knowledge={ this.props.factKnowledge }
+                            onClose={ () => this.setState({ explain: false }) }
+                            onSelect={ (word) => this.setState({ explainWord: word })} 
+                        />
 
-                    :
+                        :
 
-                    <div/>
+                        <div/>
                 }
-        
             </div>
         }
         else {

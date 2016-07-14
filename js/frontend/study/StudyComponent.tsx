@@ -20,7 +20,7 @@ import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 
-import { FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
+import { CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 
@@ -35,7 +35,7 @@ import FrontendExposures from './FrontendExposures'
 interface Props {
     sentence: Sentence,
     corpus: Corpus,
-    fact: InflectionFact,
+    fact: Fact,
     factKnowledge: LeitnerKnowledge,
     trivialKnowledge: TrivialKnowledge,
     onAnswer: (exposures: Exposure[]) => void
@@ -75,11 +75,17 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     isStudiedForm(word) {
-        let form = this.props.fact.form
+        let fact = this.props.fact
 
-        return word instanceof InflectedWord &&
-            word.form == form &&
-            word.word.inflection.getEnding(form) === this.props.fact.inflection.getEnding(form)
+        let result = false
+
+        word.visitFacts((otherFact: Fact) => {
+            if (fact.getId() == otherFact.getId()) {
+                result = true
+            }
+        })
+
+        return result
     }
 
     reveal() {
@@ -203,71 +209,75 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     getFormHint() {
-        let form = FORMS[this.props.fact.form] 
+        let fact = this.props.fact
 
-        if (!form) {
-            console.warn(`Unknown form ${this.props.fact.form}.`)
-            return ''
-        }
+        if (fact instanceof InflectionFact) {
+            let form = FORMS[fact.form] 
 
-        let targetTense = form.tense
-        let targetNumber = form.number
-        let targetGender = form.gender
-
-        let tenseHintNeeded = !!targetTense
-        let numberHintNeeded = !!targetNumber
-
-        // we will need to know the gender of nouns for this to work, we don't yet.
-        let genderHintNeeded = false
-
-        this.props.sentence.words.forEach((word) => {
-
-            if (word instanceof InflectedWord && !this.isStudiedForm(word)) {
-                let form = FORMS[word.form]
-
-                if (!form) {
-                    console.warn(`Unknown form ${word.form}.`)
-                    return
-                }
-
-                if (tenseHintNeeded && form.tense && form.tense == targetTense) {
-                    tenseHintNeeded = false
-                }
-
-                if (numberHintNeeded && form.number && form.number == targetNumber) {
-                    numberHintNeeded = false
-                }
-
-                if (genderHintNeeded && form.gender && form.gender == targetGender) {
-                    genderHintNeeded = false
-                }
+            if (!form) {
+                console.warn(`Unknown form ${ fact.form }.`)
+                return ''
             }
 
-        })
+            let targetTense = form.tense
+            let targetNumber = form.number
+            let targetGender = form.gender
 
-        let result = ''
+            let tenseHintNeeded = !!targetTense
+            let numberHintNeeded = !!targetNumber
 
-        if (tenseHintNeeded) {
-            result += (targetTense == Tense.PAST ? 'past' : 'present') 
-        }
+            // we will need to know the gender of nouns for this to work, we don't yet.
+            let genderHintNeeded = false
 
-        if (numberHintNeeded) {
-            if (result) {
-                result += ', '
+            this.props.sentence.words.forEach((word) => {
+
+                if (word instanceof InflectedWord && !this.isStudiedForm(word)) {
+                    let form = FORMS[word.form]
+
+                    if (!form) {
+                        console.warn(`Unknown form ${word.form}.`)
+                        return
+                    }
+
+                    if (tenseHintNeeded && form.tense && form.tense == targetTense) {
+                        tenseHintNeeded = false
+                    }
+
+                    if (numberHintNeeded && form.number && form.number == targetNumber) {
+                        numberHintNeeded = false
+                    }
+
+                    if (genderHintNeeded && form.gender && form.gender == targetGender) {
+                        genderHintNeeded = false
+                    }
+                }
+
+            })
+
+            let result = ''
+
+            if (tenseHintNeeded) {
+                result += (targetTense == Tense.PAST ? 'past' : 'present') 
             }
 
-            result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
-        }
+            if (numberHintNeeded) {
+                if (result) {
+                    result += ', '
+                }
 
-        if (genderHintNeeded) {
-            if (result) {
-                result += ', '
+                result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
             }
 
-            result += (targetGender == Gender.M ? 'masculine' : (targetGender == Gender.N ? 'neuter' : 'feminine')) 
-        }
+            if (genderHintNeeded) {
+                if (result) {
+                    result += ', '
+                }
 
-        return result         
+                result += (targetGender == Gender.M ? 'masculine' : (targetGender == Gender.N ? 'neuter' : 'feminine')) 
+            }
+
+            return result         
+        }
     }
 
     render() {
@@ -305,7 +315,7 @@ export default class StudyComponent extends Component<Props, State> {
                     groupedWords.map((words, index) => {
                         return <div className='group' key={ index }>
                         {
-                            words.map((word, index) => {
+                            words.map((word: UnstudiedWord, index) => {
                                 let explain = () => {
                                     this.explainWord(word)
 
@@ -319,20 +329,44 @@ export default class StudyComponent extends Component<Props, State> {
 
                                 let formHint
 
-                                if (word instanceof InflectedWord &&
-                                    this.isStudiedForm(word)) {
+                                if (this.isStudiedForm(word)) {
                                     studiedWord = word
 
-                                    if (this.state.stage == Stage.TEST) {
-                                        formHint = this.getFormHint() 
+                                    if (this.props.fact instanceof InflectionFact) {
+                                        if (this.state.stage == Stage.TEST) {
+                                            formHint = this.getFormHint() 
+                                        }
+
+                                        if (!reveal) {
+                                            text = (word as InflectedWord).getDefaultInflection().jp 
+                                        }
+                                    }
+                                    else if (!reveal) {
+                                        let replaceWord = this.props.corpus.words.get('что@nom')
+
+                                        text = replaceWord.jp
+
+                                        if (word instanceof InflectedWord) {
+                                            let grammaticalCase = FORMS[word.form].grammaticalCase 
+
+                                            let inflected = (replaceWord as InflectedWord).word.inflect(CASES[grammaticalCase])
+
+                                            if (inflected) {
+                                                text = inflected.jp
+                                            }
+                                            else {
+                                                console.warn('Could not get что in case ' + CASES[grammaticalCase])
+                                            }
+                                        }
+
+                                        text += '?'
                                     }
 
                                     if (reveal) {
                                         className += ' revealed' 
                                     }
                                     else {
-                                        className += ' nominalized' 
-                                        text = word.getDefaultInflection().jp 
+                                        className += ' nominalized'
                                     }
                                 }
 
@@ -352,7 +386,7 @@ export default class StudyComponent extends Component<Props, State> {
                                 </div>
                             })
                         }
-                        </div>                        
+                        </div>            
                     })
                 }
                 </div>

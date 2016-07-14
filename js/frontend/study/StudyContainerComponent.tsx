@@ -51,8 +51,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     chooseSentence() {
-        let selectableFacts = this.props.corpus.facts.facts 
-            .filter(isStudiedFact)
+        let selectableFacts = this.props.corpus.facts.facts
 
         let nextFact = new LeitnerFactSelector(this.factKnowledge, selectableFacts).chooseFact() as InflectionFact
 
@@ -73,8 +72,6 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.sentenceKnowledge = new LastSawSentenceKnowledge()
         this.trivialKnowledge = new TrivialKnowledge()
         this.forgettingStats = new ForgettingStats(this.props.corpus)
-
-        this.factKnowledge.factFilter = isStudiedFact
 
         this.exposures
             .getExposures(-1)

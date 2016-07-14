@@ -87,4 +87,14 @@ export default class InflectedWord extends Word {
     getId() {
         return this.word.getId() + '@' + this.form
     }
+
+    getEnglish(form?) {
+        var result = this.en[form || '']
+
+        if (!result) {
+            result = this.word.getEnglish()
+        }
+
+        return result
+    }
 }

@@ -46,13 +46,23 @@ export enum Number {
     SINGULAR, PLURAL
 }
 
+export enum Comparison {
+    NORMAL, COMPARATIVE
+}
+
+export enum AdjectiveForm {
+    NORMAL, SHORT
+}
+
 interface FormComponents {
     gender?: Gender, 
     tense?: Tense, 
     grammaticalCase?: GrammaticalCase, 
     animate?: Animateness, 
     number?: Number, 
-    person?: Person 
+    person?: Person, 
+    comparison?: Comparison,
+    adjectiveForm?: AdjectiveForm
 }
 
 export class InflectionForm {
@@ -62,6 +72,8 @@ export class InflectionForm {
     animate: Animateness
     number: Number
     person: Person
+    comparison: Comparison
+    adjectiveForm: AdjectiveForm
 
     constructor(public id: string, public name: string, used: FormComponents) {
         this.id = id
@@ -72,6 +84,9 @@ export class InflectionForm {
         this.animate = used.animate
         this.number = used.number
         this.person = used.person
+        this.comparison = used.comparison
+        this.adjectiveForm = used.adjectiveForm
+
     }
 
 }
@@ -81,6 +96,15 @@ export let FORMS: { [id: string]: InflectionForm } = {}
 function addForm(id: string, name: string, components: FormComponents) {
     FORMS[id] = new InflectionForm(id, name, components)
 }
+
+export let CASES = {}
+
+CASES[GrammaticalCase.NOM] = 'nom'
+CASES[GrammaticalCase.GEN] = 'gen'
+CASES[GrammaticalCase.DAT] = 'dat'
+CASES[GrammaticalCase.ACC] = 'acc'
+CASES[GrammaticalCase.INSTR] = 'instr'
+CASES[GrammaticalCase.PREP] = 'prep'
 
 
 addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),
@@ -150,12 +174,12 @@ addForm('instralt', 'instrumental plural alternative form', { grammaticalCase: G
 addForm('prepalt', 'prepositional plural alternative form', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
 
 addForm('adv', 'adverb', {})
-addForm('comp', 'comparative', {})
+addForm('comp', 'comparative', { comparison: Comparison.COMPARATIVE })
 
-addForm('shortf', 'short form feminine', { gender: Gender.F, number: Number.SINGULAR })
-addForm('shortn', 'short form neuter', { gender: Gender.N, number: Number.SINGULAR })
-addForm('shortm', 'short form masculine', { gender: Gender.M, number: Number.SINGULAR })
-addForm('shortpl', 'short form plural', { number: Number.PLURAL })
+addForm('shortf', 'short form feminine', { gender: Gender.F, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
+addForm('shortn', 'short form neuter', { gender: Gender.N, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
+addForm('shortm', 'short form masculine', { gender: Gender.M, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
+addForm('shortpl', 'short form plural', { number: Number.PLURAL, adjectiveForm: AdjectiveForm.SHORT })
 
 addForm('alt', 'alternative form', {})
 addForm('alt2', 'alternative form', {})

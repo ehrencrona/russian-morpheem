@@ -31,8 +31,6 @@ export default class OldestSentenceSelector {
                 age = 1
             }
 
-console.log(age, sentenceDiff.sentence.toString())
-
             let score 
 
             if (age == 1) {
