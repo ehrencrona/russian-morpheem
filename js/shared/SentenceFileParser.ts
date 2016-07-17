@@ -137,11 +137,13 @@ export default function parseSentenceFile(data, words: Words, facts: Facts): Sen
     for (let line of data.split('\n')) {
         lineNumber++;
         
+        line = line.trim()
+
         if (!line || line.substr(0, 2) == '//') {
             continue
         }
 
-        sentences.add(parseLine(line.trim(), words, facts, lineNumber, sentenceIndex++))
+        sentences.add(parseLine(line, words, facts, lineNumber, sentenceIndex++))
     }
 
     return sentences
