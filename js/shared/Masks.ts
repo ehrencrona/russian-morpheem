@@ -8,7 +8,8 @@ const MASKS = {
         allbutpl: (form) => !pl(form),
         pl: pl,
         sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
-        adv: (form) => form == 'adv'
+        adv: (form) => form == 'adv',
+        allbutadv: (form) => form != 'adv'
     },
     num: {
         pl: pl,
