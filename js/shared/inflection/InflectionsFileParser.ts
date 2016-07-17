@@ -123,6 +123,8 @@ export default function parseInflectionsFile(data, lang?: string) {
             continue
         }
 
+        line = line.trim()
+
         let i = line.indexOf(':')
 
         if (i < 0) {

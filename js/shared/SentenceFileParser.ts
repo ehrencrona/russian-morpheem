@@ -141,7 +141,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts): Sen
             continue
         }
 
-        sentences.add(parseLine(line, words, facts, lineNumber, sentenceIndex++))
+        sentences.add(parseLine(line.trim(), words, facts, lineNumber, sentenceIndex++))
     }
 
     return sentences

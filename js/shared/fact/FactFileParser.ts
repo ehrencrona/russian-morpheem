@@ -203,6 +203,8 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             continue
         }
 
+        line = line.trim()
+
         let i = line.indexOf(':')
 
         if (i < 0) {
