@@ -198,12 +198,12 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
 
     for (let line of data.split('\n')) {
         lineIndex++ 
+
+        line = line.trim()
         
         if (!line || line.substr(0, 2) == '//') {
             continue
         }
-
-        line = line.trim()
 
         let i = line.indexOf(':')
 
