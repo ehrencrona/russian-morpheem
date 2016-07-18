@@ -219,6 +219,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
                     (!this.state.showComments && !this.state.showDecks && !this.state.edit ? 
                     
+                    
                         <div className='debugButtonBar'>
                             <div className='button' onClick={ () => this.setState({ showComments: true }) }>
                                 Comment
