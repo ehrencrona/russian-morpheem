@@ -1,7 +1,7 @@
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
-import { findSentencesForFact, indexSentencesByFact } from '../shared/IndexSentencesByFact'
+import { findSentencesForFact, indexSentencesByFact } from '../shared/SentencesByFactIndex'
 
 import Inflections from '../shared/inflection/Inflections'
 import Inflection from '../shared/inflection/Inflection'
@@ -19,7 +19,7 @@ import Ending from '../shared/Ending'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import { expect } from 'chai';
 
-describe('IndexSentencesByFact', function() {
+describe('SentencesByFactIndex', function() {
     let inflection = new Inflection('verb', 'inf', null, 
         parseEndings('inf: re, i: vo', 'fake').endings)
 
@@ -57,14 +57,14 @@ describe('IndexSentencesByFact', function() {
     it('indexes all sentences by fact', function () {
         let index = indexSentencesByFact(sentences, facts, 0)
 
-        expect(index[ io.getId() ].easy).to.equal(0)
-        expect(index[ io.getId() ].hard).to.equal(1)
+        expect(index[ io.getId() ].easy.length).to.equal(0)
+        expect(index[ io.getId() ].hard.length).to.equal(1)
         
-        expect(index[ inf.getId() ].easy).to.equal(1)
-        expect(index[ inf.getId() ].hard).to.equal(1)
+        expect(index[ inf.getId() ].easy.length).to.equal(1)
+        expect(index[ inf.getId() ].hard.length).to.equal(1)
         
-        expect(index[ inflection.getFact('inf').getId() ].hard).to.equal(1)
-        expect(index[ inflection.getFact('inf').getId() ].easy).to.equal(0)
+        expect(index[ inflection.getFact('inf').getId() ].hard.length).to.equal(1)
+        expect(index[ inflection.getFact('inf').getId() ].easy.length).to.equal(0)
 
         index = indexSentencesByFact(sentences, facts, 1)
 

@@ -50,7 +50,6 @@ body {
     font-family: sans-serif;
     font-size: 12pt;
     color: $color-fg;
-    position: fixed;
 }
 
 .button {
@@ -893,9 +892,17 @@ h3 {
         justify-content: center;
     }
 
+    .explanation {
+        margin: 36pt;
+        margin-bottom: 12pt;
+        font-size: 1em;
+        font-weight: bold;
+    }
+
     .sentence {
-        margin: 1em;
-        font-size: 5em;
+        margin: 36pt;
+        margin-top: 0;
+        font-size: 4em;
         display: flex;
         flex-wrap: wrap;
 

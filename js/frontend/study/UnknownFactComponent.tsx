@@ -11,7 +11,7 @@ import InflectableWord from '../../shared/InflectableWord'
 import UnstudiedWord from '../../shared/UnstudiedWord'
 
 import UnknownFact from './UnknownFact'
-import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
+import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import DesiredFormFactComponent from './DesiredFormFactComponent'
@@ -22,7 +22,7 @@ import { TranslatableFact } from './WordFactComponent'
 import EndingTransformFactComponent from './EndingTransformFactComponent'
 
 export interface FactComponentProps<FactType> {
-    factKnowledge: LeitnerKnowledge,
+    knowledge: NaiveKnowledge,
     corpus: Corpus,
     unknownFact: UnknownFact,
     fact: FactType,
@@ -49,7 +49,7 @@ let unknownFactComponent = (props: Props) => {
             content = <DesiredFormFactComponent 
                 fact={ fact } 
                 corpus={ props.corpus }
-                factKnowledge={ props.factKnowledge }
+                knowledge={ props.knowledge }
                 hiddenFact={ props.hiddenFact }
                 unknownFact={ props.unknownFact } />
         }
@@ -57,7 +57,7 @@ let unknownFactComponent = (props: Props) => {
             content = <DesiredWordFactComponent 
                 fact={ fact } 
                 corpus={ props.corpus }
-                factKnowledge={ props.factKnowledge } 
+                knowledge={ props.knowledge }
                 hiddenFact={ props.hiddenFact }
                 unknownFact={ props.unknownFact } />
         }
@@ -68,7 +68,7 @@ let unknownFactComponent = (props: Props) => {
         content = <InflectionFactComponent 
             fact={ fact } 
             corpus={ props.corpus }
-            factKnowledge={ props.factKnowledge } 
+            knowledge={ props.knowledge }
             hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact }
             ref={ (child) => explainable = child  } />
@@ -77,7 +77,7 @@ let unknownFactComponent = (props: Props) => {
         content = <WordFactComponent 
             fact={ fact } 
             corpus={ props.corpus }
-            factKnowledge={ props.factKnowledge } 
+            knowledge={ props.knowledge }
             hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact } />
     }
@@ -85,7 +85,7 @@ let unknownFactComponent = (props: Props) => {
         content = <EndingTransformFactComponent 
             fact={ fact } 
             corpus={ props.corpus }
-            factKnowledge={ props.factKnowledge } 
+            knowledge={ props.knowledge }
             hiddenFact={ props.hiddenFact }
             unknownFact={ props.unknownFact } />
     }

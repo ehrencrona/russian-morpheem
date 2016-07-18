@@ -1,5 +1,5 @@
 
-import { indexSentencesByFact, FactSentenceIndex } from  '../../shared/IndexSentencesByFact'
+import { indexSentencesByFact, FactSentences } from  '../../shared/SentencesByFactIndex'
 
 import readCorpus from '../CorpusReader'
 import InflectionFact from '../../shared/inflection/InflectionFact'
@@ -26,7 +26,7 @@ readCorpus('ru', false)
     .filter((fact: InflectionFact) => corpus.facts.indexOf(fact) > LOWEST_FACT)
     .map((fact: InflectionFact) => {
 
-        let factIndex: FactSentenceIndex = index[fact.getId()]
+        let factIndex: FactSentences = index[fact.getId()]
 
         let score = {
             fact: fact,
@@ -34,7 +34,7 @@ readCorpus('ru', false)
         }
 
         if (factIndex) {
-            score.score = factIndex.easy + factIndex.hard + factIndex.ok
+            score.score = factIndex.count
         }
 
         return score

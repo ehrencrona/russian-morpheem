@@ -7,7 +7,7 @@ import Sentence from '../shared/Sentence'
 import { Component, createElement } from 'react';
 import { MISSING_INDEX } from '../shared/fact/Facts'
 
-import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/IndexSentencesByFact'
+import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/SentencesByFactIndex'
 import Tab from './Tab'
 import SentenceComponent from './SentenceComponent'
 

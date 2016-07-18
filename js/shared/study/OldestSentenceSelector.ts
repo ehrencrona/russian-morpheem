@@ -1,6 +1,6 @@
 
 import LastSawSentenceKnowledge from './LastSawSentenceKnowledge'
-import { FactSentences } from '../IndexSentencesByFact'
+import SentenceScore from './SentenceScore'
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 
@@ -14,13 +14,12 @@ export default class OldestSentenceSelector {
         this.facts = facts
     }
 
-    chooseSentence(sentences: FactSentences) {
+    scoreSentences(sentenceScores: SentenceScore[]): SentenceScore[] {
         let chosenSentence
         let highestScore = -1
 
-        sentences.easy.concat(sentences.ok).concat(sentences.hard).forEach((sentenceDiff) => {
-
-            let lastSawDate = this.knowledge.lastSawSentence[sentenceDiff.sentence.id]
+        sentenceScores.forEach((sentenceScore) => {
+            let lastSawDate = this.knowledge.lastSawSentence[sentenceScore.sentence.id]
 
             let age
 
@@ -31,26 +30,12 @@ export default class OldestSentenceSelector {
                 age = 1
             }
 
-            let score 
+            sentenceScore.score = age * sentenceScore.score
 
-            if (age == 1) {
-                let difficulty = Math.min(sentenceDiff.difficulty, this.facts.facts.length) / this.facts.facts.length
-
-                score = age + 1 - difficulty
-            }
-            else {
-                score = age
-            }
-
-
-            if (score > highestScore) {
-                chosenSentence = sentenceDiff.sentence
-                highestScore = score
-            }
-
+            sentenceScore.debug['age'] = age
         })
 
-        return chosenSentence
+        return sentenceScores
     }
 
 } 

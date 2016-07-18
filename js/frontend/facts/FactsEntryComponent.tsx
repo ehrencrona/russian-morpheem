@@ -12,12 +12,12 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import FactNameComponent from '../FactNameComponent'
 
-import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
+import { SentencesByFactIndex, FactSentences } from '../../shared/SentencesByFactIndex'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
 
 interface Props {
     fact: Fact,
-    indexOfFacts : { [factId: string]: FactSentenceIndex },
+    sentencesByFact : SentencesByFactIndex,
     index: number,
     corpus: Corpus,
     tab: Tab,
@@ -71,13 +71,13 @@ export default class FactsEntryComponent extends Component<Props, State> {
     render() {
         let fact = this.props.fact
         let index = this.props.index
-        let indexOfFacts = this.props.indexOfFacts      
+        let sentencesByFact = this.props.sentencesByFact      
         
-        let indexEntry: FactSentenceIndex = indexOfFacts[fact.getId()] || 
-            { ok: 0, easy: 0, hard: 0, factIndex: 0 }
+        let indexEntry: FactSentences = sentencesByFact[fact.getId()] || 
+            { ok: [], easy: [], hard: [], count: 0, factIndex: 0 }
 
-        let easyLeft = 8 - (indexEntry.easy + indexEntry.ok)
-        let left = easyLeft - indexEntry.hard
+        let easyLeft = 8 - (indexEntry.easy.length + indexEntry.ok.length)
+        let left = easyLeft - indexEntry.hard.length
 
         return ( 
             <li 

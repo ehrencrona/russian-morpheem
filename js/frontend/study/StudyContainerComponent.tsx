@@ -3,12 +3,21 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
-import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
-import LeitnerFactSelector from '../../shared/study/LeitnerFactSelector'
+import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
+import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import OldestSentenceSelector from '../../shared/study/OldestSentenceSelector'
 import LastSawSentenceKnowledge from '../../shared/study/LastSawSentenceKnowledge'
+import chooseHighestScoreSentence from '../../shared/study/chooseHighestScoreSentence'
+import createNewFactsSelector from '../../shared/study/NewFactsSelector'
+import FactScore from '../../shared/study/FactScore'
 
-import { findSentencesForFact } from '../../shared/IndexSentencesByFact'
+import FixedIntervalFactSelectorInspectorComponent from './FixedIntervalFactSelectorInspectorComponent'
+import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
+
+import sentencesForFacts from '../../shared/study/sentencesForFacts'
+import topScores from '../../shared/study/topScores'
+
+import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Sentence from '../../shared/Sentence'
@@ -20,6 +29,7 @@ import InflectedWord from '../../shared/InflectedWord'
 
 import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
+import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelector'
 
 import ExplainFormComponent  from './ExplainFormComponent'
 import ForgettingStats from './ForgettingStats'
@@ -31,7 +41,9 @@ interface Props {
 
 interface State {
     sentence?: Sentence,
-    fact?: InflectionFact,
+    fact?: Fact,
+    showDecks?: boolean
+    showComments?: boolean
 }
 
 let React = { createElement: createElement }
@@ -39,40 +51,68 @@ let React = { createElement: createElement }
 
 export default class StudyContainerComponent extends Component<Props, State> {
     exposures: FrontendExposures
-    factKnowledge: LeitnerKnowledge
+    knowledge: NaiveKnowledge
     sentenceKnowledge: LastSawSentenceKnowledge
     trivialKnowledge: TrivialKnowledge
+    sentencesByFactIndex: SentencesByFactIndex 
+    factSelector: FixedIntervalFactSelector
+    newFactsSelector: () => FactScore[]
+
     forgettingStats: ForgettingStats
 
     constructor(props) {
         super(props)
 
         this.state = {}
+
+        this.sentencesByFactIndex = indexSentencesByFact(props.corpus.sentences, props.corpus.facts, 0)
+        this.factSelector = new FixedIntervalFactSelector(this.props.corpus.facts)
+        this.knowledge = new NaiveKnowledge()
+        this.trivialKnowledge = new TrivialKnowledge()
+        this.newFactsSelector = createNewFactsSelector(this.props.corpus.facts, this.knowledge, this.factSelector, 0.1, 10)
+        this.exposures = new FrontendExposures(this.props.xrArgs, this.props.corpus.lang)
+        this.sentenceKnowledge = new LastSawSentenceKnowledge()
+        this.forgettingStats = new ForgettingStats(this.props.corpus)
     }
 
     chooseSentence() {
-        let selectableFacts = this.props.corpus.facts.facts
+        let factScores = this.factSelector.chooseFact(new Date())
 
-        let nextFact = new LeitnerFactSelector(this.factKnowledge, selectableFacts).chooseFact() as InflectionFact
+        factScores = factScores.concat(this.newFactsSelector())
 
-        console.log('next fact: ' + nextFact.getId())
+        factScores = factScores.filter((fs) => {
+            let fact = fs.fact 
 
-        let factSentences = findSentencesForFact(nextFact, this.props.corpus.sentences, this.props.corpus.facts, 0)
+            if (fact instanceof InflectionFact) {
+                return fact.form != fact.inflection.defaultForm
+            }
+            else {
+                return true
+            }
+        })
 
-        let sentence = new OldestSentenceSelector(this.sentenceKnowledge, this.props.corpus.facts).chooseSentence(factSentences)
+        factScores = topScores(factScores, 20)
 
-        console.log('next sentence: ' + sentence.toString())
+        let sentenceScores = sentencesForFacts(factScores, this.sentencesByFactIndex)
 
-        this.setState({ sentence: sentence, fact: nextFact })
+        sentenceScores = new OldestSentenceSelector(this.sentenceKnowledge, this.props.corpus.facts)
+            .scoreSentences(sentenceScores)
+
+        sentenceScores = topScores(sentenceScores, 100)
+
+        sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
+
+        let sentenceScore = chooseHighestScoreSentence(sentenceScores)
+
+        let sentence = sentenceScore.sentence
+        let fact = sentenceScore.fact
+
+        console.log(sentenceScore)
+
+        this.setState({ sentence: sentence, fact: fact })
     }
 
     componentWillMount() {
-        this.exposures = new FrontendExposures(this.props.xrArgs, this.props.corpus.lang)
-        this.factKnowledge = new LeitnerKnowledge(this.props.corpus.facts)
-        this.sentenceKnowledge = new LastSawSentenceKnowledge()
-        this.trivialKnowledge = new TrivialKnowledge()
-        this.forgettingStats = new ForgettingStats(this.props.corpus)
-
         this.exposures
             .getExposures(-1)
             .then((exposures) => {
@@ -83,12 +123,13 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     processExposures(exposures: Exposure[]) {
-        this.factKnowledge.processExposures(exposures)
+        this.knowledge.processExposures(exposures)
         this.sentenceKnowledge.processExposures(exposures)
         this.trivialKnowledge.processExposures(exposures)
         this.forgettingStats.processExposures(exposures)
+        this.factSelector.processExposures(exposures)
 
-        this.forgettingStats.print()
+//        this.forgettingStats.print()
     }
 
     onAnswer(exposures: Exposure[]) {
@@ -99,32 +140,79 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     render() {
-        if (0==1) {
-            let knowledge = new LeitnerKnowledge(this.props.corpus.facts)
-
-            knowledge.known['fem@genpl'] = 9;
-            knowledge.known['femka2@genpl'] = 9;
-            knowledge.known['neu@genpl'] = 9;
-            knowledge.known['-mascь@genpl'] = 9;
-
-            return <ExplainFormComponent 
-                corpus={ this.props.corpus }
-                knowledge={ knowledge }
-                word={ this.props.corpus.words.get('писать@3pl') as InflectedWord }
-                onClose={ () => {} }
-                onSelect={ () => {} }
-                />
-        }
-
         if (this.state.sentence) {
-            return <StudyComponent 
-                sentence={ this.state.sentence }
-                fact={ this.state.fact } 
-                corpus={ this.props.corpus }
-                factKnowledge={ this.factKnowledge }
-                trivialKnowledge={ this.trivialKnowledge }
-                onAnswer={ (exposures) => this.onAnswer(exposures)} />
-            
+            return <div className='study'>
+                <StudyComponent 
+                    sentence={ this.state.sentence }
+                    fact={ this.state.fact } 
+                    corpus={ this.props.corpus }
+                    knowledge={ this.knowledge }
+                    trivialKnowledge={ this.trivialKnowledge }
+                    onAnswer={ (exposures) => this.onAnswer(exposures)} />            
+
+
+                {
+                    (this.state.showComments ?
+
+                    <div>
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showComments: false }) }>Close</div>
+                        </div>
+
+                        <SentenceHistoryComponent 
+                            corpus={ this.props.corpus }
+                            sentence={ this.state.sentence }
+                            commentBoxOpen={ true }
+                            />
+                    </div>
+                        
+                        :
+
+                    <div/>)
+                }
+
+                {
+                    (this.state.showDecks ?
+
+                        <div>
+
+                            <div className='debugButtonBar'>
+                                <div className='button' onClick={ () => this.setState({ showDecks: false }) }>Close</div>
+                            </div>
+
+                            <FixedIntervalFactSelectorInspectorComponent 
+                                knowledge={ this.factSelector } />
+
+                        </div>                    
+                    
+                    :
+
+                        <div/>
+
+                    )
+                }
+
+                {
+
+                    (!this.state.showComments && !this.state.showDecks ? 
+                    
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showComments: true }) }>
+                                Comment
+                            </div>
+                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
+                                What am I studying?
+                            </div>
+                        </div>
+
+                    :
+                    
+                        <div/>
+                    
+                    )
+
+                }
+            </div>
         }
         else {
             return <div/>

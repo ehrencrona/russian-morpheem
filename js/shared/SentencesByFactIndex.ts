@@ -14,17 +14,20 @@ export interface SentenceDifficulty {
 export interface FactSentences {
     easy: SentenceDifficulty[],
     ok: SentenceDifficulty[],
-    hard: SentenceDifficulty[]
+    hard: SentenceDifficulty[],
+    count: number,
+    factIndex: number
 }
 
+export type SentencesByFactIndex = { [factId: string]: FactSentences }; 
+
 export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts: Facts, okInterval?: number): FactSentences {
-    let result : FactSentences = { ok: [], easy: [], hard: [] }
-    
-    if (okInterval == undefined) {
+        if (okInterval == undefined) {
         okInterval = OK_INTERVAL
     } 
     
     let forFactIndex = facts.indexOf(forFact)
+    let result : FactSentences = { ok: [], easy: [], hard: [], count: 0, factIndex: forFactIndex }
     
     sentences.sentences.forEach((sentence) => {
         let hardestIndex = -1
@@ -54,7 +57,8 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
             else {
                 list = result.hard
             }
-            
+
+            result.count++        
             list.push({ sentence: sentence, difficulty: hardestIndex })
         }
     })
@@ -62,17 +66,8 @@ export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts:
     return result
 }
 
-export interface FactSentenceIndex {
-    easy: number,
-    ok: number,
-    hard: number,
-    factIndex: number 
-}
-
-export type SentenceCountByFact = { [factId: string]: FactSentenceIndex }; 
-
-export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number): SentenceCountByFact {
-    let result : { [factId: string]: FactSentenceIndex } = {}
+export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInterval?: number): SentencesByFactIndex {
+    let result: SentencesByFactIndex = {}
     
     if (okInterval == undefined) {
         okInterval = OK_INTERVAL
@@ -80,15 +75,15 @@ export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInter
 
     let t = new Date().getTime();
 
-    sentences.sentences.forEach((sentence) => {
+    sentences.sentences.forEach((sentence: Sentence) => {
         
         let hardestIndex = -1
         let hardestFactSentences 
-        let allFactSentences = []
+        let allFactSentences: FactSentences[] = []
 
         sentence.visitFacts((fact) => {
             let fs = result[fact.getId()]
-            
+
             if (!fs) {
                 let factIndex = facts.indexOf(fact)
                 
@@ -96,7 +91,7 @@ export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInter
                     return
                 }
                 
-                fs = { easy: 0, hard: 0, ok: 0, factIndex: factIndex }
+                fs = { easy: [], hard: [], ok: [], factIndex: factIndex, count: 0 }
                 
                 result[fact.getId()] = fs
             }
@@ -107,19 +102,26 @@ export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInter
                 hardestIndex = fs.factIndex
                 hardestFactSentences = fs
             }
-
         })
+
+        let sentenceDifficulty = { sentence: sentence, difficulty: hardestIndex }
     
         allFactSentences.forEach((fs) => {
+            fs.count++
+            
+            let list
+
             if (hardestIndex == fs.factIndex) {
-                fs.easy++
+                list = fs.easy
             }
             else if (hardestIndex - fs.factIndex <= okInterval) {
-                fs.ok++
+                list = fs.ok
             }
             else {
-                fs.hard++
+                list = fs.hard
             }
+    
+            list.push(sentenceDifficulty)
         })
     })
     

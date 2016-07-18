@@ -1,7 +1,7 @@
 /// <reference path="../../../typings/react/react.d.ts" />
 import { Component, createElement } from 'react'
 
-import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
+import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
 import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
@@ -49,7 +49,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
     }
 
     render() {
-        let indexOfFacts : { [factId: string]: FactSentenceIndex } =
+        let sentencesByFact : SentencesByFactIndex =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
         let factIndices: FactIndex[] = this.props.corpus.facts.facts.map((fact, index) => { 
@@ -116,7 +116,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                             key={ fact.getId() }
                             fact={ fact }
                             index={ factIndex.index }
-                            indexOfFacts={ indexOfFacts }
+                            sentencesByFact={ sentencesByFact }
                             corpus={ this.props.corpus }
                             tab={ this.props.tab }
                             onMove={ () => this.forceUpdate() }

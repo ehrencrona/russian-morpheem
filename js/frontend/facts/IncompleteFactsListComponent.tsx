@@ -6,7 +6,7 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
 
-import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'		
+import { indexSentencesByFact, SentencesByFactIndex, FactSentences } from '../../shared/SentencesByFactIndex'		
  
 import { FactIndex } from './FactIndex'
 
@@ -24,14 +24,13 @@ let React = { createElement: createElement }
 
 export default class FactsMissingComponent extends Component<Props, State> {
     render() {
-        let indexOfFacts : { [factId: string]: FactSentenceIndex } =		
+        let indexOfFacts : SentencesByFactIndex =		
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)		
 
         let filter = (factIndex) => {		
-            let indexEntry: FactSentenceIndex = indexOfFacts[factIndex.fact.getId()] || 		
-                { ok: 0, easy: 0, hard: 0, factIndex: 0 }		
+            let indexEntry: FactSentences = indexOfFacts[factIndex.fact.getId()]
                     
-            return indexEntry.easy + indexEntry.ok + indexEntry.hard < 8		
+            return !indexEntry || indexEntry.count < 8		
         }
 
         return (

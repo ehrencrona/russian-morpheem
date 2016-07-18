@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
-import { findSentencesForFact } from '../../shared/IndexSentencesByFact'
+import { findSentencesForFact } from '../../shared/SentencesByFactIndex'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
@@ -16,16 +16,12 @@ import UnstudiedWord from '../../shared/UnstudiedWord'
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
 
+import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 
 import { CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
-
-import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
-
-import LeitnerKnowledgeInspectorComponent from './LeitnerKnowledgeInspectorComponent'
-import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
 
 import UnknownFact from './UnknownFact'
 import UnknownFactComponent from './UnknownFactComponent'
@@ -36,7 +32,7 @@ interface Props {
     sentence: Sentence,
     corpus: Corpus,
     fact: Fact,
-    factKnowledge: LeitnerKnowledge,
+    knowledge: NaiveKnowledge,
     trivialKnowledge: TrivialKnowledge,
     onAnswer: (exposures: Exposure[]) => void
 }
@@ -45,8 +41,6 @@ interface State {
     unknownFacts?: UnknownFact[],
     knownFacts?: UnknownFact[],
     stage?: Stage,
-    showDecks?: boolean
-    showComments?: boolean
 }
 
 let React = { createElement: createElement }
@@ -159,6 +153,8 @@ export default class StudyComponent extends Component<Props, State> {
                 return
             }
 
+console.log('fact '+fact.getId() + ' was known: '+ this.props.trivialKnowledge.isKnown(fact));
+
             (this.props.trivialKnowledge.isKnown(fact) ?
                 known :
                 unknown).push({
@@ -171,13 +167,17 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     addFacts(addKnown: UnknownFact[], addUnknown: UnknownFact[]) {
+console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f) => f.fact.getId()))
+
         let unknown = this.state.unknownFacts
         let known = this.state.knownFacts 
 
         let addAll = addKnown.concat(addUnknown)
 
-        addAll.forEach((fact) => unknown = excludeFact(fact, unknown))
-        addAll.forEach((fact) => known = excludeFact(fact, known))
+        addAll.forEach((fact) => {
+            unknown = excludeFact(fact, unknown)
+            known = excludeFact(fact, known)
+        })
 
         this.setState({
             unknownFacts: unknown.concat(addUnknown),
@@ -310,6 +310,25 @@ export default class StudyComponent extends Component<Props, State> {
                     </a>)
                 </div>
 
+                <div className='explanation'>
+                    {
+                        (this.state.stage == Stage.TEST ?
+
+                            (this.props.fact instanceof UnstudiedWord ?
+                                'What Russian word is missing?'
+                            :
+                                'What form should the highlighed word be in?')
+
+                            :
+
+                            (this.state.stage == Stage.REVEAL ?
+                                'Did you get it right?'
+                                :
+                                'Check the facts you didn\'t know below')
+                        )
+                    }
+                </div>
+
                 <div className='sentence'>
                 { 
                     groupedWords.map((words, index) => {
@@ -342,24 +361,8 @@ export default class StudyComponent extends Component<Props, State> {
                                         }
                                     }
                                     else if (!reveal) {
-                                        let replaceWord = this.props.corpus.words.get('что@nom')
-
-                                        text = replaceWord.jp
-
-                                        if (word instanceof InflectedWord) {
-                                            let grammaticalCase = FORMS[word.form].grammaticalCase 
-
-                                            let inflected = (replaceWord as InflectedWord).word.inflect(CASES[grammaticalCase])
-
-                                            if (inflected) {
-                                                text = inflected.jp
-                                            }
-                                            else {
-                                                console.warn('Could not get что in case ' + CASES[grammaticalCase])
-                                            }
-                                        }
-
-                                        text += '?'
+                                        formHint = studiedWord.getEnglish()
+                                        text = ''
                                     }
 
                                     if (reveal) {
@@ -370,7 +373,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     }
                                 }
 
-                                if (capitalize) {
+                                if (capitalize && text) {
                                     text = text[0].toUpperCase() + text.substr(1)
                                 }
 
@@ -428,7 +431,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
                                     corpus={ this.props.corpus }
-                                    factKnowledge={ this.props.factKnowledge } 
+                                    knowledge={ this.props.knowledge } 
                                     onKnew={ (fact: UnknownFact) => this.addFacts([ fact ], []) }
                                     known={ true }
                                 />)
@@ -454,7 +457,7 @@ export default class StudyComponent extends Component<Props, State> {
                                     fact={ unknownFact.fact } 
                                     unknownFact={ unknownFact } 
                                     corpus={ this.props.corpus }
-                                    factKnowledge={ this.props.factKnowledge } 
+                                    knowledge={ this.props.knowledge } 
                                     onKnew={ (fact: UnknownFact) => this.addFacts([], [ fact ]) }
                                     known={ false }
                                 />)
@@ -466,72 +469,6 @@ export default class StudyComponent extends Component<Props, State> {
 
                     <div/>
                 )}
-
-                {
-                    (this.state.showComments ?
-
-                    <div>
-                        <div className='debugButtonBar'>
-                            <div className='button' onClick={ () => this.setState({ showComments: false }) }>Close</div>
-                        </div>
-
-                        <SentenceHistoryComponent 
-                            corpus={ this.props.corpus }
-                            sentence={ this.props.sentence }
-                            commentBoxOpen={ true }
-                            />
-                    </div>
-                        
-                        :
-
-                    <div/>)
-                }
-
-                {
-                    (this.state.showDecks ?
-
-                        <div>
-
-                            <div className='debugButtonBar'>
-                                <div className='button' onClick={ () => this.setState({ showDecks: false }) }>Close</div>
-                            </div>
-
-                            <LeitnerKnowledgeInspectorComponent 
-                                knowledge={ this.props.factKnowledge }
-                                currentFact={ this.props.fact }/>
-
-                            <TrivialKnowledgeInspectorComponent
-                                knowledge={ this.props.trivialKnowledge } />
-
-                        </div>                    
-                    
-                    :
-
-                        <div/>
-
-                    )
-                }
-
-                {
-
-                    (!this.state.showComments && !this.state.showDecks ? 
-                    
-                        <div className='debugButtonBar'>
-                            <div className='button' onClick={ () => this.setState({ showComments: true }) }>
-                                Comment
-                            </div>
-                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
-                                What am I studying?
-                            </div>
-                        </div>
-
-                    :
-                    
-                        <div/>
-                    
-                    )
-
-                }
 
             </div>
             

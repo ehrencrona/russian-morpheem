@@ -1,7 +1,7 @@
 /// <reference path="../../../typings/react/react.d.ts" />
 import { Component, createElement } from 'react'
 
-import { indexSentencesByFact, FactSentenceIndex } from '../../shared/IndexSentencesByFact'
+import { indexSentencesByFact } from '../../shared/SentencesByFactIndex'
 import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
@@ -52,7 +52,7 @@ export default class MissingFactsListComponent extends Component<Props, State> {
             })
         })
 
-        let indexOfFacts : { [factId: string]: FactSentenceIndex } =
+        let sentencesByFact =
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
         let factIds = Object.keys(factsById).sort((id1, id2) => 
@@ -65,7 +65,7 @@ export default class MissingFactsListComponent extends Component<Props, State> {
                     <FactsEntryComponent
                         key={ factId } 
                         fact={ factsById[factId] }
-                        indexOfFacts={ indexOfFacts }
+                        sentencesByFact={ sentencesByFact }
                         index={ MISSING_INDEX }
                         corpus={ this.props.corpus }
                         tab={ this.props.tab } >

@@ -7,7 +7,7 @@ import UnparsedWord from '../shared/UnparsedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import Tab from './Tab'
-import { indexSentencesByFact, FactSentenceIndex } from '../shared/IndexSentencesByFact'
+import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesByFactIndex'
 import InflectionsContainerComponent from './InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
@@ -282,7 +282,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
         
     render() {
-        let index : { [factId: string]: FactSentenceIndex } = 
+        let index : SentencesByFactIndex = 
             indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
 
         let allForms = new Set<string>()
@@ -298,7 +298,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 return 0
             }
             
-            return fi.easy + fi.ok + fi.hard
+            return fi.count
         } 
         
         let facts = this.props.corpus.facts

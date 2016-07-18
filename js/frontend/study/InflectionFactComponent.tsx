@@ -52,7 +52,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                         <ExplainFormComponent 
                             corpus={ this.props.corpus } 
                             word={ this.state.explainWord } 
-                            knowledge={ this.props.factKnowledge }
+                            knowledge={ this.props.knowledge }
                             onClose={ () => this.setState({ explain: false }) }
                             onSelect={ (word) => this.setState({ explainWord: word })} 
                         />

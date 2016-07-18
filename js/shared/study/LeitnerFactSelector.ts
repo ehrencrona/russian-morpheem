@@ -1,6 +1,7 @@
 
 import LeitnerKnowledge from './LeitnerKnowledge'
 import Fact from '../fact/Fact'
+import FactScore from './FactScore'
 
 const MAX_PARALLEL_STUDY_COUNT = 20
 const NEW_FACT_RATE = 0.1
@@ -12,48 +13,72 @@ export default class LeitnerFactSelector {
         this.facts = facts
     }
 
-
-    chooseFact() {
+    chooseFact(): FactScore[] {
+        let factScores: FactScore[] = []
 
         let deckCount = this.knowledge.decks.length
-
-        let maxScore = 0
 
         // each item in first deck studied three times as often as last
         let deckScore = (deckIndex) => 
             ((deckCount - deckIndex) / deckCount * 2 + 1) * this.knowledge.decks[deckIndex].facts.length
 
         this.knowledge.decks.forEach((deck, index) => {
-console.log(index+ ': '+ deckScore(index))            
-            maxScore += deckScore(index)  
+            let score = deckScore(index) / deck.facts.length
+
+            deck.facts.forEach((fact) => {
+                factScores.push({ fact: fact, score: score })
+            })
         })
 
         let chanceOfNewFact = (1 + NEW_FACT_RATE) * Math.max(MAX_PARALLEL_STUDY_COUNT - this.knowledge.size, 1)
+
+        let newFacts: Fact[] = []
+
+        for (let i = 0; i < this.facts.length; i++) {
+            let fact = this.facts[i]
+
+            if (!this.knowledge.isKnown(fact) && !this.knowledge.isStudying(fact)) {
+                newFacts.push(fact)
+
+                if (newFacts.length == 4) {
+                    break
+                }
+            }
+        }
+
+        newFacts.forEach((fact) => 
+            factScores.push({ fact: fact, score: chanceOfNewFact / newFacts.length })
+        )
+
+        return this.sample(factScores, 10)
+    }
+
+    sample(factScores: FactScore[], count: number) {
+        let scoreSum = 0
+
+        function sampleOne(): FactScore {
+            let score = Math.random() * scoreSum
+
+            return factScores.find((fs) => {
+                score -= fs.score
+
+                return score <= 0
+            })
+        }
         
-        maxScore *= chanceOfNewFact 
+        factScores.forEach((fs) => scoreSum += fs.score)
 
-        let score = Math.random() * maxScore
-console.log('score ' + score + ' / ' + maxScore)
-        let deck = this.knowledge.decks.find((deck, index) => {
-            score -= deckScore(index)
-
-            return score < 0
-        })
-console.log('deck ' + this.knowledge.decks.findIndex((d) => d==deck) + ', score left ' + score)
-
-        if (deck) {
-            return deck.facts[Math.floor(deck.facts.length * Math.random())]
-        }
-        else {
-            return this.getNewFact()
+        if (isNaN(scoreSum)) {
+            console.warn('Fact scores:', factScores)
+            throw new Error('Fact score was NaN.')
         }
 
+        let result: FactScore[] = []
+
+        for (let i = 0; i < count; i++) {
+            result.push(sampleOne())
+        }
+
+        return result
     }
-
-    getNewFact(): Fact {
-
-        return this.facts.find((fact) => !this.knowledge.isKnown(fact) && !this.knowledge.isStudying(fact))
-
-    }
-
 } 

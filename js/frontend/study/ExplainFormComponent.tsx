@@ -7,12 +7,13 @@ import InflectionsContainerComponent from '../InflectionsComponent'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 import Fact from '../../shared/fact/Fact'
+import { Knowledge } from '../../shared/study/Exposure'
 
 import Inflection from '../../shared/inflection/Inflection'
 import Ending from '../../shared/Ending'
 import { getFormName } from '../../shared/inflection/InflectionForms' 
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
+import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import Transform from '../../shared/Transform'
 import { EndingTransform } from '../../shared/Transforms'
 
@@ -21,7 +22,7 @@ let React = { createElement: createElement }
 interface Props {
     corpus: Corpus,
     word: InflectedWord,
-    knowledge: LeitnerKnowledge,
+    knowledge: NaiveKnowledge,
     onClose: () => void
     onSelect: (word: InflectedWord) => void
 }
@@ -55,7 +56,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
             }
         })
 
-        let known: InflectableWord[] = [], studying: InflectableWord[] = [], unknown: InflectableWord[] = [], trivial: InflectableWord[] = []
+        let known: InflectableWord[]
 
         let facts = corpus.facts.facts
 
@@ -68,24 +69,15 @@ export default class ExplainFormComponent extends Component<Props, State> {
                 inflectionIds.has(fact.inflection.id)) {
                 let list: InflectableWord[]
 
-                if (this.props.knowledge.isKnown(fact)) {
-                    list = known
-                }
-                else if (this.props.knowledge.isTrivial(fact)) {
-                    list = trivial
-                }
-                else if (this.props.knowledge.isStudying(fact)) {
-                    list = known
-                }
-                else {
-                    list = unknown
-                }
+                let knowledge = this.props.knowledge.getKnowledge(fact)
 
-                list.push(fact)
+                if (knowledge == Knowledge.KNEW) {
+                    known.push(fact)
+                }
             }
         }
 
-        return studying.concat(known).concat(trivial).concat(unknown)
+        return known
     }
 
     filterOnlySameDefaultSuffix(words: InflectableWord[], form: string, inflection: Inflection) {
@@ -206,7 +198,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
         inflections.forEach((inflection) => {
             let fact = inflection.getFact(form) 
 
-            if (this.props.knowledge.isKnown(fact) || this.props.knowledge.isStudying(fact)) {
+            if (this.props.knowledge.getKnowledge(fact) == Knowledge.KNEW) {
                 known.push(inflection)
             }
         })

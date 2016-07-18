@@ -8,7 +8,7 @@ import Tab from './Tab'
 
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import { Component, createElement } from 'react';
-import { FactSentences } from '../shared/IndexSentencesByFact'
+import { FactSentences } from '../shared/SentencesByFactIndex'
 
 let React = { createElement: createElement }
 
