@@ -17,7 +17,7 @@ export default function(corpus: Corpus) {
         exposuresToStore.forEach((exposure) => exposure.user = authorId)
 
         exposures.registerExposures(exposuresToStore).then(() => {
-            console.log(author.name + ' did not know ' +
+            console.log(new Date() + ' ' + author.name + ' did not know ' +
                 exposuresToStore.filter((e) => e.knew == Knowledge.DIDNT_KNOW).map((e) => e.fact).join(', ') +
                 ' in sentence ' + exposuresToStore[0].sentence + '.')
 

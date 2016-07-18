@@ -23,7 +23,7 @@ const INCREASE_BY_REPETITION = 5
 // URGENCY + BASE_SCORE must equal 1
 const URGENCY = 0.8
 const BASE_SCORE = 0.2
-const INTERVAL_FIRST_REP_IN_MS = { min: 5000, max: 25000 }
+const INTERVAL_FIRST_REP_IN_MS = { min: 5000, max: 50000 }
 
 const INTERVAL_BY_REP_IN_MS: Interval[] = [ INTERVAL_FIRST_REP_IN_MS ]
 
