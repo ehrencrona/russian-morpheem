@@ -4,7 +4,7 @@ import Facts from '../fact/Facts'
 import FactScore from './FactScore'
 import { Exposure, Knowledge } from '../study/Exposure'
 
-const REPETITION_COUNT = 8
+export const REPETITION_COUNT = 8
 
 interface LastStudied {
     fact: string,
@@ -25,7 +25,7 @@ const URGENCY = 0.8
 const BASE_SCORE = 0.2
 const INTERVAL_FIRST_REP_IN_MS = { min: 5000, max: 50000 }
 
-const INTERVAL_BY_REP_IN_MS: Interval[] = [ INTERVAL_FIRST_REP_IN_MS ]
+export const INTERVAL_BY_REP_IN_MS: Interval[] = [ INTERVAL_FIRST_REP_IN_MS ]
 
 for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     INTERVAL_BY_REP_IN_MS[rep] = {

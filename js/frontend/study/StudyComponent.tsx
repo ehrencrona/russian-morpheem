@@ -136,32 +136,22 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
-    explainWord(word: UnstudiedWord) {
+    explainWord(word: UnstudiedWord, somethingIsUnknown?: boolean) {
         let known: UnknownFact[] = [], 
             unknown: UnknownFact[] = []
 
-        let inflection
+console.log('facts form word ' + this.unknownFactsFromWord(word).map((f)=>f.fact.getId()).join(', '))
 
-        if (word instanceof InflectedWord) {
-            inflection = word.word.inflection
-        }
-
-        word.visitFacts((fact: Fact) => {
-            if (inflection &&
-                fact instanceof InflectionFact && 
-                fact.form == inflection.defaultForm) {
-                return
-            }
-
-console.log('fact '+fact.getId() + ' was known: '+ this.props.trivialKnowledge.isKnown(fact));
-
-            (this.props.trivialKnowledge.isKnown(fact) ?
+        this.unknownFactsFromWord(word).forEach((fact) =>
+            (this.props.trivialKnowledge.isKnown(fact.fact) ?
                 known :
-                unknown).push({
-                fact: fact,
-                word: word
-            })
-        })
+                unknown).push(fact)
+        )
+
+        if (!unknown.length && somethingIsUnknown) {
+            unknown = known
+            known = []
+        }
 
         this.addFacts(known, unknown)
     }
@@ -172,9 +162,7 @@ console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f)
         let unknown = this.state.unknownFacts
         let known = this.state.knownFacts 
 
-        let addAll = addKnown.concat(addUnknown)
-
-        addAll.forEach((fact) => {
+        addKnown.concat(addUnknown).forEach((fact) => {
             unknown = excludeFact(fact, unknown)
             known = excludeFact(fact, known)
         })
@@ -185,27 +173,31 @@ console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f)
         })
     }
 
-    unknownFactsFromFact(fact: Fact, word: UnstudiedWord): UnknownFact[] {
+    unknownFactsFromWord(word: UnstudiedWord): UnknownFact[] {
         let facts: Fact[] = []
 
-        this.props.fact.visitFacts((fact: Fact) => facts.push(fact))
+        word.visitFacts((fact: Fact) => facts.push(fact))
+
+        facts = facts.filter((fact) =>
+            !(fact instanceof InflectionFact) || 
+            (fact.form != fact.inflection.defaultForm))
 
         return facts.map((fact) => { 
             return {
-                fact: this.props.fact,
+                fact: fact,
                 word: word
             }
         })
     }
 
     iWasWrong(studiedWord) {
-        this.addFacts([], this.unknownFactsFromFact(this.props.fact, studiedWord))
+        this.explainWord(studiedWord, true)
 
         this.setState({ stage: Stage.CONFIRM })
     }
 
     iWasRight(studiedWord) {
-        this.next(...this.unknownFactsFromFact(this.props.fact, studiedWord))
+        this.next(...this.unknownFactsFromWord(studiedWord))
     }
 
     getFormHint() {

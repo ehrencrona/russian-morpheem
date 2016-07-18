@@ -56,7 +56,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
             }
         })
 
-        let known: InflectableWord[]
+        let known: InflectableWord[] = []
 
         let facts = corpus.facts.facts
 

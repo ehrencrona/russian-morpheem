@@ -9,6 +9,7 @@ import UnknownFactComponent from './UnknownFactComponent'
 import Fact from '../../shared/fact/Fact'
 
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
+import { INTERVAL_BY_REP_IN_MS, REPETITION_COUNT } from '../../shared/study/FixedIntervalFactSelector'
 
 interface Props {
     knowledge: FixedIntervalFactSelector
@@ -38,16 +39,22 @@ export default class FixedIntervalFactSelectorInspectorComponent extends Compone
                 <h3>Not Yet Studying</h3>
                 <ul>{ 
                     this.props.knowledge.notYetStudying().map((ls) => {
+                        let interval = INTERVAL_BY_REP_IN_MS[Math.min(ls.repetition, REPETITION_COUNT-1)]
+
                         return <li><b>{ ls.fact }</b>: { human(ls.time) }
-                            , { ls.repetition } rep</li>
+                            , { ls.repetition } rep, will study in { 
+                                human(new Date(interval.min + ls.time.getTime())) } </li>
                     })
                 }</ul>
 
                 <h3>Not Longer Studying</h3>
                 <ul>{ 
                     this.props.knowledge.noLongerStudying().map((ls) => {
+                        let interval = INTERVAL_BY_REP_IN_MS[Math.min(ls.repetition, REPETITION_COUNT-1)]
+
                         return <li><b>{ ls.fact }</b>: { human(ls.time) }
-                            , { ls.repetition } rep</li>
+                            , { ls.repetition } rep, not studying since { 
+                                human(new Date(interval.max + ls.time.getTime())) } </li>
                     })
                 }</ul>
             </div>

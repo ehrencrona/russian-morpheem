@@ -23,21 +23,25 @@ export default class KnowledgeSentenceSelector {
         let maybes = 0
         let unknowns = 0
 
+        sentenceScore.debug['maybeUnknowns'] = []
+        sentenceScore.debug['unknowns'] = []
+
         sentenceScore.sentence.visitFacts((fact) => {
 
             let knowledgeOfFact = this.knowledge.getKnowledge(fact)
 
             if (knowledgeOfFact == Knowledge.MAYBE) {
                 maybes++        
+
+                sentenceScore.debug['maybeUnknowns'].push(fact.getId())
             }
             else if (knowledgeOfFact == Knowledge.DIDNT_KNOW) {
                 unknowns++
+
+                sentenceScore.debug['unknowns'].push(fact.getId())
             }
 
         })
-
-        sentenceScore.debug['maybeUnknown'] = maybes
-        sentenceScore.debug['unknowns'] = unknowns
 
         return SCORE_BY_MAYBES[Math.min(maybes, STOP_COUNTING_AT)] * 
                 SCORE_BY_UNKNOWNS[Math.min(unknowns, STOP_COUNTING_AT)]
