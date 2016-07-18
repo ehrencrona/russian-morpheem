@@ -6,7 +6,7 @@ import Inflection from '../shared/inflection/Inflection'
 
 import InflectionFact from '../shared/inflection/InflectionFact'
 
-import Tab from './Tab'
+import Tab from './OpenTab'
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'

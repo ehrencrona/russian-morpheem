@@ -3,7 +3,7 @@
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 import MoveFactButton from '../MoveFactButtonComponent'
 import TagButton from '../TagButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'

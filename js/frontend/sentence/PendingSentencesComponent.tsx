@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
 
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'

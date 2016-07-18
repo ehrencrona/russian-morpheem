@@ -37,7 +37,7 @@ input[type=text], input[type=number] {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-.smallFont, .index, .inflections table td .add, .phrase .pattern .field .label, .externalSentence .en, .addPhrase .description, .history li .event, .history li .main .date {
+.smallFont, .index, .inflections table td .add, .phrase .pattern .field .label, .externalSentence .en, .addPhrase .description, .history li .event, .history li .main .date, .study .factSelectorInspector ul li .details {
   font-size: 60%;
   font-weight: 900; }
 
@@ -635,14 +635,15 @@ h3 {
   bottom: 0;
   right: 0; }
 
-.study .knowledgeInspector .decks {
-  display: flex;
-  align-content: stretch;
-  flex-wrap: wrap; }
-  .study .knowledgeInspector .decks .deck {
-    flex-grow: 1; }
-    .study .knowledgeInspector .decks .deck li.current {
-      font-weight: bold; }
+.study .factSelectorInspector {
+  margin: 8px; }
+  .study .factSelectorInspector ul li {
+    margin-bottom: 8px; }
+    .study .factSelectorInspector ul li .fact {
+      display: inline;
+      margin-bottom: 4px; }
+    .study .factSelectorInspector ul li .details {
+      margin-left: 36px; }
 
 .overlayContainer {
   position: fixed;

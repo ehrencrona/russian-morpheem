@@ -9,7 +9,7 @@ import Fact from '../../shared/fact/Fact'
 
 import { FactIndex } from './FactIndex'
 import FactComponent from '../FactComponent'
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 import AddWordComponent from '../AddWordComponent'
 import AddPhraseComponent from '../AddPhraseComponent'
 import WordSearchComponent from '../WordSearchComponent'
@@ -45,7 +45,7 @@ export default class FactsComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            list: (this.props.tab.tabSet.getLastTabIds().length ? RECENT : INCOMPLETE),
+            list: (this.props.tab.getLastTabIds().length ? RECENT : INCOMPLETE),
         }
     }
     
@@ -89,7 +89,7 @@ export default class FactsComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.list == RECENT) {
-            let lastIds = this.props.tab.tabSet.getLastTabIds()
+            let lastIds = this.props.tab.getLastTabIds()
 
             list = <FilteredFactsListComponent
                 corpus={ this.props.corpus }
@@ -99,7 +99,7 @@ export default class FactsComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.list == MISSING) {
-            let lastIds = this.props.tab.tabSet.getLastTabIds()
+            let lastIds = this.props.tab.getLastTabIds()
 
             list = <MissingFactsListComponent
                 corpus={ this.props.corpus }

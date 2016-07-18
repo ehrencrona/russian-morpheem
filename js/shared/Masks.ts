@@ -5,10 +5,13 @@ const MASKS = {
     adj: {
         short: (form) => form.substr(0, 5) == 'short',
         nonstd: (form) => form.substr(0, 5) == 'short' || form == 'adv' || form == 'comp',
-        allbutpl: (form) => !pl(form),
         pl: pl,
         sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
         adv: (form) => form == 'adv',
+        comp: (form) => form == 'comp',
+        allbutcomp: (form) => form != 'comp',
+        allbutshort: (form) => form != 'short',
+        allbutpl: (form) => !pl(form),
         allbutadv: (form) => form != 'adv'
     },
     num: {

@@ -3,7 +3,7 @@
 import {Component,createElement} from 'react'
 import Corpus from '../../shared/Corpus'
 
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 import PendingSentencesComponent from './PendingSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'

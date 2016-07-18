@@ -4,7 +4,7 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
 
 import human = require('human-time')

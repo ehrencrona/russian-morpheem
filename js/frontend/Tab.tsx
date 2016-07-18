@@ -18,4 +18,8 @@ export default class Tab {
     close() {
         this.tabSet.closeTab(this)
     }
+
+    getLastTabIds() {
+        return this.tabSet.getLastTabIds()
+    }
 }

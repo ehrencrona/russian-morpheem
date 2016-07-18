@@ -12,6 +12,7 @@ import createNewFactsSelector from '../../shared/study/NewFactsSelector'
 import FactScore from '../../shared/study/FactScore'
 
 import FixedIntervalFactSelectorInspectorComponent from './FixedIntervalFactSelectorInspectorComponent'
+import SentenceComponent from '../SentenceComponent'
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 
 import sentencesForFacts from '../../shared/study/sentencesForFacts'
@@ -40,10 +41,11 @@ interface Props {
 }
 
 interface State {
-    sentence?: Sentence,
-    fact?: Fact,
+    sentence?: Sentence
+    fact?: Fact
     showDecks?: boolean
     showComments?: boolean
+    edit?: boolean
 }
 
 let React = { createElement: createElement }
@@ -172,6 +174,26 @@ export default class StudyContainerComponent extends Component<Props, State> {
                 }
 
                 {
+                    (this.state.edit ?
+
+                    <div>
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ edit: false }) }>Close</div>
+                        </div>
+
+                        <SentenceComponent 
+                            corpus={ this.props.corpus }
+                            sentence={ this.state.sentence }
+                            tab={ { openTab: () => {}, close: () => {}, getLastTabIds: () => [] } }
+                            />
+                    </div>
+                        
+                        :
+
+                    <div/>)
+                }
+
+                {
                     (this.state.showDecks ?
 
                         <div>
@@ -181,9 +203,10 @@ export default class StudyContainerComponent extends Component<Props, State> {
                             </div>
 
                             <FixedIntervalFactSelectorInspectorComponent 
-                                knowledge={ this.factSelector } />
+                                knowledge={ this.factSelector }
+                                corpus={ this.props.corpus } />
 
-                        </div>                    
+                        </div>
                     
                     :
 
@@ -194,7 +217,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
                 {
 
-                    (!this.state.showComments && !this.state.showDecks ? 
+                    (!this.state.showComments && !this.state.showDecks && !this.state.edit ? 
                     
                         <div className='debugButtonBar'>
                             <div className='button' onClick={ () => this.setState({ showComments: true }) }>
@@ -202,6 +225,9 @@ export default class StudyContainerComponent extends Component<Props, State> {
                             </div>
                             <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
                                 What am I studying?
+                            </div>
+                            <div className='button' onClick={ () => this.setState({ edit: true }) }>
+                                Edit
                             </div>
                         </div>
 

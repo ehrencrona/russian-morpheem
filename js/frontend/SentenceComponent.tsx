@@ -8,7 +8,7 @@ import InflectedWord from '../shared/InflectedWord'
 import UnparsedWord from '../shared/UnparsedWord';
 import Sentence from '../shared/Sentence'
 import { MISSING_INDEX } from '../shared/fact/Facts'
-import Tab from './Tab'
+import Tab from './OpenTab'
 
 import FactNameComponent from './FactNameComponent'
 import WordSearchComponent from './WordSearchComponent'
@@ -159,9 +159,6 @@ export default class SentenceComponent extends Component<Props, State> {
                     this.setState({ sentence: sentence })
 
                     this.props.corpus.sentences.store(sentence)
-                    
-                    // todo: this doesn't update the tab. flux?
-                    this.props.tab.name = sentence.toString();
                 } }/>
 
             <WordSearchComponent

@@ -4,7 +4,7 @@ import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
-import Tab from './Tab'
+import Tab from './OpenTab'
 
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import { Component, createElement } from 'react';

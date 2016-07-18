@@ -140,10 +140,8 @@ export default class StudyComponent extends Component<Props, State> {
         let known: UnknownFact[] = [], 
             unknown: UnknownFact[] = []
 
-console.log('facts form word ' + this.unknownFactsFromWord(word).map((f)=>f.fact.getId()).join(', '))
-
         this.unknownFactsFromWord(word).forEach((fact) =>
-            (this.props.trivialKnowledge.isKnown(fact.fact) ?
+            (this.props.trivialKnowledge.isKnown(fact.fact) && fact.fact.getId() != this.props.fact.getId() ?
                 known :
                 unknown).push(fact)
         )
@@ -157,8 +155,6 @@ console.log('facts form word ' + this.unknownFactsFromWord(word).map((f)=>f.fact
     }
 
     addFacts(addKnown: UnknownFact[], addUnknown: UnknownFact[]) {
-console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f) => f.fact.getId()))
-
         let unknown = this.state.unknownFacts
         let known = this.state.knownFacts 
 
@@ -344,7 +340,7 @@ console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f)
                                     studiedWord = word
 
                                     if (this.props.fact instanceof InflectionFact) {
-                                        if (this.state.stage == Stage.TEST) {
+                                        if (!reveal) {
                                             formHint = this.getFormHint() 
                                         }
 
@@ -353,7 +349,11 @@ console.log('add facts', addKnown.map((f) => f.fact.getId()), addUnknown.map((f)
                                         }
                                     }
                                     else if (!reveal) {
-                                        formHint = studiedWord.getEnglish()
+                                        formHint = this.getFormHint() 
+
+                                        formHint = studiedWord.getEnglish() + 
+                                            (formHint ? ', ' + formHint : '')
+
                                         text = ''
                                     }
 

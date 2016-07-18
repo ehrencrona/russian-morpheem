@@ -6,7 +6,7 @@ import UnstudiedWord from '../shared/UnstudiedWord';
 import UnparsedWord from '../shared/UnparsedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
-import Tab from './Tab'
+import Tab from './OpenTab'
 import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesByFactIndex'
 import InflectionsContainerComponent from './InflectionsContainerComponent';
 

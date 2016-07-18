@@ -8,7 +8,7 @@ import FilteredFactsListComponent from './FilteredFactsListComponent'
 
 import { FactIndex } from './FactIndex'
 
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 
 interface Props {
     corpus: Corpus,

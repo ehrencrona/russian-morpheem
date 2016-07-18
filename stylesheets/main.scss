@@ -1001,22 +1001,25 @@ h3 {
         right: 0;
     }
 
-    .knowledgeInspector {
-        .decks {
-            display: flex;
-            align-content: stretch;
-            flex-wrap: wrap;
-            
-            .deck {
-                flex-grow: 1;
+    .factSelectorInspector {
+        margin: 2 * $unit;
 
-                li.current {
-                    font-weight: bold;
+        ul {
+            li {
+                margin-bottom: 2 * $unit;
+
+                .fact {
+                    display: inline;
+                    margin-bottom: $unit;
+                }
+
+                .details {
+                    @extend .smallFont;
+                    margin-left: 9*$unit;
                 }
             }
         }
     }
-
 }
 
 $overlayPadding: 4 * $unit;
@@ -1073,3 +1076,4 @@ $overlayPadding: 4 * $unit;
         }
     }
 }
+

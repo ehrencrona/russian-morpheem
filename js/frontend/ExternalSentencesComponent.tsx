@@ -11,7 +11,7 @@ import { parseSentenceToWords, ParsedWord } from '../shared/external/parseSenten
 import { Component, createElement } from 'react';
 
 import SentenceComponent from './SentenceComponent'
-import Tab from './Tab'
+import Tab from './OpenTab'
 
 interface Props {
     corpus: Corpus,

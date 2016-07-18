@@ -8,7 +8,7 @@ import { Component, createElement } from 'react';
 import { MISSING_INDEX } from '../shared/fact/Facts'
 
 import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/SentencesByFactIndex'
-import Tab from './Tab'
+import Tab from './OpenTab'
 import SentenceComponent from './SentenceComponent'
 
 interface Props {

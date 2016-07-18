@@ -5,7 +5,6 @@ import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 
 const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000
-const MAX_LOG = Math.log(MAX_AGE_MS + 1)
 
 export default class OldestSentenceSelector {
 
@@ -33,6 +32,8 @@ export default class OldestSentenceSelector {
             sentenceScore.score = age * sentenceScore.score
 
             sentenceScore.debug['age'] = age
+            sentenceScore.debug['lastSawSentence'] = lastSawDate
+            sentenceScore.debug['lastSawSentenceId'] = sentenceScore.sentence.id
         })
 
         return sentenceScores

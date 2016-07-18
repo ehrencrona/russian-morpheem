@@ -7,7 +7,7 @@ import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
 import InflectionsComponent from './InflectionsComponent'
 
-import Tab from './Tab'
+import Tab from './OpenTab'
 import FactComponent from './FactComponent'
 import Word from '../shared/Word'
 import getLanguage from './getLanguage'

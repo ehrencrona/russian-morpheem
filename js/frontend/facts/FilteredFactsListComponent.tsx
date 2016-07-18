@@ -12,7 +12,7 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import UnstudiedWord from '../../shared/UnstudiedWord'
 import InflectableWord from '../../shared/InflectableWord'
 
-import Tab from '../Tab'
+import Tab from '../OpenTab'
 
 import { FactIndex } from './FactIndex'
 
