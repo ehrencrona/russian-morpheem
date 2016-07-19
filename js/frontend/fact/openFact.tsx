@@ -3,7 +3,7 @@ import Tab from '../OpenTab'
 import FactComponent from './FactComponent'
 
 export default function openFact(fact: Fact, tab: Tab) {
-    this.props.tab.openTab(
+    tab.openTab(
         <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ this.props.tab }/>,
         fact.toString(),
         fact.getId().toString()
