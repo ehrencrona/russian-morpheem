@@ -104,7 +104,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
         }
 
         let sentenceToComponent = (sentence: ParsedSentence) => {
-            return <li key={ sentence.sentence.id } className='externalSentence'>
+            return <li key={ sentence.sentence.id } className='sentenceWithButton'>
                 <div className={ 'index' + (sentence.difficulty == MISSING_INDEX ? ' missing' : '') }>
                     <div className='number' >
                         { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }

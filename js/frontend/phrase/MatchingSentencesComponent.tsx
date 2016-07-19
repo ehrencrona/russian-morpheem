@@ -4,9 +4,6 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 
 import Tab from '../OpenTab'
-import MoveFactButton from '../MoveFactButtonComponent'
-import TagButton from '../TagButtonComponent'
-import SentencesWithFact from '../SentencesWithFactComponent';
 import SentenceComponent from '../SentenceComponent'
 
 import Sentence from '../../shared/Sentence'
@@ -15,12 +12,14 @@ import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import htmlEscape from '../../shared/util/htmlEscape'
 
 import { MISSING_INDEX } from '../../shared/fact/Facts'
-import { Component, createElement } from 'react';
+import { Component, createElement, ReactElement } from 'react';
 
 interface Props {
-    corpus: Corpus,
-    match: PhraseMatch,
+    corpus: Corpus
+    match: PhraseMatch
+    filter?: (sentence: Sentence) => boolean
     tab: Tab
+    buttonFactory?: (sentence: Sentence) => ReactElement<any>
 }
 
 interface State {
@@ -33,7 +32,7 @@ interface Match {
     words: Word[]
 }
 
-export default class FindPhraseComponent extends Component<Props, State> {
+export default class MatchingSentencesComponent extends Component<Props, State> {
 
     openSentence(sentence: Sentence) {
         this.props.tab.openTab(
@@ -43,14 +42,11 @@ export default class FindPhraseComponent extends Component<Props, State> {
         )
     }
 
-    renderMatch(match: Match) {
-        let difficulty = 0
-
-        return <li 
-            key={ match.sentence.id }
-            className='clickable'
-            onClick={ () => this.openSentence(match.sentence) } 
-            dangerouslySetInnerHTML={ { __html: 
+    renderSentence(match: Match) {
+        return <div className='main'>
+            <div className='sentence clickable' 
+                onClick={ () => this.openSentence(match.sentence) }
+                dangerouslySetInnerHTML={ { __html: 
                 match.sentence.innerToString((word, first) => {
                     let wordString = htmlEscape(word.toString())
 
@@ -61,17 +57,32 @@ export default class FindPhraseComponent extends Component<Props, State> {
                         return wordString
                     }
                 })
-            } }>
+            } }/>
+        </div>
+    }
+
+    renderMatch(match: Match) {
+        let difficulty = 0
+
+        return <li 
+            key={ match.sentence.id }
+            className='sentenceWithButton'>
+                {
+                    (this.props.buttonFactory ? this.props.buttonFactory(match.sentence) : <div/>)
+                }
+                { this.renderSentence(match) }
             </li>
     }
 
-    render() {
-
+    getMatches() {
         let match = this.props.match
-
         let matches: Match[] = []
 
         this.props.corpus.sentences.sentences.forEach((sentence) => {
+            if (this.props.filter && !this.props.filter(sentence)) {
+                return
+            }
+
             let words = match.match(sentence.words, this.props.corpus.facts)
 
             if (words && words.length) {
@@ -82,6 +93,10 @@ export default class FindPhraseComponent extends Component<Props, State> {
             }
         })
 
-        return <ul className='findPhraseSentences'>{ matches.map((match) => this.renderMatch(match)) }</ul>
+        return matches
+    }
+
+    render() {
+        return <ul className='findPhraseSentences'>{ this.getMatches().map((match) => this.renderMatch(match)) }</ul>
     }
 }

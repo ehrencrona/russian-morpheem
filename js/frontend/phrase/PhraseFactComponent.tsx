@@ -7,8 +7,9 @@ import Tab from '../OpenTab'
 import MoveFactButton from '../MoveFactButtonComponent'
 import TagButton from '../TagButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'
-import FindPhraseComponent from './FindPhraseComponent'
+import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
+import MatchingSentencesComponent from './MatchingSentencesComponent'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
@@ -48,16 +49,26 @@ export default class PhraseFactComponent extends Component<Props, State> {
         let tab;    
 
         if (this.state.tab == 'sentences') {
-            tab = <SentencesWithFact 
-                ref='sentencesWithFact'
-                corpus={ this.props.corpus} 
-                fact={ this.props.fact } 
-                tab={ this.props.tab } />
+            tab = <MatchingSentencesComponent 
+                corpus={ this.props.corpus }
+                match={ fact.patterns[0] }
+                tab={ this.props.tab }
+                filter={ (sentence) => !!sentence.hasPhrase(fact) }
+                ref='sentences'
+                buttonFactory={ (sentence) => 
+                    <div className='button' onClick={ 
+                        () => { 
+                            this.props.corpus.sentences.removePhrase(fact, sentence);
+
+                            (this.refs['sentences'] as Component<any, any>).forceUpdate() 
+                    } } >Remove</div>
+                }
+            />
         }
         else {
-            tab = <FindPhraseComponent 
+            tab = <AddSentenceToPhraseComponent 
                 corpus={ this.props.corpus } 
-                match={ fact.patterns[0] } 
+                phrase={ fact } 
                 tab={ this.props.tab } />
         }
 
@@ -65,8 +76,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
             <div className='buttonBar'>                
                 { tabButton('sentences', 'Sentences') }
-                { tabButton('find', 'Find Sentences') }
-                <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact }
+                { tabButton('find', 'Matching') }
+                <MoveFactButton corpus={ this.props.corpus} 
+                    fact={ this.props.fact }
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
                     />
 

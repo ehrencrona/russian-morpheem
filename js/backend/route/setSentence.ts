@@ -15,7 +15,7 @@ export default function(corpus: Corpus) {
         }
 
         try {
-            let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+            let sentence = Sentence.fromJson(req.body, corpus.phrases, corpus.words)
 
             if (sentence.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');

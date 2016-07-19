@@ -1,6 +1,8 @@
 
 import Sentence from './Sentence';
 import Facts from './fact/Facts';
+import Phrase from './phrase/Phrase'
+import Phrases from './phrase/Phrases'
 import Words from './Words';
 
 import { JsonFormat as SentenceJsonFormat } from './Sentence'
@@ -29,6 +31,22 @@ export default class Sentences {
         let sentence = this.sentenceById[id]
         
         return sentence;
+    }
+
+    addPhrase(phrase: Phrase, sentence: Sentence) {
+        sentence.addPhrase(phrase)
+
+        if (this.onChange) {
+            this.onChange(sentence)
+        }
+    }
+
+    removePhrase(phrase: Phrase, sentence: Sentence) {
+        sentence.removePhrase(phrase)
+
+        if (this.onChange) {
+            this.onChange(sentence)
+        }
     }
 
     remove(sentence: Sentence) {
@@ -97,9 +115,9 @@ export default class Sentences {
         }
     }
 
-    fromJson(json: JsonFormat, facts: Facts, words: Words) {
+    fromJson(json: JsonFormat, phrases: Phrases, words: Words) {
         json.forEach((sentenceJson) => {
-            this.add(Sentence.fromJson(sentenceJson, facts, words))
+            this.add(Sentence.fromJson(sentenceJson, phrases, words))
         })
 
         return this

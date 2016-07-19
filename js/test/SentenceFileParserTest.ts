@@ -7,6 +7,8 @@ import { expect } from 'chai';
 import Word from '../shared/Word'
 import Words from '../shared/Words'
 import Facts from '../shared/fact/Facts'
+import Phrases from '../shared/phrase/Phrases'
+import Phrase from '../shared/phrase/Phrase'
 import Grammar from '../shared/Grammar'
 
 describe('SentenceFileParser', function() {
@@ -18,7 +20,7 @@ describe('SentenceFileParser', function() {
         words.addWord(new Word('b', '1'))
         words.addWord(new Word('b', '2'))
 
-        var sentences = parser('9 a b[1] b[2]: english',  words, new Facts())
+        var sentences = parser('9 a b[1] b[2]: english',  words, new Phrases())
         let sentence = sentences.sentences[0]
 
         expect(sentence.words.length).to.equal(3)
@@ -28,20 +30,20 @@ describe('SentenceFileParser', function() {
         expect(sentence.id).to.equal(9)
     })
 
-    it('handles requires', function () {
+    it('handles phrases', function () {
         var a = new Word('a')
         let words = new Words();
         words.addWord(a)
 
-        let facts = new Facts()
-        facts.add(new Grammar('grammar'))
+        let phrases = new Phrases()
+        phrases.add(new Phrase('testPhrase', []))
 
-        var sentences = parser('123 a (requires: grammar, author: ae): english', words, facts)
+        var sentences = parser('123 a (author: ae, phrase: testPhrase): english', words, phrases)
         let sentence = sentences.sentences[0]
 
         expect(sentence.author).to.equal('ae')
         expect(sentence.words[0]).to.equal(a)
-        expect(sentence.required[0].getId()).to.equal('grammar')
+        expect(sentence.phrases[0].getId()).to.equal('testPhrase')
         expect(sentence.id).to.equal(123)
     })
 })

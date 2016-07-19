@@ -28,7 +28,7 @@ export default class FrontendExternalCorpus implements ExternalCorpus {
     importSentence(sentence: ExternalSentence): Promise<Sentence> {
         return xr.post(`/api/${ this.lang }/sentence/external/` + sentence.source + '/' + sentence.id, {}, this.xrArgs)
         .then((xhr) => {
-            let sentence = Sentence.fromJson(xhr.data, this.corpus.facts, this.corpus.words)
+            let sentence = Sentence.fromJson(xhr.data, this.corpus.phrases, this.corpus.words)
 
             return this.corpus.sentences.add(sentence)
         })

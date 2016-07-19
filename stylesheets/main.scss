@@ -210,70 +210,105 @@ input[type=text], input[type=number] {
     }
 }
 
-.sentenceEditor {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    
-    margin: 8px 0 8px 0;
-    
-    .word {
+.sentenceTab {
+    .sentenceEditor {
         display: flex;
         flex-direction: row;
-        background-color: $color6-light;
-        padding: 2 * $unit;
-        margin-right: $unit;
-        margin-bottom: 2 * $unit;
-        font-size: 1.5rem;
-    }
+        flex-wrap: wrap;
+        
+        margin: 8px 0 8px 0;
+        
+        .word {
+            display: flex;
+            flex-direction: row;
+            background-color: $color6-light;
+            padding: 2 * $unit;
+            margin-right: $unit;
+            margin-bottom: 2 * $unit;
+            font-size: 1.5rem;
+        }
 
-    .word.unparsed {
-        background-color: $color5;
-    }
+        .word.unparsed {
+            background-color: $color5;
+        }
 
-    .word.selected {
-        background-color: $color-bg-inverted;
-        color: $color-fg-inverted;
+        .word.selected {
+            background-color: $color-bg-inverted;
+            color: $color-fg-inverted;
 
-        .form {
-            color: darken($color-fg-inverted, 10%);
+            .form {
+                color: darken($color-fg-inverted, 10%);
+            }
+        }
+
+        .word.drag-target {
+            border-left: $unit solid $color-fg;
+        }
+
+        .word .form {
+            margin-left: 4px;
+            font-size: 80%;
+            align-self: center;
+            color: $color14;
+        }
+
+        .space {
+            width: 4 * $unit;
+            margin-bottom: 2 * $unit;
+            background-color: $color-bg-inverted;
+            color: $color-fg-inverted;
+        }
+
+        .sentenceEnd {
+            flex-grow: 1;
         }
     }
 
-    .word.drag-target {
-        border-left: $unit solid $color-fg;
+    .openClose {
+        fill: $color4;
+
+        &:hover {
+            color: $color13;
+            fill: $color13;
+        }
+
+        svg {
+            height: 0.6em;
+            width: 0.6em;
+            margin-right: $unit;
+            position: relative;
+            top: -1px;
+
+        }
     }
 
-    .word .form {
-        margin-left: 4px;
-        font-size: 80%;
-        align-self: center;
-        color: $color14;
+    .sentenceTranslation {    
+        input {
+            @extend .border-box-sizing;
+            width: 100%;
+            padding: $unit;
+        }
     }
 
-    .space {
-        width: 4 * $unit;
-        margin-bottom: 2 * $unit;
-        background-color: $color-bg-inverted;
-        color: $color-fg-inverted;
+    .sortedFacts .form {
+        font-style: italic;
+        margin-left: $unit;
     }
 
-    .sentenceEnd {
-        flex-grow: 1;
-    }
-}
+    .sentenceFacts {
+        display: flex;
+        flex-direction: line;
+        
+        .current, .matching {
+            width: 50%;
 
-.sentenceTranslation {    
-    input {
-        @extend .border-box-sizing;
-        width: 100%;
-        padding: $unit;
+            .button {
+                display: inline-block;
+                margin: 0;
+                margin-right: $unit;
+            }
+        }
     }
-}
-
-.sortedFacts .form {
-    font-style: italic;
-    margin-left: $unit;
 }
 
 .wordSearch {    
@@ -602,18 +637,7 @@ ul {
     }
 }
 
-.findPhraseSentences {
-    li {
-        margin: 2 * $unit 0;
-
-        .match {
-            color: darken($color10, 10%);
-            font-weight: bold;
-        }
-    }
-}
-
-.externalSentence {
+.sentenceWithButton {
     margin: 2 * $unit 0;
     display: flex;
     align-items: flex-start;
@@ -641,6 +665,7 @@ ul {
             .match {
                 color: darken($color10, 10%);
                 font-weight: bold;
+                text-decoration: inherit;
             }
 
             .ambiguous:after {
@@ -844,14 +869,13 @@ ul.stats {
 
 .status {
     margin: $unit 0;
-
+    margin-top: 2 * $unit;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
     .current {
-        display: inline-block;
         font-style: italic;
-    }
-
-    .button {
-        display: inline-block;
     }
 }
 

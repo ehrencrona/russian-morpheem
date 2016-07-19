@@ -4,6 +4,7 @@ import Sentence from './Sentence';
 import Sentences from './Sentences';
 import Words from './Words';
 import Facts from './fact/Facts';
+import Phrases from './phrase/Phrases'
 
 /**
  * Parses a Japanese sentence (words delimited by spaces) into Words.
@@ -94,7 +95,7 @@ function parseLineToElements(line, parseSentenceToWords, lineNumber) {
     return result
 }
 
-function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenceIndex: number) {
+function parseLine(line, words: Words, phrases: Phrases, lineNumber: number, sentenceIndex: number) {
     var elements = parseLineToElements(line, (sentence) => parseSentenceToWords(sentence, words, lineNumber), lineNumber)
     
     let english = elements.english, tags = elements.tags;
@@ -113,12 +114,18 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
         let name = tag[0]
         let value = tag[1]
 
-        if (name == 'requires') {
-            sentence.requiresFact(facts.get(value))
-        }
-
         if (name == 'author') {
             sentence.author = value
+        }
+
+        if (name == 'phrase') {
+            let phrase = phrases.get(value)
+
+            if (!phrase) {
+                throw new Error(`Required phrase "${phrase}", referenced on line ${line}, was not found."`)
+            }
+
+            sentence.addPhrase(phrase)
         }
     }
 
@@ -128,7 +135,7 @@ function parseLine(line, words: Words, facts: Facts, lineNumber: number, sentenc
 /**
  * Reads a file of sentences. See parseLine for the format.
  */
-export default function parseSentenceFile(data, words: Words, facts: Facts): Sentences {
+export default function parseSentenceFile(data, words: Words, phrases: Phrases): Sentences {
     var sentences = new Sentences()
 
     let lineNumber = 0;
@@ -143,7 +150,7 @@ export default function parseSentenceFile(data, words: Words, facts: Facts): Sen
             continue
         }
 
-        sentences.add(parseLine(line, words, facts, lineNumber, sentenceIndex++))
+        sentences.add(parseLine(line, words, phrases, lineNumber, sentenceIndex++))
     }
 
     return sentences

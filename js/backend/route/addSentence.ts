@@ -15,7 +15,7 @@ export default function(corpus: Corpus) {
             return
         }
 
-        let sentence = Sentence.fromJson(req.body, corpus.facts, corpus.words)
+        let sentence = Sentence.fromJson(req.body, corpus.phrases, corpus.words)
 
         sentence.author = getAuthor(req).name
         sentence.id = null

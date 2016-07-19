@@ -32,12 +32,12 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.border-box-sizing, .sentenceTranslation input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
+.border-box-sizing, .sentenceTab .sentenceTranslation input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-.smallFont, .index, .inflections table td .add, .phrase .pattern .field .label, .externalSentence .en, .addPhrase .description, .history li .event, .history li .main .date, .study .factSelectorInspector ul li .details {
+.smallFont, .index, .inflections table td .add, .phrase .pattern .field .label, .sentenceWithButton .en, .addPhrase .description, .history li .event, .history li .main .date, .study .factSelectorInspector ul li .details {
   font-size: 60%;
   font-weight: 900; }
 
@@ -119,12 +119,12 @@ input[type=text], input[type=number] {
     font-weight: bold;
     background-color: #e95f3d; }
 
-.sentenceEditor {
+.sentenceTab .sentenceEditor {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin: 8px 0 8px 0; }
-  .sentenceEditor .word {
+  .sentenceTab .sentenceEditor .word {
     display: flex;
     flex-direction: row;
     background-color: #ffdb5d;
@@ -132,35 +132,57 @@ input[type=text], input[type=number] {
     margin-right: 4px;
     margin-bottom: 8px;
     font-size: 1.5rem; }
-  .sentenceEditor .word.unparsed {
+  .sentenceTab .sentenceEditor .word.unparsed {
     background-color: #ff5f3b; }
-  .sentenceEditor .word.selected {
+  .sentenceTab .sentenceEditor .word.selected {
     background-color: #766db0;
     color: #f8f9f3; }
-    .sentenceEditor .word.selected .form {
+    .sentenceTab .sentenceEditor .word.selected .form {
       color: #e4e8d1; }
-  .sentenceEditor .word.drag-target {
+  .sentenceTab .sentenceEditor .word.drag-target {
     border-left: 4px solid #303030; }
-  .sentenceEditor .word .form {
+  .sentenceTab .sentenceEditor .word .form {
     margin-left: 4px;
     font-size: 80%;
     align-self: center;
     color: #636363; }
-  .sentenceEditor .space {
+  .sentenceTab .sentenceEditor .space {
     width: 16px;
     margin-bottom: 8px;
     background-color: #766db0;
     color: #f8f9f3; }
-  .sentenceEditor .sentenceEnd {
+  .sentenceTab .sentenceEditor .sentenceEnd {
     flex-grow: 1; }
 
-.sentenceTranslation input {
+.sentenceTab .openClose {
+  fill: #766db0; }
+  .sentenceTab .openClose:hover {
+    color: #e95f3d;
+    fill: #e95f3d; }
+  .sentenceTab .openClose svg {
+    height: 0.6em;
+    width: 0.6em;
+    margin-right: 4px;
+    position: relative;
+    top: -1px; }
+
+.sentenceTab .sentenceTranslation input {
   width: 100%;
   padding: 4px; }
 
-.sortedFacts .form {
+.sentenceTab .sortedFacts .form {
   font-style: italic;
   margin-left: 4px; }
+
+.sentenceTab .sentenceFacts {
+  display: flex;
+  flex-direction: line; }
+  .sentenceTab .sentenceFacts .current, .sentenceTab .sentenceFacts .matching {
+    width: 50%; }
+    .sentenceTab .sentenceFacts .current .button, .sentenceTab .sentenceFacts .current .tab-header .tab-close, .tab-header .sentenceTab .sentenceFacts .current .tab-close, .sentenceTab .sentenceFacts .current .pending .unacceptable, .pending .sentenceTab .sentenceFacts .current .unacceptable, .sentenceTab .sentenceFacts .matching .button, .sentenceTab .sentenceFacts .matching .tab-header .tab-close, .tab-header .sentenceTab .sentenceFacts .matching .tab-close, .sentenceTab .sentenceFacts .matching .pending .unacceptable, .pending .sentenceTab .sentenceFacts .matching .unacceptable {
+      display: inline-block;
+      margin: 0;
+      margin-right: 4px; }
 
 .wordSearch .filter {
   padding: 4px;
@@ -371,39 +393,34 @@ ul {
   .phrase .pattern .field input {
     width: 100%; }
 
-.findPhraseSentences li {
-  margin: 8px 0; }
-  .findPhraseSentences li .match {
-    color: #3b938a;
-    font-weight: bold; }
-
-.externalSentence {
+.sentenceWithButton {
   margin: 8px 0;
   display: flex;
   align-items: flex-start; }
-  .externalSentence .index, .externalSentence .inflections table td .add, .inflections table td .externalSentence .add {
+  .sentenceWithButton .index, .sentenceWithButton .inflections table td .add, .inflections table td .sentenceWithButton .add {
     margin-top: 2px;
     margin-right: 8px; }
-  .externalSentence .button, .externalSentence .tab-header .tab-close, .tab-header .externalSentence .tab-close, .externalSentence .pending .unacceptable, .pending .externalSentence .unacceptable {
+  .sentenceWithButton .button, .sentenceWithButton .tab-header .tab-close, .tab-header .sentenceWithButton .tab-close, .sentenceWithButton .pending .unacceptable, .pending .sentenceWithButton .unacceptable {
     display: inline-block;
     margin: 0;
     margin-right: 4px; }
-  .externalSentence .main .sentence {
+  .sentenceWithButton .main .sentence {
     display: block; }
-    .externalSentence .main .sentence span {
+    .sentenceWithButton .main .sentence span {
       display: inline-block;
       margin-right: 4px; }
-    .externalSentence .main .sentence .match {
+    .sentenceWithButton .main .sentence .match {
       color: #3b938a;
-      font-weight: bold; }
-    .externalSentence .main .sentence .ambiguous:after {
+      font-weight: bold;
+      text-decoration: inherit; }
+    .sentenceWithButton .main .sentence .ambiguous:after {
       color: #94d3cd;
       font-weight: bold;
       content: ' (?)'; }
-    .externalSentence .main .sentence .missing {
+    .sentenceWithButton .main .sentence .missing {
       font-style: italic;
       border-bottom: dotted 2px #ff5f3b; }
-  .externalSentence .en {
+  .sentenceWithButton .en {
     margin-top: 4px;
     margin-bottom: 4px; }
 
@@ -527,12 +544,13 @@ ul.stats {
         margin-bottom: 0; }
 
 .status {
-  margin: 4px 0; }
+  margin: 4px 0;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; }
   .status .current {
-    display: inline-block;
     font-style: italic; }
-  .status .button, .status .tab-header .tab-close, .tab-header .status .tab-close, .status .pending .unacceptable, .pending .status .unacceptable {
-    display: inline-block; }
 
 .pending li {
   display: flex;

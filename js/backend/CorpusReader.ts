@@ -56,7 +56,7 @@ export default function readCorpus(lang, doWatch) {
                     .then((phrases: Phrases) => {
                         resolvePhrases(facts, phrases)
 
-                        return SentenceFileReader(corpusDir + '/sentences.txt', words, facts)
+                        return SentenceFileReader(corpusDir + '/sentences.txt', words, phrases)
                         .then((sentences: Sentences) => {
                             return new Corpus(inflections, words, sentences, facts, phrases, lang)
                         })

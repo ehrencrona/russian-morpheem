@@ -56,7 +56,7 @@ export default class Corpus {
         let facts = Facts.fromJson(json.facts, inflections, words, phrases)
         let sentences = new Sentences()
 
-        sentences.fromJson(json.sentences, facts, words)
+        sentences.fromJson(json.sentences, phrases, words)
         
         return new Corpus(
             inflections,

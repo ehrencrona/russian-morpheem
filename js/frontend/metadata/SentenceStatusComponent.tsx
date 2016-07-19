@@ -54,8 +54,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         this.setState({ status: this.state.status })
     }
 
-    render() {
-        
+    render() {        
         if (!this.state.status) {
             return <div/>
         }
@@ -73,17 +72,21 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
             { this.state.status.status == STATUS_SUBMITTED && this.state.canAccept && this.props.sentence.canAccept() ? 
 
-                <div className='button' onClick={ () => this.accept() }>Accept</div>
+                <div key='accept' className='button' onClick={ () => this.accept() }>Accept</div>
 
                 :
 
-                (this.state.status.status != STATUS_SUBMITTED ?
+                <div key='foo'>
+                    {
+                        (this.state.status.status != STATUS_SUBMITTED ?
 
-                    <div className='button' onClick={ () => this.resubmit() }>Resubmit</div>
+                            <div key='resubmit' className='button' onClick={ () => this.resubmit() }>Resubmit</div>
 
-                    :
+                            :
 
-                    <div/>)
+                            <div key='none'/>)
+                    }
+                </div>
                 
             }
 

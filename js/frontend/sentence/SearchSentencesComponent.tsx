@@ -6,7 +6,7 @@ import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
 import PhraseMatch from '../../shared/phrase/PhraseMatch'
-import FindPhraseComponent from '../phrase/FindPhraseComponent'
+import MatchingSentencesComponent from '../phrase/MatchingSentencesComponent'
 
 interface Props {
     corpus: Corpus,
@@ -50,7 +50,7 @@ export default class SentencesComponent extends Component<Props, State> {
                 {
                     this.state.match ?
 
-                        <FindPhraseComponent 
+                        <MatchingSentencesComponent 
                             corpus={ this.props.corpus }
                             match={ this.state.match }
                             tab={ this.props.tab }/>

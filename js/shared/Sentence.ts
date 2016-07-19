@@ -1,6 +1,8 @@
 import Fact from './fact/Fact'
 import Words from './Words'
 import Facts from './fact/Facts'
+import Phrase from './phrase/Phrase'
+import Phrases from './phrase/Phrases'
 import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'
@@ -13,8 +15,8 @@ export type JsonFormat = (number | string | string[])[]
  */
 export default class Sentence {
     english: string
-    required: Fact[]
-    
+    phrases: Phrase[] = []
+
     constructor(public words: UnstudiedWord[], public id: number, public author?: string) {
         this.words = words
         this.id = id
@@ -26,12 +28,12 @@ export default class Sentence {
             !this.words.find((word, index) => word.getId() != other.words[index].getId())
     }
 
-    static fromJson(json: JsonFormat, facts: Facts, words: Words) {
+    static fromJson(json: JsonFormat, phrases: Phrases, words: Words) {
         let data = {
             id: json[0],
             words: json[1],
             english: json[2],
-            requires: json[3],
+            phrases: json[3],
             tags: json[4]
         }
 
@@ -52,9 +54,9 @@ export default class Sentence {
                  }), data.id as number)
                 .setEnglish(data.english)
 
-        if (data.requires) {    
-            (data.requires as string[]).forEach((factId) => 
-                sentence.requiresFact(facts.get(factId))
+        if (data.phrases) {    
+            (data.phrases as string[]).forEach((phraseId) => 
+                sentence.addPhrase(phrases.get(phraseId))
             )
         }
 
@@ -66,7 +68,7 @@ export default class Sentence {
             this.id,
             this.words.map((word) => word.getId()),
             this.english,
-            ( this.required ? this.required.map((fact) => fact.getId()) : undefined )
+            ( this.phrases ? this.phrases.map((fact) => fact.getId()) : undefined )
         ]
     }
 
@@ -100,14 +102,20 @@ export default class Sentence {
         return res
     }
 
-    requiresFact(fact: Fact) {
-        if (!this.required) {
-            this.required = []
+    hasPhrase(phrase: Phrase) {
+        return this.phrases.find((p) => p.getId() == phrase.getId())
+    }
+    
+    addPhrase(phrase: Phrase) {
+        if (!this.hasPhrase(phrase)) {
+            this.phrases.push(phrase)
         }
 
-        this.required.push(fact)
-
         return this
+    }
+
+    removePhrase(phrase: Phrase) {        
+        this.phrases = this.phrases.filter((p) => p != phrase)
     }
 
     visitFacts(visitor: (Fact) => any) {
@@ -115,11 +123,7 @@ export default class Sentence {
             word.visitFacts(visitor)
         }
 
-        if (this.required) {
-            for (let fact of this.required) {
-                fact.visitFacts(visitor)
-            }
-        }
+        this.phrases.forEach((phrase) => phrase.visitFacts(visitor))
     }
 
     innerToString(wordToString: (word: UnstudiedWord, first: boolean) => string) {

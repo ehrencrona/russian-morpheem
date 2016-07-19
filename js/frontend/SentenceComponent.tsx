@@ -17,17 +17,20 @@ import SentenceEditorComponent from './SentenceEditorComponent'
 import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
 import SentenceStatusComponent from './metadata/SentenceStatusComponent'
 import SentenceTranslationComponent from './SentenceTranslationComponent'
+import SentencePhrasesComponent from './phrase/SentencePhrasesComponent'
 
 import { Component, createElement } from 'react'
 
 interface Props {
-    corpus: Corpus,
-    sentence: Sentence,
+    corpus: Corpus
+    sentence: Sentence
     tab: Tab
 }
 
 interface State {
     sentence?: Sentence
+    factsOpen?: boolean
+    phrasesOpen?: boolean    
 }
 
 let React = { createElement: createElement }
@@ -123,7 +126,7 @@ export default class SentenceComponent extends Component<Props, State> {
         let editor: SentenceEditorComponent
         let wordSearch: WordSearchComponent
 
-        return (<div>
+        return (<div className='sentenceTab'>
             <div className='buttonBar right'>
                 <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
                 <div className='button' onClick={ () => this.delete() }>Delete</div>                
@@ -168,16 +171,56 @@ export default class SentenceComponent extends Component<Props, State> {
                 ref={ (ref) => { wordSearch = ref } }
                 canFilterWord={ true }/>
 
-            <ul className='sortedFacts'>
-            {
-                sortedFacts.map(factIndexToElement)
-            }
-            </ul>
-
             <SentenceStatusComponent
                 corpus={ this.props.corpus }
                 sentence={ this.props.sentence }
                 />
+
+            <h3 className='openClose' onClick={ () => this.setState({ factsOpen: !this.state.factsOpen }) }>
+            
+                <svg viewBox='0 0 100 100'>
+                    { this.state.factsOpen ?
+                        <polygon points="0,0 100,0 50,100"/>
+                        :
+                        <polygon points="0,0 0,100 100,50"/>
+                    }
+                </svg>
+
+                Facts
+            </h3>
+
+            { this.state.factsOpen ?
+                <ul className='sortedFacts'>
+                {
+                    sortedFacts.map(factIndexToElement)
+                }
+                </ul>
+                :
+                <div/>
+            }
+
+            <h3 className='openClose' onClick={ () => this.setState({ phrasesOpen: !this.state.phrasesOpen }) }>
+            
+                <svg viewBox='0 0 100 100'>
+                    { this.state.phrasesOpen ?
+                        <polygon points="0,0 100,0 50,100"/>
+                        :
+                        <polygon points="0,0 0,100 100,50"/>
+                    }
+                </svg>
+
+                Phrases
+            </h3>
+
+            { this.state.phrasesOpen ?
+                <SentencePhrasesComponent
+                    corpus={ this.props.corpus }
+                    sentence={ this.props.sentence }
+                    tab={ this.props.tab }
+                />
+                :
+                <div/>
+            }
 
             <SentenceTranslationComponent
                 corpus={ this.props.corpus }

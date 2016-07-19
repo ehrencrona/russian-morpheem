@@ -11,6 +11,8 @@ import Ending from '../shared/Ending'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
 import Facts from '../shared/fact/Facts'
+import Phrase from '../shared/phrase/Phrase'
+import Phrases from '../shared/phrase/Phrases'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 import { expect } from 'chai';
@@ -48,23 +50,24 @@ describe('Sentences', function() {
         let bere = drink.inflect('inf')
         let bevo = drink.inflect('i')
         
-        let facts = new Facts()
-        facts.add(io)
-        facts.add(drink)
-        
         let words = new Words().addInflectableWord(drink).addWord(io)
         
+        let phrases = new Phrases()
+        let phrase = new Phrase('testPhrase', [])
+        phrases.add(phrase)
+
         let before = new Sentences()
         
         before.add(new Sentence(
             [ io, bevo ], 1
-        ))
+        ).addPhrase(phrase))
         
-        let after = new Sentences().fromJson(before.toJson(), facts, words)
+        let after = new Sentences().fromJson(before.toJson(), phrases, words)
 
         expect(after.sentences[0].words[0].getId()).to.equal(io.getId());
         expect(after.sentences[0].words[1].getId()).to.equal(bevo.getId());
         expect(after.sentences[0].words[1].toString()).to.equal('bevo');
+        expect(after.sentences[0].phrases[0].getId()).to.equal('testPhrase');
 
     })
 })

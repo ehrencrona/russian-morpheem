@@ -1,12 +1,13 @@
 /// <reference path="../../typings/node-4.d.ts"/>
 "use strict";
 
-import { readFile } from 'fs';
-import parseSentenceFile from '../shared/SentenceFileParser';
-import Words from '../shared/Words';
-import Facts from '../shared/fact/Facts';
+import { readFile } from 'fs'
+import parseSentenceFile from '../shared/SentenceFileParser'
+import Words from '../shared/Words'
+import Facts from '../shared/fact/Facts'
+import Phrases from '../shared/phrase/Phrases'
 
-export default function readSentenceFile(fileName, words: Words, facts: Facts) {
+export default function readSentenceFile(fileName, words: Words, phrases: Phrases) {
     return new Promise((resolve, reject) => {
         readFile(fileName, 'utf8', function (err, body) {
             if (err) {
@@ -14,7 +15,7 @@ export default function readSentenceFile(fileName, words: Words, facts: Facts) {
             }
 
             try {
-                let sentences = parseSentenceFile(body, words, facts)
+                let sentences = parseSentenceFile(body, words, phrases)
 
                 console.log('Read ' + sentences.sentences.length + ' sentences.')
 

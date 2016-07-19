@@ -17,10 +17,9 @@ export function sentenceToString(sentence: Sentence, words: Words) {
         tags.push('author: ' + sentence.author)
     }
  
-    if (sentence.required) {        
-        sentence.required.forEach((fact) => 
-            tags.push('requires: ' + fact.getId()))
-    }
+    sentence.phrases.forEach((p) => {
+        tags.push('phrase: ' + p.getId())
+    })
 
     let en = sentence.en()
     
@@ -39,7 +38,7 @@ export function sentenceToString(sentence: Sentence, words: Words) {
 export default function sentencesToString(sentences: Sentences, words: Words) {
     let res = ''
     let lineNumber = 0
-    
+
     sentences.sentences.forEach((sentence) => {
         while (lineNumber < sentence.getId()) {
             lineNumber++

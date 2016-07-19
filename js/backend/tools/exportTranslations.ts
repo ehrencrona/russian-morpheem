@@ -18,7 +18,7 @@ readCorpus('ru', false)
 
         if (index > 300 && (fact instanceof UnstudiedWord || fact instanceof InflectableWord)) {
 
-            console.log(fact.getId() + ' / ' + Math.floor(CLASSES * (index - 300) / (corpus.facts.facts.length - 300)))
+            console.log(fact.getId())
 
         }
 

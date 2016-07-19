@@ -13,10 +13,15 @@ import Inflections from '../shared/inflection/Inflections'
 import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Facts from '../shared/fact/Facts'
+import Phrases from '../shared/phrase/Phrases'
+import Phrase from '../shared/phrase/Phrase'
 import Grammar from '../shared/Grammar'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
 describe('SentenceFileGenerator', function() {
+    let phrases = new Phrases()
+    phrases.add(new Phrase('testPhrase', []))
+
     it('generates same string as the read one', function () {
         var a = new Word('a')
 
@@ -29,9 +34,9 @@ describe('SentenceFileGenerator', function() {
         let facts = new Facts()
         facts.add(new Grammar('grammar'))
 
-        let original = '0 a b[1] b[2] (author: ae, requires: grammar): english'
+        let original = '0 a b[1] b[2] (author: ae, requires: grammar, phrase: testPhrase): english'
 
-        var sentences: Sentences = parser(original, words, facts)
+        var sentences: Sentences = parser(original, words, phrases)
 
         let generated = sentenceToString(sentences.sentences[0], words)
 
@@ -50,6 +55,6 @@ describe('SentenceFileGenerator', function() {
         words.addInflectableWord(new InflectableWord('sobak', inflections.get('fem')))
         words.addInflectableWord(new InflectableWord('dom', inflections.get('masc')))
 
-        var sentences: Sentences = parser('sobaka@acc sobaka@nom dom@acc dom@nom: bla', words, new Facts())
+        var sentences: Sentences = parser('sobaka@acc sobaka@nom dom@acc dom@nom: bla', words, phrases)
     })
 })
