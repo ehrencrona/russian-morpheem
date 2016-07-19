@@ -9,10 +9,12 @@ import Word from '../Word'
 export interface JsonFormat {
     id: string,
     patterns: string[],
-    description: string
+    description: string,
+    en: string
 }
 
 export default class Phrase implements Fact {
+    en: string = ''
     description: string = ''
 
     constructor(public id: string, public patterns: PhraseMatch[]) {
@@ -27,7 +29,7 @@ export default class Phrase implements Fact {
                 PhraseMatch.fromString(str.trim(), words, inflections)))
     }
 
-    match(words: Word[], facts: Facts): Word[] {
+    match(words: Word[], facts: Facts): number[] {
         for (let i = 0; i < this.patterns.length; i++) {
             let match = this.patterns[i].match(words, facts)
 
@@ -53,7 +55,8 @@ export default class Phrase implements Fact {
         return {
             id: this.id,
             description: this.description,
-            patterns: this.patterns.map((p) => p.toString())
+            patterns: this.patterns.map((p) => p.toString()),
+            en: this.en
         }
     }
 
@@ -64,6 +67,7 @@ export default class Phrase implements Fact {
                 PhraseMatch.fromString(str, words, inflections))
         )
 
+        result.en = json.en
         result.description = json.description
 
         return result

@@ -19,11 +19,11 @@ export default class PhraseMatch {
         this.wordMatches = wordMatches
     }
 
-    match(words: Word[], facts: Facts): Word[] {
+    match(words: Word[], facts: Facts): number[] {
         for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
             let at = i
             let found = true
-            let result: Word[] = []
+            let result: number[] = []
 
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
@@ -36,7 +36,9 @@ export default class PhraseMatch {
                 }
 
                 if (!(wordMatch instanceof WildcardMatch)) {
-                    result = result.concat(words.slice(at, at + match))
+                    for (let i = 0; i < match; i++) {
+                        result.push(at+i)
+                    }
                 }
 
                 at += match

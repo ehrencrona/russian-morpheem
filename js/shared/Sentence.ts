@@ -126,16 +126,16 @@ export default class Sentence {
         this.phrases.forEach((phrase) => phrase.visitFacts(visitor))
     }
 
-    innerToString(wordToString: (word: UnstudiedWord, first: boolean) => string) {
+    innerToString(wordToString: (word: UnstudiedWord, first: boolean, index: number) => string) {
         let res = ''
         let capitalize = true 
 
-        for (let word of this.words) {
+        this.words.forEach((word, index) => {
             if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
                 res += ' '
             }
 
-            let wordString = wordToString(word, res.length == 0)
+            let wordString = wordToString(word, res.length == 0, index)
 
             if (capitalize) {
                 wordString = wordString[0].toUpperCase() + wordString.substr(1)
@@ -144,7 +144,7 @@ export default class Sentence {
             res += wordString
 
             capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
-        }
+        })
 
         if (this.words.length && Words.PUNCTUATION.indexOf(this.words[this.words.length-1].jp) < 0) {
             res += '.'

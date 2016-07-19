@@ -24,11 +24,28 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
             throw new Error(`Can't parse pattern ${line}. Should be id: "description" pattern`)                
         }
 
+        let description = line.substr(i+3, j-i-3)
+
+        let k = line.indexOf('"', j+1)
+        let l = line.indexOf('"', k+1)
+
+        let en = ''
+        let wordString
+
+        if (k >= 0) {
+            en = line.substr(k+1, l-k-1)
+            wordString = line.substr(l + 2)
+        }
+        else {
+            wordString = line.substr(j+1).trim()
+        }
+
         let phrase = Phrase.fromString(
-            line.substr(0, i).trim(), line.substr(j+1).trim(), 
+            line.substr(0, i).trim(), wordString, 
             words, inflections)
 
-        phrase.description = line.substr(i+3, j-i-3)
+        phrase.en = en
+        phrase.description = description
 
         phrases.add(phrase)
     }

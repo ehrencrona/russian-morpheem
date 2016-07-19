@@ -1,22 +1,22 @@
-/// <reference path="../../typings/react/react.d.ts" />
+/// <reference path="../../../typings/react/react.d.ts" />
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import InflectedWord from '../shared/InflectedWord'
-import InflectionFact from '../shared/inflection/InflectionFact'
-import Phrase from '../shared/phrase/Phrase'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectionFact from '../../shared/inflection/InflectionFact'
+import Phrase from '../../shared/phrase/Phrase'
 
-import Tab from './OpenTab'
+import Tab from '../OpenTab'
 
-import InflectableWordFactComponent from './InflectableWordFactComponent'
-import PhraseFactComponent from './phrase/PhraseFactComponent'
-import WordFactComponent from './WordFactComponent'
-import InflectionFactComponent from './InflectionFactComponent'
-import TransformFactComponent from './TransformFactComponent'
+import InflectableWordFactComponent from '../InflectableWordFactComponent'
+import PhraseFactComponent from '../phrase/PhraseFactComponent'
+import WordFactComponent from '../WordFactComponent'
+import InflectionFactComponent from '../InflectionFactComponent'
+import TransformFactComponent from '../TransformFactComponent'
 
-import InflectableWord from '../shared/InflectableWord'
-import Word from '../shared/Word'
-import { EndingTransform } from '../shared/Transforms'
+import InflectableWord from '../../shared/InflectableWord'
+import Word from '../../shared/Word'
+import { EndingTransform } from '../../shared/Transforms'
 
 import { Component, createElement } from 'react'
 

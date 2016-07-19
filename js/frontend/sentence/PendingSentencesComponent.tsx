@@ -5,6 +5,7 @@ import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
+import openSentence from '../sentence/openSentence'
 
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
@@ -34,14 +35,6 @@ export default class PendingSentencesComponent extends Component<Props, State> {
         )
 
         this.setState({ sentenceIds: this.state.sentenceIds.filter((id) => id != sentenceId) })
-    }
-
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
     }
 
     neverEmpty(str: string) {
@@ -74,7 +67,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                                 :
                                 <div className='unacceptable'>Not ready</div>
                         }
-                        <div className='clickable' onClick={ () => this.openSentence(sentence) } >{ 
+                        <div className='clickable' onClick={ () => openSentence(sentence, this.props.tab) } >{ 
                             this.neverEmpty(sentence.toUnambiguousString(this.props.corpus.words)) 
                         }</div>
 

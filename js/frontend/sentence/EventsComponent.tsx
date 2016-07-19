@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import { Event } from '../../shared/metadata/Event'
 import Tab from '../OpenTab'
-import SentenceComponent from '../SentenceComponent'
+import openSentence from './openSentence'
 
 import human = require('human-time')
 import marked = require('marked')
@@ -27,14 +27,6 @@ interface EventAndSentence {
 let React = { createElement: createElement }
 
 export default class EventsComponent extends Component<Props, State> {
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
-    }
-
     renderEventAndSentence(eventAndSentence: EventAndSentence) {
         let html
 
@@ -58,7 +50,7 @@ export default class EventsComponent extends Component<Props, State> {
                         { eventAndSentence.event.author || 'Unknown' }
                     </div>
                     { (eventAndSentence.sentence ? 
-                        <div className='clickable' onClick={ () => this.openSentence(eventAndSentence.sentence) } >
+                        <div className='clickable' onClick={ () => openSentence(eventAndSentence.sentence, this.props.tab) } >
                             <div dangerouslySetInnerHTML={ { __html: html } }/>
                         </div>
                         :

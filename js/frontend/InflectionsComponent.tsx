@@ -6,7 +6,6 @@ import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
 
-import FactComponent from './FactComponent'
 import Word from '../shared/Word'
 import getLanguage from './getLanguage'
 

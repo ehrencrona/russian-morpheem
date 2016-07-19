@@ -2,7 +2,6 @@
 import { Component, createElement } from 'react'
 
 import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
-import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
@@ -38,14 +37,6 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         super(props)
 
         this.state = { startIndex: 0, showInflectionFact: true, showWords: true, showPhrases: true }
-    }
-
-    openFact(fact: Fact) {
-        this.props.tab.openTab(
-            <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ this.props.tab }/>,
-            fact.toString(),
-            fact.getId()
-        )
     }
 
     render() {

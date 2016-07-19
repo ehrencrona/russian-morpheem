@@ -42,6 +42,14 @@ export default class Phrases {
         }
     }
 
+    setEnglish(phrase: Phrase, en: string) {
+        phrase.en = en
+
+        if (this.onChange) {
+            this.onChange(phrase)
+        }
+    }
+
     setPattern(phrase: Phrase, patterns: PhraseMatch[]) {
         phrase.patterns = patterns
 

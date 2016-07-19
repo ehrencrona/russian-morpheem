@@ -1,8 +1,6 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import FactComponent from './FactComponent';
-import Tab from './OpenTab';
 import Fact from '../shared/fact/Fact';
 import Corpus from '../shared/Corpus';
 import Word from '../shared/Word';
@@ -10,6 +8,8 @@ import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { NotInflectedError } from '../shared/inflection/Inflections';
+import openFact from './fact/openFact'
+import Tab from './OpenTab';
 
 let React = { createElement: createElement }
 
@@ -37,14 +37,6 @@ export default class AddWordComponent extends Component<Props, State> {
         this.word.focus();
     }
     
-    openFact(word: Fact) {
-        this.props.tab.openTab(
-            <FactComponent fact={ word } corpus={ this.props.corpus } tab={ null }/>,
-            word.toString(),
-            word.getId()
-        )
-    }
-    
     submit() {
         let corpus = this.props.corpus
         let wordString = this.state.word
@@ -53,7 +45,7 @@ export default class AddWordComponent extends Component<Props, State> {
             let existingFact = corpus.facts.get(wordString)
             
             if (existingFact) {
-                this.openFact(existingFact)
+                openFact(existingFact, this.props.tab)
 
                 return
             }
@@ -66,7 +58,7 @@ export default class AddWordComponent extends Component<Props, State> {
                         corpus.words.addWord(word)
                         corpus.facts.add(word)
 
-                        this.openFact(word)
+                        openFact(word, this.props.tab)
 
                         this.props.onClose();
                         this.word.value = ''
@@ -85,7 +77,7 @@ export default class AddWordComponent extends Component<Props, State> {
                     corpus.words.addInflectableWord(word)
                     corpus.facts.add(word)
 
-                    this.openFact(word)
+                    openFact(word, this.props.tab)
                                     
                     this.props.onClose();
                     this.word.value = ''

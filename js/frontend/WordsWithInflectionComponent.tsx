@@ -7,10 +7,12 @@ import InflectedWord from '../shared/InflectedWord'
 import Inflection from '../shared/inflection/Inflection'
 
 import Tab from './OpenTab'
-import FactComponent from './FactComponent'
 import SentenceComponent from './SentenceComponent'
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
+
+import openSentence from './sentence/openSentence'
+import openFact from './fact/openFact'
 
 import { Component, createElement } from 'react';
 
@@ -30,26 +32,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
         let sentence = new Sentence([ word ], null)
 
         this.props.corpus.sentences.add(sentence)
-        .then((sentence) => this.openSentence(sentence))
-    }
-
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
-    }
-    
-    openFact(word: InflectedWord) {
-        let fact = this.props.corpus.facts.get(word.word.getId())
-
-        if (fact) {            
-            this.props.tab.openTab(
-                <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } fact={ fact }/>, 
-                fact.toString(), fact.getId()
-            )
-        }        
+        .then((sentence) => openSentence(sentence, this.props.tab))
     }
 
     render() {
@@ -71,7 +54,7 @@ export default class WordsWithInflectionComponent extends Component<Props, State
             words.map((word) => {            
                 let index = this.props.corpus.facts.indexOf(word.word);
 
-                return <div key={ word.getId() } className='clickable' onClick={ () => this.openFact(word) }>
+                return <div key={ word.getId() } className='clickable' onClick={ () => openFact(word, this.props.tab) }>
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                     { word.toString() }
 

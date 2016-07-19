@@ -9,7 +9,7 @@ import { MISSING_INDEX } from '../shared/fact/Facts'
 
 import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/SentencesByFactIndex'
 import Tab from './OpenTab'
-import SentenceComponent from './SentenceComponent'
+import openSentence from './sentence/openSentence'
 
 interface Props {
     corpus: Corpus,
@@ -47,14 +47,6 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
         this.forceUpdate()
     }
 
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
-    }
-
     render() {
         let fact = this.props.fact
 
@@ -65,7 +57,7 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
             return <li 
                 key={ sentence.sentence.id }
                 className='clickable'
-                onClick={ () => this.openSentence(sentence.sentence) }>
+                onClick={ () => openSentence(sentence.sentence, this.props.tab) }>
                     <div className={ 'index' + (sentence.difficulty == MISSING_INDEX ? ' missing' : '') }>
                         <div className='number' >
                             { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }

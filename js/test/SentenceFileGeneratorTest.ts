@@ -30,11 +30,12 @@ describe('SentenceFileGenerator', function() {
         words.addWord(a)
         words.addWord(new Word('b', '1'))
         words.addWord(new Word('b', '2'))
+        words.addWord(new Word(':'))
 
         let facts = new Facts()
         facts.add(new Grammar('grammar'))
 
-        let original = '0 a b[1] b[2] (author: ae, requires: grammar, phrase: testPhrase): english'
+        let original = '0 a b[1] [colon] b[2] (author: ae, phrase: testPhrase): english'
 
         var sentences: Sentences = parser(original, words, phrases)
 

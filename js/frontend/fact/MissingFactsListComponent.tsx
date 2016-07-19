@@ -2,7 +2,6 @@
 import { Component, createElement } from 'react'
 
 import { indexSentencesByFact } from '../../shared/SentencesByFactIndex'
-import FactComponent from '../FactComponent'
 import FactsEntryComponent from './FactsEntryComponent'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
 import Corpus from '../../shared/Corpus'

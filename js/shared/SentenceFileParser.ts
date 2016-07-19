@@ -68,6 +68,8 @@ function parseLineToElements(line, parseSentenceToWords, lineNumber) {
     var tags = m[4]
     var english = m[5]
 
+    japanese = japanese.replace(/\[colon\]/g, ':')
+
     var result = {
         tags: [],
         words: undefined,
@@ -81,7 +83,7 @@ function parseLineToElements(line, parseSentenceToWords, lineNumber) {
             let split = element.split(':').map((s) => s.trim())
 
             if (split.length != 2) {
-                throw new Error('Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "requires". The element "' + element + '" does not have a colon.')
+                throw new Error('Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "phrase". The element "' + element + '" does not have a colon.')
             }
 
             result.tags.push(split)

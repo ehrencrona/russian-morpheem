@@ -6,7 +6,7 @@ import InflectedWord from '../shared/InflectedWord'
 import InflectionFact from '../shared/inflection/InflectionFact'
 
 import Tab from './OpenTab'
-import FactComponent from './FactComponent'
+import openSentence from './sentence/openSentence'
 import SentenceComponent from './SentenceComponent'
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import ChangeInflectionComponent from './ChangeInflectionComponent'
@@ -15,6 +15,7 @@ import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
 import ExternalSentences from './ExternalSentencesComponent';
+import PhrasesWithWordComponent from './PhrasesWithWordComponent'
 
 import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
@@ -48,23 +49,7 @@ export default class WordFactComponent extends Component<Props, State> {
         let sentence = new Sentence([ fact.getDefaultInflection() ], null)
 
         this.props.corpus.sentences.add(sentence)
-        .then((sentence) => this.openSentence(sentence))
-    }
-
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
-    }
-
-    openFact(fact: Fact) {
-        this.props.tab.openTab(
-            <FactComponent corpus={ this.props.corpus } fact={ fact } tab={ null }/>,
-            fact.getId(),
-            fact.getId()
-        )
+        .then((sentence) => openSentence(sentence, this.props.tab))
     }
 
     render() {
@@ -93,7 +78,14 @@ export default class WordFactComponent extends Component<Props, State> {
             </div>
         }
         else if (this.state.tab == 'sentences') {
-            tab = <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
+            tab = <div>
+                <PhrasesWithWordComponent
+                    word={ this.props.fact }
+                    corpus={ this.props.corpus }
+                    tab={ this.props.tab } />
+
+                <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />                
+            </div>
         }
         else {
             tab = <ExternalSentences corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />

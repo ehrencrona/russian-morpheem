@@ -12,13 +12,13 @@ import Tab from './OpenTab'
 
 import FactNameComponent from './FactNameComponent'
 import WordSearchComponent from './WordSearchComponent'
-import FactComponent from './FactComponent'
 import SentenceEditorComponent from './SentenceEditorComponent'
 import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
 import SentenceStatusComponent from './metadata/SentenceStatusComponent'
 import SentenceTranslationComponent from './SentenceTranslationComponent'
 import SentencePhrasesComponent from './phrase/SentencePhrasesComponent'
 
+import openFact from './fact/openFact'
 import { Component, createElement } from 'react'
 
 interface Props {
@@ -100,19 +100,8 @@ export default class SentenceComponent extends Component<Props, State> {
 
         sortedFacts = sortedFacts.sort((f1, f2) => f1.index - f2.index)
 
-        let openFact = (fact: Fact) => {
-            this.props.tab.openTab(
-                <FactComponent
-                    corpus={ this.props.corpus }
-                    fact={ fact }
-                    tab={ this.props.tab } 
-                />, 
-                fact.getId(), 
-                fact.getId())
-        }
-
         let factIndexToElement = (factIndex : FactIndex) => 
-            <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact) }>
+            <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact, this.props.tab) }>
 
                 <div className={ 'index' + (factIndex.index == MISSING_INDEX ? ' missing' : '') }>
                     <div className='number' >

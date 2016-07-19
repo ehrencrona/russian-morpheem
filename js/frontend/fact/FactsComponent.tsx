@@ -8,7 +8,6 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import Fact from '../../shared/fact/Fact'
 
 import { FactIndex } from './FactIndex'
-import FactComponent from '../FactComponent'
 import Tab from '../OpenTab'
 import AddWordComponent from '../AddWordComponent'
 import AddPhraseComponent from '../AddPhraseComponent'
@@ -17,6 +16,8 @@ import FactsTagComponent from './FactsTagComponent'
 import IncompleteFactsListComponent from './IncompleteFactsListComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
 import MissingFactsListComponent from './MissingFactsListComponent'
+
+import openFact from './openFact'
 
 interface Props {
     corpus: Corpus,
@@ -49,14 +50,6 @@ export default class FactsComponent extends Component<Props, State> {
         }
     }
     
-    openFact(fact: Fact) {
-        this.props.tab.openTab(
-            <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
-            fact.toString(),
-            fact.getId()
-        )
-    }
-
     render() {
         let filterButton = (id, name) =>
             <div className={ 'button ' + (this.state.list == id ? ' selected' : '') } 
@@ -79,7 +72,7 @@ export default class FactsComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } 
                 onWordSelect={ (word) => { 
-                    this.openFact((word instanceof InflectedWord ? word.word : word)) 
+                    openFact((word instanceof InflectedWord ? word.word : word), this.props.tab) 
                 } } />
         }
         else if (this.state.list == ALL) {

@@ -11,6 +11,8 @@ import Word from '../../shared/Word'
 import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import htmlEscape from '../../shared/util/htmlEscape'
 
+import openSentence from '../sentence/openSentence'
+
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 import { Component, createElement, ReactElement } from 'react';
 
@@ -29,28 +31,20 @@ let React = { createElement: createElement }
 
 interface Match {
     sentence: Sentence,
-    words: Word[]
+    wordIndexes: number[]
 }
 
 export default class MatchingSentencesComponent extends Component<Props, State> {
 
-    openSentence(sentence: Sentence) {
-        this.props.tab.openTab(
-            <SentenceComponent sentence={ sentence } corpus={ this.props.corpus } tab={ null }/>,
-            sentence.toString(),
-            sentence.id.toString()
-        )
-    }
-
     renderSentence(match: Match) {
         return <div className='main'>
             <div className='sentence clickable' 
-                onClick={ () => this.openSentence(match.sentence) }
+                onClick={ () => openSentence(match.sentence, this.props.tab) }
                 dangerouslySetInnerHTML={ { __html: 
-                match.sentence.innerToString((word, first) => {
+                match.sentence.innerToString((word, first, index) => {
                     let wordString = htmlEscape(word.toString())
 
-                    if (match.words.indexOf(word) >= 0) {
+                    if (match.wordIndexes.indexOf(index) >= 0) {
                         return '<span class="match">' + wordString + '</span>' 
                     }
                     else {
@@ -78,17 +72,21 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
         let match = this.props.match
         let matches: Match[] = []
 
+        if (!match) {
+            return matches
+        }
+
         this.props.corpus.sentences.sentences.forEach((sentence) => {
             if (this.props.filter && !this.props.filter(sentence)) {
                 return
             }
 
-            let words = match.match(sentence.words, this.props.corpus.facts)
+            let wordIndexes = match.match(sentence.words, this.props.corpus.facts)
 
-            if (words && words.length) {
+            if (wordIndexes && wordIndexes.length) {
                 matches.push({
                     sentence: sentence,
-                    words: words
+                    wordIndexes: wordIndexes
                 })
             }
         })

@@ -8,7 +8,7 @@ import Inflection from '../shared/inflection/Inflection'
 import InflectionsComponent from './InflectionsComponent'
 
 import Tab from './OpenTab'
-import FactComponent from './FactComponent'
+import openFact from './fact/openFact'
 import Word from '../shared/Word'
 import getLanguage from './getLanguage'
 
@@ -30,16 +30,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class InflectionsContainerComponent extends Component<Props, State> {
-    openForm(form) {
-        let fact = this.props.inflection.getFact(form)
-
-        this.props.tab.openTab(
-            <FactComponent corpus={ this.props.corpus } tab={ this.props.tab } 
-                fact={ fact }/>, fact.getId(), fact.getId()
-        ) 
-    }
-    
+export default class InflectionsContainerComponent extends Component<Props, State> {    
     addFact(form: string) {
         let fact = this.props.inflection.getFact(form)
         
@@ -53,7 +44,7 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
             this.props.onSelect(this.props.word.inflect(form))
         }
         else {
-            this.openForm(form)
+            openFact(this.props.inflection.getFact(form), this.props.tab)
         }
     }
 

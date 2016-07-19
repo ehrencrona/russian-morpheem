@@ -1,9 +1,9 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import Facts from './facts/FactsComponent';
+import Facts from './fact/FactsComponent';
 import StatsComponent from './StatsComponent';
-import Fact from './FactComponent';
+import Fact from './fact/FactComponent';
 import Sentence from './SentenceComponent';
 import Corpus from '../shared/Corpus';
 import Tab from './Tab';

@@ -407,8 +407,7 @@ ul {
   .sentenceWithButton .main .sentence {
     display: block; }
     .sentenceWithButton .main .sentence span {
-      display: inline-block;
-      margin-right: 4px; }
+      display: inline-block; }
     .sentenceWithButton .main .sentence .match {
       color: #3b938a;
       font-weight: bold;

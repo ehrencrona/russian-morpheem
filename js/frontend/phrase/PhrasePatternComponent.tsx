@@ -35,6 +35,10 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         this.props.corpus.phrases.setDescription(this.props.phrase, newDescription)
     }
 
+    changeEnglish(english: string) {
+        this.props.corpus.phrases.setEnglish(this.props.phrase, english)
+    }
+
     changePattern(newPattern: string) {
         let pattern
 
@@ -71,6 +75,15 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             
                 <input type='text' autoCapitalize='off' defaultValue={ phrase.description } 
                     onBlur={ (e) => this.changeDescription((e.target as HTMLInputElement).value) }/>
+            </div>
+
+            <div className='field'>
+                <div className='label'>
+                    English
+                </div>
+            
+                <input type='text' autoCapitalize='off' defaultValue={ phrase.en } 
+                    onBlur={ (e) => this.changeEnglish((e.target as HTMLInputElement).value) }/>
             </div>
 
             <div className='field'>

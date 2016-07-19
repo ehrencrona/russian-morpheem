@@ -1,11 +1,11 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
 import {Component, cloneElement, createElement} from 'react';
-import FactComponent from './FactComponent';
 import Tab from './OpenTab'
 import Fact from '../shared/fact/Fact';
 import Corpus from '../shared/Corpus';
 import Phrase from '../shared/phrase/Phrase';
+import openFact from './fact/openFact'
 
 let React = { createElement: createElement }
 
@@ -32,14 +32,6 @@ export default class AddWordComponent extends Component<Props, State> {
         this.word.focus();
     }
     
-    openFact(word: Fact) {
-        this.props.tab.openTab(
-            <FactComponent fact={ word } corpus={ this.props.corpus } tab={ null }/>,
-            word.toString(),
-            word.getId()
-        )
-    }
-    
     submit() {
         let corpus = this.props.corpus
         let phraseId = this.state.phraseId
@@ -48,7 +40,7 @@ export default class AddWordComponent extends Component<Props, State> {
             let existingFact = corpus.phrases.get(phraseId)
             
             if (existingFact) {
-                this.openFact(existingFact)
+                openFact(existingFact, this.props.tab)
 
                 return
             }
@@ -58,7 +50,7 @@ export default class AddWordComponent extends Component<Props, State> {
             corpus.phrases.add(phrase)
             corpus.facts.add(phrase)
 
-            this.openFact(phrase)
+            openFact(phrase, this.props.tab)
 
             this.props.onClose()
         }

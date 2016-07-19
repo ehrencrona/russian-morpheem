@@ -4,8 +4,8 @@ import {Component,createElement} from 'react'
 import Corpus from '../../shared/Corpus'
 
 import Tab from '../OpenTab'
-import FactComponent from '../FactComponent'
 import AddWordComponent from '../AddWordComponent'
+import openFact from './openFact'
 
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
@@ -41,11 +41,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
     onClick(e) {
         let fact = this.props.fact
 
-        this.props.tab.openTab(
-            <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ null }/>,
-            fact.toString(),
-            fact.getId()
-        )
+        openFact(fact, this.props.tab)
     }
 
     onDrop(e) {
