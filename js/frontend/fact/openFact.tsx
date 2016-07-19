@@ -1,10 +1,16 @@
 import Fact from '../../shared/fact/Fact'
 import Tab from '../OpenTab'
 import FactComponent from './FactComponent'
+import Corpus from '../../shared/Corpus'
 
-export default function openFact(fact: Fact, tab: Tab) {
+/// <reference path="../../typings/react/react.d.ts" />
+
+import { Component, createElement } from 'react';
+let React = { createElement: createElement }
+
+export default function openFact(fact: Fact, corpus: Corpus, tab: Tab) {
     tab.openTab(
-        <FactComponent fact={ fact } corpus={ this.props.corpus } tab={ this.props.tab }/>,
+        <FactComponent fact={ fact } corpus={ corpus } tab={ tab }/>,
         fact.toString(),
         fact.getId().toString()
     )

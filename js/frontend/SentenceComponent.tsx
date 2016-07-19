@@ -101,7 +101,7 @@ export default class SentenceComponent extends Component<Props, State> {
         sortedFacts = sortedFacts.sort((f1, f2) => f1.index - f2.index)
 
         let factIndexToElement = (factIndex : FactIndex) => 
-            <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact, this.props.tab) }>
+            <li key={ factIndex.fact.getId() } className='clickable' onClick={ () => openFact(factIndex.fact, this.props.corpus, this.props.tab) }>
 
                 <div className={ 'index' + (factIndex.index == MISSING_INDEX ? ' missing' : '') }>
                     <div className='number' >

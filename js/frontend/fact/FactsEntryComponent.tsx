@@ -41,7 +41,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
     onClick(e) {
         let fact = this.props.fact
 
-        openFact(fact, this.props.tab)
+        openFact(fact, this.props.corpus, this.props.tab)
     }
 
     onDrop(e) {

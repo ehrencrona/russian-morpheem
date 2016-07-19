@@ -40,7 +40,7 @@ export default class AddWordComponent extends Component<Props, State> {
             let existingFact = corpus.phrases.get(phraseId)
             
             if (existingFact) {
-                openFact(existingFact, this.props.tab)
+                openFact(existingFact, this.props.corpus, this.props.tab)
 
                 return
             }
@@ -50,7 +50,7 @@ export default class AddWordComponent extends Component<Props, State> {
             corpus.phrases.add(phrase)
             corpus.facts.add(phrase)
 
-            openFact(phrase, this.props.tab)
+            openFact(phrase, this.props.corpus, this.props.tab)
 
             this.props.onClose()
         }

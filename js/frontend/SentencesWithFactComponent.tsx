@@ -57,7 +57,7 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
             return <li 
                 key={ sentence.sentence.id }
                 className='clickable'
-                onClick={ () => openSentence(sentence.sentence, this.props.tab) }>
+                onClick={ () => openSentence(sentence.sentence, this.props.corpus, this.props.tab) }>
                     <div className={ 'index' + (sentence.difficulty == MISSING_INDEX ? ' missing' : '') }>
                         <div className='number' >
                             { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }

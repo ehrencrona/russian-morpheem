@@ -50,7 +50,7 @@ export default class EventsComponent extends Component<Props, State> {
                         { eventAndSentence.event.author || 'Unknown' }
                     </div>
                     { (eventAndSentence.sentence ? 
-                        <div className='clickable' onClick={ () => openSentence(eventAndSentence.sentence, this.props.tab) } >
+                        <div className='clickable' onClick={ () => openSentence(eventAndSentence.sentence, this.props.corpus, this.props.tab) } >
                             <div dangerouslySetInnerHTML={ { __html: html } }/>
                         </div>
                         :

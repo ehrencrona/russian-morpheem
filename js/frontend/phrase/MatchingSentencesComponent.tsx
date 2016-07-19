@@ -39,7 +39,7 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
     renderSentence(match: Match) {
         return <div className='main'>
             <div className='sentence clickable' 
-                onClick={ () => openSentence(match.sentence, this.props.tab) }
+                onClick={ () => openSentence(match.sentence, this.props.corpus, this.props.tab) }
                 dangerouslySetInnerHTML={ { __html: 
                 match.sentence.innerToString((word, first, index) => {
                     let wordString = htmlEscape(word.toString())

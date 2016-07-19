@@ -72,7 +72,7 @@ export default class FactsComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } 
                 onWordSelect={ (word) => { 
-                    openFact((word instanceof InflectedWord ? word.word : word), this.props.tab) 
+                    openFact((word instanceof InflectedWord ? word.word : word), this.props.corpus, this.props.tab) 
                 } } />
         }
         else if (this.state.list == ALL) {

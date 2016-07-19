@@ -49,7 +49,7 @@ export default class PhrasesWithWordComponent extends Component<Props, State> {
                 phrases.map((phrase) => {            
                     let index = this.props.corpus.facts.indexOf(phrase);
 
-                    return <div key={ phrase.getId() } className='clickable' onClick={ () => openFact(phrase, this.props.tab) }>
+                    return <div key={ phrase.getId() } className='clickable' onClick={ () => openFact(phrase, this.props.corpus, this.props.tab) }>
                         <div className='index'><div className='number'>{ index + 1 }</div></div>
                         { phrase.description }
                     </div>

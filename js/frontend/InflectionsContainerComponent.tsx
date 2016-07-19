@@ -44,7 +44,7 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
             this.props.onSelect(this.props.word.inflect(form))
         }
         else {
-            openFact(this.props.inflection.getFact(form), this.props.tab)
+            openFact(this.props.inflection.getFact(form), this.props.corpus, this.props.tab)
         }
     }
 

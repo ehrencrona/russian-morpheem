@@ -67,7 +67,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                                 :
                                 <div className='unacceptable'>Not ready</div>
                         }
-                        <div className='clickable' onClick={ () => openSentence(sentence, this.props.tab) } >{ 
+                        <div className='clickable' onClick={ () => openSentence(sentence, this.props.corpus, this.props.tab) } >{ 
                             this.neverEmpty(sentence.toUnambiguousString(this.props.corpus.words)) 
                         }</div>
 

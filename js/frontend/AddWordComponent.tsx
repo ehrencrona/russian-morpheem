@@ -45,7 +45,7 @@ export default class AddWordComponent extends Component<Props, State> {
             let existingFact = corpus.facts.get(wordString)
             
             if (existingFact) {
-                openFact(existingFact, this.props.tab)
+                openFact(existingFact, this.props.corpus, this.props.tab)
 
                 return
             }
@@ -58,7 +58,7 @@ export default class AddWordComponent extends Component<Props, State> {
                         corpus.words.addWord(word)
                         corpus.facts.add(word)
 
-                        openFact(word, this.props.tab)
+                        openFact(word, this.props.corpus, this.props.tab)
 
                         this.props.onClose();
                         this.word.value = ''
@@ -77,7 +77,7 @@ export default class AddWordComponent extends Component<Props, State> {
                     corpus.words.addInflectableWord(word)
                     corpus.facts.add(word)
 
-                    openFact(word, this.props.tab)
+                    openFact(word, this.props.corpus, this.props.tab)
                                     
                     this.props.onClose();
                     this.word.value = ''
