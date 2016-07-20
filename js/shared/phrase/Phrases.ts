@@ -26,6 +26,14 @@ export default class Phrases {
         return this
     }
 
+    remove(phrase: Phrase) {
+        delete this.phraseById[phrase.getId()]
+
+        if (this.onChange) {
+            this.onChange(phrase)
+        }
+    }
+
     store(phrase: Phrase) {
         this.phraseById[phrase.getId()] = phrase
 

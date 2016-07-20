@@ -15,6 +15,7 @@ import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
 
 import addFact from './route/addFact'
+import deleteFact from './route/deleteFact'
 import setFact from './route/setFact'
 import inflectionFor from './route/inflectionFor'
 import addWord from './route/addWord'
@@ -80,6 +81,8 @@ function registerRoutes(corpus: Corpus) {
 
     app.post(`/api/${lang}/fact/:id`, addFact(corpus))
     
+    app.delete(`/api/${lang}/fact/:id`, deleteFact(corpus))
+
     app.get(`/api/${lang}/fact/:fact/external`, getExternalSentences(corpus))
 
     app.post(`/api/${lang}/inflection-for/:word`, inflectionFor(corpus))

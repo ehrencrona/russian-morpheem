@@ -11,6 +11,7 @@ import SentenceComponent from './SentenceComponent'
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import ChangeInflectionComponent from './ChangeInflectionComponent'
 import MoveFactButton from './MoveFactButtonComponent'
+import DeleteFactButton from './DeleteFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
@@ -100,6 +101,8 @@ export default class WordFactComponent extends Component<Props, State> {
                     onMove={ () => 
                         (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
                 />
+                <DeleteFactButton corpus={ this.props.corpus} fact={ this.props.fact } 
+                    onDelete={ () => this.props.tab.close() }/>
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>

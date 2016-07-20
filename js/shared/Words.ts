@@ -19,6 +19,7 @@ export default class Words {
     ambiguousForms : { [s: string]: Word[] } = {}
 
     onAddWord: (word: Word) => void = null
+    onDeleteWord: (word: Word) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
     
     static PUNCTUATION = '.?!,;:«»—'
@@ -78,7 +79,33 @@ export default class Words {
             delete this.wordsByString[str]
         }
         else {
-            this.wordsByString[str] = word;
+            this.wordsByString[str] = word
+        }
+
+        this.sortedWords = null
+    }
+
+    remove(word: Word) {
+        delete this.wordsById[word.getId()]
+
+        let str = word.jp;
+
+        let ambiguous = this.ambiguousForms[str]
+
+        if (ambiguous) {
+            ambiguous = ambiguous.filter((w) => w.getId() != word.getId())
+
+            if (ambiguous.length == 1) {
+                this.wordsByString[str] = ambiguous[0]
+
+                delete this.ambiguousForms[str]
+            }
+            else {
+                this.ambiguousForms[str] = ambiguous
+            }
+        }
+        else {
+            delete this.wordsByString[str]
         }
 
         this.sortedWords = null
@@ -138,6 +165,16 @@ export default class Words {
         }
 
         this.inflectableWordsById[word.getId()] = word
+
+        return this
+    }
+
+    removeInflectableWord(word: InflectableWord) {
+        word.visitAllInflections((word: InflectedWord) =>
+            this.remove(word)
+        )
+
+        delete this.inflectableWordsById[word.getId()]
 
         return this
     }

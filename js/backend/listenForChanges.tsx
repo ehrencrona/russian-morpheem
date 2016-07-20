@@ -95,6 +95,7 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.facts.onTag = saveFacts
     corpus.facts.onUntag = saveFacts
     corpus.inflections.onAdd = saveInflections
+    corpus.inflections.onRemove = saveInflections
     corpus.phrases.onChange = savePhrases
 
     corpus.onChangeOnDisk = () => {

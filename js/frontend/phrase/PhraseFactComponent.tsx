@@ -5,6 +5,7 @@ import Fact from '../../shared/fact/Fact'
 
 import Tab from '../OpenTab'
 import MoveFactButton from '../MoveFactButtonComponent'
+import DeleteFactButton from '../DeleteFactButtonComponent'
 import TagButton from '../TagButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
@@ -81,6 +82,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     fact={ this.props.fact }
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
                     />
+
+                <DeleteFactButton corpus={ this.props.corpus} fact={ this.props.fact } 
+                    onDelete={ () => this.props.tab.close() }/>
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>

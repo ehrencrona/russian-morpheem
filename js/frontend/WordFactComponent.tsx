@@ -15,6 +15,7 @@ import SentencesWithFact from './SentencesWithFactComponent';
 import ExternalSentencesComponent from './ExternalSentencesComponent';
 import PhrasesWithWordComponent from './PhrasesWithWordComponent'
 
+import DeleteFactButton from './DeleteFactButtonComponent'
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'
 
@@ -90,6 +91,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 <div className='button' onClick={ () => this.addSentence() }>Add sentence</div>
 
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <DeleteFactButton corpus={ this.props.corpus} fact={ this.props.fact } onDelete={ () => this.props.tab.close() } />
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
 

@@ -18,6 +18,7 @@ export default class Inflections {
     inflections: Inflection[] = []
 
     onAdd: (inflection: Inflection) => void = null
+    onRemove: (inflection: Inflection) => void = null
     allPos: string[]
     
     constructor(inflections? : Inflection[]) {
@@ -90,6 +91,17 @@ export default class Inflections {
         }
 
         this.allPos = null
+    }
+
+    remove(inflection: Inflection) {
+        delete this.inflectionsById[inflection.getId()]
+        this.inflections = this.inflections.filter((i) => i.getId() != inflection.getId())
+
+        if (this.onRemove) {
+            console.log('Removed inflection ' + inflection.id)
+            
+            this.onRemove(inflection)
+        }
     }
     
     getInflection(id) {
