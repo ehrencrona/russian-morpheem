@@ -14,7 +14,6 @@
  */
 
 import Word from '../Word'
-import UnstudiedWord from '../UnstudiedWord'
 import InflectableWord from '../InflectableWord'
 import Inflections from '../inflection/Inflections'
 import InflectionFact from '../inflection/InflectionFact'
@@ -63,7 +62,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         return {classifier: classifier, word: text}
     }
 
-    function parseLeftSideOfDefinition(leftSide): UnstudiedWord {
+    function parseLeftSideOfDefinition(leftSide): Word {
         let elements = leftSide.split(',').map((s) => s.trim())
 
         let parseResult = parseWordAndClassifier(elements[0])
@@ -78,7 +77,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         let wordWithoutStemMark = parseResult.word.replace('--', '')
 
         if (leftSide.indexOf('unstudied') > 0) {
-            return new UnstudiedWord(parseResult.word, parseResult.classifier)
+            return new Word(parseResult.word, parseResult.classifier)
         }
         else {
             return new Word(wordWithoutStemMark, parseResult.classifier)

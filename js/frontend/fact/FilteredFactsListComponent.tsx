@@ -8,7 +8,7 @@ import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 import InflectableWord from '../../shared/InflectableWord'
 
 import Tab from '../OpenTab'
@@ -50,7 +50,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         if (!this.state.showInflectionFact || !this.state.showWords) {
             factIndices = factIndices.filter((index) => {
                 return (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
-                    (this.state.showWords && (index.fact instanceof UnstudiedWord || index.fact instanceof InflectableWord)) ||
+                    (this.state.showWords && (index.fact instanceof Word || index.fact instanceof InflectableWord)) ||
                     (this.state.showPhrases && index.fact instanceof Phrase) 
             })
         }

@@ -1,11 +1,11 @@
 
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import Fact from '../../shared/fact/Fact'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 
 interface UnknownFact {
     fact: Fact,
-    word: UnstudiedWord
+    word: Word
 }
 
 export default UnknownFact

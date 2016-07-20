@@ -8,7 +8,6 @@ import Word from '../../shared/Word'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import InflectableWord from '../../shared/InflectableWord'
-import UnstudiedWord from '../../shared/UnstudiedWord'
 
 import UnknownFact from './UnknownFact'
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
@@ -73,7 +72,7 @@ let unknownFactComponent = (props: Props) => {
             unknownFact={ props.unknownFact }
             ref={ (child) => explainable = child  } />
     }
-    else if (fact instanceof InflectableWord || fact instanceof UnstudiedWord) {
+    else if (fact instanceof InflectableWord || fact instanceof Word) {
         content = <WordFactComponent 
             fact={ fact } 
             corpus={ props.corpus }

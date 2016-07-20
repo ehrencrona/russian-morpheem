@@ -6,7 +6,6 @@ import Inflection from '../shared/inflection/Inflection';
 
 import Words from '../shared/Words';
 import Word from '../shared/Word';
-import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import { parseEndings } from '../shared/inflection/InflectionsFileParser';

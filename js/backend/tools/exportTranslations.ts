@@ -5,7 +5,7 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import writeFactFile from '../FactFileWriter'
 import { getCorpusDir } from '../CorpusReader'
 
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 import InflectableWord from '../../shared/InflectableWord'
 
 const CLASSES = 4
@@ -16,7 +16,7 @@ readCorpus('ru', false)
 
     corpus.facts.facts.forEach((fact, index) => {
 
-        if (index > 300 && (fact instanceof UnstudiedWord || fact instanceof InflectableWord)) {
+        if (index > 300 && (fact instanceof Word || fact instanceof InflectableWord)) {
 
             console.log(fact.getId())
 

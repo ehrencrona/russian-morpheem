@@ -1,10 +1,10 @@
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 import { ExternalSentence } from './ExternalSentence'
 
-export type ParsedWord = (string | UnstudiedWord[])
+export type ParsedWord = (string | Word[])
 
 export function parseSentenceToWords(sentence: ExternalSentence, corpus: Corpus): ParsedWord[] {
     let words = tokenize(sentence.text)

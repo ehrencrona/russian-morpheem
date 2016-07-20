@@ -1,9 +1,9 @@
 
-import UnstudiedWord from './UnstudiedWord'
+import Word from './Word'
 import Words from './Words'
 import htmlEscape from './util/htmlEscape'
 
-export default class UnparsedWord extends UnstudiedWord {
+export default class UnparsedWord extends Word {
 
     getId() {
         return '"' + this.jp +  '"'

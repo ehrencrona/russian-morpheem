@@ -5,7 +5,7 @@ import { ExternalSentence } from '../../shared/external/ExternalSentence'
 import { STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import { parseSentenceToWords } from '../../shared/external/parseSentenceToWords'
 import Sentence from '../../shared/Sentence'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 import UnparsedWord from '../../shared/UnparsedWord'
 import getAuthor from '../getAuthor'
 
@@ -31,7 +31,7 @@ export default function(corpus: Corpus) {
 
                 let words = parsedWords
                     .map((parsedWord) => {
-                        let wordAlternatives: UnstudiedWord[] = parsedWord as UnstudiedWord[] 
+                        let wordAlternatives: Word[] = parsedWord as Word[] 
 
                         if (typeof parsedWord == 'object' && wordAlternatives.length == 1) {
                             return wordAlternatives[0]

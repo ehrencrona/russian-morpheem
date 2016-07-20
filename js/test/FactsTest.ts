@@ -11,7 +11,6 @@ import Sentences from '../shared/Sentences';
 import Word from '../shared/Word';
 import Phrase from '../shared/phrase/Phrase';
 import Phrases from '../shared/phrase/Phrases';
-import UnstudiedWord from '../shared/UnstudiedWord';
 import InflectableWord from '../shared/InflectableWord';
 
 import transforms from '../shared/Transforms';

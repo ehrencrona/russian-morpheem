@@ -8,7 +8,7 @@ import { getCorpusDir } from '../CorpusReader'
 
 import Fact from '../../shared/fact/Fact'
 
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 import InflectableWord from '../../shared/InflectableWord'
 import { readFile } from 'fs';
 

@@ -12,7 +12,6 @@ import Facts from '../fact/Facts'
 import Word from '../Word'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
-import UnstudiedWord from '../UnstudiedWord'
 
 export default class PhraseMatch {
     constructor(public wordMatches: WordMatch[]) {

@@ -4,11 +4,10 @@ import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
 import Inflection from './inflection/Inflection'
 import Facts from './fact/Facts'
-import UnstudiedWord from './UnstudiedWord'
 import UnparsedWord from './UnparsedWord'
 
 import { JsonFormat as InflectableWordJsonFormat } from './InflectableWord'
-import { JsonFormat as WordJsonFormat } from './UnstudiedWord'
+import { JsonFormat as WordJsonFormat } from './Word'
 
 export type JsonFormat = (InflectableWordJsonFormat | WordJsonFormat)[]
 
@@ -49,7 +48,7 @@ export default class Words {
 
     getPunctuationWords() {
         return Words.PUNCTUATION.split('').map((char) =>
-            new UnstudiedWord(char, null))
+            new Word(char, null))
     }
 
     addPunctuation() {

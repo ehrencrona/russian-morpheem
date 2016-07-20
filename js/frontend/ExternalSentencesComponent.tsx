@@ -4,7 +4,7 @@ import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import { MISSING_INDEX } from '../shared/fact/Facts'
 import Sentence from '../shared/Sentence'
-import UnstudiedWord from '../shared/UnstudiedWord'
+import Word from '../shared/Word'
 import { ExternalSentence } from '../shared/external/ExternalSentence'
 import { parseSentenceToWords, ParsedWord } from '../shared/external/parseSentenceToWords'
 
@@ -44,7 +44,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
 
         words.forEach((word) => {
             if (typeof word != 'string') {
-                let wordAlternatives = word as UnstudiedWord[]
+                let wordAlternatives = word as Word[]
 
                 wordAlternatives.forEach((wordAlternative) => {
                     wordAlternative.visitFacts((fact) => {
@@ -123,7 +123,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
                                 let anyMatch = false
                                 let allMatch = true
 
-                                let potentialWords = word as UnstudiedWord[];
+                                let potentialWords = word as Word[];
 
                                 potentialWords.forEach((uw) => {
                                     let thisMatch = false

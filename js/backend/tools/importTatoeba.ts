@@ -2,7 +2,7 @@ import readCorpus from '../CorpusReader'
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 
 import { readFile } from 'fs'
 import { storeSentence } from '../external/ExternalCorpus' 
@@ -22,7 +22,7 @@ let found = 0
 let unknownCountByWord = {}
 
 function process(ts: TatoebaSentence, corpus: Corpus): Promise<any> {
-    let known: UnstudiedWord[] = []
+    let known: Word[] = []
     let unknown: string[] = []
 
     let sentence: ExternalSentence = {
@@ -53,7 +53,7 @@ function process(ts: TatoebaSentence, corpus: Corpus): Promise<any> {
             }
         }
         else {
-            known = known.concat(parsedWord as UnstudiedWord[])
+            known = known.concat(parsedWord as Word[])
         }
     })
 

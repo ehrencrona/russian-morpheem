@@ -11,7 +11,7 @@ import Sentence from '../../shared/Sentence'
 
 import InflectableWord from '../../shared/InflectableWord'
 import InflectedWord from '../../shared/InflectedWord'
-import UnstudiedWord from '../../shared/UnstudiedWord'
+import Word from '../../shared/Word'
 
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
@@ -136,7 +136,7 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
-    explainWord(word: UnstudiedWord, somethingIsUnknown?: boolean) {
+    explainWord(word: Word, somethingIsUnknown?: boolean) {
         let known: UnknownFact[] = [], 
             unknown: UnknownFact[] = []
 
@@ -169,7 +169,7 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    unknownFactsFromWord(word: UnstudiedWord): UnknownFact[] {
+    unknownFactsFromWord(word: Word): UnknownFact[] {
         let facts: Fact[] = []
 
         word.visitFacts((fact: Fact) => facts.push(fact))
@@ -269,7 +269,7 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     render() {
-        let studiedWord: UnstudiedWord
+        let studiedWord: Word
 
         let reveal = this.state.stage !== Stage.TEST
         let capitalize = true
@@ -280,7 +280,7 @@ export default class StudyComponent extends Component<Props, State> {
             words.push(this.props.corpus.words.get('.'))
         }
 
-        let groupedWords: UnstudiedWord[][] = []
+        let groupedWords: Word[][] = []
 
         words.forEach((word) => {
             if (isWordWithSpaceBefore(word)) {
@@ -302,7 +302,7 @@ export default class StudyComponent extends Component<Props, State> {
                     {
                         (this.state.stage == Stage.TEST ?
 
-                            (this.props.fact instanceof UnstudiedWord ?
+                            (this.props.fact instanceof Word ?
                                 'What Russian word is missing?'
                             :
                                 'What form should the highlighed word be in?')
@@ -322,7 +322,7 @@ export default class StudyComponent extends Component<Props, State> {
                     groupedWords.map((words, index) => {
                         return <div className='group' key={ index }>
                         {
-                            words.map((word: UnstudiedWord, index) => {
+                            words.map((word: Word, index) => {
                                 let explain = () => {
                                     this.explainWord(word)
 
@@ -468,7 +468,7 @@ export default class StudyComponent extends Component<Props, State> {
 }
 
 
-function getWordMeaningFactId(word: UnstudiedWord) {
+function getWordMeaningFactId(word: Word) {
     if (word instanceof InflectedWord) {
         return word.word.getId()
     }
@@ -481,6 +481,6 @@ function excludeFact(exclude: UnknownFact, array: UnknownFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
 }
 
-function isWordWithSpaceBefore(word: UnstudiedWord) {
+function isWordWithSpaceBefore(word: Word) {
     return (word.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) < 0)
 }

@@ -2,7 +2,7 @@
 
 import Corpus from '../shared/Corpus';
 import Fact from '../shared/fact/Fact';
-import UnstudiedWord from '../shared/UnstudiedWord';
+import Word from '../shared/Word';
 import UnparsedWord from '../shared/UnparsedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
@@ -37,7 +37,7 @@ interface Inflection {
 
 interface Suggestion {
     index: number,
-    word: UnstudiedWord,
+    word: Word,
     fact: Fact,
     inflection: Inflection
 }
@@ -76,7 +76,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
 
     findMatchingInflections(word: InflectableWord, filter: string): Suggestion[] {
-        let exactMatches: UnstudiedWord[] = []
+        let exactMatches: Word[] = []
         let prefixMatch: InflectedWord
         let prefixIsDefault
 
@@ -105,7 +105,7 @@ export default class WordSearchComponent extends Component<Props, State> {
         }
     }
     
-    wordToSuggestion(word: UnstudiedWord): Suggestion {
+    wordToSuggestion(word: Word): Suggestion {
         let inflection
         let index
         let fact: Fact
@@ -147,7 +147,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     } 
            
     wordsMatchingFilterString(fact, filter: string): Suggestion[] {
-        if (fact instanceof UnstudiedWord && 
+        if (fact instanceof Word && 
             fact.jp.substr(0, filter.length).toLowerCase() == filter) {
             return [ this.wordToSuggestion(fact) ]
         }
@@ -177,7 +177,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                         return
                     }
                 }
-                else if (!(filterPos == NO_POS && fact instanceof UnstudiedWord)) {
+                else if (!(filterPos == NO_POS && fact instanceof Word)) {
                     return
                 }
             }
@@ -192,7 +192,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             else if (filterString) {
                 suggestions = suggestions.concat(this.wordsMatchingFilterString(fact, filterString)) 
             }
-            else if (fact instanceof UnstudiedWord) {
+            else if (fact instanceof Word) {
                 suggestions.push(this.wordToSuggestion(fact))
             }
             else if (fact instanceof InflectableWord) {

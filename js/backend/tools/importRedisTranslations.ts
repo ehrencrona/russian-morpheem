@@ -7,7 +7,6 @@ import readCorpus from '../CorpusReader'
 
 import { translateGlosbe } from './glosbe'
 import InflectableWord from '../../shared/InflectableWord'
-import UnstudiedWord from '../../shared/UnstudiedWord'
 import Word from '../../shared/Word'
 import { getCorpusDir } from '../CorpusReader'
 
@@ -120,7 +119,7 @@ client.on('connect', () => {
                                 })
                         })
                     }
-                    else if (fact instanceof UnstudiedWord) {
+                    else if (fact instanceof Word) {
                         promise = getFromGlosbe(fact.jp, fact)
                     }
 

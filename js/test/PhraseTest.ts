@@ -9,7 +9,6 @@ import Words from '../shared/Words'
 import Corpus from '../shared/Corpus'
 import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
-import UnstudiedWord from '../shared/UnstudiedWord'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Phrase from '../shared/phrase/Phrase'
@@ -24,8 +23,8 @@ let inflections = new Inflections([
 describe('Phrase', function() {
     let w1, w2: Word, w3: InflectableWord, words: Words, facts: Facts, corpus: Corpus
     
-    w1 = new UnstudiedWord('в', 'loc')
-    w2 = new UnstudiedWord('в', 'dir')
+    w1 = new Word('в', 'loc')
+    w2 = new Word('в', 'dir')
     w3 = new InflectableWord('библиотек', inflections.inflections[0])
     
     words = new Words()

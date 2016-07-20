@@ -1,5 +1,4 @@
 import Word from './Word'
-import UnstudiedWord from './UnstudiedWord'
 import InflectedWord from './InflectedWord'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'

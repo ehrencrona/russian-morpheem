@@ -3,7 +3,7 @@ import Words from './Words'
 import Facts from './fact/Facts'
 import Phrase from './phrase/Phrase'
 import Phrases from './phrase/Phrases'
-import UnstudiedWord from './UnstudiedWord'
+import Word from './Word'
 import InflectedWord from './InflectedWord'
 import htmlEscape from './util/htmlEscape'
 import UnparsedWord from './UnparsedWord'
@@ -17,7 +17,7 @@ export default class Sentence {
     english: string
     phrases: Phrase[] = []
 
-    constructor(public words: UnstudiedWord[], public id: number, public author?: string) {
+    constructor(public words: Word[], public id: number, public author?: string) {
         this.words = words
         this.id = id
         this.author = author
@@ -126,7 +126,7 @@ export default class Sentence {
         this.phrases.forEach((phrase) => phrase.visitFacts(visitor))
     }
 
-    innerToString(wordToString: (word: UnstudiedWord, first: boolean, index: number) => string) {
+    innerToString(wordToString: (word: Word, first: boolean, index: number) => string) {
         let res = ''
         let capitalize = true 
 

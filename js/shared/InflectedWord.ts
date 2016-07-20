@@ -1,7 +1,6 @@
 "use strict";
 
 import Word from './Word'
-import UnstudiedWord from './UnstudiedWord'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
 import InflectableWord from './InflectableWord'

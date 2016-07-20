@@ -6,7 +6,6 @@ import Inflections from '../shared/inflection/Inflections'
 import Word from '../shared/Word'
 import Words from '../shared/Words'
 import Ending from '../shared/Ending'
-import UnstudiedWord from '../shared/UnstudiedWord'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
@@ -21,7 +20,7 @@ describe('Words', function() {
     let w1, w2: Word, w3: InflectableWord, words: Words;
     
     beforeEach(() => {        
-        w1 = new UnstudiedWord('foo', 'bar').setEnglish('eng')
+        w1 = new Word('foo', 'bar').setEnglish('eng')
         w2 = new Word('fooo', 'bar').setEnglish('eng')
         w3 = new InflectableWord('pass', inflections.inflections[0])
             .setEnglish('eng')
@@ -47,7 +46,7 @@ describe('Words', function() {
     it('converts unstudied to JSON and back', function () {
         let after = Words.fromJson(words.toJson(), inflections);
 
-        expect(after.wordsById[w1.getId()]).to.be.instanceOf(UnstudiedWord)
+        expect(after.wordsById[w1.getId()]).to.be.instanceOf(Word)
 
         expect(after.get('passer')).to.be.not.null
         
