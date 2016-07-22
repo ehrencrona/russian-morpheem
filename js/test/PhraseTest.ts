@@ -54,20 +54,22 @@ describe('Phrase', function() {
             w1, w3.inflect('prep')
         ]
 
-        function testMatch(phraseStr: string) {
+        function testMatch(phraseStr: string, length: number) {
             let phrase = Phrase.fromString('foo', phraseStr, words, inflections)
 
             expect(phrase.match(wordArray, facts)).to.be.not.undefined
-            expect(phrase.match(wordArray, facts).length).to.equal(2)
+            expect(phrase.match(wordArray, facts).length).to.equal(length)
         }
 
-        testMatch('в[loc]@ библиотека@prep')
-        testMatch('в[loc]@ библиотека@')
-        testMatch('в[loc]@ библиотека')
-        testMatch('в[loc]@ prep')
-        testMatch('в[loc]@ tag:location')
-        testMatch('в[loc]@ noun+')
-        testMatch('в[loc]@ noun@prep+')
+        testMatch('в[loc]@ библиотека@prep', 2)
+        testMatch('в[loc]@ библиотека@', 2)
+        testMatch('в[loc]@ библиотека', 2)
+        testMatch('в[loc]@ prep', 2)
+        testMatch('в[loc]@ tag:location', 2)
+        testMatch('в[loc]@ noun+', 2)
+        testMatch('в[loc]@ noun@prep+', 2)
+        
+        testMatch('noun@prep+', 1)
     })
 
 })

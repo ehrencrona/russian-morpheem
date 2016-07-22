@@ -43,7 +43,7 @@ export default class PhraseMatch {
                 at += match
             }
 
-            if (found) {
+            if (found && result.length) {
                 return result
             }
         }
