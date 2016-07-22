@@ -110,8 +110,15 @@ export default class FixedIntervalFactSelector {
             let age = timeSince(lastStudied, now)
             let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1)]
 
-            if (age < interval.max && age > interval.min) {
-                let score = (interval.max - age) / (interval.max - interval.min) * URGENCY + BASE_SCORE
+            if (age > interval.min) {
+                let score
+                
+                if (age < interval.max) {
+                    score = (interval.max - age) / (interval.max - interval.min) * URGENCY + BASE_SCORE
+                }
+                else {
+                    score = BASE_SCORE
+                }
 
                 let fact = this.facts.get(factId)
 

@@ -95,11 +95,6 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         factScores = topScores(factScores, 20)
 
-        factScores = [ { 
-            fact: this.props.corpus.facts.get('at-instr'),
-            score: 1
-        } ]
-
         let sentenceScores = sentencesForFacts(factScores, this.sentencesByFactIndex)
 
         sentenceScores = new OldestSentenceSelector(this.sentenceKnowledge, this.props.corpus.facts)

@@ -228,8 +228,8 @@ export default class StudyComponent extends Component<Props, State> {
     getFormHint() {
         let fact = this.props.fact
 
-        if (fact instanceof InflectionFact) {
-            let form = FORMS[fact.form] 
+        if (fact instanceof InflectionFact || fact instanceof InflectedWord) {
+            let form = FORMS[fact.form]
 
             if (!form) {
                 console.warn(`Unknown form ${ fact.form }.`)
