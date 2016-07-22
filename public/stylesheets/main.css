@@ -183,6 +183,17 @@ input[type=text], input[type=number] {
       display: inline-block;
       margin: 0;
       margin-right: 4px; }
+    .sentenceTab .sentenceFacts .current li, .sentenceTab .sentenceFacts .matching li {
+      display: flex;
+      align-items: flex-start; }
+      .sentenceTab .sentenceFacts .current li .clickable, .sentenceTab .sentenceFacts .matching li .clickable {
+        display: block; }
+      .sentenceTab .sentenceFacts .current li .match, .sentenceTab .sentenceFacts .matching li .match {
+        color: #3b938a;
+        font-weight: bold;
+        text-decoration: inherit; }
+      .sentenceTab .sentenceFacts .current li .phrase, .sentenceTab .sentenceFacts .matching li .phrase {
+        font-size: 80%; }
 
 .wordSearch .filter {
   padding: 4px;
@@ -213,6 +224,8 @@ input[type=text], input[type=number] {
       color: #2CAAA9;
       background-color: #f8f9f3;
       top: auto; }
+    .wordSearch .suggestions .suggestion .error {
+      color: #ff5f3b; }
     .wordSearch .suggestions .suggestion .form {
       margin-left: 4px;
       font-size: 80%;

@@ -307,6 +307,25 @@ input[type=text], input[type=number] {
                 margin: 0;
                 margin-right: $unit;
             }
+
+            li {
+                display: flex;
+                align-items: flex-start;
+
+                .clickable {
+                    display: block;
+                }
+
+                .match {
+                    color: darken($color10, 10%);
+                    font-weight: bold;
+                    text-decoration: inherit;
+                }
+
+                .phrase {
+                    font-size: 80%;
+                }
+            }
         }
     }
 }
@@ -348,6 +367,10 @@ input[type=text], input[type=number] {
                 color: $color2;
                 background-color: $color12;
                 top: auto;
+            }
+
+            .error {
+                color: $color5;
             }
 
             .form {
