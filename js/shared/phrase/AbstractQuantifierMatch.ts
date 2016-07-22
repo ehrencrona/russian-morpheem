@@ -4,17 +4,10 @@ import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
 
-export const POS_NAMES = {
-    noun: 'n',
-    adjective: 'adj',
-    verb: 'v',
-    numeral: 'num',
-    pronoun: 'pron'
-}
-
 type Range = number[]
 
-const EXACT_MATCH_QUANTIFIER = '!'
+export const ANY_MATCH_QUANTIFIER = '*'
+export const EXACT_MATCH_QUANTIFIER = '!'
 
 export const QUANTIFIERS: { [name: string]: Range } = {
     '?': [ 0, 1 ],
@@ -23,12 +16,10 @@ export const QUANTIFIERS: { [name: string]: Range } = {
     '!': [ 1, 1 ]
 }
 
-export default class PoSWordMatch implements WordMatch {
+abstract class AbstractQuantifierMatch implements WordMatch {
     range: Range
 
-    constructor(public pos : string, public posName: string, public quantifier?: string) {
-        this.pos = pos
-        this.posName = posName
+    constructor(public quantifier?: string) {
         this.quantifier = quantifier || EXACT_MATCH_QUANTIFIER
         this.range = QUANTIFIERS[this.quantifier]
 
@@ -37,6 +28,8 @@ export default class PoSWordMatch implements WordMatch {
         } 
     }
 
+    abstract wordMatches(word: Word)
+    
     matches(words: Word[], wordPosition: number): number {
         let getMatchCount = () => {
             let stopBefore = Math.min(words.length, wordPosition + this.range[1])
@@ -44,8 +37,7 @@ export default class PoSWordMatch implements WordMatch {
             for (let i = wordPosition; i < stopBefore; i++) {
                 let word = words[i]
     
-                if (!(word instanceof InflectedWord) || 
-                    (word.word.inflection.pos != this.pos)) {
+                if (!this.wordMatches(word)) {
                     return i - wordPosition
                 }
             }
@@ -66,8 +58,6 @@ export default class PoSWordMatch implements WordMatch {
     allowEmptyMatch() {
         return this.range[0] == 0
     }
-
-    toString() {
-        return this.posName + (this.quantifier == EXACT_MATCH_QUANTIFIER ? '' : this.quantifier)
-    }
 }
+
+export default AbstractQuantifierMatch

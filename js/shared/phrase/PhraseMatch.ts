@@ -2,10 +2,10 @@
 import WordMatch from './WordMatch'
 import WildcardMatch from './WildcardMatch'
 import { ExactWordMatch, AnyWord } from './ExactWordMatch'
-import FormWordMatch from './FormWordMatch'
+import PosFormWordMatch from './PosFormWordMatch'
+import { POS_NAMES } from './PoSFormWordMatch'
 import TagWordMatch from './TagWordMatch'
-import PoSWordMatch from './PoSWordMatch'
-import { QUANTIFIERS, POS_NAMES } from './PoSWordMatch'
+import { QUANTIFIERS } from './AbstractQuantifierMatch'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
@@ -49,6 +49,39 @@ export default class PhraseMatch {
         }
     }
 
+    static parseFormMatch(str: string, line: string) {
+        let quantifier
+
+        if (QUANTIFIERS[str[str.length - 1]]) {
+            quantifier = str[str.length - 1]
+            str = str.substr(0, str.length-1)
+        }
+
+        let split = str.split('@')
+
+        let formStr = split[1]
+
+        if (formStr == '') {
+            formStr = null
+        }
+
+        if (formStr && !FORMS[formStr]) {
+            throw new Error(`Unknown form "${formStr}" on line "${line}". Should be one of ${ Object.keys(FORMS).join(', ') }.`)
+        }
+
+        let posStr = split[0]
+
+        if (posStr == '') {
+            posStr = null
+        }
+
+        if (posStr && !POS_NAMES[posStr]) {
+            throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_NAMES).join(', ') }.`)
+        }
+
+        return new PosFormWordMatch(posStr, FORMS[formStr], formStr, quantifier)
+    }
+
     static fromString(line: string, words: Words, inflections: Inflections) {
         let wordMatches: WordMatch[] = []
         
@@ -59,24 +92,18 @@ export default class PhraseMatch {
 
             let match: WordMatch
 
-            if (str[0] == '@' || FORMS[str]) {
-                let caseStr = str
 
-                if (caseStr[0] == '@') {
-                    caseStr = caseStr.substr(1)
-                }
-
-                if (FORMS[caseStr] == null) {
-                    throw new Error(`Unknown form "${caseStr}" on line "${line}". Should be one of ${ Object.keys(FORMS).join(', ') }.`)
-                }
-
-                match = new FormWordMatch(FORMS[caseStr], caseStr)
+            if (str.indexOf('@') == 0 || (str.indexOf('@') > 0 && POS_NAMES[str.substr(0, str.indexOf('@'))])) {
+                match = this.parseFormMatch(str, line)
+            }
+            else if (FORMS[str]) {
+                match = new PosFormWordMatch(null, FORMS[str], str, null)
             }
             else if (POS_NAMES[str]) {
-                match = new PoSWordMatch(POS_NAMES[str], str)
+                match = new PosFormWordMatch(str, null, null, null)
             }
             else if (POS_NAMES[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
-                match = new PoSWordMatch(POS_NAMES[str.substr(0, str.length-1)], str.substr(0, str.length-1), str[str.length-1])
+                match = new PosFormWordMatch(str.substr(0, str.length-1), null, null, str[str.length-1])
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let els = str.substr(4).split('@')
@@ -128,7 +155,7 @@ export default class PhraseMatch {
                 match = new ExactWordMatch(word)
             }
             else {
-                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speach (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
+                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speech (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
             }
 
             wordMatches.push(match)

@@ -186,8 +186,6 @@ input[type=text], input[type=number] {
     .sentenceTab .sentenceFacts .current li, .sentenceTab .sentenceFacts .matching li {
       display: flex;
       align-items: flex-start; }
-      .sentenceTab .sentenceFacts .current li .clickable, .sentenceTab .sentenceFacts .matching li .clickable {
-        display: block; }
       .sentenceTab .sentenceFacts .current li .match, .sentenceTab .sentenceFacts .matching li .match {
         color: #3b938a;
         font-weight: bold;

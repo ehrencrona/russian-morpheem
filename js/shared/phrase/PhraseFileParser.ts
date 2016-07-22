@@ -49,6 +49,8 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
                 id, wordString, 
                 words, inflections)
         } catch (e) {
+            console.warn(e.stack)
+            
             throw new Error(`In phrase ${id}: ${e.message}.`)
         }
 
