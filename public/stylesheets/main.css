@@ -393,6 +393,10 @@ ul {
   .phrase .pattern .field input {
     width: 100%; }
 
+.matchingSentences .conflict {
+  color: #ff5f3b;
+  font-weight: bold; }
+
 .sentenceWithButton {
   margin: 8px 0;
   display: flex;

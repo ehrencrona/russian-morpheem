@@ -48,12 +48,17 @@ export default class Words {
     }
 
     getPunctuationWords() {
-        return Words.PUNCTUATION.split('').map((char) =>
-            new Word(char, null))
+        return Words.PUNCTUATION.split('').map((char) => {
+            let result = new Word(char, null)
+
+            result.studied = false
+
+            return result
+        })
     }
 
     addPunctuation() {
-        this.getPunctuationWords().forEach((word) =>
+        this.getPunctuationWords().forEach((word) => 
             this.addWord(word)
         )
     }

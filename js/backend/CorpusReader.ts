@@ -23,7 +23,7 @@ export function watchForChangesOnDisk(corpus: Corpus) {
     let corpusDir = getCorpusDir(corpus.lang)
     let lastChange
 
-    for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt' ]) {                            
+    for (let file of [ 'inflections.txt', 'facts.txt', 'sentences.txt', 'phrases.txt' ]) {                            
         watch(corpusDir + '/' + file, (event, filename) => {
             let t = new Date().getTime()
 

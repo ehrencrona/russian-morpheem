@@ -62,6 +62,8 @@ describe('Phrase', function() {
         }
 
         testMatch('в[loc]@ библиотека@prep')
+        testMatch('в[loc]@ библиотека@')
+        testMatch('в[loc]@ библиотека')
         testMatch('в[loc]@ prep')
         testMatch('в[loc]@ tag:location')
         testMatch('в[loc]@ noun')

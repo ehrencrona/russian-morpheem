@@ -9,6 +9,7 @@ import SentenceComponent from '../SentenceComponent'
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
 import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
 
 import openSentence from '../sentence/openSentence'
@@ -20,6 +21,9 @@ interface Props {
     corpus: Corpus
     match: PhraseMatch
     filter?: (sentence: Sentence) => boolean
+    isConflict?: (sentence: Sentence, matchWordIndexes: number[]) => boolean
+    includeConflicts?: boolean
+    noMatchIsConflict?: boolean
     tab: Tab
     buttonFactory?: (sentence: Sentence) => ReactElement<any>
 }
@@ -31,7 +35,8 @@ let React = { createElement: createElement }
 
 interface Match {
     sentence: Sentence,
-    wordIndexes: number[]
+    wordIndexes: number[],
+    conflict: boolean
 }
 
 export default class MatchingSentencesComponent extends Component<Props, State> {
@@ -60,7 +65,7 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
 
         return <li 
             key={ match.sentence.id }
-            className='sentenceWithButton'>
+            className={ 'sentenceWithButton' + (match.conflict ? ' conflict' : '') }>
                 {
                     (this.props.buttonFactory ? this.props.buttonFactory(match.sentence) : <div/>)
                 }
@@ -69,7 +74,10 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
     }
 
     getMatches() {
+        let facts = this.props.corpus.facts
         let match = this.props.match
+        let isConflict = this.props.isConflict 
+
         let matches: Match[] = []
 
         if (!match) {
@@ -81,12 +89,24 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
                 return
             }
 
-            let wordIndexes = match.match(sentence.words, this.props.corpus.facts)
+            let wordIndexes = match.match(sentence.words, facts)
 
             if (wordIndexes && wordIndexes.length) {
+                let conflict = isConflict && isConflict(sentence, wordIndexes)
+
+                if (!conflict || this.props.includeConflicts) {
+                    matches.push({
+                        sentence: sentence,
+                        wordIndexes: wordIndexes,
+                        conflict: conflict
+                    })
+                }
+            }
+            else if (this.props.noMatchIsConflict && this.props.includeConflicts) {
                 matches.push({
                     sentence: sentence,
-                    wordIndexes: wordIndexes
+                    wordIndexes: [],
+                    conflict: true
                 })
             }
         })
@@ -95,6 +115,6 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
     }
 
     render() {
-        return <ul className='findPhraseSentences'>{ this.getMatches().map((match) => this.renderMatch(match)) }</ul>
+        return <ul className='matchingSentences'>{ this.getMatches().map((match) => this.renderMatch(match)) }</ul>
     }
 }

@@ -40,9 +40,17 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
             wordString = line.substr(j+1).trim()
         }
 
-        let phrase = Phrase.fromString(
-            line.substr(0, i).trim(), wordString, 
-            words, inflections)
+        let id = line.substr(0, i).trim()
+        
+        let phrase
+
+        try {            
+            phrase = Phrase.fromString(
+                id, wordString, 
+                words, inflections)
+        } catch (e) {
+            throw new Error(`In phrase ${id}: ${e.message}.`)
+        }
 
         phrase.en = en
         phrase.description = description

@@ -40,7 +40,7 @@ export default class SentencesComponent extends Component<Props, State> {
         }
     }
 
-    render() {        
+    render() {
         return (
             <div className='searchSentences'>
                 <input type='text' onChange={ (e) => {
@@ -53,7 +53,8 @@ export default class SentencesComponent extends Component<Props, State> {
                         <MatchingSentencesComponent 
                             corpus={ this.props.corpus }
                             match={ this.state.match }
-                            tab={ this.props.tab }/>
+                            tab={ this.props.tab }
+                            />
 
                     :
 

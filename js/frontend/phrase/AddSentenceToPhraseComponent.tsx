@@ -8,6 +8,7 @@ import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import Phrase from '../../shared/phrase/Phrase'
 import Sentence from '../../shared/Sentence'
 import MatchingSentencesComponent from './MatchingSentencesComponent'
+import isConflictFunction from './isConflict'
 
 import { Component, createElement } from 'react';
 
@@ -41,6 +42,10 @@ export default class FindPhraseComponent extends Component<Props, State> {
     }
 
     render() {
+        let phrase = this.props.phrase
+        let facts = this.props.corpus.facts
+
+
         return <div>
             <div className='buttonBar'>                
                 <div className='button' 
@@ -53,9 +58,11 @@ export default class FindPhraseComponent extends Component<Props, State> {
             </div>
             <MatchingSentencesComponent 
                 corpus={ this.props.corpus }
-                match={ this.props.phrase.patterns[0] }
+                match={ phrase.patterns[0] }
+                isConflict={ isConflictFunction(phrase, this.props.corpus.facts) }
+                includeConflicts={ false }
                 tab={ this.props.tab }
-                filter={ (sentence) => !sentence.hasPhrase(this.props.phrase) }
+                filter={ (sentence) => !sentence.hasPhrase(phrase) }
                 ref='sentences'
                 buttonFactory={ (sentence) => 
                     <div className='button' onClick={ 

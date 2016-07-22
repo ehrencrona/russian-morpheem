@@ -68,7 +68,7 @@ describe('SentencesByFactIndex', function() {
 
         index = indexSentencesByFact(sentences, facts, 1)
 
-        expect(index[ inf.getId() ].ok).to.equal(1)
+        expect(index[ inf.getId() ].ok.length).to.equal(1)
     })
 
     it('works on real data', function (done) {

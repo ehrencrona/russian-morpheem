@@ -11,6 +11,7 @@ import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
 import MatchingSentencesComponent from './MatchingSentencesComponent'
+import isConflictFunction from './isConflict'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
@@ -55,6 +56,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 match={ fact.patterns[0] }
                 tab={ this.props.tab }
                 filter={ (sentence) => !!sentence.hasPhrase(fact) }
+                isConflict={ isConflictFunction(this.props.fact, this.props.corpus.facts) }
+                includeConflicts={ true }
+                noMatchIsConflict={ true }
                 ref='sentences'
                 buttonFactory={ (sentence) => 
                     <div className='button' onClick={ 

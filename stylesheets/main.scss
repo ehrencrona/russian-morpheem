@@ -637,6 +637,14 @@ ul {
     }
 }
 
+.matchingSentences {
+    .conflict {
+        color: $color5;
+        font-weight: bold;
+    }
+}
+
+
 .sentenceWithButton {
     margin: 2 * $unit 0;
     display: flex;

@@ -1,12 +1,14 @@
 /// <reference path="../../../typings/react/react.d.ts" />
 
-import { Component, createElement } from 'react'
+import { Component, createElement, createFactory } from 'react'
 
 import { EndingTransform } from '../../shared/Transforms'
 
 import Word from '../../shared/Word'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
+import Phrase from '../../shared/phrase/Phrase'
+import Sentence from '../../shared/Sentence'
 import InflectableWord from '../../shared/InflectableWord'
 
 import UnknownFact from './UnknownFact'
@@ -15,15 +17,18 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import DesiredFormFactComponent from './DesiredFormFactComponent'
 import DesiredWordFactComponent from './DesiredWordFactComponent'
+import DesiredPhraseFactComponent from './DesiredPhraseFactComponent'
 import InflectionFactComponent from './InflectionFactComponent'
-import WordFactComponent from './WordFactComponent'
-import { TranslatableFact } from './WordFactComponent'
 import EndingTransformFactComponent from './EndingTransformFactComponent'
+import WordFactComponent from './WordFactComponent'
+import PhraseFactComponent from './PhraseFactComponent'
+import { TranslatableFact } from './WordFactComponent'
 
 export interface FactComponentProps<FactType> {
     knowledge: NaiveKnowledge,
     corpus: Corpus,
     unknownFact: UnknownFact,
+    sentence: Sentence,
     fact: FactType,
     hiddenFact: Fact
 }
@@ -43,59 +48,50 @@ let unknownFactComponent = (props: Props) => {
     let explainable
     let canExplain = false
 
+    let componentType
+
     if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
         if (fact instanceof InflectionFact) {
-            content = <DesiredFormFactComponent 
-                fact={ fact } 
-                corpus={ props.corpus }
-                knowledge={ props.knowledge }
-                hiddenFact={ props.hiddenFact }
-                unknownFact={ props.unknownFact } />
+            componentType = createFactory(DesiredFormFactComponent) 
         }
         else if (fact instanceof InflectableWord || fact instanceof Word) {
-            content = <DesiredWordFactComponent 
-                fact={ fact } 
-                corpus={ props.corpus }
-                knowledge={ props.knowledge }
-                hiddenFact={ props.hiddenFact }
-                unknownFact={ props.unknownFact } />
+            componentType = createFactory(DesiredWordFactComponent)
+        }
+        else if (fact instanceof Phrase) {
+            componentType = createFactory(DesiredPhraseFactComponent) 
         }
     }
     else if (fact instanceof InflectionFact) {
         canExplain = true
 
-        content = <InflectionFactComponent 
-            fact={ fact } 
-            corpus={ props.corpus }
-            knowledge={ props.knowledge }
-            hiddenFact={ props.hiddenFact }
-            unknownFact={ props.unknownFact }
-            ref={ (child) => explainable = child  } />
+        componentType = createFactory(InflectionFactComponent)
     }
     else if (fact instanceof InflectableWord || fact instanceof Word) {
-        content = <WordFactComponent 
-            fact={ fact } 
-            corpus={ props.corpus }
-            knowledge={ props.knowledge }
-            hiddenFact={ props.hiddenFact }
-            unknownFact={ props.unknownFact } />
+        componentType = createFactory(WordFactComponent)
     }
     else if (fact instanceof EndingTransform) {
-        content = <EndingTransformFactComponent 
-            fact={ fact } 
-            corpus={ props.corpus }
-            knowledge={ props.knowledge }
-            hiddenFact={ props.hiddenFact }
-            unknownFact={ props.unknownFact } />
+        componentType = createFactory(EndingTransformFactComponent)
     }
-    else {
+    else if (fact instanceof Phrase) {
+        componentType = createFactory(PhraseFactComponent)
+    }
+    
+    if (!componentType) {
         console.warn('Unhandled fact type', fact)
 
-        content = <span>{ fact.getId() }</span>
+        componentType = () => <span>{ fact.getId() }</span>
     }
 
     return <li>
-            <div className='content'>{ content }</div>
+            <div className='content'>
+                 { componentType({
+                    fact: fact, 
+                    corpus: props.corpus,
+                    knowledge: props.knowledge,
+                    sentence: props.sentence,
+                    hiddenFact: props.hiddenFact,
+                    unknownFact: props.unknownFact }, []) }  
+            </div>
 
             <div className='buttonBar'>
                 { canExplain ?

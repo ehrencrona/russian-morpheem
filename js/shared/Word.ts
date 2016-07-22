@@ -8,7 +8,8 @@ export interface JsonFormat {
     target: string,
     en: string,
     classifier: string,
-    type: string    
+    type: string,
+    unstudied?: boolean
 }
 
 /**
@@ -17,6 +18,7 @@ export interface JsonFormat {
 export default class Word {
     en: any
     required: Fact[]
+    studied: boolean = true
 
     constructor(public jp: string, public classifier?: string) {
         this.jp = jp
@@ -88,15 +90,6 @@ export default class Word {
     toString() {
         return this.jp
     }
-        
-    toJson(): JsonFormat {
-        return {
-            target: this.jp,
-            en: this.en[''],
-            classifier: this.classifier,
-            type: this.getJsonType()
-        }
-    }
     
     toUnambiguousString(words: Words) {
         let disambiguation = this.getDisambiguation(words)
@@ -129,13 +122,36 @@ export default class Word {
     }
     
     visitFacts(visitor) {
-        visitor(this)
+        if (this.studied) {
+            visitor(this)
+        }
 
         this.visitRequired(visitor)
     }
 
     static fromJson(json: JsonFormat, inflections: Inflections): Word {
-        return new Word(json.target, json.classifier).setEnglish(json.en)
+        let result = new Word(json.target, json.classifier).setEnglish(json.en)
+
+        if (json.unstudied) {
+            result.studied = false
+        }
+
+        return result
+    }
+
+    toJson(): JsonFormat {
+        let result: JsonFormat = {
+            target: this.jp,
+            en: this.en[''],
+            classifier: this.classifier,
+            type: this.getJsonType()
+        }
+
+        if (!this.studied) {
+            result.unstudied = true
+        }
+
+        return result
     }
 
     getId() {
