@@ -41,9 +41,10 @@ export default class SentencesComponent extends Component<Props, State> {
     }
 
     render() {
+        console.log('lang',this.props.corpus.lang)
         return (
             <div className='searchSentences'>
-                <input type='text' onChange={ (e) => {
+                <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' onChange={ (e) => {
                     this.search((e.target as HTMLInputElement).value)
                 }}/>
 

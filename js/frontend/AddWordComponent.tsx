@@ -88,7 +88,7 @@ export default class AddWordComponent extends Component<Props, State> {
     
     render() {
         return <div className='addWord'>
-            <input type='text' autoCapitalize='off' 
+            <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' 
                 ref={ (input) => this.word = input }
                 onChange={ (event) => {
                         let target = event.target

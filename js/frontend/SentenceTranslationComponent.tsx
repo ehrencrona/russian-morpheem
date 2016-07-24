@@ -31,7 +31,7 @@ export default class SentenceTranslationComponent extends Component<Props, State
         return <div className='sentenceTranslation'>
             <h3>English</h3>
 
-            <input type='text' defaultValue={ this.props.sentence.english } 
+            <input type='text' lang='en' autoCapitalize='off' defaultValue={ this.props.sentence.english } 
                 onBlur={ (e) => this.save((e.target as HTMLInputElement).value) }/> 
         </div>        
     }

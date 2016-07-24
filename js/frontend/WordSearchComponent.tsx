@@ -309,7 +309,7 @@ export default class WordSearchComponent extends Component<Props, State> {
     
         return (<div className='wordSearch'>
             <div className='filter'>
-                <input type='text' autoCapitalize='off' value={ this.state.filterString } onChange={ (event) => {
+                <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' value={ this.state.filterString } onChange={ (event) => {
                     let target = event.target
 
                     if (target instanceof HTMLInputElement) {

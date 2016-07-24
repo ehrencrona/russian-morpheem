@@ -47,6 +47,7 @@ export default class Corpus {
         this.words = words
         this.sentences = sentences
         this.facts = facts
+        this.lang = lang
     }
 
     static fromJson(json): Corpus {
@@ -73,6 +74,7 @@ export default class Corpus {
         this.inflections.clone(otherCorpus.inflections)
         this.sentences.clone(otherCorpus.sentences)
         this.phrases.clone(otherCorpus.phrases)
+        this.lang = otherCorpus.lang
     }
 
     toJson() {
