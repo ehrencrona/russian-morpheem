@@ -114,7 +114,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
                 <div className='button' onClick={ () => this.importSentence(sentence.sentence) } >Add</div>
                 
                 <div className='main'>
-                    <div className='sentence'>{
+                    <div className='sentence external'>{
                         sentence.words.map((word: ParsedWord, index) => {
                             if (typeof word == 'string') {
                                 return <span key={ index } className='missing'>{ word }</span>
@@ -142,10 +142,10 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
 
                                 if (anyMatch) {
                                     return <span key={ index } className={ 'match' + (!allMatch ? ' ambiguous' : '' ) }>
-                                        { uw.toString() } </span>
+                                        { uw.toString() }</span>
                                 }
                                 else {
-                                    return <span key={ index }>{ uw.toString() } </span>
+                                    return <span key={ index }>{ uw.toString() }</span>
                                 }
                             }
                         })

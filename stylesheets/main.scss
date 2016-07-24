@@ -687,10 +687,6 @@ ul {
         .sentence {
             display: block;
 
-            span {
-                display: inline-block;
-            }
-
             .match {
                 color: darken($color10, 10%);
                 font-weight: bold;
@@ -706,6 +702,12 @@ ul {
             .missing {
                 font-style: italic;
                 border-bottom: dotted 2px $color5;
+            }
+        }
+
+        .external.sentence {
+            span {
+                padding-right: $unit;
             }
         }
     }

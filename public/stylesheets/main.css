@@ -421,8 +421,6 @@ ul {
     margin-right: 4px; }
   .sentenceWithButton .main .sentence {
     display: block; }
-    .sentenceWithButton .main .sentence span {
-      display: inline-block; }
     .sentenceWithButton .main .sentence .match {
       color: #3b938a;
       font-weight: bold;
@@ -434,6 +432,8 @@ ul {
     .sentenceWithButton .main .sentence .missing {
       font-style: italic;
       border-bottom: dotted 2px #ff5f3b; }
+  .sentenceWithButton .main .external.sentence span {
+    padding-right: 4px; }
   .sentenceWithButton .en {
     margin-top: 4px;
     margin-bottom: 4px; }
