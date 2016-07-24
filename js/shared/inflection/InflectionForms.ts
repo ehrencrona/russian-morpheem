@@ -86,7 +86,6 @@ export class InflectionForm {
         this.person = used.person
         this.comparison = used.comparison
         this.adjectiveForm = used.adjectiveForm
-
     }
 
 }
@@ -121,9 +120,9 @@ addForm('impr', 'imperative', { number: Number.SINGULAR })
 addForm('imprpl', 'imperative plural', { number: Number.PLURAL })
 addForm('inf', 'infinitive', {})
 
-addForm('m', 'masculine', { gender: Gender.M })
-addForm('f', 'feminine', { gender: Gender.F })
-addForm('n', 'neuter', { gender: Gender.N })
+addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR })
+addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR })
+addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR })
 addForm('pl', 'plural', { number: Number.PLURAL })
 
 addForm('nom', 'nominative', { grammaticalCase: GrammaticalCase.NOM, number: Number.SINGULAR })

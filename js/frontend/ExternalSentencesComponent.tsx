@@ -142,8 +142,7 @@ export default class ExternalSentencesComponent extends Component<Props, State> 
 
                                 if (anyMatch) {
                                     return <span key={ index } className={ 'match' + (!allMatch ? ' ambiguous' : '' ) }>
-                                        { uw.toString() }
-                                    </span>
+                                        { uw.toString() } </span>
                                 }
                                 else {
                                     return <span key={ index }>{ uw.toString() }</span>

@@ -22,9 +22,10 @@ import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 
-import { CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
+import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 
 import UnknownFact from './UnknownFact'
+import StudyWord from './StudyWord'
 import UnknownFactComponent from './UnknownFactComponent'
 import FrontendExposures from './FrontendExposures'
 
@@ -136,7 +137,7 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
-    explainWord(word: Word, phrase: Phrase, somethingIsUnknown?: boolean) {
+    explainWord(word: StudyWord, somethingIsUnknown?: boolean) {
         let known: UnknownFact[] = [], 
             unknown: UnknownFact[] = []
 
@@ -145,29 +146,16 @@ export default class StudyComponent extends Component<Props, State> {
                 known :
                 unknown).push(fact)
 
-        // if we are looking for a phrase it's ok to give the main component words as a hint and 
-        // the description of the phrase, but nothing more (particularly not any cases or prepositions)
-        if (phrase && phrase.getId() == this.props.fact.getId()) { 
-            this.unknownFactsFromWord(word).
-                filter((word) => {
-                    let fact = word.fact
-                    
-                    if (fact instanceof InflectableWord) {
-                        let pos = fact.inflection.pos
-                        
-                        return pos == 'v' || pos == 'adj' || pos == 'n'
-                    }
-                }).
-                forEach(addFact)
+        let facts
+        
+        if (this.isStudiedForm(word)) {
+            facts = word.getHintFacts()
         }
         else {
-            this.unknownFactsFromWord(word).forEach(addFact)
+            facts = word.facts
         }
 
-
-        if (phrase) {
-            addFact({ fact: phrase, word: word })
-        }
+        facts.forEach(addFact)
 
         if (!unknown.length && somethingIsUnknown) {
             unknown = known
@@ -192,35 +180,26 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    unknownFactsFromWord(word: Word): UnknownFact[] {
-        let facts: Fact[] = []
-
-        word.visitFacts((fact: Fact) => facts.push(fact))
-
-        facts = facts.filter((fact) =>
-            !(fact instanceof InflectionFact) || 
-            (fact.form != fact.inflection.defaultForm))
-
-        return facts.map((fact) => { 
-            return {
-                fact: fact,
-                word: word
+    iWasWrong(words: StudyWord[]) {
+        words.forEach((word: StudyWord) => {
+            if (this.isStudiedForm(word)) {
+                this.explainWord(word, true)
             }
         })
-    }
-
-    iWasWrong(studiedWord, phrase: Phrase) {
-        this.explainWord(studiedWord, phrase, true)
 
         this.setState({ stage: Stage.CONFIRM })
     }
 
-    iWasRight(studiedWord, phrase: Phrase) {
-        let facts = this.unknownFactsFromWord(studiedWord)
+    iWasRight(words: StudyWord[]) {
+        let facts = []
 
-        if (phrase) {
-            facts = facts.concat({ fact: phrase, word: studiedWord } )
-        }
+        words.forEach((word: StudyWord) => {
+            if (this.isStudiedForm(word)) {
+                word.facts.forEach((fact) => 
+                    facts.push({ word: word, fact: fact }) 
+                )
+            }
+        })
 
         this.next(...facts)
     }
@@ -297,23 +276,71 @@ export default class StudyComponent extends Component<Props, State> {
         }
     }
 
-    render() {
-        let studiedWord: Word
-        let studiedIndex: number
+    wordToStudyWord(word: Word): StudyWord {
+        let facts = []
 
+        word.visitFacts((fact: Fact) => {
+            facts.push(fact)
+        })
+
+        let getHint = () => {
+            let formHint = this.getFormHint() 
+            let wordHint
+
+            if (this.props.fact.getId() != word.getId()) {
+                wordHint = word.getEnglish()
+            }
+            else {
+                wordHint = (word as InflectedWord).getDefaultInflection().jp 
+            }
+
+            return wordHint + 
+                (formHint ? ', ' + formHint : '')
+        }
+
+        return {
+            id: word.getId(),
+            jp: word.jp,
+            getHint: getHint,
+            getExplanation: getHint,
+            form: (word instanceof InflectedWord ? FORMS[word.form] : null),
+            getHintFacts: () => facts,
+            facts: facts,
+            wordFact: word
+        }
+    }
+
+    toStudyWords(sentence: Sentence): StudyWord[] {
+        let words = sentence.words.map((word) => this.wordToStudyWord(word))
+
+        sentence.phrases.forEach((phrase) => {
+            let matchIndexes = phrase.match(sentence.words, this.props.corpus.facts)
+
+            matchIndexes.forEach((index) => {
+                words[index].facts.push({
+                    fact: phrase,
+                    word: words[index] 
+                })
+            })
+        })
+
+        if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
+            words.push(this.wordToStudyWord(this.props.corpus.words.get('.')))
+        }
+
+        return words
+    }
+
+    render() {
         let reveal = this.state.stage !== Stage.TEST
         let capitalize = true
         let sentence = this.props.sentence
 
-        let words = sentence.words.slice(0)
+        let words = this.toStudyWords(sentence)
         let corpus = this.props.corpus
 
-        if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
-            words.push(this.props.corpus.words.get('.'))
-        }
-
         interface WordGroup {
-            words: Word[],
+            words: StudyWord[],
             startIndex: number
         }
 
@@ -327,13 +354,6 @@ export default class StudyComponent extends Component<Props, State> {
                 groupedWords[groupedWords.length-1].words.push(word)
             }
         })
-
-        let phraseForWord = (wordIndex) => 
-            sentence.phrases.find((phrase) => {
-                let matchIndexes = phrase.match(words, corpus.facts)
-
-                return matchIndexes && matchIndexes.indexOf(wordIndex) >= 0
-            })
 
         return <div className='study'>
                 <div className='sentenceId'>
@@ -366,11 +386,11 @@ export default class StudyComponent extends Component<Props, State> {
                     groupedWords.map((group, index) => {
                         return <div className='group' key={ index }>
                         {
-                            group.words.map((word: Word, index) => {
+                            group.words.map((word: StudyWord, index) => {
                                 let explain = () => {
-                                    this.explainWord(word, phraseForWord(index + group.startIndex))
+                                    this.explainWord(word)
 
-                                    if (word === studiedWord && this.state.stage == Stage.REVEAL) {
+                                    if (this.isStudiedForm(word) && this.state.stage == Stage.REVEAL) {
                                         this.setState({ stage: Stage.CONFIRM })
                                     }
                                 }
@@ -381,25 +401,8 @@ export default class StudyComponent extends Component<Props, State> {
                                 let formHint
 
                                 if (this.isStudiedForm(word)) {
-                                    studiedWord = word
-                                    studiedIndex = index + group.startIndex
-
-                                    if (this.props.fact instanceof InflectionFact) {
-                                        if (!reveal) {
-                                            formHint = this.getFormHint() 
-                                        }
-
-                                        if (!reveal) {
-                                            text = (word as InflectedWord).getDefaultInflection().jp 
-                                        }
-                                    }
-                                    else if (!reveal) {
-                                        formHint = this.getFormHint() 
-
-                                        formHint = studiedWord.getEnglish() + 
-                                            (formHint ? ', ' + formHint : '')
-
-                                        text = ''
+                                    if (!reveal) {
+                                        text = word.getHint()
                                     }
 
                                     if (reveal) {
@@ -442,8 +445,8 @@ export default class StudyComponent extends Component<Props, State> {
                     (this.state.stage == Stage.REVEAL ?
 
                         <div className='buttonBar'>
-                            <div className='button' onClick={ () => this.iWasRight(studiedWord, phraseForWord(studiedIndex)) }>I was right</div>
-                            <div className='button' onClick={ () => this.iWasWrong(studiedWord, phraseForWord(studiedIndex)) }>I was wrong</div>
+                            <div className='button' onClick={ () => this.iWasRight(words) }>I was right</div>
+                            <div className='button' onClick={ () => this.iWasWrong(words) }>I was wrong</div>
                         </div>
 
                     :
@@ -528,6 +531,6 @@ function excludeFact(exclude: UnknownFact, array: UnknownFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
 }
 
-function isWordWithSpaceBefore(word: Word) {
+function isWordWithSpaceBefore(word: StudyWord) {
     return (word.jp.length > 1 || Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) < 0)
 }
