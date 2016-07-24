@@ -31,7 +31,7 @@ export enum Tense {
 }
 
 export enum GrammaticalCase {
-    NOM, GEN, DAT, ACC, INSTR, PREP
+    NOM, GEN, DAT, ACC, INSTR, PREP, LOC
 }
 
 export enum Person {
@@ -54,6 +54,10 @@ export enum AdjectiveForm {
     NORMAL, SHORT
 }
 
+export enum PartOfSpeech {
+    ADVERB
+}
+
 interface FormComponents {
     gender?: Gender, 
     tense?: Tense, 
@@ -62,7 +66,8 @@ interface FormComponents {
     number?: Number, 
     person?: Person, 
     comparison?: Comparison,
-    adjectiveForm?: AdjectiveForm
+    adjectiveForm?: AdjectiveForm,
+    pos?: PartOfSpeech
 }
 
 export class InflectionForm {
@@ -74,6 +79,7 @@ export class InflectionForm {
     person: Person
     comparison: Comparison
     adjectiveForm: AdjectiveForm
+    pos: PartOfSpeech
 
     constructor(public id: string, public name: string, used: FormComponents) {
         this.id = id
@@ -86,7 +92,7 @@ export class InflectionForm {
         this.person = used.person
         this.comparison = used.comparison
         this.adjectiveForm = used.adjectiveForm
-
+        this.pos = used.pos
     }
 
 }
@@ -125,6 +131,7 @@ addForm('m', 'masculine', { gender: Gender.M })
 addForm('f', 'feminine', { gender: Gender.F })
 addForm('n', 'neuter', { gender: Gender.N })
 addForm('pl', 'plural', { number: Number.PLURAL })
+addForm('fpl', 'feminine plural', { number: Number.PLURAL, gender: Gender.F })
 
 addForm('nom', 'nominative', { grammaticalCase: GrammaticalCase.NOM, number: Number.SINGULAR })
 addForm('gen', 'genitive', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR })
@@ -132,6 +139,8 @@ addForm('dat', 'dative', { grammaticalCase: GrammaticalCase.DAT, number: Number.
 addForm('acc', 'accusative', { grammaticalCase: GrammaticalCase.ACC, number: Number.SINGULAR })
 addForm('instr', 'instrumental', { grammaticalCase: GrammaticalCase.INSTR, number: Number.SINGULAR })
 addForm('prep', 'prepositional', { grammaticalCase: GrammaticalCase.PREP, number: Number.SINGULAR })
+addForm('loc', 'locative', { grammaticalCase: GrammaticalCase.LOC, number: Number.SINGULAR })
+addForm('locpl', 'locative plural', { grammaticalCase: GrammaticalCase.LOC, number: Number.PLURAL })
 
 addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
 addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })
@@ -156,8 +165,10 @@ addForm('pl', 'nominative plural', { grammaticalCase: GrammaticalCase.NOM, numbe
 addForm('genpl', 'genitive plural', { grammaticalCase: GrammaticalCase.GEN, number: Number.PLURAL })
 addForm('datpl', 'dative plural', { grammaticalCase: GrammaticalCase.DAT, number: Number.PLURAL })
 addForm('accpl', 'accusative plural', { grammaticalCase: GrammaticalCase.ACC, number: Number.PLURAL })
-addForm('accanpl', 'accusative masculine animate plural', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.ANIMATE, number: Number.PLURAL })
-addForm('accinanpl', 'accusative masculine inanimate plural', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.M, animate: Animateness.INANIMATE, number: Number.PLURAL })
+addForm('accanpl', 'accusative animate plural', { grammaticalCase: GrammaticalCase.ACC, animate: Animateness.ANIMATE, number: Number.PLURAL })
+addForm('accinanpl', 'accusative inanimate plural', { grammaticalCase: GrammaticalCase.ACC, animate: Animateness.INANIMATE, number: Number.PLURAL })
+addForm('accinanfpl', 'accusative femininate inanimate plural', { grammaticalCase: GrammaticalCase.ACC, gender: Gender.F, animate: Animateness.INANIMATE, number: Number.PLURAL })
+
 addForm('instrpl', 'instrumental plural', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
 addForm('preppl', 'prepositional plural', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
 
@@ -173,7 +184,7 @@ addForm('accalt', 'accusative plural alternative form', { grammaticalCase: Gramm
 addForm('instralt', 'instrumental plural alternative form', { grammaticalCase: GrammaticalCase.INSTR, number: Number.PLURAL })
 addForm('prepalt', 'prepositional plural alternative form', { grammaticalCase: GrammaticalCase.PREP, number: Number.PLURAL })
 
-addForm('adv', 'adverb', {})
+addForm('adv', 'adverb', { pos: PartOfSpeech.ADVERB })
 addForm('comp', 'comparative', { comparison: Comparison.COMPARATIVE })
 
 addForm('shortf', 'short form feminine', { gender: Gender.F, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
@@ -223,23 +234,24 @@ export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
             ]),
         n: new Forms(
             [ 'singular', 'plural' ], 
-            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
-            [        
+            [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep', 'loc' ],
+            [
                 ['nom','pl'],
                 ['gen','genpl'],
                 ['dat','datpl'],
                 ['acc','accpl'],
                 ['instr','instrpl'],
-                ['prep','preppl']
+                ['prep','preppl'],
+                ['loc', 'locpl']
             ]),
         num: new Forms(
             [ 'm sg', 'n sg', 'f sg', 'plural' ],
             [ 'nom', 'gen', 'dat', 'acc', 'instr', 'prep' ],
             [
-                ['m','n','f','pl'],
+                ['m','n','f', [ 'pl', 'fpl' ]],
                 ['genm','genn','genf','genpl'],
                 ['datm','datn','datf','datpl'],
-                [ [ 'accinanm', 'accanm' ],'accn','accf', [ 'accinanpl', 'accanpl' ]],
+                [ [ 'accinanm', 'accanm' ], 'accn', 'accf', [ 'accinanpl', 'accinanfpl', 'accanpl' ]],
                 ['instrm','instrn','instrf','instrpl'],
                 ['prepm','prepn','prepf','preppl'],
             ]),
@@ -263,7 +275,7 @@ export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
                 [ [ 'acc', 'accalt'], [ 'accpl', 'accplalt' ]],
                 [ [ 'instr', 'instralt'], [ 'instrpl', 'instrplalt' ]],
                 [ [ 'prep', 'prepalt'], [ 'preppl', 'prepplalt' ]]
-            ]),
+            ])
     }
 }
 

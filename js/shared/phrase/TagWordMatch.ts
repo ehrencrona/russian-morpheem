@@ -35,6 +35,7 @@ export default class TagWordMatch implements WordMatch {
                         (this.form.number && this.form.number != wordForm.number) ||
                         (this.form.adjectiveForm && this.form.adjectiveForm != wordForm.adjectiveForm) ||
                         (this.form.comparison && this.form.comparison != wordForm.comparison) ||
+                        (this.form.pos && this.form.pos != wordForm.pos) ||
                         (this.form.tense && this.form.tense != wordForm.tense)) {
                         return i - wordPosition 
                     }

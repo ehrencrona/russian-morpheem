@@ -35,7 +35,6 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
         if (word instanceof InflectedWord) {
             if (this.posName &&
                 word.word.inflection.pos != this.posName) {
-console.log('wrong pos' + this.pos + word.word.inflection.pos)
                 return false
             }
 
@@ -50,12 +49,8 @@ console.log('wrong pos' + this.pos + word.word.inflection.pos)
                     (form.number && form.number != wordForm.number) ||
                     (form.adjectiveForm && form.adjectiveForm != wordForm.adjectiveForm) ||
                     (form.comparison && form.comparison != wordForm.comparison) ||
+                    (form.pos && form.pos != wordForm.pos) ||
                     (form.tense && form.tense != wordForm.tense))
-
-if (!res) {
-    console.log('wrong form'+word.form)
-}
-
                 return res
             }
             else {
