@@ -127,6 +127,8 @@ addForm('impr', 'imperative', { number: Number.SINGULAR })
 addForm('imprpl', 'imperative plural', { number: Number.PLURAL })
 addForm('inf', 'infinitive', {})
 
+addForm('past', 'past', { tense: Tense.PAST })
+
 addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR })
 addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR })
 addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR })
