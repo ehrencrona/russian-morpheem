@@ -13,8 +13,6 @@ import { FactComponentProps } from './UnknownFactComponent'
 let React = { createElement: createElement }
 
 let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
-    console.log('phrase fact')
-    
     let words = props.fact.match(props.sentence.words, props.corpus.facts)
         .map((index) => props.sentence.words[index])
         .map((word) => word.jp).join(' ')
