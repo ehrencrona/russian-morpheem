@@ -50,6 +50,8 @@ export default class Facts {
         this.factsById = facts.factsById
         this.facts = facts.facts
         this.factIndexById = facts.factIndexById
+        this.factIdsByTag = facts.factIdsByTag
+        this.tagsByFactIds = facts.tagsByFactIds
     }
 
     get(id) {

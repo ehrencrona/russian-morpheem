@@ -98,7 +98,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 		  
          factScores = [ { 		
              fact: this.props.corpus.facts.get('at-instr'),		
-             score: 1		
+             score: 1
          } ]
 
         let sentenceScores = sentencesForFacts(factScores, this.sentencesByFactIndex)

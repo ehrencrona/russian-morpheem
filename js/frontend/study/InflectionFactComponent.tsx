@@ -42,7 +42,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                 desc = <div>You are looking for the <strong>{ studyWord.form }</strong></div>
             }
             else {
-                desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong></div>
+                desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form.name }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong></div>
             }
     
             return <div>

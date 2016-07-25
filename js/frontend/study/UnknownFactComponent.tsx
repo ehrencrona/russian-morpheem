@@ -90,7 +90,9 @@ let unknownFactComponent = (props: Props) => {
                     knowledge: props.knowledge,
                     sentence: props.sentence,
                     hiddenFact: props.hiddenFact,
-                    unknownFact: props.unknownFact }, []) }  
+                    unknownFact: props.unknownFact, 
+                    ref: (comp) => explainable = comp
+                }, []) }  
             </div>
 
             <div className='buttonBar'>

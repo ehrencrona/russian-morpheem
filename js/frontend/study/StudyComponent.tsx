@@ -69,18 +69,12 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    isStudiedForm(word) {
+    isStudiedForm(word: StudyWord) {
         let fact = this.props.fact
 
         let result = false
 
-        word.visitFacts((otherFact: Fact) => {
-            if (fact.getId() == otherFact.getId()) {
-                result = true
-            }
-        })
-
-        return result
+        return word.facts.find((f) => f.fact.getId() == fact.getId()) 
     }
 
     reveal() {
@@ -204,7 +198,7 @@ export default class StudyComponent extends Component<Props, State> {
         this.next(...facts)
     }
 
-    getFormHint() {
+    getFormHint(words: StudyWord[]): string {
         let fact = this.props.fact
 
         if (fact instanceof InflectionFact || fact instanceof InflectedWord) {
@@ -225,15 +219,10 @@ export default class StudyComponent extends Component<Props, State> {
             // we will need to know the gender of nouns for this to work, we don't yet.
             let genderHintNeeded = false
 
-            this.props.sentence.words.forEach((word) => {
+            words.forEach((word) => {
 
-                if (word instanceof InflectedWord && !this.isStudiedForm(word)) {
-                    let form = FORMS[word.form]
-
-                    if (!form) {
-                        console.warn(`Unknown form ${word.form}.`)
-                        return
-                    }
+                if (word.form) {
+                    let form = word.form
 
                     if (tenseHintNeeded && form.tense && form.tense == targetTense) {
                         tenseHintNeeded = false
@@ -276,15 +265,11 @@ export default class StudyComponent extends Component<Props, State> {
         }
     }
 
-    wordToStudyWord(word: Word): StudyWord {
-        let facts = []
-
-        word.visitFacts((fact: Fact) => {
-            facts.push(fact)
-        })
+    wordToStudyWord(word: Word, words: StudyWord[]): StudyWord {
+        let facts: UnknownFact[] = []
 
         let getHint = () => {
-            let formHint = this.getFormHint() 
+            let formHint = this.getFormHint(words) 
             let wordHint
 
             if (this.props.fact.getId() != word.getId()) {
@@ -298,7 +283,7 @@ export default class StudyComponent extends Component<Props, State> {
                 (formHint ? ', ' + formHint : '')
         }
 
-        return {
+        let result = {
             id: word.getId(),
             jp: word.jp,
             getHint: getHint,
@@ -308,13 +293,26 @@ export default class StudyComponent extends Component<Props, State> {
             facts: facts,
             wordFact: word
         }
+
+        word.visitFacts((fact: Fact) => {
+            facts.push({ fact: fact, word: result })
+        })
+
+        return result
     }
 
     toStudyWords(sentence: Sentence): StudyWord[] {
-        let words = sentence.words.map((word) => this.wordToStudyWord(word))
+        let words: StudyWord[] = []
+        
+        sentence.words.forEach((word) => words.push(this.wordToStudyWord(word, words)))
 
         sentence.phrases.forEach((phrase) => {
             let matchIndexes = phrase.match(sentence.words, this.props.corpus.facts)
+
+            if (!matchIndexes) {
+                console.warn(phrase + ' does not match ' + sentence + '.')
+                return
+            }
 
             matchIndexes.forEach((index) => {
                 words[index].facts.push({
@@ -325,7 +323,7 @@ export default class StudyComponent extends Component<Props, State> {
         })
 
         if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
-            words.push(this.wordToStudyWord(this.props.corpus.words.get('.')))
+            words.push(this.wordToStudyWord(this.props.corpus.words.get('.'), words))
         }
 
         return words
