@@ -2,6 +2,7 @@
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import PhraseMatch from './PhraseMatch'
+import { CaseStudy } from './PhraseMatch'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Word from '../Word'
@@ -10,6 +11,11 @@ export interface JsonFormat {
     id: string,
     patterns: string[],
     description: string,
+    en: string
+}
+
+interface EnglishBlock {
+    placeholder: boolean,
     en: string
 }
 
@@ -29,9 +35,9 @@ export default class Phrase implements Fact {
                 PhraseMatch.fromString(str.trim(), words, inflections)))
     }
 
-    match(words: Word[], facts: Facts): number[] {
+    match(words: Word[], facts: Facts, study?: CaseStudy): number[] {
         for (let i = 0; i < this.patterns.length; i++) {
-            let match = this.patterns[i].match(words, facts)
+            let match = this.patterns[i].match(words, facts, study)
 
             if (match) {
                 return match
@@ -58,6 +64,31 @@ export default class Phrase implements Fact {
             patterns: this.patterns.map((p) => p.toString()),
             en: this.en
         }
+    }
+
+    getEnglishBlocks(): EnglishBlock[] {
+
+        let split = this.en.match(/(\[[^\]]+\]|[^\[]+)/g)
+
+        return split.map((str) => {
+
+            str = str.trim()
+
+            let en = str
+
+            let placeholder = str[0] == '['
+
+            if (placeholder) {
+                en = str.substr(1, str.length-2)
+            }
+
+            return {
+                placeholder: placeholder,
+                en: en 
+            }
+
+        })
+
     }
 
     static fromJson(json: JsonFormat, words: Words, inflections: Inflections): Phrase {

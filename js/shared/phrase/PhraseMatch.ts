@@ -13,12 +13,20 @@ import Word from '../Word'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 
+export enum CaseStudy {
+    STUDY_CASE, STUDY_WORDS, STUDY_BOTH
+}
+
 export default class PhraseMatch {
     constructor(public wordMatches: WordMatch[]) {
         this.wordMatches = wordMatches
     }
 
-    match(words: Word[], facts: Facts): number[] {
+    match(words: Word[], facts: Facts, caseStudy?: CaseStudy): number[] {
+        if (!caseStudy) {
+            caseStudy = CaseStudy.STUDY_BOTH
+        }
+
         for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
             let at = i
             let found = true
@@ -34,7 +42,9 @@ export default class PhraseMatch {
                     break
                 }
 
-                if (!(wordMatch instanceof WildcardMatch)) {
+                if (!(wordMatch instanceof WildcardMatch) &&
+                    (caseStudy == CaseStudy.STUDY_BOTH || 
+                     wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
                     for (let i = 0; i < match; i++) {
                         result.push(at+i)
                     }

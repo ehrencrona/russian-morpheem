@@ -53,6 +53,10 @@ export default class TagWordMatch implements WordMatch {
         return words.length - wordPosition
     }
 
+    isCaseStudy() {
+        return !!(this.form && (this.form.grammaticalCase || this.form.comparison))
+    }
+
     allowEmptyMatch() {
         return false
     }

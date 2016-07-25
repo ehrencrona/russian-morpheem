@@ -10,7 +10,6 @@ import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Transforms from '../shared/Transforms'
 
 import Facts from '../shared/fact/Facts'
-import Corpus from '../shared/Corpus'
 import Phrase from '../shared/phrase/Phrase'
 import Phrases from '../shared/phrase/Phrases'
 

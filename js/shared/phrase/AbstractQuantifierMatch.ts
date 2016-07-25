@@ -30,6 +30,8 @@ abstract class AbstractQuantifierMatch implements WordMatch {
 
     abstract wordMatches(word: Word)
     
+    abstract isCaseStudy()
+
     matches(words: Word[], wordPosition: number): number {
         let getMatchCount = () => {
             let stopBefore = Math.min(words.length, wordPosition + this.range[1])

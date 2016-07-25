@@ -9,7 +9,6 @@ interface StudyWord {
     id: string
     jp: string
     getHint(): string
-    getExplanation(): string
     form: InflectionForm
     getHintFacts(): UnknownFact[]
     facts: UnknownFact[]

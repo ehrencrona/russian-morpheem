@@ -59,6 +59,10 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
         }
     }
 
+    isCaseStudy() {
+        return !!(this.form && (this.form.grammaticalCase || this.form.comparison))
+    }
+
     toString() {
         if (this.pos && !this.form && this.quantifier == EXACT_MATCH_QUANTIFIER) {
             return this.pos

@@ -9,6 +9,9 @@ interface WordMatch {
         matchPosition: number, facts: Facts): number
 
     allowEmptyMatch(): boolean
+
+    isCaseStudy(): boolean
+
 }
 
 export default WordMatch

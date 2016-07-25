@@ -6,7 +6,6 @@ import Inflection from '../shared/inflection/Inflection'
 import Inflections from '../shared/inflection/Inflections'
 import Word from '../shared/Word'
 import Words from '../shared/Words'
-import Corpus from '../shared/Corpus'
 import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
 import InflectableWord from '../shared/InflectableWord'
@@ -21,7 +20,7 @@ let inflections = new Inflections([
 ])
 
 describe('Phrase', function() {
-    let w1, w2: Word, w3: InflectableWord, words: Words, facts: Facts, corpus: Corpus
+    let w1, w2: Word, w3: InflectableWord, words: Words, facts: Facts
     
     w1 = new Word('в', 'loc')
     w2 = new Word('в', 'dir')

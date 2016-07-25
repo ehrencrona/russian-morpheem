@@ -6,7 +6,6 @@ import Inflection from '../shared/inflection/Inflection';
 
 import Facts from '../shared/fact/Facts';
 import Words from '../shared/Words';
-import Corpus from '../shared/Corpus';
 import Sentences from '../shared/Sentences';
 import Word from '../shared/Word';
 import Phrase from '../shared/phrase/Phrase';

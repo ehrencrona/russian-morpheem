@@ -34,6 +34,10 @@ export class ExactWordMatch implements WordMatch {
         return false
     }
 
+    isCaseStudy() {
+        return false
+    }
+
     toString() {
         let result = this.word.getId()
         
