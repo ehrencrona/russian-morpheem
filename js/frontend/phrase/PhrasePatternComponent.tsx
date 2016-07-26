@@ -13,9 +13,10 @@ import { MISSING_INDEX } from '../../shared/fact/Facts'
 import { Component, createElement } from 'react';
 
 interface Props {
-    corpus: Corpus,
-    phrase: Phrase,
+    corpus: Corpus
+    phrase: Phrase
     onChange: () => void
+    onChangeEnglish: () => void
 }
 
 interface State {
@@ -37,6 +38,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
 
     changeEnglish(english: string) {
         this.props.corpus.phrases.setEnglish(this.props.phrase, english)
+
+        this.props.onChangeEnglish()
     }
 
     changePattern(newPattern: string) {

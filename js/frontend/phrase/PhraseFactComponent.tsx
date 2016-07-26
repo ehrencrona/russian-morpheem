@@ -55,7 +55,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
             tab = <div>
                 <PhraseStudyWordsComponent 
                     phrase={ this.props.fact } 
-                    corpus={ this.props.corpus } 
+                    corpus={ this.props.corpus }
+                    ref='studyWords' 
                     />
 
                 <h3>Sentences</h3>
@@ -108,7 +109,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
             <PhrasePatternComponent 
                 phrase={ this.props.fact } 
                 corpus={ this.props.corpus } 
-                onChange={ () => { this.forceUpdate() } } />
+                onChange={ () => { this.forceUpdate() } } 
+                onChangeEnglish={ () => { (this.refs['studyWords'] as PhraseStudyWordsComponent).forceUpdate() } } />
         
             { tab }
         </div>)

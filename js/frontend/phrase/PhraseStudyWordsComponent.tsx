@@ -27,14 +27,20 @@ let React = { createElement: createElement }
 export default class PhraseStudyWordsComponent extends Component<Props, State> {
     render() {
         let phrase = this.props.phrase
-
-        let exampleSentence: Sentence
-
         let words: StudyWord[] = []
+        let sentence: Sentence
 
-        let sentence = this.props.corpus.sentences.sentences.find((sentence) => {
-            return phrase.patterns[0].match(sentence.words, this.props.corpus.facts) != null 
-        })
+        if (phrase.patterns.length) {
+            sentence = this.props.corpus.sentences.sentences.find((sentence) => {
+                return !!sentence.phrases.find((p) => p.getId() == phrase.getId())
+            })
+
+            if (!sentence) {
+                sentence = this.props.corpus.sentences.sentences.find((sentence) => {
+                    return phrase.patterns[0].match(sentence.words, this.props.corpus.facts) != null 
+                })
+            }
+        }
 
         let error: string 
 
@@ -44,7 +50,7 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         else {
             error = 'No matching sentence.'
         }
-console.log('study words', words)
+
         return <div className='phraseStudyWords'>
             <h3>Example</h3>
             {
