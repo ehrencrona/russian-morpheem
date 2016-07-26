@@ -18,7 +18,7 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
     posName: string 
 
     constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
-        super((!quantifier && !pos ? ANY_MATCH_QUANTIFIER : quantifier))
+        super((!quantifier && pos ? ANY_MATCH_QUANTIFIER : quantifier))
 
         this.form = form
         this.formStr = formStr
