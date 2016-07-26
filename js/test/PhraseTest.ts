@@ -16,15 +16,20 @@ import { expect } from 'chai';
 
 let inflections = new Inflections([
     new Inflection('infl', 'nom', 'n', 
-        parseEndings('nom а, prep е', 'ru', 'n').endings)
+        parseEndings('nom а, prep е', 'ru', 'n').endings),
+    new Inflection('adj', 'm', 'adj', 
+        parseEndings('m ий, adv о', 'ru', 'adj').endings)
 ])
 
 describe('Phrase', function() {
-    let w1, w2: Word, w3: InflectableWord, words: Words, facts: Facts
+    let w1, w2: Word, w3, w4, w5: InflectableWord, words: Words, facts: Facts
     
     w1 = new Word('в', 'loc')
     w2 = new Word('в', 'dir')
     w3 = new InflectableWord('библиотек', inflections.inflections[0])
+
+    w4 = new InflectableWord('я', inflections.inflections[0])
+    w5 = new InflectableWord('хорош', inflections.inflections[1])
     
     words = new Words()
     words.addWord(w1)
@@ -32,8 +37,12 @@ describe('Phrase', function() {
     words.addInflectableWord(w3)
 
     facts = new Facts()
+    facts.add(w2)
     facts.add(w3)
+    facts.add(w4)
+    facts.add(w5)
 
+    facts.tag(w4, 'animate')
     facts.tag(w3, 'location')
 
     it('converts to str and back', function () {
@@ -46,6 +55,22 @@ describe('Phrase', function() {
         testStr('в[loc]@ библиотека@prep')
         testStr('в[dir]@ prep')
         testStr('в[loc]@ tag:location')
+    })
+
+    it('respects quantifiers', function () {
+        let shouldMatch = [
+            w4.inflect('nom'), w5.inflect('adv')
+        ]
+
+        let shouldNotMatch = [
+            w4.inflect('nom'), w3
+        ]
+
+        let phrase = Phrase.fromString('foo', 'tag:animate adjective@adv+', words, inflections)
+
+        expect(phrase.match(shouldMatch, facts).length).to.equal(2)
+
+        expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
     })
 
     it('matches', function () {

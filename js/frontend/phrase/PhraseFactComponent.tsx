@@ -10,7 +10,8 @@ import TagButton from '../TagButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
-import MatchingSentencesComponent from './MatchingSentencesComponent'
+import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
+import PhraseSentencesComponent from './PhraseSentencesComponent'
 import isConflictFunction from './isConflict'
 
 import Sentence from '../../shared/Sentence'
@@ -51,24 +52,33 @@ export default class PhraseFactComponent extends Component<Props, State> {
         let tab;    
 
         if (this.state.tab == 'sentences') {
-            tab = <MatchingSentencesComponent 
-                corpus={ this.props.corpus }
-                match={ fact.patterns[0] }
-                tab={ this.props.tab }
-                filter={ (sentence) => !!sentence.hasPhrase(fact) }
-                isConflict={ isConflictFunction(this.props.fact, this.props.corpus.facts) }
-                includeConflicts={ true }
-                noMatchIsConflict={ true }
-                ref='sentences'
-                buttonFactory={ (sentence) => 
-                    <div className='button' onClick={ 
-                        () => { 
-                            this.props.corpus.sentences.removePhrase(fact, sentence);
+            tab = <div>
+                <PhraseStudyWordsComponent 
+                    phrase={ this.props.fact } 
+                    corpus={ this.props.corpus } 
+                    />
 
-                            (this.refs['sentences'] as Component<any, any>).forceUpdate() 
-                    } } >Remove</div>
-                }
-            />
+                <h3>Sentences</h3>
+
+                <PhraseSentencesComponent 
+                    corpus={ this.props.corpus }
+                    match={ fact.patterns[0] }
+                    tab={ this.props.tab }
+                    filter={ (sentence) => !!sentence.hasPhrase(fact) }
+                    isConflict={ isConflictFunction(this.props.fact, this.props.corpus.facts) }
+                    includeConflicts={ true }
+                    noMatchIsConflict={ true }
+                    ref='sentences'
+                    buttonFactory={ (sentence) => 
+                        <div className='button' onClick={ 
+                            () => { 
+                                this.props.corpus.sentences.removePhrase(fact, sentence);
+
+                                (this.refs['sentences'] as Component<any, any>).forceUpdate() 
+                        } } >Remove</div>
+                    }
+                />
+            </div>
         }
         else {
             tab = <AddSentenceToPhraseComponent 
@@ -92,6 +102,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
+
+            <h3>Pattern</h3>
 
             <PhrasePatternComponent 
                 phrase={ this.props.fact } 

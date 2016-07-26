@@ -124,7 +124,7 @@ function parseLine(line, words: Words, phrases: Phrases, lineNumber: number, sen
             let phrase = phrases.get(value)
 
             if (!phrase) {
-                throw new Error(`Required phrase "${phrase}", referenced on line ${line}, was not found."`)
+                throw new Error(`Phrase "${value}", referenced on line ${line}, was not found."`)
             }
 
             sentence.addPhrase(phrase)

@@ -54,7 +54,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
         else {
             return <div className='match'>{
-                match.map((wordIndex) => words[wordIndex].jp).join(' ')
+                match.map((wordIndex) => words[wordIndex.index].jp).join(' ')
             }</div>
         }
     }

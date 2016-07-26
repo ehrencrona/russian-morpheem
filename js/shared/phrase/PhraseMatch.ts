@@ -17,20 +17,28 @@ export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
 }
 
+export type Match = WordMatched[]
+
+export interface WordMatched {
+    wordMatch: WordMatch
+    word: Word
+    index: number    
+}
+
 export default class PhraseMatch {
     constructor(public wordMatches: WordMatch[]) {
         this.wordMatches = wordMatches
     }
 
-    match(words: Word[], facts: Facts, caseStudy?: CaseStudy): number[] {
-        if (!caseStudy) {
+    match(words: Word[], facts: Facts, caseStudy?: CaseStudy): Match {
+        if (caseStudy == null) {
             caseStudy = CaseStudy.STUDY_BOTH
         }
 
         for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
             let at = i
             let found = true
-            let result: number[] = []
+            let result: Match = []
 
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
@@ -46,7 +54,11 @@ export default class PhraseMatch {
                     (caseStudy == CaseStudy.STUDY_BOTH || 
                      wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
                     for (let i = 0; i < match; i++) {
-                        result.push(at+i)
+                        result.push({
+                            index: at+i,
+                            word: words[at+i],
+                            wordMatch: wordMatch
+                        })
                     }
                 }
 
@@ -101,7 +113,6 @@ export default class PhraseMatch {
             }
 
             let match: WordMatch
-
 
             if (str.indexOf('@') == 0 || (str.indexOf('@') > 0 && POS_NAMES[str.substr(0, str.indexOf('@'))])) {
                 match = this.parseFormMatch(str, line)

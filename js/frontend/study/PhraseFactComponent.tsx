@@ -14,15 +14,30 @@ let React = { createElement: createElement }
 
 let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
     let words = props.fact.match(props.sentence.words, props.corpus.facts)
-        .map((index) => props.sentence.words[index])
+        .map((m) => props.sentence.words[m.index])
         .map((word) => word.jp).join(' ')
+
+    let phrase: Phrase = props.fact
+
+    let blocks = phrase.getEnglishBlocks()
+
+    let match = phrase.match(props.sentence.words, props.corpus.facts)
+
+    let explanation
+    
+    if (match) {
+        explanation = blocks.map((b) => b.enWithJpForCases(match)).join(' ') 
+    }
+    else {
+        explanation = phrase.en
+
+        console.error(phrase.id + ' did not match ' + props.sentence)
+    }
 
     return <div><strong>
             { words }
-        </strong> is an example of <strong>
-            { props.fact.description }
-        </strong> meaning <strong>
-            { props.fact.en }
+        </strong> means <strong>
+            { explanation }
         </strong>
     </div>
 }

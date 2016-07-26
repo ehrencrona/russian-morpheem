@@ -30,13 +30,13 @@ export default class TagWordMatch implements WordMatch {
                 if (word instanceof InflectedWord) {
                     let wordForm = FORMS[word.form]
 
-                    if ((this.form.grammaticalCase && this.form.grammaticalCase != wordForm.grammaticalCase) ||
-                        (this.form.gender && this.form.gender != wordForm.gender) ||
-                        (this.form.number && this.form.number != wordForm.number) ||
-                        (this.form.adjectiveForm && this.form.adjectiveForm != wordForm.adjectiveForm) ||
-                        (this.form.comparison && this.form.comparison != wordForm.comparison) ||
-                        (this.form.pos && this.form.pos != wordForm.pos) ||
-                        (this.form.tense && this.form.tense != wordForm.tense)) {
+                    if ((this.form.grammaticalCase != null && this.form.grammaticalCase != wordForm.grammaticalCase) ||
+                        (this.form.gender != null && this.form.gender != wordForm.gender) ||
+                        (this.form.number != null && this.form.number != wordForm.number) ||
+                        (this.form.adjectiveForm != null && this.form.adjectiveForm != wordForm.adjectiveForm) ||
+                        (this.form.comparison != null && this.form.comparison != wordForm.comparison) ||
+                        (this.form.pos != null && this.form.pos != wordForm.pos) ||
+                        (this.form.tense != null && this.form.tense != wordForm.tense)) {
                         return i - wordPosition 
                     }
                 }

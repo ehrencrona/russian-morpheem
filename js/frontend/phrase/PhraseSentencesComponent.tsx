@@ -39,7 +39,7 @@ interface Match {
     conflict: boolean
 }
 
-export default class MatchingSentencesComponent extends Component<Props, State> {
+export default class PhraseSentencesComponent extends Component<Props, State> {
 
     renderSentence(match: Match) {
         return <div className='main'>
@@ -75,12 +75,12 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
 
     getMatches() {
         let facts = this.props.corpus.facts
-        let match = this.props.match
+        let phraseMatch = this.props.match
         let isConflict = this.props.isConflict 
 
         let matches: Match[] = []
 
-        if (!match) {
+        if (!phraseMatch) {
             return matches
         }
 
@@ -89,9 +89,10 @@ export default class MatchingSentencesComponent extends Component<Props, State> 
                 return
             }
 
-            let wordIndexes = match.match(sentence.words, facts)
+            let match = phraseMatch.match(sentence.words, facts)
 
-            if (wordIndexes && wordIndexes.length) {
+            if (match && match.length) {
+                let wordIndexes = match.map((i) => i.index)
                 let conflict = isConflict && isConflict(sentence, wordIndexes)
 
                 if (!conflict || this.props.includeConflicts) {

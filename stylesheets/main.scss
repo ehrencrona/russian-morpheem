@@ -636,6 +636,19 @@ ul {
     }
 }
 
+.phraseStudyWords {
+    .match {
+        color: darken($color10, 10%);
+        font-weight: bold;
+        text-decoration: inherit;
+    }
+
+    .error {
+        color: $color7;
+        font-weight: bold;
+    }
+}
+
 .phrase {
     .error {
         color: $color7;

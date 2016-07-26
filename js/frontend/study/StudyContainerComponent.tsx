@@ -96,7 +96,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         factScores = topScores(factScores, 20)
 
 factScores = [ { 		
-    fact: this.props.corpus.facts.get('для-чего-то'),		
+    fact: this.props.corpus.facts.get('после-чего-то'),		
     score: 1
 } ]
 

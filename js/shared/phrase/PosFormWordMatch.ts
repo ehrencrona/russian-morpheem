@@ -27,10 +27,6 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
         this.posName = POS_NAMES[pos]
     }
 
-    allowEmptyMatch() {
-        return !!this.pos
-    }
-
     wordMatches(word: Word) {
         if (word instanceof InflectedWord) {
             if (this.posName &&
@@ -44,13 +40,14 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
                 let wordForm = FORMS[word.form]
 
                 let res = !(!wordForm ||
-                    (form.grammaticalCase && form.grammaticalCase != wordForm.grammaticalCase) ||
-                    (form.gender && form.gender != wordForm.gender) ||
-                    (form.number && form.number != wordForm.number) ||
-                    (form.adjectiveForm && form.adjectiveForm != wordForm.adjectiveForm) ||
-                    (form.comparison && form.comparison != wordForm.comparison) ||
-                    (form.pos && form.pos != wordForm.pos) ||
-                    (form.tense && form.tense != wordForm.tense))
+                    (form.grammaticalCase != null && form.grammaticalCase != wordForm.grammaticalCase) ||
+                    (form.gender != null && form.gender != wordForm.gender) ||
+                    (form.number != null && form.number != wordForm.number) ||
+                    (form.adjectiveForm != null && form.adjectiveForm != wordForm.adjectiveForm) ||
+                    (form.comparison != null && form.comparison != wordForm.comparison) ||
+                    (form.pos != null && form.pos != wordForm.pos) ||
+                    (form.tense != null && form.tense != wordForm.tense))
+
                 return res
             }
             else {

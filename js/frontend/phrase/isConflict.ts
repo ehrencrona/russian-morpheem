@@ -7,10 +7,10 @@ export default function isConflictFunction(phrase: Phrase, facts: Facts) {
         let conflictingPhrase = sentence.phrases.find((existingPhrase) =>
             phrase.id != existingPhrase.id &&
             !!existingPhrase.patterns.find((pattern) => {
-                let existingMatching = pattern.match(sentence.words, facts)
+                let match = pattern.match(sentence.words, facts)
 
-                if (existingMatching) {
-                    return !!wordIndexes.find((index) => existingMatching.indexOf(index) >= 0)
+                if (match) {
+                    return !!match.find((m) => wordIndexes.indexOf(m.index) >= 0)
                 }
             })
         )

@@ -188,12 +188,12 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     iWasRight(words: StudyWord[]) {
-        let facts = []
+        let facts: UnknownFact[] = []
 
         words.forEach((word: StudyWord) => {
             if (this.isStudiedForm(word)) {
                 word.facts.forEach((fact) => 
-                    facts.push({ word: word, fact: fact }) 
+                    facts.push(fact) 
                 )
             }
         })
@@ -206,11 +206,11 @@ export default class StudyComponent extends Component<Props, State> {
         let capitalize = true
         let sentence = this.props.sentence
 
-console.log(sentence.toString())
+console.log('Sentence: ' + sentence.toString())
 
         let words = toStudyWords(sentence, this.props.fact, this.props.corpus)
 
-console.log(words)
+console.log('Study words', words)
 
         let corpus = this.props.corpus
 

@@ -2,9 +2,10 @@
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import PhraseMatch from './PhraseMatch'
-import { CaseStudy } from './PhraseMatch'
+import { CaseStudy, Match } from './PhraseMatch'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
+import InflectedWord from '../InflectedWord'
 import Word from '../Word'
 
 export interface JsonFormat {
@@ -16,7 +17,8 @@ export interface JsonFormat {
 
 interface EnglishBlock {
     placeholder: boolean,
-    en: string
+    en(match: Match): string
+    enWithJpForCases(match: Match): string
 }
 
 export default class Phrase implements Fact {
@@ -35,7 +37,7 @@ export default class Phrase implements Fact {
                 PhraseMatch.fromString(str.trim(), words, inflections)))
     }
 
-    match(words: Word[], facts: Facts, study?: CaseStudy): number[] {
+    match(words: Word[], facts: Facts, study?: CaseStudy): Match {
         for (let i = 0; i < this.patterns.length; i++) {
             let match = this.patterns[i].match(words, facts, study)
 
@@ -69,6 +71,7 @@ export default class Phrase implements Fact {
     getEnglishBlocks(): EnglishBlock[] {
 
         let split = this.en.match(/(\[[^\]]+\]|[^\[]+)/g)
+        let placeholderCount = 0
 
         return split.map((str) => {
 
@@ -77,14 +80,89 @@ export default class Phrase implements Fact {
             let en = str
 
             let placeholder = str[0] == '['
+            let placeholderIndex = placeholderCount
 
             if (placeholder) {
                 en = str.substr(1, str.length-2)
+
+                placeholderCount++
             }
 
             return {
                 placeholder: placeholder,
-                en: en 
+                enWithJpForCases: (match: Match) => {
+                    
+                    if (placeholder) {
+                        let m = match.filter((m) => m.wordMatch.isCaseStudy())[placeholderIndex]
+
+                        if (!m) {
+                            console.log('Placeholders didnt match case studies in phrase ' + this.id)
+
+                            return en
+                        }
+
+                        let placeholderWord = m.word
+
+                        return (placeholderWord instanceof InflectedWord ? 
+                            placeholderWord.word.getDefaultInflection().jp : 
+                            placeholderWord.jp)
+                    }
+                    else {
+                        let replace: { [key: string]: Word[]} = {}
+    console.log(match)
+                        match.forEach((m) => {
+                            let mStr = m.wordMatch.toString()
+    console.log('mStr', mStr)
+                            if (en.indexOf(mStr) >= 0) {
+                                let r = replace[mStr]
+
+                                if (!r) {
+                                    r = []
+                                    replace[mStr] = r
+                                }
+
+                                r.push(m.word)
+                            }
+                        })
+
+                        Object.keys(replace).forEach((r) => {
+    console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
+
+                            en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 
+                                (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)
+                            ).join(' '))
+                        })
+
+                        return en                                     
+                    }
+
+                },
+                en: (match: Match) => {
+                    let replace: { [key: string]: Word[]} = {}
+console.log(match)
+                    match.forEach((m) => {
+                        let mStr = m.wordMatch.toString()
+console.log('mStr', mStr)
+                        if (en.indexOf(mStr) >= 0) {
+                            let r = replace[mStr]
+
+                            if (!r) {
+                                r = []
+                                replace[mStr] = r
+                            }
+
+                            r.push(m.word)
+                        }
+                    })
+
+                    Object.keys(replace).forEach((r) => {
+console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
+
+                        en = en.replace(r, replace[r].map((w) => w.getEnglish()).join(' '))
+                    })
+
+                    return en                                     
+                } 
             }
 
         })
