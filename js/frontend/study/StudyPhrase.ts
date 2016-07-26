@@ -24,6 +24,10 @@ export default class StudyPhrase implements StudyWord {
         words.forEach((w) => this.facts = this.facts.concat(w.facts))
     }
 
+    getFormHint() {
+        return ''
+    }
+    
     getHint() {
         return this.en
     }

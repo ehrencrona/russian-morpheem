@@ -241,10 +241,15 @@ console.log('Study words', words)
                     {
                         (this.state.stage == Stage.TEST ?
 
-                            (this.props.fact instanceof Word ?
-                                'What Russian word is missing?'
-                            :
-                                'What form should the highlighed word be in?')
+                            (this.props.fact instanceof InflectionFact ?
+                                'What form should the highlighed word be in?'
+                                :
+                                (this.props.fact instanceof Phrase ?
+                                    'What words complete the expression?'
+                                    :
+                                    'What Russian word is missing?'
+                                    )
+                                )
 
                             :
 
@@ -282,6 +287,7 @@ console.log('Study words', words)
                                 if (this.isStudiedForm(word)) {
                                     if (!reveal) {
                                         text = word.getHint()
+                                        formHint = word.getFormHint()
                                     }
 
                                     if (reveal) {

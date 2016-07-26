@@ -144,6 +144,16 @@ addForm('prep', 'prepositional', { grammaticalCase: GrammaticalCase.PREP, number
 addForm('loc', 'locative', { grammaticalCase: GrammaticalCase.LOC, number: Number.SINGULAR })
 addForm('locpl', 'locative plural', { grammaticalCase: GrammaticalCase.LOC, number: Number.PLURAL })
 
+// this is a bit of a hack to make it possible select a case independent of number if phrases.
+// "gen" should be renamed into "gensg" and "genitive" to "gen" at some point
+addForm('nominative', 'nominative', { grammaticalCase: GrammaticalCase.NOM })
+addForm('genitive', 'genitive', { grammaticalCase: GrammaticalCase.GEN })
+addForm('dative', 'dative', { grammaticalCase: GrammaticalCase.DAT })
+addForm('accusative', 'accusative', { grammaticalCase: GrammaticalCase.ACC })
+addForm('instrumental', 'instrumental', { grammaticalCase: GrammaticalCase.INSTR })
+addForm('prepositional', 'prepositional', { grammaticalCase: GrammaticalCase.PREP })
+addForm('locative', 'locative', { grammaticalCase: GrammaticalCase.LOC })
+
 addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
 addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })
 addForm('accf', 'accusative feminine', { grammaticalCase: GrammaticalCase.ACC, number: Number.SINGULAR, gender: Gender.F })

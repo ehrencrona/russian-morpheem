@@ -1,5 +1,6 @@
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import InflectedWord from '../../shared/InflectedWord'
+import InflectableWord from '../../shared/InflectableWord'
 import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 
 import Fact from '../../shared/fact/Fact'
@@ -14,14 +15,14 @@ import UnknownFact from './UnknownFact'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
 
-export function getFormHint(words: StudyWord[], studiedFact: Fact): string {
+export function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact): string {
     let fact = studiedFact
 
-    if (fact instanceof InflectionFact || fact instanceof InflectedWord) {
-        let form = FORMS[fact.form]
+    if (forWord instanceof InflectedWord) {
+        let form = FORMS[forWord.form]
 
         if (!form) {
-            console.warn(`Unknown form ${ fact.form }.`)
+            console.warn(`Unknown form ${ forWord.form }.`)
             return ''
         }
 
@@ -35,20 +36,28 @@ export function getFormHint(words: StudyWord[], studiedFact: Fact): string {
         // we will need to know the gender of nouns for this to work, we don't yet.
         let genderHintNeeded = false
 
+console.log('number is asked?', numberHintNeeded)
+
         words.forEach((word) => {
 
             if (word.form) {
+                let wordFact = word.wordFact
+
+                if (isStudiedWord(forWord, fact)) {
+                    return 
+                }
+
                 let form = word.form
 
-                if (tenseHintNeeded && form.tense && form.tense == targetTense) {
+                if (tenseHintNeeded && form.tense != null && form.tense == targetTense) {
                     tenseHintNeeded = false
                 }
 
-                if (numberHintNeeded && form.number && form.number == targetNumber) {
+                if (numberHintNeeded && form.number != null && form.number == targetNumber) {
                     numberHintNeeded = false
                 }
 
-                if (genderHintNeeded && form.gender && form.gender == targetGender) {
+                if (genderHintNeeded && form.gender != null && form.gender == targetGender) {
                     genderHintNeeded = false
                 }
             }
@@ -65,7 +74,6 @@ export function getFormHint(words: StudyWord[], studiedFact: Fact): string {
             if (result) {
                 result += ', '
             }
-
             result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
         }
 
@@ -81,9 +89,19 @@ export function getFormHint(words: StudyWord[], studiedFact: Fact): string {
     }
 }
 
+function isStudiedWord(word: Word, fact: Fact) {
+    let result = false
 
+    word.visitFacts((f) => {
+        if (f.getId() == fact.getId()) {
+            result = true
+        }
+    })
 
-function isStudiedFact(fact: Fact) {
+    return result
+}
+
+function isWorthExplaining(fact: Fact) {
     return !(fact instanceof InflectionFact &&
         fact.form == fact.inflection.defaultForm)
 }
@@ -92,24 +110,25 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fac
     let facts: UnknownFact[] = []
 
     let getHint = () => {
-        let formHint = getFormHint(words, studiedFact) 
         let wordHint
 
-        if (studiedFact.getId() != word.getId()) {
+        if ((studiedFact instanceof Word || studiedFact instanceof InflectableWord) && isStudiedWord(word, studiedFact)) {
             wordHint = word.getEnglish()
         }
         else {
             wordHint = (word as InflectedWord).getDefaultInflection().jp 
         }
 
-        return wordHint + 
-            (formHint ? ', ' + formHint : '')
+        return wordHint
     }
 
     let result = {
         id: word.getId(),
         jp: word.jp,
         getHint: getHint,
+        getFormHint: () => {
+            return getFormHint(word, words, studiedFact) 
+        },
         form: (word instanceof InflectedWord ? FORMS[word.form] : null),
         getHintFacts: () => facts,
         facts: facts,
@@ -117,7 +136,7 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fac
     }
 
     word.visitFacts((fact: Fact) => {
-        if (isStudiedFact(fact)) {
+        if (isWorthExplaining(fact)) {
             facts.push({ fact: fact, word: result })
         }
     })

@@ -50,21 +50,18 @@ let unknownFactComponent = (props: Props) => {
 
     let componentType
 
-    if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
-        if (fact instanceof InflectionFact) {
-            componentType = createFactory(DesiredFormFactComponent) 
-        }
-        else if (fact instanceof InflectableWord || fact instanceof Word) {
+    if (fact instanceof InflectionFact) {
+        canExplain = true
+
+        componentType = createFactory(InflectionFactComponent)
+    }
+    else if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
+        if (fact instanceof InflectableWord || fact instanceof Word) {
             componentType = createFactory(DesiredWordFactComponent)
         }
         else if (fact instanceof Phrase) {
             componentType = createFactory(DesiredPhraseFactComponent) 
         }
-    }
-    else if (fact instanceof InflectionFact) {
-        canExplain = true
-
-        componentType = createFactory(InflectionFactComponent)
     }
     else if (fact instanceof InflectableWord || fact instanceof Word) {
         componentType = createFactory(WordFactComponent)

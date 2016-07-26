@@ -35,14 +35,17 @@ export default class InflectionFactComponent extends Component<FactComponentProp
         let studyWord = this.props.unknownFact.word
         let word = studyWord.wordFact
 
+        let hiddenId = this.props.hiddenFact && this.props.hiddenFact.getId()
+
         if (word instanceof InflectedWord) {
             let desc
 
-            if (this.props.hiddenFact && studyWord.id == this.props.hiddenFact.getId()) {
-                desc = <div>You are looking for the <strong>{ studyWord.form }</strong></div>
+            if (word.word.getId() == hiddenId || 
+                    word.word.inflection.getFact(word.form).getId() == hiddenId) {
+                desc = <div>You are looking for the <strong>{ studyWord.form.name }</strong></div>
             }
             else {
-                desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form.name }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong></div>
+                desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form.name }</strong> of <strong>{      word.word.getDefaultInflection().jp }</strong></div>
             }
     
             return <div>
@@ -65,7 +68,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
             </div>
         }
         else {
-            console.warn(word + ' was not inflected yet InflectionFactComponent got it.')
+            console.warn(word + ' was not inflected, yet InflectionFactComponent got it.')
 
             return <div/>
         }

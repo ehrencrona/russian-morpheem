@@ -94,12 +94,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         })
 
         factScores = topScores(factScores, 20)
-/*
-factScores = [ { 		
-    fact: this.props.corpus.facts.get('verb-acc'),		
-    score: 1
-} ]
-*/
+
         let sentenceScores = sentencesForFacts(factScores, this.sentencesByFactIndex)
 
         sentenceScores = new OldestSentenceSelector(this.sentenceKnowledge, this.props.corpus.facts)
@@ -108,6 +103,20 @@ factScores = [ {
         sentenceScores = topScores(sentenceScores, 100)
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
+
+/*
+factScores = [ { 		
+    fact: this.props.corpus.facts.get('голос'),		
+    score: 1
+} ]
+
+sentenceScores = [{
+    sentence: this.props.corpus.sentences.get(5235),
+    score: 1,
+    fact: factScores[0].fact,
+    debug: {}
+}]
+*/
 
         let sentenceScore = chooseHighestScoreSentence(sentenceScores)
 
@@ -251,10 +260,4 @@ factScores = [ {
         }
     }
 
-}
-
-function isStudiedFact(fact: Fact) {
-    return fact instanceof InflectionFact &&
-        fact.form != fact.inflection.defaultForm &&
-        (fact.inflection.pos == 'n' || fact.inflection.pos == 'v' || fact.inflection.pos == 'adj')
 }
