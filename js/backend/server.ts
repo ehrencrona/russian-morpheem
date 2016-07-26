@@ -19,6 +19,7 @@ import deleteFact from './route/deleteFact'
 import setFact from './route/setFact'
 import inflectionFor from './route/inflectionFor'
 import addWord from './route/addWord'
+import setWord from './route/setWord'
 import addInflectedWord from './route/addInflectedWord'
 import addSentence from './route/addSentence'
 import addComment from './route/addComment'
@@ -88,6 +89,8 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/inflection-for/:word`, inflectionFor(corpus))
     
     app.post(`/api/${lang}/word/:word`, addWord(corpus))
+
+    app.put(`/api/${lang}/word/:word`, setWord(corpus))
     
     app.post(`/api/${lang}/inflected-word/:stem`, addInflectedWord(corpus))
     

@@ -32,7 +32,7 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.border-box-sizing, .sentenceTab .sentenceTranslation input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
+.border-box-sizing, .wordTranslation input, .sentenceTab .sentenceTranslation input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -118,6 +118,9 @@ input[type=text], input[type=number] {
   .filter .option.active {
     font-weight: bold;
     background-color: #e95f3d; }
+
+.wordTranslation input {
+  width: 100%; }
 
 .sentenceTab .sentenceEditor {
   display: flex;

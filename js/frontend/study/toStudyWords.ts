@@ -36,8 +36,6 @@ export function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact
         // we will need to know the gender of nouns for this to work, we don't yet.
         let genderHintNeeded = false
 
-console.log('number is asked?', numberHintNeeded)
-
         words.forEach((word) => {
 
             if (word.form) {

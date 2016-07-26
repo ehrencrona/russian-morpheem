@@ -51,6 +51,15 @@ interface State {
 let React = { createElement: createElement }
 
 
+function isWorthStudying(fact: Fact) {
+    if (fact instanceof InflectionFact) {
+        return fact.form != fact.inflection.defaultForm
+    }
+    else {
+        return true
+    }
+}
+
 export default class StudyContainerComponent extends Component<Props, State> {
     exposures: FrontendExposures
     knowledge: NaiveKnowledge
@@ -85,12 +94,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         factScores = factScores.filter((fs) => {
             let fact = fs.fact 
 
-            if (fact instanceof InflectionFact) {
-                return fact.form != fact.inflection.defaultForm
-            }
-            else {
-                return true
-            }
+            return isWorthStudying(fact)
         })
 
         factScores = topScores(factScores, 20)

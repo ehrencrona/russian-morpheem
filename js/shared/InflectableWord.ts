@@ -113,7 +113,7 @@ export default class InflectableWord {
         return this.en
     }
 
-    setEnglish(en) {
+    setEnglish(en, form?: string) {
         this.en = en
         
         return this

@@ -11,9 +11,10 @@ import ChangeInflectionComponent from './ChangeInflectionComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
-import SentencesWithFact from './SentencesWithFactComponent';
-import ExternalSentencesComponent from './ExternalSentencesComponent';
+import SentencesWithFact from './SentencesWithFactComponent'
+import ExternalSentencesComponent from './ExternalSentencesComponent'
 import PhrasesWithWordComponent from './PhrasesWithWordComponent'
+import WordTranslationComponent from './WordTranslationComponent'
 
 import DeleteFactButton from './DeleteFactButtonComponent'
 import Sentence from '../shared/Sentence'
@@ -66,6 +67,10 @@ export default class WordFactComponent extends Component<Props, State> {
 
         if (this.state.tab == 'sentences') {
             tab = <div>
+                    <WordTranslationComponent 
+                        corpus={ this.props.corpus }
+                        word={ fact } />
+
                     <PhrasesWithWordComponent
                         word={ this.props.fact }
                         corpus={ this.props.corpus }

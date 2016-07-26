@@ -97,6 +97,7 @@ export default function listenForChanges(corpus: Corpus) {
     corpus.inflections.onAdd = saveInflections
     corpus.inflections.onRemove = saveInflections
     corpus.phrases.onChange = savePhrases
+    corpus.words.onChangeWord = saveFacts
 
     corpus.onChangeOnDisk = () => {
         let t = new Date().getTime()

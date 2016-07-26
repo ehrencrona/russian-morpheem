@@ -60,6 +60,12 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
             .catch(handleException)
     }
 
+    corpus.words.onChangeWord = (word: Word) => {
+        xr.put(`/api/${lang}/word/` + word.getId(), 
+            word.toJson(), xrArgs)
+            .catch(handleException)
+    }
+
     corpus.facts.onRemove = (fact: Fact) => {
         xr.del(`/api/${lang}/fact/` + fact.getId(), xrArgs)        
             .catch(handleException)

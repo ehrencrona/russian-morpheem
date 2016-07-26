@@ -210,6 +210,13 @@ input[type=text], input[type=number] {
     }
 }
 
+.wordTranslation {
+    input {
+        @extend .border-box-sizing;
+        width: 100%;
+    }
+}
+
 .sentenceTab {
     .sentenceEditor {
         display: flex;
