@@ -82,6 +82,12 @@ export function getFormHint(words: StudyWord[], studiedFact: Fact): string {
 }
 
 
+
+function isStudiedFact(fact: Fact) {
+    return !(fact instanceof InflectionFact &&
+        fact.form == fact.inflection.defaultForm)
+}
+
 export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fact): StudyWord {
     let facts: UnknownFact[] = []
 
@@ -111,7 +117,9 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fac
     }
 
     word.visitFacts((fact: Fact) => {
-        facts.push({ fact: fact, word: result })
+        if (isStudiedFact(fact)) {
+            facts.push({ fact: fact, word: result })
+        }
     })
 
     return result

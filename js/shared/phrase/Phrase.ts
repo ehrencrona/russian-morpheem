@@ -75,6 +75,10 @@ export default class Phrase implements Fact {
 
         let result: EnglishBlock[] = []
         
+        if (!split) {
+            return result
+        }
+
         split.map((str) => {
             str.split('...').forEach((str) => {
                 str = str.trim()
