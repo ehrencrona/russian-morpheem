@@ -6,7 +6,7 @@ import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
 import Phrase from '../../shared/phrase/Phrase'
-import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
 
 import toStudyWords from '../study/toStudyWords'
 import StudyWord from '../study/StudyWord'
@@ -15,8 +15,9 @@ import StudyPhrase from '../study/StudyPhrase'
 import { Component, createElement } from 'react';
 
 interface Props {
-    corpus: Corpus,
+    corpus: Corpus
     phrase: Phrase
+    pattern: PhrasePattern
 }
 
 interface State {
@@ -26,18 +27,22 @@ let React = { createElement: createElement }
 
 export default class PhraseStudyWordsComponent extends Component<Props, State> {
     render() {
+
         let phrase = this.props.phrase
+        let pattern: PhrasePattern = this.props.pattern
+
         let words: StudyWord[] = []
         let sentence: Sentence
 
         if (phrase.patterns.length) {
             sentence = this.props.corpus.sentences.sentences.find((sentence) => {
-                return !!sentence.phrases.find((p) => p.getId() == phrase.getId())
+                return !!sentence.phrases.find((p) => p.getId() == phrase.getId() && 
+                    pattern.match(sentence.words, this.props.corpus.facts) != null)
             })
 
             if (!sentence) {
                 sentence = this.props.corpus.sentences.sentences.find((sentence) => {
-                    return phrase.patterns[0].match(sentence.words, this.props.corpus.facts) != null 
+                    return pattern.match(sentence.words, this.props.corpus.facts) != null 
                 })
             }
         }
@@ -52,22 +57,24 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         }
 
         return <div className='phraseStudyWords'>
-            <h3>Example</h3>
-            {
-                words.map((w) => 
-                    
-                    <span className={ w instanceof StudyPhrase ? 'match' : '' }> { 
-                        (w instanceof StudyPhrase ? w.getHint() || w.jp : w.jp) }</span>
+            <div className='field'>
+                <div className='label'>
+                    Pattern
+                </div>
+                {
+                    words.map((w) => 
+                        
+                        <span className={ w instanceof StudyPhrase ? 'match' : '' }> { 
+                            (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>
 
-                )
-            }
-            {
-                error ? 
-                <div className='error'>{ error }</div> :
-                <div/>
-            }
+                    )
+                }
+                {
+                    error ? 
+                    <div className='error'>{ error }</div> :
+                    <div/>
+                }
+            </div>
         </div>
-
     }
-
 }

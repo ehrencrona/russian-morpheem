@@ -3,7 +3,7 @@ import Phrase from './Phrase';
 import { JsonFormat as PhraseJsonFormat } from './Phrase'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
-import PhraseMatch from './PhraseMatch'
+import PhrasePattern from './PhrasePattern'
 
 export type JsonFormat = PhraseJsonFormat[]
 
@@ -50,15 +50,15 @@ export default class Phrases {
         }
     }
 
-    setEnglish(phrase: Phrase, en: string) {
-        phrase.en = en
+    setEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {
+        pattern.en = en
 
         if (this.onChange) {
             this.onChange(phrase)
         }
     }
 
-    setPattern(phrase: Phrase, patterns: PhraseMatch[]) {
+    setPattern(phrase: Phrase, patterns: PhrasePattern[]) {
         phrase.patterns = patterns
 
         if (this.onChange) {

@@ -4,7 +4,7 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 
 import Tab from '../OpenTab'
-import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import Phrase from '../../shared/phrase/Phrase'
 import Sentence from '../../shared/Sentence'
 import PhraseSentencesComponent from './PhraseSentencesComponent'
@@ -58,7 +58,7 @@ export default class FindPhraseComponent extends Component<Props, State> {
             </div>
             <PhraseSentencesComponent 
                 corpus={ this.props.corpus }
-                match={ phrase.patterns[0] }
+                patterns={ phrase.patterns }
                 isConflict={ isConflictFunction(phrase, this.props.corpus.facts) }
                 includeConflicts={ false }
                 tab={ this.props.tab }

@@ -10,7 +10,7 @@ export default function isConflictFunction(phrase: Phrase, facts: Facts) {
                 let match = pattern.match(sentence.words, facts)
 
                 if (match) {
-                    return !!match.find((m) => wordIndexes.indexOf(m.index) >= 0)
+                    return !!match.words.find((m) => wordIndexes.indexOf(m.index) >= 0)
                 }
             })
         )

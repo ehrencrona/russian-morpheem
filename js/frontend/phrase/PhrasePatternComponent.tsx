@@ -7,7 +7,8 @@ import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
 import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
-import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
+import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
 
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 import { Component, createElement } from 'react';
@@ -16,7 +17,6 @@ interface Props {
     corpus: Corpus
     phrase: Phrase
     onChange: () => void
-    onChangeEnglish: () => void
 }
 
 interface State {
@@ -36,28 +36,45 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         this.props.corpus.phrases.setDescription(this.props.phrase, newDescription)
     }
 
-    changeEnglish(english: string) {
-        this.props.corpus.phrases.setEnglish(this.props.phrase, english)
+    changeEnglish(english: string, pattern: PhrasePattern, index: number) {
+        if (english == pattern.en) {
+            return
+        }
 
-        this.props.onChangeEnglish()
+        this.props.corpus.phrases.setEnglish(this.props.phrase, pattern, english);
+
+        (this.refs['studyWords' + index] as PhraseStudyWordsComponent).forceUpdate() 
     }
 
-    changePattern(newPattern: string) {
-        let pattern
-
+    changePattern(patternStr: string, oldPattern: PhrasePattern) {
         try {
-            pattern = PhraseMatch.fromString(newPattern.trim(), 
+            let newPattern = PhrasePattern.fromString(patternStr.trim(), oldPattern.en,
                 this.props.corpus.words, this.props.corpus.inflections)
 
-            this.props.corpus.phrases.setPattern(this.props.phrase, [ pattern ])
+            if (newPattern.toString() == oldPattern.toString()) {
+                return
+            }
+
+            let patterns = this.props.phrase.patterns.map((p) => 
+                (p == oldPattern ? newPattern : p))
+
+            this.props.corpus.phrases.setPattern(this.props.phrase, patterns)
 
             this.setState({ error: null })
 
-            this.props.onChange()
+            this.props.onChange();
         }
         catch (e) {
             this.setState({ error: e.toString() })
         }
+    }
+
+    addPattern() {
+        this.props.phrase.patterns.push(
+            new PhrasePattern([], '')
+        )
+
+        this.forceUpdate()
     }
 
     render() {
@@ -80,23 +97,45 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                     onBlur={ (e) => this.changeDescription((e.target as HTMLInputElement).value) }/>
             </div>
 
-            <div className='field'>
-                <div className='label'>
-                    English
-                </div>
-            
-                <input type='text' lang='en' autoCapitalize='off' defaultValue={ phrase.en } 
-                    onBlur={ (e) => this.changeEnglish((e.target as HTMLInputElement).value) }/>
+            {  
+                phrase.patterns.map((pattern, index) => 
+
+                    <div key={ index } className='pattern'>
+                        <h3>Pattern</h3>
+
+                        <div className='field'>
+                            <div className='label'>
+                                English
+                            </div>
+                        
+                            <input type='text' lang='en' autoCapitalize='off' defaultValue={ pattern.en } 
+                                onBlur={ (e) => this.changeEnglish((e.target as HTMLInputElement).value, pattern, index) }/>
+                        </div>
+
+                        <div className='field'>
+                            <div className='label'>
+                                Pattern
+                            </div>
+                        
+                            <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' 
+                                defaultValue={ pattern && pattern.toString() } 
+                                onBlur={ (e) => this.changePattern((e.target as HTMLInputElement).value, pattern) }/>
+                        </div>
+
+                        <PhraseStudyWordsComponent 
+                            phrase={ phrase }
+                            pattern={ pattern } 
+                            corpus={ this.props.corpus }
+                            ref={ 'studyWords' + index } 
+                            />
+                    </div>
+                )
+            }
+
+            <div className='buttonBar'>
+                <div className='button' onClick={ () => this.addPattern() }>Add pattern</div>
             </div>
 
-            <div className='field'>
-                <div className='label'>
-                    Pattern
-                </div>
-            
-                <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' defaultValue={ phrase.patterns[0] && phrase.patterns[0].toString() } 
-                    onBlur={ (e) => this.changePattern((e.target as HTMLInputElement).value) }/>
-            </div>
 
         </div>
 

@@ -16,7 +16,7 @@ import Word from '../../shared/Word'
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
 import Phrase from '../../shared/phrase/Phrase'
-import { CaseStudy } from '../../shared/phrase/PhraseMatch'
+import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'

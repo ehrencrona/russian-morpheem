@@ -42,11 +42,11 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
 
         let id = line.substr(0, i).trim()
         
-        let phrase
+        let phrase: Phrase
 
         try {            
             phrase = Phrase.fromString(
-                id, wordString, 
+                id, wordString, en,  
                 words, inflections)
         } catch (e) {
             console.warn(e.stack)
@@ -54,10 +54,16 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
             throw new Error(`In phrase ${id}: ${e.message}.`)
         }
 
-        phrase.en = en
         phrase.description = description
 
-        phrases.add(phrase)
+        let existing = phrases.get(id)
+
+        if (existing) {
+            existing.patterns.push(phrase.patterns[0])
+        }
+        else {
+            phrases.add(phrase)
+        }
     }
 
     return phrases

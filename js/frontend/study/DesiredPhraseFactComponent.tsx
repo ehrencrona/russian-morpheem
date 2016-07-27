@@ -9,7 +9,7 @@ import { FactComponentProps } from './UnknownFactComponent'
 let React = { createElement: createElement }
 
 let desiredPhraseFactComponent = (props: FactComponentProps<Phrase>) => {
-    return <div>The phrase you are looking for uses the pattern <strong>{ props.fact.en }</strong></div>
+    return <div>The phrase you are looking for means <strong>{ props.fact.patterns[0].en }</strong></div>
 }
 
 export default desiredPhraseFactComponent

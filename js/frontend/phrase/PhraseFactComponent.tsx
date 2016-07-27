@@ -10,7 +10,6 @@ import TagButton from '../TagButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
-import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
 import PhraseSentencesComponent from './PhraseSentencesComponent'
 import isConflictFunction from './isConflict'
 
@@ -53,17 +52,11 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         if (this.state.tab == 'sentences') {
             tab = <div>
-                <PhraseStudyWordsComponent 
-                    phrase={ this.props.fact } 
-                    corpus={ this.props.corpus }
-                    ref='studyWords' 
-                    />
-
                 <h3>Sentences</h3>
 
                 <PhraseSentencesComponent 
                     corpus={ this.props.corpus }
-                    match={ fact.patterns[0] }
+                    patterns={ fact.patterns }
                     tab={ this.props.tab }
                     filter={ (sentence) => !!sentence.hasPhrase(fact) }
                     isConflict={ isConflictFunction(this.props.fact, this.props.corpus.facts) }
@@ -104,13 +97,11 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
 
-            <h3>Pattern</h3>
-
             <PhrasePatternComponent 
                 phrase={ this.props.fact } 
                 corpus={ this.props.corpus } 
                 onChange={ () => { this.forceUpdate() } } 
-                onChangeEnglish={ () => { (this.refs['studyWords'] as PhraseStudyWordsComponent).forceUpdate() } } />
+                />
         
             { tab }
         </div>)

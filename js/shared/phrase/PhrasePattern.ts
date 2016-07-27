@@ -12,22 +12,33 @@ import Facts from '../fact/Facts'
 import Word from '../Word'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
+import InflectedWord from '../InflectedWord'
+import EnglishPatternFragment from './EnglishPatternFragment'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
 }
 
-export type Match = WordMatched[]
+export interface JsonFormat {
+    pattern: string,
+    en: string
+}
+
+export interface Match {
+    words: WordMatched[]
+    pattern: PhrasePattern
+}
 
 export interface WordMatched {
     wordMatch: WordMatch
     word: Word
-    index: number    
+    index: number
 }
 
-export default class PhraseMatch {
-    constructor(public wordMatches: WordMatch[]) {
+export default class PhrasePattern {
+    constructor(public wordMatches: WordMatch[], public en: string) {
         this.wordMatches = wordMatches
+        this.en = en
     }
 
     match(words: Word[], facts: Facts, caseStudy?: CaseStudy): Match {
@@ -35,10 +46,18 @@ export default class PhraseMatch {
             caseStudy = CaseStudy.STUDY_BOTH
         }
 
-        for (let i = 0; i <= words.length - this.wordMatches.length; i++) {
+        let minWords = this.wordMatches.length
+
+        this.wordMatches.forEach((m) => {
+            if (m.allowEmptyMatch()) {
+                minWords--
+            }
+        })
+
+        for (let i = 0; i <= words.length - minWords; i++) {
             let at = i
             let found = true
-            let result: Match = []
+            let wordsMatched: WordMatched[] = []
 
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
@@ -54,7 +73,7 @@ export default class PhraseMatch {
                     (caseStudy == CaseStudy.STUDY_BOTH || 
                      wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
                     for (let i = 0; i < match; i++) {
-                        result.push({
+                        wordsMatched.push({
                             index: at+i,
                             word: words[at+i],
                             wordMatch: wordMatch
@@ -65,10 +84,120 @@ export default class PhraseMatch {
                 at += match
             }
 
-            if (found && result.length) {
-                return result
+            if (found && words.length) {
+                return {
+                    words: wordsMatched,
+                    pattern: this
+                }
             }
         }
+    }
+
+    getEnglishFragments(): EnglishPatternFragment[] {
+        let split = this.en.match(/(\[[^\]]+\]|[^\[]+)/g)
+        let placeholderCount = 0
+
+        let result: EnglishPatternFragment[] = []
+        
+        if (!split) {
+            return result
+        }
+
+        split.map((str) => {
+            str.split('...').forEach((str) => {
+                str = str.trim()
+
+                let en = str
+
+                let placeholder = str[0] == '['
+                let placeholderIndex = placeholderCount
+
+                if (placeholder) {
+                    en = str.substr(1, str.length-2)
+
+                    placeholderCount++
+                }
+
+                result.push({
+                    placeholder: placeholder,
+                    enWithJpForCases: (match: Match) => {
+                        
+                        if (placeholder) {
+                            let m = match.words.filter((m) => m.wordMatch.isCaseStudy())[placeholderIndex]
+
+                            if (!m) {
+                                console.log(`Placeholders didn't match case studies in pattern "${this.toString()}"`)
+
+                                return en
+                            }
+
+                            let placeholderWord = m.word
+
+                            return (placeholderWord instanceof InflectedWord ? 
+                                placeholderWord.word.getDefaultInflection().jp : 
+                                placeholderWord.jp)
+                        }
+                        else {
+                            let replace: { [key: string]: Word[]} = {}
+        console.log(match)
+                            match.words.forEach((m) => {
+                                let mStr = m.wordMatch.toString()
+        console.log('mStr', mStr)
+                                if (en.indexOf(mStr) >= 0) {
+                                    let r = replace[mStr]
+
+                                    if (!r) {
+                                        r = []
+                                        replace[mStr] = r
+                                    }
+
+                                    r.push(m.word)
+                                }
+                            })
+
+                            Object.keys(replace).forEach((r) => {
+        console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
+
+                                en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 
+                                    (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)
+                                ).join(' '))
+                            })
+
+                            return en                                     
+                        }
+
+                    },
+                    en: (match: Match) => {
+                        let replace: { [key: string]: Word[]} = {}
+    console.log(match)
+                        match.words.forEach((m) => {
+                            let mStr = m.wordMatch.toString()
+    console.log('mStr', mStr)
+                            if (en.indexOf(mStr) >= 0) {
+                                let r = replace[mStr]
+
+                                if (!r) {
+                                    r = []
+                                    replace[mStr] = r
+                                }
+
+                                r.push(m.word)
+                            }
+                        })
+
+                        Object.keys(replace).forEach((r) => {
+    console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
+
+                            en = en.replace(r, replace[r].map((w) => w.getEnglish()).join(' '))
+                        })
+
+                        return en                                     
+                    } 
+                })
+            })
+        })
+
+        return result
     }
 
     static parseFormMatch(str: string, line: string) {
@@ -104,7 +233,7 @@ export default class PhraseMatch {
         return new PosFormWordMatch(posStr, FORMS[formStr], formStr, quantifier)
     }
 
-    static fromString(line: string, words: Words, inflections: Inflections) {
+    static fromString(line: string, en: string, words: Words, inflections: Inflections) {
         let wordMatches: WordMatch[] = []
         
         line.split(' ').forEach((str) => {
@@ -182,7 +311,18 @@ export default class PhraseMatch {
             wordMatches.push(match)
         })
 
-        return new PhraseMatch(wordMatches)
+        return new PhrasePattern(wordMatches, en)
+    }
+
+    toJson(): JsonFormat {
+        return {
+            pattern: this.toString(),
+            en: this.en
+        }
+    }
+
+    static fromJson(json: JsonFormat, words: Words, inflections: Inflections) {
+        return PhrasePattern.fromString(json.pattern, json.en, words, inflections)
     }
 
     toString() {

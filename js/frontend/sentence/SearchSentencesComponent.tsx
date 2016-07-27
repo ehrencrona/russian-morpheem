@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
-import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import PhraseSentencesComponent from '../phrase/PhraseSentencesComponent'
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 
 interface State {
 
-    match?: PhraseMatch,
+    pattern?: PhrasePattern,
     error?: string
 
 }
@@ -31,12 +31,12 @@ export default class SentencesComponent extends Component<Props, State> {
 
     search(str: string) {
         try {
-            let match = PhraseMatch.fromString(str, this.props.corpus.words, this.props.corpus.inflections)
+            let pattern = PhrasePattern.fromString(str, '', this.props.corpus.words, this.props.corpus.inflections)
 
-            this.setState({ match: match })
+            this.setState({ pattern: pattern })
         }
         catch (e) {
-            this.setState({ error: e.toString(), match: null })
+            this.setState({ error: e.toString(), pattern: null })
         }
     }
 
@@ -49,11 +49,11 @@ export default class SentencesComponent extends Component<Props, State> {
                 }}/>
 
                 {
-                    this.state.match ?
+                    this.state.pattern ?
 
                         <PhraseSentencesComponent 
                             corpus={ this.props.corpus }
-                            match={ this.state.match }
+                            patterns={ [ this.state.pattern ] }
                             tab={ this.props.tab }
                             />
 

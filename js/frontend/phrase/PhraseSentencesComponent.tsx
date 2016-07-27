@@ -8,7 +8,7 @@ import SentenceComponent from '../SentenceComponent'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
-import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
 
@@ -19,7 +19,7 @@ import { Component, createElement, ReactElement } from 'react';
 
 interface Props {
     corpus: Corpus
-    match: PhraseMatch
+    patterns: PhrasePattern[]
     filter?: (sentence: Sentence) => boolean
     isConflict?: (sentence: Sentence, matchWordIndexes: number[]) => boolean
     includeConflicts?: boolean
@@ -75,12 +75,12 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
 
     getMatches() {
         let facts = this.props.corpus.facts
-        let phraseMatch = this.props.match
+        let patterns = this.props.patterns
         let isConflict = this.props.isConflict 
 
         let matches: Match[] = []
 
-        if (!phraseMatch) {
+        if (!patterns.length) {
             return matches
         }
 
@@ -89,10 +89,19 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
                 return
             }
 
-            let match = phraseMatch.match(sentence.words, facts)
+            
+            let match
+            
+            for (let i = 0; i < patterns.length; i++) {
+                match = patterns[i].match(sentence.words, facts)
 
-            if (match && match.length) {
-                let wordIndexes = match.map((i) => i.index)
+                if (match) {
+                    break
+                }
+            }
+
+            if (match) {
+                let wordIndexes = match.words.map((i) => i.index)
                 let conflict = isConflict && isConflict(sentence, wordIndexes)
 
                 if (!conflict || this.props.includeConflicts) {

@@ -54,7 +54,8 @@ export default class WordsWithInflectionComponent extends Component<Props, State
             words.map((word) => {            
                 let index = this.props.corpus.facts.indexOf(word.word);
 
-                return <div key={ word.getId() } className='clickable' onClick={ () => openFact(word, this.props.corpus, this.props.tab) }>
+                return <div key={ word.getId() } className='clickable' onClick={ () => 
+                        openFact(word.word, this.props.corpus, this.props.tab) }>
                     <div className='index'><div className='number'>{ index + 1 }</div></div>
                     { word.toString() }
 

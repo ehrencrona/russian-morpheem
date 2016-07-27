@@ -13,23 +13,21 @@ import { FactComponentProps } from './UnknownFactComponent'
 let React = { createElement: createElement }
 
 let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
-    let words = props.fact.match(props.sentence.words, props.corpus.facts)
-        .map((m) => props.sentence.words[m.index])
-        .map((word) => word.jp).join(' ')
-
     let phrase: Phrase = props.fact
-
-    let blocks = phrase.getEnglishBlocks()
-
     let match = phrase.match(props.sentence.words, props.corpus.facts)
 
-    let explanation
+    let explanation, words
     
     if (match) {
+        let blocks = match.pattern.getEnglishFragments()
+        
         explanation = blocks.map((b) => b.enWithJpForCases(match)).join(' ') 
+        
+        words = match.words.map((m) => props.sentence.words[m.index])
+            .map((word) => word.jp).join(' ')
     }
     else {
-        explanation = phrase.en
+        explanation = phrase.patterns[0].en
 
         console.error(phrase.id + ' did not match ' + props.sentence)
     }

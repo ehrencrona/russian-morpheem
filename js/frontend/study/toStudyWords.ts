@@ -9,7 +9,7 @@ import Words from '../../shared/Words'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
-import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhraseMatch'
+import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
 
 import UnknownFact from './UnknownFact'
 import StudyWord from './StudyWord'
@@ -152,13 +152,13 @@ interface WordBlock {
 function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]) {
     let result: WordBlock[] = []
 
-    phraseMatch.forEach((m) => {
+    phraseMatch.words.forEach((m) => {
 
         let block: WordBlock
 
         let i = m.index
 
-        let isCaseStudy = wordMatch.findIndex((n) => i == n.index) < 0
+        let isCaseStudy = wordMatch.words.findIndex((n) => i == n.index) < 0
 
         if (result.length &&
             i == result[result.length-1].end &&
@@ -186,16 +186,16 @@ function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]
 }
 
 function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlocks: WordBlock[], phraseMatch: Match, wordMatch: Match) {
-    let englishBlocks = phrase.getEnglishBlocks()
+    let fragments = phraseMatch.pattern.getEnglishFragments()
 
-console.log('english blocks', englishBlocks.map((eb) => eb.en(phraseMatch)))
+console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
 
-    let atWordBlock = 0, atEnglishBlock = 0
+    let atWordBlock = 0, atFragment = 0
     let wordIndexAdjust = 0
 
-    while (atWordBlock < wordBlocks.length || atEnglishBlock < englishBlocks.length) {
+    while (atWordBlock < wordBlocks.length || atFragment < fragments.length) {
         let wordBlock = wordBlocks[atWordBlock]
-        let englishBlock = englishBlocks[atEnglishBlock]
+        let englishBlock = fragments[atFragment]
 
         if ((!wordBlock || (englishBlock && wordBlock.caseStudy)) && 
                 !englishBlock.placeholder) {
@@ -211,11 +211,11 @@ console.log('english blocks', englishBlocks.map((eb) => eb.en(phraseMatch)))
             words.splice(start + wordIndexAdjust, 0, new StudyPhrase(phrase, englishBlock.en(phraseMatch), []))
             wordIndexAdjust++
 
-            atEnglishBlock++
+            atFragment++
         }
         else if (!wordBlock) {
             console.error(`More English blocks than words block in ${phrase.getId()}. Could not place ${englishBlock.en(phraseMatch)}`)
-            atEnglishBlock++
+            atFragment++
         }
         else if (!englishBlock ||
             (!wordBlock.caseStudy && englishBlock.placeholder)) {
@@ -229,7 +229,7 @@ console.log('english blocks', englishBlocks.map((eb) => eb.en(phraseMatch)))
         }
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
             atWordBlock++
-            atEnglishBlock++
+            atFragment++
         }
         else if (!wordBlock.caseStudy && !englishBlock.placeholder) {
             words.splice(wordBlock.start + wordIndexAdjust, wordBlock.end - wordBlock.start, 
@@ -238,7 +238,7 @@ console.log('english blocks', englishBlocks.map((eb) => eb.en(phraseMatch)))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
-            atEnglishBlock++
+            atFragment++
             atWordBlock++
         }
         else {
@@ -254,22 +254,22 @@ export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corp
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFact)))
 
     let handlePhrase = (phrase) => {
-        let phraseMatch = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_BOTH)
+        let phraseMatch: Match = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_BOTH)
 
         if (!phraseMatch) {
             console.warn(phrase + ' does not match ' + sentence + '.')
             return
         }
 
-        let wordMatch = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_WORDS)
+        let wordMatch: Match = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_WORDS)
 
         if (!wordMatch) {
             console.warn(phrase + ' does not match ' + sentence + ' for study words.')
             return
         }
 
-console.log('phrase match ' + phraseMatch.map((m) => m.word.jp).join(' - '))
-console.log('word match ' + wordMatch.map((m) => m.word.jp).join(' - '))
+console.log('phrase match ' + phraseMatch.words.map((m) => m.word.jp).join(' - '))
+console.log('word match ' + wordMatch.words.map((m) => m.word.jp).join(' - '))
 
         let wordBlocks: WordBlock[] = findWordBlocks(wordMatch, phraseMatch, words)
 
@@ -279,7 +279,7 @@ console.log('word blocks', wordBlocks.map((wb) => wb.words.map((w) => w.jp).join
             replaceWordsWithStudyPhrase(phrase, words, wordBlocks, phraseMatch, wordMatch)
         }
         else {
-            phraseMatch.forEach((m) => {
+            phraseMatch.words.forEach((m) => {
                 words[m.index].facts.push({ fact: phrase, word: words[m.index] })
             })
         }

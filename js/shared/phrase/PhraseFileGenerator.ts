@@ -4,6 +4,9 @@ import Phrases from './Phrases'
 import Phrase from './Phrase'
 
 export default function phrasesToString(phrases: Phrases) {
-    return phrases.all().map((p) => 
-        `${p.id}: "${p.description.replace(/"/g, '\'')}" "${p.en.replace(/"/g, '\'')}" ${p.toString()}`).join('\n')
+    return phrases.all().map((phrase) =>
+        phrase.patterns.map((pattern) => 
+            `${phrase.id}: "${(phrase.description || '').replace(/"/g, '\'')}" "${(pattern.en || '').replace(/"/g, '\'')}" ${pattern.toString()}`
+        ).join('\n')
+    ).join('\n')
 }

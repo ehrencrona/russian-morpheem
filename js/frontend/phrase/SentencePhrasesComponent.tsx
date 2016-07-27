@@ -49,12 +49,12 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
         let match = phrase.match(words, this.props.corpus.facts)
 
-        if (!match || !match.length) {
+        if (!match) {
             return <div classname='error'>Does not fit pattern</div>
         }
         else {
             return <div className='match'>{
-                match.map((wordIndex) => words[wordIndex.index].jp).join(' ')
+                match.words.map((wordIndex) => words[wordIndex.index].jp).join(' ')
             }</div>
         }
     }

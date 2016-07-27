@@ -12,7 +12,7 @@ import Sentence from '../shared/Sentence';
 import Word from '../shared/Word';
 import Phrase from '../shared/phrase/Phrase';
 import Phrases from '../shared/phrase/Phrases';
-import PhraseMatch from '../shared/phrase/PhraseMatch';
+import PhrasePattern from '../shared/phrase/PhrasePattern';
 import InflectableWord from '../shared/InflectableWord';
 
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
@@ -43,9 +43,9 @@ describe('toStudyWordsTest', () => {
 
     let words = new Words(facts)
 
-    let phrase = new Phrase('unet', [ PhraseMatch.fromString('у@ gen нет@ gen', words, inflections) ])
-
-    phrase.en = '[gen] does not have [gen]'
+    let phrase = new Phrase('unet', [ 
+        PhrasePattern.fromString('у@ gen нет@ gen', '[gen] does not have [gen]', words, inflections) 
+    ])
 
     let phrases = new Phrases()
 
