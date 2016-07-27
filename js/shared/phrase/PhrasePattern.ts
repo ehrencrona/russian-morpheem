@@ -84,7 +84,7 @@ export default class PhrasePattern {
                 at += match
             }
 
-            if (found && words.length) {
+            if (found && wordsMatched.length) {
                 return {
                     words: wordsMatched,
                     pattern: this

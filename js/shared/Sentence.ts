@@ -14,7 +14,7 @@ export type JsonFormat = (number | string | string[])[]
  * A sentence is a list of Japanese words with an English translation. It can optionally require certain grammar facts.
  */
 export default class Sentence {
-    english: string
+    english: string = ''
     phrases: Phrase[] = []
 
     constructor(public words: Word[], public id: number, public author?: string) {

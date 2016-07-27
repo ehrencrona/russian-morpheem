@@ -204,8 +204,11 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
             if (wordBlock) {
                 start = wordBlock.start 
             }
-            else {
+            else if (wordBlocks.length > 0) {
                 start = wordBlocks[wordBlocks.length-1].end
+            }
+            else {
+                start = 0
             }
 
             words.splice(start + wordIndexAdjust, 0, new StudyPhrase(phrase, englishBlock.en(phraseMatch), []))

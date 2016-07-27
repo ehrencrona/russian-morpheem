@@ -22,7 +22,7 @@ interface State {
 let React = { createElement: createElement }
 
 function untranslated(sentence: Sentence) {
-    return !sentence.english.trim()
+    return !sentence.english || !sentence.english.trim()
 }
 
 export default class UntranslatedSentencesComponent extends Component<Props, State> {
@@ -33,6 +33,10 @@ export default class UntranslatedSentencesComponent extends Component<Props, Sta
     }
 
     translate(english: string) {
+        if (!english) {
+            return
+        }
+
         let sentence = this.state.sentence
 
         if (english != sentence.english) {
@@ -69,7 +73,7 @@ export default class UntranslatedSentencesComponent extends Component<Props, Sta
                     <div>
                         <p><b>{ this.state.sentence.toString() }</b></p>
 
-                        <input type='text' defaultValue={ this.state.sentence.english } ref='input'                 
+                        <input type='text' defaultValue={ this.state.sentence.english || '' } ref='input'                 
                             onKeyPress={ (event) => {                    
                             if (event.charCode == 13) {
                                 this.translate((event.target as HTMLInputElement).value) 
@@ -77,7 +81,7 @@ export default class UntranslatedSentencesComponent extends Component<Props, Sta
                         }/>
 
                         <div className='buttonBar'>
-                            <div className='open' onClick={ () => openSentence(this.state.sentence, this.props.corpus, this.props.tab) }>Open</div>
+                            <div className='button' onClick={ () => openSentence(this.state.sentence, this.props.corpus, this.props.tab) }>Open</div>
                             <div className='button' onClick={ () => this.translate( (this.refs['input'] as HTMLInputElement).value ) }>Save</div>
                         </div>
                     </div>

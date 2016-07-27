@@ -55,6 +55,7 @@ export default class SentencesComponent extends Component<Props, State> {
                             corpus={ this.props.corpus }
                             patterns={ [ this.state.pattern ] }
                             tab={ this.props.tab }
+                            limit={ 200 }
                             />
 
                     :

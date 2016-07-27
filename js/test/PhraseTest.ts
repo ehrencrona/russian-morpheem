@@ -44,7 +44,7 @@ describe('Phrase', function() {
 
     facts.tag(w4, 'animate')
     facts.tag(w3, 'location')
-/*
+
     it('converts to str and back', function () {
         function testStr(originalStr: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)
@@ -72,7 +72,13 @@ describe('Phrase', function() {
 
         expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
     })
-*/
+
+    it('cant reproduce a bug', () => {
+
+
+//        noun@acc noun@gen+
+
+    })
 
     it('matches', function () {
         let wordArray = [
@@ -86,7 +92,7 @@ describe('Phrase', function() {
             expect(phrase.match(wordArray, facts).words.length).to.equal(length)
         }
 
-/*
+
         testMatch('в[loc]@ библиотека@prep', 2)
         testMatch('в[loc]@ библиотека@', 2)
         testMatch('в[loc]@ библиотека', 2)
@@ -94,7 +100,7 @@ describe('Phrase', function() {
         testMatch('в[loc]@ tag:location', 2)
         testMatch('в[loc]@ noun+', 2)
         testMatch('в[loc]@ noun@prep+', 2)
-        */
+        
         testMatch('в[loc]@ any noun@prep+', 2)
         
         testMatch('noun@prep+', 1)

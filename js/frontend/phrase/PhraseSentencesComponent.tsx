@@ -26,6 +26,7 @@ interface Props {
     noMatchIsConflict?: boolean
     tab: Tab
     buttonFactory?: (sentence: Sentence) => ReactElement<any>
+    limit?: number
 }
 
 interface State {
@@ -84,11 +85,16 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
             return matches
         }
 
+        let limit = this.props.limit
+
         this.props.corpus.sentences.sentences.forEach((sentence) => {
-            if (this.props.filter && !this.props.filter(sentence)) {
+            if (limit && matches.length >= limit) {
                 return
             }
 
+            if (this.props.filter && !this.props.filter(sentence)) {
+                return
+            }
             
             let match
             
