@@ -36,6 +36,7 @@ import getEventsByDate from './route/eventsByDate'
 import getNewsfeed from './route/getNewsfeed'
 import getExternalSentences from './route/getExternalSentences'
 import importExternalSentence from './route/importExternalSentence'
+import getTranslation from './route/getTranslation'
 
 import registerExposures from './route/registerExposures'
 import getExposures from './route/getExposures'
@@ -133,6 +134,8 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/exposure`, registerExposures(corpus))    
 
     app.get(`/api/${lang}/exposure`, getExposures(corpus))    
+
+    app.get(`/api/translate`, getTranslation(corpus))    
 
 }
 

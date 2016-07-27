@@ -336,6 +336,14 @@ input[type=text], input[type=number] {
     }
 }
 
+.untranslated {    
+    input {
+        @extend .border-box-sizing;
+        width: 100%;
+        padding: $unit;
+    }
+}
+
 .wordSearch {    
     .filter {
         padding: $unit;

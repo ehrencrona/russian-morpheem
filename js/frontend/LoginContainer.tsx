@@ -12,6 +12,7 @@ import listenForChanges from './listenForChanges'
 
 import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
 import FrontendExternalCorpus from './external/FrontendExternalCorpus'
+import { setXrArgs } from './sentence/googleTranslate' 
 
 import xr from './xr';
 
@@ -90,6 +91,8 @@ export default class LoginContainer extends Component<Props, State> {
 
             corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
             corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus)
+
+            setXrArgs(xrArgs)
 
             this.setState({ corpus: corpus })
         })

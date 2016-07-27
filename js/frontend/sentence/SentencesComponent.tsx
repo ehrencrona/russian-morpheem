@@ -5,6 +5,7 @@ import Corpus from '../../shared/Corpus'
 
 import Tab from '../OpenTab'
 import PendingSentencesComponent from './PendingSentencesComponent'
+import UntranslatedSentencesComponent from './UntranslatedSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'
 import SentenceComponent from '../SentenceComponent'
@@ -21,6 +22,7 @@ const MY_LATEST = 'my-latest'
 const PENDING = 'pending'
 const NEWSFEED = 'newsfeed'
 const SEARCH = 'search'
+const UNTRANSLATED = 'untranslated'
 
 interface State {
     list?: string,
@@ -88,6 +90,11 @@ export default class SentencesComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } />
         }
+        else if (this.state.list == UNTRANSLATED) {
+            list = <UntranslatedSentencesComponent
+                corpus={ this.props.corpus }
+                tab={ this.props.tab } />
+        }
 
         return (<div>
                 <div className='buttonBar'>
@@ -98,6 +105,7 @@ export default class SentencesComponent extends Component<Props, State> {
                         { filterButton(SEARCH, 'Search') }
                         { filterButton(LATEST, 'Latest') }
                         { filterButton(MY_LATEST, 'My latest') }
+                        { filterButton(UNTRANSLATED, 'Untranslated') }
                         { filterButton(PENDING, 'Pending') }
                     </div>
                 </div>

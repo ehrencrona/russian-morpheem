@@ -32,7 +32,7 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.border-box-sizing, .wordTranslation input, .sentenceTab .sentenceTranslation input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
+.border-box-sizing, .wordTranslation input, .sentenceTab .sentenceTranslation input, .untranslated input, .searchSentences input, .phrase .pattern .field input, .study ul.unknown > li {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -195,6 +195,10 @@ input[type=text], input[type=number] {
         text-decoration: inherit; }
       .sentenceTab .sentenceFacts .current li .phrase, .sentenceTab .sentenceFacts .matching li .phrase {
         font-size: 80%; }
+
+.untranslated input {
+  width: 100%;
+  padding: 4px; }
 
 .wordSearch .filter {
   padding: 4px;
