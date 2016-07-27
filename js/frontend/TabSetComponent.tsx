@@ -1,14 +1,15 @@
 /// <reference path="../../typings/react/react.d.ts" />
 
-import {Component, cloneElement, createElement} from 'react';
-import Facts from './fact/FactsComponent';
-import StatsComponent from './StatsComponent';
-import Fact from './fact/FactComponent';
-import Sentence from './SentenceComponent';
-import Corpus from '../shared/Corpus';
-import Tab from './Tab';
-import TabComponent from './TabComponent';
-import SentencesComponent from './sentence/SentencesComponent';
+import {Component, cloneElement, createElement} from 'react'
+import Facts from './fact/FactsComponent'
+import StatsComponent from './StatsComponent'
+import Fact from './fact/FactComponent'
+import Sentence from './SentenceComponent'
+import Corpus from '../shared/Corpus'
+import Tab from './Tab'
+import TabComponent from './TabComponent'
+import SentencesComponent from './sentence/SentencesComponent'
+import PhrasesComponent from './sentence/PhrasesComponent'
 
 interface Props {
     corpus: Corpus
@@ -46,17 +47,7 @@ export default class TabSetComponent extends Component<Props, State> {
             console.error(e.stack)
         }
 
-        if (!state.tabs.find((tab) => tab.id == 'facts')) {
-            state.tabs.push(this.createFactsTab())
-        }
-
-        if (!state.tabs.find((tab) => tab.id == 'sentences')) {
-            state.tabs.push(this.createSentencesTab())
-        }
-
-        if (!state.tabs.find((tab) => tab.id == 'stats')) {
-            state.tabs.push(this.createStatsTab())
-        }
+        this.addStandardTabs(state)
 
         if (document.location.hash) {
             let sentenceId = parseInt(document.location.hash.substr(1))
@@ -78,6 +69,24 @@ export default class TabSetComponent extends Component<Props, State> {
         }
 
         this.state = state
+    }
+
+    addStandardTabs(state: State) {
+        if (!state.tabs.find((tab) => tab.id == 'facts')) {
+            state.tabs.push(this.createFactsTab())
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'sentences')) {
+            state.tabs.push(this.createSentencesTab())
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'stats')) {
+            state.tabs.push(this.createStatsTab())
+        }
+
+        if (!state.tabs.find((tab) => tab.id == 'phrases')) {
+            state.tabs.push(this.createPhrasesTab())
+        }
     }
 
     componentDidUpdate() {
@@ -131,6 +140,10 @@ export default class TabSetComponent extends Component<Props, State> {
                 return this.createSentencesTab()
             }
 
+            if (id == 'phrases') {
+                return this.createPhrasesTab()
+            }
+
             console.warn('Could not build tab ' + id)
 
             return null
@@ -155,6 +168,11 @@ export default class TabSetComponent extends Component<Props, State> {
     createStatsTab() {
         return new Tab('Stats', 'stats',
             <StatsComponent corpus={ this.props.corpus } tab={ null } ></StatsComponent>, this)
+    }
+
+    createPhrasesTab() {
+        return new Tab('Phrases', 'phrases',
+            <PhrasesComponent corpus={ this.props.corpus } tab={ null } ></PhrasesComponent>, this)
     }
 
     tabExists(id: string) {
@@ -246,6 +264,17 @@ export default class TabSetComponent extends Component<Props, State> {
         return this.state.tabs.slice(this.state.first, this.state.first+2);
     }
     
+    closeAll() {
+        let state: State = {
+            tabs: [],
+            first: 0
+        }
+
+        this.addStandardTabs(state)
+
+        this.setState(state)
+    }
+
     render() {
         let toClosedTab = (offset, addToFirst) => (tab: Tab, index) => {
             let factIndex
@@ -275,6 +304,7 @@ export default class TabSetComponent extends Component<Props, State> {
 
         return (
             <div className='tabSet'>
+                <div className='closeAll' onClick={ () => this.closeAll() }>Close All</div>
                 <div className='closedTabs'>
                     <div className='tabs'>
                         { this.state.tabs.slice(0, this.state.first).map(toClosedTab(0, 0)) }

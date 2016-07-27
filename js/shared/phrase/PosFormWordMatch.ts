@@ -3,7 +3,7 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
-import { EXACT_MATCH_QUANTIFIER, ANY_MATCH_QUANTIFIER } from './AbstractQuantifierMatch'
+import { EXACT_MATCH_QUANTIFIER, ANY_MATCH_QUANTIFIER, AT_LEAST_ONE_QUANTIFIER } from './AbstractQuantifierMatch'
 import AbstractQuantifierMatch from './AbstractQuantifierMatch'
 
 export const POS_NAMES = {
@@ -18,7 +18,7 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
     posName: string 
 
     constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
-        super((!quantifier && pos ? ANY_MATCH_QUANTIFIER : quantifier))
+        super((!quantifier && pos ? AT_LEAST_ONE_QUANTIFIER : quantifier))
 
         this.form = form
         this.formStr = formStr

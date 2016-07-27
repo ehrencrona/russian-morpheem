@@ -123,6 +123,20 @@ input[type=text], input[type=number] {
         }
     }
 
+    .closeAll {
+        color: $color12;
+        margin: 2 * $unit;
+        padding: 2 * $unit;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: lighten($color4, 10%);
+    }
+
+    .closeAll:hover {
+        background-color: darken($color-bg-light, 20%);
+    }
+
     .openTabs {    
         display: flex;
         flex-grow: 1;

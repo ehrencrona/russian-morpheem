@@ -3,6 +3,7 @@ import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import PhrasePattern from './PhrasePattern'
 import { JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
+import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 import { CaseStudy, Match } from './PhrasePattern'
 import Words from '../Words'
 import Inflections from '../inflection/Inflections'
@@ -50,6 +51,10 @@ export default class Phrase implements Fact {
 
     visitFacts(visitor: (Fact) => any) {
         visitor(this)
+    }
+
+    hasCase(grammaticalCase: GrammaticalCase): boolean {
+        return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
     }
     
     toJson(): JsonFormat {

@@ -8,6 +8,7 @@ type Range = number[]
 
 export const ANY_MATCH_QUANTIFIER = '*'
 export const EXACT_MATCH_QUANTIFIER = '!'
+export const AT_LEAST_ONE_QUANTIFIER = '+'
 
 export const QUANTIFIERS: { [name: string]: Range } = {
     '?': [ 0, 1 ],

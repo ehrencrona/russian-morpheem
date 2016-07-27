@@ -111,6 +111,7 @@ CASES[GrammaticalCase.DAT] = 'dat'
 CASES[GrammaticalCase.ACC] = 'acc'
 CASES[GrammaticalCase.INSTR] = 'instr'
 CASES[GrammaticalCase.PREP] = 'prep'
+CASES[GrammaticalCase.LOC] = 'loc'
 
 
 addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),

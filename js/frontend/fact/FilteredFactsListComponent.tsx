@@ -18,7 +18,8 @@ import { FactIndex } from './FactIndex'
 interface Props {
     corpus: Corpus,
     tab: Tab,
-    filter: (factIndex: FactIndex) => boolean
+    filter: (factIndex: FactIndex) => boolean,
+    typeFilter?: boolean
 }
 
 interface State {
@@ -59,23 +60,26 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
 
         return (
             <div>
-                <ul className='formFilter'>
-                    <li className={ (this.state.showInflectionFact ? 'active' : '') } 
-                        onClick={ () => this.setState({ showInflectionFact: !this.state.showInflectionFact }) }>
-                        Forms
-                    </li>
+                {this.props.typeFilter ? 
+                    <ul className='formFilter'>
+                        <li className={ (this.state.showInflectionFact ? 'active' : '') } 
+                            onClick={ () => this.setState({ showInflectionFact: !this.state.showInflectionFact }) }>
+                            Forms
+                        </li>
 
-                    <li className={ (this.state.showWords ? 'active' : '') } 
-                        onClick={ () => this.setState({ showWords: !this.state.showWords }) }>
-                        Words
-                    </li>
+                        <li className={ (this.state.showWords ? 'active' : '') } 
+                            onClick={ () => this.setState({ showWords: !this.state.showWords }) }>
+                            Words
+                        </li>
 
-                    <li className={ (this.state.showPhrases ? 'active' : '') } 
-                        onClick={ () => this.setState({ showPhrases: !this.state.showPhrases }) }>
-                        Phrases
-                    </li>
-                </ul>
-
+                        <li className={ (this.state.showPhrases ? 'active' : '') } 
+                            onClick={ () => this.setState({ showPhrases: !this.state.showPhrases }) }>
+                            Phrases
+                        </li>
+                    </ul>
+                    : 
+                    <div/>
+                }
 
                 { (
                     factIndices.length > PAGE_SIZE ?

@@ -16,7 +16,7 @@ import { expect } from 'chai';
 
 let inflections = new Inflections([
     new Inflection('infl', 'nom', 'n', 
-        parseEndings('nom а, prep е', 'ru', 'n').endings),
+        parseEndings('nom а, acc у, gen и, prep е', 'ru', 'n').endings),
     new Inflection('adj', 'm', 'adj', 
         parseEndings('m ий, adv о', 'ru', 'adj').endings)
 ])
@@ -45,6 +45,21 @@ describe('Phrase', function() {
     facts.tag(w4, 'animate')
     facts.tag(w3, 'location')
 
+    it('cant reproduce a bug', () => {
+        let shouldMatch = [
+            w4.inflect('acc'), w4.inflect('gen')
+        ]
+
+        let shouldNotMatch = [
+            w1, w2, w4.inflect('acc')
+        ]
+
+        let phrase = Phrase.fromString('foo', 'noun@acc+ noun@gen+', 'English', words, inflections)
+
+        expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
+        expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
+    })
+
     it('converts to str and back', function () {
         function testStr(originalStr: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)
@@ -71,13 +86,6 @@ describe('Phrase', function() {
         expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
 
         expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
-    })
-
-    it('cant reproduce a bug', () => {
-
-
-//        noun@acc noun@gen+
-
     })
 
     it('matches', function () {

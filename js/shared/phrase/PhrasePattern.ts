@@ -14,6 +14,7 @@ import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
+import FormMatch from './FormMatch'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
@@ -53,7 +54,6 @@ export default class PhrasePattern {
                 minWords--
             }
         })
-
         for (let i = 0; i <= words.length - minWords; i++) {
             let at = i
             let found = true
@@ -198,6 +198,10 @@ export default class PhrasePattern {
         })
 
         return result
+    }
+
+    hasCase(grammaticalCase: GrammaticalCase): boolean {
+        return !!this.wordMatches.find((m) => (m as any).form && (m as any).form.grammaticalCase == grammaticalCase)
     }
 
     static parseFormMatch(str: string, line: string) {

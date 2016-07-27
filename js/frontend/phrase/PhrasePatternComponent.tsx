@@ -51,6 +51,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             let newPattern = PhrasePattern.fromString(patternStr.trim(), oldPattern.en,
                 this.props.corpus.words, this.props.corpus.inflections)
 
+            this.setState({ error: null })
+
             if (newPattern.toString() == oldPattern.toString()) {
                 return
             }
@@ -59,8 +61,6 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                 (p == oldPattern ? newPattern : p))
 
             this.props.corpus.phrases.setPattern(this.props.phrase, patterns)
-
-            this.setState({ error: null })
 
             this.props.onChange();
         }

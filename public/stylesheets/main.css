@@ -63,6 +63,16 @@ input[type=text], input[type=number] {
           background-color: #958ec2; }
         .tabSet .closedTabs .tabs .tab .tab-close:hover {
           background-color: #d8c8b1; }
+  .tabSet .closeAll {
+    color: #f8f9f3;
+    margin: 8px;
+    padding: 8px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #958ec2; }
+  .tabSet .closeAll:hover {
+    background-color: #d8c8b1; }
   .tabSet .openTabs {
     display: flex;
     flex-grow: 1; }
