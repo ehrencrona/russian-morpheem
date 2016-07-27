@@ -14,7 +14,6 @@ import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
-import FormMatch from './FormMatch'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
