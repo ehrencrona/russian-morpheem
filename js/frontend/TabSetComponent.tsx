@@ -265,9 +265,22 @@ export default class TabSetComponent extends Component<Props, State> {
     }
     
     closeAll() {
+        let currentFirst = this.state.tabs[this.state.first].id
+        let currentSecond = this.state.tabs[this.state.first].id
+
         let state: State = {
-            tabs: [],
+            tabs: this.state.tabs.filter((t) => ['facts', 'stats', 'sentences', 'phrases' ].indexOf(t.id) >= 0),
             first: 0
+        }
+
+        state.first = this.state.tabs.findIndex((t) => t.id == currentFirst)
+
+        if (state.first < 0) {
+            state.first = this.state.tabs.findIndex((t) => t.id == currentSecond) - 1
+
+            if (state.first < 0) {
+                state.first = 0
+            }
         }
 
         this.addStandardTabs(state)
