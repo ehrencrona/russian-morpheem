@@ -19,7 +19,7 @@ interface Props {
     corpus: Corpus,
     tab: Tab,
     filter: (factIndex: FactIndex) => boolean,
-    typeFilter?: boolean
+    hideTypeFilter?: boolean
 }
 
 interface State {
@@ -60,7 +60,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
 
         return (
             <div>
-                {this.props.typeFilter ? 
+                {!this.props.hideTypeFilter ? 
                     <ul className='formFilter'>
                         <li className={ (this.state.showInflectionFact ? 'active' : '') } 
                             onClick={ () => this.setState({ showInflectionFact: !this.state.showInflectionFact }) }>

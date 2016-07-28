@@ -68,7 +68,8 @@ export default class FactsTagComponent extends Component<Props, State> {
             <FilteredFactsListComponent 
                 corpus={ this.props.corpus }
                 tab={ this.props.tab }
-                filter={ filter } />
+                filter={ filter }
+                hideTypeFilter={ true } />
         </div>)
     }
 }

@@ -27,8 +27,7 @@ export default class Phrase implements Fact {
     static fromString(id: string, str: string, en: string, words: Words, inflections: Inflections) {
         return new Phrase(
             id,
-            str.split(',').map((str) => 
-                PhrasePattern.fromString(str.trim(), en, words, inflections)))
+            [ PhrasePattern.fromString(str.trim(), en, words, inflections) ])
     }
 
     match(words: Word[], facts: Facts, study?: CaseStudy): Match {

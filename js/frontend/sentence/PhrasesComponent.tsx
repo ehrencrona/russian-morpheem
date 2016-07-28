@@ -56,13 +56,15 @@ export default class PhrasesComponent extends Component<Props, State> {
                      
                      return fact instanceof Phrase && fact.hasCase(this.state.case)
                 } }
-                tab={ this.props.tab } />
+                tab={ this.props.tab }
+                hideTypeFilter={ true } />
         }
         else {
             list = <FilteredFactsListComponent
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => factIndex.fact instanceof Phrase }
-                tab={ this.props.tab } />
+                tab={ this.props.tab }
+                hideTypeFilter={ true } />
         }
 
         return (<div>
