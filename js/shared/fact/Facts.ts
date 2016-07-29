@@ -77,7 +77,15 @@ export default class Facts {
         this.factsById[fact.getId()] = fact
         this.factIndexById[fact.getId()] = this.facts.length
         this.facts.push(fact)
-        
+
+        if (fact instanceof Phrase) {
+            fact.getCaseFacts().forEach((caseFact) => {
+                // casefacts are placed at the same index but not present in the list of facts.
+                this.factsById[caseFact.getId()] = caseFact                
+                this.factIndexById[caseFact.getId()] = this.facts.length
+            })
+        }
+
         if (this.onAdd) {
             this.onAdd(fact)
         }

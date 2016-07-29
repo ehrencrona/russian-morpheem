@@ -1,5 +1,6 @@
 
 import WordMatch from './WordMatch'
+import CaseStudyMatch from './CaseStudyMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
@@ -14,7 +15,7 @@ export const POS_NAMES = {
     pronoun: 'pron'
 }
 
-export default class PosFormWordMatch extends AbstractQuantifierMatch {
+export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch {
     posName: string 
 
     constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
@@ -48,7 +49,11 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
     }
 
     isCaseStudy() {
-        return !!(this.form && (this.form.grammaticalCase || this.form.comparison))
+        return !!(this.form && this.form.grammaticalCase)
+    }
+
+    getCaseStudied() {
+        return this.form.grammaticalCase
     }
 
     toString() {

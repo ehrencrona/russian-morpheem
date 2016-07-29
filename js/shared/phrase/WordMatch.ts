@@ -1,6 +1,7 @@
 
 import Word from '../Word'
 import Facts from '../fact/Facts'
+import { GrammaticalCase } from '../inflection/InflectionForms'
 
 interface WordMatch {
 
@@ -10,6 +11,7 @@ interface WordMatch {
 
     allowEmptyMatch(): boolean
 
+    /* must also implement CaseStudyMatch if true */
     isCaseStudy(): boolean
 
 }

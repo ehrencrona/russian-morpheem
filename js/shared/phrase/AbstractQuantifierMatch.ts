@@ -31,6 +31,8 @@ abstract class AbstractQuantifierMatch implements WordMatch {
 
     abstract wordMatches(word: Word)
     
+    abstract getCaseStudied()
+    
     abstract isCaseStudy()
 
     matches(words: Word[], wordPosition: number): number {

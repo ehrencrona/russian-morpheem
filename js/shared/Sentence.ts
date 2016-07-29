@@ -123,7 +123,7 @@ export default class Sentence {
             word.visitFacts(visitor)
         }
 
-        this.phrases.forEach((phrase) => phrase.visitFacts(visitor))
+        this.phrases.forEach((phrase) => phrase.visitFactsForSentence(visitor))
     }
 
     innerToString(wordToString: (word: Word, first: boolean, index: number) => string) {

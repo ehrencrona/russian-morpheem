@@ -35,6 +35,11 @@ import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelec
 import ExplainFormComponent  from './ExplainFormComponent'
 import ForgettingStats from './ForgettingStats'
 
+
+import Phrase from '../../shared/phrase/Phrase'
+import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
+
+
 interface Props {
     corpus: Corpus,
     xrArgs: { [arg: string] : string }
@@ -99,6 +104,11 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         factScores = topScores(factScores, 20)
 
+factScores = [ { 		
+    fact: (this.props.corpus.facts.get('comp-gen') as Phrase).getCaseFact(GrammaticalCase.GEN),		
+    score: 1
+} ]
+
         let sentenceScores = sentencesForFacts(factScores, this.sentencesByFactIndex)
 
         sentenceScores = new OldestSentenceSelector(this.sentenceKnowledge, this.props.corpus.facts)
@@ -108,12 +118,8 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
-/*
-factScores = [ { 		
-    fact: this.props.corpus.facts.get('голос'),		
-    score: 1
-} ]
 
+/*
 sentenceScores = [{
     sentence: this.props.corpus.sentences.get(5235),
     score: 1,

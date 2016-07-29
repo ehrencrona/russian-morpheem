@@ -9,11 +9,13 @@ import Words from '../../shared/Words'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
 
 import UnknownFact from './UnknownFact'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
+import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
 export function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact): string {
     let fact = studiedFact
@@ -120,6 +122,15 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fac
         return wordHint
     }
 
+    let isGiveaway = (fact: Fact) => {
+        if (studiedFact instanceof PhraseCase) {
+            return (fact instanceof InflectionFact)
+        }
+        else { 
+            return false
+        }
+    } 
+
     let result = {
         id: word.getId(),
         jp: word.jp,
@@ -128,7 +139,7 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fac
             return getFormHint(word, words, studiedFact) 
         },
         form: (word instanceof InflectedWord ? FORMS[word.form] : null),
-        getHintFacts: () => facts,
+        getHintFacts: () => facts.filter((f) => !isGiveaway(f.fact)),
         facts: facts,
         wordFact: word
     }
@@ -199,6 +210,7 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
 
         if ((!wordBlock || (englishBlock && wordBlock.caseStudy)) && 
                 !englishBlock.placeholder) {
+            // add an English text block with no corresponding Russian text
             let start
             
             if (wordBlock) {
@@ -222,6 +234,7 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
         }
         else if (!englishBlock ||
             (!wordBlock.caseStudy && englishBlock.placeholder)) {
+            // add a Russian text block with English equivalent.
             words.splice(wordBlock.start + wordIndexAdjust, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, '', 
                     words.slice(wordBlock.start, wordBlock.end)))
@@ -231,10 +244,19 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
             atWordBlock++
         }
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
+            // case study block: retain Russian words
+            wordBlock.words.forEach((word) => {
+                word.facts.push({
+                    fact: phrase.getCaseFact(word.form.grammaticalCase),
+                    word: word 
+                })
+            })
+
             atWordBlock++
             atFragment++
         }
         else if (!wordBlock.caseStudy && !englishBlock.placeholder) {
+            // add an English text block for Russian text
             words.splice(wordBlock.start + wordIndexAdjust, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, englishBlock.en(phraseMatch), 
                     words.slice(wordBlock.start, wordBlock.end)))
@@ -267,8 +289,10 @@ export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corp
         let wordMatch: Match = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_WORDS)
 
         if (!wordMatch) {
-            console.warn(phrase + ' does not match ' + sentence + ' for study words.')
-            return
+            wordMatch = {
+                words: [],
+                pattern: null
+            }
         }
 
 console.log('phrase match ' + phraseMatch.words.map((m) => m.word.jp).join(' - '))
@@ -284,6 +308,12 @@ console.log('word blocks', wordBlocks.map((wb) => wb.words.map((w) => w.jp).join
         else {
             phraseMatch.words.forEach((m) => {
                 words[m.index].facts.push({ fact: phrase, word: words[m.index] })
+
+                if (m.wordMatch.isCaseStudy()) {
+                    words[m.index].facts.push({ 
+                        fact: phrase.getCaseFact(((m.wordMatch as any) as CaseStudyMatch).getCaseStudied()), 
+                        word: words[m.index] })
+                }
             })
         }
     }

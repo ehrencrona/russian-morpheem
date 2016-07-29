@@ -2,6 +2,8 @@
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import PhrasePattern from './PhrasePattern'
+import PhraseCase from './PhraseCase'
+import CaseStudyMatch from './CaseStudyMatch'
 import { JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 import { CaseStudy, Match } from './PhrasePattern'
@@ -18,6 +20,7 @@ export interface JsonFormat {
 
 export default class Phrase implements Fact {
     description: string = ''
+    casesCache: PhraseCase[]
 
     constructor(public id: string, public patterns: PhrasePattern[]) {
         this.id = id
@@ -52,8 +55,43 @@ export default class Phrase implements Fact {
         visitor(this)
     }
 
+    /** When visiting a sentence, the phrase implies knowledge of which cases to use which it, but when 
+      * talking about an individual study word, it does not. So this method is used when visiting the 
+      * sentence facts.
+      */
+    visitFactsForSentence(visitor: (Fact) => any) {
+        visitor(this)
+
+        this.getCaseFacts().forEach(visitor)
+    }
+
     hasCase(grammaticalCase: GrammaticalCase): boolean {
         return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
+    }
+
+    getCaseFacts() {
+        if (!this.casesCache) {
+            this.casesCache = []
+
+            let allCases = {}
+            this.patterns.forEach((p) => p.wordMatches.forEach((m) => {
+                if (m.isCaseStudy()) {
+                    let grammaticalCase = ((m as any) as CaseStudyMatch).getCaseStudied()
+
+                    if (!allCases[grammaticalCase]) {
+                        allCases[grammaticalCase] = true
+                        
+                        this.casesCache.push(this.getCaseFact(grammaticalCase))
+                    }
+                }
+            }))
+        }
+
+        return this.casesCache
+    }
+
+    getCaseFact(grammaticalCase: GrammaticalCase): PhraseCase {
+        return new PhraseCase(this, grammaticalCase)
     }
     
     toJson(): JsonFormat {

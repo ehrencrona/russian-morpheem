@@ -1,12 +1,13 @@
 
 import WordMatch from './WordMatch'
+import CaseStudyMatch from './CaseStudyMatch'
 import Word from '../Word'
 import Facts from '../fact/Facts'
 import Fact from '../fact/Fact'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm, GrammaticalCase } from '../inflection/InflectionForms'
 
-export default class TagWordMatch implements WordMatch {
+export default class TagWordMatch implements WordMatch, CaseStudyMatch {
     constructor(public tag : string, public form: InflectionForm) {
         this.tag = tag
         this.form = form
@@ -48,7 +49,11 @@ export default class TagWordMatch implements WordMatch {
     }
 
     isCaseStudy() {
-        return !!(this.form && (this.form.grammaticalCase || this.form.comparison))
+        return !!(this.form && this.form.grammaticalCase)
+    }
+
+    getCaseStudied() {
+        return this.form.grammaticalCase
     }
 
     allowEmptyMatch() {

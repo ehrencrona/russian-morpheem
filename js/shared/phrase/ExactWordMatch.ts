@@ -42,7 +42,7 @@ export class ExactWordMatch implements WordMatch {
     isCaseStudy() {
         return false
     }
-
+    
     toString() {
         let result = this.words.map((w) => w.getId()).join('|')
 

@@ -8,6 +8,7 @@ import Word from '../../shared/Word'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import Sentence from '../../shared/Sentence'
 import InflectableWord from '../../shared/InflectableWord'
 
@@ -18,10 +19,12 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import DesiredFormFactComponent from './DesiredFormFactComponent'
 import DesiredWordFactComponent from './DesiredWordFactComponent'
 import DesiredPhraseFactComponent from './DesiredPhraseFactComponent'
+import DesiredPhraseCaseComponent from './DesiredPhraseCaseComponent'
 import InflectionFactComponent from './InflectionFactComponent'
 import EndingTransformFactComponent from './EndingTransformFactComponent'
 import WordFactComponent from './WordFactComponent'
 import PhraseFactComponent from './PhraseFactComponent'
+import PhraseCaseComponent from './PhraseCaseComponent'
 import { TranslatableFact } from './WordFactComponent'
 
 export interface FactComponentProps<FactType> {
@@ -62,12 +65,18 @@ let unknownFactComponent = (props: Props) => {
         else if (fact instanceof Phrase) {
             componentType = createFactory(DesiredPhraseFactComponent) 
         }
+        else if (fact instanceof PhraseCase) {
+            componentType = createFactory(DesiredPhraseCaseComponent)
+        }
     }
     else if (fact instanceof InflectableWord || fact instanceof Word) {
         componentType = createFactory(WordFactComponent)
     }
     else if (fact instanceof EndingTransform) {
         componentType = createFactory(EndingTransformFactComponent)
+    }
+    else if (fact instanceof PhraseCase) {
+        componentType = createFactory(PhraseCaseComponent)
     }
     else if (fact instanceof Phrase) {
         componentType = createFactory(PhraseFactComponent)
