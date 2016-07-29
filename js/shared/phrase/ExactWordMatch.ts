@@ -8,8 +8,14 @@ import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 export type AnyWord = InflectableWord | Word
 
 export class ExactWordMatch implements WordMatch {
-    constructor(public word : AnyWord) {
-        this.word = word
+    wordIds: { [id:string]: boolean} = {}
+
+    constructor(public words : AnyWord[]) {
+        this.words = words
+
+        this.words.forEach((w) => {
+            this.wordIds[w.getId()] = true
+        })
     }
 
     matches(words: Word[], wordPosition: number): number {
@@ -17,13 +23,12 @@ export class ExactWordMatch implements WordMatch {
         let match = false
 
         if (firstWord) {
-            if (this.word instanceof InflectableWord) {
-                match =
-                    firstWord instanceof InflectedWord &&
-                    this.word.getId() == firstWord.word.getId()
+            if (firstWord instanceof InflectedWord && this.wordIds[firstWord.word.getId()]) {
+                match = true
             }
-            else {
-                match = firstWord.getId() == this.word.getId()
+
+            if (this.wordIds[firstWord.getId()]) {
+                match = true
             }
         }
 
@@ -39,8 +44,8 @@ export class ExactWordMatch implements WordMatch {
     }
 
     toString() {
-        let result = this.word.getId()
-        
+        let result = this.words.map((w) => w.getId()).join('|')
+
         if (result.indexOf('@') < 0) {
             result += '@'
         }

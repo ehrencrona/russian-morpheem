@@ -95,6 +95,17 @@ export class InflectionForm {
         this.pos = used.pos
     }
 
+    matches(otherForm: InflectionForm) {
+        return !(
+            (this.grammaticalCase != null && this.grammaticalCase != otherForm.grammaticalCase) ||
+            (this.gender != null && this.gender != otherForm.gender) ||
+            (this.number != null && this.number != otherForm.number) ||
+            (this.adjectiveForm != null && this.adjectiveForm != otherForm.adjectiveForm) ||
+            (this.comparison != null && this.comparison != otherForm.comparison) ||
+            (this.pos != null && this.pos != otherForm.pos) ||
+            (this.tense != null && this.tense != otherForm.tense))
+    }
+
 }
 
 export let FORMS: { [id: string]: InflectionForm } = {}

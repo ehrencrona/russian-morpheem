@@ -39,16 +39,7 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch {
             if (form) {
                 let wordForm = FORMS[word.form]
 
-                let res = !(!wordForm ||
-                    (form.grammaticalCase != null && form.grammaticalCase != wordForm.grammaticalCase) ||
-                    (form.gender != null && form.gender != wordForm.gender) ||
-                    (form.number != null && form.number != wordForm.number) ||
-                    (form.adjectiveForm != null && form.adjectiveForm != wordForm.adjectiveForm) ||
-                    (form.comparison != null && form.comparison != wordForm.comparison) ||
-                    (form.pos != null && form.pos != wordForm.pos) ||
-                    (form.tense != null && form.tense != wordForm.tense))
-
-                return res
+                return wordForm && form.matches(wordForm) 
             }
             else {
                 return true

@@ -14,11 +14,19 @@ import Phrase from '../shared/phrase/Phrase'
 
 import { expect } from 'chai';
 
+let mascInflection =
+    new Inflection('m', 'nom', 'n', 
+        parseEndings('nom , acc , gen и, prep е', 'ru', 'n').endings)
+
+let femInflection =
+    new Inflection('f', 'nom', 'n', 
+        parseEndings('nom а, acc у, gen и, prep е', 'ru', 'n').endings)
+
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', 'n', 
-        parseEndings('nom а, acc у, gen и, prep е', 'ru', 'n').endings),
+    femInflection,
     new Inflection('adj', 'm', 'adj', 
-        parseEndings('m ий, adv о', 'ru', 'adj').endings)
+        parseEndings('m ий, adv о', 'ru', 'adj').endings),
+    mascInflection
 ])
 
 describe('Phrase', function() {
@@ -26,15 +34,17 @@ describe('Phrase', function() {
     
     w1 = new Word('в', 'loc')
     w2 = new Word('в', 'dir')
-    w3 = new InflectableWord('библиотек', inflections.inflections[0])
+    w3 = new InflectableWord('библиотек', femInflection)
 
-    w4 = new InflectableWord('я', inflections.inflections[0])
+    w4 = new InflectableWord('я', mascInflection)
     w5 = new InflectableWord('хорош', inflections.inflections[1])
 
     words = new Words()
     words.addWord(w1)
     words.addWord(w2)
     words.addInflectableWord(w3)
+    words.addInflectableWord(w4)
+    words.addInflectableWord(w5)
 
     facts = new Facts()
     facts.add(w2)
@@ -68,6 +78,8 @@ describe('Phrase', function() {
         }
 
         testStr('в[loc]@ библиотека@prep')
+        testStr('в[loc]@ я|библиотека@prepositional')
+        testStr('в[loc]@ я|библиотека@')
         testStr('в[dir]@ @prep')
         testStr('в[loc]@ tag:location')
     })
@@ -100,8 +112,9 @@ describe('Phrase', function() {
             expect(phrase.match(wordArray, facts).words.length).to.equal(length)
         }
 
-
         testMatch('в[loc]@ библиотека@prep', 2)
+        testMatch('в[loc]@ я|библиотека@prepositional', 2)
+        testMatch('в[loc]@ я|библиотека', 2)
         testMatch('в[loc]@ библиотека@', 2)
         testMatch('в[loc]@ библиотека', 2)
         testMatch('в[loc]@ prep', 2)

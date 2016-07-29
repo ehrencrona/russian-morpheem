@@ -3,6 +3,7 @@ import WordMatch from './WordMatch'
 import WildcardMatch from './WildcardMatch'
 import { ExactWordMatch, AnyWord } from './ExactWordMatch'
 import PosFormWordMatch from './PosFormWordMatch'
+import WordInFormMatch from './WordInFormMatch'
 import { POS_NAMES } from './PosFormWordMatch'
 import TagWordMatch from './TagWordMatch'
 import { QUANTIFIERS } from './AbstractQuantifierMatch'
@@ -138,10 +139,10 @@ export default class PhrasePattern {
                         }
                         else {
                             let replace: { [key: string]: Word[]} = {}
-        console.log(match)
+
                             match.words.forEach((m) => {
                                 let mStr = m.wordMatch.toString()
-        console.log('mStr', mStr)
+
                                 if (en.indexOf(mStr) >= 0) {
                                     let r = replace[mStr]
 
@@ -155,8 +156,6 @@ export default class PhrasePattern {
                             })
 
                             Object.keys(replace).forEach((r) => {
-        console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
-
                                 en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 
                                     (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)
                                 ).join(' '))
@@ -168,10 +167,10 @@ export default class PhrasePattern {
                     },
                     en: (match: Match) => {
                         let replace: { [key: string]: Word[]} = {}
-    console.log(match)
+
                         match.words.forEach((m) => {
                             let mStr = m.wordMatch.toString()
-    console.log('mStr', mStr)
+
                             if (en.indexOf(mStr) >= 0) {
                                 let r = replace[mStr]
 
@@ -185,8 +184,6 @@ export default class PhrasePattern {
                         })
 
                         Object.keys(replace).forEach((r) => {
-    console.log('replace',r,'with', replace[r].map((w) => w.jp).join(' '))
-
                             en = en.replace(r, replace[r].map((w) => w.getEnglish()).join(' '))
                         })
 
@@ -278,7 +275,7 @@ export default class PhrasePattern {
             else if (str == 'any') {
                 match = new WildcardMatch()
             }
-            else if (str.indexOf('@') > 0 || words.inflectableWordsById[str] || words.get(str)) {
+            else if (str.indexOf('@') > 0 || str.indexOf('|') >= 0 || words.inflectableWordsById[str] || words.get(str)) {
                 let wordStr
                 let word: AnyWord
                 
@@ -289,23 +286,56 @@ export default class PhrasePattern {
                 if (str[str.length-1] == '@') {
                     wordStr = str.substr(0, str.length-1)
                     
-                    word = words.inflectableWordsById[wordStr] 
-                    
-                    if (!word) {
-                        word = words.get(wordStr) 
-                    }
+                    let wordList: AnyWord[] = wordStr.split('|').map((w) => {
+                        let result: AnyWord = words.inflectableWordsById[w]
+
+                        if (!result) {
+                            result = words.get(wordStr) 
+                        }
+                        
+                        if (!result) {
+                            throw new Error(`Unknown word "${w}". Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
+                        }
+
+                        return result
+                    })
+
+                    match = new ExactWordMatch(wordList)
                 }
                 else {
                     wordStr = str
 
                     word = words.get(wordStr)
-                }
 
-                if (!word) {
-                    throw new Error(`Unknown word "${ wordStr }". did you mean ${ words.getSimilarTo(wordStr).join(', ') }?`)
-                }
+                    if (!word) {
+                        let wordForm = str.split('@')
 
-                match = new ExactWordMatch(word)
+                        let wordList: InflectableWord[] = wordForm[0].split('|').map((w) => {
+                            let result = words.inflectableWordsById[w]
+
+                            if (!result) {
+                                throw new Error(`Unknown word "${w}". Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
+                            }
+
+                            return result
+                        })
+
+                        let form = FORMS[wordForm[1]]
+
+                        if (!form) {
+                            throw new Error(`Unknown form ${wordForm[1]} of word ${wordForm[0]}. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
+                        }
+
+                        match = new WordInFormMatch(wordList, form)
+                    }
+                    else {
+                        if (!word) {
+                            throw new Error(`Unknown word "${ wordStr }". Did you mean ${ words.getSimilarTo(wordStr).join(', ') }?`)
+                        }
+
+                        match = new ExactWordMatch([ word ])
+                    }
+                }
             }
             else {
                 throw new Error(`Unknown word match "${str}". Should either be a form, a part of speech (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)

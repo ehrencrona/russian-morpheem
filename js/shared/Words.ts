@@ -219,7 +219,7 @@ export default class Words {
         }
         
         
-        let sameLetter = Object.keys(this.wordsById).filter((word) => word[0] == token[0])
+        let sameLetter: string[] = Object.keys(this.wordsById).filter((word) => word[0] == token[0])
 
         let byMatchLength = sameLetter.map((word) => {
             let i;
@@ -242,7 +242,7 @@ export default class Words {
 
         let split = token.split('@');
         
-        let suggestions = byMatchLength.map((match) => match[0]);
+        let suggestions: string[] = byMatchLength.map((match) => match[0]);
         
         if (split[1]) {
             let rightForm = suggestions.filter((word) => {
