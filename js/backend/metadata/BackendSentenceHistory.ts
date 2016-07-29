@@ -330,7 +330,11 @@ export default class BackendSentenceHistory implements SentenceHistory {
         }
 
         return this.returnAllEvents(
-            db.collection(COLLECTION_EVENT).find( { notify: forAuthor } ).sort({ 'date': -1 }))
+            db.collection(COLLECTION_EVENT).find( 
+                { 
+                    notify: forAuthor, 
+                    date: { $gt: this.someTimeAgo() } 
+                } ).sort({ 'date': -1 }))
     }
 
     getExistingExternalIds(externalIds: string[]) {
