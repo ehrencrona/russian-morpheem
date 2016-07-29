@@ -123,19 +123,39 @@ export default class PhrasePattern {
                     enWithJpForCases: (match: Match) => {
                         
                         if (placeholder) {
-                            let m = match.words.filter((m) => m.wordMatch.isCaseStudy())[placeholderIndex]
+                            let atCaseStudyIndex = -1
+                            let atWordMatch 
 
-                            if (!m) {
+                            let m: WordMatched[] = match.words.filter((m) => {
+                                let wordMatch = m.wordMatch
+
+                                if (wordMatch.isCaseStudy()) {
+                                    if (wordMatch != atWordMatch) {
+                                        atCaseStudyIndex++
+
+                                        atWordMatch = wordMatch 
+                                    }
+
+                                    return atCaseStudyIndex == placeholderIndex
+                                } 
+                            })
+
+                            if (!m.length) {
                                 console.log(`Placeholders didn't match case studies in pattern "${this.toString()}"`)
 
                                 return en
                             }
 
-                            let placeholderWord = m.word
-
-                            return (placeholderWord instanceof InflectedWord ? 
-                                placeholderWord.word.getDefaultInflection().jp : 
-                                placeholderWord.jp)
+                            return m.map((wordMatched) => {
+                                let placeholderWord = wordMatched.word
+                                
+                                if (placeholderWord instanceof InflectedWord) {
+                                    return placeholderWord.word.getDefaultInflection().jp 
+                                }
+                                else {
+                                    return placeholderWord.jp
+                                }
+                            }).join(' ')
                         }
                         else {
                             let replace: { [key: string]: Word[]} = {}
