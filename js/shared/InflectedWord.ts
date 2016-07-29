@@ -79,6 +79,10 @@ export default class InflectedWord extends Word {
         }
     } 
 
+    hasMyStem(word: Word | InflectableWord) {
+        return this.word.hasMyStem(word)
+    }
+
     getDefaultInflection() {
         return this.word.getDefaultInflection()
     }

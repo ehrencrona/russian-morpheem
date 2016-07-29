@@ -3,6 +3,7 @@
 import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
 import Words from './Words'
+import InflectableWord from './InflectableWord'
 
 export interface JsonFormat {
     target: string,
@@ -152,6 +153,10 @@ export default class Word {
         }
 
         return result
+    }
+
+    hasMyStem(word: Word | InflectableWord) {
+        return word.getId() == this.getId()
     }
 
     getId() {

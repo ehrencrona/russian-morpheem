@@ -15,10 +15,15 @@ export default function(corpus: Corpus) {
 
         corpus.sentenceHistory.getStatus(sentenceId)
             .then((status: SentenceStatusResponse) => {
-                res.status(200).send({
-                    canAccept: status.canAccept && getAuthor(req).name != status.status.author,
-                    status: status.status
-                })
+                if (status) {
+                    res.status(200).send({
+                        canAccept: status.canAccept && getAuthor(req).name != status.status.author,
+                        status: status.status
+                    })
+                }
+                else {
+                    res.status(404).send({})
+                }
             })
             .catch((e) => {
                 console.log(e)

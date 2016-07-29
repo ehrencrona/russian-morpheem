@@ -63,6 +63,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             this.props.corpus.phrases.setPattern(this.props.phrase, patterns)
 
             this.props.onChange();
+
+            return newPattern
         }
         catch (e) {
             this.setState({ error: e.toString() })
@@ -119,7 +121,15 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                         
                             <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' 
                                 defaultValue={ pattern && pattern.toString() } 
-                                onBlur={ (e) => this.changePattern((e.target as HTMLInputElement).value, pattern) }/>
+                                onBlur={ (e) => {
+                                    let input = e.target as HTMLInputElement
+                                    
+                                    let newPattern = this.changePattern(input.value, pattern)
+
+                                    if (newPattern) {
+                                        input.value = newPattern.toString()
+                                    } 
+                                } }/>
                         </div>
 
                         <PhraseStudyWordsComponent 

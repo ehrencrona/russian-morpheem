@@ -150,6 +150,13 @@ export default class InflectableWord {
         return result
     }
 
+    hasMyStem(word: Word | InflectableWord) {
+        return word.getId() == this.getId() || (
+            word instanceof InflectedWord &&
+            word.word.getId() == this.getId()
+        )
+    }
+
     toString() {
         return this.getId() + ' (' + this.inflection.getId() + ')'
     }

@@ -5,7 +5,7 @@ import Fact from '../shared/fact/Fact'
 import InflectableWord from '../shared/InflectableWord'
 import InflectedWord from '../shared/InflectedWord'
 import ExactWordMatch from '../shared/phrase/ExactWordMatch'
-
+import WordInFormMatch from '../shared/phrase/WordInFormMatch'
 import Tab from './OpenTab'
 import Word from '../shared/Word'
 import Phrase from '../shared/phrase/Phrase'
@@ -32,8 +32,11 @@ export default class PhrasesWithWordComponent extends Component<Props, State> {
         let phrases: Phrase[] = this.props.corpus.phrases.all().filter((phrase) => 
             !!phrase.patterns.find((pattern) => 
                 !!pattern.wordMatches.find((wordMatch) => 
-                    wordMatch instanceof ExactWordMatch && 
-                    wordMatch.word.getId() == this.props.word.getId())
+                    (wordMatch instanceof ExactWordMatch || wordMatch instanceof WordInFormMatch) &&
+                    !!wordMatch.words.find((w) =>  
+                        this.props.word.hasMyStem(w)
+                    )
+                )
             )
         )
 
