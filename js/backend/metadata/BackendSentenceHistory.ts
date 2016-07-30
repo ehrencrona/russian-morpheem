@@ -158,6 +158,9 @@ export default class BackendSentenceHistory implements SentenceHistory {
         else if (eventType == EVENT_IMPORT) {
             collection = 'imports_by_date'
         }
+        else if (eventType == EVENT_TRANSLATE) {
+            collection = 'translates_by_date'
+        }
         else {
             throw new Error('Unhandled event type')
         }
