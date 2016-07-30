@@ -112,14 +112,16 @@ export default class StudyContainerComponent extends Component<Props, State> {
         sentenceScores = topScores(sentenceScores, 100)
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
+
+
 /*
 factScores = [ { 		
-    fact: (this.props.corpus.facts.get('comp-gen') as Phrase).getCaseFact(GrammaticalCase.GEN),		
+    fact: (this.props.corpus.facts.get('к-time') as Phrase),
     score: 1
 } ]
 
 sentenceScores = [{
-    sentence: this.props.corpus.sentences.get(5235),
+    sentence: this.props.corpus.sentences.get(4954),
     score: 1,
     fact: factScores[0].fact,
     debug: {}
@@ -127,6 +129,10 @@ sentenceScores = [{
 */
 
         let sentenceScore = chooseHighestScoreSentence(sentenceScores)
+
+        if (!sentenceScore) {
+            throw new Error('No sentence could be picked.')
+        }
 
         let sentence = sentenceScore.sentence
         let fact = sentenceScore.fact

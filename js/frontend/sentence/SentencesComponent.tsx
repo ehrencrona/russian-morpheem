@@ -98,16 +98,14 @@ export default class SentencesComponent extends Component<Props, State> {
 
         return (<div>
                 <div className='buttonBar'>
-                    <div>
-                        <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
+                    <div className='button' onClick={ () => { this.addSentence() }}>+ Sentence</div>
 
-                        { filterButton(NEWSFEED, 'Newsfeed') }
-                        { filterButton(SEARCH, 'Search') }
-                        { filterButton(LATEST, 'Latest') }
-                        { filterButton(MY_LATEST, 'My latest') }
-                        { filterButton(UNTRANSLATED, 'Untranslated') }
-                        { filterButton(PENDING, 'Pending') }
-                    </div>
+                    { filterButton(NEWSFEED, 'Newsfeed') }
+                    { filterButton(SEARCH, 'Search') }
+                    { filterButton(LATEST, 'Latest') }
+                    { filterButton(MY_LATEST, 'My latest') }
+                    { filterButton(UNTRANSLATED, 'Untranslated') }
+                    { filterButton(PENDING, 'Pending') }
                 </div>
 
                 { list }

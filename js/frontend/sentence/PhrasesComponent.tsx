@@ -43,7 +43,7 @@ export default class PhrasesComponent extends Component<Props, State> {
     
     render() {
         let caseButton = (grammaticalCase: GrammaticalCase) =>
-            <div className={ 'button ' + (this.state.case == grammaticalCase ? ' selected' : '') } 
+            <div className={ 'button ' + (this.state.case == grammaticalCase ? ' selected' : '') } key={ grammaticalCase } 
                 onClick={ () => { this.setState({ case: grammaticalCase, wordId: null }) }}>{ getFormName(CASES[grammaticalCase]) }</div>
 
         let list

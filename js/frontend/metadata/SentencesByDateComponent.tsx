@@ -131,6 +131,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
                     { filterButton( 'create', 'Written') }
                     { filterButton( 'accept', 'Accepted') }
                     { filterButton( 'importExternal', 'Imported') }
+                    { filterButton( 'translate', 'Translated') }
                 </div>
             
             <canvas ref={ (canvas) => this.renderGraph(canvas) }></canvas>

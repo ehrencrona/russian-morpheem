@@ -26,7 +26,8 @@ interface Props {
 }
 
 interface State {
-    tab: string
+    tab?: string,
+    includeConflicts?: boolean
 }
 
 let React = { createElement: createElement }
@@ -37,7 +38,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
         super(props)
         
         this.state = {
-            tab: 'sentences'
+            tab: 'sentences',
+            includeConflicts: false
         }
     }
 
@@ -78,7 +80,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
             tab = <AddSentenceToPhraseComponent 
                 corpus={ this.props.corpus } 
                 phrase={ fact } 
-                tab={ this.props.tab } />
+                tab={ this.props.tab } 
+            /> 
         }
 
         return (<div className='phrase'>
@@ -100,7 +103,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
             <PhrasePatternComponent 
                 phrase={ this.props.fact } 
                 corpus={ this.props.corpus } 
-                onChange={ () => { this.forceUpdate() } } 
+                onChange={ () => { this.forceUpdate() } }
                 />
         
             { tab }

@@ -19,11 +19,19 @@ interface Props {
 }
 
 interface State {
+    includeConflicts: boolean
 }
 
 let React = { createElement: createElement }
 
 export default class FindPhraseComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            includeConflicts: false
+        }
+    }
 
     addSentence(sentence: Sentence) {
         this.props.corpus.sentences.addPhrase(this.props.phrase, sentence)
@@ -45,7 +53,6 @@ export default class FindPhraseComponent extends Component<Props, State> {
         let phrase = this.props.phrase
         let facts = this.props.corpus.facts
 
-
         return <div>
             <div className='buttonBar'>                
                 <div className='button' 
@@ -55,12 +62,23 @@ export default class FindPhraseComponent extends Component<Props, State> {
                     }}>
                     Add all
                 </div>
+                <div>
+
+                    <input type='checkbox' defaultValue={ this.state.includeConflicts } 
+                        onChange={ (e) => {
+                            this.setState({ includeConflicts: (e.target as HTMLInputElement).checked })
+                            console.log('value',(e.target as HTMLInputElement).value)  
+                        } } 
+                        id='includeConflicts'/> 
+                    <label htmlFor='includeConflicts'>Include matches already part of another phrase</label> 
+
+                </div>
             </div>
             <PhraseSentencesComponent 
                 corpus={ this.props.corpus }
                 patterns={ phrase.patterns }
                 isConflict={ isConflictFunction(phrase, this.props.corpus.facts) }
-                includeConflicts={ false }
+                includeConflicts={ this.state.includeConflicts }
                 tab={ this.props.tab }
                 filter={ (sentence) => !sentence.hasPhrase(phrase) }
                 ref='sentences'
