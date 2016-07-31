@@ -19,7 +19,8 @@ interface Props {
     corpus: Corpus,
     tab: Tab,
     filter: (factIndex: FactIndex) => boolean,
-    hideTypeFilter?: boolean
+    hideTypeFilter?: boolean,
+    sort?: (fact1: Fact, fact2: Fact) => number 
 }
 
 interface State {
@@ -57,6 +58,12 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         }
 
         factIndices = factIndices.filter(this.props.filter)
+
+        if (this.props.sort) {
+            factIndices = factIndices.sort((i1, i2) => this.props.sort(i1.fact, i2.fact))
+        }
+
+        factIndices = factIndices.slice(this.state.startIndex, this.state.startIndex + PAGE_SIZE)
 
         return (
             <div>
@@ -105,7 +112,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
 
                 <ul className='facts'>
                 {
-                    factIndices.slice(this.state.startIndex, this.state.startIndex + PAGE_SIZE).map((factIndex) => {
+                    factIndices.map((factIndex) => {
                         let fact = factIndex.fact
                                                     
                         return <FactsEntryComponent

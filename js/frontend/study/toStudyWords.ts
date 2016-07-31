@@ -273,7 +273,7 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
     }
 }
 
-export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corpus: Corpus): StudyWord[] {
+export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corpus: Corpus, ignorePhrases?: boolean): StudyWord[] {
     let words: StudyWord[] = []
     
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFact)))
@@ -318,11 +318,13 @@ console.log('word blocks', wordBlocks.map((wb) => wb.words.map((w) => w.jp).join
         }
     }
 
-    sentence.phrases.forEach((p) => { 
-        if (p.getId() != studiedFact.getId()) {
-            handlePhrase(p)
-        }
-    })
+    if (!ignorePhrases) {
+        sentence.phrases.forEach((p) => { 
+            if (p.getId() != studiedFact.getId()) {
+                handlePhrase(p)
+            }
+        })
+    }
 
     if (studiedFact instanceof Phrase) {
         // needs to be done last since indexes change.

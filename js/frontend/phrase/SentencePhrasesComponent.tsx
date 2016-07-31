@@ -4,9 +4,12 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import PhraseFactComponent from './PhraseFactComponent'
 import Tab from '../OpenTab'
+import StudyPhrase from '../study/StudyPhrase'
+import toStudyWords from '../study/toStudyWords'
 
 interface Props {
     corpus: Corpus
@@ -59,6 +62,19 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
     }
 
+    renderStudyWords(phrase: Phrase) {
+        return <div>
+            <div className='match'>{ 
+                toStudyWords(this.props.sentence, phrase, this.props.corpus, true)
+                    .filter((w) => w instanceof StudyPhrase || !!w.facts.find((f) => f.fact instanceof PhraseCase))
+                    .map((w) => (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp)).join(' ') 
+            }</div>
+            <div className='phrase'>{ 
+                phrase.description 
+            }</div>
+        </div>
+    }
+
     render() {
         let corpus = this.props.corpus
         let sentence = this.props.sentence
@@ -69,8 +85,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
         let renderPhrase = (p) => 
             <div className='clickable' onClick={() => this.openPhrase(p) }>
-                { this.renderSentenceExtract(p) } 
-                <div className='phrase'>{ p.description }</div></div>
+                { this.renderStudyWords(p) }</div>
 
         return <div className='sentenceFacts'>
             <div className='current'>

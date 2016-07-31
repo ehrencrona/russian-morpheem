@@ -48,6 +48,10 @@ export default class PhrasesComponent extends Component<Props, State> {
 
         let list
 
+        function sort(fact1: Fact, fact2: Fact) {
+            return (fact1 as Phrase).description.localeCompare((fact2 as Phrase).description)
+        }
+
         if (this.state.case != null) {
             list = <FilteredFactsListComponent
                 corpus={ this.props.corpus }
@@ -57,6 +61,7 @@ export default class PhrasesComponent extends Component<Props, State> {
                      return fact instanceof Phrase && fact.hasCase(this.state.case)
                 } }
                 tab={ this.props.tab }
+                sort={ sort }
                 hideTypeFilter={ true } />
         }
         else {
@@ -64,6 +69,7 @@ export default class PhrasesComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => factIndex.fact instanceof Phrase }
                 tab={ this.props.tab }
+                sort={ sort }
                 hideTypeFilter={ true } />
         }
 
