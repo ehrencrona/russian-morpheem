@@ -62,9 +62,9 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
                     Pattern
                 </div>
                 {
-                    words.map((w) => 
+                    words.map((w, index) => 
                         
-                        <span className={ w instanceof StudyPhrase ? 'match' : '' }> { 
+                        <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
                             (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>
 
                     )

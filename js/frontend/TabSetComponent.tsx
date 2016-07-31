@@ -243,6 +243,7 @@ export default class TabSetComponent extends Component<Props, State> {
     
     close(index) {
         return (e) => {
+console.log('close', index)
             this.state.tabs.splice(index, 1)
             this.setState({ 
                 tabs: this.state.tabs,
@@ -315,8 +316,8 @@ export default class TabSetComponent extends Component<Props, State> {
             </div>
         }
 
-        let left = this.getVisibleTabs()[0]
-        let right = this.getVisibleTabs()[1]
+        let left = this.state.tabs[this.state.first]
+        let right = this.state.tabs[this.state.first+1]
 
         return (
             <div>
@@ -348,7 +349,7 @@ export default class TabSetComponent extends Component<Props, State> {
                                 key={ right.id }
                                 corpus={ this.props.corpus }
                                 tab={ right } 
-                                close={ this.close(this.state.first) }/>
+                                close={ this.close(this.state.first+1) }/>
                                 :
                             <div/>
                         }
