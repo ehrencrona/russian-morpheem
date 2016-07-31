@@ -107,7 +107,10 @@ export default class Word {
 
             homonyms = homonyms.filter((other) => other !== this)
 
-            if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
+            if (!homonyms.find((otherWord) => otherWord.getEnglish() == this.getEnglish())) {
+                form = this.getEnglish()
+            }
+            else if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
                 form = this.classifier
             }
             else {
