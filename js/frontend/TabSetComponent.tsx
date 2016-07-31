@@ -315,28 +315,46 @@ export default class TabSetComponent extends Component<Props, State> {
             </div>
         }
 
+        let left = this.getVisibleTabs()[0]
+        let right = this.getVisibleTabs()[1]
+
         return (
+            <div>
             <div className='tabSet'>
-                <div className='closeAll' onClick={ () => this.closeAll() }>Close All</div>
-                <div className='closedTabs'>
-                    <div className='tabs'>
+                <div className='column'>
+                    <div className='closedTabs'>
                         { this.state.tabs.slice(0, this.state.first).map(toClosedTab(0, 0)) }
                     </div>
-                    <div className='tabs'>
-                        { this.state.tabs.slice(this.state.first+2).map(toClosedTab(this.state.first+2, -1)).reverse() }
+                    <div className='openTabs'>
+                        { left ?
+                            <TabComponent 
+                                key={ left.id }
+                                corpus={ this.props.corpus }
+                                tab={ left } 
+                                close={ this.close(this.state.first) }/>
+                                :
+                            <div/>
+                        }
                     </div>
                 </div>
-                
-                <div className='openTabs'>
-                { this.getVisibleTabs().map(
-                    (tab, index) => 
-                        <TabComponent 
-                            key={ tab.id }
-                            corpus={ this.props.corpus }
-                            tab={ tab } 
-                            close={ this.close(this.state.first + index) }/>
-                ) }
+                <div className='column'>
+                    <div className='closeAll' onClick={ () => this.closeAll() }>Close All</div>
+                    <div className='closedTabs'>
+                        { this.state.tabs.slice(this.state.first+2).map(toClosedTab(this.state.first+2, -1)).reverse() }
+                    </div>
+                    <div className='openTabs'>
+                        { right ?
+                            <TabComponent 
+                                key={ right.id }
+                                corpus={ this.props.corpus }
+                                tab={ right } 
+                                close={ this.close(this.state.first) }/>
+                                :
+                            <div/>
+                        }
+                    </div>
                 </div>
+            </div>
             </div>
         )
     }

@@ -89,25 +89,25 @@ input[type=text], input[type=number] {
 .tabSet {
     height: 100vh;
     display: flex;
-    flex-direction: column;
-    padding: 2 * $unit;
-    
-    .closedTabs {
-        display: flex;
-        flex-shrink: 0;
 
-        .tabs:first-child {
-            padding-right: $unit;
-        }
+    .column:first-child {
+        padding-right: $unit;
+    }
 
-        .tabs:nth-child(2) {
-            padding-left: $unit;
-        }
+    .column:nth-child(2) {
+        padding-left: $unit;
+    }
 
-        .tabs {
-            width: 50%;
+    $tabHeight: 2em;
+
+    .column {
+        width: 50%;
+        padding: $unit;
+
+        .closedTabs {
 
             .tab {
+                height: $tabHeight;
                 background-color: $color4-light;
                 margin-bottom: 2px;
                 color: $color12;
@@ -121,65 +121,56 @@ input[type=text], input[type=number] {
                 }
             }
         }
-    }
 
-    .closeAll {
-        color: $color12;
-        margin: 2 * $unit;
-        padding: 2 * $unit;
-        position: absolute;
-        right: 0;
-        top: 0;
-        background-color: lighten($color4, 10%);
-    }
-
-    .closeAll:hover {
-        background-color: darken($color-bg-light, 20%);
-    }
-
-    .openTabs {    
-        display: flex;
-        flex-grow: 1;
-
-        .tab:first-child {
-            padding-right: $unit;
+        .closeAll {
+            @extend .border-box-sizing;
+            height: $tabHeight;
+            color: $color12;
+            margin: $unit;
+            padding: 2 * $unit;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: lighten($color4, 10%);
         }
 
-        .tab:nth-child(2) {
-            padding-left: $unit;
+        .closeAll:hover {
+            background-color: darken($color-bg-light, 20%);
         }
 
-        .tab {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            
-            .tab-header {
-                color: $color-fg-inverted;
-                background-color: $color-bg-inverted;
-                flex-shrink: 0;
+        .openTabs {
+            .tab {
+                display: flex;
+                flex-direction: column;
                 
-                .index {
-                    background-color: darken($color-bg-inverted, 10%);
-                }
-                
-                .tab-close {
-                    background-color: darken($color-bg-inverted, 10%);
-                }
+                .tab-header {
+                    color: $color-fg-inverted;
+                    background-color: $color-bg-inverted;
+                    flex-shrink: 0;
+                    
+                    .index {
+                        background-color: darken($color-bg-inverted, 10%);
+                    }
+                    
+                    .tab-close {
+                        background-color: darken($color-bg-inverted, 10%);
+                    }
 
-                .tab-close:hover {
-                    background-color: darken($color-bg-inverted, 20%);
+                    .tab-close:hover {
+                        background-color: darken($color-bg-inverted, 20%);
+                    }
                 }
-            }
-            
-            .content {
-                background-color: $color17;
-                flex-grow: 1;
-                overflow-y: scroll;
-                padding: 2 * $unit;
+                
+                .content {
+                    background-color: $color17;
+                    flex-grow: 1;
+                    overflow-y: scroll;
+                    padding: 2 * $unit;
+                }
             }
         }
     }
+
 }
 
 .tab-header {
