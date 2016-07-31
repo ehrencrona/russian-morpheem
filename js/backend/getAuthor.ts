@@ -74,6 +74,10 @@ const AUTHORS: { [id:string] : Author } = {
             name: 'inspectorpumpkin',
             id: 'U1PJ8GBRN'
         }
+    },
+    '579dd92a5baeed6d29ed2faf': {
+        numericalId: 17,
+        name: 'izabella'
     }
 }
 
