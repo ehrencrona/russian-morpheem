@@ -5,8 +5,6 @@ import { get } from 'request';
 
 var apiKey = 'AIzaSyDSw1HZQxVaucBB2R53mQQ1x4mx9vvxmsU'
 
-import xr from 'xr'
-
 import * as express from 'express'
 
 import { SentenceStatusResponse } from '../../shared/metadata/SentenceHistory'
