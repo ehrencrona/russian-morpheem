@@ -75,7 +75,7 @@ let result: XrInterface = {
         data: any,
         parameters?:  { [name: string]: string },
         args?: { [name: string]: any }) => {
-        return retryOnce(() => xr.post(url, parameters, args))
+        return retryOnce(() => xr.post(url, data, parameters, args))
     },
 
     put: (
@@ -84,7 +84,7 @@ let result: XrInterface = {
         parameters?:  { [name: string]: string },
         args?: { [name: string]: any }
     ) => {
-        return retryOnce(() => xr.put(url, parameters, args))
+        return retryOnce(() => xr.put(url, data, parameters, args))
     }
 };
 
