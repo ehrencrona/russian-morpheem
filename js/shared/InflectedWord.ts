@@ -49,7 +49,10 @@ export default class InflectedWord extends Word {
 
             homonyms = homonyms.filter((other) => other !== this)
 
-            if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
+            if (!homonyms.find((otherWord) => otherWord.getEnglish() == this.getEnglish())) {
+                disambiguation = this.getEnglish()
+            }
+            else if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
                 disambiguation = this.classifier
             }
             else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
@@ -64,9 +67,9 @@ export default class InflectedWord extends Word {
                     disambiguation = defaultInflection
                 } 
                 else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
-                    otherWord.word.getDefaultInflection().jp == defaultInflection && 
+                    otherWord.word.getEnglish() == this.getEnglish() && 
                     otherWord.form == this.form)) {
-                    disambiguation = this.form + ', ' + defaultInflection
+                    disambiguation = this.form + ', ' + this.getEnglish()
                 }
                 else {
                     console.warn(this + ' is ambiguous no matter what.', this.getId(), homonyms.map((w) => w.getId()))
