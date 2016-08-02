@@ -5,7 +5,6 @@ import human = require('human-time')
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
-import UnknownFactComponent from './UnknownFactComponent'
 import Fact from '../../shared/fact/Fact'
 
 import FactNameComponent from '../FactNameComponent'

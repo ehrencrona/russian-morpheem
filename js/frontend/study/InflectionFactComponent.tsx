@@ -4,11 +4,11 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
 import InflectedWord from '../../shared/InflectedWord'
-import { getFormName } from '../../shared/inflection/InflectionForms' 
+import { getFormName, INFLECTION_FORMS, FORMS, CASES, GENDERS, NUMBERS } from '../../shared/inflection/InflectionForms' 
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 
-import { FactComponentProps } from './UnknownFactComponent'
+import { FactComponentProps } from './StudyFactComponent'
 import ExplainFormComponent from './ExplainFormComponent'
 
 let React = { createElement: createElement }
@@ -23,7 +23,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
         super(props)
 
         this.state = {
-            explainWord: this.props.unknownFact.word.wordFact as InflectedWord
+            explainWord: this.props.studyFact.words[0].wordFact as InflectedWord
         }
     }
 
@@ -32,40 +32,106 @@ export default class InflectionFactComponent extends Component<FactComponentProp
     }
 
     render() {
-        let studyWord = this.props.unknownFact.word
+        let studyWord = this.props.studyFact.words[0]
         let word = studyWord.wordFact
 
-        let hiddenId = this.props.hiddenFact && this.props.hiddenFact.getId()
+        let hideWord = this.props.hiddenFacts.find((fact) => fact.fact.getId() == word.getId())
 
         if (word instanceof InflectedWord) {
-            let desc
+            // if we are not allowed to name the case, show an inflection table.
+            if (!!this.props.hiddenFacts.find((fact) => fact.fact instanceof PhraseCase && fact.words.indexOf(studyWord) >= 0)) {
 
-            if (word.word.getId() == hiddenId || 
-                    word.word.inflection.getFact(word.form).getId() == hiddenId) {
-                desc = <div>You are looking for the <strong>{ studyWord.form.name }</strong></div>
+                let allForms = INFLECTION_FORMS[this.props.corpus.lang][word.word.inflection.pos].allForms
+
+                let thisForm = FORMS[word.form]
+
+                let number = thisForm.number
+                let gender = thisForm.gender
+
+                let relevantForms = allForms.filter((testForm) => {
+                    if (FORMS[testForm].grammaticalCase == null) {
+                        return
+                    }
+
+                    if (FORMS[testForm].number != null && number != null && FORMS[testForm].number != number) {
+                        return false
+                    } 
+
+                    if (FORMS[testForm].gender != null && gender != null && FORMS[testForm].gender != gender) {
+                        return false
+                    } 
+
+                    return true
+                })
+
+                return <div>
+                    <strong>{ 
+                        hideWord ? studyWord.getHint() : word.word.getDefaultInflection().jp  
+                    }</strong> inflects as follows {
+
+                        (gender != null || number != 0 ?
+                            <span> in the <strong>{
+                            ( 
+                                (gender != null ? FORMS[GENDERS[gender]].name + ' ' : '') +
+                                (number != null ? FORMS[NUMBERS[number]].name : '')
+                            )
+                            }</strong></span>
+                            : <span/>
+                        )
+
+                    }:
+                    
+                    <ul>
+                        {
+                            relevantForms.map((form) => {
+                                console.log(form, word.word.inflection.getEnding(form))
+
+                                return <li key={form}>
+                                    { FORMS[CASES[FORMS[form].grammaticalCase]].name }: -<strong>{ 
+                                        word.word.inflection.getInflectedForm('', form).form 
+                                    }</strong>
+                                </li>
+                            })
+                        }
+                    </ul>
+                </div>
+
             }
+            // if we are not allowed to name the word, just show the english word and name the suffix
+            else if (hideWord) {
+                return <div>
+                    <strong>{ 
+                        studyWord.getHint() 
+                    }</strong> forms the <strong>{ 
+                        studyWord.form.name
+                    }</strong> with the ending <strong>-{
+                        word.word.inflection.getInflectedForm('', word.form).form
+                    }</strong>
+                </div>
+            }
+            // but in normal circumatances we just state the inflection form, the case and the default form
             else {
-                desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form.name }</strong> of <strong>{      word.word.getDefaultInflection().jp }</strong></div>
+                let desc = <div><strong>{ studyWord.jp }</strong> is the <strong>{ studyWord.form.name }</strong> of <strong>{ word.word.getDefaultInflection().jp }</strong></div>
+        
+                return <div>
+                    { desc }
+                    {
+                            this.state.explain ?
+
+                            <ExplainFormComponent 
+                                corpus={ this.props.corpus } 
+                                word={ this.state.explainWord } 
+                                knowledge={ this.props.knowledge }
+                                onClose={ () => this.setState({ explain: false }) }
+                                onSelect={ (word) => this.setState({ explainWord: word })} 
+                            />
+
+                            :
+
+                            <div/>
+                    }
+                </div>
             }
-    
-            return <div>
-                { desc }
-                {
-                        this.state.explain ?
-
-                        <ExplainFormComponent 
-                            corpus={ this.props.corpus } 
-                            word={ this.state.explainWord } 
-                            knowledge={ this.props.knowledge }
-                            onClose={ () => this.setState({ explain: false }) }
-                            onSelect={ (word) => this.setState({ explainWord: word })} 
-                        />
-
-                        :
-
-                        <div/>
-                }
-            </div>
         }
         else {
             console.warn(word + ' was not inflected, yet InflectionFactComponent got it.')

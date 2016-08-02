@@ -400,10 +400,13 @@ ul {
   color: #d03a3e;
   font-weight: bold; }
 
-.phraseStudyWords .match {
+.phraseStudyWords .match, .phraseStudyWords .case {
   color: #3b938a;
   font-weight: bold;
   text-decoration: inherit; }
+
+.phraseStudyWords .case {
+  font-style: italic; }
 
 .phraseStudyWords .error {
   color: #d03a3e;

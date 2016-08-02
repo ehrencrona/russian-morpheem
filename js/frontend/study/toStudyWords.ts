@@ -12,141 +12,41 @@ import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
 
-import UnknownFact from './UnknownFact'
+import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
-export function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact): string {
-    let fact = studiedFact
+import getFormHint from './getFormHint'
 
-    if (forWord instanceof InflectedWord) {
-        let form = FORMS[forWord.form]
-
-        if (!form) {
-            console.warn(`Unknown form ${ forWord.form }.`)
-            return ''
-        }
-
-        let targetTense = form.tense
-        let targetNumber = form.number
-        let targetGender = form.gender
-
-        let tenseHintNeeded = !!targetTense
-        let numberHintNeeded = !!targetNumber
-
-        // we will need to know the gender of nouns for this to work, we don't yet.
-        let genderHintNeeded = false
-
-        words.forEach((word) => {
-
-            if (word.form) {
-                let wordFact = word.wordFact
-
-                if (isStudiedWord(forWord, fact)) {
-                    return 
-                }
-
-                let form = word.form
-
-                if (tenseHintNeeded && form.tense != null && form.tense == targetTense) {
-                    tenseHintNeeded = false
-                }
-
-                if (numberHintNeeded && form.number != null && form.number == targetNumber) {
-                    numberHintNeeded = false
-                }
-
-                if (genderHintNeeded && form.gender != null && form.gender == targetGender) {
-                    genderHintNeeded = false
-                }
-            }
-
-        })
-
-        let result = ''
-
-        if (tenseHintNeeded) {
-            result += (targetTense == Tense.PAST ? 'past' : 'present') 
-        }
-
-        if (numberHintNeeded) {
-            if (result) {
-                result += ', '
-            }
-            result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
-        }
-
-        if (genderHintNeeded) {
-            if (result) {
-                result += ', '
-            }
-
-            result += (targetGender == Gender.M ? 'masculine' : (targetGender == Gender.N ? 'neuter' : 'feminine')) 
-        }
-
-        return result         
+function isWorthExplaining(fact: Fact, word: Word) {
+    if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
+        return false
     }
-}
 
-function isStudiedWord(word: Word, fact: Fact) {
-    let result = false
-
-    word.visitFacts((f) => {
-        if (f.getId() == fact.getId()) {
-            result = true
-        }
-    })
-
-    return result
-}
-
-function isWorthExplaining(fact: Fact) {
     return !(fact instanceof InflectionFact &&
-        fact.form == fact.inflection.defaultForm)
+        word instanceof InflectedWord &&
+        // can't check the default form of the inflection since it might be masked, 
+        // so we have to get the default form of the word
+        word.getDefaultInflection().form == fact.form)
 }
 
 export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fact): StudyWord {
-    let facts: UnknownFact[] = []
-
-    let getHint = () => {
-        let wordHint
-
-        if ((studiedFact instanceof Word || studiedFact instanceof InflectableWord) && isStudiedWord(word, studiedFact)) {
-            wordHint = word.getEnglish()
-        }
-        else {
-            wordHint = (word as InflectedWord).getDefaultInflection().jp 
-        }
-
-        return wordHint
-    }
-
-    let isGiveaway = (fact: Fact) => {
-        if (studiedFact instanceof PhraseCase) {
-            return (fact instanceof InflectionFact)
-        }
-        else { 
-            return false
-        }
-    } 
+    let facts: StudyFact[] = []
 
     let result = {
         id: word.getId(),
         jp: word.jp,
-        getHint: getHint,
-        getFormHint: () => {
-            return getFormHint(word, words, studiedFact) 
-        },
+        getHint: () => word.getEnglish(),
+        getFormHint: () => getFormHint(word, words, studiedFact),
         form: (word instanceof InflectedWord ? FORMS[word.form] : null),
-        getHintFacts: () => facts.filter((f) => !isGiveaway(f.fact)),
         facts: facts,
         wordFact: word
     }
 
     word.visitFacts((fact: Fact) => {
-        if (isWorthExplaining(fact)) {
-            facts.push({ fact: fact, word: result })
+        if (isWorthExplaining(fact, word)) {
+            facts.push({ fact: fact, words: [ result ] })
         }
     })
 
@@ -199,8 +99,6 @@ function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]
 function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlocks: WordBlock[], phraseMatch: Match, wordMatch: Match) {
     let fragments = phraseMatch.pattern.getEnglishFragments()
 
-console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
-
     let atWordBlock = 0, atFragment = 0
     let wordIndexAdjust = 0
 
@@ -248,7 +146,7 @@ console.log('english blocks', fragments.map((eb) => eb.en(phraseMatch)))
             wordBlock.words.forEach((word) => {
                 word.facts.push({
                     fact: phrase.getCaseFact(word.form.grammaticalCase),
-                    word: word 
+                    words: wordBlock.words 
                 })
             })
 
@@ -295,24 +193,41 @@ export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corp
             }
         }
 
-console.log('phrase match ' + phraseMatch.words.map((m) => m.word.jp).join(' - '))
-console.log('word match ' + wordMatch.words.map((m) => m.word.jp).join(' - '))
-
         let wordBlocks: WordBlock[] = findWordBlocks(wordMatch, phraseMatch, words)
-
-console.log('word blocks', wordBlocks.map((wb) => wb.words.map((w) => w.jp).join(' ')).join(' - '))
 
         if (phrase.getId() == studiedFact.getId()) {
             replaceWordsWithStudyPhrase(phrase, words, wordBlocks, phraseMatch, wordMatch)
         }
         else {
-            phraseMatch.words.forEach((m) => {
-                words[m.index].facts.push({ fact: phrase, word: words[m.index] })
+            let wordsFact: StudyFact = { fact: phrase, words: [] } 
+            let caseFacts: { [id: string]: StudyFact } = {}
 
+            phraseMatch.words.forEach((m) => {
                 if (m.wordMatch.isCaseStudy()) {
-                    words[m.index].facts.push({ 
-                        fact: phrase.getCaseFact(((m.wordMatch as any) as CaseStudyMatch).getCaseStudied()), 
-                        word: words[m.index] })
+                    let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
+
+                    if (!caseFacts[caseStudied]) {
+                        caseFacts[caseStudied] = {
+                            fact: phrase.getCaseFact(caseStudied),
+                            words: []
+                        }
+                    }
+
+                    caseFacts[caseStudied].words.push(words[m.index])
+                }
+                else {
+                    wordsFact.words.push(words[m.index])
+                }
+            })
+
+            phraseMatch.words.forEach((m) => {
+                if (m.wordMatch.isCaseStudy()) {
+                    let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
+                    words[m.index].facts.push(caseFacts[caseStudied])
+                }
+
+                if (!m.wordMatch.isCaseStudy() || !wordsFact.words.length) {
+                    words[m.index].facts.push(wordsFact)
                 }
             })
         }

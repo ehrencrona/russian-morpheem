@@ -4,11 +4,9 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import InflectedWord from '../../shared/InflectedWord'
 import Phrase from '../../shared/phrase/Phrase'
-import Fact from '../../shared/fact/Fact'
+import shouldHideWord from './shouldHideWord'
 
-import UnknownFact from './UnknownFact'
-
-import { FactComponentProps } from './UnknownFactComponent'
+import { FactComponentProps } from './StudyFactComponent'
 
 let React = { createElement: createElement }
 
@@ -17,14 +15,20 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
     let match = phrase.match(props.sentence.words, props.corpus.facts)
 
     let explanation, words
-    
+
     if (match) {
         let blocks = match.pattern.getEnglishFragments()
         
         explanation = blocks.map((b) => b.enWithJpForCases(match)).join(' ') 
         
         words = match.words.map((m) => props.sentence.words[m.index])
-            .map((word) => word.jp).join(' ')
+            .map((word) => 
+
+                (shouldHideWord(word, props.hiddenFacts) ?
+                    word.getEnglish() : 
+                    word.jp)
+
+            ).join(' ')
     }
     else {
         explanation = phrase.patterns[0].en

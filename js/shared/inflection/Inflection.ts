@@ -230,7 +230,7 @@ export default class Inflection {
 
     addSuffix(stem: string, ending: Ending, suffix: string) {
         if (ending.subtractFromStem > 0) {
-            stem = stem.substr(0, stem.length - ending.subtractFromStem)
+            stem = stem.substr(0, Math.max(stem.length - ending.subtractFromStem, 0))
         }
 
         return stem + suffix

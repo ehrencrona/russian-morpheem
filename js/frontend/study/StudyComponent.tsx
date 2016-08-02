@@ -16,21 +16,23 @@ import Word from '../../shared/Word'
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
-
+import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 
-import UnknownFact from './UnknownFact'
+import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
-import UnknownFactComponent from './UnknownFactComponent'
+import StudyFactComponent from './StudyFactComponent'
 import FrontendExposures from './FrontendExposures'
 
 import toStudyWords from './toStudyWords'
+import isGiveaway from './isGiveaway'
 
 interface Props {
     sentence: Sentence,
@@ -38,13 +40,22 @@ interface Props {
     fact: Fact,
     knowledge: NaiveKnowledge,
     trivialKnowledge: TrivialKnowledge,
+    factSelector: FixedIntervalFactSelector
     onAnswer: (exposures: Exposure[]) => void
 }
 
+interface WordGroup {
+    words: StudyWord[],
+    startIndex: number
+}
+
 interface State {
-    unknownFacts?: UnknownFact[],
-    knownFacts?: UnknownFact[],
+    words?: StudyWord[],
+    groupedWords?: WordGroup[],
+    unknownFacts?: StudyFact[],
+    knownFacts?: StudyFact[],
     stage?: Stage,
+    additionalStudyFact?: Fact
 }
 
 let React = { createElement: createElement }
@@ -57,38 +68,90 @@ export default class StudyComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {
-            unknownFacts: [],
-            knownFacts: [],
-            stage: Stage.TEST
-        }
+        this.state = 
+            this.getStateForProps(props)
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ 
-            unknownFacts: [], 
-            knownFacts: [],
-            stage: Stage.TEST
-        })
+        this.setState(this.getStateForProps(nextProps))
     }
 
-    isStudiedForm(word: StudyWord) {
+    oughtToKnow(fact: Fact) {
+        return this.props.knowledge.getKnowledge(fact) == Knowledge.KNEW ||
+            this.props.factSelector.isStudied(fact, new Date())
+    }
+
+    getStateForProps(props): State {
+        let sentence = this.props.sentence
+
+console.log('Sentence: ' + sentence.toString())
+
+        let words = toStudyWords(sentence, this.props.fact, this.props.corpus)
+
+        let corpus = this.props.corpus
+
+        let groupedWords: WordGroup[] = []
+
+        words.forEach((word, index) => {
+            if (!groupedWords.length || isWordWithSpaceBefore(word)) {
+                groupedWords.push({ words: [word], startIndex: index })
+            }
+            else {
+                groupedWords[groupedWords.length-1].words.push(word)
+            }
+        })
+
+        let additionalFact: Fact
         let fact = this.props.fact
 
-        let result = false
+        if (fact instanceof Phrase) {
+            fact.getCaseFacts().forEach((caseFact) => {
+                if (this.oughtToKnow(caseFact)) {
+                    additionalFact = caseFact
+                }
+            })
+        }
+        else if (fact instanceof PhraseCase) {
+            if (this.oughtToKnow(fact.phrase)) {
+                additionalFact = fact.phrase
+            }
+        }
 
-        return word.facts.find((f) => f.fact.getId() == fact.getId()) 
+        return {
+            words: words,
+            groupedWords: groupedWords,
+            unknownFacts: [], 
+            knownFacts: [],
+            stage: Stage.TEST,
+            additionalStudyFact: additionalFact
+        }
+    }
+
+    isStudiedFact(fact: Fact) {
+        let additionalStudyFact = this.state.additionalStudyFact
+
+        if (additionalStudyFact && additionalStudyFact.getId() == fact.getId()) {
+            return true
+        }
+
+        return this.props.fact.getId() == fact.getId()
+    }
+
+    isWordHidden(word: StudyWord) {
+        let fact = this.props.fact
+
+        return word.facts.find((f) => this.isStudiedFact(f.fact))
     }
 
     reveal() {
         this.setState({ 
             stage: Stage.REVEAL,
-            unknownFacts: excludeFact({ fact: this.props.fact, word: null }, this.state.unknownFacts) 
+            unknownFacts: excludeFact({ fact: this.props.fact, words: [] }, this.state.unknownFacts) 
         })
     }
 
-    next(...addKnownFacts: UnknownFact[]) {
-        let factToExposure = (fact: UnknownFact, knew: Knowledge) => {
+    next(...addKnownFacts: StudyFact[]) {
+        let factToExposure = (fact: StudyFact, knew: Knowledge) => {
             return {
                 fact: fact.fact.getId(),
                 time: new Date(),
@@ -111,8 +174,8 @@ export default class StudyComponent extends Component<Props, State> {
 
         let exposures: Exposure[] = []
 
-        unknown.forEach((unknownFact) => 
-            exposures.push(factToExposure(unknownFact, Knowledge.DIDNT_KNOW)))
+        unknown.forEach((studyFact) => 
+            exposures.push(factToExposure(studyFact, Knowledge.DIDNT_KNOW)))
         known.forEach((knownFact) => 
             exposures.push(factToExposure(knownFact, Knowledge.KNEW)))
 
@@ -123,7 +186,7 @@ export default class StudyComponent extends Component<Props, State> {
 
             exposures.push(factToExposure({
                 fact: fact,
-                word: null
+                words: []
             }, Knowledge.KNEW))
         })
 
@@ -134,23 +197,19 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
-    explainWord(word: StudyWord, reveal: boolean, somethingIsUnknown?: boolean) {
-        let known: UnknownFact[] = [], 
-            unknown: UnknownFact[] = []
+    explainWord(word: StudyWord, hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
+        let words = this.state.words
+        let known: StudyFact[] = [], 
+            unknown: StudyFact[] = []
 
-        let addFact = (fact: UnknownFact) =>
+        let addFact = (fact: StudyFact) =>
             (this.props.trivialKnowledge.isKnown(fact.fact) && fact.fact.getId() != this.props.fact.getId() ?
                 known :
                 unknown).push(fact)
 
         let facts
 
-        if (!reveal && this.isStudiedForm(word)) {
-            facts = word.getHintFacts()
-        }
-        else {
-            facts = word.facts
-        }
+        facts = word.facts.filter((f) => !isGiveaway(f, hiddenFacts))
 
         facts.forEach(addFact)
 
@@ -162,7 +221,7 @@ export default class StudyComponent extends Component<Props, State> {
         this.addFacts(known, unknown)
     }
 
-    addFacts(addKnown: UnknownFact[], addUnknown: UnknownFact[]) {
+    addFacts(addKnown: StudyFact[], addUnknown: StudyFact[]) {
         let unknown = this.state.unknownFacts
         let known = this.state.knownFacts 
 
@@ -177,21 +236,21 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    iWasWrong(words: StudyWord[]) {
-        words.forEach((word: StudyWord) => {
-            if (this.isStudiedForm(word)) {
-                this.explainWord(word, true, true)
+    iWasWrong(hiddenFacts: StudyFact[]) {
+        this.state.words.forEach((word: StudyWord) => {
+            if (this.isWordHidden(word)) {
+                this.explainWord(word, hiddenFacts, true)
             }
         })
 
         this.setState({ stage: Stage.CONFIRM })
     }
 
-    iWasRight(words: StudyWord[]) {
-        let facts: UnknownFact[] = []
+    iWasRight() {
+        let facts: StudyFact[] = []
 
-        words.forEach((word: StudyWord) => {
-            if (this.isStudiedForm(word)) {
+        this.state.words.forEach((word: StudyWord) => {
+            if (this.isWordHidden(word)) {
                 word.facts.forEach((fact) => 
                     facts.push(fact) 
                 )
@@ -208,27 +267,24 @@ export default class StudyComponent extends Component<Props, State> {
 
 console.log('Sentence: ' + sentence.toString())
 
-        let words = toStudyWords(sentence, this.props.fact, this.props.corpus)
+        let words = this.state.words
 
-console.log('Study words', words)
+        let hiddenFacts: StudyFact[] = []
 
-        let corpus = this.props.corpus
+        if (!reveal) {
+            words.forEach((word) => {
+                if (this.isWordHidden(word)) {
+                    hiddenFacts = hiddenFacts.concat(word.facts)
+                }
+            })
 
-        interface WordGroup {
-            words: StudyWord[],
-            startIndex: number
+            let studyFact = this.props.fact
+            let additionalId
+
+            hiddenFacts = hiddenFacts.filter((fact) => 
+                this.isStudiedFact(fact.fact) ||
+                this.oughtToKnow(fact.fact))
         }
-
-        let groupedWords: WordGroup[] = []
-
-        words.forEach((word, index) => {
-            if (!groupedWords.length || isWordWithSpaceBefore(word)) {
-                groupedWords.push({ words: [word], startIndex: index })
-            }
-            else {
-                groupedWords[groupedWords.length-1].words.push(word)
-            }
-        })
 
         return <div className='study'>
                 <div className='sentenceId'>
@@ -263,14 +319,14 @@ console.log('Study words', words)
 
                 <div className='sentence'>
                 { 
-                    groupedWords.map((group, index) => {
+                    this.state.groupedWords.map((group, index) => {
                         return <div className='group' key={ index }>
                         {
                             group.words.map((word: StudyWord, index) => {
                                 let explain = () => {
-                                    this.explainWord(word, reveal)
+                                    this.explainWord(word, hiddenFacts)
 
-                                    if (this.isStudiedForm(word) && this.state.stage == Stage.REVEAL) {
+                                    if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
                                         this.setState({ stage: Stage.CONFIRM })
                                     }
                                 }
@@ -284,7 +340,7 @@ console.log('Study words', words)
 
                                 let formHint
 
-                                if (this.isStudiedForm(word)) {
+                                if (this.isWordHidden(word)) {
                                     if (!reveal) {
                                         text = word.getHint()
                                         formHint = word.getFormHint()
@@ -326,8 +382,8 @@ console.log('Study words', words)
                     (this.state.stage == Stage.REVEAL ?
 
                         <div className='buttonBar'>
-                            <div className='button' onClick={ () => this.iWasRight(words) }>I was right</div>
-                            <div className='button' onClick={ () => this.iWasWrong(words) }>I was wrong</div>
+                            <div className='button' onClick={ () => this.iWasRight() }>I was right</div>
+                            <div className='button' onClick={ () => this.iWasWrong(hiddenFacts) }>I was wrong</div>
                         </div>
 
                     :
@@ -345,16 +401,16 @@ console.log('Study words', words)
                         <h3>I didn't know</h3>
                         <ul className='unknown'>
                         {
-                            (this.state.unknownFacts).map((unknownFact) => 
-                                <UnknownFactComponent 
-                                    key={ unknownFact.fact.getId() }
-                                    hiddenFact={ (reveal ? null : this.props.fact) }
-                                    fact={ unknownFact.fact } 
-                                    unknownFact={ unknownFact } 
+                            (this.state.unknownFacts).map((studyFact) => 
+                                <StudyFactComponent 
+                                    key={ studyFact.fact.getId() }
+                                    hiddenFacts={ (reveal ? [] : hiddenFacts) }
+                                    fact={ studyFact.fact } 
+                                    studyFact={ studyFact } 
                                     sentence={ this.props.sentence } 
                                     corpus={ this.props.corpus }
                                     knowledge={ this.props.knowledge } 
-                                    onKnew={ (fact: UnknownFact) => this.addFacts([ fact ], []) }
+                                    onKnew={ (fact: StudyFact) => this.addFacts([ fact ], []) }
                                     known={ true }
                                 />)
                         }
@@ -372,16 +428,16 @@ console.log('Study words', words)
                         <h3>I knew</h3>
                         <ul className='unknown'>
                         {
-                            (this.state.knownFacts).map((unknownFact) => 
-                                <UnknownFactComponent 
-                                    key={ unknownFact.fact.getId() }
-                                    hiddenFact={ (reveal ? null : this.props.fact) }
-                                    fact={ unknownFact.fact } 
-                                    unknownFact={ unknownFact }
+                            (this.state.knownFacts).map((studyFact) => 
+                                <StudyFactComponent 
+                                    key={ studyFact.fact.getId() }
+                                    hiddenFacts={ (reveal ? [] : hiddenFacts) }
+                                    fact={ studyFact.fact } 
+                                    studyFact={ studyFact }
                                     sentence={ this.props.sentence } 
                                     corpus={ this.props.corpus }
                                     knowledge={ this.props.knowledge } 
-                                    onKnew={ (fact: UnknownFact) => this.addFacts([], [ fact ]) }
+                                    onKnew={ (fact: StudyFact) => this.addFacts([], [ fact ]) }
                                     known={ false }
                                 />)
                         }
@@ -408,7 +464,7 @@ function getWordMeaningFactId(word: Word) {
     }
 }
 
-function excludeFact(exclude: UnknownFact, array: UnknownFact[]) {
+function excludeFact(exclude: StudyFact, array: StudyFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
 }
 

@@ -76,12 +76,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
 
         let wordWithoutStemMark = parseResult.word.replace('--', '')
 
-        if (leftSide.indexOf('unstudied') > 0) {
-            return new Word(parseResult.word, parseResult.classifier)
-        }
-        else {
-            return new Word(wordWithoutStemMark, parseResult.classifier)
-        }
+        return new Word(wordWithoutStemMark, parseResult.classifier)
     }
 
     function splitRightSide(rightSide) {
@@ -164,6 +159,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             }
             else if (tag == 'tag') {
                 facts.tag(fact, text)
+
+                if (text == 'untranslatable' && (fact instanceof Word || fact instanceof InflectableWord)) {
+                    fact.studied = false
+                }
             }
             else if (tag == 'mask') {
                 if (fact instanceof InflectableWord) {

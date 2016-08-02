@@ -4,9 +4,9 @@ import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
 import StudyWord from './StudyWord'
 
-interface UnknownFact {
+interface StudyFact {
     fact: Fact,
-    word: StudyWord
+    words: StudyWord[]
 }
 
-export default UnknownFact
+export default StudyFact

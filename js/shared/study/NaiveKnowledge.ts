@@ -17,11 +17,11 @@ export default class NaiveKnowledge {
 
     }
 
-    getKnowledge(fact: Fact) {
+    getKnowledge(fact: Fact): Knowledge {
         return this.getKnowledgeOfId(fact.getId())
     }
 
-    getKnowledgeOfId(factId: string) {
+    getKnowledgeOfId(factId: string): Knowledge {
         let result = this.known[factId]
 
         if (result == undefined) {

@@ -3,7 +3,7 @@ import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import { InflectionForm } from '../../shared/inflection/InflectionForms'
-import UnknownFact from './UnknownFact'
+import StudyFact from './StudyFact'
 
 interface StudyWord {
     id: string
@@ -11,8 +11,7 @@ interface StudyWord {
     getHint(): string
     getFormHint(): string
     form: InflectionForm
-    getHintFacts(): UnknownFact[]
-    facts: UnknownFact[]
+    facts: StudyFact[]
     wordFact: Fact
 }
 

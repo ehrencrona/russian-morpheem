@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import { EndingTransform } from '../../shared/Transforms'
 
-import { FactComponentProps } from './UnknownFactComponent'
+import { FactComponentProps } from './StudyFactComponent'
 
 let React = { createElement: createElement }
 

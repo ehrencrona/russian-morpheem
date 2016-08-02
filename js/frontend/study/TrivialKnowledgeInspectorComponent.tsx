@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
-import UnknownFactComponent from './UnknownFactComponent'
+import StudyFactComponent from './StudyFactComponent'
 import Fact from '../../shared/fact/Fact'
 
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'

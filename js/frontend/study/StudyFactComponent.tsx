@@ -12,7 +12,7 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import Sentence from '../../shared/Sentence'
 import InflectableWord from '../../shared/InflectableWord'
 
-import UnknownFact from './UnknownFact'
+import StudyFact from './StudyFact'
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
@@ -30,22 +30,21 @@ import { TranslatableFact } from './WordFactComponent'
 export interface FactComponentProps<FactType> {
     knowledge: NaiveKnowledge,
     corpus: Corpus,
-    unknownFact: UnknownFact,
+    studyFact: StudyFact,
     sentence: Sentence,
     fact: FactType,
-    hiddenFact: Fact
+    hiddenFacts: StudyFact[]
 }
 
 interface Props extends FactComponentProps<Fact> {
-    onKnew: (fact: UnknownFact) => void,
-    known: boolean,
-    hiddenFact: Fact
+    onKnew: (fact: StudyFact) => void,
+    known: boolean
 }
 
 let React = { createElement: createElement }
 
-let unknownFactComponent = (props: Props) => {
-    let fact = props.unknownFact.fact
+let studyFactComponent = (props: Props) => {
+    let fact = props.studyFact.fact
 
     let content
     let explainable
@@ -57,17 +56,6 @@ let unknownFactComponent = (props: Props) => {
         canExplain = true
 
         componentType = createFactory(InflectionFactComponent)
-    }
-    else if (props.hiddenFact && fact.getId() == props.hiddenFact.getId()) {
-        if (fact instanceof InflectableWord || fact instanceof Word) {
-            componentType = createFactory(DesiredWordFactComponent)
-        }
-        else if (fact instanceof Phrase) {
-            componentType = createFactory(DesiredPhraseFactComponent) 
-        }
-        else if (fact instanceof PhraseCase) {
-            componentType = createFactory(DesiredPhraseCaseComponent)
-        }
     }
     else if (fact instanceof InflectableWord || fact instanceof Word) {
         componentType = createFactory(WordFactComponent)
@@ -81,7 +69,11 @@ let unknownFactComponent = (props: Props) => {
     else if (fact instanceof Phrase) {
         componentType = createFactory(PhraseFactComponent)
     }
-    
+
+    if (!props.hiddenFacts.length) {
+        canExplain = false
+    }
+
     if (!componentType) {
         console.warn('Unhandled fact type', fact)
 
@@ -95,8 +87,8 @@ let unknownFactComponent = (props: Props) => {
                     corpus: props.corpus,
                     knowledge: props.knowledge,
                     sentence: props.sentence,
-                    hiddenFact: props.hiddenFact,
-                    unknownFact: props.unknownFact, 
+                    hiddenFacts: props.hiddenFacts,
+                    studyFact: props.studyFact, 
                     ref: (comp) => explainable = comp
                 }, []) }  
             </div>
@@ -107,7 +99,7 @@ let unknownFactComponent = (props: Props) => {
                     :
                     []
                 }
-                <div className='button iKnew' onClick={ () => props.onKnew(props.unknownFact) }>{
+                <div className='button iKnew' onClick={ () => props.onKnew(props.studyFact) }>{
                     !props.known ?
                         'I didn\'t know that' :
                         'I knew that'
@@ -116,4 +108,4 @@ let unknownFactComponent = (props: Props) => {
         </li>
 }
 
-export default unknownFactComponent;
+export default studyFactComponent;

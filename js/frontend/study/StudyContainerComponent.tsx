@@ -27,6 +27,8 @@ import Exposure from '../../shared/study/Exposure'
 import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
+import InflectableWord from '../../shared/InflectableWord'
+import Word from '../../shared/Word'
 
 import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
@@ -35,8 +37,8 @@ import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelec
 import ExplainFormComponent  from './ExplainFormComponent'
 import ForgettingStats from './ForgettingStats'
 
-
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
 
@@ -59,6 +61,9 @@ let React = { createElement: createElement }
 function isWorthStudying(fact: Fact) {
     if (fact instanceof InflectionFact) {
         return fact.form != fact.inflection.defaultForm
+    }
+    else if (fact instanceof Word || fact instanceof InflectableWord) {
+        return fact.studied
     }
     else {
         return true
@@ -113,10 +118,8 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
-
-/*
 factScores = [ { 		
-    fact: (this.props.corpus.facts.get('к-time') as Phrase),
+    fact: this.props.corpus.facts.get('этот'),
     score: 1
 } ]
 
@@ -126,7 +129,29 @@ sentenceScores = [{
     fact: factScores[0].fact,
     debug: {}
 }]
-*/
+
+        // if studying phrases, remove any sentences that don't actually match the phrase.
+        sentenceScores = sentenceScores.filter((score) => {
+            let phrase: Phrase
+            let fact = score.fact
+
+            if (fact instanceof Phrase) {
+                phrase = fact
+            }
+            
+            if (fact instanceof PhraseCase) {
+                phrase = fact.phrase
+            }
+
+            if (phrase && !phrase.match(score.sentence.words, this.props.corpus.facts)) {
+                console.log(score.sentence + ' did not match phrase ' + phrase)
+                return false
+            }
+            else {
+                return true
+            }
+        })
+
 
         let sentenceScore = chooseHighestScoreSentence(sentenceScores)
 
@@ -174,7 +199,8 @@ sentenceScores = [{
             return <div className='study'>
                 <StudyComponent 
                     sentence={ this.state.sentence }
-                    fact={ this.state.fact } 
+                    fact={ this.state.fact }
+                    factSelector={ this.factSelector } 
                     corpus={ this.props.corpus }
                     knowledge={ this.knowledge }
                     trivialKnowledge={ this.trivialKnowledge }

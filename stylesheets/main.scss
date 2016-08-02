@@ -657,10 +657,14 @@ ul {
 }
 
 .phraseStudyWords {
-    .match {
+    .match, .case {
         color: darken($color10, 10%);
         font-weight: bold;
         text-decoration: inherit;
+    }
+
+    .case {
+        font-style: italic;
     }
 
     .error {

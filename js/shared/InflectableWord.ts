@@ -11,7 +11,8 @@ export interface JsonFormat {
     inflection: string,
     type: string,
     classifier?: string,
-    mask?: string
+    mask?: string,
+    unstudied?: boolean
 }
 
 export default class InflectableWord {
@@ -19,6 +20,7 @@ export default class InflectableWord {
     en: string
     mask: (string) => boolean
     defaultInflection: InflectedWord
+    studied: boolean = true
 
     constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
         this.stem = stem
@@ -50,6 +52,7 @@ export default class InflectableWord {
                 result.setEnglish(this.getEnglish())
 
                 result.classifier = this.classifier
+                result.studied = this.studied
             }
             catch (e) {
                 throw new Error(`While inflecting ${this.stem}: ${e}`)
@@ -147,6 +150,10 @@ export default class InflectableWord {
             result.setMask(posMasks[json.mask])
         }
 
+        if (json.unstudied) {
+            result.studied = false
+        }
+
         return result
     }
 
@@ -175,6 +182,10 @@ export default class InflectableWord {
 
         if (this.mask) {
             result.mask = this.getMaskId()
+        }
+
+        if (!this.studied) {
+            result.unstudied = true
         }
 
         return result

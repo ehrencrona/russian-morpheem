@@ -2,14 +2,14 @@ import StudyWord from './StudyWord'
 import { InflectionForm } from '../../shared/inflection/InflectionForms'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
-import UnknownFact from './UnknownFact'
+import StudyFact from './StudyFact'
 
 export default class StudyPhrase implements StudyWord {
     id: string
     jp: string
     form: InflectionForm
     wordFact: Fact
-    facts: UnknownFact[]
+    facts: StudyFact[]
 
     constructor(public phrase: Phrase, public en: string, public words: StudyWord[]) {
         this.phrase = phrase
@@ -20,7 +20,8 @@ export default class StudyPhrase implements StudyWord {
         this.en = en
         this.wordFact = phrase
 
-        this.facts = [ { fact: phrase, word: words[0] } ] 
+        this.facts = [ { fact: phrase, words: words } ] 
+
         words.forEach((w) => this.facts = this.facts.concat(w.facts))
     }
 
@@ -32,8 +33,4 @@ export default class StudyPhrase implements StudyWord {
         return this.en
     }
 
-    getHintFacts() {
-        return []
-    }
-    
 }

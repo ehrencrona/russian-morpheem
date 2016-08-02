@@ -23,39 +23,43 @@ class Forms {
 }
 
 export enum Gender {
-    M, N, F
+    M = 1, N, F
 }
 
 export enum Tense {
-    PRESENT, PAST
+    PRESENT = 1, PAST
 }
 
 export enum GrammaticalCase {
-    NOM, GEN, DAT, ACC, INSTR, PREP, LOC
+    NOM = 1, GEN, DAT, ACC, INSTR, PREP, LOC
 }
 
 export enum Person {
-    FIRST, SECOND, THIRD
+    FIRST = 1, SECOND, THIRD
 }
 
 export enum Animateness {
-    INANIMATE, ANIMATE
+    INANIMATE = 1, ANIMATE
 }
 
 export enum Number {
-    SINGULAR, PLURAL
+    SINGULAR = 1, PLURAL
 }
 
 export enum Comparison {
-    NORMAL, COMPARATIVE
+    NORMAL = 1, COMPARATIVE
+}
+
+export enum Command {
+    NORMAL = 1, IMPERATIVE
 }
 
 export enum AdjectiveForm {
-    NORMAL, SHORT
+    NORMAL = 1, SHORT
 }
 
 export enum PartOfSpeech {
-    ADVERB
+    ADVERB = 1
 }
 
 interface FormComponents {
@@ -67,7 +71,8 @@ interface FormComponents {
     person?: Person, 
     comparison?: Comparison,
     adjectiveForm?: AdjectiveForm,
-    pos?: PartOfSpeech
+    pos?: PartOfSpeech,
+    command?: Command
 }
 
 export class InflectionForm {
@@ -78,6 +83,7 @@ export class InflectionForm {
     number: Number
     person: Person
     comparison: Comparison
+    command: Command
     adjectiveForm: AdjectiveForm
     pos: PartOfSpeech
 
@@ -91,6 +97,7 @@ export class InflectionForm {
         this.number = used.number
         this.person = used.person
         this.comparison = used.comparison
+        this.command = used.command
         this.adjectiveForm = used.adjectiveForm
         this.pos = used.pos
     }
@@ -102,6 +109,7 @@ export class InflectionForm {
             (this.number != null && this.number != otherForm.number) ||
             (this.adjectiveForm != null && this.adjectiveForm != otherForm.adjectiveForm) ||
             (this.comparison != null && this.comparison != otherForm.comparison) ||
+            (this.command != null && this.command != otherForm.command) ||
             (this.pos != null && this.pos != otherForm.pos) ||
             (this.tense != null && this.tense != otherForm.tense))
     }
@@ -114,6 +122,17 @@ function addForm(id: string, name: string, components: FormComponents) {
     FORMS[id] = new InflectionForm(id, name, components)
 }
 
+export let GENDERS = {}
+
+GENDERS[Gender.M] = 'm'
+GENDERS[Gender.F] = 'f'
+GENDERS[Gender.N] = 'n'
+
+export let NUMBERS = {}
+
+NUMBERS[Number.SINGULAR] = 'sg'
+NUMBERS[Number.PLURAL] = 'pl'
+
 export let CASES = {}
 
 CASES[GrammaticalCase.NOM] = 'nom'
@@ -123,7 +142,6 @@ CASES[GrammaticalCase.ACC] = 'acc'
 CASES[GrammaticalCase.INSTR] = 'instr'
 CASES[GrammaticalCase.PREP] = 'prep'
 CASES[GrammaticalCase.LOC] = 'loc'
-
 
 addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),
 addForm('2', 'second person (you)', { person: Person.SECOND, number: Number.SINGULAR, tense: Tense.PRESENT }),
@@ -135,8 +153,8 @@ addForm('pastm', 'masculine past', { gender: Gender.M, number: Number.SINGULAR, 
 addForm('pastn', 'neuter past', { gender: Gender.N, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastf', 'feminine past', { gender: Gender.F, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastpl', 'past plural', { number: Number.PLURAL, tense: Tense.PAST })
-addForm('impr', 'imperative', { number: Number.SINGULAR })
-addForm('imprpl', 'imperative plural', { number: Number.PLURAL })
+addForm('impr', 'imperative', { number: Number.SINGULAR, command: Command.IMPERATIVE })
+addForm('imprpl', 'imperative plural', { number: Number.PLURAL, command: Command.IMPERATIVE })
 addForm('inf', 'infinitive', {})
 
 addForm('past', 'past', { tense: Tense.PAST })
@@ -146,6 +164,7 @@ addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR })
 addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR })
 addForm('pl', 'plural', { number: Number.PLURAL })
 addForm('fpl', 'feminine plural', { number: Number.PLURAL, gender: Gender.F })
+addForm('sg', 'singular', { number: Number.PLURAL })
 
 addForm('nom', 'nominative', { grammaticalCase: GrammaticalCase.NOM, number: Number.SINGULAR })
 addForm('gen', 'genitive', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR })
@@ -165,6 +184,10 @@ addForm('accusative', 'accusative', { grammaticalCase: GrammaticalCase.ACC })
 addForm('instrumental', 'instrumental', { grammaticalCase: GrammaticalCase.INSTR })
 addForm('prepositional', 'prepositional', { grammaticalCase: GrammaticalCase.PREP })
 addForm('locative', 'locative', { grammaticalCase: GrammaticalCase.LOC })
+addForm('imperative', 'imperative', { command: Command.IMPERATIVE })
+addForm('masculine', 'masculine', { gender: Gender.M })
+addForm('feminine', 'feminine', { gender: Gender.F })
+addForm('neuter', 'neuter', { gender: Gender.N })
 
 addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
 addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })

@@ -6,6 +6,7 @@ import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
 
 import toStudyWords from '../study/toStudyWords'
@@ -63,10 +64,13 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
                 </div>
                 {
                     words.map((w, index) => 
-                        
-                        <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
-                            (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>
+                        (!!w.facts.find((f) => f.fact instanceof PhraseCase) ?
+                            <span className='case' key={ index }> { w.jp }</span>
 
+                            :
+
+                            <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
+                                (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>)
                     )
                 }
                 {
