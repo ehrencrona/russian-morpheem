@@ -68,12 +68,12 @@ export default class StudyComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = 
-            this.getStateForProps(props)
+        this.state = this.getStateForProps(props)
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState(this.getStateForProps(nextProps))
+console.log('new props')
     }
 
     oughtToKnow(fact: Fact) {
@@ -82,13 +82,13 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     getStateForProps(props): State {
-        let sentence = this.props.sentence
+        let sentence = props.sentence
 
 console.log('Sentence: ' + sentence.toString())
 
-        let words = toStudyWords(sentence, this.props.fact, this.props.corpus)
+        let words = toStudyWords(sentence, props.fact, props.corpus)
 
-        let corpus = this.props.corpus
+        let corpus = props.corpus
 
         let groupedWords: WordGroup[] = []
 
@@ -102,7 +102,7 @@ console.log('Sentence: ' + sentence.toString())
         })
 
         let additionalFact: Fact
-        let fact = this.props.fact
+        let fact = props.fact
 
         if (fact instanceof Phrase) {
             fact.getCaseFacts().forEach((caseFact) => {
