@@ -61,7 +61,7 @@ describe('toStudyWordsTest', () => {
 
     it('works', () => {
 
-        let studyWords = toStudyWords(sentence, phrase, corpus)
+        let studyWords = toStudyWords(sentence, [ phrase ], corpus)
 
         expect(studyWords.length).to.equal(4)
 

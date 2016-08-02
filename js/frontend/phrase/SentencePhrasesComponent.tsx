@@ -65,7 +65,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
     renderStudyWords(phrase: Phrase) {
         return <div>
             <div className='match'>{ 
-                toStudyWords(this.props.sentence, phrase, this.props.corpus, true)
+                toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
                     .filter((w) => w instanceof StudyPhrase || !!w.facts.find((f) => f.fact instanceof PhraseCase))
                     .map((w) => (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp)).join(' ') 
             }</div>

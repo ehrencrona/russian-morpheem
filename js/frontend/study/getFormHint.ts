@@ -8,15 +8,17 @@ import Word from '../../shared/Word'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
 
-function isStudiedWord(word: StudyWord, studiedFact: Fact) {
-    return !!word.facts.find((f) => {
-        if (f.fact.getId() == studiedFact.getId()) {
-            return true
-        }
-    })
+function isStudiedWord(word: StudyWord, studiedFacts: Fact[]) {
+    return !!studiedFacts.find((studiedFact) => 
+        !!word.facts.find((f) => {
+            if (f.fact.getId() == studiedFact.getId()) {
+                return true
+            }
+        })
+    )
 }
 
-export default function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact): string {
+export default function getFormHint(forWord: Word, words: StudyWord[], studiedFacts: Fact[]): string {
     if (forWord instanceof InflectedWord) {
         let form = FORMS[forWord.form]
 
@@ -27,6 +29,7 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
 
         let targetTense = form.tense
         let targetNumber = form.number
+
         let targetGender = form.gender
 
         let tenseHintNeeded = !!targetTense
@@ -41,7 +44,7 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
             if (word.form) {
                 let wordFact = word.wordFact
 
-                if (isStudiedWord(word, studiedFact)) {
+                if (isStudiedWord(word, studiedFacts)) {
                     return 
                 }
 

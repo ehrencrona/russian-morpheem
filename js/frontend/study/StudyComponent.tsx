@@ -73,7 +73,6 @@ export default class StudyComponent extends Component<Props, State> {
 
     componentWillReceiveProps(nextProps) {
         this.setState(this.getStateForProps(nextProps))
-console.log('new props')
     }
 
     oughtToKnow(fact: Fact) {
@@ -81,25 +80,10 @@ console.log('new props')
             this.props.factSelector.isStudied(fact, new Date())
     }
 
-    getStateForProps(props): State {
+    getStateForProps(props: Props): State {
         let sentence = props.sentence
 
 console.log('Sentence: ' + sentence.toString())
-
-        let words = toStudyWords(sentence, props.fact, props.corpus)
-
-        let corpus = props.corpus
-
-        let groupedWords: WordGroup[] = []
-
-        words.forEach((word, index) => {
-            if (!groupedWords.length || isWordWithSpaceBefore(word)) {
-                groupedWords.push({ words: [word], startIndex: index })
-            }
-            else {
-                groupedWords[groupedWords.length-1].words.push(word)
-            }
-        })
 
         let additionalFact: Fact
         let fact = props.fact
@@ -116,6 +100,28 @@ console.log('Sentence: ' + sentence.toString())
                 additionalFact = fact.phrase
             }
         }
+
+        let studiedFacts = [ props.fact ]
+
+        if (additionalFact) {
+            studiedFacts.push(additionalFact)
+        }
+
+        let words = toStudyWords(sentence, studiedFacts, props.corpus)
+
+        let corpus = props.corpus
+
+        let groupedWords: WordGroup[] = []
+
+        words.forEach((word, index) => {
+            if (!groupedWords.length || isWordWithSpaceBefore(word)) {
+                groupedWords.push({ words: [word], startIndex: index })
+            }
+            else {
+                groupedWords[groupedWords.length-1].words.push(word)
+            }
+        })
+
 
         return {
             words: words,

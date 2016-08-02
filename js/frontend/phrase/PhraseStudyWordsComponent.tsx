@@ -51,7 +51,7 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         let error: string 
 
         if (sentence) {
-             words = toStudyWords(sentence, phrase, this.props.corpus, true)
+             words = toStudyWords(sentence, [ phrase ], this.props.corpus, true)
         }
         else {
             error = 'No matching sentence.'

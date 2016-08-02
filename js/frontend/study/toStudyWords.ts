@@ -31,14 +31,14 @@ function isWorthExplaining(fact: Fact, word: Word) {
         word.getDefaultInflection().form == fact.form)
 }
 
-export function wordToStudyWord(word: Word, words: StudyWord[], studiedFact: Fact): StudyWord {
+export function wordToStudyWord(word: Word, words: StudyWord[], studiedFacts: Fact[]): StudyWord {
     let facts: StudyFact[] = []
 
     let result = {
         id: word.getId(),
         jp: word.jp,
         getHint: () => word.getEnglish(),
-        getFormHint: () => getFormHint(word, words, studiedFact),
+        getFormHint: () => getFormHint(word, words, studiedFacts),
         form: (word instanceof InflectedWord ? FORMS[word.form] : null),
         facts: facts,
         wordFact: word
@@ -171,10 +171,10 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
     }
 }
 
-export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corpus: Corpus, ignorePhrases?: boolean): StudyWord[] {
+export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyWord[] {
     let words: StudyWord[] = []
     
-    sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFact)))
+    sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
 
     let handlePhrase = (phrase) => {
         let phraseMatch: Match = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_BOTH)
@@ -195,7 +195,7 @@ export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corp
 
         let wordBlocks: WordBlock[] = findWordBlocks(wordMatch, phraseMatch, words)
 
-        if (phrase.getId() == studiedFact.getId()) {
+        if (!!studiedFacts.find((f) => f.getId() == phrase.getId())) {
             replaceWordsWithStudyPhrase(phrase, words, wordBlocks, phraseMatch, wordMatch)
         }
         else {
@@ -235,22 +235,33 @@ export default function toStudyWords(sentence: Sentence, studiedFact: Fact, corp
 
     if (!ignorePhrases) {
         sentence.phrases.forEach((p) => { 
-            if (p.getId() != studiedFact.getId()) {
+            if (!studiedFacts.find((f) => f.getId() == p.getId())) {
                 handlePhrase(p)
             }
         })
     }
 
-    if (studiedFact instanceof Phrase) {
-        // needs to be done last since indexes change.
-        handlePhrase(studiedFact)
-    }
+    let phraseCount = 0
+
+    studiedFacts.forEach((studiedFact) => {
+        if (studiedFact instanceof Phrase) {
+            if (phraseCount > 0) {
+                console.log('studying more than one phrase at a time: ' + studiedFacts.map((f) => f.getId()))
+            }
+            else {
+                // needs to be done last since indexes change.
+                handlePhrase(studiedFact)
+                
+                phraseCount++
+            }
+        }
+    })
 
     if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
         let fullStop = corpus.words.get('.')
 
         if (fullStop) {
-            words.push(wordToStudyWord(fullStop, words, studiedFact))
+            words.push(wordToStudyWord(fullStop, words, studiedFacts))
         }
     }
 
