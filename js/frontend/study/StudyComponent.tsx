@@ -137,10 +137,10 @@ console.log('Sentence: ' + sentence.toString())
         return this.props.fact.getId() == fact.getId()
     }
 
-    isWordHidden(word: StudyWord) {
+    isWordHidden(word: StudyWord): boolean {
         let fact = this.props.fact
 
-        return word.facts.find((f) => this.isStudiedFact(f.fact))
+        return !!word.facts.find((f) => this.isStudiedFact(f.fact))
     }
 
     reveal() {
@@ -197,8 +197,8 @@ console.log('Sentence: ' + sentence.toString())
         this.props.onAnswer(exposures)
     }
 
-    explainWord(word: StudyWord, hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
-        let words = this.state.words
+    explainWords(words: StudyWord[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
+        
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
@@ -207,9 +207,11 @@ console.log('Sentence: ' + sentence.toString())
                 known :
                 unknown).push(fact)
 
-        let facts
+        let facts = []
 
-        facts = word.facts.filter((f) => !isGiveaway(f, hiddenFacts))
+        words.forEach((word) => {
+            facts = facts.concat(word.facts.filter((f) => !isGiveaway(f, hiddenFacts)))
+        })
 
         facts.forEach(addFact)
 
@@ -237,11 +239,8 @@ console.log('Sentence: ' + sentence.toString())
     }
 
     iWasWrong(hiddenFacts: StudyFact[]) {
-        this.state.words.forEach((word: StudyWord) => {
-            if (this.isWordHidden(word)) {
-                this.explainWord(word, hiddenFacts, true)
-            }
-        })
+        this.explainWords(this.state.words.filter((word) => 
+            this.isWordHidden(word)), hiddenFacts, true)
 
         this.setState({ stage: Stage.CONFIRM })
     }
@@ -324,7 +323,7 @@ console.log('Sentence: ' + sentence.toString())
                         {
                             group.words.map((word: StudyWord, index) => {
                                 let explain = () => {
-                                    this.explainWord(word, hiddenFacts)
+                                    this.explainWords([word], hiddenFacts)
 
                                     if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
                                         this.setState({ stage: Stage.CONFIRM })

@@ -8,21 +8,15 @@ import Word from '../../shared/Word'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
 
-function isStudiedWord(word: Word, fact: Fact) {
-    let result = false
-
-    word.visitFacts((f) => {
-        if (f.getId() == fact.getId()) {
-            result = true
+function isStudiedWord(word: StudyWord, studiedFact: Fact) {
+    return !!word.facts.find((f) => {
+        if (f.fact.getId() == studiedFact.getId()) {
+            return true
         }
     })
-
-    return result
 }
 
 export default function getFormHint(forWord: Word, words: StudyWord[], studiedFact: Fact): string {
-    let fact = studiedFact
-
     if (forWord instanceof InflectedWord) {
         let form = FORMS[forWord.form]
 
@@ -41,12 +35,13 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
         // we will need to know the gender of nouns for this to work, we don't yet.
         let genderHintNeeded = false
 
+
         words.forEach((word) => {
 
             if (word.form) {
                 let wordFact = word.wordFact
 
-                if (isStudiedWord(forWord, fact)) {
+                if (isStudiedWord(word, studiedFact)) {
                     return 
                 }
 
