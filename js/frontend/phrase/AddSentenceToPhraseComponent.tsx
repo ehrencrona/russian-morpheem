@@ -67,7 +67,6 @@ export default class FindPhraseComponent extends Component<Props, State> {
                     <input type='checkbox' defaultValue={ this.state.includeConflicts } 
                         onChange={ (e) => {
                             this.setState({ includeConflicts: (e.target as HTMLInputElement).checked })
-                            console.log('value',(e.target as HTMLInputElement).value)  
                         } } 
                         id='includeConflicts'/> 
                     <label htmlFor='includeConflicts'>Include matches already part of another phrase</label> 

@@ -12,7 +12,8 @@ const MASKS = {
         allbutcomp: (form) => form != 'comp',
         allbutshort: (form) => form != 'short',
         allbutpl: (form) => !pl(form),
-        allbutadv: (form) => form != 'adv'
+        allbutadv: (form) => form != 'adv',
+        allbutplandadv: (form) => !pl(form) && form != 'adv'
     },
     num: {
         pl: pl,

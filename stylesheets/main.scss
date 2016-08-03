@@ -645,9 +645,18 @@ ul {
 }
 
 .searchSentences {
-    input {
+    input[type=text] {
         @extend .border-box-sizing;
         width: 100%
+    }
+
+    input[type=checkbox] {
+        margin-right: 2 * $unit;
+    }
+
+    .filter {
+        padding: 2 * $unit;
+        display: flex;
     }
 
     .error {

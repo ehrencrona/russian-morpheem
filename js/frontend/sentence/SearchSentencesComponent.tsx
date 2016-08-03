@@ -6,7 +6,9 @@ import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
+import Phrase from '../../shared/phrase/Phrase'
 import PhraseSentencesComponent from '../phrase/PhraseSentencesComponent'
+import isConflictFunction from '../phrase/isConflict'
 
 interface Props {
     corpus: Corpus,
@@ -16,6 +18,7 @@ interface Props {
 interface State {
 
     pattern?: PhrasePattern,
+    onlyNonPhrase?: boolean,
     error?: string
 
 }
@@ -26,7 +29,8 @@ export default class SentencesComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+        }
     }
 
     search(str: string) {
@@ -41,12 +45,25 @@ export default class SentencesComponent extends Component<Props, State> {
     }
 
     render() {
-        console.log('lang',this.props.corpus.lang)
+        let phrase = new Phrase('search', [ this.state.pattern ])
+
         return (
             <div className='searchSentences'>
                 <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' onChange={ (e) => {
                     this.search((e.target as HTMLInputElement).value)
                 }}/>
+
+                <div className='filter'>
+                    <input type='checkbox' defaultChecked={ this.state.onlyNonPhrase } 
+                        onChange={ (e) => {
+                            this.setState({ onlyNonPhrase: (e.target as HTMLInputElement).checked })
+                        } }
+                        id='onlyNonPhrase'/> 
+
+                    <label htmlFor='onlyNonPhrase'>
+                        Only matches that are not part of a phrase
+                    </label>
+                </div>
 
                 {
                     this.state.pattern ?
@@ -56,6 +73,11 @@ export default class SentencesComponent extends Component<Props, State> {
                             patterns={ [ this.state.pattern ] }
                             tab={ this.props.tab }
                             limit={ 200 }
+                            includeConflicts={ !this.state.onlyNonPhrase }
+                            isConflict={ (this.state.onlyNonPhrase ?
+                                (sentence: Sentence, wordIndexes: number[]) => 
+                                    isConflictFunction(phrase, this.props.corpus.facts)(sentence, wordIndexes) :
+                                null) }
                             />
 
                     :
