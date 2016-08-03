@@ -310,7 +310,7 @@ export default class PhrasePattern {
                         let result: AnyWord = words.inflectableWordsById[w]
 
                         if (!result) {
-                            result = words.get(wordStr) 
+                            result = words.get(w)
                         }
                         
                         if (!result) {
