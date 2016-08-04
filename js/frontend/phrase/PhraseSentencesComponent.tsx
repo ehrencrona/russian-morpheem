@@ -131,6 +131,11 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
     }
 
     render() {
-        return <ul className='matchingSentences'>{ this.getMatches().map((match) => this.renderMatch(match)) }</ul>
+        let matches = this.getMatches()
+
+        return <div>
+            <ul className='matchingSentences'>{ matches.map((match) => this.renderMatch(match)) }</ul>
+            { matches.length >= this.props.limit ? `Limited to ${this.props.limit} matches.` : ''}
+        </div>
     }
 }
