@@ -45,6 +45,8 @@ describe('toStudyWordsTest', () => {
         .add(u)
         .add(helovek)
         .add(net)
+        .add(on)
+        .add(podarok)
         .add(professor)
 
     let words = new Words(facts)
@@ -64,7 +66,7 @@ describe('toStudyWordsTest', () => {
     let sentences = new Sentences()
 
     let corpus = new Corpus(inflections, words, sentences, facts, phrases, 'ru')
-/*
+
     it('works', () => {
 
         let studyWords = toStudyWords(sentence, [ phrase ], corpus)
@@ -78,6 +80,7 @@ describe('toStudyWordsTest', () => {
         expect((studyWords[2] as StudyPhrase).en).to.equal('does not have')
 
     })
+    
     it('handles multiple cases', () => {
         let sentence = new Sentence([
             helovek.inflect('dat'), on, dat.inflect('3'), podarok.inflect('acc')
@@ -100,7 +103,6 @@ describe('toStudyWordsTest', () => {
         expect(studyWords[3].jp).to.equal('')
         expect(studyWords[3].getHint()).to.equal('give')
     })
-*/
 
     it('cant reproduce an error', () => {
         let sentence = new Sentence([
@@ -120,6 +122,26 @@ describe('toStudyWordsTest', () => {
         let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
 
         expect(studyWords.length).to.equal(4)
+    })
+
+    it('cant reproduce another error', () => {
+        let sentence = new Sentence([
+            helovek.inflect('dat'), on, podarok.inflect('acc'), net
+        ], 0)
+
+        let pattern = PhrasePattern.fromString('@dative+ он@ подарок@', '[someone] does do something', words, inflections)
+
+        let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+
+        let match = phrase.match(sentence.words, facts)
+
+        sentence.phrases.push(phrase)
+
+        expect(!!match).to.be.true
+
+        let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
+
+        expect(studyWords.length).to.equal(3)
     })
 
 })

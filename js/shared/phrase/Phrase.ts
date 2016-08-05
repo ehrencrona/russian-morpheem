@@ -80,7 +80,7 @@ export default class Phrase implements Fact {
 
                     if (!allCases[grammaticalCase]) {
                         allCases[grammaticalCase] = true
-                        
+
                         this.casesCache.push(this.getCaseFact(grammaticalCase))
                     }
                 }
@@ -93,7 +93,7 @@ export default class Phrase implements Fact {
     getCaseFact(grammaticalCase: GrammaticalCase): PhraseCase {
         return new PhraseCase(this, grammaticalCase)
     }
-    
+
     toJson(): JsonFormat {
         return {
             id: this.id,

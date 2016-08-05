@@ -9,8 +9,8 @@ import Words from '../../shared/Words'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
+import EnglishPatternFragment from '../../shared/phrase/EnglishPatternFragment' 
 import WordMatch from '../../shared/phrase/WordMatch'
-import PhraseCase from '../../shared/phrase/PhraseCase'
 import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
 
 import StudyFact from './StudyFact'
@@ -54,7 +54,7 @@ export function wordToStudyWord(word: Word, words: StudyWord[], studiedFacts: Fa
     return result
 }
 
-interface WordBlock {
+export interface WordBlock {
     caseStudy: boolean,
     start: number,
     end: number
@@ -75,8 +75,10 @@ function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]
 
         if (result.length &&
             i == result[result.length-1].end &&
-            m.wordMatch.isCaseStudy() &&
-            m.wordMatch == result[result.length-1].match) {
+            ((m.wordMatch.isCaseStudy() &&
+                m.wordMatch == result[result.length-1].match) ||
+                !m.wordMatch.isCaseStudy() && !result[result.length-1].match.isCaseStudy()
+            )) {
 
             block = result[result.length-1]
 
@@ -106,9 +108,11 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
     let atWordBlock = 0, atFragment = 0
     let wordIndexAdjust = 0
 
+console.log(wordBlocks.map((wb) => wb.words.map((w) => w.jp).join(' ')).join(' --- '))
+
     while (atWordBlock < wordBlocks.length || atFragment < fragments.length) {
         let wordBlock = wordBlocks[atWordBlock]
-        let englishBlock = fragments[atFragment]
+        let englishBlock: EnglishPatternFragment = fragments[atFragment]
 
         let blockStart = (wordBlock ? wordBlock.start + wordIndexAdjust : null)
         let blockEnd = (wordBlock ? wordBlock.end + wordIndexAdjust : null)
@@ -137,11 +141,12 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
             console.error(`More English blocks than words block in ${phrase.getId()}. Could not place ${englishBlock.en(phraseMatch)}`)
 
             words.push(new StudyPhrase(phrase, englishBlock.en(phraseMatch), []))
+
             atFragment++
         }
         else if (!englishBlock ||
             (!wordBlock.caseStudy && englishBlock.placeholder)) {
-            // add a Russian text block with English equivalent.
+            // add a Russian text block with no English equivalent.
             words.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, '', 
                     words.slice(blockStart, blockEnd)))
@@ -153,8 +158,13 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
             // case study block: retain Russian words
             wordBlock.words.forEach((word) => {
+                let caseFact = phrase.getCaseFact(word.form.grammaticalCase)
+
+                // unfortunately, we don't know this earlier
+                caseFact.placeholderName = englishBlock.en(phraseMatch)
+
                 word.facts.push({
-                    fact: phrase.getCaseFact(word.form.grammaticalCase),
+                    fact: caseFact,
                     words: wordBlock.words
                 })
             })

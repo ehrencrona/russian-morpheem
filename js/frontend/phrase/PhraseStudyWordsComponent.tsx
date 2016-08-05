@@ -27,10 +27,15 @@ interface State {
 let React = { createElement: createElement }
 
 export default class PhraseStudyWordsComponent extends Component<Props, State> {
+
     render() {
 
         let phrase = this.props.phrase
         let pattern: PhrasePattern = this.props.pattern
+
+        let firstMatchingPattern = (sentence: Sentence) => {
+            return phrase.patterns.find((pattern) => pattern.match(sentence.words, this.props.corpus.facts) != null)
+        }
 
         let words: StudyWord[] = []
         let sentence: Sentence
@@ -38,12 +43,12 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         if (phrase.patterns.length) {
             sentence = this.props.corpus.sentences.sentences.find((sentence) => {
                 return !!sentence.phrases.find((p) => p.getId() == phrase.getId() && 
-                    pattern.match(sentence.words, this.props.corpus.facts) != null)
+                    firstMatchingPattern(sentence) == pattern)
             })
 
             if (!sentence) {
                 sentence = this.props.corpus.sentences.sentences.find((sentence) => {
-                    return pattern.match(sentence.words, this.props.corpus.facts) != null 
+                    return firstMatchingPattern(sentence) == pattern 
                 })
             }
         }

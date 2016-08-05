@@ -4,11 +4,13 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Phrase from '../../shared/phrase/Phrase'
+import Translatable from '../../shared/Translatable'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import PhraseFactComponent from './PhraseFactComponent'
 import Tab from '../OpenTab'
 import StudyPhrase from '../study/StudyPhrase'
+import StudyWord from '../study/StudyWord'
 import toStudyWords from '../study/toStudyWords'
 
 interface Props {
@@ -63,11 +65,26 @@ export default class SentenceStatusComponent extends Component<Props, State> {
     }
 
     renderStudyWords(phrase: Phrase) {
+        function getPhraseCase(word: StudyWord): PhraseCase {
+            let fact = word.facts.find((f) => f.fact instanceof PhraseCase)
+
+            if (!fact) {
+                return
+            }
+
+            return fact.fact as PhraseCase
+        }
+
+        let studyWords =                 
+            toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
+                .filter((w) => w instanceof StudyPhrase || !!getPhraseCase(w))
+
         return <div>
             <div className='match'>{ 
-                toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
-                    .filter((w) => w instanceof StudyPhrase || !!w.facts.find((f) => f.fact instanceof PhraseCase))
-                    .map((w) => (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp)).join(' ') 
+                studyWords.map((w) => w.jp).join(' ')
+            }: { 
+                studyWords.map((w) => (w instanceof StudyPhrase ? w.getHint() || '___' : 
+                    `${ (getPhraseCase(w) ? getPhraseCase(w).placeholderName : '') } (${ w.jp })`)).join(' ') 
             }</div>
             <div className='phrase'>{ 
                 phrase.description 
