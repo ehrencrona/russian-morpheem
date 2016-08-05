@@ -25,15 +25,15 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
         let word = words.get(token)
 
         if (!word) {
-            let suggestions = words.getSimilarTo(token);
-            let split = token.split('@');
+            let suggestions = words.getSimilarTo(token)
+            let split = token.split('@')
 
             throw new Error(lineNumber + ': Unknown word "' + token + '" in "' + sentence + '".' + 
                 (suggestions.length ? ' Did you mean any of ' + suggestions + '?' : '') +
                 (split[0].match(/[a-z]/) ? ' Note that the word contains Latin characters' : '') +
                 (split[1] && split[1].match(/[а-ё]/) ? ' Note that the form contains Cyrillic characters' : '') 
                 + '\n    at (/projects/morpheem-jp/public/corpus/russian/sentences.txt:' + lineNumber + ':' + pos + ')'
-            );
+            )
         }
 
         result.push(word)

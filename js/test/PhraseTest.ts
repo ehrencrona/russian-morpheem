@@ -11,6 +11,7 @@ import Ending from '../shared/Ending'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Phrase from '../shared/phrase/Phrase'
+import PhrasePattern from '../shared/phrase/PhrasePattern';
 
 import { expect } from 'chai';
 
@@ -98,6 +99,12 @@ describe('Phrase', function() {
         expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
 
         expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
+    })
+
+    it('fragments patterns correctly', () => {
+        let pattern = PhrasePattern.fromString('verb@+ @dative+ @accusative+', 'verb@+ [someone] [something]', words, inflections)
+        
+        expect(pattern.getEnglishFragments().length).to.equal(3)
     })
 
     it('matches', function () {

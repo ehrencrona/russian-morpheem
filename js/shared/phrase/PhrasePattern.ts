@@ -107,6 +107,10 @@ export default class PhrasePattern {
             str.split('...').forEach((str) => {
                 str = str.trim()
 
+                if (!str) {
+                    return
+                }
+
                 let en = str
 
                 let placeholder = str[0] == '['

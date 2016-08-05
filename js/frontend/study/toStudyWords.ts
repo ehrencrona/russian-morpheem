@@ -106,6 +106,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         let wordBlock = wordBlocks[atWordBlock]
         let englishBlock = fragments[atFragment]
 
+        let blockStart = wordBlock.start + wordIndexAdjust
+        let blockEnd = wordBlock.end + wordIndexAdjust
+
         if ((!wordBlock || (englishBlock && wordBlock.caseStudy)) && 
                 !englishBlock.placeholder) {
             // add an English text block with no corresponding Russian text
@@ -133,9 +136,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         else if (!englishBlock ||
             (!wordBlock.caseStudy && englishBlock.placeholder)) {
             // add a Russian text block with English equivalent.
-            words.splice(wordBlock.start + wordIndexAdjust, wordBlock.end - wordBlock.start, 
+            words.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, '', 
-                    words.slice(wordBlock.start, wordBlock.end)))
+                    words.slice(blockStart, blockEnd)))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
@@ -155,9 +158,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         }
         else if (!wordBlock.caseStudy && !englishBlock.placeholder) {
             // add an English text block for Russian text
-            words.splice(wordBlock.start + wordIndexAdjust, wordBlock.end - wordBlock.start, 
+            words.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, englishBlock.en(phraseMatch), 
-                    words.slice(wordBlock.start, wordBlock.end)))
+                    words.slice(blockEnd, blockEnd)))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
@@ -226,6 +229,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                     words[m.index].facts.push(caseFacts[caseStudied])
                 }
 
+                // TODO: or there are words but the words are all placeholders [verb] [someone] [something])
                 if (!m.wordMatch.isCaseStudy() || !wordsFact.words.length) {
                     words[m.index].facts.push(wordsFact)
                 }

@@ -3,6 +3,7 @@
 
 import Inflections from '../shared/inflection/Inflections';
 import Inflection from '../shared/inflection/Inflection';
+import { GrammaticalCase } from '../shared/inflection/InflectionForms';
 
 import Facts from '../shared/fact/Facts';
 import Words from '../shared/Words';
@@ -24,16 +25,21 @@ import StudyPhrase from '../frontend/study/StudyPhrase'
 import { expect } from 'chai';
 
 describe('toStudyWordsTest', () => {
+    let verbInflection = new Inflection('verb', 'inf', 'v', 
+            parseEndings('inf: ть, 3: ет', 'ru', 'n').endings)
 
-    let inflection = new Inflection('regular', 'nom', '', 
-            parseEndings('nom: , gen: а', 'ru', 'n').endings)
+    let inflection = new Inflection('regular', 'nom', 'n', 
+            parseEndings('nom: , gen: а, dat: у, acc: а', 'ru', 'n').endings)
 
     let inflections = new Inflections([ inflection ])
     
     let u = new Word('у')
-    let helovek = new InflectableWord('человек', inflection)
-    let net = new Word('нет')
-    let professor = new InflectableWord('профессор', inflection)
+    let dat = new InflectableWord('да', verbInflection).setEnglish('give')
+    let helovek = new InflectableWord('человек', inflection).setEnglish('person')
+    let net = new Word('нет').setEnglish('not')
+    let professor = new InflectableWord('профессор', inflection).setEnglish('professor')
+    let podarok = new InflectableWord('подарок', inflection).setEnglish('gift')
+    let on = new Word('он').setEnglish('he')
 
     let facts = new Facts()
         .add(u)
@@ -58,7 +64,7 @@ describe('toStudyWordsTest', () => {
     let sentences = new Sentences()
 
     let corpus = new Corpus(inflections, words, sentences, facts, phrases, 'ru')
-
+/*
     it('works', () => {
 
         let studyWords = toStudyWords(sentence, [ phrase ], corpus)
@@ -72,5 +78,28 @@ describe('toStudyWordsTest', () => {
         expect((studyWords[2] as StudyPhrase).en).to.equal('does not have')
 
     })
+*/
+    it('handles multiple cases', () => {
 
+        let sentence = new Sentence([
+            helovek.inflect('dat'), on, dat.inflect('3'), podarok.inflect('acc')
+        ], 0)
+
+        let pattern = PhrasePattern.fromString('@dative+ any verb@+ any @accusative+', 'to [someone] verb@+ [something]', words, inflections)
+        
+        let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+
+        let match = phrase.match(sentence.words, facts)
+
+        sentence.phrases.push(phrase)
+
+        expect(!!match).to.be.true
+
+        let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
+
+        expect(studyWords.length).to.equal(5)
+
+        expect(studyWords[3].jp).to.equal('')
+        expect(studyWords[3].getHint()).to.equal('give')
+    })
 })

@@ -18,7 +18,7 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
 
     if (match) {
         let blocks = match.pattern.getEnglishFragments()
-        
+
         explanation = blocks.map((b) => b.enWithJpForCases(match)).join(' ') 
         
         words = match.words.map((m) => props.sentence.words[m.index])
