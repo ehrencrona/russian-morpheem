@@ -78,9 +78,7 @@ describe('toStudyWordsTest', () => {
         expect((studyWords[2] as StudyPhrase).en).to.equal('does not have')
 
     })
-*/
     it('handles multiple cases', () => {
-
         let sentence = new Sentence([
             helovek.inflect('dat'), on, dat.inflect('3'), podarok.inflect('acc')
         ], 0)
@@ -102,4 +100,26 @@ describe('toStudyWordsTest', () => {
         expect(studyWords[3].jp).to.equal('')
         expect(studyWords[3].getHint()).to.equal('give')
     })
+*/
+
+    it('cant reproduce an error', () => {
+        let sentence = new Sentence([
+            on, dat.inflect('3'), helovek.inflect('dat'), podarok.inflect('acc')
+        ], 0)
+
+        let pattern = PhrasePattern.fromString('verb@+ @dative+ any @accusative+', 'verb@+ [someone] [something]', words, inflections)
+
+        let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+
+        let match = phrase.match(sentence.words, facts)
+
+        sentence.phrases.push(phrase)
+
+        expect(!!match).to.be.true
+
+        let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
+
+        expect(studyWords.length).to.equal(4)
+    })
+
 })
