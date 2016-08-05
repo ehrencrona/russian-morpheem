@@ -100,7 +100,7 @@ describe('toStudyWordsTest', () => {
 
         expect(studyWords.length).to.equal(5)
 
-        expect(studyWords[3].jp).to.equal('')
+        expect(studyWords[3].jp).to.equal('дает')
         expect(studyWords[3].getHint()).to.equal('give')
     })
 
@@ -142,6 +142,9 @@ describe('toStudyWordsTest', () => {
         let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
 
         expect(studyWords.length).to.equal(3)
+        expect(studyWords[0].jp).to.equal('человеку')
+        expect(studyWords[1].jp).to.equal('он подарока')
+        expect(studyWords[2].jp).to.equal('нет')
     })
 
 })

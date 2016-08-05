@@ -88,6 +88,8 @@ console.log('Sentence: ' + sentence.toString())
         let additionalFact: Fact
         let fact = props.fact
 
+console.log('Fact ' + fact.getId())
+
         if (fact instanceof Phrase) {
             fact.getCaseFacts().forEach((caseFact) => {
                 if (this.oughtToKnow(caseFact)) {
@@ -104,6 +106,8 @@ console.log('Sentence: ' + sentence.toString())
         let studiedFacts = [ props.fact ]
 
         if (additionalFact) {
+            console.log('Additional fact ' + additionalFact.getId())
+
             studiedFacts.push(additionalFact)
         }
 
@@ -121,7 +125,6 @@ console.log('Sentence: ' + sentence.toString())
                 groupedWords[groupedWords.length-1].words.push(word)
             }
         })
-
 
         return {
             words: words,
@@ -152,7 +155,7 @@ console.log('Sentence: ' + sentence.toString())
     reveal() {
         this.setState({ 
             stage: Stage.REVEAL,
-            unknownFacts: excludeFact({ fact: this.props.fact, words: [] }, this.state.unknownFacts) 
+            unknownFacts: this.state.unknownFacts
         })
     }
 

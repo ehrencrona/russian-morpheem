@@ -108,8 +108,6 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
     let atWordBlock = 0, atFragment = 0
     let wordIndexAdjust = 0
 
-console.log(wordBlocks.map((wb) => wb.words.map((w) => w.jp).join(' ')).join(' --- '))
-
     while (atWordBlock < wordBlocks.length || atFragment < fragments.length) {
         let wordBlock = wordBlocks[atWordBlock]
         let englishBlock: EnglishPatternFragment = fragments[atFragment]
@@ -176,7 +174,7 @@ console.log(wordBlocks.map((wb) => wb.words.map((w) => w.jp).join(' ')).join(' -
             // add an English text block for Russian text
             words.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, englishBlock.en(phraseMatch), 
-                    words.slice(blockEnd, blockEnd)))
+                    words.slice(blockStart, blockEnd)))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 

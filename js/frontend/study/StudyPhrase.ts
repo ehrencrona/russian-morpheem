@@ -16,6 +16,7 @@ export default class StudyPhrase implements StudyWord {
         this.words = words
 
         this.id = phrase.getId()
+
         this.jp = words.map((w) => w.jp).join(' ')
         this.en = en
         this.wordFact = phrase
