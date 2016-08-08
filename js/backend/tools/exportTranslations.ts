@@ -17,8 +17,8 @@ readCorpus('ru', false)
     corpus.facts.facts.forEach((fact, index) => {
 
         if (index > 300 && (fact instanceof Word || fact instanceof InflectableWord)) {
-
-            console.log(fact.getId())
+            if (fact.getEnglish().indexOf(',') >= 0)
+                console.log(fact.getId() + ' ' + fact.getEnglish())
 
         }
 

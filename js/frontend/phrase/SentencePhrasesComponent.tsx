@@ -75,11 +75,20 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             return fact.fact as PhraseCase
         }
 
+        let match = phrase.match(this.props.sentence.words, this.props.corpus.facts)
+
+        if (!match) {
+            return <div>
+                <div className='match error'>Unmatched</div>
+                <div className='phrase'>{ 
+                    phrase.description 
+                }</div>
+            </div>
+        }
+
         let studyWords =
             toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
                 .filter((w) => w instanceof StudyPhrase || !!getPhraseCase(w))
-
-        let match = phrase.match(this.props.sentence.words, this.props.corpus.facts)
 
         return <div>
             <div className='match'>{ 

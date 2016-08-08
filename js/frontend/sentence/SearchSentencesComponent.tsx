@@ -45,7 +45,7 @@ export default class SentencesComponent extends Component<Props, State> {
     }
 
     render() {
-        let phrase = new Phrase('search', [ this.state.pattern ])
+        let phrase = new Phrase('search', this.state.pattern ? [ this.state.pattern ] : [])
         phrase.setCorpus(this.props.corpus)
 
         return (

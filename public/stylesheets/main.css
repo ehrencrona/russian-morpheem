@@ -193,6 +193,8 @@ input[type=text], input[type=number] {
         color: #3b938a;
         font-weight: bold;
         text-decoration: inherit; }
+      .sentenceTab .sentenceFacts .current li .error, .sentenceTab .sentenceFacts .matching li .error {
+        color: #ff5f3b; }
       .sentenceTab .sentenceFacts .current li .phrase, .sentenceTab .sentenceFacts .matching li .phrase {
         font-size: 80%; }
 

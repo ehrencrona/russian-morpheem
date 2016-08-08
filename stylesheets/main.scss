@@ -333,6 +333,10 @@ input[type=text], input[type=number] {
                     text-decoration: inherit;
                 }
 
+                .error {
+                    color: $color5;
+                }
+
                 .phrase {
                     font-size: 80%;
                 }
