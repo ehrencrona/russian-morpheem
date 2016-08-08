@@ -10,6 +10,7 @@ import Sentences from '../shared/Sentences';
 import Word from '../shared/Word';
 import Phrase from '../shared/phrase/Phrase';
 import Phrases from '../shared/phrase/Phrases';
+import Corpus from '../shared/Corpus'
 import InflectableWord from '../shared/InflectableWord';
 
 import transforms from '../shared/Transforms';
@@ -29,7 +30,10 @@ describe('Facts', function() {
         .setEnglish('eng')
 
     let phrase = new Phrase('phraseId', [])
-    let phrases = new Phrases().add(phrase)
+    let phrases = new Phrases()
+    
+    phrases.setCorpus(Corpus.createEmpty('ru'))
+    phrases.add(phrase)
 
     let facts = new Facts()
         .add(inflections.getForm('regular@nom'))

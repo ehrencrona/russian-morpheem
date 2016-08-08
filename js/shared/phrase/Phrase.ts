@@ -11,6 +11,7 @@ import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import InflectedWord from '../InflectedWord'
 import Word from '../Word'
+import Corpus from '../Corpus'
 
 export interface JsonFormat {
     id: string,
@@ -21,6 +22,7 @@ export interface JsonFormat {
 export default class Phrase implements Fact {
     description: string = ''
     casesCache: PhraseCase[]
+    corpus: Corpus
 
     constructor(public id: string, public patterns: PhrasePattern[]) {
         this.id = id
@@ -34,8 +36,12 @@ export default class Phrase implements Fact {
     }
 
     match(words: Word[], facts: Facts, study?: CaseStudy): Match {
+        if (!this.corpus) {
+            throw new Error('setCorpus was never called.')
+        }
+
         for (let i = 0; i < this.patterns.length; i++) {
-            let match = this.patterns[i].match(words, facts, study)
+            let match = this.patterns[i].match(words, facts, study, true)
 
             if (match) {
                 return match
@@ -92,6 +98,12 @@ export default class Phrase implements Fact {
 
     getCaseFact(grammaticalCase: GrammaticalCase): PhraseCase {
         return new PhraseCase(this, grammaticalCase)
+    }
+
+    setCorpus(corpus: Corpus) {
+        this.corpus = corpus
+
+        this.patterns.forEach((p) => p.setCorpus(corpus))
     }
 
     toJson(): JsonFormat {

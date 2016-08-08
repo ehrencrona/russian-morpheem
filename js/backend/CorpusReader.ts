@@ -58,7 +58,11 @@ export default function readCorpus(lang, doWatch) {
 
                         return SentenceFileReader(corpusDir + '/sentences.txt', words, phrases)
                         .then((sentences: Sentences) => {
-                            return new Corpus(inflections, words, sentences, facts, phrases, lang)
+                            let corpus = new Corpus(inflections, words, sentences, facts, phrases, lang)
+
+                            phrases.setCorpus(corpus)
+
+                            return corpus
                         })
                     })
             })

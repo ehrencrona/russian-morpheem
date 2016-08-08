@@ -57,6 +57,7 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
 
         if (sentence) {
             let phraseWithOnePattern = new Phrase(phrase.getId(), [ pattern ])
+            phraseWithOnePattern.setCorpus(this.props.corpus)
 
             words = toStudyWords(sentence, [ phraseWithOnePattern ], this.props.corpus, true)
         }

@@ -54,6 +54,7 @@ describe('toStudyWordsTest', () => {
     let phrase = new Phrase('unet', [ 
         PhrasePattern.fromString('у@ gen нет@ gen', '[gen] does not have [gen]', words, inflections) 
     ])
+    phrase.setCorpus(Corpus.createEmpty('ru'))
 
     let phrases = new Phrases()
 
@@ -89,6 +90,7 @@ describe('toStudyWordsTest', () => {
         let pattern = PhrasePattern.fromString('@dative+ any verb@+ any @accusative+', 'to [someone] verb@+ [something]', words, inflections)
         
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+        phrases.setCorpus(Corpus.createEmpty('ru'))
 
         let match = phrase.match(sentence.words, facts)
 
@@ -112,6 +114,7 @@ describe('toStudyWordsTest', () => {
         let pattern = PhrasePattern.fromString('verb@+ @dative+ any @accusative+', 'verb@+ [someone] [something]', words, inflections)
 
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+        phrases.setCorpus(Corpus.createEmpty('ru'))
 
         let match = phrase.match(sentence.words, facts)
 
@@ -132,6 +135,7 @@ describe('toStudyWordsTest', () => {
         let pattern = PhrasePattern.fromString('@dative+ он@ подарок@', '[someone] does do something', words, inflections)
 
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
+        phrases.setCorpus(Corpus.createEmpty('ru'))
 
         let match = phrase.match(sentence.words, facts)
 

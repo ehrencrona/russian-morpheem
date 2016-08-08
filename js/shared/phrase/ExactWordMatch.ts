@@ -35,6 +35,9 @@ export class ExactWordMatch implements WordMatch {
         return (match ? 1 : 0)
     }
 
+    setCorpus() {
+    }
+
     allowEmptyMatch() {
         return false
     }

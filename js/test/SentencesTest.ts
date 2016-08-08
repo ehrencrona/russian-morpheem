@@ -10,6 +10,7 @@ import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Words from '../shared/Words'
 import Word from '../shared/Word'
+import Corpus from '../shared/Corpus'
 import Facts from '../shared/fact/Facts'
 import Phrase from '../shared/phrase/Phrase'
 import Phrases from '../shared/phrase/Phrases'
@@ -53,6 +54,8 @@ describe('Sentences', function() {
         let words = new Words().addInflectableWord(drink).addWord(io)
         
         let phrases = new Phrases()
+        phrases.setCorpus(Corpus.createEmpty('ru'))
+
         let phrase = new Phrase('testPhrase', [])
         phrases.add(phrase)
 

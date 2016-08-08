@@ -15,6 +15,8 @@ import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
+import PhraseMatch from './PhraseMatch'
+import Corpus from '../Corpus'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
@@ -42,7 +44,7 @@ export default class PhrasePattern {
         this.en = en
     }
 
-    match(words: Word[], facts: Facts, caseStudy?: CaseStudy): Match {
+    match(words: Word[], facts: Facts, caseStudy?: CaseStudy, onlyFirstWord?: boolean): Match {
         if (caseStudy == null) {
             caseStudy = CaseStudy.STUDY_BOTH
         }
@@ -54,7 +56,8 @@ export default class PhrasePattern {
                 minWords--
             }
         })
-        for (let i = 0; i <= words.length - minWords; i++) {
+
+        for (let i = 0; i <= (onlyFirstWord ? 0 : words.length - minWords); i++) {
             let at = i
             let found = true
             let wordsMatched: WordMatched[] = []
@@ -62,7 +65,7 @@ export default class PhrasePattern {
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
 
-                let match = wordMatch.matches(words, at, this.wordMatches, j, facts)
+                let match = wordMatch.matches(words, at, this.wordMatches, j)
 
                 if (!match && !wordMatch.allowEmptyMatch()) {
                     found = false
@@ -220,6 +223,10 @@ export default class PhrasePattern {
         return result
     }
 
+    setCorpus(corpus: Corpus) {
+        this.wordMatches.forEach((m) => m.setCorpus(corpus))
+    }
+
     hasCase(grammaticalCase: GrammaticalCase): boolean {
         return !!this.wordMatches.find((m) => (m as any).form && (m as any).form.grammaticalCase == grammaticalCase)
     }
@@ -278,6 +285,9 @@ export default class PhrasePattern {
             }
             else if (POS_NAMES[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
                 match = new PosFormWordMatch(str.substr(0, str.length-1), null, null, str[str.length-1])
+            }
+            else if (str.substr(0, 7) == 'phrase:') {
+    	        match = new PhraseMatch(str.substr(7))
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let els = str.substr(4).split('@')

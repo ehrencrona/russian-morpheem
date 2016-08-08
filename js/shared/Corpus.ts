@@ -58,14 +58,17 @@ export default class Corpus {
         let sentences = new Sentences()
 
         sentences.fromJson(json.sentences, phrases, words)
-        
-        return new Corpus(
+
+        let corpus = new Corpus(
             inflections,
             words,
             sentences,
             facts,
             phrases, 
             json.lang)
+
+        phrases.setCorpus(corpus)
+        return corpus
     }
 
     clone(otherCorpus: Corpus) {

@@ -17,13 +17,17 @@ export default class FrontendCorpus extends Corpus {
         
         sentences.fromJson(json.sentences, phrases, words)
 
-        return new FrontendCorpus(
+        let corpus = new FrontendCorpus(
             inflections,
             words,
             sentences,
             facts, 
             phrases,
             json.lang)
+
+        phrases.setCorpus(corpus)
+
+        return corpus
     }
 
     setXrArgs(xrArgs: { [header: string]: string }) {

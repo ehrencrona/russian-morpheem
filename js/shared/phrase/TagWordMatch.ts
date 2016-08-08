@@ -4,17 +4,20 @@ import CaseStudyMatch from './CaseStudyMatch'
 import Word from '../Word'
 import Facts from '../fact/Facts'
 import Fact from '../fact/Fact'
+import Corpus from '../Corpus'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm, GrammaticalCase } from '../inflection/InflectionForms'
 
 export default class TagWordMatch implements WordMatch, CaseStudyMatch {
+    corpus: Corpus
+
     constructor(public tag : string, public form: InflectionForm) {
         this.tag = tag
         this.form = form
     }
 
     matches(words: Word[], wordPosition: number, matches: WordMatch[], 
-        matchPosition: number, facts: Facts): number {
+        matchPosition: number): number {
         
         for (let i = wordPosition; i < words.length; i++) {
             let word = words[i]
@@ -25,7 +28,7 @@ export default class TagWordMatch implements WordMatch, CaseStudyMatch {
                 fact = word.word
             }
 
-            let tags = facts.getTagsOfFact(fact)
+            let tags = this.corpus.facts.getTagsOfFact(fact)
 
             if (this.form) {
                 if (word instanceof InflectedWord) {
@@ -46,6 +49,10 @@ export default class TagWordMatch implements WordMatch, CaseStudyMatch {
         }
 
         return words.length - wordPosition
+    }
+
+    setCorpus(corpus: Corpus) {
+        this.corpus = corpus
     }
 
     isCaseStudy() {

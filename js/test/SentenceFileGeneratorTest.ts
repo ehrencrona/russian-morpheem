@@ -17,9 +17,11 @@ import Phrases from '../shared/phrase/Phrases'
 import Phrase from '../shared/phrase/Phrase'
 import Grammar from '../shared/Grammar'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
+import Corpus from '../shared/Corpus'
 
 describe('SentenceFileGenerator', function() {
     let phrases = new Phrases()
+    phrases.setCorpus(Corpus.createEmpty('ru'))
     phrases.add(new Phrase('testPhrase', []))
 
     it('generates same string as the read one', function () {

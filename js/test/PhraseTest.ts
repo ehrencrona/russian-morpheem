@@ -8,9 +8,12 @@ import Word from '../shared/Word'
 import Words from '../shared/Words'
 import Facts from '../shared/fact/Facts'
 import Ending from '../shared/Ending'
+import Corpus from '../shared/Corpus'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Phrase from '../shared/phrase/Phrase'
+import Phrases from '../shared/phrase/Phrases'
+import Sentences from '../shared/Sentences'
 import PhrasePattern from '../shared/phrase/PhrasePattern';
 
 import { expect } from 'chai';
@@ -56,6 +59,8 @@ describe('Phrase', function() {
     facts.tag(w4, 'animate')
     facts.tag(w3, 'location')
 
+    let corpus = new Corpus(inflections, words, new Sentences(), facts, new Phrases(), 'ru')
+
     it('cant reproduce a bug', () => {
         let shouldMatch = [
             w4.inflect('acc'), w4.inflect('gen')
@@ -66,6 +71,7 @@ describe('Phrase', function() {
         ]
 
         let phrase = Phrase.fromString('foo', 'noun@acc+ noun@gen+', 'English', words, inflections)
+        phrase.setCorpus(corpus)
 
         expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
         expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
@@ -74,6 +80,8 @@ describe('Phrase', function() {
     it('converts to str and back', function () {
         function testStr(originalStr: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)
+
+            phrase.setCorpus(corpus)
 
             expect(phrase.toString()).to.equal(originalStr)
         }
@@ -95,6 +103,7 @@ describe('Phrase', function() {
         ]
 
         let phrase = Phrase.fromString('foo', 'tag:animate adjective@adv+', 'English', words, inflections)
+        phrase.setCorpus(corpus)
 
         expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
 
@@ -112,8 +121,14 @@ describe('Phrase', function() {
             w1, w3.inflect('prep')
         ]
 
-        function testMatch(phraseStr: string, length: number) {
+        function testMatch(phraseStr: string, length: number, isCanonicalForm?: boolean) {
             let phrase = Phrase.fromString('foo', phraseStr, 'English', words, inflections)
+
+            phrase.setCorpus(corpus)
+
+            if (isCanonicalForm != null && isCanonicalForm) {
+                expect(phrase.toString()).to.equal(phraseStr)
+            }
 
             expect(phrase.match(wordArray, facts)).to.be.not.undefined
             expect(phrase.match(wordArray, facts).words.length).to.equal(length)
@@ -121,16 +136,18 @@ describe('Phrase', function() {
 
         testMatch('в[loc]@ библиотека@prep', 2)
         testMatch('в[loc]@ я|библиотека@prepositional', 2)
-        testMatch('в[loc]@ я|библиотека', 2)
         testMatch('в[loc]@ библиотека@', 2)
-        testMatch('в[loc]@ библиотека', 2)
+        testMatch('в[loc]@ я|библиотека', 2, false)
+        testMatch('в[loc]@ библиотека', 2, false)
         testMatch('в[loc]@ prep', 2)
         testMatch('в[loc]@ tag:location', 2)
         testMatch('в[loc]@ noun+', 2)
+        testMatch('в[loc]@ noun@prepositional+', 2)
+        testMatch('в[loc]@ noun@prepositional!', 2)
         testMatch('в[loc]@ noun@prep+', 2)
-        
+
         testMatch('в[loc]@ any noun@prep+', 2)
-        
+
         testMatch('noun@prep+', 1)
     })
 

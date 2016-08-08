@@ -7,7 +7,7 @@ import Fact from '../fact/Fact'
 
 export default class WildcardMatch implements WordMatch {
     matches(words: Word[], wordPosition: number, matches: WordMatch[], 
-        matchPosition: number, facts: Facts): number {
+        matchPosition: number): number {
         if (matchPosition >= matches.length-1) {
             return 0
         }
@@ -18,12 +18,15 @@ export default class WildcardMatch implements WordMatch {
             }
 
             if (matches[matchPosition+1].matches(
-                words, i, matches, matchPosition+1, facts) > 0) {
+                words, i, matches, matchPosition+1) > 0) {
                 return i - wordPosition
             }
         }
 
         return 0
+    }
+
+    setCorpus() {
     }
 
     isCaseStudy() {

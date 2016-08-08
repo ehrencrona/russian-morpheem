@@ -10,6 +10,7 @@ import Facts from '../shared/fact/Facts'
 import Phrases from '../shared/phrase/Phrases'
 import Phrase from '../shared/phrase/Phrase'
 import Grammar from '../shared/Grammar'
+import Corpus from '../shared/Corpus'
 
 describe('SentenceFileParser', function() {
     it('parses words and meaning', function () {
@@ -36,6 +37,7 @@ describe('SentenceFileParser', function() {
         words.addWord(a)
 
         let phrases = new Phrases()
+        phrases.setCorpus(Corpus.createEmpty('ru'))
         phrases.add(new Phrase('testPhrase', []))
 
         var sentences = parser('123 a (author: ae, phrase: testPhrase): english', words, phrases)

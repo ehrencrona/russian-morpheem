@@ -37,6 +37,9 @@ export class WordInFormMatch implements WordMatch {
         return false
     }
 
+    setCorpus() {
+    }
+    
     isCaseStudy() {
         return false
     }

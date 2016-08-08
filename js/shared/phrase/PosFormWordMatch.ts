@@ -15,7 +15,7 @@ export const POS_NAMES = {
     pronoun: 'pron'
 }
 
-export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch {
+export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch, WordMatch {
     posName: string 
 
     constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
@@ -48,6 +48,9 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch implements
         }
     }
 
+    setCorpus() {
+    }
+
     isCaseStudy() {
         return !!(this.form && this.form.grammaticalCase)
     }
@@ -67,6 +70,6 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch implements
 
         return (this.pos ? this.pos : '') + '@' + 
             (this.formStr ? this.formStr : '') + 
-            (this.quantifier == EXACT_MATCH_QUANTIFIER ? '' : this.quantifier)
+            (this.quantifier == (this.pos ? AT_LEAST_ONE_QUANTIFIER : EXACT_MATCH_QUANTIFIER) ? '' : this.quantifier)
     }
 }
