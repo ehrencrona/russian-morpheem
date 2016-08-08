@@ -57,7 +57,9 @@ export default class PhrasePattern {
             }
         })
 
-        for (let i = 0; i <= (onlyFirstWord ? 0 : words.length - minWords); i++) {
+        let until = (onlyFirstWord ? 0 : words.length - minWords)
+
+        for (let i = 0; i <= until; i++) {
             let at = i
             let found = true
             let wordsMatched: WordMatched[] = []

@@ -41,7 +41,7 @@ export default class Phrase implements Fact {
         }
 
         for (let i = 0; i < this.patterns.length; i++) {
-            let match = this.patterns[i].match(words, facts, study, true)
+            let match = this.patterns[i].match(words, facts, study, false)
 
             if (match) {
                 return match
