@@ -411,6 +411,11 @@ ul {
     position: relative;
     top: 1px; }
 
+.sentencesWithFact .match {
+  color: #3b938a;
+  font-weight: bold;
+  text-decoration: inherit; }
+
 .sentencesWithFact li {
   margin: 4px 0; }
 

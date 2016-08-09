@@ -48,7 +48,9 @@ export default class WordClassifierComponent extends Component<Props, State> {
                 filter={ (factIndex) => {
                     let fact = factIndex.fact
                     
-                    return (fact instanceof Word || fact instanceof InflectableWord) && fact.getIdWithoutClassifier() == thisId 
+                    return (fact instanceof Word || fact instanceof InflectableWord) 
+                        && fact.getIdWithoutClassifier() == thisId 
+                        && fact.getId() != this.props.word.getId()
                 } }
             />
         </div>

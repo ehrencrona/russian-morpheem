@@ -63,8 +63,6 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
             factIndices = factIndices.sort((i1, i2) => this.props.sort(i1.fact, i2.fact))
         }
 
-        factIndices = factIndices.slice(this.state.startIndex, this.state.startIndex + PAGE_SIZE)
-
         return (
             <div>
                 {!this.props.hideTypeFilter ? 
@@ -88,8 +86,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                     <div/>
                 }
 
-                { (
-                    factIndices.length > PAGE_SIZE ?
+                { (factIndices.length > PAGE_SIZE ?
 
                         <ul className='paging'>{
 
@@ -112,7 +109,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
 
                 <ul className='facts'>
                 {
-                    factIndices.map((factIndex) => {
+                    factIndices.slice(this.state.startIndex, this.state.startIndex + PAGE_SIZE).map((factIndex) => {
                         let fact = factIndex.fact
                                                     
                         return <FactsEntryComponent

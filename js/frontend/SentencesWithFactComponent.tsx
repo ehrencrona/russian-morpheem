@@ -3,6 +3,10 @@
 import Corpus from '../shared/Corpus'
 import Fact from '../shared/fact/Fact'
 import Sentence from '../shared/Sentence'
+import htmlEscape from '../shared/util/htmlEscape'
+import InflectedWord from '../shared/InflectedWord'
+import InflectableWord from '../shared/InflectableWord'
+import Word from '../shared/Word'
 
 import { Component, createElement } from 'react';
 import { MISSING_INDEX } from '../shared/fact/Facts'
@@ -54,6 +58,24 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
             findSentencesForFact(fact, this.props.corpus.sentences, this.props.corpus.facts)
 
         let toSentence = (sentence: SentenceDifficulty) => {
+
+            let sentenceElement 
+            
+            if (fact instanceof Word || fact instanceof InflectableWord) {
+                sentenceElement = <span dangerouslySetInnerHTML={ { __html: sentence.sentence.innerToString((word, first) => {
+                    let result = htmlEscape(word.toString())
+                    
+                    if (word.getId() == fact.getId() || (word instanceof InflectedWord && word.word.getId() == fact.getId())) {
+                        result = '<span class="match">' + result + '</span>'
+                    }
+
+                    return result
+                })} } />
+            }
+            else {
+                sentenceElement = sentence.sentence.toString()
+            }
+
             return <li 
                 key={ sentence.sentence.id }
                 className='clickable'
@@ -63,7 +85,8 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
                             { sentence.difficulty == MISSING_INDEX ? 'n/a' : sentence.difficulty + 1 }
                         </div>
                     </div>
-                    { sentence.sentence.toString() }
+
+                    { sentenceElement }
                 </li>
         }
 
