@@ -20,7 +20,7 @@ export default class Words {
     wordsByString : { [s: string]: Word } = {}
     wordsById : { [s: string]: Word } = {}
     inflectableWordsById : { [s: string]: InflectableWord } = {}
-    
+
     ambiguousForms : { [s: string]: Word[] } = {}
 
     onAddWord: (word: Word) => void = null

@@ -162,6 +162,10 @@ export default class Word {
         return word.getId() == this.getId()
     }
 
+    getIdWithoutClassifier() {
+        return this.jp
+    }
+
     getId() {
         return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
     }

@@ -18,6 +18,7 @@ import SentencesWithFact from './SentencesWithFactComponent'
 import ExternalSentences from './ExternalSentencesComponent'
 import PhrasesWithWordComponent from './PhrasesWithWordComponent'
 import WordTranslationComponent from './WordTranslationComponent'
+import WordClassifierComponent from './WordClassifierComponent'
 
 import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
@@ -80,15 +81,18 @@ export default class WordFactComponent extends Component<Props, State> {
                 <WordTranslationComponent
                     corpus={ this.props.corpus } 
                     word={ fact } />
-            </div>
-        }
-        else if (this.state.tab == 'sentences') {
-            tab = <div>
+
+                <WordClassifierComponent corpus={ this.props.corpus} word={ this.props.fact } tab={ this.props.tab }/>
+
                 <PhrasesWithWordComponent
                     word={ this.props.fact }
                     corpus={ this.props.corpus }
                     tab={ this.props.tab } />
 
+            </div>
+        }
+        else if (this.state.tab == 'sentences') {
+            tab = <div>
                 <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />                
             </div>
         }

@@ -7,6 +7,7 @@ import Phrase from '../shared/phrase/Phrase'
 
 import InflectionFact from '../shared/inflection/InflectionFact'
 import InflectedWord from '../shared/InflectedWord'
+import Word from '../shared/Word'
 
 import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
@@ -92,13 +93,18 @@ export default class FactNameComponent extends Component<Props, State> {
                 (fact.patterns[0] ? ' – ' + fact.patterns[0].en : '') }</span>
         }
         else {
-            let name = fact.getId();
+            let name = fact.getId()
+            let en = ''
             
             if (fact instanceof InflectedWord) {
-                name = fact.toString();
+                name = fact.toString()
             }
 
-            return <span>{ name }</span>
+            if (fact instanceof Word || fact instanceof InflectableWord) {
+                en = fact.getEnglish()
+            }
+
+            return <span>{ name }: { en } </span>
         }
     }
 }

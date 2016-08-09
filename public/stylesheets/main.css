@@ -119,6 +119,9 @@ input[type=text], input[type=number] {
     font-weight: bold;
     background-color: #e95f3d; }
 
+.wordClassifier ul {
+  margin-top: 12px; }
+
 .wordTranslation input {
   width: 100%; }
 
@@ -220,6 +223,22 @@ input[type=text], input[type=number] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; }
+  .wordSearch .suggestions .alternatives {
+    display: flex;
+    flex-direction: row;
+    align-items: center; }
+    .wordSearch .suggestions .alternatives ul {
+      display: flex;
+      flex-direction: row;
+      margin-top: 4px;
+      margin-left: 8px; }
+      .wordSearch .suggestions .alternatives ul li {
+        background-color: #ffdb5d;
+        font-style: italic;
+        padding: 4px;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        border-radius: 4px; }
   .wordSearch .suggestions .suggestion {
     display: flex;
     flex-direction: row;
@@ -313,7 +332,7 @@ ul {
       display: inline-block; }
   .inflections .inherits {
     font-style: italic; }
-    .inflections .inherits .clickable {
+    .inflections .inherits .clickable, .inflections .inherits .wordSearch .suggestions .alternatives ul li, .wordSearch .suggestions .alternatives ul .inflections .inherits li {
       font-weight: bold; }
   .inflections table {
     width: 100%;
@@ -353,7 +372,7 @@ ul {
   top: -1px;
   font-size: 60%; }
 
-.clickable:hover {
+.clickable:hover, .wordSearch .suggestions .alternatives ul li:hover {
   color: black;
   text-decoration: underline; }
 

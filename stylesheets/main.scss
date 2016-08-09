@@ -215,6 +215,12 @@ input[type=text], input[type=number] {
     }
 }
 
+.wordClassifier {
+    ul {
+        margin-top: 3 * $unit;
+    }
+}
+
 .wordTranslation {
     input {
         @extend .border-box-sizing;
@@ -377,6 +383,29 @@ input[type=text], input[type=number] {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+
+        .alternatives {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            
+            ul {
+                display: flex;
+                flex-direction: row;
+                margin-top: $unit;
+                margin-left: 2 * $unit;
+
+                li {
+                    @extend .clickable;
+                    background-color: $color6-light;
+                    font-style: italic;
+                    padding: $unit;
+                    margin-bottom: 4px;
+                    margin-right: 4px;
+                    border-radius: $unit;
+                }            
+            }
+        }
 
         .suggestion {
             display: flex;

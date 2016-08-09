@@ -98,8 +98,12 @@ export default class InflectableWord {
         return this.defaultInflection
     }
 
+    getIdWithoutClassifier() {
+        return this.getDefaultInflection().jp
+    }
+
     getId() {
-        let result = this.getDefaultInflection().jp
+        let result = this.getIdWithoutClassifier()
 
         if (this.classifier) {
             result += '[' + this.classifier + ']' 

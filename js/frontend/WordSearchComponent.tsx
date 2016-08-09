@@ -280,6 +280,20 @@ export default class WordSearchComponent extends Component<Props, State> {
             }
         </div>
     }
+
+    getAlternatives(word: InflectableWord): (Word|InflectableWord)[] {
+        let thisId = word.getIdWithoutClassifier()
+
+        let result: (Word|InflectableWord)[] = []
+
+        this.props.corpus.facts.facts.forEach((fact) => { 
+            if ((fact instanceof Word || fact instanceof InflectableWord) && fact.getIdWithoutClassifier() == thisId && fact.getId() != word.getId()) {
+                result.push(fact)
+            }
+        })
+
+        return result
+    }
         
     render() {
         let index : SentencesByFactIndex = 
@@ -307,6 +321,12 @@ export default class WordSearchComponent extends Component<Props, State> {
         
         let suggestions = this.getSuggestions().slice(0, MAX_SUGGESTIONS)
     
+        let alternatives
+
+        if (filterWord) {
+            alternatives = this.getAlternatives(filterWord)
+        }
+
         return (<div className='wordSearch'>
             <div className='filter'>
                 <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' value={ this.state.filterString } onChange={ (event) => {
@@ -357,13 +377,31 @@ export default class WordSearchComponent extends Component<Props, State> {
             <div className='suggestions'>
 
             {
-                filterWord && filterWord instanceof InflectableWord ?
+                filterWord ?
                 <div>
-                    <div className='inflections'>
-                        <div className='inflectionName'>
-                            { filterWord.inflection.id + (filterWord.inflection.pos ? ' (' + filterWord.inflection.pos + ')' : '') } 
+                    { alternatives ?
+                        <div className='alternatives'>
+                            This word means&nbsp;<b>{ filterWord.getEnglish() }</b>. See also:                         
+
+                            <ul>
+                                {
+                                    alternatives.map((word: InflectableWord | Word) => 
+                                        <li onClick={ () => { 
+                                            if (word instanceof InflectableWord) {
+                                                this.setState({ filterWord: word }) 
+                                            }
+                                            else {
+                                                this.props.onWordSelect(word)
+                                            }
+                                        } }>{ word.getEnglish() }</li>
+                                    )
+                                }
+                            </ul>
                         </div>
-                    </div>
+
+                        : 
+                        <div/>
+                    }
 
                     <InflectionsContainerComponent 
                         corpus={ this.props.corpus }
