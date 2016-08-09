@@ -284,12 +284,41 @@ export default class WordSearchComponent extends Component<Props, State> {
     getAlternatives(word: InflectableWord): (Word|InflectableWord)[] {
         let thisId = word.getIdWithoutClassifier()
 
+        let ids = {}
+
         let result: (Word|InflectableWord)[] = []
 
-        this.props.corpus.facts.facts.forEach((fact) => { 
-            if ((fact instanceof Word || fact instanceof InflectableWord) && fact.getIdWithoutClassifier() == thisId && fact.getId() != word.getId()) {
-                result.push(fact)
+        let found = (fact: Word | InflectableWord) => {
+            let stem = fact
+
+            if (fact instanceof InflectedWord) {
+                stem = fact.word
             }
+
+            if (ids[stem.getId()]) {
+                return
+            }
+
+            ids[stem.getId()] = stem
+            result.push(stem)
+        }
+
+        this.props.corpus.facts.facts.forEach((fact) => { 
+            if ((fact instanceof Word || fact instanceof InflectableWord) && fact.getIdWithoutClassifier() == thisId) {
+                found(fact)
+            }
+        })
+
+        word.visitAllInflections((inflection) => {
+
+            let ambiguous = this.props.corpus.words.ambiguousForms[inflection.toString()]
+
+            if (ambiguous) {
+                ambiguous.forEach((word) => {
+                    found(word)
+                })
+            }
+
         })
 
         return result
@@ -381,7 +410,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                 <div>
                     { alternatives ?
                         <div className='alternatives'>
-                            This word means&nbsp;<b>{ filterWord.getEnglish() }</b>. See also:                         
+                            This means&nbsp;"<b>{ filterWord.getEnglish() }</b>". Similar words:                         
 
                             <ul>
                                 {
@@ -393,7 +422,8 @@ export default class WordSearchComponent extends Component<Props, State> {
                                             else {
                                                 this.props.onWordSelect(word)
                                             }
-                                        } }>{ word.getEnglish() }</li>
+                                        } }>{ (word instanceof InflectableWord ? word.getDefaultInflection().jp : word.jp) + 
+                                            ' (' + word.getEnglish() + ')' }</li>
                                     )
                                 }
                             </ul>
