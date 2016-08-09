@@ -37,7 +37,7 @@ export default function WordTranslationComponent(props: Props, children) {
                     <div className='label'>{form }</div>
 
                     <input type='text' key={ form } autoCapitalize='off' 
-                            defaultValue={ props.word.getEnglish(form) } onBlur={ setValue(form) }/>
+                            defaultValue={ props.word.en[form] } onBlur={ setValue(form) }/>
 
                 </div>
             )

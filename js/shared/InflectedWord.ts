@@ -112,6 +112,12 @@ export default class InflectedWord extends Word {
                 if (this.form == '3') {
                     form = '3' 
                 }
+                else if (this.form == 'inf' && this.en['inf']) {
+                    form = 'inf'
+                }
+                else if (this.form == 'pastpl' && this.en['pastpl']) {
+                    form = 'pastpl'
+                }
                 else if (FORMS[this.form].tense == Tense.PAST) {
                     form = 'past'
                 }
@@ -123,11 +129,9 @@ export default class InflectedWord extends Word {
             }
             else if (this.pos == 'n') {
                 if (FORMS[this.form].number == Number.PLURAL) {
-                    form = 'past'
+                    form = 'pl'
                 }
             }
-
-            console.log('got form ' + form + ' for ' + this.form + ' in pos ' + this.pos)
         }
 
         var result = this.en[form || '']
