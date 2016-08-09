@@ -53,6 +53,7 @@ export default class InflectableWord extends AbstractAnyWord {
                     result.requiresFact(transform))
 
                 result.en = this.en
+                result.pos = this.pos
 
                 result.classifier = this.classifier
                 result.studied = this.studied

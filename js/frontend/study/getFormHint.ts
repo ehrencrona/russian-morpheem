@@ -32,12 +32,8 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
 
         let targetGender = form.gender
 
-        let tenseHintNeeded = !!targetTense
-        let numberHintNeeded = !!targetNumber
-
         // we will need to know the gender of nouns for this to work, we don't yet.
         let genderHintNeeded = false
-
 
         words.forEach((word) => {
 
@@ -50,14 +46,6 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
 
                 let form = word.form
 
-                if (tenseHintNeeded && form.tense != null && form.tense == targetTense) {
-                    tenseHintNeeded = false
-                }
-
-                if (numberHintNeeded && form.number != null && form.number == targetNumber) {
-                    numberHintNeeded = false
-                }
-
                 if (genderHintNeeded && form.gender != null && form.gender == targetGender) {
                     genderHintNeeded = false
                 }
@@ -66,17 +54,6 @@ export default function getFormHint(forWord: Word, words: StudyWord[], studiedFa
         })
 
         let result = ''
-
-        if (tenseHintNeeded) {
-            result += (targetTense == Tense.PAST ? 'past' : 'present') 
-        }
-
-        if (numberHintNeeded) {
-            if (result) {
-                result += ', '
-            }
-            result += (targetNumber == Number.PLURAL ? 'plural' : 'singular') 
-        }
 
         if (genderHintNeeded) {
             if (result) {

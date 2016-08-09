@@ -3,6 +3,7 @@
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
+import { FORMS, Tense, Number } from './inflection/InflectionForms' 
 import InflectableWord from './InflectableWord'
 import Words from './Words'
 import htmlEscape from './util/htmlEscape'
@@ -106,6 +107,29 @@ export default class InflectedWord extends Word {
     }
 
     getEnglish(form?) {
+        if (!form) {
+            if (this.pos == 'v') {
+                if (this.form == '3') {
+                    form = '3' 
+                }
+                else if (FORMS[this.form].tense == Tense.PAST) {
+                    form = 'past'
+                }
+            }
+            else if (this.pos == 'adj') {
+                if (this.form == 'comp') {
+                    form = 'comp'
+                }
+            }
+            else if (this.pos == 'n') {
+                if (FORMS[this.form].number == Number.PLURAL) {
+                    form = 'past'
+                }
+            }
+
+            console.log('got form ' + form + ' for ' + this.form + ' in pos ' + this.pos)
+        }
+
         var result = this.en[form || '']
 
         if (!result) {

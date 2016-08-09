@@ -18,7 +18,11 @@ abstract class AbstractAnyWord implements AnyWord {
         var result = this.en[form]
 
         if (!result) {
-            return ''
+            result = this.en['']
+
+            if (!result) {
+                result = ''
+            }
         }
 
         return result

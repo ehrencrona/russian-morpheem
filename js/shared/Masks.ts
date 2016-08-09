@@ -4,6 +4,7 @@ const sg = (form) => form.substr(form.length-2) != 'pl'
 const MASKS = {
     adj: {
         short: (form) => form.substr(0, 5) == 'short',
+        shortandadv: (form) => form.substr(0, 5) == 'short' || form == 'adv',
         nonstd: (form) => form.substr(0, 5) == 'short' || form == 'adv' || form == 'comp',
         pl: pl,
         sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
