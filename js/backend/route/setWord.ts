@@ -6,7 +6,7 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 
 import { JsonFormat } from '../../shared/Word'
-import { TranslatableWord } from '../../shared/Words'
+import AnyWord from '../../shared/AnyWord'
 import getAuthor from '../getAuthor'
 
 export default function(corpus: Corpus) {
@@ -24,7 +24,7 @@ export default function(corpus: Corpus) {
             return
         }
         else {
-            let existingWord: TranslatableWord = existingFact as TranslatableWord
+            let existingWord: AnyWord = existingFact as AnyWord
 
             if (!existingWord) {
                 res.status(404).send({ error: `Unknown word ${wordId}.`})
@@ -38,11 +38,13 @@ export default function(corpus: Corpus) {
             let word = Word.fromJson(req.body as JsonFormat, corpus.inflections)
             let author = getAuthor(req).name
 
-            if (word.getEnglish() != existingWord.getEnglish()) {
-                corpus.words.setEnglish(word.getEnglish(), existingWord)
+            Object.keys(word.en).forEach((form) => {
+                if (word.getEnglish(form) != existingWord.getEnglish(form)) {
+                    corpus.words.setEnglish(word.getEnglish(form), existingWord, form)
 
-                console.log('Stored translation "' + word.getEnglish() + '" for word ' + existingWord.getId() + ' by ' + author)
-            }
+                    console.log('Stored translation "' + word.getEnglish() + '" for word ' + existingWord.getId() + ' by ' + author)
+                }
+            })
 
             res.status(200).send({})
         }

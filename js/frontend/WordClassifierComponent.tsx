@@ -30,14 +30,6 @@ export default class WordClassifierComponent extends Component<Props, State> {
 
         let thisId = this.props.word.getIdWithoutClassifier()
 
-        let alternatives: (Word|InflectableWord)[] = []
-
-        this.props.corpus.facts.facts.forEach((fact) => {
-            if ((fact instanceof Word || fact instanceof InflectableWord) && fact.getIdWithoutClassifier() == thisId) {
-                alternatives.push(fact)
-            }
-        })
-
         return <div className='wordClassifier'><h3>Other Meanings</h3> 
             {current}
 

@@ -24,7 +24,7 @@ inflections.add(new Inflection('lastchar', 'nom', null,
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {
-        var facts = parser('word:meaning', inflections, 'ru')
+        var facts = parser('word:meaning, pl: meanings', inflections, 'ru')
         let word = facts.facts[0]
         
         expect(word.toString()).to.equal('word')
@@ -32,6 +32,7 @@ describe('FactFileParser', function() {
         expect(word).to.be.instanceOf(Word)
 
         expect((<Word> word).getEnglish()).to.equal('meaning')
+        expect((<Word> word).getEnglish('pl')).to.equal('meanings')
     })
 
     it('parses inflected words', function () {
@@ -42,7 +43,7 @@ describe('FactFileParser', function() {
 
         expect(word).to.be.instanceOf(InflectableWord)
 
-        expect((<InflectableWord> word).en).to.equal('meaning')
+        expect((<InflectableWord> word).getEnglish()).to.equal('meaning')
     })
 
     it('parses classifiers', function () {

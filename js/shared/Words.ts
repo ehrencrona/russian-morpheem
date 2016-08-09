@@ -4,17 +4,12 @@ import InflectableWord from './InflectableWord'
 import Inflection from './inflection/Inflection'
 import Facts from './fact/Facts'
 import UnparsedWord from './UnparsedWord'
+import AnyWord from './AnyWord'
 
 import { JsonFormat as InflectableWordJsonFormat } from './InflectableWord'
 import { JsonFormat as WordJsonFormat } from './Word'
 
 export type JsonFormat = (InflectableWordJsonFormat | WordJsonFormat)[]
-
-export interface TranslatableWord {
-    setEnglish(en, form?: string)
-    getEnglish()
-    getId(): string
-}
 
 export default class Words {
     wordsByString : { [s: string]: Word } = {}
@@ -24,7 +19,7 @@ export default class Words {
     ambiguousForms : { [s: string]: Word[] } = {}
 
     onAddWord: (word: Word) => void = null
-    onChangeWord: (word: TranslatableWord) => void = null
+    onChangeWord: (word: AnyWord) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
     
     static PUNCTUATION = '.?!,;:«»—'
@@ -189,7 +184,7 @@ export default class Words {
         return this
     }
 
-    setEnglish(en, word: TranslatableWord, form?) {
+    setEnglish(en, word: AnyWord, form?: string) {
         word.setEnglish(en, form)
 
         if (this.onChangeWord) {

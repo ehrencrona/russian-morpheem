@@ -4,11 +4,11 @@ import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
 import INFLECTION_FORMS from './inflection/InflectionForms'
 import MASKS from './Masks'
-import AnyWord from './AnyWord'
+import AbstractAnyWord from './AbstractAnyWord'
 
 export interface JsonFormat {
     stem: string,
-    en: string,
+    en: { [ form: string ]: string },
     inflection: string,
     type: string,
     classifier?: string,
@@ -17,15 +17,14 @@ export interface JsonFormat {
     pos?: string
 }
 
-export default class InflectableWord implements AnyWord {
+export default class InflectableWord extends AbstractAnyWord {
     inflectionByForm : { [s: string]: InflectedWord } = {}
-    en: string
     mask: (string) => boolean
     defaultInflection: InflectedWord
-    studied: boolean = true
-    pos: string
 
     constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
+        super()
+
         this.stem = stem
         this.inflection = inflection
         this.classifier = classifier
@@ -53,7 +52,7 @@ export default class InflectableWord implements AnyWord {
                 inflected.transforms.forEach((transform) => 
                     result.requiresFact(transform))
 
-                result.setEnglish(this.getEnglish())
+                result.en = this.en
 
                 result.classifier = this.classifier
                 result.studied = this.studied
@@ -120,16 +119,6 @@ export default class InflectableWord implements AnyWord {
         return 'ib'
     }
 
-    getEnglish() {
-        return this.en
-    }
-
-    setEnglish(en, form?: string) {
-        this.en = en
-        
-        return this
-    }
-
     setClassifier(classifier) {
         this.classifier = classifier
 
@@ -150,7 +139,9 @@ export default class InflectableWord implements AnyWord {
 
         let result = new InflectableWord(
             json.stem, inflection, json.classifier)
-            .setEnglish(json.en)
+            
+            
+        result.en = json.en
 
         if (json.mask) {
             let posMasks = MASKS[inflection.pos]

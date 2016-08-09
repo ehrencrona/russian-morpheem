@@ -4,11 +4,11 @@ import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
 import Words from './Words'
 import InflectableWord from './InflectableWord'
-import AnyWord from './AnyWord'
+import AbstractAnyWord from './AbstractAnyWord'
 
 export interface JsonFormat {
     target: string,
-    en: string,
+    en: { [ form: string ]: string },
     classifier: string,
     type: string,
     unstudied?: boolean,
@@ -18,13 +18,12 @@ export interface JsonFormat {
 /**
  * A word has a Japanese spelling, an English translation an optional list of grammar that is required to understand it.
  */
-export default class Word implements AnyWord  {
-    en: any
+export default class Word extends AbstractAnyWord {
     required: Fact[]
-    studied: boolean = true
-    pos: string
 
     constructor(public jp: string, public classifier?: string) {
+        super()
+
         this.jp = jp
         this.classifier = classifier
         this.en = { }
@@ -61,34 +60,6 @@ export default class Word implements AnyWord  {
                 }
             }
         }
-    }
-
-    getEnglish(form?) {
-        if (!form) {
-            form = ''
-        }
-
-        var result = this.en[form]
-
-        if (!result) {
-            if (form == '') {
-                return ''
-            }
-            
-            throw new Error('Form ' + form + ' not present among English translations of "' + this + '", only ' + Object.keys(this.en))
-        }
-
-        return result
-    }
-
-    setEnglish(en, form?) {
-        if (!form) {
-            form = ''
-        }
-
-        this.en[form] = en
-
-        return this
     }
 
     toString() {
@@ -137,7 +108,9 @@ export default class Word implements AnyWord  {
     }
 
     static fromJson(json: JsonFormat, inflections: Inflections): Word {
-        let result = new Word(json.target, json.classifier).setEnglish(json.en)
+        let result = new Word(json.target, json.classifier)
+        
+        result.en = json.en
 
         if (json.unstudied) {
             result.studied = false
@@ -151,7 +124,7 @@ export default class Word implements AnyWord  {
     toJson(): JsonFormat {
         let result: JsonFormat = {
             target: this.jp,
-            en: this.en[''],
+            en: this.en,
             classifier: this.classifier,
             type: this.getJsonType(),
             pos: this.pos

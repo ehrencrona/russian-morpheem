@@ -1,5 +1,7 @@
+
 interface Translatable {
-    getEnglish(): string,
+    getEnglish(form?: string): string
+    setEnglish(en?: string, form?: string) 
     toText(): string
 }
 

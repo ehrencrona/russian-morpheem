@@ -257,6 +257,18 @@ export function getFormName(formId: string) {
     }
 }
 
+export const ENGLISH_FORMS_BY_POS: { [s: string]: string[] } = {
+    v: [ '3', 'past', 'prog' ],
+    adj: [ 'adv', 'comp' ],
+    n: [ 'pl' ],
+    pron: [ 'acc', 'gen' ],
+}
+
+export let ENGLISH_FORMS_HASH: { [s:string]: boolean } = {}
+
+Object.keys(ENGLISH_FORMS_BY_POS).forEach((pos) => 
+    ENGLISH_FORMS_BY_POS[pos].forEach((form) => ENGLISH_FORMS_HASH[form] = true))
+
 export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     ru: {
         v: new Forms(

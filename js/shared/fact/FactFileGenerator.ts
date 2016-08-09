@@ -10,7 +10,22 @@ import { EndingTransform } from '../Transforms'
 
 export function factToString(fact: Fact, facts: Facts) {
     let tags = facts.getTagsOfFact(fact).map((tag) => ', tag: ' + tag).join('')
-    
+
+    let nonDefaultEnglish = (word: Word | InflectableWord) => {
+        let result = ''
+
+        Object.keys(word.en).forEach((form) => {
+
+            if (form) {
+                result += `, ${form}: ${word.en[form]}` 
+            }
+
+        })
+
+        return result
+    }
+
+
     if (fact instanceof InflectionFact) {
         return 'grammar: ' + fact.getId() + tags
     }
@@ -20,13 +35,16 @@ export function factToString(fact: Fact, facts: Facts) {
 
         return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + suffix + 
             (fact.classifier ? `[${ fact.classifier }]` : '') + 
-            ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags +
+            ': ' + fact.getEnglish() +
+            nonDefaultEnglish(fact) +
+            ', inflect: ' + fact.inflection.getId() + tags +
             (fact.pos && fact.inflection.pos != fact.pos ? ', pos: ' + fact.pos : '') +
             (fact.mask ? ', mask: ' + fact.getMaskId() : '')
     }
     else if (fact instanceof Word) {
         return fact.jp +
             (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
+            nonDefaultEnglish(fact) +
             (fact.pos ? ', pos: ' + fact.pos : '') +
             (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '') + 
             tags

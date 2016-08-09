@@ -56,6 +56,10 @@ describe('FactFileParser', function() {
         test('wordd--<a: meaning, inflect: lastchar')
     })
 
+    it('parses English', function () {
+        test('word: meaning, pl: meanings')
+    })
+
     it('parses grammar facts', function () {
         test('grammar: inflection@nom')
     })

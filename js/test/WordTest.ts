@@ -43,6 +43,7 @@ describe('Word', function() {
     it('converts inflectable to JSON and back', function () {
         let before = new InflectableWord('foo', inflections.inflections[0])
             .setEnglish('eng')
+            .setEnglish('engpl', 'pl')
             .setClassifier('classified')
 
         let after = InflectableWord.fromJson(before.toJson(), inflections);
@@ -51,7 +52,8 @@ describe('Word', function() {
         
         expect(after.classifier).to.equal(before.classifier)
         expect(after.stem).to.equal(before.stem)
-        expect(after.en).to.equal(before.en)
+        expect(after.getEnglish()).to.equal(before.getEnglish())
+        expect(after.getEnglish('pl')).to.equal(before.getEnglish('pl'))
         expect(after.inflection.id).to.equal(before.inflection.id)
     })
 })

@@ -222,6 +222,18 @@ input[type=text], input[type=number] {
 }
 
 .wordTranslation {
+    .form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 4*$unit 0;
+    }
+
+    .label {
+        width: 80px;
+        font-weight: bold;
+    }
+
     input {
         @extend .border-box-sizing;
         width: 100%;

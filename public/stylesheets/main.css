@@ -122,6 +122,16 @@ input[type=text], input[type=number] {
 .wordClassifier ul {
   margin-top: 12px; }
 
+.wordTranslation .form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 16px 0; }
+
+.wordTranslation .label {
+  width: 80px;
+  font-weight: bold; }
+
 .wordTranslation input {
   width: 100%; }
 

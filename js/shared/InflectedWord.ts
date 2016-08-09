@@ -18,6 +18,17 @@ export default class InflectedWord extends Word {
         this.word = word
     }
 
+    setEnglish(en: string, form?: string) {
+        if (form) {
+            this.word.setEnglish(form)
+        }
+        else {
+            throw new Error('Cant set English translation on inflected word without specifying form')
+        }
+
+        return this
+    }
+
     /**
      * The knowledge required for an inflection is the base form of the word as well as any gramar rules used to
      * derive it.

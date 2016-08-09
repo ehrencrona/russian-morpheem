@@ -23,14 +23,12 @@ readCorpus('ru', false)
 .then((corpus) => {
     console.log('Read corpus.')
 
-    Object.keys(poses).forEach((pos) => {
-
-        poses[pos].forEach((wordId) => {
-            (corpus.facts.get(wordId) as Word).pos = pos
-        })
-
+    corpus.facts.facts.forEach((fact) => {
+        if (fact instanceof Word || fact instanceof InflectableWord) {
+            if (fact.getEnglish() == 'n/a') {
+                console.log(fact.toString())
+            }
+        }
     })
-
-    writeFactFile('facts.txt', corpus.facts)
 })
 .catch((e) => console.log(e.stack))
