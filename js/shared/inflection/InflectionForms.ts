@@ -259,7 +259,7 @@ export function getFormName(formId: string) {
 
 export const ENGLISH_FORMS_BY_POS: { [s: string]: string[] } = {
     v: [ '3', 'past', 'prog' ],
-    adj: [ 'adv', 'comp' ],
+    adj: [ 'adv', 'comp', 'super' ],
     n: [ 'pl' ],
     pron: [ 'acc', 'gen' ],
 }

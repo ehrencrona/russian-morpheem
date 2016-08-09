@@ -16,7 +16,7 @@ export function factToString(fact: Fact, facts: Facts) {
 
         Object.keys(word.en).forEach((form) => {
 
-            if (form) {
+            if (form && word.en[form]) {
                 result += `, ${form}: ${word.en[form]}` 
             }
 
