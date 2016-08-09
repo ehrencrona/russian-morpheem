@@ -371,7 +371,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                         })
                     }
                 }}
-                
+
                 onKeyPress={
                     (event) => {
                         if (event.charCode == 13) {
@@ -409,16 +409,16 @@ export default class WordSearchComponent extends Component<Props, State> {
             <div className='suggestions'>
 
             {
-                alternatives && alternatives.length ?
+                filterWord ?
                 <div>
-                    { alternatives ?
+                    { alternatives && alternatives.length ?
                         <div className='alternatives'>
                             This means&nbsp;"<b>{ filterWord.getEnglish() }</b>". Similar words:                         
 
                             <ul>
                                 {
                                     alternatives.map((word: InflectableWord | Word) => 
-                                        <li onClick={ () => { 
+                                        <li key={ word.getId() } onClick={ () => { 
                                             if (word instanceof InflectableWord) {
                                                 this.setState({ filterWord: word }) 
                                             }
