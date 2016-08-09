@@ -77,6 +77,8 @@ export default class Corpus {
         this.inflections.clone(otherCorpus.inflections)
         this.sentences.clone(otherCorpus.sentences)
         this.phrases.clone(otherCorpus.phrases)
+        this.sentenceHistory = otherCorpus.sentenceHistory
+        this.externalCorpus = otherCorpus.externalCorpus
         this.lang = otherCorpus.lang
     }
 

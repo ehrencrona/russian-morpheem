@@ -146,7 +146,9 @@ export default class SentenceComponent extends Component<Props, State> {
                 } }
                 ref={ (ref) => { editor = ref } }
                 onSentenceChange={ (words: Word[]) => {
-                    let sentence = new Sentence(words, this.state.sentence.id)
+                    let sentence = this.props.corpus.sentences.get(this.state.sentence.id)
+
+                    sentence.words = words
 
                     this.setState({ sentence: sentence })
 

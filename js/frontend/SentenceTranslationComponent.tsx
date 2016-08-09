@@ -22,7 +22,7 @@ export default class SentenceTranslationComponent extends Component<Props, State
         let sentence = this.props.sentence
 
         if (english != sentence.english) {
-            sentence.english = english.trim()
+            sentence.setEnglish(english.trim())
             this.props.corpus.sentences.store(sentence)
         }
     }
