@@ -4,22 +4,25 @@ import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
 import Words from './Words'
 import InflectableWord from './InflectableWord'
+import AnyWord from './AnyWord'
 
 export interface JsonFormat {
     target: string,
     en: string,
     classifier: string,
     type: string,
-    unstudied?: boolean
+    unstudied?: boolean,
+    pos?: string
 }
 
 /**
  * A word has a Japanese spelling, an English translation an optional list of grammar that is required to understand it.
  */
-export default class Word {
+export default class Word implements AnyWord  {
     en: any
     required: Fact[]
     studied: boolean = true
+    pos: string
 
     constructor(public jp: string, public classifier?: string) {
         this.jp = jp
@@ -140,6 +143,8 @@ export default class Word {
             result.studied = false
         }
 
+        result.pos = json.pos
+
         return result
     }
 
@@ -148,7 +153,8 @@ export default class Word {
             target: this.jp,
             en: this.en[''],
             classifier: this.classifier,
-            type: this.getJsonType()
+            type: this.getJsonType(),
+            pos: this.pos
         }
 
         if (!this.studied) {

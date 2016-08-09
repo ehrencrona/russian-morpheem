@@ -17,12 +17,15 @@ let inflections = new Inflections([
 describe('Word', function() {
     it('converts unstudied to JSON and back', function () {
         let before = new Word('foo', 'bar').setEnglish('eng')
+        before.pos = 'verb'
+
         let after = Word.fromJson(before.toJson(), inflections);
         
         expect(after).to.be.instanceOf(Word)
         
         expect(after.classifier).to.equal(before.classifier)
         expect(after.jp).to.equal(before.jp)
+        expect(after.pos).to.equal(before.pos)
         expect(after.getEnglish()).to.equal(before.getEnglish())
     })
     

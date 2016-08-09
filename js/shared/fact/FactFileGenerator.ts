@@ -21,11 +21,13 @@ export function factToString(fact: Fact, facts: Facts) {
         return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + suffix + 
             (fact.classifier ? `[${ fact.classifier }]` : '') + 
             ': ' + fact.en + ', inflect: ' + fact.inflection.getId() + tags +
+            (fact.pos && fact.inflection.pos != fact.pos ? ', pos: ' + fact.pos : '') +
             (fact.mask ? ', mask: ' + fact.getMaskId() : '')
     }
     else if (fact instanceof Word) {
         return fact.jp +
             (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
+            (fact.pos ? ', pos: ' + fact.pos : '') +
             (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '') + 
             tags
     }

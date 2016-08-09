@@ -6,6 +6,7 @@ import Word from '../shared/Word';
 import UnparsedWord from '../shared/UnparsedWord';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
+import AnyWord from '../shared/AnyWord'
 import Tab from './OpenTab'
 import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesByFactIndex'
 import InflectionsContainerComponent from './InflectionsContainerComponent';
@@ -171,9 +172,9 @@ export default class WordSearchComponent extends Component<Props, State> {
 
         let filterFact = (filterString) => (fact: Fact) => {
             if (filterPos) {
-                if (fact instanceof InflectableWord) {
-                    if (!(fact.inflection.pos == filterPos || 
-                            (filterPos == NO_POS && !fact.inflection.pos))) {
+                if (fact instanceof Word || fact instanceof InflectableWord) {
+                    if (!(fact.pos == filterPos || 
+                        (filterPos == NO_POS && !fact.pos))) {
                         return
                     }
                 }
@@ -285,6 +286,8 @@ export default class WordSearchComponent extends Component<Props, State> {
         let thisId = word.getIdWithoutClassifier()
 
         let ids = {}
+
+        ids[word.getId()] = word
 
         let result: (Word|InflectableWord)[] = []
 
@@ -406,7 +409,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             <div className='suggestions'>
 
             {
-                filterWord ?
+                alternatives && alternatives.length ?
                 <div>
                     { alternatives ?
                         <div className='alternatives'>

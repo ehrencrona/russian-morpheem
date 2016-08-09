@@ -12,6 +12,7 @@ import Facts from '../shared/fact/Facts'
 import InflectableWord from '../shared/InflectableWord'
 import { EndingTransform } from '../shared/Transforms'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
+import AnyWord from '../shared/AnyWord'
 
 var inflections = new Inflections()
 
@@ -59,6 +60,13 @@ describe('FactFileParser', function() {
         expect(facts.get('iwa[b]')).to.not.be.null
     })
     
+    it('parses PoS', function () {
+        var facts = parser(
+            'word:meaning, pos: verb', inflections, 'ru')
+
+        expect((facts.facts[0] as Word).pos).to.equal('verb')
+    })
+
     it('parses grammar facts', function () {
         var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]

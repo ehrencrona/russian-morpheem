@@ -164,6 +164,9 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     fact.studied = false
                 }
             }
+            else if (tag == 'pos') {
+                word.pos = text
+            }
             else if (tag == 'mask') {
                 if (fact instanceof InflectableWord) {
                     let mask = MASKS[fact.inflection.pos][text]

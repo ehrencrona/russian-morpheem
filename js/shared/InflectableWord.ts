@@ -4,6 +4,7 @@ import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
 import INFLECTION_FORMS from './inflection/InflectionForms'
 import MASKS from './Masks'
+import AnyWord from './AnyWord'
 
 export interface JsonFormat {
     stem: string,
@@ -12,20 +13,23 @@ export interface JsonFormat {
     type: string,
     classifier?: string,
     mask?: string,
-    unstudied?: boolean
+    unstudied?: boolean,
+    pos?: string
 }
 
-export default class InflectableWord {
+export default class InflectableWord implements AnyWord {
     inflectionByForm : { [s: string]: InflectedWord } = {}
     en: string
     mask: (string) => boolean
     defaultInflection: InflectedWord
     studied: boolean = true
+    pos: string
 
     constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
         this.stem = stem
         this.inflection = inflection
         this.classifier = classifier
+        this.pos = inflection.pos
     }
 
     visitFacts(visitor: (Fact) => any) {
@@ -158,6 +162,10 @@ export default class InflectableWord {
             result.studied = false
         }
 
+        if (json.pos) {
+            result.pos = json.pos
+        }
+
         return result
     }
 
@@ -186,6 +194,10 @@ export default class InflectableWord {
 
         if (this.mask) {
             result.mask = this.getMaskId()
+        }
+
+        if (this.pos != this.inflection.pos) {
+            result.pos = this.pos
         }
 
         if (!this.studied) {
