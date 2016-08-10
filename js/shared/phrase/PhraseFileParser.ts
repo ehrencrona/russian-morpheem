@@ -58,7 +58,7 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
 
         let existing = phrases.get(id)
 
-        if (existing) {
+        if (existing && wordString) {
             existing.patterns.push(phrase.patterns[0])
         }
         else {

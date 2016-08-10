@@ -12,23 +12,50 @@ import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import toStudyWords from '../study/toStudyWords'
 import StudyWord from '../study/StudyWord'
 import StudyPhrase from '../study/StudyPhrase'
+import openSentence from '../sentence/openSentence'
+import Tab from '../OpenTab'
 
-import { Component, createElement } from 'react';
+import { Component, createElement } from 'react'
 
 interface Props {
     corpus: Corpus
     phrase: Phrase
+    tab: Tab
     pattern: PhrasePattern
 }
 
 interface State {
+    limit: number
 }
 
 let React = { createElement: createElement }
 
+const LESS = 3
+const MORE = 30
+
 export default class PhraseStudyWordsComponent extends Component<Props, State> {
 
+    constructor(props) {
+        super(props)
+
+        this.state = { limit: LESS }
+    }
+
     render() {
+
+        let findAFew = (array: Sentence[], filter: (sentence: Sentence) => boolean) => {
+            let result = []
+
+            for (let i = 0; i < array.length && result.length < this.state.limit; i++) {
+
+                if (filter(array[i])) {
+                    result.push(array[i])
+                }
+
+            }
+
+            return result
+        }
 
         let phrase = this.props.phrase
         let pattern: PhrasePattern = this.props.pattern
@@ -38,16 +65,16 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         }
 
         let words: StudyWord[] = []
-        let sentence: Sentence
+        let sentences: Sentence[]
 
         if (phrase.patterns.length) {
-            sentence = this.props.corpus.sentences.sentences.find((sentence) => {
+            sentences = findAFew(this.props.corpus.sentences.sentences, (sentence) => {
                 return !!sentence.phrases.find((p) => p.getId() == phrase.getId() && 
                     firstMatchingPattern(sentence) == pattern)
             })
 
-            if (!sentence) {
-                sentence = this.props.corpus.sentences.sentences.find((sentence) => {
+            if (!sentences.length) {
+                sentences = findAFew(this.props.corpus.sentences.sentences, (sentence) => {
                     return firstMatchingPattern(sentence) == pattern 
                 })
             }
@@ -55,36 +82,60 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
 
         let error: string 
 
-        if (sentence) {
-            let phraseWithOnePattern = new Phrase(phrase.getId(), [ pattern ])
-            phraseWithOnePattern.setCorpus(this.props.corpus)
-
-            words = toStudyWords(sentence, [ phraseWithOnePattern ], this.props.corpus, true)
-        }
-        else {
-            error = 'No matching sentence.'
-        }
-
         return <div className='phraseStudyWords'>
             <div className='field'>
                 <div className='label'>
                     Pattern
                 </div>
                 {
-                    words.map((w, index) => 
-                        (!!w.facts.find((f) => f.fact instanceof PhraseCase) ?
-                            <span className='case' key={ index }> { w.jp }</span>
+                    sentences.length ?
+                    (
 
-                            :
+                        <ul> { 
+                            sentences.map(sentence => {
+                                let phraseWithOnePattern = new Phrase(phrase.getId(), [ pattern ])
+                                phraseWithOnePattern.setCorpus(this.props.corpus)
 
-                            <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
-                                (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>)
+                                words = toStudyWords(sentence, [ phraseWithOnePattern ], this.props.corpus, true)
+
+                                return <li key={ sentence.id } className='clickable' onClick={ () => openSentence(sentence, this.props.corpus, this.props.tab) } > { words.map((w, index) => 
+                                        (!!w.facts.find((f) => f.fact instanceof PhraseCase) ?
+                                            <span className='case' key={ index }> { w.getHint() }</span>
+
+                                            :
+
+                                            <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
+                                                (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>)
+                                ) }</li>
+                            })
+                        }</ul>
+
                     )
+
+                    :
+
+                    (
+                        error ? 
+                        <div className='error'>{ error }</div> :
+                        <div/>
+                    )
+
                 }
+
                 {
-                    error ? 
-                    <div className='error'>{ error }</div> :
-                    <div/>
+                    this.state.limit == LESS ?
+
+                    ( sentences.length >= LESS ?
+
+                        <div className='clickable' onClick={ () => this.setState({ limit: MORE }) }>More...</div>
+
+                        :
+
+                        <div/>)
+
+                    : 
+
+                    <div className='clickable' onClick={ () => this.setState({ limit: LESS }) }>Less...</div>
                 }
             </div>
         </div>

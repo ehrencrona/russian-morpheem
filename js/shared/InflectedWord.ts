@@ -3,7 +3,7 @@
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
-import { FORMS, Tense, Number } from './inflection/InflectionForms' 
+import { FORMS, Tense, Number, Comparison, GrammaticalCase } from './inflection/InflectionForms' 
 import InflectableWord from './InflectableWord'
 import Words from './Words'
 import htmlEscape from './util/htmlEscape'
@@ -106,38 +106,67 @@ export default class InflectedWord extends Word {
         return this.word.getId() + '@' + this.form
     }
 
+    static getEnglishForm(pos: string, formString: string, en: { [ form: string ]: string }): string {
+        let form = FORMS[formString]
+
+        if (!form) {
+            console.warn(`Unknown form ${formString}.`)
+            return ''
+        }
+
+        let result = ''
+
+        if (pos == 'v') {
+            if (formString == '3') {
+                result = '3'
+            }
+            else if (formString == 'inf') {
+                result = 'inf'
+            }
+            else if (form.tense == Tense.PAST) {
+                if (form.number == Number.PLURAL && en['pastpl']) {
+                    result = 'pastpl'
+                }
+                else {
+                    result = 'past'
+                }
+            }
+            else if (form.number == Number.PLURAL) {
+                result = 'pl'
+            }
+        }
+        else if (pos == 'adj') {
+            if (form.comparison == Comparison.COMPARATIVE) {
+                result = 'comp'
+            }
+        }
+        else if (pos == 'pron') {
+            if (form.grammaticalCase != null && form.grammaticalCase != GrammaticalCase.NOM) {
+                result = 'acc'
+            }
+        }
+        else if (pos == 'n') {
+            if (form.number == Number.PLURAL) {
+                result = 'pl'
+            }
+        }
+
+        return result
+    }
+
     getEnglish(form?) {
         if (!form) {
-            if (this.pos == 'v') {
-                if (this.form == '3') {
-                    form = '3' 
-                }
-                else if (this.form == 'inf' && this.en['inf']) {
-                    form = 'inf'
-                }
-                else if (this.form == 'pastpl' && this.en['pastpl']) {
-                    form = 'pastpl'
-                }
-                else if (FORMS[this.form].tense == Tense.PAST) {
-                    form = 'past'
-                }
-            }
-            else if (this.pos == 'adj') {
-                if (this.form == 'comp') {
-                    form = 'comp'
-                }
-            }
-            else if (this.pos == 'n') {
-                if (FORMS[this.form].number == Number.PLURAL) {
-                    form = 'pl'
-                }
-            }
+            form = InflectedWord.getEnglishForm(this.pos, this.form, this.en)
         }
 
         var result = this.en[form || '']
 
         if (!result) {
             result = this.word.getEnglish()
+
+            if (form == 'inf') {
+                result = 'to ' + result
+            }
         }
 
         return result

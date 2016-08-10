@@ -26,7 +26,7 @@ import MASKS from '../Masks'
 import transforms from '../Transforms'
 import Transform from '../Transform'
 import Phrase from '../phrase/Phrase'
-import { ENGLISH_FORMS_HASH } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS } from '../inflection/InflectionForms'
 
 class PhraseFact implements Fact {
     constructor(public id: string) {
@@ -182,7 +182,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     console.error('Attempt to set mask on ' + fact.getId() + '. It is not an inflectable word. Not that the mask tag should be after the inflect tag.')
                 }
             }
-            else if (ENGLISH_FORMS_HASH[tag]) {
+            else if (ENGLISH_FORMS[tag]) {
                 word.setEnglish(text, tag)
             }
             else if (!tag) {

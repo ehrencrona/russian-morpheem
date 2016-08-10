@@ -9,6 +9,7 @@ import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
+import Tab from '../OpenTab'
 
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 import { Component, createElement } from 'react';
@@ -17,6 +18,7 @@ interface Props {
     corpus: Corpus
     phrase: Phrase
     onChange: () => void
+    tab: Tab
 }
 
 interface State {
@@ -137,6 +139,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                             pattern={ pattern } 
                             corpus={ this.props.corpus }
                             ref={ 'studyWords' + index } 
+                            tab={ this.props.tab }
                             />
                     </div>
                 )

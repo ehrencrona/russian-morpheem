@@ -11,7 +11,7 @@ import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
 import Word from '../Word'
-import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS, FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
@@ -195,25 +195,140 @@ export default class PhrasePattern {
 
                     },
                     en: (match: Match) => {
-                        let replace: { [key: string]: Word[]} = {}
+                        let placeholders = en.match(/\(([^)]*)\)/g) || []
 
-                        match.words.forEach((m) => {
-                            let mStr = m.wordMatch.toString()
+                        placeholders.forEach(placeholder => {
+                            let params = placeholder.substr(1, placeholder.length-2).split(',')
 
-                            if (en.indexOf(mStr) >= 0) {
-                                let r = replace[mStr]
-
-                                if (!r) {
-                                    r = []
-                                    replace[mStr] = r
-                                }
-
-                                r.push(m.word)
+                            if (!params.length) {
+                                console.warn(`Empty placeholder in phrase translated as ${en}.`)
+                                return
                             }
-                        })
 
-                        Object.keys(replace).forEach((r) => {
-                            en = en.replace(r, replace[r].map((w) => w.getEnglish()).join(' '))
+                            let flags = params[params.length-1].split('->')
+                            
+                            let words: InflectedWord[]
+                            
+                            let agreeWithPoSorCase = flags[0]
+
+                            let inflectAsPoS
+
+                            let fragmentIndex
+                            let agreeWithForm
+                            let agreeWithPoS
+
+                            {
+                                let els = agreeWithPoSorCase.split('@') 
+
+                                if (els.length > 1) {
+                                    agreeWithForm = FORMS[els[1]]
+                                    agreeWithPoS = els[0]
+                                }
+                            }
+
+                            if (parseInt(agreeWithPoSorCase)) {
+                                fragmentIndex = parseInt(agreeWithPoSorCase)
+                            }
+                            else {
+                                agreeWithForm = FORMS[agreeWithPoSorCase]
+
+                                if (!agreeWithForm) {
+                                    agreeWithPoS = agreeWithPoSorCase
+                                }
+                            }
+
+                            if (fragmentIndex) {
+                                let at = 0
+                                let lastMatch
+                                words = []
+
+                                match.words.forEach((w) => {
+
+                                    if (w.wordMatch != lastMatch) {
+                                        at++
+                                        lastMatch = w.wordMatch
+                                    }
+
+                                    let word = w.word 
+
+                                    if (at == fragmentIndex && word instanceof InflectedWord) {
+                                        words.push(word)
+                                    }
+                                })
+
+                            }
+                            else {
+                                words = match.words.map(m => m.word as InflectedWord)
+                            }
+
+                            if (agreeWithForm) {
+                                words = words.filter(word => {
+                                    return word instanceof InflectedWord && agreeWithForm.matches(FORMS[word.form])
+                                })
+
+                                if (!words.length) {
+                                    console.warn(`No words with form ${agreeWithForm.id} in phrase translated as ${en}`)
+                                }
+                            }
+
+                            if (agreeWithPoS) {
+                                words = words.filter(word => word.pos == agreeWithPoS)
+
+                                if (!words.length) {
+                                    console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${en}`)
+                                }
+                            }
+
+                            if (flags.length > 1) {
+                                inflectAsPoS = flags[1]
+                            }
+                            else if (agreeWithPoS) {
+                                inflectAsPoS = agreeWithPoS
+                            }
+                            else {
+                                console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${en}`)
+                                inflectAsPoS = 'v'
+                            }
+
+                            let replaceWith = '' 
+
+                            if (params.length == 1) {
+                                replaceWith = words.map(w => w.getEnglish()).join(' ')
+                            }
+                            else if (words.length) {
+                                let inflections = params.slice(0, params.length-1)
+
+                                let en: { [ form: string ]: string } = {}
+
+                                en[''] = params[0]
+
+                                ENGLISH_FORMS_BY_POS[inflectAsPoS].allForms.map((form, index) => {
+                                    let inflection = inflections[index+1]
+
+                                    if (!inflection) {
+                                        return
+                                    }
+
+                                    let els = inflection.split(':')
+
+                                    if (els.length == 2) {
+                                        en[els[0]] = els[1].trim()
+                                    }
+                                    else {
+                                        en[form] = inflections[index+1]
+                                    }
+                                })
+
+                                let englishForm = InflectedWord.getEnglishForm(inflectAsPoS, words[0].form, en)
+
+                                replaceWith = en[englishForm] || en['']
+
+                                if (englishForm == 'inf') {
+                                    replaceWith = 'to ' + replaceWith
+                                }
+                            }
+
+                            en = en.replace(placeholder, replaceWith)
                         })
 
                         return en                                     

@@ -31,8 +31,9 @@ export default function WordTranslationComponent(props: Props, children) {
         <input type='text' autoCapitalize='off' defaultValue={ props.word.getEnglish() } onBlur={ setValue('') }/>
 
         {
+            ENGLISH_FORMS_BY_POS[props.word.pos] ?
 
-            (ENGLISH_FORMS_BY_POS[props.word.pos] || []).map((form) => 
+            ENGLISH_FORMS_BY_POS[props.word.pos].allForms.map((form) => 
                 <div key={ form } className='form'>
                     <div className='label'>{form }</div>
 
@@ -42,6 +43,9 @@ export default function WordTranslationComponent(props: Props, children) {
                 </div>
             )
 
+            :
+
+            <div/>
         }
     </div> 
 } 

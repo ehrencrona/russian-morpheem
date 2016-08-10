@@ -159,10 +159,10 @@ addForm('inf', 'infinitive', {})
 
 addForm('past', 'past', { tense: Tense.PAST })
 
-addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR })
-addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR })
-addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR })
-addForm('pl', 'plur', { number: Number.PLURAL })
+addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('pl', 'plur', { number: Number.PLURAL, grammaticalCase: GrammaticalCase.NOM })
 addForm('fpl', 'feminine plural', { number: Number.PLURAL, gender: Gender.F })
 addForm('sg', 'singular', { number: Number.PLURAL })
 
@@ -257,17 +257,17 @@ export function getFormName(formId: string) {
     }
 }
 
-export const ENGLISH_FORMS_BY_POS: { [s: string]: string[] } = {
-    v: [ 'inf', '3', 'past', 'pastpl', 'prog' ],
-    adj: [ 'adv', 'comp', 'super' ],
-    n: [ 'pl' ],
-    pron: [ 'acc', 'gen' ],
+export const ENGLISH_FORMS_BY_POS: { [s: string]: Forms } = {
+    v: new Forms([], [], [['3', 'past', 'prog', 'inf', 'pl', 'pastpl']]),
+    adj: new Forms([], [], [[ 'adv', 'comp', 'super' ]]),
+    n: new Forms([], [], [[ 'pl' ]]),
+    pron: new Forms([], [], [[ 'acc' ]]),
 }
 
-export let ENGLISH_FORMS_HASH: { [s:string]: boolean } = {}
+export let ENGLISH_FORMS: { [s:string]: InflectionForm } = {}
 
 Object.keys(ENGLISH_FORMS_BY_POS).forEach((pos) => 
-    ENGLISH_FORMS_BY_POS[pos].forEach((form) => ENGLISH_FORMS_HASH[form] = true))
+    ENGLISH_FORMS_BY_POS[pos].allForms.forEach((form) => ENGLISH_FORMS[form] = FORMS[form]))
 
 export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     ru: {

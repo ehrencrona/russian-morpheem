@@ -456,6 +456,9 @@ ul {
   color: #d03a3e;
   font-weight: bold; }
 
+.phraseStudyWords li {
+  margin: 4px 0; }
+
 .phrase .error {
   color: #d03a3e;
   font-weight: bold; }

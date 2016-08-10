@@ -243,7 +243,6 @@ export default class TabSetComponent extends Component<Props, State> {
     
     close(index) {
         return (e) => {
-console.log('close', index)
             this.state.tabs.splice(index, 1)
             this.setState({ 
                 tabs: this.state.tabs,

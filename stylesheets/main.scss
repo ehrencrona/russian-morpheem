@@ -732,6 +732,10 @@ ul {
         color: $color7;
         font-weight: bold;
     }
+
+    li {
+        margin: $unit 0;
+    }
 }
 
 .phrase {

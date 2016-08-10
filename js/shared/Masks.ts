@@ -10,6 +10,7 @@ const MASKS = {
         sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
         adv: (form) => form == 'adv',
         comp: (form) => form == 'comp',
+        compandshort: (form) => form == 'comp' || form == 'short',
         allbutcomp: (form) => form != 'comp',
         allbutshort: (form) => form.substr(0, 5) != 'short',
         allbutpl: (form) => !pl(form),

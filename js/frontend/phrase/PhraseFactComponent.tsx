@@ -104,6 +104,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 phrase={ this.props.fact } 
                 corpus={ this.props.corpus } 
                 onChange={ () => { this.forceUpdate() } }
+                tab={ this.props.tab }
                 />
         
             { tab }
