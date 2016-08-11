@@ -117,7 +117,10 @@ export default class InflectedWord extends Word {
         let result = ''
 
         if (pos == 'v') {
-            if (formString == '3') {
+            if (formString == '1') {
+                result = '1'
+            }
+            else if (formString == '3') {
                 result = '3'
             }
             else if (formString == 'inf') {
@@ -138,6 +141,9 @@ export default class InflectedWord extends Word {
         else if (pos == 'adj') {
             if (form.comparison == Comparison.COMPARATIVE) {
                 result = 'comp'
+            }
+            else if (form.number == Number.PLURAL) {
+                result = 'pl'
             }
         }
         else if (pos == 'pron') {

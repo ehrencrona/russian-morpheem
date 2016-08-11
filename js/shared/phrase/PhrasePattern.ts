@@ -108,6 +108,39 @@ export default class PhrasePattern {
             return result
         }
 
+        function getEnglishInflectionFromList(pos, form, inflectionList) {
+            let en: { [ form: string ]: string } = {}
+
+            en[''] = inflectionList[0]
+
+            ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
+                let inflection = inflectionList[index+1]
+
+                if (!inflection) {
+                    return
+                }
+
+                let els = inflection.split(':')
+
+                if (els.length == 2) {
+                    en[els[0]] = els[1].trim()
+                }
+                else {
+                    en[form] = inflectionList[index+1]
+                }
+            })
+
+            let englishForm = InflectedWord.getEnglishForm(pos, form, en)
+
+            let result = en[englishForm] || en['']
+
+            if (englishForm == 'inf') {
+                result = 'to ' + result
+            }
+
+            return result
+        }
+
         split.map((str) => {
             str.split('...').forEach((str) => {
                 str = str.trim()
@@ -205,11 +238,11 @@ export default class PhrasePattern {
                                 return
                             }
 
-                            let flags = params[params.length-1].split('->')
+                            let fromToForm = params[params.length-1].split('->')
                             
                             let words: InflectedWord[]
                             
-                            let agreeWithPoSorCase = flags[0]
+                            let fromPosAtForm = fromToForm[0]
 
                             let inflectAsPoS
 
@@ -218,7 +251,7 @@ export default class PhrasePattern {
                             let agreeWithPoS
 
                             {
-                                let els = agreeWithPoSorCase.split('@') 
+                                let els = fromPosAtForm.split('@') 
 
                                 if (els.length > 1) {
                                     agreeWithForm = FORMS[els[1]]
@@ -226,14 +259,14 @@ export default class PhrasePattern {
                                 }
                             }
 
-                            if (parseInt(agreeWithPoSorCase)) {
-                                fragmentIndex = parseInt(agreeWithPoSorCase)
+                            if (parseInt(fromPosAtForm)) {
+                                fragmentIndex = parseInt(fromPosAtForm)
                             }
                             else {
-                                agreeWithForm = FORMS[agreeWithPoSorCase]
+                                agreeWithForm = FORMS[fromPosAtForm]
 
                                 if (!agreeWithForm) {
-                                    agreeWithPoS = agreeWithPoSorCase
+                                    agreeWithPoS = fromPosAtForm
                                 }
                             }
 
@@ -278,54 +311,33 @@ export default class PhrasePattern {
                                     console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${en}`)
                                 }
                             }
-
-                            if (flags.length > 1) {
-                                inflectAsPoS = flags[1]
-                            }
-                            else if (agreeWithPoS) {
-                                inflectAsPoS = agreeWithPoS
-                            }
-                            else {
-                                console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${en}`)
-                                inflectAsPoS = 'v'
-                            }
-
                             let replaceWith = '' 
 
                             if (params.length == 1) {
-                                replaceWith = words.map(w => w.getEnglish()).join(' ')
+                                if (fromToForm.length > 1) {
+                                    let enForm = fromToForm[1]
+
+                                    replaceWith = words.map(w => w.en[enForm] || w.en['']).join(' ')
+                                }
+                                else {
+                                    replaceWith = words.map(w => w.getEnglish()).join(' ')
+                                }
                             }
                             else if (words.length) {
+                                if (fromToForm.length > 1) {
+                                    inflectAsPoS = fromToForm[1]
+                                }
+                                else if (agreeWithPoS) {
+                                    inflectAsPoS = agreeWithPoS
+                                }
+                                else {
+                                    console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${en}`)
+                                    inflectAsPoS = 'v'
+                                }
+
                                 let inflections = params.slice(0, params.length-1)
 
-                                let en: { [ form: string ]: string } = {}
-
-                                en[''] = params[0]
-
-                                ENGLISH_FORMS_BY_POS[inflectAsPoS].allForms.map((form, index) => {
-                                    let inflection = inflections[index+1]
-
-                                    if (!inflection) {
-                                        return
-                                    }
-
-                                    let els = inflection.split(':')
-
-                                    if (els.length == 2) {
-                                        en[els[0]] = els[1].trim()
-                                    }
-                                    else {
-                                        en[form] = inflections[index+1]
-                                    }
-                                })
-
-                                let englishForm = InflectedWord.getEnglishForm(inflectAsPoS, words[0].form, en)
-
-                                replaceWith = en[englishForm] || en['']
-
-                                if (englishForm == 'inf') {
-                                    replaceWith = 'to ' + replaceWith
-                                }
+                                replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, params)
                             }
 
                             en = en.replace(placeholder, replaceWith)

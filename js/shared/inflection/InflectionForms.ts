@@ -27,7 +27,7 @@ export enum Gender {
 }
 
 export enum Tense {
-    PRESENT = 1, PAST
+    PRESENT = 1, PAST, PROGRESSIVE
 }
 
 export enum GrammaticalCase {
@@ -47,7 +47,7 @@ export enum Number {
 }
 
 export enum Comparison {
-    NORMAL = 1, COMPARATIVE
+    NORMAL = 1, COMPARATIVE, SUPERLATIVE
 }
 
 export enum Command {
@@ -243,6 +243,10 @@ addForm('alt', 'alternative form', {})
 addForm('alt2', 'alternative form', {})
 addForm('std', 'standard form', {})
 
+// English forms
+addForm('prog', 'progressive', { tense: Tense.PROGRESSIVE })
+addForm('super', 'superlative', { comparison: Comparison.SUPERLATIVE })
+
 export function getFormName(formId: string) {
     
     let form = FORMS[formId]
@@ -258,8 +262,8 @@ export function getFormName(formId: string) {
 }
 
 export const ENGLISH_FORMS_BY_POS: { [s: string]: Forms } = {
-    v: new Forms([], [], [['3', 'past', 'prog', 'inf', 'pl', 'pastpl']]),
-    adj: new Forms([], [], [[ 'adv', 'comp', 'super' ]]),
+    v: new Forms([], [], [['3', 'past', 'prog', 'inf', 'pl', 'pastpl', '1' ]]),
+    adj: new Forms([], [], [[ 'adv', 'comp', 'super', 'pl' ]]),
     n: new Forms([], [], [[ 'pl' ]]),
     pron: new Forms([], [], [[ 'acc' ]]),
 }
@@ -267,7 +271,13 @@ export const ENGLISH_FORMS_BY_POS: { [s: string]: Forms } = {
 export let ENGLISH_FORMS: { [s:string]: InflectionForm } = {}
 
 Object.keys(ENGLISH_FORMS_BY_POS).forEach((pos) => 
-    ENGLISH_FORMS_BY_POS[pos].allForms.forEach((form) => ENGLISH_FORMS[form] = FORMS[form]))
+    ENGLISH_FORMS_BY_POS[pos].allForms.forEach((form) => {
+        if (!FORMS[form]) {
+            throw new Error('Need to define form ' + form)
+        }
+
+        ENGLISH_FORMS[form] = FORMS[form]
+    }))
 
 export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
     ru: {

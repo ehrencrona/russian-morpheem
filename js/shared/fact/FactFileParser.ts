@@ -105,7 +105,6 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         splitRightSide(rightSide).forEach((pair) => {
             let tag = pair[0]
             let text = pair[1]
-
             if (tag == 'inflect') {
                 let inflection = inflections.getInflection(text)
 
@@ -192,7 +191,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
 
                 en += text
 
-                word.setEnglish(en, tag)
+                word.setEnglish(en)
+            }
+            else {
+                console.error(`Unknown tag ${tag} on line "${rightSide}".`)
             }
         })
         
@@ -286,7 +288,6 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             let word = parseLeftSideOfDefinition(leftSide)
 
             fact = parseRightSideOfDefinition(rightSide, word)
-
         }
 
         if (fact) {

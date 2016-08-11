@@ -58,6 +58,7 @@ describe('FactFileParser', function() {
 
     it('parses English', function () {
         test('word: meaning, pl: meanings')
+        test('word: meaning, prog: meanings')
     })
 
     it('parses grammar facts', function () {
