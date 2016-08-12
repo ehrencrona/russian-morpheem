@@ -83,7 +83,7 @@ function parseLineToElements(line, parseSentenceToWords, lineNumber) {
             let split = element.split(':').map((s) => s.trim())
 
             if (split.length != 2) {
-                throw new Error('Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "phrase". The element "' + element + '" does not have a colon.')
+                throw new Error(`Each element tagging a sentence should consist of <tag>:<value>, where <tag> is e.g. "phrase". The element "${element}" on line ${lineNumber} does not have a colon.`)
             }
 
             result.tags.push(split)

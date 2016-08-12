@@ -188,6 +188,7 @@ addForm('imperative', 'imperative', { command: Command.IMPERATIVE })
 addForm('masculine', 'masculine', { gender: Gender.M })
 addForm('feminine', 'feminine', { gender: Gender.F })
 addForm('neuter', 'neuter', { gender: Gender.N })
+addForm('plural', 'plural', { number: Number.PLURAL })
 
 addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
 addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })
