@@ -16,6 +16,7 @@ import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
 import PhraseMatch from './PhraseMatch'
+import AdverbWordMatch from './AdverbWordMatch'
 import Corpus from '../Corpus'
 
 export enum CaseStudy {
@@ -390,6 +391,10 @@ export default class PhrasePattern {
             throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_NAMES).join(', ') }.`)
         }
 
+        if (posStr == 'adverb' && !formStr) {
+            return new AdverbWordMatch(quantifier)
+        }
+
         return new PosFormWordMatch(posStr, FORMS[formStr], formStr, quantifier)
     }
 
@@ -410,10 +415,23 @@ export default class PhrasePattern {
                 match = new PosFormWordMatch(null, FORMS[str], str, null)
             }
             else if (POS_NAMES[str]) {
-                match = new PosFormWordMatch(str, null, null, null)
+                if (str == 'adverb') {
+                    match = new AdverbWordMatch()
+                }
+                else {
+                    match = new PosFormWordMatch(str, null, null, null)
+                }
             }
             else if (POS_NAMES[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
-                match = new PosFormWordMatch(str.substr(0, str.length-1), null, null, str[str.length-1])
+                let posStr = str.substr(0, str.length-1) 
+                let quantifier = str[str.length-1]
+
+                if (posStr == 'adverb') {
+                    match = new AdverbWordMatch(quantifier)
+                }
+                else {
+                    match = new PosFormWordMatch(posStr, null, null, quantifier)
+                }
             }
             else if (str.substr(0, 7) == 'phrase:') {
     	        match = new PhraseMatch(str.substr(7))

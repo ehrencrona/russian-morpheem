@@ -1,4 +1,4 @@
-/// <reference path="../../typings/react/react.d.ts" />
+/// <reference path="../../typings/index.d.ts" />
 
 import Corpus from '../shared/Corpus';
 import Fact from '../shared/fact/Fact';
@@ -12,6 +12,8 @@ import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesB
 import InflectionsContainerComponent from './InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
+
+import { start, stop, printWasted, getLastMeasurements } from 'react-addons-perf';
 
 let NO_POS = 'none'
 const MAX_SUGGESTIONS = 50
@@ -28,8 +30,6 @@ interface State {
     filterString?: string,
     filterWord?: InflectableWord
 }
-
-let React = { createElement: createElement }
 
 interface Inflection {
     fact: Fact,
@@ -374,6 +374,11 @@ export default class WordSearchComponent extends Component<Props, State> {
 
                 onKeyPress={
                     (event) => {
+debugger
+start();
+
+setTimeout(() => { stop(); printWasted(getLastMeasurements()) } , 1000);
+
                         if (event.charCode == 13) {
                             let wordString = this.state.filterString.trim()
 

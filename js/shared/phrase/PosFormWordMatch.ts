@@ -12,7 +12,8 @@ export const POS_NAMES = {
     adjective: 'adj',
     verb: 'v',
     numeral: 'num',
-    pronoun: 'pron'
+    pronoun: 'pron',
+    adverb: 'adv'
 }
 
 export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch, WordMatch {
@@ -29,12 +30,15 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch implements
     }
 
     wordMatches(word: Word) {
-        if (word instanceof InflectedWord) {
-            if (this.posName &&
-                word.word.inflection.pos != this.posName) {
-                return false
-            }
+        if (this.posName &&
+            word.pos != this.posName) {
+            return false
+        }
 
+        if (word instanceof Word && !this.form) { 
+            return true
+        }
+        else if (word instanceof InflectedWord) {
             let form = this.form
 
             if (form) {

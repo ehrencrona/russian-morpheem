@@ -18,7 +18,7 @@ export class PhraseMatch implements WordMatch {
 
     matches(words: Word[], wordPosition: number, matches: WordMatch[], 
             matchPosition: number): number {
-        let m = this.phrase.match(words.slice(wordPosition), this.corpus.facts)
+        let m = this.phrase.match(words.slice(wordPosition), this.corpus.facts, null, true)
 
         if (m) {
             return m.words.length

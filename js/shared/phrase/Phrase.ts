@@ -35,13 +35,13 @@ export default class Phrase implements Fact {
             [ PhrasePattern.fromString(str.trim(), en, words, inflections) ])
     }
 
-    match(words: Word[], facts: Facts, study?: CaseStudy): Match {
+    match(words: Word[], facts: Facts, study?: CaseStudy, onlyFirstWord?: boolean): Match {
         if (!this.corpus) {
             throw new Error('setCorpus was never called.')
         }
 
         for (let i = 0; i < this.patterns.length; i++) {
-            let match = this.patterns[i].match(words, facts, study, false)
+            let match = this.patterns[i].match(words, facts, study, onlyFirstWord)
 
             if (match) {
                 return match
