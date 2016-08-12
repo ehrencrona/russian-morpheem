@@ -1,7 +1,6 @@
 
 import { Component, createElement } from 'react'
 
-import { indexSentencesByFact } from '../../shared/SentencesByFactIndex'
 import FactsEntryComponent from './FactsEntryComponent'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
 import Corpus from '../../shared/Corpus'
@@ -52,7 +51,7 @@ export default class MissingFactsListComponent extends Component<Props, State> {
         })
 
         let sentencesByFact =
-            indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
+            this.props.corpus.sentences.getSentencesByFact(this.props.corpus.facts)
 
         let factIds = Object.keys(factsById).sort((id1, id2) => 
             factsById[id1].form.localeCompare(factsById[id2].form)

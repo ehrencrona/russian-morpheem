@@ -4,6 +4,7 @@ import Facts from './fact/Facts';
 import Phrase from './phrase/Phrase'
 import Phrases from './phrase/Phrases'
 import Words from './Words';
+import { SentencesByFactIndex, indexSentencesByFact } from './SentencesByFactIndex'
 
 import { JsonFormat as SentenceJsonFormat } from './Sentence'
 
@@ -19,7 +20,17 @@ export default class Sentences {
     
     nextSentenceId: number = 0
 
+    sentencesByFact : SentencesByFactIndex
+
     constructor() {
+    }
+
+    getSentencesByFact(facts: Facts) {
+        if (!this.sentencesByFact) {
+            this.sentencesByFact = indexSentencesByFact(this, facts)
+        }
+
+        return this.sentencesByFact
     }
 
     clone(sentences: Sentences) {
@@ -36,6 +47,8 @@ export default class Sentences {
     addPhrase(phrase: Phrase, sentence: Sentence) {
         sentence.addPhrase(phrase)
 
+        this.sentencesByFact = null
+
         if (this.onChange) {
             this.onChange(sentence)
         }
@@ -43,6 +56,8 @@ export default class Sentences {
 
     removePhrase(phrase: Phrase, sentence: Sentence) {
         sentence.removePhrase(phrase)
+
+        this.sentencesByFact = null
 
         if (this.onChange) {
             this.onChange(sentence)
@@ -80,6 +95,8 @@ export default class Sentences {
             this.nextSentenceId = sentence.getId() + 1
         }
 
+        this.sentencesByFact = null
+
         if (this.onAdd) {
             this.onAdd(sentence)
         }
@@ -110,6 +127,8 @@ export default class Sentences {
             }
         })
         
+        this.sentencesByFact = null
+
         if (this.onChange) {
             this.onChange(sentence)
         }

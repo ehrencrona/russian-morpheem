@@ -1,7 +1,7 @@
 
 import { Component, createElement } from 'react'
 
-import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
+import { SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
 import FactsEntryComponent from './FactsEntryComponent'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
@@ -43,7 +43,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
 
     render() {
         let sentencesByFact : SentencesByFactIndex =
-            indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
+            this.props.corpus.sentences.getSentencesByFact(this.props.corpus.facts)
 
         let factIndices: FactIndex[] = this.props.corpus.facts.facts.map((fact, index) => { 
             return { fact: fact, index: index } 

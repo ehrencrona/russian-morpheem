@@ -7,7 +7,7 @@ import InflectableWord from '../shared/InflectableWord'
 import Tab from './Tab'
 import SentencesByDateComponent from './metadata/SentencesByDateComponent'
 
-import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesByFactIndex'
+import { SentencesByFactIndex } from '../shared/SentencesByFactIndex'
 
 interface Props {
     corpus: Corpus,
@@ -25,7 +25,7 @@ export default class StatsComponent extends Component<Props, State> {
         let corpus = this.props.corpus 
 
         let indexOfFacts: SentencesByFactIndex =
-            indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
+            this.props.corpus.sentences.getSentencesByFact(this.props.corpus.facts)
 
         let factsWithEnoughSentences = 0, wordsWithEnoughSentences = 0
         let factsWithEnoughEasySentences = 0, wordsWithEnoughEasySentences = 0

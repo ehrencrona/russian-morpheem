@@ -6,7 +6,6 @@ import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import AnyWord from '../shared/AnyWord'
 import Tab from './OpenTab'
-import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesByFactIndex'
 import InflectionsContainerComponent from './InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
