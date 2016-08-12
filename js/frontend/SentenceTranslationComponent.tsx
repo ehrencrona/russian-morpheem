@@ -1,4 +1,4 @@
-/// <reference path="../../typings/react/react.d.ts" />
+
 
 import { Component, createElement } from 'react'
 import Corpus from '../shared/Corpus'

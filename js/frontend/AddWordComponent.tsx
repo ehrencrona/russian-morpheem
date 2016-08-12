@@ -1,4 +1,4 @@
-/// <reference path="../../typings/react/react.d.ts" />
+
 
 import {Component, cloneElement, createElement} from 'react';
 import Fact from '../shared/fact/Fact';

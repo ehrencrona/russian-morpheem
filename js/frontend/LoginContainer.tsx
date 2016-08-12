@@ -1,5 +1,6 @@
-/// <reference path="../../typings/react/react.d.ts" />
+
 /// <reference path="./auth0.d.ts" />
+
 
 import { Component, createElement, Factory } from 'react'
 

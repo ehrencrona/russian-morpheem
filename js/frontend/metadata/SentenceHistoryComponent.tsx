@@ -1,4 +1,4 @@
-/// <reference path="../../../typings/react/react.d.ts" />
+
 /// <reference path="../../../typings/human-time.d.ts" />
 /// <reference path="../../../typings/marked.d.ts" />
 

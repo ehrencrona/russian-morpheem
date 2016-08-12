@@ -1,5 +1,5 @@
 /// <reference path="./xr.d.ts" />
-/// <reference path="../../typings/react/react-dom.d.ts" />
+/// <reference path="../../typings/index.d.ts" />
 
 import LoginContainer from './LoginContainer'
 import StudyContainerComponent from './study/StudyContainerComponent'

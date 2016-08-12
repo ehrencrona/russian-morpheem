@@ -1,4 +1,4 @@
-/// <reference path="../../../typings/react/react.d.ts" />
+
 /// <reference path="../../../typings/human-time.d.ts" />
 
 import human = require('human-time')

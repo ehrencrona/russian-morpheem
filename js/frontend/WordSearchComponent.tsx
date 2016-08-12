@@ -1,5 +1,3 @@
-/// <reference path="../../typings/index.d.ts" />
-
 import Corpus from '../shared/Corpus';
 import Fact from '../shared/fact/Fact';
 import Word from '../shared/Word';
@@ -12,8 +10,6 @@ import { indexSentencesByFact, SentencesByFactIndex } from '../shared/SentencesB
 import InflectionsContainerComponent from './InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
-
-import { start, stop, printWasted, getLastMeasurements } from 'react-addons-perf';
 
 let NO_POS = 'none'
 const MAX_SUGGESTIONS = 50
@@ -42,6 +38,8 @@ interface Suggestion {
     fact: Fact,
     inflection: Inflection
 }
+
+let React = { createElement: createElement }
 
 export default class WordSearchComponent extends Component<Props, State> {
     constructor(props) {
@@ -328,31 +326,18 @@ export default class WordSearchComponent extends Component<Props, State> {
     }
         
     render() {
-        let index : SentencesByFactIndex = 
-            indexSentencesByFact(this.props.corpus.sentences, this.props.corpus.facts)
-
         let allForms = new Set<string>()
 
         let filterPos = this.state.filterPos
         let filterString = this.state.filterString.toLowerCase()
         let corpus = this.props.corpus
-
-        function getFactOccurrences(fact: Fact) {
-            let fi = index[fact.getId()]
-            
-            if (!fi) {
-                return 0
-            }
-            
-            return fi.count
-        } 
         
         let facts = this.props.corpus.facts
         
         let filterWord = this.state.filterWord
         
         let suggestions = this.getSuggestions().slice(0, MAX_SUGGESTIONS)
-    
+
         let alternatives
 
         if (filterWord) {
@@ -374,10 +359,6 @@ export default class WordSearchComponent extends Component<Props, State> {
 
                 onKeyPress={
                     (event) => {
-debugger
-start();
-
-setTimeout(() => { stop(); printWasted(getLastMeasurements()) } , 1000);
 
                         if (event.charCode == 13) {
                             let wordString = this.state.filterString.trim()
