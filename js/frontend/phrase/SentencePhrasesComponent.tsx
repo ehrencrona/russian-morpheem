@@ -64,7 +64,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
     }
 
-    renderStudyWords(phrase: Phrase) {
+    getBreakdown(studyWords: StudyWord[]) {
         function getPhraseCase(word: StudyWord): PhraseCase {
             let fact = word.facts.find((f) => f.fact instanceof PhraseCase)
 
@@ -75,6 +75,43 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             return fact.fact as PhraseCase
         }
 
+        let result = []
+        let lastPhraseCase: PhraseCase
+        let phraseCaseWords = []
+
+        studyWords.forEach((w) => {
+            let phraseCase = getPhraseCase(w)
+
+            if (w instanceof StudyPhrase) {
+                result.push(w.getHint() || '___')
+            }
+            else if (phraseCase) {
+                if (!lastPhraseCase || lastPhraseCase.getId() != phraseCase.getId()) {
+                    phraseCaseWords = []
+                }
+
+                phraseCaseWords.push(w)
+
+                let str = `${ phraseCase.placeholderName } (${ phraseCaseWords.map(w => w.jp).join(' ') })`
+
+                if (lastPhraseCase) {
+                    result[result.length-1] = str
+                }
+                else {
+                    result.push(str)
+                }
+            }
+            else {
+                result.push(`??? (${ w.jp })`) 
+            }
+
+            lastPhraseCase = phraseCase
+        })
+
+        return result.join(' ')
+    }
+
+    renderStudyWords(phrase: Phrase) {
         let match = phrase.match(this.props.sentence.words, this.props.corpus.facts)
 
         if (!match) {
@@ -88,14 +125,13 @@ export default class SentenceStatusComponent extends Component<Props, State> {
 
         let studyWords =
             toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
-                .filter((w) => w instanceof StudyPhrase || !!getPhraseCase(w))
+                .filter((w) => w instanceof StudyPhrase || !!w.facts.find((f) => f.fact instanceof PhraseCase))
 
         return <div>
             <div className='match'>{ 
                 match.words.map((w) => w.word.jp).join(' ')
             } – {
-                studyWords.map((w) => (w instanceof StudyPhrase ? w.getHint() || '___' : 
-                    `${ (getPhraseCase(w) ? getPhraseCase(w).placeholderName : '') } (${ w.jp })`)).join(' ') 
+                this.getBreakdown(studyWords)
             }</div>
             <div className='phrase'>{ 
                 phrase.description 
