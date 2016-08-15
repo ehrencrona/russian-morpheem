@@ -111,7 +111,6 @@ export default class PhrasePattern {
 
         function getEnglishInflectionFromList(pos, form, inflectionList) {
             let en: { [ form: string ]: string } = {}
-
             en[''] = inflectionList[0]
 
             ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
@@ -312,6 +311,7 @@ export default class PhrasePattern {
                                     console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${en}`)
                                 }
                             }
+
                             let replaceWith = '' 
 
                             if (params.length == 1) {
@@ -338,7 +338,7 @@ export default class PhrasePattern {
 
                                 let inflections = params.slice(0, params.length-1)
 
-                                replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, params)
+                                replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, inflections)
                             }
 
                             en = en.replace(placeholder, replaceWith)
