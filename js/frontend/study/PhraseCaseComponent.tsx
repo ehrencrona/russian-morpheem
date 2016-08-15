@@ -19,7 +19,7 @@ let phraseFactComponent = (props: FactComponentProps<PhraseCase>) => {
     let phrase = phraseCase.phrase 
     let match = phrase.match(props.sentence.words, props.corpus.facts)
 
-    let words, phraseString
+    let wordString, phraseString
 
     if (match) {
         phraseString = match.words.map((w) => (
@@ -27,15 +27,24 @@ let phraseFactComponent = (props: FactComponentProps<PhraseCase>) => {
                 w.word.getEnglish() :
                 w.word.jp)).join(' ') 
 
-        words = match.words
+        let wordToString = (word) =>
+            (shouldHideWord(word, props.hiddenFacts) ?
+                word.getEnglish() :
+                (word instanceof InflectedWord ? word.word.getDefaultInflection().jp : word.jp))
+
+        wordString = ''
+        let lastIndex = 0
+
+        match.words
             .filter((m) => m.wordMatch.isCaseStudy() && ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() == phraseCase.grammaticalCase)
-            .map((m) => props.sentence.words[m.index])
-            .map((word) => 
-                (   
-                    shouldHideWord(word, props.hiddenFacts) ?
-                        word.getEnglish() :
-                        (word instanceof InflectedWord ? word.word.getDefaultInflection().jp : word.jp)
-                )).join(' ')
+            .forEach((m) => {
+                if (wordString && m.index > lastIndex+1) {
+                    wordString += ' and '
+                }
+
+                wordString += wordToString(props.sentence.words[m.index]) + ' '
+                lastIndex = m.index 
+            })
     }
     else {
         phraseString = phrase.patterns[0].en
@@ -44,7 +53,7 @@ let phraseFactComponent = (props: FactComponentProps<PhraseCase>) => {
     }
 
     return <div><strong>
-            { words }
+            { wordString }
         </strong> must be in the <strong>
             { FORMS[CASES[phraseCase.grammaticalCase]].name }
         </strong> when used as <strong>

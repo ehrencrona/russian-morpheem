@@ -193,7 +193,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
     
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
 
-    let handlePhrase = (phrase) => {
+    let handlePhrase = (phrase: Phrase) => {
         let phraseMatch: Match = phrase.match(sentence.words, corpus.facts, CaseStudy.STUDY_BOTH)
 
         if (!phraseMatch) {
@@ -244,7 +244,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                 }
 
                 // TODO: or there are words but the words are all placeholders [verb] [someone] [something])
-                if (!m.wordMatch.isCaseStudy() || !wordsFact.words.length) {
+                if (phrase.hasWordFacts && (!m.wordMatch.isCaseStudy() || !wordsFact.words.length)) {
                     words[m.index].facts.push(wordsFact)
                 }
             })

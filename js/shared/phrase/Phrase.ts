@@ -24,9 +24,16 @@ export default class Phrase implements Fact {
     casesCache: PhraseCase[]
     corpus: Corpus
 
+    // whether there are any study words. 
+    // there are some facts that are just about how to use a certain case, e.g. genitive to mean possession.
+    hasWordFacts: boolean
+
     constructor(public id: string, public patterns: PhrasePattern[]) {
         this.id = id
         this.patterns = patterns
+
+        this.hasWordFacts =
+            !!this.patterns.find(p => !!p.wordMatches.find((m) => !m.isCaseStudy()))
     }
 
     static fromString(id: string, str: string, en: string, words: Words, inflections: Inflections) {
@@ -66,7 +73,10 @@ export default class Phrase implements Fact {
       * sentence facts.
       */
     visitFactsForSentence(visitor: (Fact) => any) {
-        visitor(this)
+        // the fact "genitive means possession" only has a case fact
+        if (this.hasWordFacts) {
+            visitor(this)
+        }
 
         this.getCaseFacts().forEach(visitor)
     }

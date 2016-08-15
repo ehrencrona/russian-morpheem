@@ -120,11 +120,11 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
 /*
 factScores = [ {
-    fact: (this.props.corpus.facts.get('у-его-нет') as Phrase).getCaseFact(GrammaticalCase.GEN),
+    fact: (this.props.corpus.facts.get('gen-of') as Phrase).getCaseFact(GrammaticalCase.GEN),
     score: 1
 } ]
 sentenceScores = [{
-    sentence: this.props.corpus.sentences.get(4954),
+    sentence: this.props.corpus.sentences.get(5785),
     score: 1,
     fact: factScores[0].fact,
     debug: {}

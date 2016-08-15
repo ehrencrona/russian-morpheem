@@ -21,6 +21,7 @@ import EndingTransformFactComponent from './EndingTransformFactComponent'
 import WordFactComponent from './WordFactComponent'
 import PhraseFactComponent from './PhraseFactComponent'
 import PhraseCaseComponent from './PhraseCaseComponent'
+import PhraseCaseComponentNoWords from './PhraseCaseComponentNoWords'
 import { TranslatableFact } from './WordFactComponent'
 
 export interface FactComponentProps<FactType> {
@@ -60,7 +61,12 @@ let studyFactComponent = (props: Props) => {
         componentType = createFactory(EndingTransformFactComponent)
     }
     else if (fact instanceof PhraseCase) {
-        componentType = createFactory(PhraseCaseComponent)
+        if (fact.phrase.hasWordFacts) {
+            componentType = createFactory(PhraseCaseComponent)
+        }
+        else {
+            componentType = createFactory(PhraseCaseComponentNoWords)
+        }
     }
     else if (fact instanceof Phrase) {
         componentType = createFactory(PhraseFactComponent)
