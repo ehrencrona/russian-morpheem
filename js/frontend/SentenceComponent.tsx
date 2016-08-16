@@ -73,7 +73,9 @@ export default class SentenceComponent extends Component<Props, State> {
         
         this.props.tab.close()
     }
-        
+
+    componentDidRender
+
     render() {
         let factsById = {}
         

@@ -18,6 +18,7 @@ import Words from '../../shared/Words'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
+import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
@@ -26,10 +27,12 @@ import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 
+import DidYouKnowComponent from './DidYouKnowComponent'
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
 import StudyFactComponent from './StudyFactComponent'
 import FrontendExposures from './FrontendExposures'
+import SentenceComponent from './SentenceComponent'
 
 import toStudyWords from './toStudyWords'
 import isGiveaway from './isGiveaway'
@@ -37,31 +40,25 @@ import isGiveaway from './isGiveaway'
 interface Props {
     sentence: Sentence,
     corpus: Corpus,
-    fact: Fact,
+    facts: Fact[],
     knowledge: NaiveKnowledge,
     trivialKnowledge: TrivialKnowledge,
     factSelector: FixedIntervalFactSelector
     onAnswer: (exposures: Exposure[]) => void
 }
 
-interface WordGroup {
-    words: StudyWord[],
-    startIndex: number
-}
-
 interface State {
     words?: StudyWord[],
-    groupedWords?: WordGroup[],
+    didYouKnow?: StudyFact[],
     unknownFacts?: StudyFact[],
-    knownFacts?: StudyFact[],
+    knownFacts?: StudyFact[],    
     stage?: Stage,
-    additionalStudyFact?: Fact
 }
 
 let React = { createElement: createElement }
 
 enum Stage {
-    TEST, REVEAL, CONFIRM
+    TEST, REVEAL, DID_YOU_KNOW, CONFIRM
 }
 
 export default class StudyComponent extends Component<Props, State> {
@@ -83,72 +80,20 @@ export default class StudyComponent extends Component<Props, State> {
     getStateForProps(props: Props): State {
         let sentence = props.sentence
 
-console.log('Sentence: ' + sentence.toString())
-
-        let additionalFact: Fact
-        let fact = props.fact
-
-console.log('Fact ' + fact.getId())
-
-        if (fact instanceof Phrase) {
-            fact.getCaseFacts().forEach((caseFact) => {
-                if (this.oughtToKnow(caseFact)) {
-                    additionalFact = caseFact
-                }
-            })
-        }
-        else if (fact instanceof PhraseCase) {
-            if (this.oughtToKnow(fact.phrase)) {
-                additionalFact = fact.phrase
-            }
-        }
-
-        let studiedFacts = [ props.fact ]
-
-        if (additionalFact) {
-            console.log('Additional fact ' + additionalFact.getId())
-
-            studiedFacts.push(additionalFact)
-        }
-
-        let words = toStudyWords(sentence, studiedFacts, props.corpus)
-
-        let corpus = props.corpus
-
-        let groupedWords: WordGroup[] = []
-
-        words.forEach((word, index) => {
-            if (!groupedWords.length || isWordWithSpaceBefore(word)) {
-                groupedWords.push({ words: [word], startIndex: index })
-            }
-            else {
-                groupedWords[groupedWords.length-1].words.push(word)
-            }
-        })
 
         return {
-            words: words,
-            groupedWords: groupedWords,
             unknownFacts: [], 
             knownFacts: [],
             stage: Stage.TEST,
-            additionalStudyFact: additionalFact
+            words: toStudyWords(sentence, props.facts, props.corpus)
         }
     }
 
     isStudiedFact(fact: Fact) {
-        let additionalStudyFact = this.state.additionalStudyFact
-
-        if (additionalStudyFact && additionalStudyFact.getId() == fact.getId()) {
-            return true
-        }
-
-        return this.props.fact.getId() == fact.getId()
+        return !!this.props.facts.find(f => f.getId() == fact.getId())
     }
 
     isWordHidden(word: StudyWord): boolean {
-        let fact = this.props.fact
-
         return !!word.facts.find((f) => this.isStudiedFact(f.fact))
     }
 
@@ -164,7 +109,7 @@ console.log('Fact ' + fact.getId())
             return {
                 fact: fact.fact.getId(),
                 time: new Date(),
-                skill: (fact.fact.getId() == this.props.fact.getId() ? Skill.PRODUCTION : Skill.RECOGNITION),
+                skill: (this.props.facts.find(f => fact.fact.getId() == f.getId()) ? Skill.PRODUCTION : Skill.RECOGNITION),
                 knew: knew,
                 user: -1,
                 sentence: this.props.sentence.id
@@ -207,12 +152,12 @@ console.log('Fact ' + fact.getId())
     }
 
     explainWords(words: StudyWord[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
-        
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
         let addFact = (fact: StudyFact) =>
-            (this.props.trivialKnowledge.isKnown(fact.fact) && fact.fact.getId() != this.props.fact.getId() ?
+            (this.props.trivialKnowledge.isKnown(fact.fact) && 
+                !this.props.facts.find(f => fact.fact.getId() != f.getId()) ?
                 known :
                 unknown).push(fact)
 
@@ -229,7 +174,18 @@ console.log('Fact ' + fact.getId())
             known = []
         }
 
-        this.addFacts(known, unknown)
+        this.state.knownFacts.concat(this.state.unknownFacts).forEach(fact => {
+            unknown = excludeFact(fact, unknown)
+            known = excludeFact(fact, known)
+        })
+
+        if (unknown.length) {
+            this.setState({
+                didYouKnow: unknown,
+                knownFacts: this.state.knownFacts.concat(known),
+                stage: Stage.DID_YOU_KNOW 
+            })
+        }
     }
 
     addFacts(addKnown: StudyFact[], addUnknown: StudyFact[]) {
@@ -250,8 +206,6 @@ console.log('Fact ' + fact.getId())
     iWasWrong(hiddenFacts: StudyFact[]) {
         this.explainWords(this.state.words.filter((word) => 
             this.isWordHidden(word)), hiddenFacts, true)
-
-        this.setState({ stage: Stage.CONFIRM })
     }
 
     iWasRight() {
@@ -266,6 +220,57 @@ console.log('Fact ' + fact.getId())
         })
 
         this.next(...facts)
+    }
+
+    renderSentenceTranslation() {
+        return <div className='lower'>
+            <div className='translation'>{ this.props.sentence.en() }</div> 
+        </div>
+    }
+
+    renderLower(hiddenFacts: StudyFact[]) {
+        if (this.state.stage == Stage.DID_YOU_KNOW) {
+            return <DidYouKnowComponent 
+                facts={ this.state.didYouKnow} 
+                factSelected={ (fact) => {} }
+                done={ (known, unknown) => {
+                    this.setState({
+                        unknownFacts: this.state.unknownFacts.concat(unknown),
+                        knownFacts: this.state.unknownFacts.concat(known),
+                        stage: Stage.CONFIRM
+                    })
+                } }
+                corpus={ this.props.corpus }
+                sentence={ this.props.sentence }
+                knowledge={ this.props.knowledge }
+                hiddenFacts={ hiddenFacts }    
+            />
+        }
+        else if (this.state.stage == Stage.CONFIRM) {
+            return <div>
+                <div className='buttonBar'>
+                    <div className='button' onClick={ () => this.next() }>Continue</div>
+                </div>
+                { this.renderSentenceTranslation() }
+            </div>
+        }
+        else if (this.state.stage == Stage.REVEAL) {
+            return <div>
+                <div className='buttonBar'>
+                    <div className='button left small' onClick={ () => this.iWasRight() }>I was<br/>right</div>
+                    <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) }>I was<br/>wrong</div>
+                </div>
+                { this.renderSentenceTranslation() }
+            </div>
+        }
+        else {
+            return <div>
+                <div className='buttonBar'>
+                    <div className='button' onClick={ () => this.reveal() }>Reveal</div>
+                </div>
+                <div className='lower'></div>
+            </div>
+        }
     }
 
     render() {
@@ -286,7 +291,6 @@ console.log('Sentence: ' + sentence.toString())
                 }
             })
 
-            let studyFact = this.props.fact
             let additionalId
 
             hiddenFacts = hiddenFacts.filter((fact) => 
@@ -295,6 +299,7 @@ console.log('Sentence: ' + sentence.toString())
         }
 
         return <div className='study'>
+            <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>
                 <div className='sentenceId'>
                     (<a href={ 'http://grammar.ru.morpheem.com/#' + sentence.id } target='backend'>
                         #{ sentence.id})
@@ -305,15 +310,11 @@ console.log('Sentence: ' + sentence.toString())
                     {
                         (this.state.stage == Stage.TEST ?
 
-                            (this.props.fact instanceof InflectionFact ?
-                                'What form should the highlighed word be in?'
+                            (this.props.facts.find(f => f instanceof Phrase) ?
+                                'What words complete the expression?'
                                 :
-                                (this.props.fact instanceof Phrase ?
-                                    'What words complete the expression?'
-                                    :
-                                    'What Russian word is missing?'
-                                    )
-                                )
+                                'What Russian word is missing?'
+                            )
 
                             :
 
@@ -325,87 +326,29 @@ console.log('Sentence: ' + sentence.toString())
                     }
                 </div>
 
-                <div className='sentence'>
-                { 
-                    this.state.groupedWords.map((group, index) => {
-                        return <div className='group' key={ index }>
-                        {
-                            group.words.map((word: StudyWord, index) => {
-                                let explain = () => {
-                                    this.explainWords([word], hiddenFacts)
+                <SentenceComponent
+                    corpus={ this.props.corpus }
+                    reveal={ reveal }
+                    words={ this.state.words }
+                    facts={ this.props.facts }
+                    wordClicked={
+                        (word: StudyWord) => {
+                            this.explainWords([word], hiddenFacts)
 
-                                    if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
-                                        this.setState({ stage: Stage.CONFIRM })
-                                    }
-                                }
-
-                                let className = ''
-                                let text = word.jp
-
-                                if (capitalize && text) {
-                                    text = text[0].toUpperCase() + text.substr(1)
-                                }
-
-                                let formHint
-
-                                if (this.isWordHidden(word)) {
-                                    if (!reveal) {
-                                        text = word.getHint()
-                                        formHint = word.getFormHint()
-                                    }
-
-                                    if (reveal) {
-                                        className += ' revealed' 
-                                    }
-                                    else {
-                                        className += ' nominalized'
-                                    }
-                                }
-
-                                capitalize = word.jp && Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
-
-                                return <div key={ index } className={ 'word ' + className } onClick={ explain }>
-                                        <div>{ text }</div>
-                                    { (formHint ?
-                                        <div className='form'>{ formHint }</div>
-                                        :
-                                        <div></div>                                
-                                    ) }
-                                </div>
-                            })
+                            if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
+                                this.setState({ stage: Stage.CONFIRM })
+                            }
                         }
-                        </div>            
-                    })
-                }
-                </div>
+                    }
+                />
 
-                { (this.state.stage == Stage.CONFIRM ?
+            </div>
 
-                    <div className='buttonBar'>
-                        <div className='button' onClick={ () => this.next() }>Continue</div>
-                    </div>
+            { this.renderLower(hiddenFacts) }
 
-                    :
+                {/* (this.state.knownFacts.length || this.state.unknownFacts.length ? 
 
-                    (this.state.stage == Stage.REVEAL ?
-
-                        <div className='buttonBar'>
-                            <div className='button' onClick={ () => this.iWasRight() }>I was right</div>
-                            <div className='button' onClick={ () => this.iWasWrong(hiddenFacts) }>I was wrong</div>
-                        </div>
-
-                    :
-
-                        <div className='buttonBar'>
-                            <div className='button' onClick={ () => this.reveal() }>Reveal</div>
-                        </div>
-
-                    )
-                ) }
-
-                { (this.state.knownFacts.length || this.state.unknownFacts.length ? 
-
-                    <div>
+                    <div className='swimlane'>
                         <h3>I didn't know</h3>
                         <ul className='unknown'>
                         {
@@ -432,7 +375,7 @@ console.log('Sentence: ' + sentence.toString())
 
                 { (this.state.knownFacts.length ? 
 
-                    <div>
+                    <div className='swimlane lower'>
                         <h3>I knew</h3>
                         <ul className='unknown'>
                         {
@@ -455,10 +398,8 @@ console.log('Sentence: ' + sentence.toString())
                     :
 
                     <div/>
-                )}
-
-            </div>
-            
+                )*/}
+        </div>
     }
 }
 
@@ -474,8 +415,4 @@ function getWordMeaningFactId(word: Word) {
 
 function excludeFact(exclude: StudyFact, array: StudyFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
-}
-
-function isWordWithSpaceBefore(word: StudyWord) {
-    return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
 }

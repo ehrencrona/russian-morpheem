@@ -23,7 +23,7 @@ import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/Sentenc
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Sentence from '../../shared/Sentence'
 
-import Exposure from '../../shared/study/Exposure'
+import { Exposure, Knowledge } from '../../shared/study/Exposure'
 import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
@@ -39,8 +39,9 @@ import ForgettingStats from './ForgettingStats'
 
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
+import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
+import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
-
 
 interface Props {
     corpus: Corpus,
@@ -49,7 +50,7 @@ interface Props {
 
 interface State {
     sentence?: Sentence
-    fact?: Fact
+    facts?: Fact[]
     showDecks?: boolean
     showComments?: boolean
     edit?: boolean
@@ -118,18 +119,17 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
-/*
-factScores = [ {
-    fact: (this.props.corpus.facts.get('gen-of') as Phrase).getCaseFact(GrammaticalCase.GEN),
-    score: 1
-} ]
-sentenceScores = [{
-    sentence: this.props.corpus.sentences.get(5785),
-    score: 1,
-    fact: factScores[0].fact,
-    debug: {}
-}]
-*/
+        this.setState({
+            sentence: this.props.corpus.sentences.get(2029),
+            facts: [
+                this.props.corpus.facts.get('в-году'),
+                (this.props.corpus.facts.get('в-году') as Phrase).getCaseFact(GrammaticalCase.PREP),
+                (this.props.corpus.facts.get('в-году') as Phrase).getCaseFact(GrammaticalCase.LOC)
+            ]
+        })
+
+        return
+
 
         // if studying phrases, remove any sentences that don't actually match the phrase.
         sentenceScores = sentenceScores.filter((score) => {
@@ -153,7 +153,6 @@ sentenceScores = [{
             }
         })
 
-
         let sentenceScore = chooseHighestScoreSentence(sentenceScores)
 
         if (!sentenceScore) {
@@ -165,7 +164,79 @@ sentenceScores = [{
 
         console.log(sentenceScore)
 
-        this.setState({ sentence: sentence, fact: fact })
+        this.setState({ sentence: sentence, facts: this.getAdditionalFacts(fact, sentence) })
+    }
+
+    oughtToKnow(fact: Fact) {
+        return this.knowledge.getKnowledge(fact) == Knowledge.KNEW ||
+            this.factSelector.isStudied(fact, new Date())
+    }
+    
+    getAdditionalFacts(fact: Fact, sentence: Sentence) {
+console.log('Sentence: ' + sentence.toString())
+
+        let additionalFact: Fact
+
+console.log('Fact ' + fact.getId())
+
+        if (fact instanceof Phrase) {
+            fact.getCaseFacts().forEach((caseFact) => {
+                if (this.oughtToKnow(caseFact)) {
+                    additionalFact = caseFact
+                }
+            })
+        }
+        else if (fact instanceof PhraseCase) {
+            if (this.oughtToKnow(fact.phrase)) {
+                additionalFact = fact.phrase
+            }
+        }
+
+        let studiedFacts = [ fact ]
+
+        if (additionalFact) {
+            console.log('Additional fact ' + additionalFact.getId())
+
+            studiedFacts.push(additionalFact)
+        }
+
+        // if we study a word or an ending but we are in fact part of a phrase, 
+        // we can just as well take the whole phrase.
+        if (!(fact instanceof PhraseCase) && !(fact instanceof Phrase)) {
+            let wordRequiresFact = (word: Word, fact: Fact) => {
+                let result = false
+
+                word.visitFacts((visitedFact) => {
+                    if (visitedFact.getId() == fact.getId()) {
+                        result = true
+                    }
+                })
+
+                return result
+            }
+
+            sentence.phrases.find(phrase => {
+
+                let match = phrase.match(sentence.words, this.props.corpus.facts, CaseStudy.STUDY_CASE)
+
+                if (match) {
+                    return !!match.words.find(m => {
+                        if (wordRequiresFact(m.word, fact)) {    
+                            additionalFact =
+                                phrase.getCaseFact(((m.wordMatch as any) as CaseStudyMatch).getCaseStudied())
+
+                            console.log('Additional fact ' + additionalFact.getId())
+
+                            studiedFacts.push(additionalFact)
+
+                            return true
+                        }
+                    })
+                }
+            })
+        }
+
+        return studiedFacts
     }
 
     componentWillMount() {
@@ -200,7 +271,7 @@ sentenceScores = [{
             return <div className='study'>
                 <StudyComponent 
                     sentence={ this.state.sentence }
-                    fact={ this.state.fact }
+                    facts={ this.state.facts }
                     factSelector={ this.factSelector } 
                     corpus={ this.props.corpus }
                     knowledge={ this.knowledge }

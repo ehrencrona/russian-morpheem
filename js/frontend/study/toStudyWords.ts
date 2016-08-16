@@ -244,7 +244,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                 }
 
                 // TODO: or there are words but the words are all placeholders [verb] [someone] [something])
-                if (phrase.hasWordFacts && (!m.wordMatch.isCaseStudy() || !wordsFact.words.length)) {
+                if (!m.wordMatch.isCaseStudy()) {
                     words[m.index].facts.push(wordsFact)
                 }
             })

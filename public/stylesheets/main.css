@@ -32,7 +32,7 @@ input[type=text], input[type=number] {
   background-color: white;
   border: 2px solid #e9e0d3; }
 
-.border-box-sizing, .tabSet .column .closeAll, .wordTranslation input, .sentenceTab .sentenceTranslation input, .untranslated input, .searchSentences input[type=text], .phrase .pattern .field input, .study ul.unknown > li {
+.border-box-sizing, .tabSet .column .closeAll, .wordTranslation input, .sentenceTab .sentenceTranslation input, .untranslated input, .searchSentences input[type=text], .phrase .pattern .field input, .study .buttonBar .button.left, .study .buttonBar .tab-header .left.tab-close, .tab-header .study .buttonBar .left.tab-close, .study .buttonBar .pending .left.unacceptable, .pending .study .buttonBar .left.unacceptable, .study .buttonBar .button.right, .study .buttonBar .tab-header .right.tab-close, .tab-header .study .buttonBar .right.tab-close, .study .buttonBar .pending .right.unacceptable, .pending .study .buttonBar .right.unacceptable, .study .lower .swimlane ul.unknown > li {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -650,98 +650,175 @@ h3 {
   color: #303030;
   background-color: #ffdb5d; }
 
-.study .sentenceId {
-  margin: 8px;
-  text-align: right;
-  font-size: 80%; }
-
-.study .buttonBar {
-  justify-content: center; }
-
-.study .explanation {
-  margin: 36pt;
-  margin-bottom: 12pt;
-  font-size: 1em;
-  font-weight: bold; }
-
-.study .sentence {
-  margin: 36pt;
-  margin-top: 0;
-  font-size: 4em;
-  display: flex;
-  flex-wrap: wrap; }
-  .study .sentence .group {
-    display: flex;
-    margin-right: 0.4em; }
-    .study .sentence .group .word {
-      cursor: pointer; }
-    .study .sentence .group .word:hover {
-      color: #766db0; }
-    .study .sentence .group .word.nominalized {
-      color: #d03a3e;
-      background-color: #ffd02a;
-      padding: 0 0.15em;
-      border-radius: 0.1em;
-      margin-right: 0.2em;
-      display: flex;
-      align-items: center; }
-      .study .sentence .group .word.nominalized .form {
-        color: #f8f7f5;
-        margin-left: 0.4em;
-        font-size: 40%;
-        display: block; }
-    .study .sentence .group .word.revealed {
-      font-weight: bold; }
-
-.study ul.unknown {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch; }
-  .study ul.unknown > li {
-    padding: 8px;
-    width: 25%;
-    max-width: 300px;
+.study {
+  height: 100vh;
+  font-size: 12pt; }
+  .study .upper {
     display: flex;
     flex-direction: column;
-    align-items: stretch; }
-    .study ul.unknown > li .content {
-      background-color: #31c8c7;
+    height: 50vh; }
+    .study .upper .sentenceId {
+      margin: 8px;
+      text-align: right;
+      font-size: 80%; }
+    .study .upper .explanation {
+      margin: 36pt;
+      margin-bottom: 12pt;
+      font-size: 1em;
+      font-weight: bold; }
+    .study .upper .sentence {
+      margin: 36pt;
+      margin-top: 0;
+      font-size: 2em;
       flex-grow: 1;
-      padding: 8px;
-      text-align: center; }
-      .study ul.unknown > li .content strong {
-        white-space: nowrap; }
-    .study ul.unknown > li > .buttonBar .button, .study ul.unknown > li > .buttonBar .tab-header .tab-close, .tab-header .study ul.unknown > li > .buttonBar .tab-close, .study ul.unknown > li > .buttonBar .pending .unacceptable, .pending .study ul.unknown > li > .buttonBar .unacceptable {
-      border-radius: 0;
-      margin: 0;
-      flex-grow: 1;
+      overflow: hidden;
+      line-height: 130%; }
+      .study .upper .sentence .content {
+        display: inline-block; }
+        .study .upper .sentence .content .space {
+          display: inline-block; }
+        .study .upper .sentence .content .word {
+          display: inline-block;
+          cursor: pointer; }
+        .study .upper .sentence .content .word:hover {
+          color: #766db0; }
+      .study .upper .sentence .hidden .space.studied {
+        margin: 0 -0.1em;
+        background-color: white; }
+      .study .upper .sentence .hidden .word.studied {
+        color: darkgray;
+        background-color: white;
+        padding: 0 0.1em;
+        display: inline-block; }
+        .study .upper .sentence .hidden .word.studied .form {
+          color: #f8f7f5;
+          margin-left: 0.4em;
+          font-size: 40%;
+          display: block; }
+      .study .upper .sentence .revealed .word.studied {
+        font-weight: bold; }
+  .study .upper.dimmed {
+    background-color: #868686;
+    color: #505050; }
+  .study .buttonBar {
+    height: 0;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 20;
+    flex-wrap: nowrap; }
+    .study .buttonBar .button, .study .buttonBar .tab-header .tab-close, .tab-header .study .buttonBar .tab-close, .study .buttonBar .pending .unacceptable, .pending .study .buttonBar .unacceptable {
       display: block;
-      text-align: left;
-      background-color: #2CAAA9;
-      color: #f8f7f5;
-      padding: 4px 8px;
-      font-size: 80%;
-      font-weight: bold;
-      cursor: pointer; }
-    .study ul.unknown > li > .buttonBar .button.iKnew, .study ul.unknown > li > .buttonBar .tab-header .iKnew.tab-close, .tab-header .study ul.unknown > li > .buttonBar .iKnew.tab-close, .study ul.unknown > li > .buttonBar .pending .iKnew.unacceptable, .pending .study ul.unknown > li > .buttonBar .iKnew.unacceptable {
-      text-align: right; }
-    .study ul.unknown > li > .buttonBar .button:hover, .study ul.unknown > li > .buttonBar .tab-header .tab-close:hover, .tab-header .study ul.unknown > li > .buttonBar .tab-close:hover, .study ul.unknown > li > .buttonBar .pending .unacceptable:hover, .pending .study ul.unknown > li > .buttonBar .unacceptable:hover {
-      background-color: #279695; }
-
-.study .debugButtonBar {
-  position: fixed;
-  bottom: 0;
-  right: 0; }
-
-.study .factSelectorInspector {
-  margin: 8px; }
-  .study .factSelectorInspector ul li {
-    margin-bottom: 8px; }
-    .study .factSelectorInspector ul li .fact {
-      display: inline;
-      margin-bottom: 4px; }
-    .study .factSelectorInspector ul li .details {
-      margin-left: 36px; }
+      margin: 0;
+      font-size: 1.5em;
+      padding: 12px 1em;
+      border-radius: 1em; }
+    .study .buttonBar .button.smallText, .study .buttonBar .tab-header .smallText.tab-close, .tab-header .study .buttonBar .smallText.tab-close, .study .buttonBar .pending .smallText.unacceptable, .pending .study .buttonBar .smallText.unacceptable {
+      font-size: 1.2em;
+      line-height: 125%; }
+    .study .buttonBar .button.left, .study .buttonBar .tab-header .left.tab-close, .tab-header .study .buttonBar .left.tab-close, .study .buttonBar .pending .left.unacceptable, .pending .study .buttonBar .left.unacceptable {
+      width: 50%;
+      flex-grow: 1;
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+      margin-right: 5%;
+      text-align: left; }
+    .study .buttonBar .button.right, .study .buttonBar .tab-header .right.tab-close, .tab-header .study .buttonBar .right.tab-close, .study .buttonBar .pending .right.unacceptable, .pending .study .buttonBar .right.unacceptable {
+      width: 50%;
+      text-align: right;
+      margin-left: 5%;
+      flex-grow: 1;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0; }
+  .study .lower {
+    background-color: lightgray;
+    height: 50vh;
+    display: flex;
+    align-content: center;
+    padding-top: 3em; }
+    .study .lower .didYouKnowFact {
+      display: block;
+      flex-grow: 1; }
+      .study .lower .didYouKnowFact li {
+        padding: 1em; }
+        .study .lower .didYouKnowFact li .content {
+          background-color: white;
+          display: block;
+          padding: 1em;
+          border-radius: 16px; }
+    .study .lower .translation {
+      font-style: italic;
+      text-align: center;
+      font-size: 1.5em; }
+    .study .lower .swimlane {
+      height: 25vh; }
+      .study .lower .swimlane h3 {
+        color: white;
+        font-size: 1.5em;
+        position: absolute;
+        right: 1em;
+        background-color: inherit; }
+      .study .lower .swimlane ul.unknown {
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch; }
+        .study .lower .swimlane ul.unknown > li {
+          z-index: 10;
+          padding: 16px;
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch; }
+          .study .lower .swimlane ul.unknown > li .content {
+            font-size: 1em;
+            border-radius: 0.5em;
+            background-color: #e0e0e0;
+            flex-grow: 1;
+            display: flex;
+            padding: 8px;
+            align-items: center; }
+            .study .lower .swimlane ul.unknown > li .content > div {
+              flex-grow: 1;
+              text-align: center; }
+            .study .lower .swimlane ul.unknown > li .content strong {
+              white-space: nowrap; }
+          .study .lower .swimlane ul.unknown > li > .buttonBar .button, .study .lower .swimlane ul.unknown > li > .buttonBar .tab-header .tab-close, .tab-header .study .lower .swimlane ul.unknown > li > .buttonBar .tab-close, .study .lower .swimlane ul.unknown > li > .buttonBar .pending .unacceptable, .pending .study .lower .swimlane ul.unknown > li > .buttonBar .unacceptable {
+            border-radius: 4px;
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+            margin: 0;
+            flex-grow: 1;
+            display: block;
+            text-align: left;
+            background-color: #2CAAA9;
+            color: #f8f7f5;
+            padding: 4px 8px;
+            font-size: 80%;
+            font-weight: bold;
+            cursor: pointer; }
+          .study .lower .swimlane ul.unknown > li > .buttonBar .button.iKnew, .study .lower .swimlane ul.unknown > li > .buttonBar .tab-header .iKnew.tab-close, .tab-header .study .lower .swimlane ul.unknown > li > .buttonBar .iKnew.tab-close, .study .lower .swimlane ul.unknown > li > .buttonBar .pending .iKnew.unacceptable, .pending .study .lower .swimlane ul.unknown > li > .buttonBar .iKnew.unacceptable {
+            text-align: right; }
+          .study .lower .swimlane ul.unknown > li > .buttonBar .button:hover, .study .lower .swimlane ul.unknown > li > .buttonBar .tab-header .tab-close:hover, .tab-header .study .lower .swimlane ul.unknown > li > .buttonBar .tab-close:hover, .study .lower .swimlane ul.unknown > li > .buttonBar .pending .unacceptable:hover, .pending .study .lower .swimlane ul.unknown > li > .buttonBar .unacceptable:hover {
+            background-color: #279695; }
+    .study .lower .swimlane.lower {
+      background-color: #b0b0b0; }
+      .study .lower .swimlane.lower ul li .content {
+        background-color: #cacaca; }
+  .study .debugButtonBar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0; }
+  .study .factSelectorInspector {
+    margin: 8px; }
+    .study .factSelectorInspector ul li {
+      margin-bottom: 8px; }
+      .study .factSelectorInspector ul li .fact {
+        display: inline;
+        margin-bottom: 4px; }
+      .study .factSelectorInspector ul li .details {
+        margin-left: 36px; }
 
 .overlayContainer {
   position: fixed;

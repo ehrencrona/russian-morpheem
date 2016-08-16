@@ -94,7 +94,9 @@ let studyFactComponent = (props: Props) => {
                     ref: (comp) => explainable = comp
                 }, []) }  
             </div>
+        </li>
 
+            /*
             <div className='buttonBar'>
                 { canExplain ?
                     <div className='button' onClick={ () => explainable.explain() }>Explain</div>
@@ -107,7 +109,8 @@ let studyFactComponent = (props: Props) => {
                         'I knew that'
                 }</div>
             </div>
-        </li>
+            */
+
 }
 
 export default studyFactComponent;

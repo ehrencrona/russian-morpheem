@@ -1039,120 +1039,247 @@ h3 {
 }
 
 .study {
-    .sentenceId {
-        margin: 2 * $unit;
-        text-align: right;
-        font-size: 80%; 
-    }
+    height: 100vh;
+    font-size: 12pt;
 
-    .buttonBar {
-        justify-content: center;
-    }
-
-    .explanation {
-        margin: 36pt;
-        margin-bottom: 12pt;
-        font-size: 1em;
-        font-weight: bold;
-    }
-
-    .sentence {
-        margin: 36pt;
-        margin-top: 0;
-        font-size: 4em;
+    .upper {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
 
-        .group {
-            display: flex;
-            margin-right: 0.4em;
+        height: 50vh;
 
-            .word {
-                cursor: pointer;
-            }
-
-            .word:hover {
-                color: $color4;
-            }
-
-            .word.nominalized {
-                color: $color7;
-                background-color: $color6;
-                padding: 0 0.15em;
-                border-radius: 0.1em;
-                margin-right: 0.2em;
-                display: flex;
-                align-items: center;
-
-                .form {
-                    color: $color9;
-                    margin-left: 0.4em;
-                    font-size: 40%;
-                    display: block;
-                }
-            }
-
-            .word.revealed {
-                font-weight: bold;
-            }
+        .sentenceId {
+            margin: 2 * $unit;
+            text-align: right;
+            font-size: 80%; 
         }
 
-    }
+        .explanation {
+            margin: 36pt;
+            margin-bottom: 12pt;
+            font-size: 1em;
+            font-weight: bold;
+        }
 
-    ul.unknown {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-
-        > li {
-            @extend .border-box-sizing;
-            padding: 2 * $unit;
-            width: 25%;
-            max-width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
+        .sentence {
+            margin: 36pt;
+            margin-top: 0;
+            font-size: 2em;
+            flex-grow: 1;
+            overflow: hidden;
+            line-height: 130%;
 
             .content {
-                background-color: $color1;
-                flex-grow: 1;
+                display: inline-block;
 
-                padding: 2 * $unit;
-                text-align: center;
-
-                strong {
-                    white-space: nowrap;
+                .space {
+                    display: inline-block;                    
                 }
-            }
 
-            > .buttonBar {
-                .button {
-                    border-radius: 0;
-                    margin: 0;
-                    flex-grow: 1;
-                    display: block;
-                    text-align: left;
-
-                    background-color: $color2;
-                    color: $color9;
-                    padding: $unit 2 * $unit;
-                    font-size: 80%; 
-                    font-weight: bold;
+                .word {
+                    display: inline-block;
                     cursor: pointer;
                 }
 
-                .button.iKnew {
-                    text-align: right;
+                .word:hover {
+                    color: $color4;
+                }               
+            }
+
+            .hidden {
+                .space.studied {
+                    margin: 0 -0.1em;
+                    background-color: white;
                 }
 
-                .button:hover {
-                    background-color: darken($color2, 5%)
+                .word.studied {
+                    color: darkgray;
+                    background-color: white;
+                    padding: 0 0.1em;
+                    display: inline-block;
+
+                    .form {
+                        color: $color9;
+                        margin-left: 0.4em;
+                        font-size: 40%;
+                        display: block;
+                    }
                 }
+            }
+
+            .revealed {
+                .word.studied {
+                    font-weight: bold;
+                }
+            }            
+        }
+    }
+
+    .upper.dimmed {
+        background-color: darken(#ececec, 40%);
+
+        color: #505050; 
+    }
+
+    .buttonBar {
+        height: 0;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 20;
+        flex-wrap: nowrap;
+        .button {
+            display: block;
+            margin: 0;
+            font-size: 1.5em;
+            padding: 3*$unit 1em;
+            border-radius: 1em;
+        }
+
+        .button.smallText {
+            font-size: 1.2em;
+            line-height: 125%;
+        }
+
+        .button.left {
+            width: 50%;
+            flex-grow: 1;
+            @extend .border-box-sizing;
+            border-bottom-left-radius: 0; 
+            border-top-left-radius: 0;
+            margin-right: 5%;
+            text-align: left;
+        }
+
+        .button.right {
+            width: 50%;
+            text-align: right;
+            margin-left: 5%;
+            flex-grow: 1;
+            @extend .border-box-sizing;
+            border-bottom-right-radius: 0; 
+            border-top-right-radius: 0; 
+        }
+    }
+
+    .lower {
+        background-color: lightgray;
+        height: 50vh;
+        display: flex;
+        align-content: center;
+        padding-top: 3em;
+
+        .didYouKnowFact {
+            display: block;
+            flex-grow: 1;
+
+            li {
+                padding: 1em;
+
+                .content {
+                    background-color: white;
+                    display: block;
+                    padding: 1em;
+                    border-radius: 4 * $unit;
+                }
+
+            }
+            
+        }
+
+        .translation {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .swimlane {
+            height: 25vh;
+
+            h3 {
+                color: white;
+                font-size: 1.5em;
+                position: absolute;
+                right: 1em;
+                background-color: inherit;
+            }
+
+            ul.unknown {
+                height: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: stretch;
+
+                > li {
+                    z-index: 10;
+                    @extend .border-box-sizing;
+                    padding: 4*$unit;
+                    width: 50%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+
+                    .content {
+                        font-size: 1em;
+                        border-radius: 0.5em;
+                        background-color: lighten(lightgray, 5%);
+                        flex-grow: 1;
+
+                        display: flex;
+                        padding: 2 * $unit;
+                        align-items: center;
+
+                        > div {
+                            flex-grow: 1;
+                            text-align: center;
+                        }
+
+                        strong {
+                            white-space: nowrap;
+                        }
+                    }
+
+                    > .buttonBar {
+                        .button {
+                        border-radius: $unit;
+                            border-top-right-radius: 0;
+                            border-top-left-radius: 0;
+                            margin: 0;
+                            flex-grow: 1;
+                            display: block;
+                            text-align: left;
+
+                            background-color: $color2;
+                            color: $color9;
+                            padding: $unit 2 * $unit;
+                            font-size: 80%; 
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+
+                        .button.iKnew {
+                            text-align: right;
+                        }
+
+                        .button:hover {
+                            background-color: darken($color2, 5%)
+                        }
+                    }
+                }
+            }
+        }
+
+        .swimlane.lower {
+            background-color: #b0b0b0;
+
+            ul li .content {
+                background-color: lighten(#b0b0b0, 10%);
             }
         }
     }
 
     .debugButtonBar {
+        display: none;
         position: fixed;
         bottom: 0;
         right: 0;

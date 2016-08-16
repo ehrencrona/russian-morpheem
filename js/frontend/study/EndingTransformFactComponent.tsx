@@ -11,7 +11,7 @@ let wordFactComponent = (props: FactComponentProps<EndingTransform>) => {
     return <div>
         <strong>
             { props.fact.from }
-        </strong> is replaced with<strong>
+        </strong> is replaced with <strong>
             { props.fact.to }
         </strong> after <strong>
             { props.fact.after.split('').join(', ') }
