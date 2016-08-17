@@ -8,7 +8,7 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import shouldHideWord from './shouldHideWord'
 
 import { FORMS, CASES } from '../../shared/inflection/InflectionForms'
-import { FactComponentProps } from './StudyFactComponent'
+import { FactComponentProps } from './fact/StudyFactComponent'
 
 let React = { createElement: createElement }
 
