@@ -4,8 +4,13 @@ import Corpus from '../../shared/Corpus'
 import Words from '../../shared/Words'
 
 import StudyWord from './StudyWord'
+import StudyFact from './StudyFact'
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
+import PhraseCase from '../../shared/phrase/PhraseCase'
+import Phrase from '../../shared/phrase/Phrase'
+
+const MAX_FONT_SIZE = 64;
 
 class WordGroup {
     constructor(public words: StudyWord[], public startIndex: number) {
@@ -19,6 +24,7 @@ interface Props {
     corpus: Corpus,
     words: StudyWord[],
     reveal: boolean,
+    highlight: StudyFact,
     wordClicked: (StudyWord) => any
 }
 
@@ -85,7 +91,7 @@ export default class SentenceComponent extends Component<Props, State> {
                 if (index > 0) {
                     if (isWordWithSpaceBefore(item)) {
                         if (this.isWordStudied(item) && this.isWordStudied(list[index-1])) {
-                            result.push(<span className='space studied'>&nbsp;</span>)
+                            result.push(<span key={'space' + index } className='space studied'>&nbsp;</span>)
                         }
                         else {
                             result.push(' ')
@@ -108,6 +114,23 @@ export default class SentenceComponent extends Component<Props, State> {
             className += ' hidden'
         }
 
+
+        let highHighlight
+        let lowHighlight 
+
+        if (this.props.highlight) {
+            let highlightFact = this.props.highlight.fact
+
+            highHighlight = (word: StudyWord) => word.hasFact(highlightFact)
+
+            if (highHighlight && highlightFact instanceof PhraseCase) {
+                lowHighlight = (word: StudyWord) => word.isPartOfPhrase(highlightFact.phrase)
+            }
+            else if (highHighlight && highlightFact instanceof Phrase) {
+                lowHighlight = (word: StudyWord) => word.isPartOfPhrase(highlightFact)
+            }
+        }
+
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
             {
                 spacedMap(this.props.words, (word, index) => {
@@ -127,6 +150,13 @@ export default class SentenceComponent extends Component<Props, State> {
                         }
 
                         className += ' studied'
+                    }
+
+                    if (highHighlight && highHighlight(word)) {
+                        className += ' highlight high'
+                    }
+                    else if (lowHighlight && lowHighlight(word)) {
+                        className += ' highlight low'
                     }
 
                     capitalize = word.jp && Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
@@ -169,15 +199,11 @@ export default class SentenceComponent extends Component<Props, State> {
         }
 
         let trySize = (lo: number, mid: number, hi: number) => {
-console.log(Math.round(lo), Math.round(hi))
-
             if (hi - lo < 4) {
                 return
             }
 
             container.setAttribute('style', 'font-size: ' + mid + 'px')
-
-console.log('fill ratio at ' + Math.round(mid) + ': ' + Math.round(100 * fillRatio()) + '%')
 
             let fill = fillRatio()
 
@@ -200,9 +226,9 @@ console.log('fill ratio at ' + Math.round(mid) + ': ' + Math.round(100 * fillRat
 
         let currentSize = parseInt(window.getComputedStyle(container, null).getPropertyValue("font-size").replace('px',''))
 
-        let guesstimate = currentSize / Math.sqrt(fillRatio())
+        let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), MAX_FONT_SIZE)
 
-        trySize(0, guesstimate, container.clientHeight)
+        trySize(0, guesstimate, Math.min(container.clientHeight, MAX_FONT_SIZE))
 
         console.log('done')
     }

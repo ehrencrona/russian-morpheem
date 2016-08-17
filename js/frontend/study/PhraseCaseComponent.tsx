@@ -52,11 +52,11 @@ let phraseFactComponent = (props: FactComponentProps<PhraseCase>) => {
         console.error(phrase.id + ' did not match ' + props.sentence)
     }
 
-    return <div><strong>
+    return <div><strong className='nobr'>
             { wordString }
-        </strong> must be in the <strong>
+        </strong> must be in the <strong className='nobr'>
             { FORMS[CASES[phraseCase.grammaticalCase]].name }
-        </strong> when used as <strong>
+        </strong> when used as <strong className='nobr'>
             { phraseString }
         </strong>
 

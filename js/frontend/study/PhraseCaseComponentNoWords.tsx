@@ -42,11 +42,11 @@ let phraseCaseComponentNoWords = (props: FactComponentProps<PhraseCase>) => {
     }
 
     return <div>
-            The meaning of the <strong>
+            The meaning of the <strong className='nobr'>
             { FORMS[CASES[phraseCase.grammaticalCase]].name }
-        </strong> in <strong>
+        </strong> in <strong className='nobr'>
             { words }
-        </strong> is <strong>
+        </strong> is <strong className='nobr'>
             { explanation }
         </strong>
     </div>

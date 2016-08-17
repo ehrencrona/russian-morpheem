@@ -30,7 +30,6 @@ import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../share
 import DidYouKnowComponent from './DidYouKnowComponent'
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
-import StudyFactComponent from './StudyFactComponent'
 import FrontendExposures from './FrontendExposures'
 import SentenceComponent from './SentenceComponent'
 
@@ -51,8 +50,9 @@ interface State {
     words?: StudyWord[],
     didYouKnow?: StudyFact[],
     unknownFacts?: StudyFact[],
-    knownFacts?: StudyFact[],    
+    knownFacts?: StudyFact[],
     stage?: Stage,
+    highlightFact?: StudyFact
 }
 
 let React = { createElement: createElement }
@@ -80,12 +80,12 @@ export default class StudyComponent extends Component<Props, State> {
     getStateForProps(props: Props): State {
         let sentence = props.sentence
 
-
         return {
             unknownFacts: [], 
             knownFacts: [],
             stage: Stage.TEST,
-            words: toStudyWords(sentence, props.facts, props.corpus)
+            words: toStudyWords(sentence, props.facts, props.corpus),
+            highlightFact: null
         }
     }
 
@@ -151,6 +151,32 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.onAnswer(exposures)
     }
 
+    sortFactsToExplain(facts: StudyFact[]) {
+        function prio(sf: StudyFact) {
+            let fact: Fact = sf.fact
+
+            if (fact instanceof Phrase) {
+                return 1
+            }
+            else if (fact instanceof Word || fact instanceof InflectableWord) {
+                return 2
+            }
+            else if (fact instanceof PhraseCase) {
+                return 3
+            }
+            else if (fact instanceof InflectionFact) {
+                return 4
+            }
+            else {
+                return 5
+            }
+        }
+
+        facts.sort((f1, f2) => {
+            return prio(f1) - prio(f2)
+        })
+    }
+
     explainWords(words: StudyWord[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
@@ -180,10 +206,13 @@ export default class StudyComponent extends Component<Props, State> {
         })
 
         if (unknown.length) {
+            this.sortFactsToExplain(unknown)
+
             this.setState({
                 didYouKnow: unknown,
                 knownFacts: this.state.knownFacts.concat(known),
-                stage: Stage.DID_YOU_KNOW 
+                stage: Stage.DID_YOU_KNOW,
+                highlightFact: unknown[0]
             })
         }
     }
@@ -232,12 +261,15 @@ export default class StudyComponent extends Component<Props, State> {
         if (this.state.stage == Stage.DID_YOU_KNOW) {
             return <DidYouKnowComponent 
                 facts={ this.state.didYouKnow} 
-                factSelected={ (fact) => {} }
+                factSelected={ (fact) => { this.setState({ highlightFact: fact }) } }
                 done={ (known, unknown) => {
+console.log('got done')
                     this.setState({
+                        didYouKnow: null,
                         unknownFacts: this.state.unknownFacts.concat(unknown),
                         knownFacts: this.state.unknownFacts.concat(known),
-                        stage: Stage.CONFIRM
+                        stage: Stage.CONFIRM,
+                        highlightFact: null
                     })
                 } }
                 corpus={ this.props.corpus }
@@ -298,7 +330,7 @@ console.log('Sentence: ' + sentence.toString())
                 this.oughtToKnow(fact.fact))
         }
 
-        return <div className='study'>
+        return <div className='content'>
             <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>
                 <div className='sentenceId'>
                     (<a href={ 'http://grammar.ru.morpheem.com/#' + sentence.id } target='backend'>
@@ -331,6 +363,7 @@ console.log('Sentence: ' + sentence.toString())
                     reveal={ reveal }
                     words={ this.state.words }
                     facts={ this.props.facts }
+                    highlight={ this.state.highlightFact }
                     wordClicked={
                         (word: StudyWord) => {
                             this.explainWords([word], hiddenFacts)

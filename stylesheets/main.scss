@@ -1041,6 +1041,15 @@ h3 {
 .study {
     height: 100vh;
     font-size: 12pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #606060;
+
+    > .content {
+        background-color: $color9; 
+        max-width: 650px;
+    }
 
     .upper {
         display: flex;
@@ -1108,7 +1117,10 @@ h3 {
             }
 
             .revealed {
+                color: $color14;
+
                 .word.studied {
+                    color: black;
                     font-weight: bold;
                 }
             }            
@@ -1116,9 +1128,31 @@ h3 {
     }
 
     .upper.dimmed {
-        background-color: darken(#ececec, 40%);
+        background-color: darken(#ececec, 35%);
 
         color: #505050; 
+
+        .content {
+            .sentence .revealed {
+                color: inherit;
+            }
+
+            .word.studied {
+                color: inherit;
+            }
+
+            .word:hover {
+                color: inherit;
+            }
+
+            .word.highlight {
+                color: $color6;
+            }
+
+            .word.highlight.low {
+                color: darken($color6, 15%);
+            }
+        }
     }
 
     .buttonBar {
@@ -1166,28 +1200,39 @@ h3 {
         background-color: lightgray;
         height: 50vh;
         display: flex;
-        align-content: center;
+        flex-direction: column;
+        align-items: center;
         padding-top: 3em;
 
         .didYouKnowFact {
             display: block;
             flex-grow: 1;
+            width: 100%;
+            max-width: 500px;
 
             li {
                 padding: 1em;
 
                 .content {
+                    font-size: 1.5em;
+                    line-height: 130%;
+                    text-align: center;
                     background-color: white;
                     display: block;
                     padding: 1em;
                     border-radius: 4 * $unit;
                 }
 
+                .nobr {
+                    display: block;
+                    margin: $unit 0;
+                }
             }
-            
         }
 
         .translation {
+            margin-top: 2em;
+            width: 100%;
             font-style: italic;
             text-align: center;
             font-size: 1.5em;

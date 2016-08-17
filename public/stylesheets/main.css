@@ -652,7 +652,14 @@ h3 {
 
 .study {
   height: 100vh;
-  font-size: 12pt; }
+  font-size: 12pt;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #606060; }
+  .study > .content {
+    background-color: #f8f7f5;
+    max-width: 650px; }
   .study .upper {
     display: flex;
     flex-direction: column;
@@ -695,11 +702,24 @@ h3 {
           margin-left: 0.4em;
           font-size: 40%;
           display: block; }
-      .study .upper .sentence .revealed .word.studied {
-        font-weight: bold; }
+      .study .upper .sentence .revealed {
+        color: #636363; }
+        .study .upper .sentence .revealed .word.studied {
+          color: black;
+          font-weight: bold; }
   .study .upper.dimmed {
-    background-color: #868686;
+    background-color: #939393;
     color: #505050; }
+    .study .upper.dimmed .content .sentence .revealed {
+      color: inherit; }
+    .study .upper.dimmed .content .word.studied {
+      color: inherit; }
+    .study .upper.dimmed .content .word:hover {
+      color: inherit; }
+    .study .upper.dimmed .content .word.highlight {
+      color: #ffd02a; }
+    .study .upper.dimmed .content .word.highlight.low {
+      color: #ddac00; }
   .study .buttonBar {
     height: 0;
     align-items: center;
@@ -734,19 +754,30 @@ h3 {
     background-color: lightgray;
     height: 50vh;
     display: flex;
-    align-content: center;
+    flex-direction: column;
+    align-items: center;
     padding-top: 3em; }
     .study .lower .didYouKnowFact {
       display: block;
-      flex-grow: 1; }
+      flex-grow: 1;
+      width: 100%;
+      max-width: 500px; }
       .study .lower .didYouKnowFact li {
         padding: 1em; }
         .study .lower .didYouKnowFact li .content {
+          font-size: 1.5em;
+          line-height: 130%;
+          text-align: center;
           background-color: white;
           display: block;
           padding: 1em;
           border-radius: 16px; }
+        .study .lower .didYouKnowFact li .nobr {
+          display: block;
+          margin: 4px 0; }
     .study .lower .translation {
+      margin-top: 2em;
+      width: 100%;
       font-style: italic;
       text-align: center;
       font-size: 1.5em; }

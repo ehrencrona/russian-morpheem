@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
-import StudyFactComponent from './StudyFactComponent'
+import StudyFactComponent from './fact/StudyFactComponent'
 import StudyFact from './StudyFact'
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
@@ -20,7 +20,7 @@ interface Props {
 }
 
 interface State {
-    selectedFact: StudyFact
+    selectedFact: number
     known: StudyFact[]
     unknown: StudyFact[]
 }
@@ -32,36 +32,38 @@ export default class DidYouKnowComponent extends Component<Props, State> {
         super(props)
 
         this.state = {
-            selectedFact: props.facts[0],
+            selectedFact: 0,
             known: [],
             unknown: []
         }
     }
 
     render() {
-        let selectedFact = this.state.selectedFact
-
         let next = (known: StudyFact[], unknown: StudyFact[]) => {
-            let i = this.props.facts.indexOf(this.state.selectedFact)
+            let selectedFact = this.state.selectedFact
 
-            if (i == this.props.facts.length-1) {
+            if (selectedFact >= this.props.facts.length-1) {
                 this.props.done(known, unknown)
             }
             else {
                 this.setState({
-                    selectedFact: this.props.facts[i+1],
+                    selectedFact: selectedFact+1,
                     known: known,
                     unknown: unknown
                 })
+
+                this.props.factSelected(this.props.facts[selectedFact])
             }
         }
 
+        let selectedFact = this.props.facts[this.state.selectedFact]
+
         let knew = () => {
-            next(this.state.known.concat([ this.state.selectedFact ]), this.state.unknown)
+            next(this.state.known.concat([ selectedFact ]), this.state.unknown)
         }
 
         let didntKnow = () => {
-            next(this.state.known, this.state.unknown.concat([ this.state.selectedFact ]))
+            next(this.state.known, this.state.unknown.concat([ selectedFact ]))
         }
 
         return <div>

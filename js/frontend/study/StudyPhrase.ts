@@ -26,6 +26,16 @@ export default class StudyPhrase implements StudyWord {
         words.forEach((w) => this.facts = this.facts.concat(w.facts))
     }
 
+    isPartOfPhrase(phrase: Phrase) {
+        return this.id == phrase.id
+    }
+
+    hasFact(fact: Fact) {
+        let id = fact.getId()
+
+        return !!this.facts.find(fact => fact.fact.getId() == id)
+    }
+
     getFormHint() {
         return ''
     }

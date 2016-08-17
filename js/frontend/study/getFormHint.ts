@@ -9,13 +9,7 @@ import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
 
 function isStudiedWord(word: StudyWord, studiedFacts: Fact[]) {
-    return !!studiedFacts.find((studiedFact) => 
-        !!word.facts.find((f) => {
-            if (f.fact.getId() == studiedFact.getId()) {
-                return true
-            }
-        })
-    )
+    return !!studiedFacts.find((studiedFact) => word.hasFact(studiedFact))
 }
 
 export default function getFormHint(forWord: Word, words: StudyWord[], studiedFacts: Fact[]): string {

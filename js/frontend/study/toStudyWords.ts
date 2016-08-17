@@ -9,6 +9,7 @@ import Words from '../../shared/Words'
 import Sentence from '../../shared/Sentence'
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseCase from '../../shared/phrase/PhraseCase'
 import EnglishPatternFragment from '../../shared/phrase/EnglishPatternFragment' 
 import WordMatch from '../../shared/phrase/WordMatch'
 import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
@@ -35,14 +36,24 @@ function isWorthExplaining(fact: Fact, word: Word) {
 export function wordToStudyWord(word: Word, words: StudyWord[], studiedFacts: Fact[]): StudyWord {
     let facts: StudyFact[] = []
 
-    let result = {
+    let result: StudyWord = {
         id: word.getId(),
         jp: word.jp,
         getHint: () => word.getEnglish(),
         getFormHint: () => getFormHint(word, words, studiedFacts),
+        hasFact: (fact: Fact) => {
+            return !!facts.find(f => f.fact.getId() == fact.getId())
+        },
         form: (word instanceof InflectedWord ? FORMS[word.form] : null),
         facts: facts,
-        wordFact: word
+        wordFact: word,
+        isPartOfPhrase: (phrase: Phrase) => {
+            return !!facts.find(f => {
+                let fact = f.fact
+
+                return fact instanceof PhraseCase && fact.phrase.id == phrase.id 
+            })
+        }
     }
 
     word.visitFacts((fact: Fact) => {
