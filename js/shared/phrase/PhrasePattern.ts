@@ -160,7 +160,7 @@ export default class PhrasePattern {
                     placeholderCount++
                 }
 
-                result.push({
+                let fragment: EnglishPatternFragment = {
                     placeholder: placeholder,
                     enWithJpForCases: (match: Match) => {
                         
@@ -200,32 +200,9 @@ export default class PhrasePattern {
                             }).join(' ')
                         }
                         else {
-                            let replace: { [key: string]: Word[]} = {}
-
-                            match.words.forEach((m) => {
-                                let mStr = m.wordMatch.toString()
-
-                                if (en.indexOf(mStr) >= 0) {
-                                    let r = replace[mStr]
-
-                                    if (!r) {
-                                        r = []
-                                        replace[mStr] = r
-                                    }
-
-                                    r.push(m.word)
-                                }
-                            })
-
-                            Object.keys(replace).forEach((r) => {
-                                en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 
-                                    (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)
-                                ).join(' '))
-                            })
-
-                            return en                                     
+                            return fragment.en(match)
                         }
-
+                        
                     },
                     en: (match: Match) => {
                         let placeholders = en.match(/\(([^)]*)\)/g) || []
@@ -346,7 +323,9 @@ export default class PhrasePattern {
 
                         return en                                     
                     } 
-                })
+                }
+                
+                result.push(fragment)
             })
         })
 
