@@ -120,11 +120,9 @@ export default class StudyContainerComponent extends Component<Props, State> {
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
         this.setState({
-            sentence: this.props.corpus.sentences.get(2029),
+            sentence: this.props.corpus.sentences.get(2629),
             facts: [
-                this.props.corpus.facts.get('в-году'),
-                (this.props.corpus.facts.get('в-году') as Phrase).getCaseFact(GrammaticalCase.PREP),
-                (this.props.corpus.facts.get('в-году') as Phrase).getCaseFact(GrammaticalCase.LOC)
+                this.props.corpus.facts.get('егоadj@datm')
             ]
         })
 
@@ -178,6 +176,8 @@ console.log('Sentence: ' + sentence.toString())
 
 console.log('Fact ' + fact.getId())
 
+        let studiedFacts = [ fact ]
+
         if (fact instanceof Phrase) {
             fact.getCaseFacts().forEach((caseFact) => {
                 if (this.oughtToKnow(caseFact)) {
@@ -190,8 +190,6 @@ console.log('Fact ' + fact.getId())
                 additionalFact = fact.phrase
             }
         }
-
-        let studiedFacts = [ fact ]
 
         if (additionalFact) {
             console.log('Additional fact ' + additionalFact.getId())
@@ -227,6 +225,11 @@ console.log('Fact ' + fact.getId())
                             console.log('Additional fact ' + additionalFact.getId())
 
                             studiedFacts.push(additionalFact)
+
+                            // remove the original, it's covered by the additional fact
+                            if (studiedFacts[0] == fact) {
+                                studiedFacts.splice(0, 1)
+                            }
 
                             return true
                         }

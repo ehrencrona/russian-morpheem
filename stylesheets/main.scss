@@ -1122,7 +1122,16 @@ h3 {
             .revealed {
                 color: $color14;
 
+                @keyframes flash {
+                    0%   { text-shadow: none; }
+                    66%  { text-shadow: 0px 0px 0.03em black; }
+                    100%  { text-shadow: none; }
+                }
+
                 .word.studied {
+                    animation-name: flash;
+                    animation-duration: 0.2s;
+                    animation-delay: 0.1s;
                     color: black;
                     font-weight: bold;
                 }
