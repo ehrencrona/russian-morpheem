@@ -697,8 +697,7 @@ h3 {
       .study .upper .sentence .hidden .word.studied {
         color: darkgray;
         background-color: white;
-        padding: 0 0.1em;
-        display: inline-block; }
+        padding: 0 0.1em; }
         .study .upper .sentence .hidden .word.studied .form {
           color: #f8f7f5;
           margin-left: 0.4em;
