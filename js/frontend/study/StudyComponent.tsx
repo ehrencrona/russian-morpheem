@@ -263,7 +263,6 @@ export default class StudyComponent extends Component<Props, State> {
                 facts={ this.state.didYouKnow} 
                 factSelected={ (fact) => { this.setState({ highlightFact: fact }) } }
                 done={ (known, unknown) => {
-console.log('got done')
                     this.setState({
                         didYouKnow: null,
                         unknownFacts: this.state.unknownFacts.concat(unknown),

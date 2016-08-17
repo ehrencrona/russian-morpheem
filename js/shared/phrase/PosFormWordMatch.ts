@@ -16,11 +16,15 @@ export const POS_NAMES = {
     adverb: 'adv'
 }
 
+function getDefaultQuantifier(pos: string) {
+    return pos ? AT_LEAST_ONE_QUANTIFIER : EXACT_MATCH_QUANTIFIER
+}
+
 export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch, WordMatch {
     posName: string 
 
     constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
-        super((!quantifier && pos ? AT_LEAST_ONE_QUANTIFIER : quantifier))
+        super(quantifier || getDefaultQuantifier(pos))
 
         this.form = form
         this.formStr = formStr
@@ -64,16 +68,16 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch implements
     }
 
     toString() {
-        if (this.pos && !this.form && this.quantifier == EXACT_MATCH_QUANTIFIER) {
-            return this.pos
+        if (this.form && !this.pos && this.quantifier == getDefaultQuantifier(this.pos) && !POS_NAMES[this.formStr]) {
+            return this.formStr
         }
 
-        if (this.form && !this.pos && this.quantifier == ANY_MATCH_QUANTIFIER) {
-            return this.formStr
+        if (this.pos && !this.form && this.quantifier == getDefaultQuantifier(this.pos) && !FORMS[this.pos]) {
+            return this.pos
         }
 
         return (this.pos ? this.pos : '') + '@' + 
             (this.formStr ? this.formStr : '') + 
-            (this.quantifier == (this.pos ? AT_LEAST_ONE_QUANTIFIER : EXACT_MATCH_QUANTIFIER) ? '' : this.quantifier)
+            (this.quantifier != getDefaultQuantifier(this.pos) ? this.quantifier : '')
     }
 }

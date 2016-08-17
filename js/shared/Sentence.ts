@@ -55,9 +55,16 @@ export default class Sentence {
                 .setEnglish(data.english)
 
         if (data.phrases) {    
-            (data.phrases as string[]).forEach((phraseId) => 
-                sentence.addPhrase(phrases.get(phraseId))
-            )
+            (data.phrases as string[]).forEach((phraseId) => {
+                let phrase = phrases.get(phraseId)
+
+                if (phrase) {
+                    sentence.addPhrase(phrase)
+                }
+                else {
+                    console.warn(`Could not find phrase ${phraseId}`)
+                }
+            })
         }
 
         return sentence        

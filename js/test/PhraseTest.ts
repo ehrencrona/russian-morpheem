@@ -78,19 +78,25 @@ describe('Phrase', function() {
     })
 
     it('converts to str and back', function () {
-        function testStr(originalStr: string) {
+        function testStr(originalStr: string, becomesStr?: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)
 
             phrase.setCorpus(corpus)
 
-            expect(phrase.toString()).to.equal(originalStr)
+            expect(phrase.toString()).to.equal(becomesStr || originalStr )
         }
 
         testStr('в[loc]@ библиотека@prep')
         testStr('в[loc]@ я|библиотека@prepositional')
         testStr('в[loc]@ я|библиотека@')
-        testStr('в[dir]@ @prep')
+        testStr('в[dir]@ prep')
         testStr('в[loc]@ tag:location')
+        testStr('noun prep')
+        testStr('noun @prep!', 'noun prep')
+        testStr('noun@+ @prep+', 'noun @prep+')
+        testStr('noun@! @prep+')
+        testStr('noun@? @prep?')
+        testStr('noun@* @prep*')
     })
 
     it('respects quantifiers', function () {

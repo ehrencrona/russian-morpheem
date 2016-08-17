@@ -69,7 +69,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
         return <div>
             <div className='buttonBar'>
                 <div className='button left smallText' onClick={ knew }>I knew<br/>that...</div>
-                <div className='button right smallText' onClick={ didntKnow }>I didn't know<br/>that...</div>
+                <div className='button right smallText' onClick={ didntKnow }>Study this<br/>again</div>
             </div>
             <div className='lower'>
                 <ul className='didYouKnowFact'>
