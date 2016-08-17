@@ -17,6 +17,12 @@ export default function(corpus: Corpus) {
         try {
             let phrase = Phrase.fromJson(req.body, corpus.words, corpus.inflections)
 
+            // try converting it to a string and back again. if that doesn't work we will break the server writing the file
+            // it shouldn't happen, but it does.
+            Phrase.fromString(
+                phrase.id, phrase.toString(), '',  
+                corpus.words, corpus.inflections)
+
             if (phrase.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');
             }
