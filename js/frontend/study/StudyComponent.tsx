@@ -183,7 +183,7 @@ export default class StudyComponent extends Component<Props, State> {
 
         let addFact = (fact: StudyFact) =>
             (this.props.trivialKnowledge.isKnown(fact.fact) && 
-                !this.props.facts.find(f => fact.fact.getId() != f.getId()) ?
+                !this.props.facts.find(f => fact.fact.getId() == f.getId()) ?
                 known :
                 unknown).push(fact)
 

@@ -1078,15 +1078,19 @@ h3 {
             overflow: hidden;
             line-height: 130%;
 
+            .nobr { 
+                white-space: nowrap
+            }
+
             .content {
                 display: inline-block;
 
                 .space {
-                    display: inline-block;                    
+                    display: inline;                    
                 }
 
                 .word {
-                    display: inline-block;
+                    display: inline;
                     cursor: pointer;
                 }
 
@@ -1326,7 +1330,10 @@ h3 {
     }
 
     .debugButtonBar {
-        display: none;
+        @media (max-width: 600px) {
+            display: none;
+        }
+
         position: fixed;
         bottom: 0;
         right: 0;

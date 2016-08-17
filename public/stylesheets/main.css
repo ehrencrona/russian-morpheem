@@ -680,12 +680,14 @@ h3 {
       flex-grow: 1;
       overflow: hidden;
       line-height: 130%; }
+      .study .upper .sentence .nobr {
+        white-space: nowrap; }
       .study .upper .sentence .content {
         display: inline-block; }
         .study .upper .sentence .content .space {
-          display: inline-block; }
+          display: inline; }
         .study .upper .sentence .content .word {
-          display: inline-block;
+          display: inline;
           cursor: pointer; }
         .study .upper .sentence .content .word:hover {
           color: #766db0; }
@@ -838,10 +840,12 @@ h3 {
       .study .lower .swimlane.lower ul li .content {
         background-color: #cacaca; }
   .study .debugButtonBar {
-    display: none;
     position: fixed;
     bottom: 0;
     right: 0; }
+    @media (max-width: 600px) {
+      .study .debugButtonBar {
+        display: none; } }
   .study .factSelectorInspector {
     margin: 8px; }
     .study .factSelectorInspector ul li {

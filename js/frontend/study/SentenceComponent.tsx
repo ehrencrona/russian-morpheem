@@ -96,10 +96,19 @@ export default class SentenceComponent extends Component<Props, State> {
                         else {
                             result.push(' ')
                         }
-                    }                
-                }
 
-                result.push(callback(item, index))
+                        result.push(callback(item, index))
+                    }
+                    else {
+                        result[result.length-1] = <span className='nobr' key={'nobr' + index } >
+                            { result[result.length-1] }
+                            { callback(item, index) }
+                        </span>
+                    }
+                }
+                else {
+                    result.push(callback(item, index))
+                }
             })
 
             return result
