@@ -52,7 +52,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
                     unknown: unknown
                 })
 
-                this.props.factSelected(this.props.facts[selectedFact])
+                this.props.factSelected(this.props.facts[selectedFact+1])
             }
         }
 
