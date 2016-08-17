@@ -26,6 +26,7 @@ import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
+import htmlEscape from '../../shared/util/htmlEscape'
 
 import DidYouKnowComponent from './DidYouKnowComponent'
 import StudyFact from './StudyFact'
@@ -253,7 +254,8 @@ export default class StudyComponent extends Component<Props, State> {
 
     renderSentenceTranslation() {
         return <div className='lower'>
-            <div className='translation'>{ this.props.sentence.en() }</div> 
+            <div className='translation'  dangerouslySetInnerHTML={ 
+                { __html: htmlEscape(this.props.sentence.en()).replace(/ — /g, '<br/>— ') } }/>
         </div>
     }
 

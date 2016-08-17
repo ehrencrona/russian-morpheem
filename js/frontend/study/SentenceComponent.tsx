@@ -89,7 +89,11 @@ export default class SentenceComponent extends Component<Props, State> {
 
             list.forEach((item, index) => {
                 if (index > 0) {
-                    if (isWordWithSpaceBefore(item)) {
+                    if (item.jp == '—') {
+                        result.push(<br/>)
+                        result.push(callback(item, index))
+                    }
+                    else if (isWordWithSpaceBefore(item)) {
                         if (this.isWordStudied(item) && this.isWordStudied(list[index-1])) {
                             result.push(<span key={'space' + index } className='space studied'>&nbsp;</span>)
                         }
