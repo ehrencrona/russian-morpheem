@@ -1086,7 +1086,8 @@ h3 {
                 display: inline-block;
 
                 .space {
-                    display: inline;                    
+                    /* if it's not inline-block we get no linebreaks within the studied phrase */
+                    display: inline-block;
                 }
 
                 .word {

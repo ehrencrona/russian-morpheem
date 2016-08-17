@@ -685,7 +685,8 @@ h3 {
       .study .upper .sentence .content {
         display: inline-block; }
         .study .upper .sentence .content .space {
-          display: inline; }
+          /* if it's not inline-block we get no linebreaks within the studied phrase */
+          display: inline-block; }
         .study .upper .sentence .content .word {
           display: inline;
           cursor: pointer; }
