@@ -120,7 +120,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
         this.setState({
-            sentence: this.props.corpus.sentences.get(2813),
+            sentence: this.props.corpus.sentences.get(2629),
             facts: [
                 this.props.corpus.facts.get('егоadj@datm')
             ]

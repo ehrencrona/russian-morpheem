@@ -739,12 +739,18 @@ h3 {
     position: relative;
     z-index: 20;
     flex-wrap: nowrap; }
+    @media (min-width: 600px) {
+      .study .buttonBar {
+        font-size: 1.5em; } }
     .study .buttonBar .button, .study .buttonBar .tab-header .tab-close, .tab-header .study .buttonBar .tab-close, .study .buttonBar .pending .unacceptable, .pending .study .buttonBar .unacceptable {
       display: block;
       margin: 0;
       font-size: 1.5em;
       padding: 12px 1em;
       border-radius: 1em; }
+      @media (max-width: 400px) {
+        .study .buttonBar .button .line, .study .buttonBar .tab-header .tab-close .line, .tab-header .study .buttonBar .tab-close .line, .study .buttonBar .pending .unacceptable .line, .pending .study .buttonBar .unacceptable .line {
+          display: block; } }
     .study .buttonBar .button.smallText, .study .buttonBar .tab-header .smallText.tab-close, .tab-header .study .buttonBar .smallText.tab-close, .study .buttonBar .pending .smallText.unacceptable, .pending .study .buttonBar .smallText.unacceptable {
       font-size: 1.2em;
       line-height: 125%; }

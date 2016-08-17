@@ -1174,12 +1174,23 @@ h3 {
         position: relative;
         z-index: 20;
         flex-wrap: nowrap;
+
+        @media (min-width: 600px) {
+            font-size: 1.5em;
+        }
+
         .button {
             display: block;
             margin: 0;
             font-size: 1.5em;
             padding: 3*$unit 1em;
             border-radius: 1em;
+
+            .line {
+                @media (max-width: 400px) {
+                    display: block;
+                }
+            }
         }
 
         .button.smallText {

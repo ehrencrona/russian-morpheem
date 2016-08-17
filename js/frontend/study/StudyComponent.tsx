@@ -290,8 +290,8 @@ export default class StudyComponent extends Component<Props, State> {
         else if (this.state.stage == Stage.REVEAL) {
             return <div>
                 <div className='buttonBar'>
-                    <div className='button left small' onClick={ () => this.iWasRight() }>I was<br/>right</div>
-                    <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) }>I was<br/>wrong</div>
+                    <div className='button left small' onClick={ () => this.iWasRight() }><span className='line'>I was</span> right</div>
+                    <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) }><span className='line'>I was</span> wrong</div>
                 </div>
                 { this.renderSentenceTranslation() }
             </div>
