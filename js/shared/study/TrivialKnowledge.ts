@@ -1,6 +1,6 @@
 
 import Fact from '../fact/Fact'
-import { Exposure, Knowledge } from '../study/Exposure'
+import { Exposure, Knowledge, Skill } from '../study/Exposure'
 
 interface LastStudied {
     fact: string,
@@ -29,24 +29,26 @@ export default class TrivialKnowledge {
         exposures.forEach((exposure) => {
 
             if (exposure.knew == Knowledge.KNEW) {
-                let lastStudied = this.known[exposure.fact]
+                if (exposure.skill != Skill.RECOGNITION) {
+                    let lastStudied = this.known[exposure.fact]
 
-                if (!lastStudied) {
-                    lastStudied = {
-                        fact: exposure.fact,
-                        time: exposure.time,
-                        knownTimes: 0
+                    if (!lastStudied) {
+                        lastStudied = {
+                            fact: exposure.fact,
+                            time: exposure.time,
+                            knownTimes: 0
+                        }
+
+                        this.known[exposure.fact] = lastStudied
+                    }
+                    else if (exposure.time.getTime() - lastStudied.time.getTime() < 30000) {
+                        // lots of fast exposures don't count
+                        return
                     }
 
-                    this.known[exposure.fact] = lastStudied
+                    lastStudied.time = exposure.time
+                    lastStudied.knownTimes++
                 }
-                else if (exposure.time.getTime() - lastStudied.time.getTime() < 30000) {
-                    // lots of fast exposures don't count
-                    return
-                }
-
-                lastStudied.time = exposure.time
-                lastStudied.knownTimes++
             }
             else {
                 delete this.known[exposure.fact]

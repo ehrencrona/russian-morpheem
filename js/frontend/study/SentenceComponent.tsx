@@ -175,7 +175,7 @@ export default class SentenceComponent extends Component<Props, State> {
                     capitalize = word.jp && Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
 
                     return <div key={ index } className={ className } onClick={ () => this.props.wordClicked(word) }>
-                            { text }
+                            { text || <span>&nbsp;</span>}
                         { (formHint ?
                             <span className='form'>{ formHint }</span>
                             :
@@ -198,17 +198,24 @@ export default class SentenceComponent extends Component<Props, State> {
     }
 
     componentDidUpdate() {
-        this.resize()        
+        this.resize()
     }
 
     resize() {
         let container = (this.refs['container'] as HTMLElement)
+        let content = (this.refs['content'] as HTMLElement)
+
+        function getWidth(element: HTMLElement) {
+            return parseInt(window.getComputedStyle(element, null).getPropertyValue('width').replace('px', ''))
+        }
+
+        function getHeight(element: HTMLElement) {
+            return parseInt(window.getComputedStyle(element, null).getPropertyValue('height').replace('px', ''))
+        }
 
         let fillRatio = () => {
-            return ((this.refs['content'] as HTMLElement).clientWidth /
-                    (this.refs['container'] as HTMLElement).clientWidth) * 
-                ((this.refs['content'] as HTMLElement).clientHeight /
-                    (this.refs['container'] as HTMLElement).clientHeight)  
+            return (getWidth(content) / getWidth(container)) * 
+                (getHeight(content) / getHeight(container))  
         }
 
         let trySize = (lo: number, mid: number, hi: number) => {
@@ -241,7 +248,7 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), MAX_FONT_SIZE)
 
-        trySize(0, guesstimate, Math.min(container.clientHeight, MAX_FONT_SIZE))
+        trySize(0, guesstimate, Math.min(getWidth(container), MAX_FONT_SIZE))
 
         console.log('done')
     }

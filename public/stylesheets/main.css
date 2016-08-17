@@ -761,14 +761,16 @@ h3 {
       border-bottom-left-radius: 0;
       border-top-left-radius: 0;
       margin-right: 5%;
-      text-align: left; }
+      text-align: left;
+      border-left: none; }
     .study .buttonBar .button.right, .study .buttonBar .tab-header .right.tab-close, .tab-header .study .buttonBar .right.tab-close, .study .buttonBar .pending .right.unacceptable, .pending .study .buttonBar .right.unacceptable {
       width: 50%;
       text-align: right;
       margin-left: 5%;
       flex-grow: 1;
       border-bottom-right-radius: 0;
-      border-top-right-radius: 0; }
+      border-top-right-radius: 0;
+      border-right: none; }
   .study .lower {
     background-color: lightgray;
     height: 50vh;

@@ -1207,6 +1207,7 @@ h3 {
             border-top-left-radius: 0;
             margin-right: 5%;
             text-align: left;
+            border-left: none;
         }
 
         .button.right {
@@ -1217,6 +1218,7 @@ h3 {
             @extend .border-box-sizing;
             border-bottom-right-radius: 0; 
             border-top-right-radius: 0; 
+            border-right: none;
         }
     }
 
