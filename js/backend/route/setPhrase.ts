@@ -2,6 +2,7 @@ import * as express from 'express'
 
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
+import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import getAuthor from '../getAuthor'
 
 import { storeSuccess } from '../listenForChanges'
@@ -19,9 +20,11 @@ export default function(corpus: Corpus) {
 
             // try converting it to a string and back again. if that doesn't work we will break the server writing the file
             // it shouldn't happen, but it does.
-            Phrase.fromString(
-                phrase.id, phrase.toString(), '',  
-                corpus.words, corpus.inflections)
+            phrase.patterns.forEach((pattern) => {
+                PhrasePattern.fromString(
+                    pattern.toString(), '',  
+                    corpus.words, corpus.inflections)
+            })
 
             if (phrase.id != req.params['id']) {
                 throw new Error('Inconsistent ID.');

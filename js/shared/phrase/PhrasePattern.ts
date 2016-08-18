@@ -474,7 +474,7 @@ export default class PhrasePattern {
                             let result = words.inflectableWordsById[w]
 
                             if (!result) {
-                                throw new Error(`Unknown word "${w}". Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
+                                throw new Error(`Word "${w}" (specified in "${str}" in "${line}") is unknown or uninflected. Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
                             }
 
                             return result
