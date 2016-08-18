@@ -73,7 +73,7 @@ export default class TrivialKnowledge {
             return true
         }
 
-        return (new Date().getTime()) - lastStudied.time.getTime() >= FORGETTING_TIME[lastStudied.knownTimes]
+        return (new Date().getTime()) - lastStudied.time.getTime() < FORGETTING_TIME[lastStudied.knownTimes]
     }
 
     getAllTrivialFacts() {

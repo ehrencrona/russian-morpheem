@@ -379,60 +379,6 @@ console.log('Sentence: ' + sentence.toString())
             </div>
 
             { this.renderLower(hiddenFacts) }
-
-                {/* (this.state.knownFacts.length || this.state.unknownFacts.length ? 
-
-                    <div className='swimlane'>
-                        <h3>I didn't know</h3>
-                        <ul className='unknown'>
-                        {
-                            (this.state.unknownFacts).map((studyFact) => 
-                                <StudyFactComponent 
-                                    key={ studyFact.fact.getId() }
-                                    hiddenFacts={ (reveal ? [] : hiddenFacts) }
-                                    fact={ studyFact.fact } 
-                                    studyFact={ studyFact } 
-                                    sentence={ this.props.sentence } 
-                                    corpus={ this.props.corpus }
-                                    knowledge={ this.props.knowledge } 
-                                    onKnew={ (fact: StudyFact) => this.addFacts([ fact ], []) }
-                                    known={ true }
-                                />)
-                        }
-                        </ul>
-                    </div>
-                    
-                 : 
-
-                    <div/>
-                )}
-
-                { (this.state.knownFacts.length ? 
-
-                    <div className='swimlane lower'>
-                        <h3>I knew</h3>
-                        <ul className='unknown'>
-                        {
-                            (this.state.knownFacts).map((studyFact) => 
-                                <StudyFactComponent 
-                                    key={ studyFact.fact.getId() }
-                                    hiddenFacts={ (reveal ? [] : hiddenFacts) }
-                                    fact={ studyFact.fact } 
-                                    studyFact={ studyFact }
-                                    sentence={ this.props.sentence } 
-                                    corpus={ this.props.corpus }
-                                    knowledge={ this.props.knowledge } 
-                                    onKnew={ (fact: StudyFact) => this.addFacts([], [ fact ]) }
-                                    known={ false }
-                                />)
-                        }
-                        </ul>
-                    </div>
-
-                    :
-
-                    <div/>
-                )*/}
         </div>
     }
 }

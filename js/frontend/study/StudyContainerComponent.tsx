@@ -14,6 +14,7 @@ import FactScore from '../../shared/study/FactScore'
 import FixedIntervalFactSelectorInspectorComponent from './FixedIntervalFactSelectorInspectorComponent'
 import SentenceComponent from '../SentenceComponent'
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
+import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
 
 import sentencesForFacts from '../../shared/study/sentencesForFacts'
 import topScores from '../../shared/study/topScores'
@@ -53,6 +54,7 @@ interface State {
     facts?: Fact[]
     showDecks?: boolean
     showComments?: boolean
+    showTrivial?: boolean
     edit?: boolean
 }
 
@@ -271,16 +273,17 @@ console.log('Fact ' + fact.getId())
 
     render() {
         if (this.state.sentence) {
-            return <div className='study'>
-                <StudyComponent 
-                    sentence={ this.state.sentence }
-                    facts={ this.state.facts }
-                    factSelector={ this.factSelector } 
-                    corpus={ this.props.corpus }
-                    knowledge={ this.knowledge }
-                    trivialKnowledge={ this.trivialKnowledge }
-                    onAnswer={ (exposures) => this.onAnswer(exposures)} />            
-
+            return <div className='studyOuter'>
+                <div className='study'>
+                    <StudyComponent 
+                        sentence={ this.state.sentence }
+                        facts={ this.state.facts }
+                        factSelector={ this.factSelector } 
+                        corpus={ this.props.corpus }
+                        knowledge={ this.knowledge }
+                        trivialKnowledge={ this.trivialKnowledge }
+                        onAnswer={ (exposures) => this.onAnswer(exposures)} />            
+                </div>
 
                 {
                     (this.state.showComments ?
@@ -294,6 +297,24 @@ console.log('Fact ' + fact.getId())
                             corpus={ this.props.corpus }
                             sentence={ this.state.sentence }
                             commentBoxOpen={ true }
+                            />
+                    </div>
+                        
+                        :
+
+                    <div/>)
+                }
+
+                {
+                    (this.state.showTrivial ?
+
+                    <div>
+                        <div className='debugButtonBar'>
+                            <div className='button' onClick={ () => this.setState({ showTrivial: false }) }>Close</div>
+                        </div>
+
+                        <TrivialKnowledgeInspectorComponent 
+                            knowledge={ this.trivialKnowledge }
                             />
                     </div>
                         
@@ -346,7 +367,7 @@ console.log('Fact ' + fact.getId())
 
                 {
 
-                    (!this.state.showComments && !this.state.showDecks && !this.state.edit ? 
+                    (!this.state.showComments && !this.state.showDecks && !this.state.edit && !this.state.showTrivial ? 
                     
                     
                         <div className='debugButtonBar'>
@@ -355,6 +376,9 @@ console.log('Fact ' + fact.getId())
                             </div>
                             <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
                                 What am I studying?
+                            </div>
+                            <div className='button' onClick={ () => this.setState({ showTrivial: true }) }>
+                                What do I know?
                             </div>
                             <div className='button' onClick={ () => this.setState({ edit: true }) }>
                                 Edit
