@@ -4,21 +4,13 @@ import { Exposure, Knowledge, Skill } from '../study/Exposure'
 
 interface LastStudied {
     fact: string,
-    time: Date,
+    firstKnew: Date,
+    lastKnew: Date,
     knownTimes: number 
 }
 
 const MIN = 60 * 1000
-
-// if we have got the fact right every time a certain number of times, 
-// for how long are we sure to still think the fact is trivial?  
-const FORGETTING_TIME = [
-    0, 0, 0, MIN
-]
-
-for (let i = 0; i < 7; i++) {
-    FORGETTING_TIME.push(FORGETTING_TIME[FORGETTING_TIME.length-1] * 5)
-}
+const DAY = 24 * 60 * MIN
 
 export default class TrivialKnowledge {
 
@@ -35,18 +27,15 @@ export default class TrivialKnowledge {
                     if (!lastStudied) {
                         lastStudied = {
                             fact: exposure.fact,
-                            time: exposure.time,
+                            firstKnew: exposure.time,
+                            lastKnew: exposure.time,
                             knownTimes: 0
                         }
 
                         this.known[exposure.fact] = lastStudied
                     }
-                    else if (exposure.time.getTime() - lastStudied.time.getTime() < 30000) {
-                        // lots of fast exposures don't count
-                        return
-                    }
 
-                    lastStudied.time = exposure.time
+                    lastStudied.lastKnew = exposure.time
                     lastStudied.knownTimes++
                 }
             }
@@ -69,11 +58,12 @@ export default class TrivialKnowledge {
             return false
         }
 
-        if (lastStudied.knownTimes >= FORGETTING_TIME.length) {
-            return true
+        if (lastStudied.knownTimes < 2) {
+            return false
         }
 
-        return (new Date().getTime()) - lastStudied.time.getTime() < FORGETTING_TIME[lastStudied.knownTimes]
+        return new Date().getTime() + lastStudied.firstKnew.getTime() <
+            2 * lastStudied.lastKnew.getTime()
     }
 
     getAllTrivialFacts() {
