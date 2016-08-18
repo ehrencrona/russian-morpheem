@@ -106,11 +106,19 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     next(...addKnownFacts: StudyFact[]) {
+        let productionFacts: { [id: string]: boolean } = {}
+
+        this.state.words.forEach(w => {
+            if (this.isWordHidden(w)) {
+                w.facts.forEach(f => productionFacts[f.fact.getId()] = true)
+            }
+        })
+
         let factToExposure = (fact: StudyFact, knew: Knowledge) => {
             return {
                 fact: fact.fact.getId(),
                 time: new Date(),
-                skill: (this.props.facts.find(f => fact.fact.getId() == f.getId()) ? Skill.PRODUCTION : Skill.RECOGNITION),
+                skill: productionFacts[fact.fact.getId()] ? Skill.PRODUCTION : Skill.RECOGNITION,
                 knew: knew,
                 user: -1,
                 sentence: this.props.sentence.id
