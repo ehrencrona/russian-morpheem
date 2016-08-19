@@ -10,6 +10,8 @@ import Sentence from '../../shared/Sentence'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import Phrase from '../../shared/phrase/Phrase'
 
+import animate from './animate'
+
 const MAX_FONT_SIZE = 64;
 
 class WordGroup {
@@ -46,6 +48,14 @@ export default class SentenceComponent extends Component<Props, State> {
 
     componentWillReceiveProps(nextProps) {
         this.setState(this.getStateForProps(nextProps))
+    }
+
+    animateOut(callback: () => any) {
+        animate(this.refs['container'] as HTMLElement, 'leave', 200, callback)
+    }
+
+    animateIn(callback: () => any) {
+        animate(this.refs['container'] as HTMLElement, 'enter', 200, callback)
     }
 
     isStudiedFact(fact: Fact) {

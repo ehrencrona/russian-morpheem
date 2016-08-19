@@ -357,7 +357,7 @@ console.log('Fact ' + fact.getId())
                                 corpus={ this.props.corpus } />
 
                         </div>
-                    
+
                     :
 
                         <div/>
@@ -368,8 +368,7 @@ console.log('Fact ' + fact.getId())
                 {
 
                     (!this.state.showComments && !this.state.showDecks && !this.state.edit && !this.state.showTrivial ? 
-                    
-                    
+
                         <div className='debugButtonBar'>
                             <div className='button' onClick={ () => this.setState({ showComments: true }) }>
                                 Comment
@@ -386,9 +385,9 @@ console.log('Fact ' + fact.getId())
                         </div>
 
                     :
-                    
+
                         <div/>
-                    
+
                     )
 
                 }

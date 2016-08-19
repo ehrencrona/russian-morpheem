@@ -1040,6 +1040,18 @@ h3 {
     background-color: $color6-light;
 }
 
+$animationLength: 0.2s;
+
+@keyframes swingout {
+    from { transform: translate3d(0, 0, 0) }
+    to   { transform: translate3d(-100vw, 0, 0) }
+}
+
+@keyframes swingin {
+    from { transform: translate3d(100vw, 0, 0) }
+    to   { transform: translate3d(0, 0, 0) }
+}
+
 .study {
     height: 100vh;
     font-size: 12pt;
@@ -1142,6 +1154,18 @@ h3 {
                 }
             }            
         }
+        
+        .sentence.leave {
+            animation-name: swingout;
+            animation-duration: $animationLength;
+
+            transform: translate3d(-100vw, 0, 0);
+        }
+
+        .sentence.enter {
+            animation-name: swingin;
+            animation-duration: $animationLength;
+        }
     }
 
     .upper.dimmed {
@@ -1234,8 +1258,6 @@ h3 {
         padding-top: 3em;
         @extend .border-box-sizing;
 
-        $animationLength: 0.2s;
-
         .didYouKnowFact {
             display: block;
             flex-grow: 1;
@@ -1262,11 +1284,6 @@ h3 {
                 .full {
                     background-color: #e6a00e;
                 }
-            }
-
-            @keyframes swingin {
-                from { transform: translate3d(100vw, 0, 0) }
-                to   { transform: translate3d(0, 0, 0) }
             }
 
             li {
@@ -1303,11 +1320,6 @@ h3 {
         }
 
         .didYouKnowFact.leave {
-            @keyframes swingout {
-                from { transform: translate3d(0, 0, 0) }
-                to   { transform: translate3d(-100vw, 0, 0) }
-            }
-
             li .content {
                 animation-name: swingout;
                 animation-duration: $animationLength;

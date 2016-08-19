@@ -9,6 +9,7 @@ import StudyFact from './StudyFact'
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
+import animate from './animate'
 
 interface Props {
     facts: StudyFact[]
@@ -29,7 +30,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-const ANIMATION_LENGTH = 195
+const ANIMATION_LENGTH = 200
 
 export default class DidYouKnowComponent extends Component<Props, State> {
     constructor(props) {
@@ -44,16 +45,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
 
     render() {
         let next = (known: StudyFact[], unknown: StudyFact[]) => {
-            let ended = false;
-
-            let nextFact = () =>  {
-                if (ended) {
-                    return
-                }
-
-                ended = true
-
-                container.classList.remove('leave')
+            animate(this.refs['container'] as HTMLElement, 'leave', ANIMATION_LENGTH, () =>  {
                 let selectedFact = this.state.selectedFact
 
                 if (selectedFact >= this.props.facts.length-1) {
@@ -68,14 +60,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
 
                     this.props.factSelected(this.props.facts[selectedFact+1])
                 }
-            }
-
-            let container = this.refs['container'] as HTMLElement;
-
-            container.addEventListener('animationend', nextFact)
-            container.classList.add('leave')
-    
-            setTimeout(nextFact, 2 * ANIMATION_LENGTH)
+            })
         }
 
         let selectedFact = this.props.facts[this.state.selectedFact]

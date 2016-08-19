@@ -155,9 +155,12 @@ export default class StudyComponent extends Component<Props, State> {
 
         console.log('Sending exposures: ' + 
             exposures.map((exp) => exp.fact + ': ' + 
-                (exp.knew == Knowledge.KNEW ? 'knew' : 'didnt know') + ' (skill ' + exp.skill + ')').join(', '))
+                (exp.knew == Knowledge.KNEW ? 'knew' : 'didnt know') + ' (skill ' + exp.skill + ')').join(', '));
 
-        this.props.onAnswer(exposures)
+        (this.refs['sentence'] as SentenceComponent).animateOut(() => 
+            this.props.onAnswer(exposures)
+        )
+
     }
 
     sortFactsToExplain(facts: StudyFact[]) {
@@ -377,6 +380,7 @@ console.log('Sentence: ' + sentence.toString())
                 </div>
 
                 <SentenceComponent
+                    ref='sentence'
                     corpus={ this.props.corpus }
                     reveal={ reveal }
                     words={ this.state.words }
