@@ -215,8 +215,17 @@ export default class SentenceComponent extends Component<Props, State> {
         }
 
         let fillRatio = () => {
-            let result = (getWidth(content) / getWidth(container)) * 
-                (getHeight(content) / getHeight(container))
+            let widthRatio = getWidth(content) / getWidth(container)
+            let heightRatio = getHeight(content) / getHeight(container)
+
+            let result
+
+            if (widthRatio > 1 && widthRatio > heightRatio) {
+                result = widthRatio * widthRatio
+            }
+            else {
+                result = widthRatio * heightRatio 
+            }
 
             this.lastFillRatio = result
 

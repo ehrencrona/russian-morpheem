@@ -114,7 +114,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                 let desc = <div><strong className='nobr'>
                 </strong>the { studyWord.form.name } of <strong className='nobr'>
                     { word.word.getDefaultInflection().jp }
-                </strong> is <strong className='nobr'>
+                </strong> is <strong className='nobr verbatim'>
                     { studyWord.jp }
                 </strong></div>  
         

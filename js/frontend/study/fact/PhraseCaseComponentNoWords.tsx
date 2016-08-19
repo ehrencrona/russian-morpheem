@@ -1,14 +1,14 @@
 
 
 import { Component, createElement } from 'react'
-import Corpus from '../../shared/Corpus'
-import InflectedWord from '../../shared/InflectedWord'
-import Phrase from '../../shared/phrase/Phrase'
-import PhraseCase from '../../shared/phrase/PhraseCase'
-import shouldHideWord from './shouldHideWord'
+import Corpus from '../../../shared/Corpus'
+import InflectedWord from '../../../shared/InflectedWord'
+import Phrase from '../../../shared/phrase/Phrase'
+import PhraseCase from '../../../shared/phrase/PhraseCase'
+import shouldHideWord from '../shouldHideWord'
 
-import { FORMS, CASES } from '../../shared/inflection/InflectionForms'
-import { FactComponentProps } from './fact/StudyFactComponent'
+import { FORMS, CASES } from '../../../shared/inflection/InflectionForms'
+import { FactComponentProps } from '../fact/StudyFactComponent'
 
 let React = { createElement: createElement }
 

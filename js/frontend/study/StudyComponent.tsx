@@ -190,13 +190,21 @@ export default class StudyComponent extends Component<Props, State> {
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
-        let addFact = (fact: StudyFact) =>
+        let factsById: { [ id: string ]: boolean } = {}
+        let facts = []
+
+        let addFact = (fact: StudyFact) => {
+            if (factsById[fact.fact.getId()]) {
+                return
+            }
+
             (this.props.trivialKnowledge.isKnown(fact.fact) && 
                 !this.props.facts.find(f => fact.fact.getId() == f.getId()) ?
                 known :
                 unknown).push(fact)
 
-        let facts = []
+            factsById[fact.fact.getId()] = true
+        }
 
         words.forEach((word) => {
             facts = facts.concat(word.facts.filter((f) => !isGiveaway(f, hiddenFacts)))
@@ -270,8 +278,9 @@ export default class StudyComponent extends Component<Props, State> {
     renderLower(hiddenFacts: StudyFact[]) {
         if (this.state.stage == Stage.DID_YOU_KNOW) {
             return <DidYouKnowComponent 
-                facts={ this.state.didYouKnow} 
+                facts={ this.state.didYouKnow } 
                 factSelected={ (fact) => { this.setState({ highlightFact: fact }) } }
+                factSelector={ this.props.factSelector }
                 done={ (known, unknown) => {
                     this.setState({
                         didYouKnow: null,

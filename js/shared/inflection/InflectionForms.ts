@@ -248,8 +248,7 @@ addForm('std', 'standard form', {})
 addForm('prog', 'progressive', { tense: Tense.PROGRESSIVE })
 addForm('super', 'superlative', { comparison: Comparison.SUPERLATIVE })
 
-export function getFormName(formId: string) {
-    
+export function getFormName(formId: string) {    
     let form = FORMS[formId]
 
     if (form) {

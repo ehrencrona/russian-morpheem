@@ -3,6 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
+import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import StudyFactComponent from './fact/StudyFactComponent'
 import StudyFact from './StudyFact'
 import Fact from '../../shared/fact/Fact'
@@ -15,17 +16,20 @@ interface Props {
     sentence: Sentence
     corpus: Corpus
     knowledge: NaiveKnowledge
+    factSelector: FixedIntervalFactSelector
     done: (known: StudyFact[], unknown: StudyFact[]) => any    
     factSelected: (fact: StudyFact) => any
 }
 
 interface State {
-    selectedFact: number
-    known: StudyFact[]
-    unknown: StudyFact[]
+    selectedFact?: number
+    known?: StudyFact[]
+    unknown?: StudyFact[]
 }
 
 let React = { createElement: createElement }
+
+const ANIMATION_LENGTH = 195
 
 export default class DidYouKnowComponent extends Component<Props, State> {
     constructor(props) {
@@ -40,20 +44,38 @@ export default class DidYouKnowComponent extends Component<Props, State> {
 
     render() {
         let next = (known: StudyFact[], unknown: StudyFact[]) => {
-            let selectedFact = this.state.selectedFact
+            let ended = false;
 
-            if (selectedFact >= this.props.facts.length-1) {
-                this.props.done(known, unknown)
-            }
-            else {
-                this.setState({
-                    selectedFact: selectedFact+1,
-                    known: known,
-                    unknown: unknown
-                })
+            let nextFact = () =>  {
+                if (ended) {
+                    return
+                }
 
-                this.props.factSelected(this.props.facts[selectedFact+1])
+                ended = true
+
+                container.classList.remove('leave')
+                let selectedFact = this.state.selectedFact
+
+                if (selectedFact >= this.props.facts.length-1) {
+                    this.props.done(known, unknown)
+                }
+                else {
+                    this.setState({
+                        selectedFact: selectedFact+1,
+                        known: known,
+                        unknown: unknown,
+                    })
+
+                    this.props.factSelected(this.props.facts[selectedFact+1])
+                }
             }
+
+            let container = this.refs['container'] as HTMLElement;
+
+            container.addEventListener('animationend', nextFact)
+            container.classList.add('leave')
+    
+            setTimeout(nextFact, 2 * ANIMATION_LENGTH)
         }
 
         let selectedFact = this.props.facts[this.state.selectedFact]
@@ -68,11 +90,11 @@ export default class DidYouKnowComponent extends Component<Props, State> {
 
         return <div>
             <div className='buttonBar'>
-                <div className='button left smallText' onClick={ knew }><span className='line'>I knew</span> that...</div>
+                <div className='button left smallText' onClick={ knew }><span className='line'>I knew</span> this</div>
                 <div className='button right smallText' onClick={ didntKnow }><span className='line'>Study this</span> again</div>
             </div>
             <div className='lower'>
-                <ul className='didYouKnowFact'>
+                <ul className='didYouKnowFact' ref='container'>
                     <StudyFactComponent 
                         key={ selectedFact.fact.getId() }
                         hiddenFacts={ this.props.hiddenFacts }
@@ -80,7 +102,8 @@ export default class DidYouKnowComponent extends Component<Props, State> {
                         studyFact={ selectedFact } 
                         sentence={ this.props.sentence } 
                         corpus={ this.props.corpus }
-                        knowledge={ this.props.knowledge } 
+                        knowledge={ this.props.knowledge }
+                        factSelector={ this.props.factSelector } 
                         onKnew={ (fact: StudyFact) => {} }
                         known={ true }
                     />

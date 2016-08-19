@@ -23,7 +23,7 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
             let text = htmlEscape(b.enWithJpForCases(match))
 
             if (!b.placeholder) {
-                text = `<strong>${text}</strong>`
+                text = `<strong className="verbatim">${text}</strong>`
             }
 
             return text

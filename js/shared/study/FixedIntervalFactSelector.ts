@@ -171,6 +171,10 @@ export default class FixedIntervalFactSelector {
     notYetStudying() {
         return this.filterLastStudied((lastStudied, age, interval) => age < interval.max)
     }
+
+    getLastStudied(fact: Fact): LastStudied {
+        return this.exposed[fact.getId()]
+    }
 }
 
 function timeSince(lastStudied: LastStudied, now: Date) {

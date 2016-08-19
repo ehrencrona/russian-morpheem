@@ -36,6 +36,9 @@ $color-bg-inverted: $color4;
 
 $small-font: 60%;
 
+$highlight: #e6bf0e;
+$lowlight: #636363;
+
 html {
     margin: 0;
     padding: 0;
@@ -47,7 +50,6 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
     font-size: 12pt;
     color: $color-fg;
 }
@@ -1077,7 +1079,7 @@ h3 {
             font-size: 2em;
             flex-grow: 1;
             overflow: hidden;
-            line-height: 130%;
+            line-height: 125%;
 
             .nobr { 
                 white-space: nowrap
@@ -1134,6 +1136,7 @@ h3 {
                     animation-name: flash-shadow;
                     animation-duration: 1s;
                     animation-delay: 0.2s;
+                    animation-timing-function: linear;
                     color: black;
                     font-weight: bold; 
                 }
@@ -1142,8 +1145,6 @@ h3 {
     }
 
     .upper.dimmed {
-        background-color: darken(#ececec, 35%);
-
         color: #505050; 
 
         .content {
@@ -1160,11 +1161,11 @@ h3 {
             }
 
             .word.highlight {
-                color: $color6;
+                color: $highlight;
             }
 
             .word.highlight.low {
-                color: darken($color6, 15%);
+                color: $lowlight;
             }
         }
     }
@@ -1184,6 +1185,7 @@ h3 {
         .button {
             display: block;
             margin: 0;
+            font-weight: 700;
             font-size: 1.5em;
             padding: 3*$unit 1em;
             border-radius: 1em;
@@ -1224,7 +1226,7 @@ h3 {
     }
 
     .lower {
-        background-color: lightgray;
+        background-color: #b9b2d4;
         height: 50vh;
         display: flex;
         flex-direction: column;
@@ -1232,23 +1234,65 @@ h3 {
         padding-top: 3em;
         @extend .border-box-sizing;
 
+        $animationLength: 0.2s;
+
         .didYouKnowFact {
             display: block;
             flex-grow: 1;
             width: 100%;
             max-width: 500px;
 
+            .repetitionIndicator {
+                display: flex;
+                float: right;
+                height: 0;
+                position: relative;
+                $move: 6px;
+                margin: -$move (-$move) $move $move;
+
+                $size: 8px;
+
+                > div {
+                    width: $size;
+                    height: $size;
+                    margin-right: 2px;
+                    background-color: #d9d7d4;
+                }
+
+                .full {
+                    background-color: #e6a00e;
+                }
+            }
+
+            @keyframes swingin {
+                from { transform: translate3d(100vw, 0, 0) }
+                to   { transform: translate3d(0, 0, 0) }
+            }
+
             li {
                 padding: 1em;
 
                 .content {
+                    animation-name: swingin;
+                    animation-duration: $animationLength;
+
                     font-size: 1.5em;
                     line-height: 130%;
                     text-align: center;
-                    background-color: white;
+                    background-color: $color9;
                     display: block;
                     padding: 1em;
                     border-radius: 4 * $unit;
+
+                    color: #636363;
+                }
+
+                strong {
+                    color: $lowlight;
+                }
+
+                .verbatim {
+                    color: $highlight;
                 }
 
                 .nobr {
@@ -1258,12 +1302,33 @@ h3 {
             }
         }
 
+        .didYouKnowFact.leave {
+            @keyframes swingout {
+                from { transform: translate3d(0, 0, 0) }
+                to   { transform: translate3d(-100vw, 0, 0) }
+            }
+
+            li .content {
+                animation-name: swingout;
+                animation-duration: $animationLength;
+            }
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
         .translation {
+            animation: fadein 0.3s;
+            font-family: Source Sans Pro;
             @extend .border-box-sizing;
             padding: 0 2em;
             margin-top: 2em;
             width: 100%;
+            color: white;
             font-style: italic;
+            font-weight: 600;
             text-align: center;
             font-size: 1.5em;
         }
