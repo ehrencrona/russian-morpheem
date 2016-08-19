@@ -1049,6 +1049,7 @@ h3 {
     > .content {
         background-color: $color9; 
         max-width: 650px;
+        width: 100%;
     }
 
     .upper {
@@ -1120,21 +1121,21 @@ h3 {
                 }
             }
 
+            @keyframes flash-shadow {
+                0%   { text-shadow: 0px 0px 0em black; }
+                66%  { text-shadow: 0px 0px 0.02em black; }
+                100%  { text-shadow: none; }
+            }
+
             .revealed {
                 color: $color14;
 
-                @keyframes flash {
-                    0%   { text-shadow: none; }
-                    66%  { text-shadow: 0px 0px 0.03em black; }
-                    100%  { text-shadow: none; }
-                }
-
                 .word.studied {
-                    animation-name: flash;
-                    animation-duration: 0.2s;
-                    animation-delay: 0.1s;
+                    animation-name: flash-shadow;
+                    animation-duration: 1s;
+                    animation-delay: 0.2s;
                     color: black;
-                    font-weight: bold;
+                    font-weight: bold; 
                 }
             }            
         }
@@ -1229,6 +1230,7 @@ h3 {
         flex-direction: column;
         align-items: center;
         padding-top: 3em;
+        @extend .border-box-sizing;
 
         .didYouKnowFact {
             display: block;

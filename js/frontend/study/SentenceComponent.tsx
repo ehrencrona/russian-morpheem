@@ -36,6 +36,7 @@ let React = { createElement: createElement }
 
 export default class SentenceComponent extends Component<Props, State> {
     resizeListener = () => this.resize()
+    lastFillRatio: number
 
     constructor(props) {
         super(props)
@@ -90,7 +91,7 @@ export default class SentenceComponent extends Component<Props, State> {
             list.forEach((item, index) => {
                 if (index > 0) {
                     if (item.jp == '—') {
-                        result.push(<br/>)
+                        result.push(<br key={'newline' + index }/>)
                         result.push(callback(item, index))
                     }
                     else if (isWordWithSpaceBefore(item)) {
@@ -214,8 +215,12 @@ export default class SentenceComponent extends Component<Props, State> {
         }
 
         let fillRatio = () => {
-            return (getWidth(content) / getWidth(container)) * 
-                (getHeight(content) / getHeight(container))  
+            let result = (getWidth(content) / getWidth(container)) * 
+                (getHeight(content) / getHeight(container))
+
+            this.lastFillRatio = result
+
+            return result  
         }
 
         let trySize = (lo: number, mid: number, hi: number) => {
@@ -242,6 +247,13 @@ export default class SentenceComponent extends Component<Props, State> {
 
                 trySize(mid, newMid, hi)
             }
+        }
+
+        let last = this.lastFillRatio
+        let fill = fillRatio()
+
+        if (Math.abs(fill - last) < 0.05 && fill <= 1) {
+            return
         }
 
         let currentSize = parseInt(window.getComputedStyle(container, null).getPropertyValue("font-size").replace('px',''))
