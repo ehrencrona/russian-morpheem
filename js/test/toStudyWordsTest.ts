@@ -87,14 +87,13 @@ describe('toStudyWordsTest', () => {
             helovek.inflect('dat'), on, dat.inflect('3'), podarok.inflect('acc')
         ], 0)
 
-        let pattern = PhrasePattern.fromString('@dative+ any verb@+ any @accusative+', 'to [someone] verb@+ [something]', words, inflections)
-        
+        let pattern = PhrasePattern.fromString('@dative+ any verb@+ any @accusative+', 'to [someone] (3) [something]', words, inflections)
+
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
-        phrases.setCorpus(Corpus.createEmpty('ru'))
+        phrase.setCorpus(Corpus.createEmpty('ru'))
+        sentence.phrases.push(phrase)
 
         let match = phrase.match({ words: sentence.words, facts: facts })
-
-        sentence.phrases.push(phrase)
 
         expect(!!match).to.be.true
 
@@ -114,11 +113,10 @@ describe('toStudyWordsTest', () => {
         let pattern = PhrasePattern.fromString('verb@+ @dative+ any @accusative+', 'verb@+ [someone] [something]', words, inflections)
 
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
-        phrases.setCorpus(Corpus.createEmpty('ru'))
+        phrase.setCorpus(Corpus.createEmpty('ru'))
+        sentence.phrases.push(phrase)
 
         let match = phrase.match({ words: sentence.words, facts: facts })
-
-        sentence.phrases.push(phrase)
 
         expect(!!match).to.be.true
 
@@ -135,11 +133,10 @@ describe('toStudyWordsTest', () => {
         let pattern = PhrasePattern.fromString('@dative+ он@ подарок@', '[someone] does do something', words, inflections)
 
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
-        phrases.setCorpus(Corpus.createEmpty('ru'))
+        phrase.setCorpus(Corpus.createEmpty('ru'))
+        sentence.phrases.push(phrase)
 
         let match = phrase.match({ words: sentence.words, facts: facts })
-
-        sentence.phrases.push(phrase)
 
         expect(!!match).to.be.true
 
@@ -149,6 +146,34 @@ describe('toStudyWordsTest', () => {
         expect(studyWords[0].jp).to.equal('человеку')
         expect(studyWords[1].jp).to.equal('он подарока')
         expect(studyWords[2].jp).to.equal('нет')
+    })
+
+    it('case study phrases work', () => {
+        let corpus = Corpus.createEmpty('ru')
+        corpus.phrases.setCorpus(corpus)
+
+        let np = new Phrase('np', [
+            PhrasePattern.fromString('noun@nominative', '[someone]', words, inflections) 
+        ])
+
+        corpus.phrases.add(np)
+
+        let pattern = PhrasePattern.fromString('у phrase:np@gen', '[someone] has', words, inflections)
+        let phrase = new Phrase('у', [ pattern ])
+
+        corpus.phrases.add(phrase)
+
+        let sentence = new Sentence([
+            u, helovek.inflect('gen')
+        ], 0)
+        
+        let match = phrase.match({ words: sentence.words, facts: facts })
+
+        expect(!!match).to.be.true
+
+        let studyWords: StudyWord[] = toStudyWords(sentence, [phrase], corpus)
+
+        expect(studyWords.length).to.equal(3)
     })
 
 })

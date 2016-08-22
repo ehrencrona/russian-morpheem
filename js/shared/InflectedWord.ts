@@ -3,7 +3,7 @@
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
-import { FORMS, Tense, Number, Comparison, GrammaticalCase } from './inflection/InflectionForms' 
+import { FORMS, PartOfSpeech, Tense, Number, Comparison, GrammaticalCase } from './inflection/InflectionForms' 
 import InflectableWord from './InflectableWord'
 import Words from './Words'
 import htmlEscape from './util/htmlEscape'
@@ -141,6 +141,9 @@ export default class InflectedWord extends Word {
         else if (pos == 'adj') {
             if (form.comparison == Comparison.COMPARATIVE) {
                 result = 'comp'
+            }
+            else if (form.pos == PartOfSpeech.ADVERB) {
+                result = 'adv'
             }
             else if (form.number == Number.PLURAL) {
                 result = 'pl'

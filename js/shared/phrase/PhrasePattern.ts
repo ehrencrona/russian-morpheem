@@ -165,6 +165,7 @@ export default class PhrasePattern {
                 }
 
                 let fragment: EnglishPatternFragment = {
+                    toString: () => en,
                     placeholder: placeholder,
                     enWithJpForCases: (match: Match) => {
                         

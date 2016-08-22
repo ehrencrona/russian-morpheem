@@ -1,7 +1,7 @@
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
-import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
+import { InflectionForm, CASES, FORMS, Tense, Number, Gender, GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
 import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
@@ -166,8 +166,10 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         }
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
             // case study block: retain Russian words
+            let grammaticalCase = wordBlock.words.find(w => w.form && w.form.grammaticalCase != GrammaticalCase.NOM).form.grammaticalCase 
+
             wordBlock.words.forEach((word) => {
-                let caseFact = phrase.getCaseFact(word.form.grammaticalCase)
+                let caseFact = phrase.getCaseFact(grammaticalCase)
 
                 // unfortunately, we don't know this earlier
                 caseFact.placeholderName = englishBlock.en(phraseMatch)
