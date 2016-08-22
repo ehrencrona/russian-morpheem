@@ -7,6 +7,7 @@ import Fact from '../fact/Fact'
 import Corpus from '../Corpus'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm, GrammaticalCase } from '../inflection/InflectionForms'
+import MatchContext from './MatchContext'
 
 export default class TagWordMatch implements WordMatch, CaseStudyMatch {
     corpus: Corpus
@@ -16,8 +17,9 @@ export default class TagWordMatch implements WordMatch, CaseStudyMatch {
         this.form = form
     }
 
-    matches(words: Word[], wordPosition: number, matches: WordMatch[], 
+    matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
         matchPosition: number): number {
+        let words = context.words
         
         for (let i = wordPosition; i < words.length; i++) {
             let word = words[i]

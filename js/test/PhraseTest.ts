@@ -73,8 +73,8 @@ describe('Phrase', function() {
         let phrase = Phrase.fromString('foo', 'noun@acc+ noun@gen+', 'English', words, inflections)
         phrase.setCorpus(corpus)
 
-        expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
-        expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
+        expect(phrase.match({ words: shouldNotMatch, facts: facts })).to.be.undefined
+        expect(phrase.match({ words: shouldMatch, facts: facts }).words.length).to.equal(2)
     })
 
     it('converts to str and back', function () {
@@ -111,9 +111,9 @@ describe('Phrase', function() {
         let phrase = Phrase.fromString('foo', 'tag:animate adjective@adv+', 'English', words, inflections)
         phrase.setCorpus(corpus)
 
-        expect(phrase.match(shouldMatch, facts).words.length).to.equal(2)
+        expect(phrase.match({ words: shouldMatch, facts: facts }).words.length).to.equal(2)
 
-        expect(phrase.match(shouldNotMatch, facts)).to.be.undefined
+        expect(phrase.match({ words: shouldNotMatch, facts: facts })).to.be.undefined
     })
 
     it('fragments patterns correctly', () => {
@@ -136,8 +136,8 @@ describe('Phrase', function() {
                 expect(phrase.toString()).to.equal(phraseStr)
             }
 
-            expect(phrase.match(wordArray, facts)).to.be.not.undefined
-            expect(phrase.match(wordArray, facts).words.length).to.equal(length)
+            expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
+            expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
         }
 
         testMatch('в[loc]@ библиотека@prep', 2)

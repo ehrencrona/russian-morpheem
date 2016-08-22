@@ -4,10 +4,13 @@ import Word from '../Word'
 import Words from '../Words'
 import Facts from '../fact/Facts'
 import Fact from '../fact/Fact'
+import MatchContext from './MatchContext'
 
 export default class WildcardMatch implements WordMatch {
-    matches(words: Word[], wordPosition: number, matches: WordMatch[], 
+    matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
         matchPosition: number): number {
+        let words = context.words
+
         if (matchPosition >= matches.length-1) {
             return 0
         }
@@ -18,7 +21,7 @@ export default class WildcardMatch implements WordMatch {
             }
 
             if (matches[matchPosition+1].matches(
-                words, i, matches, matchPosition+1) > 0) {
+                context, i, matches, matchPosition+1) > 0) {
                 return i - wordPosition
             }
         }

@@ -3,22 +3,29 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
-import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
+import { FORMS, CASES, GrammaticalCase } from '../inflection/InflectionForms'
 import Phrase from './Phrase'
 import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
+import MatchContext from './MatchContext'
+import CaseStudyMatch from './CaseStudyMatch'
 
-export class PhraseMatch implements WordMatch {
+export class PhraseMatch implements WordMatch, CaseStudyMatch {
     phrase: Phrase
     corpus: Corpus
 
-    constructor(public phraseId: string) {
+    constructor(public phraseId: string, public overrideFormCase: GrammaticalCase) {
         this.phraseId = phraseId
+        this.overrideFormCase = overrideFormCase
     }
 
-    matches(words: Word[], wordPosition: number, matches: WordMatch[], 
+    matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
             matchPosition: number): number {
-        let m = this.phrase.match(words.slice(wordPosition), this.corpus.facts, null, true)
+        let childContext = Object.assign({}, context)
+        childContext.words = context.words.slice(wordPosition)
+        childContext.overrideFormCase = this.overrideFormCase
+
+        let m = this.phrase.match(childContext, true)
 
         if (m) {
             return m.words.length
@@ -42,11 +49,16 @@ export class PhraseMatch implements WordMatch {
     }
 
     isCaseStudy() {
-        return false
+        return !!this.overrideFormCase
+    }
+
+    getCaseStudied() {
+        return this.overrideFormCase
     }
     
     toString() {
-        return 'phrase:' + this.phraseId
+        return 'phrase:' + this.phraseId + 
+            (this.overrideFormCase ? '@' + CASES[this.overrideFormCase] : '') 
     }
 }
 

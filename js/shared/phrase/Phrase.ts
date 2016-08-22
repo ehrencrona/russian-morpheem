@@ -12,6 +12,7 @@ import Inflections from '../inflection/Inflections'
 import InflectedWord from '../InflectedWord'
 import Word from '../Word'
 import Corpus from '../Corpus'
+import MatchContext from './MatchContext'
 
 export interface JsonFormat {
     id: string,
@@ -42,13 +43,13 @@ export default class Phrase implements Fact {
             [ PhrasePattern.fromString(str.trim(), en, words, inflections) ])
     }
 
-    match(words: Word[], facts: Facts, study?: CaseStudy, onlyFirstWord?: boolean): Match {
+    match(context: MatchContext, onlyFirstWord?: boolean): Match {
         if (!this.corpus) {
             throw new Error('setCorpus was never called.')
         }
 
         for (let i = 0; i < this.patterns.length; i++) {
-            let match = this.patterns[i].match(words, facts, study, onlyFirstWord)
+            let match = this.patterns[i].match(context, onlyFirstWord)
 
             if (match) {
                 return match

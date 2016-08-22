@@ -92,7 +92,7 @@ describe('toStudyWordsTest', () => {
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
         phrases.setCorpus(Corpus.createEmpty('ru'))
 
-        let match = phrase.match(sentence.words, facts)
+        let match = phrase.match({ words: sentence.words, facts: facts })
 
         sentence.phrases.push(phrase)
 
@@ -116,7 +116,7 @@ describe('toStudyWordsTest', () => {
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
         phrases.setCorpus(Corpus.createEmpty('ru'))
 
-        let match = phrase.match(sentence.words, facts)
+        let match = phrase.match({ words: sentence.words, facts: facts })
 
         sentence.phrases.push(phrase)
 
@@ -137,7 +137,7 @@ describe('toStudyWordsTest', () => {
         let phrase = new Phrase('giveSomeoneSthg', [ pattern ])
         phrases.setCorpus(Corpus.createEmpty('ru'))
 
-        let match = phrase.match(sentence.words, facts)
+        let match = phrase.match({ words: sentence.words, facts: facts })
 
         sentence.phrases.push(phrase)
 

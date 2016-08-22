@@ -18,6 +18,7 @@ import EnglishPatternFragment from './EnglishPatternFragment'
 import PhraseMatch from './PhraseMatch'
 import AdverbWordMatch from './AdverbWordMatch'
 import Corpus from '../Corpus'
+import MatchContext from './MatchContext'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
@@ -45,7 +46,9 @@ export default class PhrasePattern {
         this.en = en
     }
 
-    match(words: Word[], facts: Facts, caseStudy?: CaseStudy, onlyFirstWord?: boolean): Match {
+    match(context: MatchContext, onlyFirstWord?: boolean): Match {
+        let caseStudy = context.study
+
         if (caseStudy == null) {
             caseStudy = CaseStudy.STUDY_BOTH
         }
@@ -58,6 +61,7 @@ export default class PhrasePattern {
             }
         })
 
+        let words = context.words
         let until = (onlyFirstWord ? 0 : words.length - minWords)
 
         for (let i = 0; i <= until; i++) {
@@ -68,7 +72,7 @@ export default class PhrasePattern {
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
 
-                let match = wordMatch.matches(words, at, this.wordMatches, j)
+                let match = wordMatch.matches(context, at, this.wordMatches, j)
 
                 if (!match && !wordMatch.allowEmptyMatch()) {
                     found = false
@@ -249,23 +253,19 @@ export default class PhrasePattern {
 
                             if (fragmentIndex) {
                                 let at = 0
-                                let lastMatch
                                 words = []
 
+                                let wordMatch = match.pattern.wordMatches[fragmentIndex-1]
+
                                 match.words.forEach((w) => {
+                                    if (w.wordMatch == wordMatch) {
+                                        let word = w.word 
 
-                                    if (w.wordMatch != lastMatch) {
-                                        at++
-                                        lastMatch = w.wordMatch
-                                    }
-
-                                    let word = w.word 
-
-                                    if (at == fragmentIndex && word instanceof InflectedWord) {
-                                        words.push(word)
+                                        if (word instanceof InflectedWord) {
+                                            words.push(word)
+                                        }
                                     }
                                 })
-
                             }
                             else {
                                 words = match.words.map(m => m.word as InflectedWord)
@@ -340,7 +340,7 @@ export default class PhrasePattern {
         return !!this.wordMatches.find((m) => (m as any).form && (m as any).form.grammaticalCase == grammaticalCase)
     }
 
-    static parseFormMatch(str: string, line: string) {
+    static parseFormMatch(str: string, line: string): WordMatch {
         let quantifier
 
         if (QUANTIFIERS[str[str.length - 1]]) {
@@ -413,7 +413,14 @@ export default class PhrasePattern {
                 }
             }
             else if (str.substr(0, 7) == 'phrase:') {
-    	        match = new PhraseMatch(str.substr(7))
+                let els = str.substr(7).split('@')
+    	        let grammaticalCase: GrammaticalCase
+
+                if (els[1]) {
+                    grammaticalCase = FORMS[els[1]].grammaticalCase
+                }
+
+                match = new PhraseMatch(els[0], grammaticalCase)
             }
             else if (str.substr(0, 4) == 'tag:') {
                 let els = str.substr(4).split('@')

@@ -3,14 +3,17 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
+import AbstractFormMatch from './AbstractFormMatch'
+import MatchContext from './MatchContext'
 import { FORMS, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
 
-export class WordInFormMatch implements WordMatch {
+export class WordInFormMatch extends AbstractFormMatch {
     wordIds: { [id:string]: boolean}
 
-    constructor(public words : InflectableWord[], public form: InflectionForm) {
+    constructor(public words : InflectableWord[], form: InflectionForm) {
+        super(form, '!')
+
         this.words = words
-        this.form = form
 
         this.wordIds = {}
 
@@ -19,29 +22,24 @@ export class WordInFormMatch implements WordMatch {
         })
     }
 
-    matches(words: Word[], wordPosition: number): number {
-        let firstWord = words[wordPosition]
-        let match = false
+    wordMatches(word: Word, context: MatchContext) {
+        if (word instanceof InflectedWord &&
+            this.wordIds[word.getId()]) {
+            let wordForm = FORMS[word.form]
 
-        if (firstWord instanceof InflectedWord &&
-            this.wordIds[firstWord.word.getId()]) {
-            let wordForm = FORMS[firstWord.form]
-
-            match = this.form.matches(wordForm)
+            return this.matchesForm(wordForm, context)
         }
-
-        return (match ? 1 : 0)
+        else {
+            return false
+        }
     }
 
-    allowEmptyMatch() {
-        return false
-    }
-
-    setCorpus() {
-    }
-    
     isCaseStudy() {
         return false
+    }
+
+    getCaseStudied() {
+        return
     }
 
     toString() {

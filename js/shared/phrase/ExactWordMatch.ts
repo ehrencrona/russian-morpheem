@@ -3,6 +3,7 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
+import MatchContext from './MatchContext'
 import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
 
 export type AnyWord = InflectableWord | Word
@@ -18,7 +19,8 @@ export class ExactWordMatch implements WordMatch {
         })
     }
 
-    matches(words: Word[], wordPosition: number): number {
+    matches(context: MatchContext, wordPosition: number): number {
+        let words = context.words
         let firstWord = words[wordPosition]
         let match = false
 

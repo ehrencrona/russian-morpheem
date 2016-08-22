@@ -42,7 +42,7 @@ export default class FindPhraseComponent extends Component<Props, State> {
         let sentences = this.props.corpus.sentences
 
         sentences.sentences.forEach((sentence) => {
-            if (phrase.patterns[0].match(sentence.words, this.props.corpus.facts) &&
+            if (phrase.patterns[0].match({ words: sentence.words, facts: this.props.corpus.facts }) &&
                 !sentence.hasPhrase(this.props.phrase)) {
                 sentences.addPhrase(phrase, sentence)
             }

@@ -5,7 +5,8 @@ import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
 import { EXACT_MATCH_QUANTIFIER, ANY_MATCH_QUANTIFIER, AT_LEAST_ONE_QUANTIFIER } from './AbstractQuantifierMatch'
-import AbstractQuantifierMatch from './AbstractQuantifierMatch'
+import AbstractFormMatch from './AbstractFormMatch'
+import MatchContext from './MatchContext'
 
 export const POS_NAMES = {
     noun: 'n',
@@ -20,20 +21,19 @@ function getDefaultQuantifier(pos: string) {
     return pos ? AT_LEAST_ONE_QUANTIFIER : EXACT_MATCH_QUANTIFIER
 }
 
-export default class PosFormWordMatch extends AbstractQuantifierMatch implements CaseStudyMatch, WordMatch {
+export default class PosFormWordMatch extends AbstractFormMatch implements CaseStudyMatch, WordMatch {
     posName: string 
 
-    constructor(public pos: string, public form : InflectionForm, public formStr: string, quantifier?: string) {
-        super(quantifier || getDefaultQuantifier(pos))
+    constructor(public pos: string, form : InflectionForm, public formStr: string, quantifier?: string) {
+        super(form, quantifier || getDefaultQuantifier(pos))
 
-        this.form = form
         this.formStr = formStr
 
         this.pos = pos
         this.posName = POS_NAMES[pos]
     }
 
-    wordMatches(word: Word) {
+    wordMatches(word: Word, context: MatchContext) {
         if (this.posName &&
             word.pos != this.posName) {
             return false
@@ -43,16 +43,9 @@ export default class PosFormWordMatch extends AbstractQuantifierMatch implements
             return true
         }
         else if (word instanceof InflectedWord) {
-            let form = this.form
+            let wordForm = FORMS[word.form]
 
-            if (form) {
-                let wordForm = FORMS[word.form]
-
-                return wordForm && form.matches(wordForm) 
-            }
-            else {
-                return true
-            }
+            return wordForm && this.matchesForm(wordForm, context) 
         }
     }
 

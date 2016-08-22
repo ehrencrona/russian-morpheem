@@ -1168,6 +1168,10 @@ $animationLength: 0.2s;
         }
     }
 
+    .upper, .lower {
+        overflow: hidden;
+    }
+
     .upper.dimmed {
         color: #505050; 
 

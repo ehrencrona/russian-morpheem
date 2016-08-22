@@ -3,6 +3,7 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
+import MatchContext from './MatchContext'
 
 type Range = number[]
 
@@ -29,7 +30,7 @@ abstract class AbstractQuantifierMatch implements WordMatch {
         } 
     }
 
-    abstract wordMatches(word: Word)
+    abstract wordMatches(word: Word, context: MatchContext): boolean
     
     abstract getCaseStudied()
     
@@ -38,14 +39,15 @@ abstract class AbstractQuantifierMatch implements WordMatch {
     setCorpus() {
     }
 
-    matches(words: Word[], wordPosition: number): number {
+    matches(context: MatchContext, wordPosition: number): number {
+        let words = context.words
         let getMatchCount = () => {
             let stopBefore = Math.min(words.length, wordPosition + this.range[1])
 
             for (let i = wordPosition; i < stopBefore; i++) {
                 let word = words[i]
     
-                if (!this.wordMatches(word)) {
+                if (!this.wordMatches(word, context)) {
                     return i - wordPosition
                 }
             }

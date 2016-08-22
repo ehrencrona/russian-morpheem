@@ -144,7 +144,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
                 phrase = fact.phrase
             }
 
-            if (phrase && !phrase.match(score.sentence.words, this.props.corpus.facts)) {
+            if (phrase && !phrase.match({ words: score.sentence.words, facts: this.props.corpus.facts })) {
                 console.log(score.sentence + ' did not match phrase ' + phrase)
                 return false
             }
@@ -217,7 +217,7 @@ console.log('Fact ' + fact.getId())
 
             sentence.phrases.find(phrase => {
 
-                let match = phrase.match(sentence.words, this.props.corpus.facts, CaseStudy.STUDY_CASE)
+                let match = phrase.match({ words: sentence.words, facts: this.props.corpus.facts, study: CaseStudy.STUDY_CASE })
 
                 if (match) {
                     return !!match.words.find(m => {

@@ -90,6 +90,15 @@ const AUTHORS: { [id:string] : Author } = {
     '57b2c755bc7da0061568ca59': {
         numericalId: 19,
         name: 'stefan'
+    },
+    '57ba9fd960976d2f5a8704fc': {
+        numericalId: 20,
+        name: 'mike',
+        slack: {
+            name: 'mike',
+            id: 'U239S0337'
+        }
+
     }
 }
 

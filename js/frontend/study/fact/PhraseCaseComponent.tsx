@@ -38,7 +38,7 @@ let phraseFactComponent = (props: FactComponentProps<PhraseCase>) => {
     let phraseCase: PhraseCase = props.fact
 
     let phrase = phraseCase.phrase 
-    let match = phrase.match(props.sentence.words, props.corpus.facts)
+    let match = phrase.match({ words: props.sentence.words, facts: props.corpus.facts })
 
     let wordString, phraseString
 
