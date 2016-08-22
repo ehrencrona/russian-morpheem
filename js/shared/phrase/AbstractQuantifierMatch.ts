@@ -4,6 +4,7 @@ import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm } from '../inflection/InflectionForms'
 import MatchContext from './MatchContext'
+import Corpus from '../Corpus'
 
 type Range = number[]
 
@@ -36,7 +37,7 @@ abstract class AbstractQuantifierMatch implements WordMatch {
     
     abstract isCaseStudy()
 
-    setCorpus() {
+    setCorpus(corpus: Corpus) {
     }
 
     matches(context: MatchContext, wordPosition: number): number {

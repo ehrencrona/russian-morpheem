@@ -8,49 +8,43 @@ import Corpus from '../Corpus'
 import InflectedWord from '../InflectedWord'
 import { FORMS, InflectionForm, GrammaticalCase } from '../inflection/InflectionForms'
 import MatchContext from './MatchContext'
+import AbstractFormMatch from './AbstractFormMatch'
 
-export default class TagWordMatch implements WordMatch, CaseStudyMatch {
+export default class TagWordMatch extends AbstractFormMatch implements WordMatch, CaseStudyMatch {
     corpus: Corpus
 
-    constructor(public tag : string, public form: InflectionForm) {
+    constructor(public tag : string, form: InflectionForm) {
+        super(form, '!')
         this.tag = tag
-        this.form = form
     }
 
-    matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
-        matchPosition: number): number {
-        let words = context.words
-        
-        for (let i = wordPosition; i < words.length; i++) {
-            let word = words[i]
+    wordMatches(word: Word, context: MatchContext): boolean {
+        let fact: Fact = word as Fact
 
-            let fact: Fact = word as Fact
+        if (word instanceof InflectedWord) {
+            fact = word.word
+        }
 
+        let tags = this.corpus.facts.getTagsOfFact(fact)
+
+        if (this.form) {
             if (word instanceof InflectedWord) {
-                fact = word.word
-            }
+                let wordForm = FORMS[word.form]
 
-            let tags = this.corpus.facts.getTagsOfFact(fact)
-
-            if (this.form) {
-                if (word instanceof InflectedWord) {
-                    let wordForm = FORMS[word.form]
-
-                    if (!this.form.matches(wordForm)) {
-                        return i - wordPosition 
-                    }
-                }
-                else {
-                    return i - wordPosition 
+                if (!this.matchesForm(wordForm, context)) {
+                    return false
                 }
             }
-
-            if (tags.indexOf(this.tag) < 0) {
-                return i - wordPosition
+            else {
+                return false
             }
         }
 
-        return words.length - wordPosition
+        if (tags.indexOf(this.tag) < 0) {
+            return false
+        }
+
+        return true
     }
 
     setCorpus(corpus: Corpus) {
