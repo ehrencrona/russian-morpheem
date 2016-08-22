@@ -166,22 +166,30 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         }
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
             // case study block: retain Russian words
-            let grammaticalCase = wordBlock.words.find(w => w.form && w.form.grammaticalCase != GrammaticalCase.NOM).form.grammaticalCase 
+            let inflectedWord = wordBlock.words.find(w => w.form && w.form.grammaticalCase != GrammaticalCase.NOM)
 
-            wordBlock.words.forEach((word) => {
-                let caseFact = phrase.getCaseFact(grammaticalCase)
+            if (inflectedWord) {
+                let grammaticalCase = inflectedWord.form.grammaticalCase 
 
-                // unfortunately, we don't know this earlier
-                caseFact.placeholderName = englishBlock.en(phraseMatch)
+                wordBlock.words.forEach((word) => {
+                    let caseFact = phrase.getCaseFact(grammaticalCase)
 
-                word.facts.push({
-                    fact: caseFact,
-                    words: wordBlock.words
+                    // unfortunately, we don't know this earlier
+                    caseFact.placeholderName = englishBlock.en(phraseMatch)
+
+                    word.facts.push({
+                        fact: caseFact,
+                        words: wordBlock.words
+                    })
                 })
-            })
 
-            atWordBlock++
-            atFragment++
+                atWordBlock++
+                atFragment++
+            }
+            else {
+                console.warn(`No inflected word in ${ wordBlock.words.map(w => w.jp).join(' ') } despite being case study (phrase: ${phrase.getId()}).`)
+                atWordBlock++
+            }
         }
         else if (!wordBlock.caseStudy && !englishBlock.placeholder) {
             // add an English text block for Russian text
