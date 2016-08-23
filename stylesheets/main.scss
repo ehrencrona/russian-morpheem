@@ -70,7 +70,7 @@ body {
     background-color: $color13;
 }
 
-input[type=text], input[type=number] {
+input[type=text], input[type=number], textarea {
     font-family: inherit;
     font-size: 120%;
     background-color: lighten($color-bg-light, 10%);
@@ -758,19 +758,17 @@ ul {
         font-weight: bold;
     }
 
-    .pattern {
-        .field {
-            padding: 2 * $unit 0;
+    .field {
+        padding: 2 * $unit 0;
 
-            .label {
-                @extend .smallFont;
-                margin-bottom: $unit;
-            }
+        .label {
+            @extend .smallFont;
+            margin-bottom: $unit;
+        }
 
-            input {
-                @extend .border-box-sizing;
-                width: 100%
-            }
+        input, textarea {
+            @extend .border-box-sizing;
+            width: 100%
         }
     }
 }

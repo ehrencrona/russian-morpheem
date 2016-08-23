@@ -11,6 +11,7 @@ import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
 import PhraseSentencesComponent from './PhraseSentencesComponent'
+import PhraseStatusComponent from '../metadata/PhraseStatusComponent'
 import isConflictFunction from './isConflict'
 
 import Sentence from '../../shared/Sentence'
@@ -102,6 +103,11 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     { this.props.fact.id }
                 </div>
             </div>
+
+            <PhraseStatusComponent 
+                phrase={ this.props.fact } 
+                corpus={ this.props.corpus } 
+            />
 
             <PhrasePatternComponent 
                 phrase={ this.props.fact } 

@@ -29,6 +29,9 @@ import setPhrase from './route/setPhrase'
 import getEvents from './route/getEvents'
 import getStatus from './route/getStatus'
 import setStatus from './route/setStatus'
+import getOpenPhrases from './route/getOpenPhrases'
+import getPhraseStatus from './route/getPhraseStatus'
+import setPhraseStatus from './route/setPhraseStatus'
 import getPendingSentences from './route/getPendingSentences'
 import getLatestEvents from './route/getLatestEvents'
 import getMyLatestEvents from './route/getMyLatestEvents'
@@ -110,6 +113,12 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/api/${lang}/sentence/:id/status`, getStatus(corpus))
 
     app.put(`/api/${lang}/sentence/:id/status`, setStatus(corpus))
+
+    app.get(`/api/${lang}/phrase/open`, getOpenPhrases(corpus))
+
+    app.get(`/api/${lang}/phrase/:id/status`, getPhraseStatus(corpus))
+
+    app.put(`/api/${lang}/phrase/:id/status`, setPhraseStatus(corpus))
 
     app.put(`/api/${lang}/phrase/:id`, setPhrase(corpus))
 

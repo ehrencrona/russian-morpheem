@@ -26,7 +26,8 @@ const ADD_PHRASE = 'addPhrase'
 
 interface State {
     case: GrammaticalCase,
-    expression: boolean
+    expression: boolean,
+    pendingIds: string[]
 }
 
 let React = { createElement: createElement }
@@ -37,14 +38,15 @@ export default class PhrasesComponent extends Component<Props, State> {
 
         this.state = {
             case: null,
-            expression: false
+            expression: false,
+            pendingIds: null
         }
     }
     
     render() {
         let caseButton = (grammaticalCase: GrammaticalCase) =>
             <div className={ 'button ' + (this.state.case == grammaticalCase ? ' selected' : '') } key={ grammaticalCase } 
-                onClick={ () => { this.setState({ case: grammaticalCase, expression: false }) }}>{ getFormName(CASES[grammaticalCase]) }</div>
+                onClick={ () => { this.setState({ case: grammaticalCase, expression: false, pendingIds: null }) }}>{ getFormName(CASES[grammaticalCase]) }</div>
 
         let list
 
@@ -76,6 +78,19 @@ export default class PhrasesComponent extends Component<Props, State> {
                 sort={ sort }
                 hideTypeFilter={ true } />
         }
+        else if (this.state.pendingIds) {
+            list = <FilteredFactsListComponent
+                corpus={ this.props.corpus }
+                filter={ (factIndex) => {
+                    let fact = factIndex.fact
+                    
+                    return fact instanceof Phrase && this.state.pendingIds.indexOf(fact.id) >= 0
+                } }
+                tab={ this.props.tab }
+                sort={ sort }
+                hideTypeFilter={ true } />
+
+        }
         else {
             list = <FilteredFactsListComponent
                 corpus={ this.props.corpus }
@@ -88,14 +103,21 @@ export default class PhrasesComponent extends Component<Props, State> {
         return (<div>
                 <div className='buttonBar'>
                     <div className={ 'button ' + (this.state.case == null ? ' selected' : '') } 
-                        onClick={ () => { this.setState({ case: null, expression: false }) }}>All</div>
+                        onClick={ () => { this.setState({ case: null, expression: false, pendingIds: null }) }}>All</div>
                         
                     {
                         Object.keys(CASES).map((grammaticalCase) => caseButton(parseInt(grammaticalCase) as GrammaticalCase))
                     }
 
                     <div className={ 'button ' + (this.state.expression ? ' selected' : '') } key='expression' 
-                        onClick={ () => { this.setState({ case: null, expression: true }) }}>expressions</div>
+                        onClick={ () => { this.setState({ case: null, expression: true, pendingIds: null }) }}>expressions</div>
+
+                    <div className={ 'button ' + (this.state.pendingIds ? ' selected' : '') } key='open' 
+                        onClick={ () => { 
+                            this.props.corpus.phraseHistory.getOpenPhrases().then((ids) => {
+                                this.setState({ pendingIds: ids, case: null, expression: false })
+                            })
+                        }}>open</div>
                 </div>
 
                 {

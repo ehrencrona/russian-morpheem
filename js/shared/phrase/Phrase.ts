@@ -58,7 +58,7 @@ export default class Phrase implements Fact {
     }
 
     toString() {
-        return this.id + ': ' + this.description
+        return this.description
     }
 
     getId() {

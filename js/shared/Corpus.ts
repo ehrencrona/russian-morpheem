@@ -4,6 +4,7 @@ import Sentences from '../shared/Sentences'
 import Phrases from '../shared/phrase/Phrases'
 import Inflections from '../shared/inflection/Inflections'
 import { SentenceHistory } from '../shared/metadata/SentenceHistory'
+import { PhraseHistory } from '../shared/metadata/PhraseHistory'
 import { ExternalCorpus } from '../shared/external/ExternalCorpus'
 
 import { JsonFormat as FactsJsonFormat } from '../shared/fact/Facts'
@@ -24,6 +25,7 @@ export interface JsonFormat {
 export default class Corpus {
     onChangeOnDisk: () => any
     sentenceHistory: SentenceHistory
+    phraseHistory: PhraseHistory
     externalCorpus: ExternalCorpus
     
     static createEmpty(lang: string) {
@@ -78,6 +80,7 @@ export default class Corpus {
         this.sentences.clone(otherCorpus.sentences)
         this.phrases.clone(otherCorpus.phrases)
         this.sentenceHistory = otherCorpus.sentenceHistory
+        this.phraseHistory = otherCorpus.phraseHistory
         this.externalCorpus = otherCorpus.externalCorpus
         this.lang = otherCorpus.lang
     }

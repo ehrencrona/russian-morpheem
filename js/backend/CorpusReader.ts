@@ -14,6 +14,7 @@ import Phrases from '../shared/phrase/Phrases'
 import Inflections from '../shared/inflection/Inflections';
 import { watch } from 'fs';
 import BackendSentenceHistory from './metadata/BackendSentenceHistory';
+import BackendPhraseHistory from './metadata/BackendPhraseHistory'
 
 export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
@@ -69,6 +70,7 @@ export default function readCorpus(lang, doWatch) {
     })
     .then((corpus: Corpus) => {
         corpus.sentenceHistory = new BackendSentenceHistory(corpus.words)
+        corpus.phraseHistory = new BackendPhraseHistory()
 
         if (doWatch) {
             watchForChangesOnDisk(corpus)

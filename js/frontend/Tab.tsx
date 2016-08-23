@@ -5,7 +5,7 @@ export default class Tab {
     state: any
     
     constructor(public name: string, public id: string, public component: any, public tabSet: TabSetComponent) {
-        this.name = name
+        this.name = (name.length > 30 ? name.substr(0, 30) + '...' : name)
         this.id = id
         this.component = component
         this.tabSet = tabSet
