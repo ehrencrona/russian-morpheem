@@ -8,8 +8,10 @@ import Word from '../../shared/Word'
 import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
+import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
 import Tab from '../OpenTab'
+import openFact from '../fact/openFact'
 
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 import { Component, createElement } from 'react';
@@ -73,6 +75,24 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         }
     }
 
+    deletePattern(pattern: PhrasePattern) {
+        this.props.phrase.patterns = this.props.phrase.patterns.filter(p => p != pattern)
+        this.props.corpus.phrases.store(this.props.phrase)
+
+        this.forceUpdate()
+    }
+
+    movePattern(pattern: PhrasePattern, offset: number) {
+        let i = this.props.phrase.patterns.indexOf(pattern)
+
+        this.props.phrase.patterns.splice(i, 1)
+        this.props.phrase.patterns.splice(i+offset, 0, pattern)
+
+        this.props.corpus.phrases.store(this.props.phrase)
+
+        this.forceUpdate()
+    }
+
     addPattern() {
         this.props.phrase.patterns.push(
             new PhrasePattern([], '')
@@ -104,7 +124,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             {  
                 phrase.patterns.map((pattern, index) => 
 
-                    <div key={ index } className='pattern'>
+                    <div key={ pattern.key } className='pattern'>
                         <h3>Pattern</h3>
 
                         <div className='field'>
@@ -134,6 +154,13 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                                 } }/>
                         </div>
 
+                        {
+                            pattern.wordMatches.filter(m => m instanceof PhraseMatch).map(m => 
+                                <div onClick={ () => openFact((m as PhraseMatch).phrase, this.props.corpus, this.props.tab) }
+                                    className='clickable'>{ (m as PhraseMatch).phrase.id }</div>
+                            )
+                        }
+
                         <PhraseStudyWordsComponent 
                             phrase={ phrase }
                             pattern={ pattern } 
@@ -141,6 +168,22 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                             ref={ 'studyWords' + index } 
                             tab={ this.props.tab }
                             />
+
+                        <div className='buttonBar'>
+                            <div className='button' onClick={ () => this.deletePattern(pattern) }>Delete</div>
+                            {
+                                index > 0 ?
+                                    <div className='button' onClick={ () => this.movePattern(pattern, -1) }>Up</div>
+                                    :
+                                    <div/>
+                            }
+                            {
+                                index < phrase.patterns.length-1 ?
+                                    <div className='button' onClick={ () => this.movePattern(pattern, 1) }>Down</div>
+                                    :
+                                    <div/>
+                            }
+                        </div>
                     </div>
                 )
             }

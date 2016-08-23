@@ -2,8 +2,7 @@ import Fact from '../../shared/fact/Fact'
 import Tab from '../OpenTab'
 import FactComponent from './FactComponent'
 import Corpus from '../../shared/Corpus'
-
-
+import Phrase from '../../shared/phrase/Phrase'
 
 import { Component, createElement } from 'react';
 let React = { createElement: createElement }

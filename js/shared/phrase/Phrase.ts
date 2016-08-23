@@ -58,7 +58,7 @@ export default class Phrase implements Fact {
     }
 
     toString() {
-        return this.patterns.map((p) => p.toString()).join(', ')
+        return this.id + ': ' + this.description
     }
 
     getId() {

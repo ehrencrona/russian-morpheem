@@ -40,7 +40,12 @@ export interface WordMatched {
     index: number
 }
 
+let counter = 0
+
 export default class PhrasePattern {
+    // it's helpful for React to have a unique ID.
+    key = counter++ 
+
     constructor(public wordMatches: WordMatch[], public en: string) {
         this.wordMatches = wordMatches
         this.en = en

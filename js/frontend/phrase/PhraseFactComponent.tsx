@@ -98,6 +98,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     onDelete={ () => this.props.tab.close() }/>
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <div className='factId'>
+                    { this.props.fact.id }
+                </div>
             </div>
 
             <PhrasePatternComponent 

@@ -121,6 +121,9 @@ export default class SentenceComponent extends Component<Props, State> {
             <div className='buttonBar right'>
                 <div className='button' onClick={ () => this.duplicate() }>Duplicate</div>
                 <div className='button' onClick={ () => this.delete() }>Delete</div>                
+                <div className='factId'>
+                    { this.props.sentence.id }
+                </div>
             </div>
             <div className='buttonBar'>
                 {

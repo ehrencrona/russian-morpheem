@@ -481,6 +481,18 @@ input[type=text], input[type=number] {
         font-size: inherit;
         font-family: inherit;
     }
+
+    .factId::before {
+        content: '#'
+    }
+
+    .factId {
+        @extend .border-box-sizing;
+        margin: 2*$unit 0;
+        border: 2px solid #e9e0d3;
+        background: white;
+        padding: 0 2*$unit;
+    }
 }
 
 .buttonBar.right {
