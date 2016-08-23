@@ -177,6 +177,23 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
                     // unfortunately, we don't know this earlier
                     caseFact.placeholderName = englishBlock.en(phraseMatch)
 
+                    let wordFact = word.wordFact
+
+                    if (englishBlock.placeholderOverrideForm && wordFact instanceof InflectedWord) {
+                        word.getHint = () => {
+                            let inflected = wordFact.word.inflect(englishBlock.placeholderOverrideForm)
+
+                            if (inflected) {
+                                return inflected.getEnglish()
+                            }
+                            else {
+                                console.warn(`Phrase ${phrase.id} specified form ${englishBlock.placeholderOverrideForm} that did not exist for ${wordFact}.`)
+
+                                return wordFact.getEnglish()
+                            }
+                        }
+                    }
+
                     word.facts.push({
                         fact: caseFact,
                         words: wordBlock.words

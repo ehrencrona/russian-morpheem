@@ -162,9 +162,24 @@ export default class PhrasePattern {
 
                 let placeholder = str[0] == '['
                 let placeholderIndex = placeholderCount
+                let placeholderOverrideForm
 
                 if (placeholder) {
-                    en = str.substr(1, str.length-2)
+                    let end = str.indexOf(']')
+
+                    if (end < 0) {
+                        end = str.length
+                    }
+
+                    str = str.substr(1, end-1)
+
+                    let els = str.split('->')
+
+                    en = els[0]
+
+                    if (els.length > 1) {
+                        placeholderOverrideForm = els[els.length-1]
+                    }
 
                     placeholderCount++
                 }
@@ -172,6 +187,7 @@ export default class PhrasePattern {
                 let fragment: EnglishPatternFragment = {
                     toString: () => en,
                     placeholder: placeholder,
+                    placeholderOverrideForm: placeholderOverrideForm,
                     enWithJpForCases: (match: Match) => {
                         
                         if (placeholder) {
@@ -189,7 +205,7 @@ export default class PhrasePattern {
                                     }
 
                                     return atCaseStudyIndex == placeholderIndex
-                                } 
+                                }
                             })
 
                             if (!m.length) {
@@ -327,6 +343,29 @@ export default class PhrasePattern {
                             en = en.replace(placeholder, replaceWith)
                         })
 
+                        let replace: { [key: string]: Word[]} = {}		 
+ 
+                        match.words.forEach((m) => {		
+                            let mStr = m.wordMatch.toString()		
+
+                        if (en.indexOf(mStr) >= 0) {		
+                                let r = replace[mStr]		
+
+                                if (!r) {		
+                                    r = []		
+                                    replace[mStr] = r		
+                                }		
+
+                                r.push(m.word)		
+                            }		
+                        })		
+
+                        Object.keys(replace).forEach((r) => {		
+                            en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 		
+                                (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)		
+                            ).join(' '))		
+                        })		
+ 
                         return en                                     
                     } 
                 }
