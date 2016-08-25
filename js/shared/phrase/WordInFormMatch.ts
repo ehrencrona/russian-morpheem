@@ -24,9 +24,8 @@ export class WordInFormMatch extends AbstractFormMatch {
 
     wordMatches(word: Word, context: MatchContext) {
         if (word instanceof InflectedWord &&
-            this.wordIds[word.getId()]) {
+            this.wordIds[word.word.getId()]) {
             let wordForm = FORMS[word.form]
-
             return this.matchesForm(wordForm, context)
         }
         else {

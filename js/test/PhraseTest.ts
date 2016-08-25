@@ -83,7 +83,7 @@ describe('Phrase', function() {
 
             phrase.setCorpus(corpus)
 
-            expect(phrase.toString()).to.equal(becomesStr || originalStr )
+            expect(phrase.patterns.map(p => p.toString()).join(',')).to.equal(becomesStr || originalStr )
         }
 
         testStr('в[loc]@ библиотека@prep')
@@ -140,6 +140,7 @@ describe('Phrase', function() {
             expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
         }
 
+        testMatch('в[loc]@', 1)
         testMatch('в[loc]@ библиотека@prep', 2)
         testMatch('в[loc]@ я|библиотека@prepositional', 2)
         testMatch('в[loc]@ библиотека@', 2)
