@@ -8,6 +8,7 @@ import SentenceComponent from '../SentenceComponent'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseSentencesComponent from '../phrase/PhraseSentencesComponent'
+import SentenceIdSearchComponent from './SentenceIdSearchComponent'
 import isConflictFunction from '../phrase/isConflict'
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 
 interface State {
 
+    id?: number,
     pattern?: PhrasePattern,
     onlyNonPhrase?: boolean,
     error?: string
@@ -35,12 +37,17 @@ export default class SentencesComponent extends Component<Props, State> {
 
     search(str: string) {
         try {
-            let pattern = PhrasePattern.fromString(str, '', this.props.corpus.words, this.props.corpus.inflections)
+            if (parseInt(str)) {
+                this.setState({ pattern: null, id: parseInt(str) })
+            }
+            else {
+                let pattern = PhrasePattern.fromString(str, '', this.props.corpus.words, this.props.corpus.inflections)
 
-            this.setState({ pattern: pattern })
+                this.setState({ pattern: pattern, id: null })
+            }
         }
         catch (e) {
-            this.setState({ error: e.toString(), pattern: null })
+            this.setState({ error: e.toString(), pattern: null, id: null })
         }
     }
 
@@ -67,31 +74,41 @@ export default class SentencesComponent extends Component<Props, State> {
                 </div>
 
                 {
-                    this.state.pattern ?
-
-                        <PhraseSentencesComponent 
+                    this.state.id ? 
+                        <SentenceIdSearchComponent
                             corpus={ this.props.corpus }
-                            patterns={ [ this.state.pattern ] }
                             tab={ this.props.tab }
-                            limit={ 200 }
-                            includeConflicts={ !this.state.onlyNonPhrase }
-                            isConflict={ (this.state.onlyNonPhrase ?
-                                (sentence: Sentence, wordIndexes: number[]) => 
-                                    isConflictFunction(phrase, this.props.corpus.facts)(sentence, wordIndexes) :
-                                null) }
-                            />
-
-                    :
-
-                    (
-                        this.state.error ?
-
-                            <div className='error'>{ this.state.error }</div>
-
+                            id={ this.state.id } />
+                        
                         :
 
-                        <div/>
-                    )
+                        (
+                            this.state.pattern ?
+
+                                <PhraseSentencesComponent 
+                                    corpus={ this.props.corpus }
+                                    patterns={ [ this.state.pattern ] }
+                                    tab={ this.props.tab }
+                                    limit={ 200 }
+                                    includeConflicts={ !this.state.onlyNonPhrase }
+                                    isConflict={ (this.state.onlyNonPhrase ?
+                                        (sentence: Sentence, wordIndexes: number[]) => 
+                                            isConflictFunction(phrase, this.props.corpus.facts)(sentence, wordIndexes) :
+                                        null) }
+                                    />
+
+                            :
+
+                            (
+                                this.state.error ?
+
+                                    <div className='error'>{ this.state.error }</div>
+
+                                :
+
+                                <div/>
+                            )
+                        )                    
                 }
             </div>)
     }

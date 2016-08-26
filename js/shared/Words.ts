@@ -123,8 +123,7 @@ export default class Words {
                 .map((id) => 
                     this.wordsById[id])
                 .sort((w1: Word, w2: Word) => 
-                    w1.jp.toLowerCase().localeCompare(w2.jp.toLowerCase())
-                )
+                    w1.jp.toLowerCase().localeCompare(w2.jp.toLowerCase()))
         }
 
         prefix = prefix.toLowerCase()

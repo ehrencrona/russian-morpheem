@@ -143,15 +143,21 @@ export default class WordSearchComponent extends Component<Props, State> {
             inflection: null
         }
     } 
-           
-    wordsMatchingFilterString(fact, filter: string): Suggestion[] {
-        if (fact instanceof Word && 
-            fact.jp.substr(0, filter.length).toLowerCase() == filter) {
-            return [ this.wordToSuggestion(fact) ]
+
+    wordsMatchingFilterString(fact: Fact, filter: string): Suggestion[] {
+        if (fact instanceof Word) {
+            if (fact.jp.substr(0, filter.length).toLowerCase() == filter ||
+                fact.getEnglish().indexOf(filter) >= 0) {
+                return [ this.wordToSuggestion(fact) ]
+            }
         }
-        
-        if (fact instanceof InflectableWord) {
-            return this.findMatchingInflections(fact, filter)
+        else if (fact instanceof InflectableWord) {
+            if (fact.getEnglish().indexOf(filter) >= 0) {
+                return [ this.inflectableWordToSuggestion(fact) ]
+            }
+            else {
+                return this.findMatchingInflections(fact, filter)
+            }
         }
 
         return []
@@ -198,7 +204,7 @@ export default class WordSearchComponent extends Component<Props, State> {
             }
         }
 
-        if (filterString && !filterPos && !this.state.filterWord) {
+        if (filterString && !filterString.match(/[a-zA-Z]/) && !filterPos && !this.state.filterWord) {
             suggestions = this.props.corpus.words.wordsStartingWith(filterString)
                 .map((word) => this.wordToSuggestion(word))
         }
