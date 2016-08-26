@@ -36,11 +36,12 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         let m = this.phrase.match(childContext, true)
 
         if (m) {
-            if (this.tag && !m.words.find(w => {
-                let tags = this.corpus.facts.getTagsOfFact(w.word.getWordFact())
-                return tags.indexOf(this.tag) >= 0
-            })) {
-                return 0
+            if (this.tag) {
+                let matchingFacts = this.corpus.facts.getFactIdsWithTag(this.tag)
+
+                if (!m.words.find(w => matchingFacts.has(w.word.getWordFact().getId()))) {
+                    return 0
+                }
             }
 
             return m.words.length
