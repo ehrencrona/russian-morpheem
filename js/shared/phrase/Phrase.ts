@@ -57,6 +57,10 @@ export default class Phrase implements Fact {
         }
     }
 
+    isAutomaticallyAssigned() {
+        return this.id.substr(0,5) == 'auto-'
+    }
+
     toString() {
         return this.description
     }

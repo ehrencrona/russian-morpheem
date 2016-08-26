@@ -23,6 +23,11 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
 
     matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
             matchPosition: number): number {
+        if (context.sentence && !this.phrase.isAutomaticallyAssigned() &&
+            !context.sentence.phrases.find(p => p.id == this.phrase.id)) {
+            return
+        }
+
         let childContext = Object.assign({}, context)
         childContext.words = context.words.slice(wordPosition)
 
@@ -56,7 +61,11 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         this.phrase = corpus.phrases.get(this.phraseId)
 
         if (!this.phrase) {
-            throw new Error(`Unknown phrase ${this.phraseId}`)
+            this.phrase = corpus.phrases.get('auto-' + this.phraseId)
+
+            if (!this.phrase) {
+                throw new Error(`Unknown phrase ${this.phraseId}`)
+            }
         }
     }
 

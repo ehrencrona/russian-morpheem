@@ -12,7 +12,7 @@ let React = { createElement: createElement }
 
 let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
     let phrase: Phrase = props.fact
-    let match = phrase.match({words: props.sentence.words, facts: props.corpus.facts})
+    let match = phrase.match({sentence: props.sentence, words: props.sentence.words, facts: props.corpus.facts})
 
     let explanation, words = ''
 

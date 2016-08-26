@@ -99,7 +99,7 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
             let match
             
             for (let i = 0; i < patterns.length; i++) {
-                match = patterns[i].match({ words: sentence.words, facts: facts })
+                match = patterns[i].match({ sentence: sentence, words: sentence.words, facts: facts })
 
                 if (match) {
                     break

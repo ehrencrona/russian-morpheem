@@ -52,7 +52,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
     renderSentenceExtract(phrase: Phrase) {
         let words = this.props.sentence.words
 
-        let match = phrase.match({ words: words, facts: this.props.corpus.facts })
+        let match = phrase.match({ sentence: this.props.sentence, words: words, facts: this.props.corpus.facts })
 
         if (!match) {
             return <div classname='error'>Does not fit pattern</div>
@@ -112,7 +112,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
     }
 
     renderStudyWords(phrase: Phrase) {
-        let match = phrase.match({ words: this.props.sentence.words, facts: this.props.corpus.facts, study: null })
+        let match = phrase.match({ sentence: this.props.sentence, words: this.props.sentence.words, facts: this.props.corpus.facts, study: null })
 
         if (!match) {
             return <div>
@@ -144,7 +144,8 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         let sentence = this.props.sentence
 
         let potentialPhrases = corpus.phrases.all().filter((p) =>
-            !!p.match({ words: sentence.words, facts: corpus.facts, study: null}) && !sentence.hasPhrase(p)
+            !p.isAutomaticallyAssigned() &&
+            !!p.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: null}) && !sentence.hasPhrase(p)
         )
 
         let renderPhrase = (p) => 

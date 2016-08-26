@@ -61,7 +61,8 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
         let pattern: PhrasePattern = this.props.pattern
 
         let firstMatchingPattern = (sentence: Sentence) => {
-            return phrase.patterns.find((pattern) => pattern.match({ words: sentence.words, facts: this.props.corpus.facts }) != null)
+            return phrase.patterns.find((pattern) => pattern.match({ 
+                sentence: sentence, words: sentence.words, facts: this.props.corpus.facts }) != null)
         }
 
         let words: StudyWord[] = []

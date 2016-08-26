@@ -38,5 +38,7 @@ export default function(corpus: Corpus) {
         console.log(author.name + ' set state of ' + phrase + ' to ' + status.status + ' with notes "' + status.notes + '".')
  
         corpus.phraseHistory.setStatus(status, phraseId)
+
+        res.status(200).send({ status: status })
     }
 }

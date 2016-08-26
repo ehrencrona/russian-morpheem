@@ -232,14 +232,14 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
 
     let handlePhrase = (phrase: Phrase) => {
-        let phraseMatch: Match = phrase.match({ words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_BOTH })
+        let phraseMatch: Match = phrase.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_BOTH })
 
         if (!phraseMatch) {
             console.warn(phrase + ' does not match ' + sentence + '.')
             return
         }
 
-        let wordMatch: Match = phrase.match({ words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_WORDS })
+        let wordMatch: Match = phrase.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_WORDS })
 
         if (!wordMatch) {
             wordMatch = {
