@@ -34,7 +34,7 @@ let inflections = new Inflections([
 ])
 
 describe('Phrase', function() {
-    let w1, w2: Word, w3, w4, w5: InflectableWord, words: Words, facts: Facts
+    let w1, comma, w2: Word, w3, w4, w5: InflectableWord, words: Words, facts: Facts
     
     w1 = new Word('в', 'loc')
     w2 = new Word('в', 'dir')
@@ -42,6 +42,8 @@ describe('Phrase', function() {
 
     w4 = new InflectableWord('я', mascInflection)
     w5 = new InflectableWord('хорош', inflections.inflections[1])
+
+    comma = new Word(',')
 
     words = new Words()
     words.addWord(w1)
@@ -120,6 +122,22 @@ describe('Phrase', function() {
         let pattern = PhrasePattern.fromString('verb@+ @dative+ @accusative+', 'verb@+ [someone] [something]', words, inflections)
         
         expect(pattern.getEnglishFragments().length).to.equal(3)
+    })
+
+    it('any does not match across phrase boundaries', () => {
+        let withComma = [
+            w1, comma, w3.inflect('prep')
+        ]
+
+        let withoutComma = [
+            w1, w2, w3.inflect('prep')
+        ]
+
+        let phrase = Phrase.fromString('foo', 'в[loc]@ any библиотека@prep', 'English', words, inflections)
+        phrase.setCorpus(corpus)
+
+        expect(phrase.match({ words: withoutComma, facts: facts })).to.be.not.undefined
+        expect(phrase.match({ words: withComma, facts: facts })).to.be.undefined
     })
 
     it('matches', function () {
