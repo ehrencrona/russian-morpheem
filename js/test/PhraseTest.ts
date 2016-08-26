@@ -20,16 +20,16 @@ import { expect } from 'chai';
 
 let mascInflection =
     new Inflection('m', 'nom', 'n', 
-        parseEndings('nom , acc , gen и, prep е', 'ru', 'n').endings)
+        parseEndings('nom , acc , gen и, genpl ах, prep е', 'ru', 'n').endings)
 
 let femInflection =
     new Inflection('f', 'nom', 'n', 
-        parseEndings('nom а, acc у, gen и, prep е', 'ru', 'n').endings)
+        parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', 'ru', 'n').endings)
 
 let inflections = new Inflections([
     femInflection,
     new Inflection('adj', 'm', 'adj', 
-        parseEndings('m ий, adv о', 'ru', 'adj').endings),
+        parseEndings('m ий, adv о, genpl ах, gen а', 'ru', 'adj').endings),
     mascInflection
 ])
 
@@ -81,7 +81,8 @@ describe('Phrase', function() {
 
     it('handles phrase matches', () => {
         let corpus = Corpus.createEmpty('ru')
-        corpus.phrases.setCorpus(corpus)
+
+        corpus.facts = facts
 
         let np = new Phrase('np', [
             PhrasePattern.fromString('noun@nominative', '[someone]', words, inflections) 
@@ -90,10 +91,12 @@ describe('Phrase', function() {
         corpus.phrases.add(np)
 
         let ap = new Phrase('ap', [
-            PhrasePattern.fromString('хорош@ phrase:np@genitive', '[someone]', words, inflections) 
+            PhrasePattern.fromString('хороший@ phrase:np@genitive#location', '[someone]', words, inflections) 
         ])
 
-        corpus.phrases.add(np)
+        corpus.phrases.add(ap)
+
+        expect(np.match({ words: [ w5.inflect('m'), w3.inflect('nom') ], facts: facts }).words.length).to.equal(1)
 
         expect(ap.match({ words: [ w5.inflect('genpl'), w3.inflect('genpl') ], facts: facts }).words.length).to.equal(2)
 
@@ -101,10 +104,16 @@ describe('Phrase', function() {
         expect(ap.match({ words: [ w5.inflect('genpl'), w3.inflect('pl') ], facts: facts })).to.be.undefined
 
         // wrong tag
-        expect(ap.match({ words: [ w5.inflect('genpl'), w4.inflect('genpl') ], facts: facts }).words.length).to.equal(2)
+        expect(ap.match({ words: [ w5.inflect('genpl'), w4.inflect('genpl') ], facts: facts })).to.be.undefined
     })
 
     it('converts to str and back', function () {
+        let np = new Phrase('np', [
+            PhrasePattern.fromString('noun@nominative', '[someone]', words, inflections) 
+        ])
+
+        corpus.phrases.add(np)
+
         function testStr(originalStr: string, becomesStr?: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)
 
@@ -117,7 +126,12 @@ describe('Phrase', function() {
         testStr('в[loc]@ я|библиотека@prepositional')
         testStr('в[loc]@ я|библиотека@')
         testStr('в[dir]@ prep')
-        testStr('в[loc]@ tag:location')
+        testStr('в[loc]@ tag:location', 'в[loc]@ #location')
+        testStr('в[loc]@ #location')
+        testStr('в[loc]@ phrase:np')
+        testStr('в[loc]@ phrase:np@gen')
+        testStr('в[loc]@ phrase:np@gen#location')
+        testStr('в[loc]@ phrase:np#location')
         testStr('noun prep')
         testStr('noun @prep!', 'noun prep')
         testStr('noun@+ @prep+', 'noun @prep+')
@@ -135,7 +149,7 @@ describe('Phrase', function() {
             w4.inflect('nom'), w3
         ]
 
-        let phrase = Phrase.fromString('foo', 'tag:animate adjective@adv+', 'English', words, inflections)
+        let phrase = Phrase.fromString('foo', '#animate adjective@adv+', 'English', words, inflections)
         phrase.setCorpus(corpus)
 
         expect(phrase.match({ words: shouldMatch, facts: facts }).words.length).to.equal(2)
@@ -190,7 +204,7 @@ describe('Phrase', function() {
         testMatch('в[loc]@ я|библиотека', 2, false)
         testMatch('в[loc]@ библиотека', 2, false)
         testMatch('в[loc]@ prep', 2)
-        testMatch('в[loc]@ tag:location', 2)
+        testMatch('в[loc]@ #location', 2)
         testMatch('в[loc]@ noun+', 2)
         testMatch('в[loc]@ noun@prepositional+', 2)
         testMatch('в[loc]@ noun@prepositional!', 2)

@@ -64,6 +64,6 @@ export default class TagWordMatch extends AbstractFormMatch implements WordMatch
     }
 
     toString() {
-        return 'tag:' + this.tag.replace(' ', '_') + (this.form ? '@' + this.form.id : '')
+        return '#' + this.tag.replace(' ', '_') + (this.form ? '@' + this.form.id : '')
     }
 }

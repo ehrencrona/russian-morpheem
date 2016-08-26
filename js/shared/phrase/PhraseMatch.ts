@@ -38,7 +38,6 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         if (m) {
             if (this.tag && !m.words.find(w => {
                 let tags = this.corpus.facts.getTagsOfFact(w.word.getWordFact())
-
                 return tags.indexOf(this.tag) >= 0
             })) {
                 return 0
@@ -73,8 +72,9 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     }
     
     toString() {
-        return 'phrase:' + this.phraseId + 
-            (this.overrideFormCase ? '@' + CASES[this.overrideFormCase] : '') 
+        return 'phrase:' + this.phraseId 
+            + (this.overrideFormCase ? '@' + CASES[this.overrideFormCase] : '') 
+            + (this.tag ? '#' + this.tag : '') 
     }
 }
 

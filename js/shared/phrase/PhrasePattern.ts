@@ -464,17 +464,42 @@ export default class PhrasePattern {
                 }
             }
             else if (str.substr(0, 7) == 'phrase:') {
-                let els = str.substr(7).split('@')
-    	        let grammaticalCase: GrammaticalCase
+                str = str.substr(7)
 
-                if (els[1]) {
-                    grammaticalCase = FORMS[els[1]].grammaticalCase
+                let hash = str.match(/#([^@]*)/)
+                let at = str.match(/@([^#]*)/)
+
+    	        let grammaticalCase: GrammaticalCase
+                let tag
+
+                if (at) {
+                    let caseStr = at[1]
+                    let form = FORMS[caseStr]
+
+                    if (form) {
+                        grammaticalCase = form.grammaticalCase
+                    }
+                    else {
+                        console.warn(`Unknown form ${caseStr} in phrase match ${str}.`)
+                    }
                 }
 
-                match = new PhraseMatch(els[0], grammaticalCase)
+                if (hash) {
+                    tag = hash[1]
+                }
+
+                let phraseIdMatch = str.match(/^([^#@]*)/)
+
+                if (!phraseIdMatch || !phraseIdMatch[1]) {
+                    throw new Error(`No phrase ID specified in phrase match ${str}.`)
+                }
+
+                match = new PhraseMatch(phraseIdMatch[1], grammaticalCase, tag)
             }
-            else if (str.substr(0, 4) == 'tag:') {
-                let els = str.substr(4).split('@')
+            else if (str.substr(0, 4) == 'tag:' || str[0] == '#') {
+                str = (str[0] == '#' ? str.substr(1) : str.substr(4))
+
+                let els = str.split('@')
 
                 let tagStr = els[0]
 

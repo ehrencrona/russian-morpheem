@@ -31,7 +31,7 @@ export default class Corpus {
     static createEmpty(lang: string) {
         let facts = new Facts()
         
-        return new Corpus(
+        let result = new Corpus(
             new Inflections([]),
             new Words(facts),
             new Sentences(),
@@ -39,6 +39,10 @@ export default class Corpus {
             new Phrases(),
             lang
         )
+
+        result.phrases.setCorpus(result)
+
+        return result
     }
     
     constructor(
