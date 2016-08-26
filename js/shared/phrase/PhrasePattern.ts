@@ -11,7 +11,7 @@ import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
 import Word from '../Word'
-import { ENGLISH_FORMS_BY_POS, FORMS, GrammaticalCase } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS, FORMS, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
@@ -19,6 +19,7 @@ import PhraseMatch from './PhraseMatch'
 import AdverbWordMatch from './AdverbWordMatch'
 import Corpus from '../Corpus'
 import MatchContext from './MatchContext'
+import { Match, WordMatched } from './Match'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_WORDS, STUDY_BOTH
@@ -29,22 +30,296 @@ export interface JsonFormat {
     en: string
 }
 
-export interface Match {
-    words: WordMatched[]
-    pattern: PhrasePattern
-}
-
-export interface WordMatched {
-    wordMatch: WordMatch
-    word: Word
-    index: number
-}
-
 let counter = 0
+
+function getEnglishInflectionFromList(pos, form, inflectionList) {
+    let en: { [ form: string ]: string } = {}
+    en[''] = inflectionList[0]
+
+    ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
+        let inflection = inflectionList[index+1]
+
+        if (!inflection) {
+            return
+        }
+
+        let els = inflection.split(':')
+
+        if (els.length == 2) {
+            en[els[0]] = els[1].trim()
+        }
+        else {
+            en[form] = inflectionList[index+1]
+        }
+    })
+
+    let englishForm = InflectedWord.getEnglishForm(pos, form, en)
+
+    let result = en[englishForm] || en['']
+
+    if (englishForm == 'inf') {
+        result = 'to ' + result
+    }
+
+    return result
+}
+
+
+class Placeholder {
+    placeholder: string
+    fragmentIndex: number
+    agreeWithForm: InflectionForm
+    agreeWithPoS: string
+    inflections: string[]
+    fromToForm: string[]
+}
+
+class Fragment implements EnglishPatternFragment {
+    placeholders: Placeholder[]
+
+    constructor(public enString: string, public placeholder: boolean, public placeholderIndex: number, public placeholderOverrideForm) {
+        this.enString = enString
+        this.placeholder = placeholder
+        this.placeholderIndex = placeholderIndex
+        this.placeholderOverrideForm = placeholderOverrideForm
+        this.placeholders = [];
+
+        (enString.match(/\(([^)]*)\)/g) || []).forEach(placeholder => {
+            let params = placeholder.substr(1, placeholder.length-2).split(',')
+
+            if (!params.length) {
+                console.warn(`Empty placeholder in phrase ${enString}.`)
+                return
+            }
+
+            let fromToForm = params[params.length-1].split('->')
+            
+            let words: InflectedWord[]
+            
+            let fromPosAtForm = fromToForm[0]
+
+            let inflectAsPoS
+
+            let fragmentIndex
+            let agreeWithForm
+            let agreeWithPoS
+            let replaceWith = '' 
+
+            {
+                let els = fromPosAtForm.split('@') 
+
+                if (els.length > 1) {
+                    agreeWithForm = FORMS[els[1]]
+                    agreeWithPoS = els[0]
+                }
+            }
+
+            agreeWithForm = FORMS[fromPosAtForm]
+
+            if (!agreeWithForm) {
+                agreeWithPoS = fromPosAtForm
+            }
+
+            let inflections
+
+            if (params.length > 1) {
+                inflections = params.slice(0, params.length-1) 
+            }
+
+            this.placeholders.push({
+                fromToForm: fromToForm,
+                placeholder: placeholder,
+                fragmentIndex: (parseInt(fromPosAtForm) ? parseInt(fromPosAtForm) : null),
+                agreeWithForm: agreeWithForm,
+                agreeWithPoS: agreeWithPoS,
+                inflections: inflections
+            })
+        })
+    }
+
+    toString() { 
+        return this.en 
+    }
+
+    enWithJpForCases(match: Match) {
+        if (this.placeholder) {
+            let atCaseStudyIndex = -1
+            let atWordMatch 
+
+            let m: WordMatched[] = match.words.filter((m) => {
+                let wordMatch = m.wordMatch
+
+                if (wordMatch.isCaseStudy()) {
+                    if (wordMatch != atWordMatch) {
+                        atCaseStudyIndex++
+
+                        atWordMatch = wordMatch 
+                    }
+
+                    return atCaseStudyIndex == this.placeholderIndex
+                }
+            })
+
+            if (!m.length) {
+                console.log(`Placeholders didn't match case studies in pattern "${this.toString()}"`)
+
+                return this.en(match)
+            }
+
+            return m.map((wordMatched) => {
+                let placeholderWord = wordMatched.word
+                
+                if (placeholderWord instanceof InflectedWord) {
+                    return placeholderWord.word.getDefaultInflection().jp 
+                }
+                else {
+                    return placeholderWord.jp
+                }
+            }).join(' ')
+        }
+        else {
+            return this.en(match)
+        }        
+    }
+
+    en(match: Match): string {
+        let result = this.enString
+
+        this.placeholders.forEach(placeholder => {
+            let replaceWith: string
+
+            if (placeholder.fragmentIndex) {
+                let at = 0
+                let wordMatch = match.pattern.wordMatches[placeholder.fragmentIndex-1]
+
+                if (wordMatch instanceof PhraseMatch) {
+                    let wordMatched: WordMatched = match.words.find((w) => w.wordMatch == wordMatch)
+
+                    let childMatch = wordMatched.childMatch
+
+                    replaceWith = childMatch.pattern.getEnglishFragments().map(f => f.en(childMatch)).join(' ')
+
+                    if (match.sentence && match.sentence.en()) {
+                        let search = wordMatched.word.getEnglish()
+                        let i = -1
+                        let en = match.sentence.en()
+                        let found = false
+
+                        do {
+                            i = en.indexOf(search, i+1)
+
+                            if (i >= 0) {
+                                found = true
+
+                                if (en.substr(i-2, 2) == 'a ') {
+                                    replaceWith = 'a ' + replaceWith
+                                    break
+                                }
+                                else if (en.substr(i-4, 4) == 'the ') {
+                                    replaceWith = 'the ' + replaceWith
+                                    break
+                                }
+                            }
+                        }
+                        while (i >= 0)
+
+                        if (!found) {
+                            console.log(`did not find "${search}" in "${en}"`)
+                        }
+                    }
+                }
+                else {
+                    replaceWith = match.words.filter((w) => w.wordMatch == wordMatch)
+                        .map(w => w.word.getEnglish()).join(' ')
+                }
+            }
+            else {
+                let agreeWithForm = placeholder.agreeWithForm
+                let agreeWithPoS = placeholder.agreeWithPoS
+                let fromToForm = placeholder.fromToForm
+
+                let words = match.words.map(m => m.word as InflectedWord)
+
+                if (agreeWithForm) {
+                    words = words.filter(word => {
+                        return word instanceof InflectedWord && agreeWithForm.matches(FORMS[word.form])
+                    })
+
+                    if (!words.length) {
+                        console.warn(`No words with form ${agreeWithForm.id} in phrase translated as ${result}`)
+                    }
+                }
+
+                if (agreeWithPoS) {
+                    words = words.filter(word => word.pos == agreeWithPoS)
+
+                    if (!words.length) {
+                        console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${result}`)
+                    }
+                }
+
+                if (!placeholder.inflections) {
+                    if (fromToForm.length > 1) {
+                        let enForm = fromToForm[1]
+
+                        replaceWith = words.map(w => w.en[enForm] || w.en['']).join(' ')
+                    }
+                    else {
+                        replaceWith = words.map(w => w.getEnglish()).join(' ')
+                    }
+                }
+                else if (words.length) {
+                    let inflectAsPoS
+
+                    if (fromToForm.length > 1) {
+                        inflectAsPoS = fromToForm[1]
+                    }
+                    else if (agreeWithPoS) {
+                        inflectAsPoS = agreeWithPoS
+                    }
+                    else {
+                        console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${result}`)
+                        inflectAsPoS = 'v'
+                    }
+
+                    replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, placeholder.inflections)
+                }
+            }
+
+            result = result.replace(placeholder.placeholder, replaceWith)
+        })
+
+        let replace: { [key: string]: Word[]} = {}		 
+
+        match.words.forEach((m) => {		
+            let mStr = m.wordMatch.toString()		
+
+            if (result.indexOf(mStr) >= 0) {		
+                let r = replace[mStr]		
+
+                if (!r) {		
+                    r = []		
+                    replace[mStr] = r		
+                }		
+
+                r.push(m.word)		
+            }		
+        })		
+
+        Object.keys(replace).forEach((r) => {		
+            result = result.replace(new RegExp(r, 'g'), replace[r].map((w) => 		
+                (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)		
+            ).join(' '))		
+        })		
+
+        return result                           
+    }
+}
 
 export default class PhrasePattern {
     // it's helpful for React to have a unique ID.
     key = counter++ 
+    englishFragmentsCache: EnglishPatternFragment[]
 
     constructor(public wordMatches: WordMatch[], public en: string) {
         this.wordMatches = wordMatches
@@ -72,35 +347,48 @@ export default class PhrasePattern {
         for (let i = 0; i <= until; i++) {
             let at = i
             let found = true
+            let childMatch: Match
             let wordsMatched: WordMatched[] = []
 
             for (let j = 0; j < this.wordMatches.length; j++) {
                 let wordMatch = this.wordMatches[j]
 
-                let match = wordMatch.matches(context, at, this.wordMatches, j)
+                let m = wordMatch.matches(context, at, this.wordMatches, j)
 
-                if (!match && !wordMatch.allowEmptyMatch()) {
+                if (!m && !wordMatch.allowEmptyMatch()) {
                     found = false
                     break
+                }
+
+                let matchedWordCount: number
+
+                if (typeof m == 'number') {
+                    matchedWordCount = m as number
+                }
+                else {
+                    childMatch = m as Match
+                    matchedWordCount = childMatch.words.length
                 }
 
                 if (!(wordMatch instanceof WildcardMatch) &&
                     (caseStudy == CaseStudy.STUDY_BOTH || 
                      wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
-                    for (let i = 0; i < match; i++) {
+                    for (let i = 0; i < matchedWordCount; i++) {
                         wordsMatched.push({
                             index: at+i,
                             word: words[at+i],
-                            wordMatch: wordMatch
+                            wordMatch: wordMatch,
+                            childMatch: childMatch
                         })
                     }
                 }
 
-                at += match
+                at += matchedWordCount
             }
 
             if (found && wordsMatched.length) {
                 return {
+                    sentence: context.sentence,
                     words: wordsMatched,
                     pattern: this
                 }
@@ -109,44 +397,20 @@ export default class PhrasePattern {
     }
 
     getEnglishFragments(): EnglishPatternFragment[] {
+        if (!this.englishFragmentsCache) {
+            this.englishFragmentsCache = this.calculateEnglishFragments()
+        }
+
+        return this.englishFragmentsCache
+    }
+
+    calculateEnglishFragments(): EnglishPatternFragment[] {
         let split = this.en.match(/(\[[^\]]+\]|[^\[]+)/g)
         let placeholderCount = 0
 
         let result: EnglishPatternFragment[] = []
         
         if (!split) {
-            return result
-        }
-
-        function getEnglishInflectionFromList(pos, form, inflectionList) {
-            let en: { [ form: string ]: string } = {}
-            en[''] = inflectionList[0]
-
-            ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
-                let inflection = inflectionList[index+1]
-
-                if (!inflection) {
-                    return
-                }
-
-                let els = inflection.split(':')
-
-                if (els.length == 2) {
-                    en[els[0]] = els[1].trim()
-                }
-                else {
-                    en[form] = inflectionList[index+1]
-                }
-            })
-
-            let englishForm = InflectedWord.getEnglishForm(pos, form, en)
-
-            let result = en[englishForm] || en['']
-
-            if (englishForm == 'inf') {
-                result = 'to ' + result
-            }
-
             return result
         }
 
@@ -184,197 +448,16 @@ export default class PhrasePattern {
                     placeholderCount++
                 }
 
-                let fragment: EnglishPatternFragment = {
-                    toString: () => en,
-                    placeholder: placeholder,
-                    placeholderOverrideForm: placeholderOverrideForm,
-                    enWithJpForCases: (match: Match) => {
-                        
-                        if (placeholder) {
-                            let atCaseStudyIndex = -1
-                            let atWordMatch 
-
-                            let m: WordMatched[] = match.words.filter((m) => {
-                                let wordMatch = m.wordMatch
-
-                                if (wordMatch.isCaseStudy()) {
-                                    if (wordMatch != atWordMatch) {
-                                        atCaseStudyIndex++
-
-                                        atWordMatch = wordMatch 
-                                    }
-
-                                    return atCaseStudyIndex == placeholderIndex
-                                }
-                            })
-
-                            if (!m.length) {
-                                console.log(`Placeholders didn't match case studies in pattern "${this.toString()}"`)
-
-                                return en
-                            }
-
-                            return m.map((wordMatched) => {
-                                let placeholderWord = wordMatched.word
-                                
-                                if (placeholderWord instanceof InflectedWord) {
-                                    return placeholderWord.word.getDefaultInflection().jp 
-                                }
-                                else {
-                                    return placeholderWord.jp
-                                }
-                            }).join(' ')
-                        }
-                        else {
-                            return fragment.en(match)
-                        }
-                        
-                    },
-                    en: (match: Match) => {
-                        let placeholders = en.match(/\(([^)]*)\)/g) || []
-
-                        placeholders.forEach(placeholder => {
-                            let params = placeholder.substr(1, placeholder.length-2).split(',')
-
-                            if (!params.length) {
-                                console.warn(`Empty placeholder in phrase translated as ${en}.`)
-                                return
-                            }
-
-                            let fromToForm = params[params.length-1].split('->')
-                            
-                            let words: InflectedWord[]
-                            
-                            let fromPosAtForm = fromToForm[0]
-
-                            let inflectAsPoS
-
-                            let fragmentIndex
-                            let agreeWithForm
-                            let agreeWithPoS
-
-                            {
-                                let els = fromPosAtForm.split('@') 
-
-                                if (els.length > 1) {
-                                    agreeWithForm = FORMS[els[1]]
-                                    agreeWithPoS = els[0]
-                                }
-                            }
-
-                            if (parseInt(fromPosAtForm)) {
-                                fragmentIndex = parseInt(fromPosAtForm)
-                            }
-                            else {
-                                agreeWithForm = FORMS[fromPosAtForm]
-
-                                if (!agreeWithForm) {
-                                    agreeWithPoS = fromPosAtForm
-                                }
-                            }
-
-                            if (fragmentIndex) {
-                                let at = 0
-                                words = []
-
-                                let wordMatch = match.pattern.wordMatches[fragmentIndex-1]
-
-                                match.words.forEach((w) => {
-                                    if (w.wordMatch == wordMatch) {
-                                        let word = w.word 
-
-                                        if (word instanceof InflectedWord) {
-                                            words.push(word)
-                                        }
-                                    }
-                                })
-                            }
-                            else {
-                                words = match.words.map(m => m.word as InflectedWord)
-                            }
-
-                            if (agreeWithForm) {
-                                words = words.filter(word => {
-                                    return word instanceof InflectedWord && agreeWithForm.matches(FORMS[word.form])
-                                })
-
-                                if (!words.length) {
-                                    console.warn(`No words with form ${agreeWithForm.id} in phrase translated as ${en}`)
-                                }
-                            }
-
-                            if (agreeWithPoS) {
-                                words = words.filter(word => word.pos == agreeWithPoS)
-
-                                if (!words.length) {
-                                    console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${en}`)
-                                }
-                            }
-
-                            let replaceWith = '' 
-
-                            if (params.length == 1) {
-                                if (fromToForm.length > 1) {
-                                    let enForm = fromToForm[1]
-
-                                    replaceWith = words.map(w => w.en[enForm] || w.en['']).join(' ')
-                                }
-                                else {
-                                    replaceWith = words.map(w => w.getEnglish()).join(' ')
-                                }
-                            }
-                            else if (words.length) {
-                                if (fromToForm.length > 1) {
-                                    inflectAsPoS = fromToForm[1]
-                                }
-                                else if (agreeWithPoS) {
-                                    inflectAsPoS = agreeWithPoS
-                                }
-                                else {
-                                    console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${en}`)
-                                    inflectAsPoS = 'v'
-                                }
-
-                                let inflections = params.slice(0, params.length-1)
-
-                                replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, inflections)
-                            }
-
-                            en = en.replace(placeholder, replaceWith)
-                        })
-
-                        let replace: { [key: string]: Word[]} = {}		 
- 
-                        match.words.forEach((m) => {		
-                            let mStr = m.wordMatch.toString()		
-
-                        if (en.indexOf(mStr) >= 0) {		
-                                let r = replace[mStr]		
-
-                                if (!r) {		
-                                    r = []		
-                                    replace[mStr] = r		
-                                }		
-
-                                r.push(m.word)		
-                            }		
-                        })		
-
-                        Object.keys(replace).forEach((r) => {		
-                            en = en.replace(new RegExp(r, 'g'), replace[r].map((w) => 		
-                                (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)		
-                            ).join(' '))		
-                        })		
- 
-                        return en                                     
-                    } 
-                }
-                
-                result.push(fragment)
+                result.push(new Fragment(en, placeholder, placeholderIndex, placeholderOverrideForm))
             })
         })
 
         return result
+    }
+
+    setEnglish(en: string) {
+        this.en = en
+        this.englishFragmentsCache = null
     }
 
     setCorpus(corpus: Corpus) {

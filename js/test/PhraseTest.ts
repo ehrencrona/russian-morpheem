@@ -14,7 +14,8 @@ import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Phrase from '../shared/phrase/Phrase'
 import Phrases from '../shared/phrase/Phrases'
 import Sentences from '../shared/Sentences'
-import PhrasePattern from '../shared/phrase/PhrasePattern';
+import PhrasePattern from '../shared/phrase/PhrasePattern'
+import PhraseMatch from '../shared/phrase/PhraseMatch'
 
 import { expect } from 'chai';
 
@@ -42,6 +43,7 @@ describe('Phrase', function() {
 
     w4 = new InflectableWord('я', mascInflection)
     w5 = new InflectableWord('хорош', inflections.inflections[1])
+    w5.setEnglish('good')
 
     comma = new Word(',')
 
@@ -105,6 +107,37 @@ describe('Phrase', function() {
 
         // wrong tag
         expect(ap.match({ words: [ w5.inflect('genpl'), w4.inflect('genpl') ], facts: facts })).to.be.undefined
+    })
+
+    it('translates phrase matches', () => {
+        let corpus = Corpus.createEmpty('ru')
+
+        corpus.facts = facts
+
+        let np = new Phrase('np', [
+            PhrasePattern.fromString('noun@nominative', 'foobar', words, inflections) 
+        ])
+
+        corpus.phrases.add(np)
+
+        let ap = new Phrase('ap', [
+            PhrasePattern.fromString('хороший@ phrase:np@genitive#location', '(2) (1)', words, inflections) 
+        ])
+
+        corpus.phrases.add(ap)
+        
+        let xp = new Phrase('xp', [
+            PhrasePattern.fromString('phrase:ap', '(1)', words, inflections) 
+        ])
+
+        corpus.phrases.add(xp)
+
+        let m = xp.match({ words: [ w5.inflect('genpl'), w3.inflect('genpl') ], facts: facts })
+
+        expect(m.words[0].wordMatch).to.be.instanceof(PhraseMatch)
+        expect(m.words[0].childMatch).to.not.be.null
+
+        expect(m.pattern.getEnglishFragments().map(f => f.en(m)).join(' ')).to.equal('foobar good')
     })
 
     it('converts to str and back', function () {

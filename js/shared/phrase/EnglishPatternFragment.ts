@@ -1,5 +1,6 @@
 
-import { CaseStudy, Match } from './PhrasePattern'
+import { CaseStudy } from './PhrasePattern'
+import Match from './Match'
 
 interface EnglishPatternFragment {
     placeholder: boolean,

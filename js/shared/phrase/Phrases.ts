@@ -58,7 +58,7 @@ export default class Phrases {
     }
 
     setEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {
-        pattern.en = en
+        pattern.setEnglish(en)
 
         if (this.onChange) {
             this.onChange(phrase)

@@ -12,7 +12,8 @@ import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import EnglishPatternFragment from '../../shared/phrase/EnglishPatternFragment' 
 import WordMatch from '../../shared/phrase/WordMatch'
-import { Match, CaseStudy, WordMatched } from '../../shared/phrase/PhrasePattern'
+import { CaseStudy } from '../../shared/phrase/PhrasePattern'
+import { Match, WordMatched } from '../../shared/phrase/Match'
 
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
@@ -244,7 +245,8 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         if (!wordMatch) {
             wordMatch = {
                 words: [],
-                pattern: null
+                pattern: null,
+                sentence: sentence
             }
         }
 

@@ -9,6 +9,7 @@ import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
 import Fact from '../../shared/fact/Fact'
 import MatchContext from './MatchContext'
+import Match from './Match'
 import CaseStudyMatch from './CaseStudyMatch'
 
 export class PhraseMatch implements WordMatch, CaseStudyMatch {
@@ -22,7 +23,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     }
 
     matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
-            matchPosition: number): number {
+            matchPosition: number): number|Match {
         if (context.sentence && !this.phrase.isAutomaticallyAssigned() &&
             !context.sentence.phrases.find(p => p.id == this.phrase.id)) {
             return
@@ -37,6 +38,13 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
                 this.overrideFormCase)
 
         childContext.study = null
+        
+        childContext.depth = (context.depth || 0) + 1
+
+        if (childContext.depth > 5) {
+            console.warn('Maximum phrase deptch reaching. Bailing.')
+            return
+        }
 
         let m = this.phrase.match(childContext, true)
 
@@ -49,7 +57,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
                 }
             }
 
-            return m.words.length
+            return m
         }
         else {
             return 0
