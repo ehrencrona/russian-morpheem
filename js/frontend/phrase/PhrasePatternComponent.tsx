@@ -156,7 +156,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
 
                         {
                             pattern.wordMatches.filter(m => m instanceof PhraseMatch).map(m => 
-                                <div onClick={ () => openFact((m as PhraseMatch).phrase, this.props.corpus, this.props.tab) }
+                                <div key={ (m as PhraseMatch).phrase.id } 
+                                    onClick={ () => openFact((m as PhraseMatch).phrase, this.props.corpus, this.props.tab) }
                                     className='clickable'>{ (m as PhraseMatch).phrase.id }</div>
                             )
                         }

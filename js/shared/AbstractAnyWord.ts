@@ -9,6 +9,7 @@ abstract class AbstractAnyWord implements AnyWord {
     abstract getIdWithoutClassifier()
     abstract getId()
     abstract toText()
+    abstract getWordFact()
 
     getEnglish(form?: string) {
         if (!form) {

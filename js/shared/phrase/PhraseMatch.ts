@@ -7,6 +7,7 @@ import { FORMS, CASES, GrammaticalCase } from '../inflection/InflectionForms'
 import Phrase from './Phrase'
 import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
+import Fact from '../../shared/fact/Fact'
 import MatchContext from './MatchContext'
 import CaseStudyMatch from './CaseStudyMatch'
 
@@ -14,9 +15,10 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     phrase: Phrase
     corpus: Corpus
 
-    constructor(public phraseId: string, public overrideFormCase: GrammaticalCase) {
+    constructor(public phraseId: string, public overrideFormCase: GrammaticalCase, public tag?: string) {
         this.phraseId = phraseId
         this.overrideFormCase = overrideFormCase
+        this.tag = tag
     }
 
     matches(context: MatchContext, wordPosition: number, matches: WordMatch[], 
@@ -34,6 +36,14 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         let m = this.phrase.match(childContext, true)
 
         if (m) {
+            if (this.tag && !m.words.find(w => {
+                let tags = this.corpus.facts.getTagsOfFact(w.word.getWordFact())
+
+                return tags.indexOf(this.tag) >= 0
+            })) {
+                return 0
+            }
+
             return m.words.length
         }
         else {

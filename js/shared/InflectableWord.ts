@@ -213,6 +213,10 @@ export default class InflectableWord extends AbstractAnyWord {
         return maskId
     }
 
+    getWordFact() {
+        return this
+    }
+
     toText() {
         return this.getDefaultInflection().toText()
     }

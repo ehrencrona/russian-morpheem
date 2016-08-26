@@ -79,6 +79,31 @@ describe('Phrase', function() {
         expect(phrase.match({ words: shouldMatch, facts: facts }).words.length).to.equal(2)
     })
 
+    it('handles phrase matches', () => {
+        let corpus = Corpus.createEmpty('ru')
+        corpus.phrases.setCorpus(corpus)
+
+        let np = new Phrase('np', [
+            PhrasePattern.fromString('noun@nominative', '[someone]', words, inflections) 
+        ])
+
+        corpus.phrases.add(np)
+
+        let ap = new Phrase('ap', [
+            PhrasePattern.fromString('хорош@ phrase:np@genitive', '[someone]', words, inflections) 
+        ])
+
+        corpus.phrases.add(np)
+
+        expect(ap.match({ words: [ w5.inflect('genpl'), w3.inflect('genpl') ], facts: facts }).words.length).to.equal(2)
+
+        // wrong case
+        expect(ap.match({ words: [ w5.inflect('genpl'), w3.inflect('pl') ], facts: facts })).to.be.undefined
+
+        // wrong tag
+        expect(ap.match({ words: [ w5.inflect('genpl'), w4.inflect('genpl') ], facts: facts }).words.length).to.equal(2)
+    })
+
     it('converts to str and back', function () {
         function testStr(originalStr: string, becomesStr?: string) {
             let phrase = Phrase.fromString('foo', originalStr, 'English', words, inflections)

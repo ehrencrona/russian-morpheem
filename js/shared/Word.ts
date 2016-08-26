@@ -35,6 +35,10 @@ export default class Word extends AbstractAnyWord {
         return this
     }
 
+    getWordFact(): Fact {
+        return this
+    }
+
     requiresFact(fact) {
         if (!fact) {
             throw new Error('No fact.')

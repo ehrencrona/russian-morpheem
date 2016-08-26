@@ -1,11 +1,10 @@
-"use strict";
-
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
 import { FORMS, PartOfSpeech, Tense, Number, Comparison, GrammaticalCase } from './inflection/InflectionForms' 
 import InflectableWord from './InflectableWord'
 import Words from './Words'
+import Fact from './fact/Fact'
 import htmlEscape from './util/htmlEscape'
 
 export default class InflectedWord extends Word {
@@ -100,6 +99,10 @@ export default class InflectedWord extends Word {
 
     getDefaultInflection() {
         return this.word.getDefaultInflection()
+    }
+
+    getWordFact(): Fact {
+        return this.word
     }
 
     getId() {
