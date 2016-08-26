@@ -382,7 +382,13 @@ export default class PhrasePattern {
     }
 
     hasCase(grammaticalCase: GrammaticalCase): boolean {
-        return !!this.wordMatches.find((m) => (m as any).form && (m as any).form.grammaticalCase == grammaticalCase)
+        return !!this.wordMatches.find((m) => {
+            if (m instanceof PhraseMatch) {
+                return m.overrideFormCase == grammaticalCase
+            }
+
+            return (m as any).form && (m as any).form.grammaticalCase == grammaticalCase
+        })
     }
 
     static parseFormMatch(str: string, line: string): WordMatch {

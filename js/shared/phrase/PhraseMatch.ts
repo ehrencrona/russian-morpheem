@@ -23,7 +23,12 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
             matchPosition: number): number {
         let childContext = Object.assign({}, context)
         childContext.words = context.words.slice(wordPosition)
-        childContext.overrideFormCase = this.overrideFormCase
+
+        childContext.overrideFormCase = 
+            (this.overrideFormCase == GrammaticalCase.NOM && context.overrideFormCase ?
+                context.overrideFormCase :
+                this.overrideFormCase)
+
         childContext.study = null
 
         let m = this.phrase.match(childContext, true)

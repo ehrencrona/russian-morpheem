@@ -56,6 +56,7 @@ export default class PhrasesComponent extends Component<Props, State> {
 
         if (this.state.case != null) {
             list = <FilteredFactsListComponent
+                key='case'
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => {
                      let fact = factIndex.fact
@@ -68,6 +69,7 @@ export default class PhrasesComponent extends Component<Props, State> {
         }
         else if (this.state.expression) {
             list = <FilteredFactsListComponent
+                key='expression'
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => {
                      let fact = factIndex.fact
@@ -80,6 +82,7 @@ export default class PhrasesComponent extends Component<Props, State> {
         }
         else if (this.state.pendingIds) {
             list = <FilteredFactsListComponent
+                key='pending'
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => {
                     let fact = factIndex.fact
@@ -93,6 +96,7 @@ export default class PhrasesComponent extends Component<Props, State> {
         }
         else {
             list = <FilteredFactsListComponent
+                key='all'
                 corpus={ this.props.corpus }
                 filter={ (factIndex) => factIndex.fact instanceof Phrase }
                 tab={ this.props.tab }
