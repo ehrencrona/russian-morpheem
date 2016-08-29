@@ -29,8 +29,10 @@ import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../share
 import htmlEscape from '../../shared/util/htmlEscape'
 
 import DidYouKnowComponent from './DidYouKnowComponent'
+import StudyPhrase from './StudyPhrase'
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
+import StudyToken from './StudyToken'
 import FrontendExposures from './FrontendExposures'
 import SentenceComponent from './SentenceComponent'
 
@@ -48,7 +50,7 @@ interface Props {
 }
 
 interface State {
-    words?: StudyWord[],
+    tokens?: StudyToken[],
     didYouKnow?: StudyFact[],
     unknownFacts?: StudyFact[],
     knownFacts?: StudyFact[],
@@ -85,7 +87,7 @@ export default class StudyComponent extends Component<Props, State> {
             unknownFacts: [], 
             knownFacts: [],
             stage: Stage.TEST,
-            words: toStudyWords(sentence, props.facts, props.corpus),
+            tokens: toStudyWords(sentence, props.facts, props.corpus),
             highlightFact: null
         }
     }
@@ -108,9 +110,9 @@ export default class StudyComponent extends Component<Props, State> {
     next(...addKnownFacts: StudyFact[]) {
         let productionFacts: { [id: string]: boolean } = {}
 
-        this.state.words.forEach(w => {
-            if (this.isWordHidden(w)) {
-                w.facts.forEach(f => productionFacts[f.fact.getId()] = true)
+        this.state.tokens.forEach(token => {
+            if (token.studied) {
+                token.facts.forEach(f => productionFacts[f.fact.getId()] = true)
             }
         })
 
@@ -189,12 +191,11 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    explainWords(words: StudyWord[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
+    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
         let factsById: { [ id: string ]: boolean } = {}
-        let facts = []
 
         let addFact = (fact: StudyFact) => {
             if (factsById[fact.fact.getId()]) {
@@ -209,9 +210,8 @@ export default class StudyComponent extends Component<Props, State> {
             factsById[fact.fact.getId()] = true
         }
 
-        words.forEach((word) => {
-            facts = facts.concat(word.facts.filter((f) => !isGiveaway(f, hiddenFacts)))
-        })
+        facts = facts.filter((f) => 
+            !isGiveaway(f, hiddenFacts) && isWorthExplaining(f.fact, f.words[0].word))
 
         facts.forEach(addFact)
 
@@ -253,22 +253,42 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     iWasWrong(hiddenFacts: StudyFact[]) {
-        this.explainWords(this.state.words.filter((word) => 
-            this.isWordHidden(word)), hiddenFacts, true)
+        this.explainFacts(this.getProductionFacts(), hiddenFacts, true)
     }
 
-    iWasRight() {
-        let facts: StudyFact[] = []
+    getProductionFacts(): StudyFact[] {
+        let factSet: Set<string> = new Set()
+        let result: StudyFact[] = []
 
-        this.state.words.forEach((word: StudyWord) => {
-            if (this.isWordHidden(word)) {
-                word.facts.forEach((fact) => 
-                    facts.push(fact) 
-                )
+        let handleWord = (t: StudyWord) => {
+            t.facts.forEach((f) => {
+                if (!factSet.has(f.fact.getId())) {
+                    result.push(f)
+                    factSet.add(f.fact.getId())
+                }
+            })
+        }
+
+        this.state.tokens.forEach((t) => {
+            if (t instanceof StudyWord) {
+                if (t.studied) {
+                    handleWord(t)
+                }
+            }
+            else if (t instanceof StudyPhrase) {
+                if (t.studied) {
+                    t.words.forEach((w) => {
+                        handleWord(w)
+                    })
+                }
             }
         })
 
-        this.next(...facts)
+        return result
+    }
+
+    iWasRight() {
+        this.next(...this.getProductionFacts())
     }
 
     renderSentenceTranslation() {
@@ -333,20 +353,12 @@ export default class StudyComponent extends Component<Props, State> {
 
 console.log('Sentence: ' + sentence.toString())
 
-        let words = this.state.words
+        let tokens = this.state.tokens
 
         let hiddenFacts: StudyFact[] = []
 
         if (!reveal) {
-            words.forEach((word) => {
-                if (this.isWordHidden(word)) {
-                    hiddenFacts = hiddenFacts.concat(word.facts)
-                }
-            })
-
-            let additionalId
-
-            hiddenFacts = hiddenFacts.filter((fact) => 
+            hiddenFacts = this.getProductionFacts().filter((fact) => 
                 this.isStudiedFact(fact.fact) ||
                 this.oughtToKnow(fact.fact))
         }
@@ -383,12 +395,12 @@ console.log('Sentence: ' + sentence.toString())
                     ref='sentence'
                     corpus={ this.props.corpus }
                     reveal={ reveal }
-                    words={ this.state.words }
+                    tokens={ this.state.tokens }
                     facts={ this.props.facts }
                     highlight={ this.state.highlightFact }
                     wordClicked={
                         (word: StudyWord) => {
-                            this.explainWords([word], hiddenFacts)
+                            this.explainFacts(word.facts, hiddenFacts)
 
                             if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
                                 this.setState({ stage: Stage.CONFIRM })
@@ -416,4 +428,16 @@ function getWordMeaningFactId(word: Word) {
 
 function excludeFact(exclude: StudyFact, array: StudyFact[]) {
     return array.filter((f) => f.fact.getId() !== exclude.fact.getId())
+}
+
+function isWorthExplaining(fact: Fact, word: Word) {
+    if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
+        return false
+    }
+
+    return !(fact instanceof InflectionFact &&
+        word instanceof InflectedWord &&
+        // can't check the default form of the inflection since it might be masked, 
+        // so we have to get the default form of the word
+        word.getDefaultInflection().form == fact.form)
 }

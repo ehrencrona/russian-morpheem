@@ -23,7 +23,7 @@ export default class InflectionFactComponent extends Component<FactComponentProp
         super(props)
 
         this.state = {
-            explainWord: this.props.studyFact.words[0].wordFact as InflectedWord
+            explainWord: this.props.studyFact.words[0].word as InflectedWord
         }
     }
 
@@ -33,7 +33,8 @@ export default class InflectionFactComponent extends Component<FactComponentProp
 
     render() {
         let studyWord = this.props.studyFact.words[0]
-        let word = studyWord.wordFact
+        let word = studyWord.word
+        let form = FORMS[this.props.fact.form]
 
         let hideWord = this.props.hiddenFacts.find((fact) => fact.fact.getId() == word.getId())
 
@@ -103,16 +104,16 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                     <strong className='nobr'>{ 
                         studyWord.getHint() 
                     }</strong> forms the <strong className='nobr'>{ 
-                        studyWord.form.name
+                        form.name
                     }</strong> with the ending <strong className='nobr'>-{
                         word.word.inflection.getInflectedForm('', word.form).form
                     }</strong>
                 </div>
             }
-            // but in normal circumatances we just state the inflection form, the case and the default form
+            // but in normal circumstances we just state the inflection form, the case and the default form
             else {
                 let desc = <div><strong className='nobr'>
-                </strong>the { studyWord.form.name } of <strong className='nobr'>
+                </strong>the { form.name } of <strong className='nobr'>
                     { word.word.getDefaultInflection().jp }
                 </strong> is <strong className='nobr verbatim'>
                     { studyWord.jp }

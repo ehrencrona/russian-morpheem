@@ -5,6 +5,9 @@ import Words from '../../shared/Words'
 
 import StudyWord from './StudyWord'
 import StudyFact from './StudyFact'
+import StudyToken from './StudyToken'
+import StudyPhrase from './StudyPhrase'
+
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import PhraseCase from '../../shared/phrase/PhraseCase'
@@ -14,24 +17,16 @@ import animate from './animate'
 
 const MAX_FONT_SIZE = 64;
 
-class WordGroup {
-    constructor(public words: StudyWord[], public startIndex: number) {
-        this.words = words
-        this.startIndex = startIndex
-    }
-}
-
 interface Props {
     facts: Fact[],
     corpus: Corpus,
-    words: StudyWord[],
+    tokens: StudyToken[],
     reveal: boolean,
     highlight: StudyFact,
     wordClicked: (StudyWord) => any
 }
 
 interface State {
-    groupedWords?: WordGroup[]
 }
 
 let React = { createElement: createElement }
@@ -42,12 +37,9 @@ export default class SentenceComponent extends Component<Props, State> {
 
     constructor(props) {
         super(props)
-
-        this.state = this.getStateForProps(props)
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(this.getStateForProps(nextProps))
     }
 
     animateOut(callback: () => any) {
@@ -66,36 +58,11 @@ export default class SentenceComponent extends Component<Props, State> {
         return !!word.facts.find((f) => this.isStudiedFact(f.fact))
     }
 
-    getStateForProps(props: Props): State {
-        let corpus = props.corpus
-
-        let groupedWords: WordGroup[] = []
-
-        let lastWasHidden 
-
-        this.props.words.forEach((word, index) => {
-            let thisHidden = this.isWordStudied(word)
-            
-            if (groupedWords.length && ((thisHidden && lastWasHidden) || (!thisHidden && !lastWasHidden))) {
-                groupedWords[groupedWords.length-1].words.push(word)
-            }
-            else {
-                groupedWords.push(new WordGroup([word], index))
-            }
-
-            lastWasHidden = this.isWordStudied(word)
-        })
-
-        return {
-            groupedWords: groupedWords
-        }
-    }
-
     render() {
         let reveal = this.props.reveal
         let capitalize = true
 
-        let spacedMap = (list: StudyWord[], callback: (item: StudyWord, index: number) => any) => {
+        let spacedMap = (list: StudyToken[], callback: (item: StudyToken, index: number) => any) => {
             let result = []
 
             list.forEach((item, index) => {
@@ -105,12 +72,7 @@ export default class SentenceComponent extends Component<Props, State> {
                         result.push(callback(item, index))
                     }
                     else if (isWordWithSpaceBefore(item)) {
-                        if (this.isWordStudied(item) && this.isWordStudied(list[index-1])) {
-                            result.push(<span key={'space' + index } className='space studied'>&nbsp;</span>)
-                        }
-                        else {
-                            result.push(' ')
-                        }
+                        result.push(' ')
 
                         result.push(callback(item, index))
                     }
@@ -148,18 +110,24 @@ export default class SentenceComponent extends Component<Props, State> {
             highHighlight = (word: StudyWord) => word.hasFact(highlightFact)
 
             if (highHighlight && highlightFact instanceof PhraseCase) {
-                lowHighlight = (word: StudyWord) => word.isPartOfPhrase(highlightFact.phrase)
+                lowHighlight = (word: StudyWord) => word.hasFact(highlightFact.phrase)
             }
             else if (highHighlight && highlightFact instanceof Phrase) {
-                lowHighlight = (word: StudyWord) => word.isPartOfPhrase(highlightFact)
+                lowHighlight = (word: StudyWord) => word.hasFact(highlightFact)
             }
+        }
+
+        let tokens = this.props.tokens
+
+        if (reveal) {
+            tokens = flatten(tokens)
         }
 
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
             {
-                spacedMap(this.props.words, (word, index) => {
+                spacedMap(tokens, (token, index) => {
                     let className = 'word'
-                    let text = word.jp
+                    let text = token.jp
 
                     if (capitalize && text) {
                         text = text[0].toUpperCase() + text.substr(1)
@@ -167,31 +135,27 @@ export default class SentenceComponent extends Component<Props, State> {
 
                     let formHint
 
-                    if (this.isWordStudied(word)) {
+                    if (token.studied) {
                         if (!reveal) {
-                            text = word.getHint()
-                            formHint = word.getFormHint()
+                            text = token.getHint()
                         }
 
                         className += ' studied'
                     }
 
-                    if (highHighlight && highHighlight(word)) {
-                        className += ' highlight high'
-                    }
-                    else if (lowHighlight && lowHighlight(word)) {
-                        className += ' highlight low'
+                    if (token instanceof StudyWord) {
+                        if (highHighlight && highHighlight(token)) {
+                            className += ' highlight high'
+                        }
+                        else if (lowHighlight && lowHighlight(token)) {
+                            className += ' highlight low'
+                        }
+                    
+                        capitalize = token.jp && Words.SENTENCE_ENDINGS.indexOf(token.jp) >= 0
                     }
 
-                    capitalize = word.jp && Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
-
-                    return <div key={ index } className={ className } onClick={ () => this.props.wordClicked(word) }>
+                    return <div key={ index } className={ className } onClick={ () => token instanceof StudyWord && this.props.wordClicked(token) }>
                             { text || <span>&nbsp;</span>}
-                        { (formHint ?
-                            <span className='form'>{ formHint }</span>
-                            :
-                            []                                
-                        ) }
                     </div>
                 })
             }
@@ -280,12 +244,29 @@ export default class SentenceComponent extends Component<Props, State> {
         let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), MAX_FONT_SIZE)
 
         trySize(0, guesstimate, Math.min(getWidth(container), MAX_FONT_SIZE))
-
-        console.log('done')
     }
 }
 
-function isWordWithSpaceBefore(word: StudyWord) {
-    return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
+function flatten(tokens: StudyToken[]) {
+    tokens = tokens.slice(0)
+
+    for (let i = tokens.length; i >= 0; i--) {
+        let token = tokens[i]
+
+        if (token instanceof StudyPhrase) {
+            tokens.splice(i, 1, ...token.words)
+        }
+    }  
+
+    return tokens
+}
+
+function isWordWithSpaceBefore(word: StudyToken) {
+    if (word instanceof StudyWord ) {
+        return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
+    }
+    else {
+        return true
+    }
 }
 

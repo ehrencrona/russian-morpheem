@@ -18,9 +18,8 @@ import { Match, WordMatched } from '../../shared/phrase/Match'
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
 import StudyPhrase from './StudyPhrase'
+import StudyToken from './StudyToken'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
-
-import getFormHint from './getFormHint'
 
 function isWorthExplaining(fact: Fact, word: Word) {
     if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
@@ -37,33 +36,7 @@ function isWorthExplaining(fact: Fact, word: Word) {
 export function wordToStudyWord(word: Word, words: StudyWord[], studiedFacts: Fact[]): StudyWord {
     let facts: StudyFact[] = []
 
-    let result: StudyWord = {
-        id: word.getId(),
-        jp: word.jp,
-        getHint: () => word.getEnglish(),
-        getFormHint: () => getFormHint(word, words, studiedFacts),
-        hasFact: (fact: Fact) => {
-            return !!facts.find(f => f.fact.getId() == fact.getId())
-        },
-        form: (word instanceof InflectedWord ? FORMS[word.form] : null),
-        facts: facts,
-        wordFact: word,
-        isPartOfPhrase: (phrase: Phrase) => {
-            return !!facts.find(f => {
-                let fact = f.fact
-
-                return fact instanceof PhraseCase && fact.phrase.id == phrase.id 
-            })
-        }
-    }
-
-    word.visitFacts((fact: Fact) => {
-        if (isWorthExplaining(fact, word)) {
-            facts.push({ fact: fact, words: [ result ] })
-        }
-    })
-
-    return result
+    return new StudyWord(word, false)
 }
 
 export interface WordBlock {
@@ -74,7 +47,7 @@ export interface WordBlock {
     match: WordMatch
 }
 
-function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]) {
+function findWordBlocks(phraseMatch: Match, words: StudyWord[]) {
     let result: WordBlock[] = []
 
     phraseMatch.words.forEach((m) => {
@@ -83,7 +56,7 @@ function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]
 
         let i = m.index
 
-        let isCaseStudy = wordMatch.words.findIndex((n) => i == n.index) < 0
+        let isCaseStudy = m.wordMatch.isCaseStudy()
 
         if (result.length &&
             i == result[result.length-1].end &&
@@ -114,7 +87,7 @@ function findWordBlocks(wordMatch: Match, phraseMatch: Match, words: StudyWord[]
     return result
 }
 
-function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlocks: WordBlock[], phraseMatch: Match, wordMatch: Match) {
+function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens: StudyToken[], wordBlocks: WordBlock[], phraseMatch: Match) {
     let fragments = phraseMatch.pattern.getEnglishFragments()
 
     let atWordBlock = 0, atFragment = 0
@@ -124,8 +97,8 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         let wordBlock = wordBlocks[atWordBlock]
         let englishBlock: EnglishPatternFragment = fragments[atFragment]
 
-        let blockStart = (wordBlock ? wordBlock.start + wordIndexAdjust : null)
-        let blockEnd = (wordBlock ? wordBlock.end + wordIndexAdjust : null)
+        let blockStart = tokens.findIndex(t => t === words[wordBlock.start]) 
+        let blockEnd = blockStart + wordBlock.end - wordBlock.start
 
         if ((!wordBlock || (englishBlock && wordBlock.caseStudy)) && 
                 !englishBlock.placeholder) {
@@ -133,40 +106,41 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
             let start
             
             if (wordBlock) {
-                start = wordBlock.start 
+                start = blockStart
             }
             else if (wordBlocks.length > 0) {
-                start = wordBlocks[wordBlocks.length-1].end
+                // WRONG
+                start = blockStart-1
             }
             else {
                 start = 0
             }
 
-            words.splice(start + wordIndexAdjust, 0, new StudyPhrase(phrase, englishBlock.en(phraseMatch), []))
+            tokens.splice(start + wordIndexAdjust, 0, new StudyPhrase(phrase, englishBlock.en(phraseMatch), [], true))
             wordIndexAdjust++
 
             atFragment++
         }
         else if (!wordBlock) {
-            console.error(`More English blocks than words block in ${phrase.getId()}. Could not place ${englishBlock.en(phraseMatch)}`)
+            console.error(`More English blocks than token block in ${phrase.getId()}. Could not place ${englishBlock.en(phraseMatch)}`)
 
-            words.push(new StudyPhrase(phrase, englishBlock.en(phraseMatch), []))
+            tokens.push(new StudyPhrase(phrase, englishBlock.en(phraseMatch), [], true))
 
             atFragment++
         }
         else if (!englishBlock ||
             (!wordBlock.caseStudy && englishBlock.placeholder)) {
             // add a Russian text block with no English equivalent.
-            words.splice(blockStart, wordBlock.end - wordBlock.start, 
+            tokens.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, '', 
-                    words.slice(blockStart, blockEnd)))
+                    words.slice(wordBlock.start, wordBlock.end), true))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
             atWordBlock++
         }
         else if (wordBlock.caseStudy && englishBlock.placeholder) {
-            // case study block: retain Russian words
+            // case study block: retain Russian word
             let inflectedWord = wordBlock.words.find(w => w.form && w.form.grammaticalCase != GrammaticalCase.NOM)
 
             if (inflectedWord) {
@@ -178,7 +152,7 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
                     // unfortunately, we don't know this earlier
                     caseFact.placeholderName = englishBlock.en(phraseMatch)
 
-                    let wordFact = word.wordFact
+                    let wordFact = word.word
 
                     if (englishBlock.placeholderOverrideForm && wordFact instanceof InflectedWord) {
                         word.getHint = () => {
@@ -211,9 +185,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
         }
         else if (!wordBlock.caseStudy && !englishBlock.placeholder) {
             // add an English text block for Russian text
-            words.splice(blockStart, wordBlock.end - wordBlock.start, 
+            tokens.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, englishBlock.en(phraseMatch), 
-                    words.slice(blockStart, blockEnd)))
+                    words.slice(wordBlock.start - wordBlock.end), true))
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
@@ -227,10 +201,20 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], wordBlo
     }
 }
 
-export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyWord[] {
+export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyToken[] {
     let words: StudyWord[] = []
     
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
+
+    words.forEach(word => {
+        studiedFacts.forEach(fact => {
+            if (word.hasFact(fact)) {
+                word.studied = true
+            }
+        })
+    })
+
+    let tokens: StudyToken[] = words.slice(0)
 
     let handlePhrase = (phrase: Phrase) => {
         let phraseMatch: Match = phrase.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_BOTH })
@@ -240,20 +224,10 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
             return
         }
 
-        let wordMatch: Match = phrase.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: CaseStudy.STUDY_WORDS })
-
-        if (!wordMatch) {
-            wordMatch = {
-                words: [],
-                pattern: null,
-                sentence: sentence
-            }
-        }
-
-        let wordBlocks: WordBlock[] = findWordBlocks(wordMatch, phraseMatch, words)
+        let wordBlocks: WordBlock[] = findWordBlocks(phraseMatch, words)
 
         if (!!studiedFacts.find((f) => f.getId() == phrase.getId())) {
-            replaceWordsWithStudyPhrase(phrase, words, wordBlocks, phraseMatch, wordMatch)
+            replaceWordsWithStudyPhrase(phrase, words, tokens, wordBlocks, phraseMatch)
         }
         else {
             let wordsFact: StudyFact = { fact: phrase, words: [] } 
@@ -280,17 +254,18 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
             phraseMatch.words.forEach((m) => {
                 if (m.wordMatch.isCaseStudy()) {
                     let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
-                    words[m.index].facts.push(caseFacts[caseStudied])
+                    words[m.index].addFact(caseFacts[caseStudied])
                 }
 
                 // TODO: or there are words but the words are all placeholders [verb] [someone] [something])
                 if (!m.wordMatch.isCaseStudy()) {
-                    words[m.index].facts.push(wordsFact)
+                    words[m.index].addFact(wordsFact)
                 }
             })
         }
     }
 
+    // handle unstudied phrases
     if (!ignorePhrases) {
         sentence.phrases.forEach((p) => { 
             if (!studiedFacts.find((f) => f.getId() == p.getId())) {
@@ -299,6 +274,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         })
     }
 
+    // handle studied phrases
     let phraseCount = 0
 
     studiedFacts.forEach((studiedFact) => {
@@ -319,9 +295,9 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         let fullStop = corpus.words.get('.')
 
         if (fullStop) {
-            words.push(wordToStudyWord(fullStop, words, studiedFacts))
+            tokens.push(wordToStudyWord(fullStop, words, studiedFacts))
         }
     }
 
-    return words
+    return tokens
 }

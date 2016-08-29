@@ -1,43 +1,36 @@
-import StudyWord from './StudyWord'
 import { InflectionForm } from '../../shared/inflection/InflectionForms'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
+
+import StudyToken from './StudyToken'
+import StudyWord from './StudyWord'
 import StudyFact from './StudyFact'
 
-export default class StudyPhrase implements StudyWord {
-    id: string
+export default class StudyPhrase implements StudyToken {
     jp: string
-    form: InflectionForm
-    wordFact: Fact
-    facts: StudyFact[]
+    facts: StudyFact[] = []
 
-    constructor(public phrase: Phrase, public en: string, public words: StudyWord[]) {
+    constructor(public phrase: Phrase, public en: string, public words: StudyWord[], public studied: boolean) {
         this.phrase = phrase
         this.words = words
-
-        this.id = phrase.getId()
+        this.studied = studied
 
         this.jp = words.map((w) => w.jp).join(' ')
         this.en = en
-        this.wordFact = phrase
 
-        this.facts = [ { fact: phrase, words: words } ] 
+        let factSet: Set<string> = new Set()
 
-        words.forEach((w) => this.facts = this.facts.concat(w.facts))
-    }
+        this.facts.push({ fact: phrase, words: words })
+        factSet.add(phrase.getId())
 
-    isPartOfPhrase(phrase: Phrase) {
-        return this.id == phrase.id
-    }
-
-    hasFact(fact: Fact) {
-        let id = fact.getId()
-
-        return !!this.facts.find(fact => fact.fact.getId() == id)
-    }
-
-    getFormHint() {
-        return ''
+        words.forEach(w => {
+            this.facts.forEach(f => {
+                if (!factSet.has(f.fact.getId())) {
+                    factSet.add(f.fact.getId())
+                    this.facts.push(f)
+                }
+            })
+        })
     }
     
     getHint() {

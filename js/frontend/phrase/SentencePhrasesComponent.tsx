@@ -11,6 +11,7 @@ import PhraseFactComponent from './PhraseFactComponent'
 import Tab from '../OpenTab'
 import StudyPhrase from '../study/StudyPhrase'
 import StudyWord from '../study/StudyWord'
+import StudyToken from '../study/StudyToken'
 import toStudyWords from '../study/toStudyWords'
 
 interface Props {
@@ -64,7 +65,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
     }
 
-    getBreakdown(studyWords: StudyWord[]) {
+    getBreakdown(studyTokens: StudyToken[]) {
         function getPhraseCase(word: StudyWord): PhraseCase {
             let fact = word.facts.find((f) => f.fact instanceof PhraseCase)
 
@@ -76,36 +77,14 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         }
 
         let result = []
-        let lastPhraseCase: PhraseCase
-        let phraseCaseWords = []
 
-        studyWords.forEach((w) => {
-            let phraseCase = getPhraseCase(w)
-
+        studyTokens.forEach((w) => {
             if (w instanceof StudyPhrase) {
                 result.push(w.getHint() || '___')
-            }
-            else if (phraseCase) {
-                if (!lastPhraseCase || lastPhraseCase.getId() != phraseCase.getId()) {
-                    phraseCaseWords = []
-                }
-
-                phraseCaseWords.push(w)
-
-                let str = `${ phraseCase.placeholderName } (${ phraseCaseWords.map(w => w.jp).join(' ') })`
-
-                if (lastPhraseCase) {
-                    result[result.length-1] = str
-                }
-                else {
-                    result.push(str)
-                }
             }
             else {
                 result.push(`??? (${ w.jp })`) 
             }
-
-            lastPhraseCase = phraseCase
         })
 
         return result.join(' ')
@@ -123,7 +102,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             </div>
         }
 
-        let studyWords =
+        let studyTokens =
             toStudyWords(this.props.sentence, [ phrase ], this.props.corpus, true)
                 .filter((w) => w instanceof StudyPhrase || !!w.facts.find((f) => f.fact instanceof PhraseCase))
 
@@ -131,7 +110,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
             <div className='match'>{ 
                 match.words.map((w) => w.word.jp).join(' ')
             } – {
-                this.getBreakdown(studyWords)
+                this.getBreakdown(studyTokens)
             }</div>
             <div className='phrase'>{ 
                 phrase.description 

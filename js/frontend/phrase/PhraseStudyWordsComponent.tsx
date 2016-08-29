@@ -10,6 +10,7 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
 
 import toStudyWords from '../study/toStudyWords'
+import StudyToken from '../study/StudyToken'
 import StudyWord from '../study/StudyWord'
 import StudyPhrase from '../study/StudyPhrase'
 import openSentence from '../sentence/openSentence'
@@ -65,7 +66,7 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
                 sentence: sentence, words: sentence.words, facts: this.props.corpus.facts }) != null)
         }
 
-        let words: StudyWord[] = []
+        let words: StudyToken[] = []
         let sentences: Sentence[]
 
         if (phrase.patterns.length) {
@@ -99,14 +100,12 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
 
                                 words = toStudyWords(sentence, [ phraseWithOnePattern ], this.props.corpus, true)
 
-                                return <li key={ sentence.id } className='clickable' onClick={ () => openSentence(sentence, this.props.corpus, this.props.tab) } > { words.map((w, index) => 
-                                        (!!w.facts.find((f) => f.fact instanceof PhraseCase) ?
-                                            <span className='case' key={ index }> { w.getHint() }</span>
-
+                                return <li key={ sentence.id } className='clickable' onClick={ () => openSentence(sentence, this.props.corpus, this.props.tab) } > { 
+                                    words.map((w, index) => 
+                                        (w instanceof StudyPhrase ?
+                                            <span className='match' key={ index }> { w.getHint() }</span> 
                                             :
-
-                                            <span className={ w instanceof StudyPhrase ? 'match' : '' } key={ index }> { 
-                                                (w instanceof StudyPhrase ? w.getHint() || '___' : w.jp) }</span>)
+                                            <span key={ index }>{ w.jp }</span>)
                                 ) }</li>
                             })
                         }</ul>

@@ -74,7 +74,7 @@ export default class Phrase implements Fact {
         visitor(this)
     }
 
-    /** When visiting a sentence, the phrase implies knowledge of which cases to use which it, but when 
+    /** When visiting a sentence, the phrase implies knowledge of which cases to use with it, but when 
       * talking about an individual study word, it does not. So this method is used when visiting the 
       * sentence facts.
       */
