@@ -51,7 +51,7 @@ export default class PhraseSentencesComponent extends Component<Props, State> {
                     let wordString = htmlEscape(word.toString())
 
                     if (match.wordIndexes.indexOf(index) >= 0) {
-                        return '<span class="match">' + wordString + '</span>' 
+                        return '<span class="match">' + wordString + '</span> ' 
                     }
                     else {
                         return wordString

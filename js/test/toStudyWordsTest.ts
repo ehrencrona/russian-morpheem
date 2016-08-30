@@ -24,7 +24,7 @@ import StudyPhrase from '../frontend/study/StudyPhrase'
 
 import { expect } from 'chai';
 
-describe('toStudyWordsTest', () => {
+describe('toStudyWords', () => {
     let nounInflection = new Inflection('regular', 'nom', 'n', 
             parseEndings('nom , gen а, dat у, pl и, acc а, genpl ей', 'ru', 'n').endings)
 
@@ -37,18 +37,16 @@ describe('toStudyWordsTest', () => {
 
     let facts = new Facts()
         .add(u)
-        .add(lyudi)
         .add(mnogo)
+        .add(lyudi)
         .add(mashina)
 
     let words = new Words(facts)
 
     let phrases = new Phrases()
-    let sentences = new Sentences()
-    let corpus = new Corpus(inflections, words, sentences, facts, phrases, 'ru')
 
-    let np = new Phrase('np', [ 
-        PhrasePattern.fromString('noun', '(1)', words, inflections), 
+    let np = new Phrase('auto-np', [ 
+        PhrasePattern.fromString('noun@nominative', '(1)', words, inflections), 
         PhrasePattern.fromString('phrase:много', '(1)', words, inflections) 
     ])
     phrases.add(np)
@@ -59,21 +57,98 @@ describe('toStudyWordsTest', () => {
     phrases.add(uPhrase)
 
     let mnogoPhrase = new Phrase('много', [ 
-        PhrasePattern.fromString('много phrase:np@gen', 'a lot of [something]', words, inflections) 
+        PhrasePattern.fromString('много phrase:np@genitive', 'a lot of [something]', words, inflections) 
     ])
     phrases.add(mnogoPhrase)
 
-    phrases.setCorpus(Corpus.createEmpty('ru'))
+    let sentences = new Sentences()
+
+    let corpus = new Corpus(inflections, words, sentences, facts, phrases, 'ru')
+    phrases.setCorpus(corpus)
 
     let sentence = new Sentence([
         u, mnogo, lyudi.inflect('genpl'), mashina.inflect('pl') 
     ], 0)
+    sentence.addPhrase(uPhrase)
+    sentence.addPhrase(mnogoPhrase)
+
+    let genpl = nounInflection.getFact('genpl')
 
     it('studies inflections', () => {
-        let tokens = toStudyWords(sentence, [ nounInflection.getFact('genpl') ], corpus)
+        let tokens = toStudyWords(sentence, [ genpl ], corpus)
 
         expect(tokens[2].studied).to.be.true
         expect(tokens[0].studied).to.be.false
+    })
+
+    it('studies inflections', () => {
+        let tokens = toStudyWords(sentence, [ mashina ], corpus)
+
+        expect(tokens[3].studied).to.be.true
+        expect(tokens[0].studied).to.be.false
+    })
+
+    it('studies embedded phrases', () => {
+        let tokens = toStudyWords(sentence, [ mnogoPhrase ], corpus)
+        let studyPhrase = tokens[1] as StudyPhrase
+
+        expect(studyPhrase).to.be.instanceof(StudyPhrase)
+        expect(studyPhrase.phrase.id).to.equal(mnogoPhrase.id)
+        expect(studyPhrase.studied).to.be.true
+
+        expect(studyPhrase.words.length).to.equal(2)
+    })
+
+    it.only('studies top-level phrases', () => {
+        let tokens = toStudyWords(sentence, [ uPhrase ], corpus)
+        let studyPhrase = tokens[0] as StudyPhrase
+
+        expect(studyPhrase).to.be.instanceof(StudyPhrase)
+        expect(studyPhrase.phrase.id).to.equal(uPhrase.id)
+        expect(studyPhrase.studied).to.be.true
+
+        expect(studyPhrase.words[1].hasFact(uPhrase)).to.be.true
+        expect(studyPhrase.words[1].hasFact(mnogoPhrase)).to.be.true
+
+        expect(studyPhrase.words.length).to.equal(4)
+    })
+
+    it('works with any', () => {
+        let anyPhrase = new Phrase('много', [ 
+            PhrasePattern.fromString('много any phrase:np@genitive', 'a lot of ... [something]', words, inflections) 
+        ])
+        anyPhrase.setCorpus(corpus)
+
+        let tokens = toStudyWords(sentence, [ anyPhrase ], corpus)
+
+        expect(tokens.length).to.equal(4)
+
+        expect(tokens[1].getHint()).to.equal('a lot of')
+        expect(tokens[2].getHint()).to.equal('people')
+    })
+
+    it('studies phrase cases', () => {
+        let caseFact = mnogoPhrase.getCaseFact(GrammaticalCase.GEN)
+        let tokens = toStudyWords(sentence, [ caseFact ], corpus)
+        let studyPhrase = tokens[2] as StudyPhrase
+
+        expect((tokens[1] as StudyWord).hasFact(caseFact)).to.be.false
+
+        expect(studyPhrase).to.be.instanceof(StudyPhrase)
+        expect(studyPhrase.studied).to.be.true
+
+        expect(studyPhrase.words[0].hasFact(caseFact)).to.be.true
+
+        expect(studyPhrase.words.length).to.equal(1)
+    })
+
+    it('attaches facts', () => {
+        let tokens = toStudyWords(sentence, [ genpl ], corpus)
+
+        let lyudiStudyWord = tokens[2] as StudyWord
+
+        expect(lyudiStudyWord.hasFact(lyudi)).to.be.true
+        expect(lyudiStudyWord.hasFact(genpl)).to.be.true
     })
 
 })

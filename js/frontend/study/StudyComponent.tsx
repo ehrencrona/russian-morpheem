@@ -260,13 +260,15 @@ export default class StudyComponent extends Component<Props, State> {
         let factSet: Set<string> = new Set()
         let result: StudyFact[] = []
 
+        let addFact = (f: StudyFact) => {
+            if (!factSet.has(f.fact.getId())) {
+                result.push(f)
+                factSet.add(f.fact.getId())
+            }
+        }
+
         let handleWord = (t: StudyWord) => {
-            t.facts.forEach((f) => {
-                if (!factSet.has(f.fact.getId())) {
-                    result.push(f)
-                    factSet.add(f.fact.getId())
-                }
-            })
+            t.facts.forEach(addFact)
         }
 
         this.state.tokens.forEach((t) => {
@@ -280,6 +282,8 @@ export default class StudyComponent extends Component<Props, State> {
                     t.words.forEach((w) => {
                         handleWord(w)
                     })
+
+                    addFact({ fact: t.phrase, words: t.words })
                 }
             }
         })

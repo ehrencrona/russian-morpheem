@@ -103,9 +103,9 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
                                 return <li key={ sentence.id } className='clickable' onClick={ () => openSentence(sentence, this.props.corpus, this.props.tab) } > { 
                                     words.map((w, index) => 
                                         (w instanceof StudyPhrase ?
-                                            <span className='match' key={ index }> { w.getHint() }</span> 
+                                            <span className='match' key={ index }>{ w.getHint() } </span> 
                                             :
-                                            <span key={ index }>{ w.jp }</span>)
+                                            <span key={ index }>{ w.jp } </span>)
                                 ) }</li>
                             })
                         }</ul>

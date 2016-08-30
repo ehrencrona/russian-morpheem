@@ -22,7 +22,7 @@ import MatchContext from './MatchContext'
 import { Match, WordMatched } from './Match'
 
 export enum CaseStudy {
-    STUDY_CASE, STUDY_WORDS, STUDY_BOTH
+    STUDY_CASE, STUDY_BOTH
 }
 
 export interface JsonFormat {
@@ -64,61 +64,108 @@ function getEnglishInflectionFromList(pos, form, inflectionList) {
     return result
 }
 
-
 class Placeholder {
     placeholder: string
     fragmentIndex: number
-    agreeWithForm: InflectionForm
-    agreeWithPoS: string
     inflections: string[]
-    fromToForm: string[]
+    toPosOrForm: string
+}
+
+type WordToString = (word: Word) => string;
+type PhraseToString = (phrase: PhraseMatch, wordMatched: WordMatched, wordToString?: WordToString) => string;
+
+const defaultWordToString: WordToString = (word) => word.getEnglish()
+const defaultPhraseToString: PhraseToString = 
+    (phrase: PhraseMatch, wordMatched: WordMatched, wordToString?: WordToString) => {
+    let childMatch = wordMatched.childMatch
+
+    return childMatch.pattern.getEnglishFragments().map(f => f.en(childMatch, wordToString)).join(' ')
+}
+
+function formTransform(pos: string, forms: string[]): WordToString {
+    return (word: Word) => {
+        if (word instanceof InflectedWord && word.pos == pos) {
+            let inflection
+            
+            forms.find(form => {
+                inflection = word.word.inflect(form)
+
+                return !!inflection
+            })
+            
+            if (inflection) {
+                return inflection.getEnglish()
+            }
+            else {
+                console.warn(`No form ${forms.join(', ')} of ${word} for transform.`)
+            }
+        }
+
+        return defaultWordToString(word)
+    }
+}
+
+const TRANSFORMS: { [id: string]: WordToString } = {
+    'inf': formTransform('v', ['inf']),
+    '1': formTransform('v', ['1']),
+    'prog': formTransform('v', ['prog']),
+    'sg': formTransform('n', ['']),
+    'pl': formTransform('n', ['pl']),
+    'nom': formTransform('pron', ['nom', 'pl'])
 }
 
 class Fragment implements EnglishPatternFragment {
     placeholders: Placeholder[]
+    squarePlaceholderCount: number = 0
 
-    constructor(public enString: string, public placeholder: boolean, public placeholderIndex: number, public placeholderOverrideForm) {
+    constructor(public enString: string, previousSquarePlaceholderCount: number, pattern: PhrasePattern) {
         this.enString = enString
-        this.placeholder = placeholder
-        this.placeholderIndex = placeholderIndex
-        this.placeholderOverrideForm = placeholderOverrideForm
+
         this.placeholders = [];
 
-        (enString.match(/\(([^)]*)\)/g) || []).forEach(placeholder => {
+        (enString.match(/[\[\(](.*?)[\]\)]/g) || []).forEach(placeholder => {
             let params = placeholder.substr(1, placeholder.length-2).split(',')
+
+            if (placeholder[0] == '[') {
+                this.squarePlaceholderCount++
+            }
 
             if (!params.length) {
                 console.warn(`Empty placeholder in phrase ${enString}.`)
                 return
             }
 
-            let fromToForm = params[params.length-1].split('->')
+            let arrowEls = params[params.length-1].split('->')
             
             let words: InflectedWord[]
             
-            let fromPosAtForm = fromToForm[0]
+            let fragmentIndexString = arrowEls[0]
 
-            let inflectAsPoS
+            let fragmentIndex = parseInt(fragmentIndexString)
 
-            let fragmentIndex
-            let agreeWithForm
-            let agreeWithPoS
-            let replaceWith = '' 
+            if (isNaN(fragmentIndex)) {
+                if (placeholder[0] == '[') {
+                    let caseMatchCount = 0
 
-            {
-                let els = fromPosAtForm.split('@') 
+                    for (let i = 0; i < pattern.wordMatches.length; i++) {
+                        if (pattern.wordMatches[i].isCaseStudy()) {
+                            caseMatchCount++
 
-                if (els.length > 1) {
-                    agreeWithForm = FORMS[els[1]]
-                    agreeWithPoS = els[0]
+                            if (caseMatchCount == this.squarePlaceholderCount) {
+                                fragmentIndex = i + 1
+                                break
+                            }
+                        }
+                    }
+
+                }
+                else {
+                    console.warn(`Missing fragment index in phrase ${enString}.`)
+                    return
                 }
             }
 
-            agreeWithForm = FORMS[fromPosAtForm]
-
-            if (!agreeWithForm) {
-                agreeWithPoS = fromPosAtForm
-            }
+            let inflectAsPoS = arrowEls[1]
 
             let inflections
 
@@ -127,11 +174,9 @@ class Fragment implements EnglishPatternFragment {
             }
 
             this.placeholders.push({
-                fromToForm: fromToForm,
+                toPosOrForm: arrowEls[1],
                 placeholder: placeholder,
-                fragmentIndex: (parseInt(fromPosAtForm) ? parseInt(fromPosAtForm) : null),
-                agreeWithForm: agreeWithForm,
-                agreeWithPoS: agreeWithPoS,
+                fragmentIndex: fragmentIndex,
                 inflections: inflections
             })
         })
@@ -141,63 +186,68 @@ class Fragment implements EnglishPatternFragment {
         return this.en 
     }
 
-    enWithJpForCases(match: Match) {
-        if (this.placeholder) {
-            let atCaseStudyIndex = -1
-            let atWordMatch 
-
-            let m: WordMatched[] = match.words.filter((m) => {
-                let wordMatch = m.wordMatch
-
-                if (wordMatch.isCaseStudy()) {
-                    if (wordMatch != atWordMatch) {
-                        atCaseStudyIndex++
-
-                        atWordMatch = wordMatch 
-                    }
-
-                    return atCaseStudyIndex == this.placeholderIndex
-                }
-            })
-
-            if (!m.length) {
-                console.log(`Placeholders didn't match case studies in pattern "${this.toString()}"`)
-
-                return this.en(match)
-            }
-
-            return m.map((wordMatched) => {
-                let placeholderWord = wordMatched.word
-                
-                if (placeholderWord instanceof InflectedWord) {
-                    return placeholderWord.word.getDefaultInflection().jp 
+    enWithJpForCases(match: Match, beforeCase?: string, afterCase?: string) {
+        return this.en(match, null, 
+            (phrase: PhraseMatch, wordMatched: WordMatched) => {
+                if (wordMatched.wordMatch.isCaseStudy()) {
+                    return (beforeCase || '') +
+                        wordMatched.childMatch.words.map(w => w.word.jp).join(' ') +
+                        (afterCase || '')
                 }
                 else {
-                    return placeholderWord.jp
+                    return defaultPhraseToString(phrase, wordMatched)
                 }
-            }).join(' ')
-        }
-        else {
-            return this.en(match)
-        }        
+            }
+        )        
     }
 
-    en(match: Match): string {
+    en(match: Match, wordToString?: WordToString, phraseToString?: PhraseToString): string {
+        if (!wordToString) {
+            wordToString = defaultWordToString
+        }
+
+        if (!phraseToString) {
+            phraseToString = defaultPhraseToString
+        }
+
         let result = this.enString
 
         this.placeholders.forEach(placeholder => {
             let replaceWith: string
 
-            if (placeholder.fragmentIndex) {
-                let at = 0
-                let wordMatch = match.pattern.wordMatches[placeholder.fragmentIndex-1]
+            let at = 0
+            let wordMatch = match.pattern.wordMatches[placeholder.fragmentIndex-1]
+
+            if (placeholder.inflections) {
+                let words = match.words.filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord)).map(w => w.word as InflectedWord)
+
+                if (words.length) {
+                    let inflectAsPoS
+
+                    if (placeholder.toPosOrForm) {
+                        inflectAsPoS = placeholder.toPosOrForm
+                    }
+                    else {
+                        console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${result}`)
+                        inflectAsPoS = 'v'
+                    }
+
+                    replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, placeholder.inflections)
+                }
+            }
+            else {
+                if (placeholder.toPosOrForm) {
+                    wordToString = TRANSFORMS[placeholder.toPosOrForm]
+
+                    if (!wordToString) {
+                        console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)
+                    }
+                }
 
                 if (wordMatch instanceof PhraseMatch) {
                     let wordMatched: WordMatched = match.words.find((w) => w.wordMatch == wordMatch)
 
-                    let childMatch = wordMatched.childMatch
-
-                    replaceWith = childMatch.pattern.getEnglishFragments().map(f => f.en(childMatch)).join(' ')
+                    replaceWith = phraseToString(wordMatch, wordMatched, wordToString)
 
                     if (match.sentence && match.sentence.en()) {
                         let search = wordMatched.word.getEnglish()
@@ -230,59 +280,7 @@ class Fragment implements EnglishPatternFragment {
                 }
                 else {
                     replaceWith = match.words.filter((w) => w.wordMatch == wordMatch)
-                        .map(w => w.word.getEnglish()).join(' ')
-                }
-            }
-            else {
-                let agreeWithForm = placeholder.agreeWithForm
-                let agreeWithPoS = placeholder.agreeWithPoS
-                let fromToForm = placeholder.fromToForm
-
-                let words = match.words.map(m => m.word as InflectedWord)
-
-                if (agreeWithForm) {
-                    words = words.filter(word => {
-                        return word instanceof InflectedWord && agreeWithForm.matches(FORMS[word.form])
-                    })
-
-                    if (!words.length) {
-                        console.warn(`No words with form ${agreeWithForm.id} in phrase translated as ${result}`)
-                    }
-                }
-
-                if (agreeWithPoS) {
-                    words = words.filter(word => word.pos == agreeWithPoS)
-
-                    if (!words.length) {
-                        console.warn(`No words matching PoS ${agreeWithPoS} in phrase translated as ${result}`)
-                    }
-                }
-
-                if (!placeholder.inflections) {
-                    if (fromToForm.length > 1) {
-                        let enForm = fromToForm[1]
-
-                        replaceWith = words.map(w => w.en[enForm] || w.en['']).join(' ')
-                    }
-                    else {
-                        replaceWith = words.map(w => w.getEnglish()).join(' ')
-                    }
-                }
-                else if (words.length) {
-                    let inflectAsPoS
-
-                    if (fromToForm.length > 1) {
-                        inflectAsPoS = fromToForm[1]
-                    }
-                    else if (agreeWithPoS) {
-                        inflectAsPoS = agreeWithPoS
-                    }
-                    else {
-                        console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${result}`)
-                        inflectAsPoS = 'v'
-                    }
-
-                    replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, placeholder.inflections)
+                        .map(w => wordToString(w.word)).join(' ')
                 }
             }
 
@@ -319,7 +317,7 @@ class Fragment implements EnglishPatternFragment {
 export default class PhrasePattern {
     // it's helpful for React to have a unique ID.
     key = counter++ 
-    englishFragmentsCache: EnglishPatternFragment[]
+    englishFragmentsCache: Fragment[]
 
     constructor(public wordMatches: WordMatch[], public en: string) {
         this.wordMatches = wordMatches
@@ -396,7 +394,7 @@ export default class PhrasePattern {
         }
     }
 
-    getEnglishFragments(): EnglishPatternFragment[] {
+    getEnglishFragments(): Fragment[] {
         if (!this.englishFragmentsCache) {
             this.englishFragmentsCache = this.calculateEnglishFragments()
         }
@@ -404,54 +402,25 @@ export default class PhrasePattern {
         return this.englishFragmentsCache
     }
 
-    calculateEnglishFragments(): EnglishPatternFragment[] {
-        let split = this.en.match(/(\[[^\]]+\]|[^\[]+)/g)
-        let placeholderCount = 0
+    calculateEnglishFragments(): Fragment[] {
+        let squarePlaceholderCount = 0
 
-        let result: EnglishPatternFragment[] = []
-        
-        if (!split) {
-            return result
-        }
+        let result: Fragment[] = []
+    
+        this.en.split('...').forEach((str) => {
+            str = str.trim()
 
-        split.map((str) => {
-            str.split('...').forEach((str) => {
-                str = str.trim()
+            if (!str) {
+                return
+            }
 
-                if (!str) {
-                    return
-                }
+            let fragment = new Fragment(str, squarePlaceholderCount, this)
 
-                let en = str
+            squarePlaceholderCount += fragment.squarePlaceholderCount
 
-                let placeholder = str[0] == '['
-                let placeholderIndex = placeholderCount
-                let placeholderOverrideForm
-
-                if (placeholder) {
-                    let end = str.indexOf(']')
-
-                    if (end < 0) {
-                        end = str.length
-                    }
-
-                    str = str.substr(1, end-1)
-
-                    let els = str.split('->')
-
-                    en = els[0]
-
-                    if (els.length > 1) {
-                        placeholderOverrideForm = els[els.length-1]
-                    }
-
-                    placeholderCount++
-                }
-
-                result.push(new Fragment(en, placeholder, placeholderIndex, placeholderOverrideForm))
-            })
+            result.push(fragment)
         })
-
+    
         return result
     }
 

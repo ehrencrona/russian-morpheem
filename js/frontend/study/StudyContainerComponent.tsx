@@ -123,9 +123,9 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
 /*
         this.setState({
-            sentence: this.props.corpus.sentences.get(2629),
+            sentence: this.props.corpus.sentences.get(3955),
             facts: [
-                this.props.corpus.facts.get('егоadj@datm')
+                this.props.corpus.facts.get('time-acc')
             ]
         })
 

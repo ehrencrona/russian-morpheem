@@ -190,12 +190,6 @@ describe('Phrase', function() {
         expect(phrase.match({ words: shouldNotMatch, facts: facts })).to.be.undefined
     })
 
-    it('fragments patterns correctly', () => {
-        let pattern = PhrasePattern.fromString('verb@+ @dative+ @accusative+', 'verb@+ [someone] [something]', words, inflections)
-        
-        expect(pattern.getEnglishFragments().length).to.equal(3)
-    })
-
     it('any does not match across phrase boundaries', () => {
         let withComma = [
             w1, comma, w3.inflect('prep')

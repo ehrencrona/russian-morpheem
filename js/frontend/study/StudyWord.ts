@@ -15,7 +15,6 @@ class StudyWord implements StudyToken {
     form: InflectionForm
 
     constructor(public word: Word, public studied: boolean) {        
-console.log('facts of ' + word)        
         word.visitFacts((fact: Fact) => this.addFact({ fact: fact, words: [ this ] }))
 
         this.word = word

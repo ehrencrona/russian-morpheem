@@ -20,13 +20,9 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
         let blocks = match.pattern.getEnglishFragments()
 
         explanation = blocks.map((b) => {
-            let text = htmlEscape(b.enWithJpForCases(match))
-
-            if (!b.placeholder) {
-                text = `<strong className="verbatim">${text}</strong>`
-            }
-
-            return text
+            return htmlEscape(b.enWithJpForCases(match, '--start--', '--end--'))
+                .replace(/--start--/g, '<strong className="verbatim">')
+                .replace(/--end--/g, '</strong>')
         }).join(' ') 
         
         words = match.words

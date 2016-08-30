@@ -121,7 +121,7 @@ export class LeitnerKnowledge {
     }
 
     isKnown(fact: Fact) {
-        return this.known[fact.getId()]
+        return !!this.known[fact.getId()]
     }
 
     isTrivial(fact: Fact) {

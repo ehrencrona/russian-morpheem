@@ -66,7 +66,7 @@ export default class SentencesWithFactComponent extends Component<Props, State> 
                     let result = htmlEscape(word.toString())
                     
                     if (word.getId() == fact.getId() || (word instanceof InflectedWord && word.word.getId() == fact.getId())) {
-                        result = '<span class="match">' + result + '</span>'
+                        result = '<span class="match">' + result + '</span> '
                     }
 
                     return result

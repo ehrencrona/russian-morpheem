@@ -3,10 +3,8 @@ import { CaseStudy } from './PhrasePattern'
 import Match from './Match'
 
 interface EnglishPatternFragment {
-    placeholder: boolean,
-    placeholderOverrideForm: string,
     en(match: Match): string
-    enWithJpForCases(match: Match): string
+    enWithJpForCases(match: Match, beforeCase?: string, afterCase?: string): string
 }
 
 export default EnglishPatternFragment
