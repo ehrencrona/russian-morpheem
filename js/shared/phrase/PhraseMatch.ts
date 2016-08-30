@@ -33,9 +33,10 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         childContext.words = context.words.slice(wordPosition)
 
         childContext.overrideFormCase = 
-            (this.overrideFormCase == GrammaticalCase.NOM && context.overrideFormCase ?
-                context.overrideFormCase :
-                this.overrideFormCase)
+            ((!this.overrideFormCase || this.overrideFormCase == GrammaticalCase.NOM) && 
+                context.overrideFormCase ?
+                    context.overrideFormCase :
+                    this.overrideFormCase)
 
         childContext.study = null
         

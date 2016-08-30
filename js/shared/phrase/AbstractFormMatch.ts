@@ -1,5 +1,5 @@
 
-import { InflectionForm } from '../inflection/InflectionForms'
+import { InflectionForm, GrammaticalCase } from '../inflection/InflectionForms'
 import AbstractQuantifierMatch from './AbstractQuantifierMatch'
 import MatchContext from './MatchContext'
 
@@ -14,7 +14,7 @@ abstract class AbstractFormMatch extends AbstractQuantifierMatch {
         let form = this.form
 
         if (form) {
-            if (context.overrideFormCase) {
+            if (context.overrideFormCase && form.grammaticalCase == GrammaticalCase.NOM) {
                 form = new InflectionForm('foo', 'foo', form)
 
                 form.grammaticalCase = context.overrideFormCase

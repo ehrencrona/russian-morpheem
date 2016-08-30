@@ -152,6 +152,7 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         }
 
         let wordBlocks: WordBlock[] = findWordBlocks(phraseMatch, words)
+
         if (!!studiedFacts.find((f) => f.getId() == phrase.getId())) {
             replaceWordsWithStudyPhrase(phrase, words, tokens, wordBlocks, phraseMatch)
         }
