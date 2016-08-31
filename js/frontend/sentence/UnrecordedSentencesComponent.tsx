@@ -41,7 +41,7 @@ export default class UnrecordedSentencesComponent extends Component<Props, State
     }
 
     play(sentenceId: number) {
-        let audioUrl = '/public-api/ru/sentence/' + sentenceId + '/recorder.wav?cachebuster=' + Math.random()
+        let audioUrl = '/public-api/ru/sentence/' + sentenceId + '/audio.wav?cachebuster=' + Math.random()
 
         new Audio(audioUrl).play()
     }
