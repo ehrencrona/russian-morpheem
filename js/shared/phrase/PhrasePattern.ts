@@ -241,6 +241,8 @@ class Fragment implements EnglishPatternFragment {
 
                     if (!wordToString) {
                         console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)
+
+                        wordToString = defaultWordToString
                     }
                 }
 
