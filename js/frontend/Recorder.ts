@@ -166,8 +166,7 @@ function store(blob, audioId, sentenceId) {
 
         req.open('POST', '/api/ru/sentence/' + sentenceId + '/audio', true)
 
-        Object.keys(headers).forEach(key =>
-            req.setRequestHeader(key, headers[key]))
+        req.setRequestHeader('Authorization', headers['Authorization'])
 
         var fd = new FormData()
 
