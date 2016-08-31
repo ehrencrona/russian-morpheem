@@ -16,6 +16,8 @@ export interface SentenceHistory {
     
     getPendingSentences(exceptAuthor?: string): Promise<number[]>
 
+    getUnrecordedSentences(): Promise<number[]>
+
     getEventsForSentence(sentenceId: number): Promise<Event[]>
 
     getLatestEvents(author?: string, type?: string): Promise<Event[]>
@@ -33,6 +35,8 @@ export interface SentenceHistory {
     recordImport(sentence: Sentence, author: string)
 
     recordTranslate(sentence: Sentence, author: string)
+
+    recordRecord(sentence: Sentence, author: string)
 
     getEventsByDate(eventType: string): Promise<SentencesByDate>
 

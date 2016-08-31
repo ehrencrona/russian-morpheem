@@ -3,6 +3,7 @@ export interface SentenceStatus {
     status: number,
     sentence?: number,
     source?: string,
+    recorded?: Date,
     externalId?: number
 }
 

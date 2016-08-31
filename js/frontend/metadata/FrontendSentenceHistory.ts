@@ -49,6 +49,10 @@ export default class FrontendSentenceHistory implements SentenceHistory {
         return this.getIdList('sentence/pending')
     }
 
+    getUnrecordedSentences() {
+        return this.getIdList('sentence/unrecorded')
+    }
+
     getEventsForSentence(sentenceId: number): Promise<Event[]> {
         return xr.get(`/api/${ this.lang }/sentence/` + sentenceId + '/events', {}, this.xrArgs)
         .then((xhr) => {
@@ -103,6 +107,10 @@ export default class FrontendSentenceHistory implements SentenceHistory {
     }
 
     recordImport(sentence: Sentence, author: string) {
+        throw new Error('Unsupported in frontend.')
+    }
+
+    recordRecord(sentence: Sentence, author: string) {
         throw new Error('Unsupported in frontend.')
     }
 

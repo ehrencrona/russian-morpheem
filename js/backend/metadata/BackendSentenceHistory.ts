@@ -34,6 +34,7 @@ export const EVENT_COMMENT = 'comment'
 export const EVENT_ACCEPT = 'accept'
 export const EVENT_IMPORT = 'importExternal'
 export const EVENT_TRANSLATE = 'translate'
+export const EVENT_RECORD = 'record'
 
 export default class BackendSentenceHistory implements SentenceHistory {
 
@@ -95,6 +96,31 @@ export default class BackendSentenceHistory implements SentenceHistory {
                 .find( { 
                     status: STATUS_SUBMITTED,
                     author: { $ne: exceptAuthor } 
+                } )
+
+        return new Promise((resolve, reject) => {
+            let ids: number[] = []
+
+            cursor
+                .limit(100)
+                .forEach((doc) => {
+                    ids.push((doc as SentenceStatus).sentence);
+                }, () => {
+                    resolve(ids)
+                });
+        })
+    }
+
+    getUnrecordedSentences(): Promise<number[]> {
+        if (!db) {
+            return Promise.resolve([])
+        }
+
+        let cursor =
+            db.collection(COLLECTION_METADATA)
+                .find( { 
+                    recorded: { $eq: null }, 
+                    status: { $eq: STATUS_ACCEPTED } 
                 } )
 
         return new Promise((resolve, reject) => {
@@ -223,6 +249,10 @@ export default class BackendSentenceHistory implements SentenceHistory {
 
     recordAccept(sentence: Sentence, author: string) {
         this.recordEvent(EVENT_ACCEPT, sentence, author, false)
+    }
+
+    recordRecord(sentence: Sentence, author: string) {
+        this.recordEvent(EVENT_RECORD, sentence, author, false)
     }
 
     recordImport(sentence: Sentence, author: string) {

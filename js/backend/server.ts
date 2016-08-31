@@ -25,6 +25,8 @@ import addSentence from './route/addSentence'
 import addComment from './route/addComment'
 import deleteSentence from './route/deleteSentence'
 import setSentence from './route/setSentence'
+import setAudio from './route/setAudio'
+import getAudio from './route/getAudio'
 import setPhrase from './route/setPhrase'
 import getEvents from './route/getEvents'
 import getStatus from './route/getStatus'
@@ -33,6 +35,7 @@ import getOpenPhrases from './route/getOpenPhrases'
 import getPhraseStatus from './route/getPhraseStatus'
 import setPhraseStatus from './route/setPhraseStatus'
 import getPendingSentences from './route/getPendingSentences'
+import getUnrecordedSentences from './route/getUnrecordedSentences'
 import getLatestEvents from './route/getLatestEvents'
 import getMyLatestEvents from './route/getMyLatestEvents'
 import getEventsByDate from './route/eventsByDate'
@@ -49,6 +52,7 @@ import { tag, untag } from './route/tag';
 var app = express()
 var bodyParser = require('body-parser')
 var passport = require('passport')
+var busboy = require('connect-busboy')
 
 var port = process.env.PORT || 8080
 
@@ -64,6 +68,7 @@ if (process.env.ENV != 'dev') {
 }
 
 app.use(bodyParser.json())
+app.use(busboy())
 
 app.use('/api', (req, res, next) => {
     try {
@@ -102,6 +107,10 @@ function registerRoutes(corpus: Corpus) {
     
     app.delete(`/api/${lang}/sentence/:id`, deleteSentence(corpus))
 
+    app.post(`/api/${lang}/sentence/:id/audio`, setAudio(corpus))    
+
+    app.get(`/api/${lang}/sentence/:id/audio.wav`, getAudio(corpus))    
+
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
@@ -127,6 +136,8 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
 
     app.get(`/api/${lang}/sentence/pending`, getPendingSentences(corpus))    
+
+    app.get(`/api/${lang}/sentence/unrecorded`, getUnrecordedSentences(corpus))    
     
     app.get(`/api/${lang}/event/latest/my/:type`, getMyLatestEvents(corpus))
 
