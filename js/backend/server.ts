@@ -67,7 +67,7 @@ if (process.env.ENV != 'dev') {
     app.use('/api', jwtCheck)
 }
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '50mb' }))
 app.use(busboy())
 
 app.use('/api', (req, res, next) => {
