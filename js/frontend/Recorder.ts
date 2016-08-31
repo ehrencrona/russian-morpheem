@@ -164,10 +164,10 @@ function store(blob, audioId, sentenceId) {
 
         let headers = xrArgs['headers']
 
+        req.open('POST', '/api/ru/sentence/' + sentenceId + '/audio', true)
+
         Object.keys(headers).forEach(key =>
             req.setRequestHeader(key, headers[key]))
-
-        req.open('POST', '/api/ru/sentence/' + sentenceId + '/audio', true)
 
         var fd = new FormData()
 
