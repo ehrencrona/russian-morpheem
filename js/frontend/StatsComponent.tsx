@@ -55,9 +55,17 @@ export default class StatsComponent extends Component<Props, State> {
             }
         }
 
+        let translated = 0
+
+        corpus.sentences.sentences.forEach(sentence => {
+            if (sentence.en().trim()) {
+                translated++
+            }
+        })
+
         return <ul className='stats'>
             <li>
-                <b>{ corpus.sentences.sentences.length }</b> sentences
+                <b>{ corpus.sentences.sentences.length }</b> sentences, <b>{ translated }</b> translated
             </li>
             <li>
                 <b>{ corpus.facts.facts.length }</b> facts (<b>{ words }</b> words)
