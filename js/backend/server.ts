@@ -109,7 +109,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.post(`/api/${lang}/sentence/:id/audio`, setAudio(corpus))    
 
-    app.get(`/api/${lang}/sentence/:id/audio.wav`, getAudio(corpus))    
+    app.get(`/public-api/${lang}/sentence/:id/audio.wav`, getAudio(corpus))    
 
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
 

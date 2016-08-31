@@ -1,12 +1,10 @@
-
-
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
 import SentenceComponent from '../SentenceComponent'
 import openSentence from '../sentence/openSentence'
-import audio from '../Recorder'
+import recorder from '../Recorder'
 
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
@@ -25,7 +23,7 @@ let React = { createElement: createElement }
 
 export default class UnrecordedSentencesComponent extends Component<Props, State> {
     componentDidMount() {
-        audio.init()
+        recorder.init()
 
         this.props.corpus.sentenceHistory.getUnrecordedSentences()
         .then((unrecorded) => {
@@ -37,17 +35,15 @@ export default class UnrecordedSentencesComponent extends Component<Props, State
 
     record(sentenceId: number) {
         setTimeout(() => {
-            audio.startRecording(this.state.sentence.id, 'foobar')
+            recorder.startRecording(this.state.sentence.id, 'foobar')
             this.setState({ recording: true })
         }, 200)
     }
 
     play(sentenceId: number) {
-        let audioUrl = '/api/ru/sentence/' + sentenceId + '/audio.wav?cachebuster=' + Math.random()
+        let audioUrl = '/public-api/ru/sentence/' + sentenceId + '/recorder.wav?cachebuster=' + Math.random()
 
-        var audio = new Audio(audioUrl)
-
-        audio.play()
+        new Audio(audioUrl).play()
     }
 
     next() {
@@ -58,7 +54,7 @@ export default class UnrecordedSentencesComponent extends Component<Props, State
     }
 
     endRecording() {
-        audio.stopRecording()
+        recorder.stopRecording()
             .then((url) => {
                 this.setState({ recording: false })
             })

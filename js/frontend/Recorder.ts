@@ -1,4 +1,8 @@
+import xr from 'xr'
+
 var WORKER_PATH = '/js/audio-worker.js'
+
+let xrArgs: { [arg: string] : string }
 
 class Recorder {
     config
@@ -158,6 +162,11 @@ function store(blob, audioId, sentenceId) {
     return new Promise((resolve, reject) => {
         var req = new XMLHttpRequest()
 
+        let headers = xrArgs['headers']
+
+        Object.keys(headers).forEach(key =>
+            req.setRequestHeader(key, headers[key]))
+
         req.open('POST', '/api/ru/sentence/' + sentenceId + '/audio', true)
 
         var fd = new FormData()
@@ -187,6 +196,10 @@ function init() {
 
     (navigator as any).webkitGetUserMedia({audio: true}, startUserMedia, function (e) {
     })
+}
+
+export function setXrArgs(newXrArgs: { [arg: string] : string }) {
+    xrArgs = newXrArgs
 }
 
 export default {
