@@ -58,7 +58,7 @@ export default class StatsComponent extends Component<Props, State> {
         let translated = 0
 
         corpus.sentences.sentences.forEach(sentence => {
-            if (sentence.en().trim()) {
+            if (sentence.en() && sentence.en().trim()) {
                 translated++
             }
         })
