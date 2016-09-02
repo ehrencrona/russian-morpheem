@@ -41,6 +41,7 @@ import ForgettingStats from './ForgettingStats'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
+import { WordMatched } from '../../shared/phrase/Match'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
@@ -122,14 +123,24 @@ export default class StudyContainerComponent extends Component<Props, State> {
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
 /*
-        this.setState({
-            sentence: this.props.corpus.sentences.get(2199),
-            facts: [
-                this.props.corpus.facts.get('с-чем')
-            ]
-        })
+        {
+            let sentence = this.props.corpus.sentences.get(4241)
 
-        return
+            this.knowledge.getKnowledge = (fact: Fact) => {
+                return Knowledge.KNEW
+            }
+
+            this.knowledge.getKnowledgeOfId = (factId: string) => {
+                return Knowledge.KNEW
+            }
+
+            this.setState({
+                sentence: sentence,
+                facts: this.expandFact(this.props.corpus.facts.get('neuie@preppl'), sentence)
+            })
+
+            return
+        }
 */
 
         // if studying phrases, remove any sentences that don't actually match the phrase.
@@ -165,7 +176,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         console.log(sentenceScore)
 
-        this.setState({ sentence: sentence, facts: this.getAdditionalFacts(fact, sentence) })
+        this.setState({ sentence: sentence, facts: this.expandFact(fact, sentence) })
     }
 
     oughtToKnow(fact: Fact) {
@@ -173,7 +184,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
             this.factSelector.isStudied(fact, new Date())
     }
     
-    getAdditionalFacts(fact: Fact, sentence: Sentence) {
+    expandFact(fact: Fact, sentence: Sentence) {
 console.log('Sentence: ' + sentence.toString())
 
         let additionalFact: Fact
@@ -216,30 +227,64 @@ console.log('Fact ' + fact.getId())
                 return result
             }
 
-            sentence.phrases.find(phrase => {
+            let wordsRequireFact = (words: WordMatched[], fact: Fact) => {
+                return !!words.find(word => wordRequiresFact(word.word, fact))
+            }
 
+            let oughtToKnowAllFacts = (words: WordMatched[]) => {
+                return !words.find(word => {
+                    let oughtNotTo = false
+
+                    word.word.visitFacts((visitedFact) => {
+                        if (!this.oughtToKnow(visitedFact)) {
+console.log('Did not ought to know ' + visitedFact.getId())                            
+                            oughtNotTo = true
+                        }
+                    })
+
+                    return oughtNotTo
+                }) 
+            }
+
+            let longestPhrase: Fact
+            let longestPhraseLength: number = -1
+
+            let candidateFact = (fact: Fact, words: WordMatched[]) => {
+                console.log('Candidate phrase: ' + fact.getId() + ' - ' + words.map(w => w.word.jp).join(' '))
+                
+                if (words.length > longestPhraseLength) {
+                    longestPhrase = fact
+                    longestPhraseLength = words.length
+                }
+            }
+
+            sentence.phrases.forEach(phrase => {
                 let match = phrase.match({ sentence: sentence, words: sentence.words, facts: this.props.corpus.facts, study: CaseStudy.STUDY_CASE })
 
                 if (match) {
-                    return !!match.words.find(m => {
-                        if (wordRequiresFact(m.word, fact)) {    
-                            additionalFact =
-                                phrase.getCaseFact(((m.wordMatch as any) as CaseStudyMatch).getCaseStudied())
+                    if (wordsRequireFact(match.words, fact) && oughtToKnowAllFacts(match.words)) {
+                        candidateFact(phrase, match.words)
+                    }
+                    else {
+                        phrase.getCaseFacts().forEach((caseFact) => {
+                            let words = match.words.filter(wm => wm.wordMatch.isCaseStudy() &&
+                                ((wm.wordMatch as any) as CaseStudyMatch).getCaseStudied() == caseFact.grammaticalCase)
 
-                            console.log('Additional fact ' + additionalFact.getId())
-
-                            studiedFacts.push(additionalFact)
-
-                            // remove the original, it's covered by the additional fact
-                            if (studiedFacts[0] == fact) {
-                                studiedFacts.splice(0, 1)
+                            if (wordsRequireFact(words, fact) && oughtToKnowAllFacts(words)) {
+                                candidateFact(caseFact, words)
                             }
-
-                            return true
-                        }
-                    })
+                        })
+                    }
                 }
             })
+
+            if (longestPhrase) {
+                console.log('Switching to fact ' + longestPhrase.getId())
+
+                studiedFacts = studiedFacts.filter(f => f.getId() != fact.getId())
+
+                studiedFacts.push(longestPhrase)
+            }
         }
 
         return studiedFacts

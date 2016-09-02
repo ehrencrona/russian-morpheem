@@ -91,8 +91,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
     let wordIndexAdjust = 0
     let lastWordBlock: WordBlock
 
+console.log(wordBlocks)
+
     while (atWordBlock < wordBlocks.length || atFragment < fragments.length) {
-        
         let wordBlock = wordBlocks[atWordBlock]
         let englishBlock: EnglishPatternFragment = fragments[atFragment]
 
@@ -103,14 +104,7 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
             blockEnd = blockStart + wordBlock.end - wordBlock.start
         }
 
-        if (!wordBlock) {
-            // add an English text block with no corresponding Russian text
-            tokens.push(new StudyPhrase(phrase, englishBlock.en(phraseMatch), [], true))
-            wordIndexAdjust++
-
-            atFragment++
-        }
-        else {
+        if (wordBlock) {
             let en: string
 
             if (!englishBlock) {
@@ -122,7 +116,6 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
             }
 
             let phraseWords = words.slice(wordBlock.start, wordBlock.end)
-
             tokens.splice(blockStart, wordBlock.end - wordBlock.start, 
                 new StudyPhrase(phrase, en, phraseWords, true))
 
@@ -134,6 +127,13 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
             atWordBlock++
+        }
+        else {
+            // add an English text block with no corresponding Russian text
+            tokens.push(new StudyPhrase(phrase, englishBlock.en(phraseMatch), [], true))
+            wordIndexAdjust++
+
+            atFragment++
         }
 
         lastWordBlock = wordBlock
@@ -182,6 +182,8 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                 }
             })
 
+            let lastWordMatch
+
             phraseMatch.words.forEach((m) => {
                 if (m.wordMatch.isCaseStudy()) {
                     let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
@@ -191,9 +193,12 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                     let wordMatch = m.wordMatch
 
                     if (wordMatch instanceof PhraseMatch &&
+                        lastWordMatch !== m.wordMatch &&
                         !!studiedFacts.find((f) => f.getId() == caseFacts[caseStudied].fact.getId())) {
                         replaceWordsWithStudyPhrase(wordMatch.phrase, words, tokens, findWordBlocks(m.childMatch, words, m.index), m.childMatch)
                     }
+
+                    lastWordMatch = m.wordMatch
                 }
 
                 words[m.index].addFact(wordsFact)

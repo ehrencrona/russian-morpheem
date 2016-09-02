@@ -356,7 +356,7 @@ export default class StudyComponent extends Component<Props, State> {
         let capitalize = true
         let sentence = this.props.sentence
 
-console.log('Sentence: ' + sentence.toString())
+console.log('Sentence: ' + sentence.toString() + ' (#' + sentence.id + ')')
 console.log('Facts: ' + this.props.facts.map(f => f.getId()).join(', '))
 
         let tokens = this.state.tokens
