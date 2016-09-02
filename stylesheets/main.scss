@@ -273,6 +273,24 @@ input[type=text], input[type=number], textarea {
             }
         }
 
+        .word.omitted {
+            background-color: lighten($color6-light, 20%);
+            color: #c0c0c0;
+
+            .form {
+                color: inherit;
+            }
+        }
+
+        .word.omitted.selected {
+            background-color: lighten($color-bg-inverted, 20%);
+            color: darken($color-fg-inverted, 20%);
+
+            .form {
+                color: inherit;
+            }
+        }
+
         .word.drag-target {
             border-left: $unit solid $color-fg;
         }

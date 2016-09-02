@@ -192,17 +192,31 @@ export default class Words {
     }
 
     get(id: string): Word {
+        let omitted = false
+
+        if (id[id.length-1] == '*') {
+            omitted = true
+            id = id.substr(0, id.length-1)
+        }
+
         let result = this.wordsByString[id]
         
-        if (result) {
-            return result
+        if (!result && id[0] == '"' && id[id.length-1] == '"') {
+            result = new UnparsedWord(id.substr(1, id.length-2))
         }
 
-        if (id[0] == '"' && id[id.length-1] == '"') {
-            return new UnparsedWord(id.substr(1, id.length-2))
+        if (!result) {
+            result = this.wordsById[id]
         }
 
-        return this.wordsById[id]
+        if (omitted) {
+            let original = result
+
+            result = Object.create(original)
+            result.omitted = original
+        }
+
+        return result
     }
     
     getSimilarTo(token) {

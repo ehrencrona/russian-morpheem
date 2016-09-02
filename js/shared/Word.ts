@@ -150,7 +150,9 @@ export default class Word extends AbstractAnyWord {
     }
 
     getId() {
-        return this.jp + (this.classifier ? '[' + this.classifier + ']' : '')
+        return this.jp 
+            + (this.classifier ? '[' + this.classifier + ']' : '') 
+            + (this.omitted ? '*' : '')
     }
 
     getJsonType() {

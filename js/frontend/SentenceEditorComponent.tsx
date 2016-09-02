@@ -66,6 +66,7 @@ class WordComponent extends Component<WordProps, WordState> {
 
         return <div draggable='true' className={'word' + 
             (word instanceof UnparsedWord ? ' unparsed' : '') + 
+            (word.omitted ? ' omitted' : '') + 
             (this.props.selected ? ' selected' : '') + 
             (this.state.dragTarget ? ' drag-target' : '')} 
                 onClick={ this.props.onClick }
@@ -118,6 +119,16 @@ class TrashComponent extends Component<ElementProps, EmptyState> {
             onDrop={ this.props.onDrop } 
             onClick={ this.props.onClick }
         >Trash</div>
+    }
+}
+
+class OmitComponent extends Component<ElementProps, EmptyState> {
+    render() {
+        return <div className='button'
+            onDragOver={ (e) => e.preventDefault() }
+            onDrop={ this.props.onDrop } 
+            onClick={ this.props.onClick }
+        >Omit</div>
     }
 }
 
@@ -184,6 +195,27 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
         this.sentenceChanged(this.state.words)
     }
     
+    omitWord(index) {
+        let word = this.state.words[index]
+
+        let newWord: Word
+
+        if (word.omitted) {
+            newWord = this.props.corpus.words.get(word.getId().substr(0, word.getId().length-1))
+        }
+        else {
+            newWord = this.props.corpus.words.get(word.getId() + '*')
+        }
+
+        this.state.words.splice(index, 1, newWord)
+
+        this.setState({
+            words: this.state.words
+        })
+
+        this.sentenceChanged(this.state.words)
+    }
+
     sentenceChanged(words: Word[]) {
         this.props.onSentenceChange(words)
     }
@@ -232,7 +264,7 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
                         this.props.onWordSelect(word)
                     }
                 }
-                
+
                 elements.push(
                     <WordComponent 
                         key={ index } 
@@ -276,6 +308,24 @@ export default class SentenceEditorComponent extends Component<Props, EditorStat
             onDrop={ drop(this.state.words.length) }
         />
 
+        <OmitComponent
+            onDrop={ (e) => {                
+                let drag = JSON.parse(e.dataTransfer.getData('text'))
+                
+                if (drag.index != undefined) {
+                    this.omitWord(drag.index)
+                }
+            } }
+            
+            onClick={
+                () => {
+                    if (this.state.selectedIndex >= 0) {
+                        this.omitWord(this.state.selectedIndex)
+                    }
+                }
+            }
+        />
+        
         <TrashComponent
             onDrop={ (e) => {                
                 let drag = JSON.parse(e.dataTransfer.getData('text'))

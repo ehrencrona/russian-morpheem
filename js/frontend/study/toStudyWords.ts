@@ -91,8 +91,6 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
     let wordIndexAdjust = 0
     let lastWordBlock: WordBlock
 
-console.log(wordBlocks)
-
     while (atWordBlock < wordBlocks.length || atFragment < fragments.length) {
         let wordBlock = wordBlocks[atWordBlock]
         let englishBlock: EnglishPatternFragment = fragments[atFragment]

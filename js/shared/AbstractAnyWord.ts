@@ -3,6 +3,7 @@ import AnyWord from './AnyWord'
 
 abstract class AbstractAnyWord implements AnyWord {
     studied: boolean = true
+    omitted: AnyWord
     pos: string
     en: { [ form: string ]: string } = {}
 

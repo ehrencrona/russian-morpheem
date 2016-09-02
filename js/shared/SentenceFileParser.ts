@@ -3,13 +3,14 @@
 import Sentence from './Sentence';
 import Sentences from './Sentences';
 import Words from './Words';
+import Word from './Word';
 import Facts from './fact/Facts';
 import Phrases from './phrase/Phrases'
 
 /**
  * Parses a Japanese sentence (words delimited by spaces) into Words.
  */
-function parseSentenceToWords(sentence, words: Words, lineNumber) {
+function parseSentenceToWords(sentence, words: Words, lineNumber): Word[] {
     var result = []
 
     let pos = 1
@@ -22,7 +23,7 @@ function parseSentenceToWords(sentence, words: Words, lineNumber) {
 
         token = token.replace(/_/g, ' ')
 
-        let word = words.get(token)
+        let word: Word = words.get(token)
 
         if (!word) {
             let suggestions = words.getSimilarTo(token)

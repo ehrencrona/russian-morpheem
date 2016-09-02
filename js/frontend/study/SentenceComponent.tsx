@@ -121,6 +121,12 @@ export default class SentenceComponent extends Component<Props, State> {
         if (reveal) {
             tokens = flatten(tokens)
         }
+        else {
+            tokens = tokens.filter(t => 
+                (t instanceof StudyWord ?
+                    !t.word.omitted :
+                    true))
+        }
 
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
             {
@@ -130,6 +136,10 @@ export default class SentenceComponent extends Component<Props, State> {
 
                     if (capitalize && text) {
                         text = text[0].toUpperCase() + text.substr(1)
+                    }
+
+                    if (token instanceof StudyWord && token.word.omitted) {
+                        text = '(' + text + ')'
                     }
 
                     let formHint

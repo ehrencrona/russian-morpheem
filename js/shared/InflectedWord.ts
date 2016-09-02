@@ -58,7 +58,7 @@ export default class InflectedWord extends Word {
         if (homonyms) {
             let disambiguation
 
-            homonyms = homonyms.filter((other) => other !== this)
+            homonyms = homonyms.filter((other) => other !== this && other != this.omitted)
 
             if (!homonyms.find((otherWord) => otherWord.getEnglish() == this.getEnglish())) {
                 disambiguation = this.getEnglish()
@@ -107,6 +107,7 @@ export default class InflectedWord extends Word {
 
     getId() {
         return this.word.getId() + '@' + this.form
+            + (this.omitted ? '*' : '')
     }
 
     static getEnglishForm(pos: string, formString: string, en: { [ form: string ]: string }): string {
