@@ -24,7 +24,10 @@ interface Props {
 }
 
 interface State {
-    error?: string
+    error?: string,
+    sentencesByPhrase?: {
+        [ key: number]: Sentence[]
+    }
 }
 
 let React = { createElement: createElement }
@@ -33,7 +36,9 @@ export default class PhrasePatternComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            sentencesByPhrase: this.findSentencesByPhrase()
+        }
     }
 
     changeDescription(newDescription: string) {
@@ -50,12 +55,45 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         (this.refs['studyWords' + index] as PhraseStudyWordsComponent).forceUpdate() 
     }
 
+    findSentencesByPhrase() {
+        let sentencesByPhrase: { [ key: number]: Sentence[] } = {}
+        let start = new Date()
+
+        this.props.corpus.sentences.sentences.find(sentence => {
+            let match = this.props.phrase.match({
+                words: sentence.words,
+                sentence: sentence,
+                facts: this.props.corpus.facts
+            })
+            
+            if (match) {
+                let sentences = sentencesByPhrase[match.pattern.key]
+
+                if (!sentences) {
+                    sentences = []
+                    sentencesByPhrase[match.pattern.key] = sentences
+                }  
+
+                sentences.push(sentence)
+            }
+
+            if (new Date().getTime() - start.getTime() > 500) {
+                return true
+            }
+        })
+
+        return sentencesByPhrase
+    }
+
     changePattern(patternStr: string, oldPattern: PhrasePattern) {
         try {
             let newPattern = PhrasePattern.fromString(patternStr.trim(), oldPattern.en,
                 this.props.corpus.words, this.props.corpus.inflections)
 
-            this.setState({ error: null })
+            this.setState({ 
+                error: null,
+                sentencesByPhrase: this.findSentencesByPhrase()
+            })
 
             if (newPattern.toString() == oldPattern.toString()) {
                 return
@@ -166,6 +204,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                             phrase={ phrase }
                             pattern={ pattern } 
                             corpus={ this.props.corpus }
+                            sentences={ this.state.sentencesByPhrase[pattern.key] }
                             ref={ 'studyWords' + index } 
                             tab={ this.props.tab }
                             />

@@ -19,9 +19,10 @@ import Tab from '../OpenTab'
 import { Component, createElement } from 'react'
 
 interface Props {
-    corpus: Corpus
+    sentences: Sentence[]
     phrase: Phrase
     tab: Tab
+    corpus: Corpus
     pattern: PhrasePattern
 }
 
@@ -43,43 +44,14 @@ export default class PhraseStudyWordsComponent extends Component<Props, State> {
     }
 
     render() {
-
-        let findAFew = (array: Sentence[], filter: (sentence: Sentence) => boolean) => {
-            let result = []
-
-            for (let i = 0; i < array.length && result.length < this.state.limit; i++) {
-
-                if (filter(array[i])) {
-                    result.push(array[i])
-                }
-
-            }
-
-            return result
-        }
-
         let phrase = this.props.phrase
         let pattern: PhrasePattern = this.props.pattern
 
-        let firstMatchingPattern = (sentence: Sentence) => {
-            return phrase.patterns.find((pattern) => pattern.match({ 
-                sentence: sentence, words: sentence.words, facts: this.props.corpus.facts }) != null)
-        }
-
         let words: StudyToken[] = []
-        let sentences: Sentence[]
+        let sentences: Sentence[] = this.props.sentences || []
 
-        if (phrase.patterns.length) {
-            sentences = findAFew(this.props.corpus.sentences.sentences, (sentence) => {
-                return !!sentence.phrases.find((p) => p.getId() == phrase.getId() && 
-                    firstMatchingPattern(sentence) == pattern)
-            })
-
-            if (!sentences.length) {
-                sentences = findAFew(this.props.corpus.sentences.sentences, (sentence) => {
-                    return firstMatchingPattern(sentence) == pattern 
-                })
-            }
+        if (this.state.limit == LESS && sentences.length > LESS) {
+            sentences = sentences.slice(0, LESS)
         }
 
         let error: string 

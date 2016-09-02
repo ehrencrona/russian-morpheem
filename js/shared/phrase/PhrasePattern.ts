@@ -69,6 +69,7 @@ class Placeholder {
     fragmentIndex: number
     inflections: string[]
     toPosOrForm: string
+    article: boolean
 }
 
 type WordToString = (word: Word) => string;
@@ -135,45 +136,53 @@ class Fragment implements EnglishPatternFragment {
                 return
             }
 
-            let arrowEls = params[params.length-1].split('->')
-            
-            let words: InflectedWord[]
-            
-            let fragmentIndexString = arrowEls[0]
+            let article = false
 
-            let fragmentIndex = parseInt(fragmentIndexString)
+            let arrowEls: string[] = []
+            let fragmentIndexString: string
+            let fragmentIndex: number
+            let inflections: string[]
 
-            if (isNaN(fragmentIndex)) {
-                if (placeholder[0] == '[') {
-                    let caseMatchCount = 0
+            if (params[0] == 'article') {
+                article = true
+            }
+            else {
+                arrowEls = params[params.length-1].split('->')
+                fragmentIndexString = arrowEls[0]
+                fragmentIndex = parseInt(fragmentIndexString)
+                
+                let words: InflectedWord[]
+                
+                if (isNaN(fragmentIndex)) {
+                    if (placeholder[0] == '[') {
+                        let caseMatchCount = 0
 
-                    for (let i = 0; i < pattern.wordMatches.length; i++) {
-                        if (pattern.wordMatches[i].isCaseStudy()) {
-                            caseMatchCount++
+                        for (let i = 0; i < pattern.wordMatches.length; i++) {
+                            if (pattern.wordMatches[i].isCaseStudy()) {
+                                caseMatchCount++
 
-                            if (caseMatchCount == this.squarePlaceholderCount) {
-                                fragmentIndex = i + 1
-                                break
+                                if (caseMatchCount == this.squarePlaceholderCount) {
+                                    fragmentIndex = i + 1
+                                    break
+                                }
                             }
                         }
                     }
-
+                    else {
+                        console.warn(`Missing fragment index in phrase ${enString}.`)
+                        return
+                    }
                 }
-                else {
-                    console.warn(`Missing fragment index in phrase ${enString}.`)
-                    return
+
+                let inflectAsPoS = arrowEls[1]
+
+                if (params.length > 1) {
+                    inflections = params.slice(0, params.length-1) 
                 }
-            }
-
-            let inflectAsPoS = arrowEls[1]
-
-            let inflections
-
-            if (params.length > 1) {
-                inflections = params.slice(0, params.length-1) 
             }
 
             this.placeholders.push({
+                article: article,
                 toPosOrForm: arrowEls[1],
                 placeholder: placeholder,
                 fragmentIndex: fragmentIndex,
@@ -213,6 +222,10 @@ class Fragment implements EnglishPatternFragment {
         let result = this.enString
 
         this.placeholders.forEach(placeholder => {
+            if (placeholder.article) {
+                return
+            }
+
             let replaceWith: string
 
             let at = 0
@@ -250,35 +263,6 @@ class Fragment implements EnglishPatternFragment {
                     let wordMatched: WordMatched = match.words.find((w) => w.wordMatch == wordMatch)
 
                     replaceWith = phraseToString(wordMatch, wordMatched, wordToString)
-
-                    if (match.sentence && match.sentence.en()) {
-                        let search = wordMatched.word.getEnglish()
-                        let i = -1
-                        let en = match.sentence.en()
-                        let found = false
-
-                        do {
-                            i = en.indexOf(search, i+1)
-
-                            if (i >= 0) {
-                                found = true
-
-                                if (en.substr(i-2, 2) == 'a ') {
-                                    replaceWith = 'a ' + replaceWith
-                                    break
-                                }
-                                else if (en.substr(i-4, 4) == 'the ') {
-                                    replaceWith = 'the ' + replaceWith
-                                    break
-                                }
-                            }
-                        }
-                        while (i >= 0)
-
-                        if (!found) {
-                            console.log(`did not find "${search}" in "${en}"`)
-                        }
-                    }
                 }
                 else {
                     replaceWith = match.words.filter((w) => w.wordMatch == wordMatch)
@@ -304,13 +288,65 @@ class Fragment implements EnglishPatternFragment {
 
                 r.push(m.word)		
             }		
-        })		
+        })
 
         Object.keys(replace).forEach((r) => {		
             result = result.replace(new RegExp(r, 'g'), replace[r].map((w) => 		
                 (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)		
             ).join(' '))		
         })		
+
+        // there can be multiple article placeholders so we must handle them separately
+
+        if (match.sentence && match.sentence.en()) {
+            let atArticle = -1
+            
+            do {
+                const ARTICLE_PLACEHOLDER = '(article)'
+                const A = 'a '
+                const THE = 'the '
+
+                atArticle = result.indexOf(ARTICLE_PLACEHOLDER, atArticle + 1)
+
+                if (atArticle >= 0) {
+                    let following = result.substr(atArticle + ARTICLE_PLACEHOLDER.length)
+                    let m = following.match(/\w+/)
+
+                    if (m) {
+                        let nextWord = m[0]
+
+                        let i = -1
+                        let en = match.sentence.en()
+                        let found = false
+
+                        do {
+                            i = en.indexOf(nextWord, i+1)
+
+                            if (i >= 0) {
+                                found = true
+                                if (en.substr(i-A.length, A.length) == A && following.substr(0, A.length) != A) {
+                                    result = result.substr(0, atArticle) + A + following
+
+                                    break
+                                }
+                                else if (en.substr(i-THE.length, THE.length) == THE && following.substr(0, THE.length) != THE) {
+                                    result = result.substr(0, atArticle) + THE + following
+
+                                    break
+                                }
+                            }
+                        }
+                        while (i >= 0)
+
+                        if (!found) {
+                            console.log(`did not find "${nextWord}" in "${en}"`)
+                        }
+                    }
+                }
+            } while (atArticle >= 0)
+        }
+
+        result = result.replace(/\(article\)/g, '')
 
         return result                           
     }
