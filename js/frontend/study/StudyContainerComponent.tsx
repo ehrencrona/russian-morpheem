@@ -121,16 +121,20 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
-/*
+
+
+let phrase = this.props.corpus.facts.get('с-чем') as Phrase
+
         this.setState({
-            sentence: this.props.corpus.sentences.get(3955),
+            sentence: this.props.corpus.sentences.get(2199),
             facts: [
-                this.props.corpus.facts.get('time-acc')
+                phrase.getCaseFact(GrammaticalCase.INSTR),
+                this.props.corpus.facts.get('с-чем')
             ]
         })
 
         return
-*/
+
         // if studying phrases, remove any sentences that don't actually match the phrase.
         sentenceScores = sentenceScores.filter((score) => {
             let phrase: Phrase

@@ -100,7 +100,6 @@ export default class SentenceComponent extends Component<Props, State> {
             className += ' hidden'
         }
 
-
         let highHighlight
         let lowHighlight 
 

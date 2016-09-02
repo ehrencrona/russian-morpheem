@@ -335,7 +335,8 @@ export default class StudyComponent extends Component<Props, State> {
             return <div>
                 <div className='buttonBar'>
                     <div className='button left small' onClick={ () => this.iWasRight() }><span className='line'>I was</span> right</div>
-                    <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) }><span className='line'>I was</span> wrong</div>
+                    <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) 
+                    }><span className='line'>I was</span> wrong</div>
                 </div>
                 { this.renderSentenceTranslation() }
             </div>
@@ -356,6 +357,7 @@ export default class StudyComponent extends Component<Props, State> {
         let sentence = this.props.sentence
 
 console.log('Sentence: ' + sentence.toString())
+console.log('Facts: ' + this.props.facts.map(f => f.getId()).join(', '))
 
         let tokens = this.state.tokens
 
@@ -366,6 +368,9 @@ console.log('Sentence: ' + sentence.toString())
                 this.isStudiedFact(fact.fact) ||
                 this.oughtToKnow(fact.fact))
         }
+
+console.log('Production facts: ' + this.getProductionFacts().map(f => f.fact.getId()).join(', '))
+console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
 
         return <div className='content'>
             <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>

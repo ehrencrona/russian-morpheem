@@ -110,25 +110,29 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
 
             atFragment++
         }
-        else if (!englishBlock) {
-            // add a Russian text block with no English equivalent.
-            tokens.splice(blockStart, wordBlock.end - wordBlock.start, 
-                new StudyPhrase(phrase, '', 
-                    words.slice(wordBlock.start, wordBlock.end), true))
-
-            wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
-
-            atWordBlock++
-        }
         else {
-            // add an English text block for Russian text
+            let en: string
+
+            if (!englishBlock) {
+                en = ''
+            }
+            else {
+                en = englishBlock.en(phraseMatch)
+                atFragment++
+            }
+
+            let phraseWords = words.slice(wordBlock.start, wordBlock.end)
+
             tokens.splice(blockStart, wordBlock.end - wordBlock.start, 
-                new StudyPhrase(phrase, englishBlock.en(phraseMatch), 
-                    words.slice(wordBlock.start, wordBlock.end), true))
+                new StudyPhrase(phrase, en, phraseWords, true))
+
+            phraseWords.forEach(w => {
+                w.studied = true
+                w.addFact({ fact: phrase, words: phraseWords })
+            })
 
             wordIndexAdjust += 1 - (wordBlock.end - wordBlock.start)
 
-            atFragment++
             atWordBlock++
         }
 

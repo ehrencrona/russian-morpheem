@@ -21,9 +21,10 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
 
         explanation = blocks.map((b) => {
             return htmlEscape(b.enWithJpForCases(match, '--start--', '--end--'))
-                .replace(/--start--/g, '<strong className="verbatim">')
-                .replace(/--end--/g, '</strong>')
+                .replace(/--start--/g, '</strong>')
+                .replace(/--end--/g, '<strong>')
         }).join(' ') 
+        explanation = '<strong>' + explanation + '</strong>'
         
         words = match.words
             .map((m) => {
@@ -46,7 +47,7 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
         console.error(phrase.id + ' did not match ' + props.sentence)
     }
 
-    return <div><span className='nobr' 
+    return <div><span className='nobr verbatim' 
         dangerouslySetInnerHTML={ { __html: words } }/> means <span className='nobr' 
         dangerouslySetInnerHTML={ { __html: explanation } }/>
     </div>
