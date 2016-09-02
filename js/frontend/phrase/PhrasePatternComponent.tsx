@@ -60,6 +60,11 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         let start = new Date()
 
         this.props.corpus.sentences.sentences.find(sentence => {
+            if (!this.props.phrase.isAutomaticallyAssigned() &&
+                !sentence.phrases.find((p) => p.getId() == this.props.phrase.getId())) {
+                return
+            }
+
             let match = this.props.phrase.match({
                 words: sentence.words,
                 sentence: sentence,
@@ -90,12 +95,11 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             let newPattern = PhrasePattern.fromString(patternStr.trim(), oldPattern.en,
                 this.props.corpus.words, this.props.corpus.inflections)
 
-            this.setState({ 
-                error: null,
-                sentencesByPhrase: this.findSentencesByPhrase()
-            })
-
             if (newPattern.toString() == oldPattern.toString()) {
+                this.setState({ 
+                    error: null,
+                })
+
                 return
             }
 
@@ -103,6 +107,11 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                 (p == oldPattern ? newPattern : p))
 
             this.props.corpus.phrases.setPattern(this.props.phrase, patterns)
+
+            this.setState({ 
+                error: null,
+                sentencesByPhrase: this.findSentencesByPhrase()
+            })
 
             this.props.onChange();
 
