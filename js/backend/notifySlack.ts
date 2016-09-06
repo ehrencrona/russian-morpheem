@@ -5,8 +5,18 @@ import Sentence from '../shared/Sentence'
 import Corpus from '../shared/Corpus'
 import { getSlackOfAuthor } from './getAuthor'
 
-export function notify(message: string, author: string) {
-    post('https://hooks.slack.com/services/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', {
+export enum Channel {
+    COMMENTS, SENTENCES
+}
+
+const CHANNEL_URL = {
+    SENTENCES: 'https://hooks.slack.com/services/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',
+    COMMENTS: 'https://hooks.slack.com/services/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'
+}
+
+
+export function notify(message: string, author: string, channel: Channel) {
+    post(CHANNEL_URL[channel], {
         body: JSON.stringify(
             { 
                 text: message,
@@ -24,7 +34,7 @@ function getOpenLink(sentence: Sentence) {
 }
 
 export function notifyAdd(sentence : Sentence) {
-    notify(sentence.toString() + getOpenLink(sentence), sentence.author)
+    notify(sentence.toString() + getOpenLink(sentence), sentence.author, Channel.SENTENCES)
 }
 
 export function notifyComment(comment: string, sentence : Sentence, author: string, corpus: Corpus) {
@@ -45,6 +55,6 @@ export function notifyComment(comment: string, sentence : Sentence, author: stri
     .then(() => {
         notify('> ' + sentence.toUnambiguousString(corpus.words) + getOpenLink(sentence) + '\n' +
             comment + Object.keys(shoutOuts).map((slackName) => 
-                ` <@${shoutOuts[slackName]}|${slackName}>`), author)
+                ` <@${shoutOuts[slackName]}|${slackName}>`), author, Channel.COMMENTS)
     })
 }

@@ -110,7 +110,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
     '1': formTransform('v', ['1']),
     'prog': formTransform('v', ['prog']),
-    'sg': formTransform('n', ['']),
+    'sg': formTransform('n', ['nom']),
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl'])
 }
@@ -304,6 +304,7 @@ class Fragment implements EnglishPatternFragment {
             do {
                 const ARTICLE_PLACEHOLDER = '(article)'
                 const A = 'a '
+                const AN = 'an '
                 const THE = 'the '
 
                 atArticle = result.indexOf(ARTICLE_PLACEHOLDER, atArticle + 1)
@@ -326,6 +327,11 @@ class Fragment implements EnglishPatternFragment {
                                 found = true
                                 if (en.substr(i-A.length, A.length) == A && following.substr(0, A.length) != A) {
                                     result = result.substr(0, atArticle) + A + following
+
+                                    break
+                                }
+                                if (en.substr(i-AN.length, AN.length) == AN && following.substr(0, AN.length) != AN) {
+                                    result = result.substr(0, atArticle) + AN + following
 
                                     break
                                 }
