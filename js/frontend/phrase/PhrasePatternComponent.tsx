@@ -9,6 +9,7 @@ import Phrase from '../../shared/phrase/Phrase'
 import htmlEscape from '../../shared/util/htmlEscape'
 import PhrasePattern from '../../shared/phrase/PhrasePattern'
 import PhraseMatch from '../../shared/phrase/PhraseMatch'
+import ExactWordMatch from '../../shared/phrase/ExactWordMatch'
 import PhraseStudyWordsComponent from './PhraseStudyWordsComponent'
 import Tab from '../OpenTab'
 import openFact from '../fact/openFact'
@@ -201,6 +202,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                                 } }/>
                         </div>
 
+                        <div className='phraseFacts'>
                         {
                             pattern.wordMatches.filter(m => m instanceof PhraseMatch).map(m => 
                                 <div key={ (m as PhraseMatch).phrase.id } 
@@ -208,6 +210,19 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                                     className='clickable'>{ (m as PhraseMatch).phrase.id }</div>
                             )
                         }
+
+                        {
+                            pattern.wordMatches.filter(m => m instanceof ExactWordMatch).map(m =>
+
+                                (m as ExactWordMatch).words.map(w => 
+                                    <div key={ w.getWordFact().getId() } 
+                                        onClick={ () => openFact(w.getWordFact(), this.props.corpus, this.props.tab) }
+                                        className='clickable'>{ w.toString() }</div>
+                                )
+
+                            )
+                        }
+                        </div>
 
                         <PhraseStudyWordsComponent 
                             phrase={ phrase }

@@ -789,6 +789,25 @@ ul {
             width: 100%
         }
     }
+
+    .pattern .phraseFacts {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+
+        > div {
+            background-color: $color10;
+            color: white;
+            font-size: 80%;
+            padding: 1px $unit 3px;
+            margin-right: 2 * $unit;
+        }
+
+        > div:hover {
+            background-color: darken($color10, 10%);
+            text-decoration: none;
+        }
+    }
 }
 
 .matchingSentences {
