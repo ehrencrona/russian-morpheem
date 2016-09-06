@@ -38,7 +38,7 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
     }
 
     for (let pair of str.split(',')) {
-        let delimiter = pair.match(/ *(\w+):? +/)
+        let delimiter = pair.match(/ *(\w+):? */)
 
         if (!delimiter) {
             throw new Error('Expected "' + pair + '" in ' + id + ' to be of the form <form> <ending>, e.g. "gen y"')
