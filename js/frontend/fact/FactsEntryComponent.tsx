@@ -12,7 +12,7 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import FactNameComponent from '../FactNameComponent'
 
-import { SentencesByFactIndex, FactSentences } from '../../shared/SentencesByFactIndex'
+import { SentencesByFactIndex, FactSentences, DESIRED_SENTENCE_COUNT } from '../../shared/SentencesByFactIndex'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 
 
 interface Props {
@@ -72,7 +72,7 @@ export default class FactsEntryComponent extends Component<Props, State> {
         let indexEntry: FactSentences = sentencesByFact[fact.getId()] || 
             { ok: [], easy: [], hard: [], count: 0, factIndex: 0 }
 
-        let easyLeft = 8 - (indexEntry.easy.length + indexEntry.ok.length)
+        let easyLeft = DESIRED_SENTENCE_COUNT - (indexEntry.easy.length + indexEntry.ok.length)
         let left = easyLeft - indexEntry.hard.length
 
         return ( 
@@ -99,8 +99,8 @@ export default class FactsEntryComponent extends Component<Props, State> {
 
                 <span className='clickable'>
                     <FactNameComponent fact={ fact } index={ index } corpus={ this.props.corpus} />
-                    
-                    { ( easyLeft > 0 ? <span className='insufficient'>{ (left > 0 ?  `+${left}!` :  `+${easyLeft}`) }</span> : '') }
+
+                    { ( left > 0 ? <span className='insufficient'>{ `+${easyLeft}` }</span> : '') }
                 </span>
 
                 { this.props.children }

@@ -3,10 +3,11 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import InflectedWord from '../../shared/InflectedWord'
+import AbstractAnyWord from '../../shared/AbstractAnyWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
 
-import { SentencesByFactIndex, FactSentences } from '../../shared/SentencesByFactIndex'		
+import { SentencesByFactIndex, FactSentences, DESIRED_SENTENCE_COUNT } from '../../shared/SentencesByFactIndex'		
  
 import { FactIndex } from './FactIndex'
 
@@ -27,10 +28,16 @@ export default class FactsMissingComponent extends Component<Props, State> {
         let indexOfFacts : SentencesByFactIndex =		
             this.props.corpus.sentences.getSentencesByFact(this.props.corpus.facts)
 
-        let filter = (factIndex) => {		
+        let filter = (factIndex) => {
+            let fact = factIndex.fact
+
+            if (fact instanceof AbstractAnyWord && !fact.studied) {
+                return false
+            }
+
             let indexEntry: FactSentences = indexOfFacts[factIndex.fact.getId()]
-                    
-            return !indexEntry || indexEntry.count < 8		
+
+            return !indexEntry || indexEntry.count < DESIRED_SENTENCE_COUNT		
         }
 
         return (

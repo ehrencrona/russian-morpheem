@@ -6,6 +6,8 @@ import Fact from './fact/Fact';
 
 let OK_INTERVAL = 10  
 
+export const DESIRED_SENTENCE_COUNT = 5
+
 export interface SentenceDifficulty {
     sentence: Sentence,
     difficulty: number

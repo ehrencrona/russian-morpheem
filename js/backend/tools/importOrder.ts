@@ -26,14 +26,20 @@ readCorpus('ru', false)
             let wordsByDiff: Fact[][] = []
 
             body.split('\n').forEach((line) => {
-                let i = line.lastIndexOf(' ')
+                let i = line.indexOf(' ')
 
                 if (i < 0) {
                     throw new Error(`No space in "${line}"`)
                 }
 
+                let j = line.indexOf(' ', i+1)
+
+                if (j < 0) {
+                    j = line.length
+                }
+
                 let id = line.substr(0, i)
-                let pos = parseInt(line.substr(i+1))
+                let pos = parseInt(line.substr(i+1, j-i-1))
 
                 if (isNaN(pos)) {
                     throw new Error(`NaN position in "${line}".`)

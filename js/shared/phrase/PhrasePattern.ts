@@ -325,17 +325,17 @@ class Fragment implements EnglishPatternFragment {
 
                             if (i >= 0) {
                                 found = true
-                                if (en.substr(i-A.length, A.length) == A && following.substr(0, A.length) != A) {
+                                if (en.substr(i-A.length, A.length).toLowerCase() == A && following.substr(0, A.length) != A) {
                                     result = result.substr(0, atArticle) + A + following
 
                                     break
                                 }
-                                if (en.substr(i-AN.length, AN.length) == AN && following.substr(0, AN.length) != AN) {
+                                if (en.substr(i-AN.length, AN.length).toLowerCase() == AN && following.substr(0, AN.length) != AN) {
                                     result = result.substr(0, atArticle) + AN + following
 
                                     break
                                 }
-                                else if (en.substr(i-THE.length, THE.length) == THE && following.substr(0, THE.length) != THE) {
+                                else if (en.substr(i-THE.length, THE.length).toLowerCase() == THE && following.substr(0, THE.length) != THE) {
                                     result = result.substr(0, atArticle) + THE + following
 
                                     break

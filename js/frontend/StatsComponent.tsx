@@ -7,7 +7,7 @@ import InflectableWord from '../shared/InflectableWord'
 import Tab from './Tab'
 import SentencesByDateComponent from './metadata/SentencesByDateComponent'
 
-import { SentencesByFactIndex } from '../shared/SentencesByFactIndex'
+import { SentencesByFactIndex, DESIRED_SENTENCE_COUNT } from '../shared/SentencesByFactIndex'
 
 interface Props {
     corpus: Corpus,
@@ -34,7 +34,7 @@ export default class StatsComponent extends Component<Props, State> {
         for (let fact of corpus.facts.facts) {
             let i = indexOfFacts[fact.getId()]
 
-            if (i && i.count >= 8) {
+            if (i && i.count >= DESIRED_SENTENCE_COUNT) {
                 factsWithEnoughSentences++
 
                 if (fact instanceof Word || fact instanceof InflectableWord) {
@@ -42,7 +42,7 @@ export default class StatsComponent extends Component<Props, State> {
                 }
             }
             
-            if (i && i.easy.length + i.ok.length >= 8) {
+            if (i && i.easy.length + i.ok.length >= DESIRED_SENTENCE_COUNT) {
                 factsWithEnoughEasySentences++
 
                 if (fact instanceof Word || fact instanceof InflectableWord) {
