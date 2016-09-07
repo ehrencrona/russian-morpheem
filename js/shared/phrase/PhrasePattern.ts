@@ -11,7 +11,7 @@ import Words from '../Words'
 import Inflections from '../inflection/Inflections'
 import Facts from '../fact/Facts'
 import Word from '../Word'
-import { ENGLISH_FORMS_BY_POS, FORMS, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS, FORMS, Number, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
@@ -245,7 +245,32 @@ class Fragment implements EnglishPatternFragment {
                         inflectAsPoS = 'v'
                     }
 
-                    replaceWith = getEnglishInflectionFromList(inflectAsPoS, words[0].form, placeholder.inflections)
+                    let accordWith = words.find(w => w.pos == inflectAsPoS) 
+                    let form: string
+                    
+                    if (!accordWith) {
+                        if (inflectAsPoS == 'v') {
+                            if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'я')) {
+                                form = '1'
+                            }
+                            else if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'ты')) {
+                                form = '2'
+                            }
+                            else if (words.find(w => w instanceof InflectedWord && FORMS[w.form].number == Number.PLURAL)) {
+                                form = '1pl'
+                            }
+                            else {
+                                form = '3'
+                            }
+                        }
+                        else {
+                            accordWith = words[0]
+
+                            console.log(`Could not find any ${inflectAsPoS} in ${ words.map(w=>w.jp).join(' ') }.`)
+                        }
+                    }
+
+                    replaceWith = getEnglishInflectionFromList(inflectAsPoS, form || accordWith.form, placeholder.inflections)
                 }
             }
             else {

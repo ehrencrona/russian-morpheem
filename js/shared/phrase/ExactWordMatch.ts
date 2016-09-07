@@ -16,6 +16,7 @@ export class ExactWordMatch implements WordMatch {
 
         this.words.forEach((w) => {
             this.wordIds[w.getId()] = true
+            this.wordIds[w.getId() + '*'] = true
         })
     }
 

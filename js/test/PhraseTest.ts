@@ -27,15 +27,20 @@ let femInflection =
     new Inflection('f', 'nom', 'n', 
         parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', 'ru', 'n').endings)
 
+let verbInflection =
+    new Inflection('verb', '1', 'v', 
+        parseEndings('1 ю, 2 ешь, 3 ет', 'ru', 'v').endings)
+
 let inflections = new Inflections([
     femInflection,
     new Inflection('adj', 'm', 'adj', 
         parseEndings('m ий, adv о, genpl ах, gen а', 'ru', 'adj').endings),
-    mascInflection
+    mascInflection,
+    verbInflection
 ])
 
 describe('Phrase', function() {
-    let w1, comma, w2: Word, w3, w4, w5: InflectableWord, words: Words, facts: Facts
+    let w1, comma, w2: Word, w3, w4, w5, w6: InflectableWord, words: Words, facts: Facts
     
     w1 = new Word('в', 'loc')
     w2 = new Word('в', 'dir')
@@ -45,6 +50,8 @@ describe('Phrase', function() {
     w5 = new InflectableWord('хорош', inflections.inflections[1])
     w5.setEnglish('good')
 
+    w6 = new InflectableWord('работа', verbInflection)
+
     comma = new Word(',')
 
     words = new Words()
@@ -53,6 +60,7 @@ describe('Phrase', function() {
     words.addInflectableWord(w3)
     words.addInflectableWord(w4)
     words.addInflectableWord(w5)
+    words.addInflectableWord(w6)
 
     facts = new Facts()
     facts.add(w2)
@@ -240,6 +248,30 @@ describe('Phrase', function() {
         testMatch('в[loc]@ any noun@prep+', 2)
 
         testMatch('noun@prep+', 1)
+    })
+
+    it('matches adverbs with quantifiers', function () {
+        let wordArray = [
+            w4, w5.inflect('adv'), w6.inflect('1') 
+        ]
+
+        function testMatch(phraseStr: string, length: number, isCanonicalForm?: boolean) {
+            let phrase = Phrase.fromString('foo', phraseStr, 'English', words, inflections)
+
+            phrase.setCorpus(corpus)
+
+            if (isCanonicalForm != null && isCanonicalForm) {
+                expect(phrase.toString()).to.equal(phraseStr)
+            }
+
+            expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
+            expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
+        }
+
+        testMatch('я хороший@adv работаю', 3)
+        testMatch('я adverb работаю', 3)
+        testMatch('я adverb! работаю', 3)
+        testMatch('я adverb? работаю', 3)
     })
 
 })

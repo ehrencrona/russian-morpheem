@@ -12,7 +12,7 @@ interface MatchContext {
     sentence?: Sentence
     facts: Facts
     study?: CaseStudy
-    overrideFormCase?: GrammaticalCase 
+    overrideFormCase?: GrammaticalCase
 }
 
 export default MatchContext
