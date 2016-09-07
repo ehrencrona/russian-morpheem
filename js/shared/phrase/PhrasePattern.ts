@@ -108,6 +108,7 @@ function formTransform(pos: string, forms: string[]): WordToString {
 
 const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
+    '1sg': formTransform('v', ['1']),
     'prog': formTransform('v', ['prog']),
     'past': formTransform('v', ['past']),
     'sg': formTransform('n', ['nom']),
@@ -348,9 +349,7 @@ class Fragment implements EnglishPatternFragment {
             
             do {
                 const ARTICLE_PLACEHOLDER = '(article)'
-                const A = 'a '
-                const AN = 'an '
-                const THE = 'the '
+                const ARTICLES = ['a ', 'an ', 'the ']
 
                 atArticle = result.indexOf(ARTICLE_PLACEHOLDER, atArticle + 1)
 
@@ -369,25 +368,17 @@ class Fragment implements EnglishPatternFragment {
                             i = en.indexOf(nextWord, i+1)
 
                             if (i >= 0) {
-                                found = true
-                                if (en.substr(i-A.length, A.length).toLowerCase() == A && following.substr(0, A.length) != A) {
-                                    result = result.substr(0, atArticle) + A + following
-
-                                    break
-                                }
-                                if (en.substr(i-AN.length, AN.length).toLowerCase() == AN && following.substr(0, AN.length) != AN) {
-                                    result = result.substr(0, atArticle) + AN + following
-
-                                    break
-                                }
-                                else if (en.substr(i-THE.length, THE.length).toLowerCase() == THE && following.substr(0, THE.length) != THE) {
-                                    result = result.substr(0, atArticle) + THE + following
-
-                                    break
-                                }
+                                ARTICLES.forEach(article => {
+                                    if (en.substr(i-article.length, article.length).toLowerCase() == article && 
+                                        (i == article.length || !en[i-article.length-1].match(/\w/)) &&
+                                        following.substr(0, article.length).toLowerCase() != article) {
+                                        result = result.substr(0, atArticle) + article + following
+                                        found = true
+                                    }
+                                })
                             }
                         }
-                        while (i >= 0)
+                        while (i >= 0 && !found)
 
                         if (!found) {
                             console.log(`did not find "${nextWord}" in "${en}"`)
