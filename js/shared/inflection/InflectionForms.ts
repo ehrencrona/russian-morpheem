@@ -106,6 +106,7 @@ export class InflectionForm {
         return !(
             (this.grammaticalCase != null && this.grammaticalCase != otherForm.grammaticalCase) ||
             (this.gender != null && this.gender != otherForm.gender) ||
+            (this.person != null && this.person != otherForm.person) ||
             (this.number != null && this.number != otherForm.number) ||
             (this.adjectiveForm != null && this.adjectiveForm != otherForm.adjectiveForm) ||
             (this.comparison != null && this.comparison != otherForm.comparison) ||

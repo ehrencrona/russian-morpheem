@@ -54,13 +54,26 @@ export default class SentenceStatusComponent extends Component<Props, State> {
         this.setState({ status: this.state.status })
     }
 
+    play() {
+        let audioUrl = '/public-api/ru/sentence/' + this.props.sentence.id + '/audio.wav?cachebuster=' + Math.random()
+
+        new Audio(audioUrl).play()
+    }
+
     render() {        
         if (!this.state.status) {
             return <div/>
         }
 
         return (<div className='status'>
+            { this.state.status.recorded ?
+                <div className='button' onClick={ () => this.play() }>Listen</div>
+                : 
+                []
+            }
+
             <div className='current'>
+
             { this.state.status.status == STATUS_SUBMITTED ? 
 
                 'Verification pending' :

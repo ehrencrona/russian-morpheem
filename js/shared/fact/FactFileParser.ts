@@ -105,6 +105,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         splitRightSide(rightSide).forEach((pair) => {
             let tag = pair[0]
             let text = pair[1]
+
             if (tag == 'inflect') {
                 let inflection = inflections.getInflection(text)
 
@@ -146,6 +147,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 let iw = new InflectableWord(stem, inflection, word.classifier)
                 iw.en = word.en
 
+                if (word.pos) {
+                    iw.pos = word.pos
+                }
+
                 fact = iw
             }
             else if (tag == 'grammar') {
@@ -166,6 +171,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             }
             else if (tag == 'pos') {
                 word.pos = text
+
+                if (fact instanceof InflectableWord) {
+                    fact.pos = text
+                }
             }
             else if (tag == 'mask') {
                 if (fact instanceof InflectableWord) {
