@@ -87,7 +87,7 @@ function formTransform(pos: string, forms: string[]): WordToString {
     return (word: Word) => {
         if (word instanceof InflectedWord && word.pos == pos) {
             let inflection
-            
+
             forms.find(form => {
                 inflection = word.word.inflect(form)
 
@@ -108,8 +108,8 @@ function formTransform(pos: string, forms: string[]): WordToString {
 
 const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
-    '1': formTransform('v', ['1']),
     'prog': formTransform('v', ['prog']),
+    'past': formTransform('v', ['past']),
     'sg': formTransform('n', ['nom']),
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl'])
@@ -210,6 +210,25 @@ class Fragment implements EnglishPatternFragment {
         )        
     }
 
+    getVerbForm(words: Word[]) {
+        let form = '2'
+
+        if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'я')) {
+            form = '1'
+        }
+        else if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'ты')) {
+            form = '2'
+        }
+        else if (words.find(w => w instanceof InflectedWord && FORMS[w.form].number == Number.PLURAL)) {
+            form = '1pl'
+        }
+        else {
+            form = '3'
+        }
+
+        return form
+    }
+
     en(match: Match, wordToString?: WordToString, phraseToString?: PhraseToString): string {
         if (!wordToString) {
             wordToString = defaultWordToString
@@ -250,18 +269,7 @@ class Fragment implements EnglishPatternFragment {
                     
                     if (!accordWith) {
                         if (inflectAsPoS == 'v') {
-                            if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'я')) {
-                                form = '1'
-                            }
-                            else if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'ты')) {
-                                form = '2'
-                            }
-                            else if (words.find(w => w instanceof InflectedWord && FORMS[w.form].number == Number.PLURAL)) {
-                                form = '1pl'
-                            }
-                            else {
-                                form = '3'
-                            }
+                            form = this.getVerbForm(words)
                         }
                         else {
                             accordWith = words[0]
@@ -278,9 +286,21 @@ class Fragment implements EnglishPatternFragment {
                     wordToString = TRANSFORMS[placeholder.toPosOrForm]
 
                     if (!wordToString) {
-                        console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)
+                        let matchIndex = parseInt(placeholder.toPosOrForm)
 
-                        wordToString = defaultWordToString
+                        if (!isNaN(matchIndex)) {
+                            let wordMatch = match.pattern.wordMatches[matchIndex-1]
+
+                            let words = match.words.filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord)).map(w => w.word as InflectedWord)
+
+                            let form = this.getVerbForm(words)
+                            wordToString = formTransform('v', [ form ])
+                        }
+                        else {
+                            console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)
+
+                            wordToString = defaultWordToString
+                        }
                     }
                 }
 
