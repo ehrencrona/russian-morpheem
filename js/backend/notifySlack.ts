@@ -9,11 +9,10 @@ export enum Channel {
     COMMENTS, SENTENCES
 }
 
-const CHANNEL_URL = {
-    SENTENCES: 'https://hooks.slack.com/services/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',
-    COMMENTS: 'https://hooks.slack.com/services/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'
-}
+const CHANNEL_URL = {}
 
+CHANNEL_URL[Channel.SENTENCES] = 'https://hooks.slack.com/services/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'
+CHANNEL_URL[Channel.COMMENTS] = 'https://hooks.slack.com/services/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'
 
 export function notify(message: string, author: string, channel: Channel) {
     post(CHANNEL_URL[channel], {
