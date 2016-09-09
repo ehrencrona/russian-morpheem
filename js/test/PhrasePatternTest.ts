@@ -50,7 +50,7 @@ describe('PhrasePatterns', () => {
     let phrases = new Phrases()
 
     let np = new Phrase('auto-np', [ 
-        PhrasePattern.fromString('noun@nominative', '(1)', words, inflections), 
+        PhrasePattern.fromString('noun@nominative', '(article)(1)', words, inflections), 
         PhrasePattern.fromString('phrase:много', '(1)', words, inflections) 
     ])
     phrases.add(np)
@@ -218,6 +218,33 @@ describe('PhrasePatterns', () => {
 
         expect(m.pattern.getEnglishFragments()[0].en(m)).to.equal('two')
         expect(m.pattern.getEnglishFragments()[1].en(m)).to.equal('cars')
+    })
+
+
+    it('handles any with both translation on one side', () => {
+        let dwaPhrase = new Phrase('два', [ 
+            PhrasePattern.fromString(
+                'два any genitive',
+                '... (1) [something->pl]', 
+                words, inflections) 
+        ])
+        phrases.add(dwaPhrase)
+
+        let sentence = new Sentence([
+            dwa, mashina.inflect('gen'), 
+        ], 0)
+
+        let m = dwaPhrase.match({
+            sentence: sentence,
+            words: sentence.words,
+            facts: facts
+        })
+ 
+        expect(m).to.not.be.undefined
+        expect(m.pattern.getEnglishFragments().length).to.equal(2)
+
+        expect(m.pattern.getEnglishFragments()[1].en(m)).to.equal('two cars')
+        expect(m.pattern.getEnglishFragments()[0].en(m)).to.equal('')
     })
 
 })

@@ -491,10 +491,6 @@ export default class PhrasePattern {
         this.en.split('...').forEach((str) => {
             str = str.trim()
 
-            if (!str) {
-                return
-            }
-
             let fragment = new Fragment(str, squarePlaceholderCount, this)
 
             squarePlaceholderCount += fragment.squarePlaceholderCount
