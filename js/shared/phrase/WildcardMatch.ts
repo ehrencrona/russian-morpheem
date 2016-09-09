@@ -17,7 +17,7 @@ export default class WildcardMatch implements WordMatch {
 
         for (let i = wordPosition; i < words.length; i++) {
             if (words[i].jp.length == 1 && Words.PUNCTUATION.indexOf(words[i].jp) >= 0) {
-                return i - wordPosition 
+                return 0 
             }
 
             if (matches[matchPosition+1].matches(

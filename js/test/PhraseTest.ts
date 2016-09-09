@@ -62,6 +62,8 @@ describe('Phrase', function() {
     words.addInflectableWord(w5)
     words.addInflectableWord(w6)
 
+    words.addPunctuation()
+
     facts = new Facts()
     facts.add(w2)
     facts.add(w3)
@@ -214,40 +216,40 @@ describe('Phrase', function() {
         expect(phrase.match({ words: withComma, facts: facts })).to.be.undefined
     })
 
+    function testMatch(wordArray: Word[], phraseStr: string, length: number, isCanonicalForm?: boolean) {
+        let phrase = Phrase.fromString('foo', phraseStr, 'English', words, inflections)
+
+        phrase.setCorpus(corpus)
+
+        if (isCanonicalForm != null && isCanonicalForm) {
+            expect(phrase.toString()).to.equal(phraseStr)
+        }
+
+        expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
+        expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
+    }
+
     it('matches', function () {
         let wordArray = [
             w1, w3.inflect('prep')
         ]
 
-        function testMatch(phraseStr: string, length: number, isCanonicalForm?: boolean) {
-            let phrase = Phrase.fromString('foo', phraseStr, 'English', words, inflections)
+        testMatch(wordArray, 'в[loc]@', 1)
+        testMatch(wordArray, 'в[loc]@ библиотека@prep', 2)
+        testMatch(wordArray, 'в[loc]@ я|библиотека@prepositional', 2)
+        testMatch(wordArray, 'в[loc]@ библиотека@', 2)
+        testMatch(wordArray, 'в[loc]@ я|библиотека', 2, false)
+        testMatch(wordArray, 'в[loc]@ библиотека', 2, false)
+        testMatch(wordArray, 'в[loc]@ prep', 2)
+        testMatch(wordArray, 'в[loc]@ #location', 2)
+        testMatch(wordArray, 'в[loc]@ noun+', 2)
+        testMatch(wordArray, 'в[loc]@ noun@prepositional+', 2)
+        testMatch(wordArray, 'в[loc]@ noun@prepositional!', 2)
+        testMatch(wordArray, 'в[loc]@ noun@prep+', 2)
 
-            phrase.setCorpus(corpus)
+        testMatch(wordArray, 'в[loc]@ any noun@prep+', 2)
 
-            if (isCanonicalForm != null && isCanonicalForm) {
-                expect(phrase.toString()).to.equal(phraseStr)
-            }
-
-            expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
-            expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
-        }
-
-        testMatch('в[loc]@', 1)
-        testMatch('в[loc]@ библиотека@prep', 2)
-        testMatch('в[loc]@ я|библиотека@prepositional', 2)
-        testMatch('в[loc]@ библиотека@', 2)
-        testMatch('в[loc]@ я|библиотека', 2, false)
-        testMatch('в[loc]@ библиотека', 2, false)
-        testMatch('в[loc]@ prep', 2)
-        testMatch('в[loc]@ #location', 2)
-        testMatch('в[loc]@ noun+', 2)
-        testMatch('в[loc]@ noun@prepositional+', 2)
-        testMatch('в[loc]@ noun@prepositional!', 2)
-        testMatch('в[loc]@ noun@prep+', 2)
-
-        testMatch('в[loc]@ any noun@prep+', 2)
-
-        testMatch('noun@prep+', 1)
+        testMatch(wordArray, 'noun@prep+', 1)
     })
 
     it('matches adverbs with quantifiers', function () {
@@ -255,23 +257,28 @@ describe('Phrase', function() {
             w4, w5.inflect('adv'), w6.inflect('1') 
         ]
 
-        function testMatch(phraseStr: string, length: number, isCanonicalForm?: boolean) {
-            let phrase = Phrase.fromString('foo', phraseStr, 'English', words, inflections)
-
-            phrase.setCorpus(corpus)
-
-            if (isCanonicalForm != null && isCanonicalForm) {
-                expect(phrase.toString()).to.equal(phraseStr)
-            }
-
-            expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
-            expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
-        }
-
-        testMatch('я хороший@adv работаю', 3)
-        testMatch('я adverb работаю', 3)
-        testMatch('я adverb! работаю', 3)
-        testMatch('я adverb? работаю', 3)
+        testMatch(wordArray, 'я хороший@adv работаю', 3)
+        testMatch(wordArray, 'я adverb работаю', 3)
+        testMatch(wordArray, 'я adverb! работаю', 3)
+        testMatch(wordArray, 'я adverb? работаю', 3)
     })
 
+    it('matches double adjectives', function () {
+        let wordArray = [
+            w5.inflect('m'), w5.inflect('m'), w3.inflect('nom') 
+        ]
+
+        testMatch(wordArray, 'adjective* noun', 3)
+        testMatch(wordArray, 'adjective! adjective! noun', 3)
+    })
+
+    it('any matching empty', function () {
+        let wordArray = [
+            w4.inflect('nom'), w5.inflect('m'), w3.inflect('nom'), words.get('.') 
+        ]
+
+        testMatch(wordArray, 'я any adjective', 2)
+        testMatch(wordArray, 'adjective any noun', 2)
+        testMatch(wordArray, 'adjective noun any', 2)
+    })
 })
