@@ -171,7 +171,7 @@ export default class Inflection {
         let transforms: Transform[] = []
 
         this.visitTransforms((transform: Transform) => {
-            if (transform.isApplicable(stem, suffix)) {
+            if (transform.isApplicable(stem, ending)) {
                 suffix = transform.apply(suffix)
                 transforms.push(transform)
             }

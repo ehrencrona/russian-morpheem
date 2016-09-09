@@ -1,6 +1,7 @@
 
 import InflectedWord from '../shared/InflectedWord'
 import Transform from './Transform'
+import Ending from './Ending'
 
 export class EndingTransform implements Transform {
 
@@ -15,10 +16,12 @@ export class EndingTransform implements Transform {
         visitor(this)
     }
 
-    isApplicable(stem: string, ending: string) {
-        return stem.length && ending.length &&
-            ending[0] == this.from &&
-            this.after.indexOf(stem[stem.length-1]) >= 0
+    isApplicable(stem: string, ending: Ending) {
+        let suffix = ending.suffix
+
+        return stem.length && suffix.length &&
+            suffix[0] == this.from &&
+            this.after.indexOf(stem[stem.length-1-ending.subtractFromStem]) >= 0
     } 
 
     apply(ending: string) {

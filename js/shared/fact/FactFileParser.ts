@@ -124,7 +124,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 let stem = word.jp.substr(0, word.jp.length - defaultSuffix.length)
 
                 inflection.visitTransforms((transform: Transform) => {
-                    if (transform.isApplicable(stem, defaultSuffix)) {
+                    if (transform.isApplicable(stem, defaultEnding)) {
                         defaultSuffix = transform.apply(defaultSuffix)
                     }
                 })

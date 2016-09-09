@@ -1,12 +1,13 @@
 
 import InflectedWord from '../shared/InflectedWord'
 import Fact from './fact/Fact'
+import Ending from './Ending'
 
 interface Transform extends Fact {
 
-    isApplicable(stem: string, suffix: string) 
+    isApplicable(stem: string, suffix: Ending) 
 
-    apply(suffix: string) 
+    apply(suffix: string)
 
     getId(): string
 
