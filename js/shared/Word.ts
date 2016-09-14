@@ -36,7 +36,14 @@ export default class Word extends AbstractAnyWord {
     }
 
     getWordFact(): Fact {
-        return this
+        let omitted = this.omitted
+
+        if (omitted instanceof Word) {
+            return omitted
+        }
+        else {
+            return this
+        }
     }
 
     requiresFact(fact) {
@@ -105,7 +112,7 @@ export default class Word extends AbstractAnyWord {
     
     visitFacts(visitor) {
         if (this.studied) {
-            visitor(this)
+            visitor(this.getWordFact())
         }
 
         this.visitRequired(visitor)
