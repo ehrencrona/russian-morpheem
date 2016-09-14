@@ -1,6 +1,6 @@
 import xr from 'xr';
 
-const TIMEOUT = 30000
+const TIMEOUT = 60000
 
 xr.configure({
     xmlHttpRequest: () => {
