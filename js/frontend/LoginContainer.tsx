@@ -18,6 +18,7 @@ import { setXrArgs } from './sentence/googleTranslate'
 import { setXrArgs as setRecorderXrArgs } from './Recorder' 
 
 import xr from './xr';
+import { setOnException } from './xr';
 
 const lang = getLanguage()
 
@@ -33,7 +34,9 @@ interface Props {
 interface State {
     idToken?: string,
     corpus?: Corpus,
-    bypass?: boolean
+    bypass?: boolean,
+    loading?: boolean,
+    error?: string
 }
 
 let React = { createElement: createElement }
@@ -48,8 +51,13 @@ export default class LoginContainer extends Component<Props, State> {
         super(props)
 
         this.state = {
-            bypass: document.location.hostname == 'localhost'
+            bypass: document.location.hostname == 'localhost',
+            loading: true
         }
+
+        setOnException((message) => {
+            this.setState({ error: message })
+        })
     }
 
     componentWillMount() {
@@ -99,11 +107,13 @@ export default class LoginContainer extends Component<Props, State> {
             setXrArgs(xrArgs)
             setRecorderXrArgs(xrArgs)
 
-            this.setState({ corpus: corpus })
+            this.setState({ corpus: corpus, error: null, loading: false })
         })
         .catch((e) => {
             console.log('While loading corpus: ', e.stack || e)
-            
+
+            this.setState({ error: 'Error while loading corpus: ' + e, loading: false })
+
             if (e.status == 401) {
                 localStorage.removeItem(TOKEN_ITEM)
                 this.lock.show()
@@ -131,8 +141,24 @@ export default class LoginContainer extends Component<Props, State> {
     }
 
     render() {
-        if ((this.state.bypass || this.state.idToken) && this.state.corpus) {
-            return this.props.factory({ corpus: this.state.corpus, xrArgs: this.xrArgs })
+        if ((this.state.bypass || this.state.idToken)) {
+            let main = (this.state.corpus ?
+                this.props.factory({ corpus: this.state.corpus, xrArgs: this.xrArgs })
+                :
+                <div/>)
+
+            if (this.state.loading) {
+                return <img className='spinner' src='/img/spinner.gif'/>
+            }
+            else if (this.state.error) {
+                return <div>
+                    <div className='globalError' onClick={ () => this.setState( { error: null }) } >{ this.state.error }</div>
+                    { main }
+                </div>
+            }
+            else {
+                return main
+            }
         }
         else {
             return <div/>

@@ -817,7 +817,6 @@ ul {
     }
 }
 
-
 .sentenceWithButton {
     margin: 2 * $unit 0;
     display: flex;
@@ -1569,3 +1568,21 @@ $overlayPadding: 4 * $unit;
     }
 }
 
+.spinner {
+    position: fixed;
+    top: calc(50% - 43px);
+    left: calc(50% - 43px);
+    width: 86px;
+    height: 86px;
+}
+
+.globalError {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $color13;
+    color: $color9;
+    padding: 2 * $unit;
+    text-align: center;     
+}

@@ -88,12 +88,33 @@ let result: XrInterface = {
     }
 };
 
-export default result
+export default result;
+
+let onException: (message: string) => any;
+
+export function setOnException(callback: (message: string) => any) {
+    onException = callback
+} 
 
 export function handleException(e) {
-    let message = 'Cannot reach the server. Status code: ' + e.status
+    let message
+
+    if (e.status == 0) {
+        message = 'Cannot reach the server. You might be offline.'
+    }
+    else if (e.status == 401) {
+        message = 'Your login has expired. Please reload and log in again.'
+    }
+    else {
+        message = 'An error with code ' + e.status + ' happened while saving.'
+    }
     
-    alert(message)
+    if (onException) {
+        onException(e)
+    }
+    else {
+        alert(message)
+    }
 
     console.log(e)
 
