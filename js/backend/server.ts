@@ -84,7 +84,7 @@ function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
 
     app.get(`/api/${lang}/corpus`, function(req, res) {
-        res.status(200).json(corpus)
+        res.status(200).json(corpus.toJson())
     })
 
     app.put(`/api/${lang}/fact/:pos/:id`, setFact(corpus))
