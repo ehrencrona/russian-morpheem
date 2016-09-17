@@ -23,8 +23,6 @@ function removeCase(word: InflectedWord, corpus: Corpus) {
         formId => FORMS[formId].matches(clone))
 
     if (nominative) {
-console.log('Nominative of ' + word.form + ' was ' + nominative + '.')
-
         return word.word.inflect(nominative)        
     }
     else {

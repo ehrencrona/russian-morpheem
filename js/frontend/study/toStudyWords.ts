@@ -155,52 +155,57 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
 
         let wordBlocks: WordBlock[] = findWordBlocks(phraseMatch, words)
 
-        if (!!studiedFacts.find((f) => f.getId() == phrase.getId())) {
-            replaceWordsWithStudyPhrase(phrase, words, tokens, wordBlocks, phraseMatch)
+        let wordsFact: StudyFact = { fact: phrase, words: [] } 
+        let caseFacts: { [id: string]: StudyFact } = {}
+
+        phraseMatch.words.forEach((m) => {
+            if (m.wordMatch.isCaseStudy()) {
+                let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
+
+                if (!caseFacts[caseStudied]) {
+                    caseFacts[caseStudied] = {
+                        fact: phrase.getCaseFact(caseStudied),
+                        words: []
+                    }
+                }
+
+                caseFacts[caseStudied].words.push(words[m.index])
+            }
+            else {
+                wordsFact.words.push(words[m.index])
+            }
+        })
+
+        let lastWordMatch
+        let isStudyingThisPhrase = !!studiedFacts.find((f) => f.getId() == phrase.getId())
+
+        let isStudyingPhraseCase = (grammaticalCase: number) => {
+            !!studiedFacts.find(f => f.getId() == caseFacts[grammaticalCase].fact.getId())
         }
-        else {
-            let wordsFact: StudyFact = { fact: phrase, words: [] } 
-            let caseFacts: { [id: string]: StudyFact } = {}
 
-            phraseMatch.words.forEach((m) => {
-                if (m.wordMatch.isCaseStudy()) {
-                    let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
+        phraseMatch.words.forEach((m) => {
+            if (m.wordMatch.isCaseStudy()) {
+                let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
 
-                    if (!caseFacts[caseStudied]) {
-                        caseFacts[caseStudied] = {
-                            fact: phrase.getCaseFact(caseStudied),
-                            words: []
-                        }
-                    }
+                words[m.index].addFact(caseFacts[caseStudied])
 
-                    caseFacts[caseStudied].words.push(words[m.index])
-                }
-                else {
-                    wordsFact.words.push(words[m.index])
-                }
-            })
+                let wordMatch = m.wordMatch
 
-            let lastWordMatch
-
-            phraseMatch.words.forEach((m) => {
-                if (m.wordMatch.isCaseStudy()) {
-                    let caseStudied = ((m.wordMatch as any) as CaseStudyMatch).getCaseStudied() 
-
-                    words[m.index].addFact(caseFacts[caseStudied])
-
-                    let wordMatch = m.wordMatch
-
-                    if (wordMatch instanceof PhraseMatch &&
-                        lastWordMatch !== m.wordMatch &&
-                        !!studiedFacts.find((f) => f.getId() == caseFacts[caseStudied].fact.getId())) {
-                        replaceWordsWithStudyPhrase(wordMatch.phrase, words, tokens, findWordBlocks(m.childMatch, words, m.index), m.childMatch)
-                    }
-
-                    lastWordMatch = m.wordMatch
+                if (wordMatch instanceof PhraseMatch &&
+                    lastWordMatch !== m.wordMatch &&
+                    !isStudyingThisPhrase &&
+                    isStudyingPhraseCase(caseStudied)) {
+                    replaceWordsWithStudyPhrase(wordMatch.phrase, words, tokens, findWordBlocks(m.childMatch, words, m.index), m.childMatch)
                 }
 
-                words[m.index].addFact(wordsFact)
-            })
+                lastWordMatch = m.wordMatch
+            }
+
+            words[m.index].addFact(wordsFact)
+        })
+
+        if (isStudyingThisPhrase) {
+            replaceWordsWithStudyPhrase(phrase, words, tokens, wordBlocks, phraseMatch)
         }
     }
 

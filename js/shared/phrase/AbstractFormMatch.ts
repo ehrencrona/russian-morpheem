@@ -14,8 +14,13 @@ abstract class AbstractFormMatch extends AbstractQuantifierMatch {
         let form = this.form
 
         if (form) {
-            if (context.overrideFormCase && form.grammaticalCase == GrammaticalCase.NOM) {
-                form = new InflectionForm('foo', 'foo', form)
+            if (form.grammaticalCase == GrammaticalCase.CONTEXT) {
+                if (!context.overrideFormCase) {
+                    return true
+                }
+
+                let id = 'contextCase' + context.overrideFormCase
+                form = new InflectionForm(id, id, form)
 
                 form.grammaticalCase = context.overrideFormCase
             }

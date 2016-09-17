@@ -84,6 +84,8 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             }
 
             if (new Date().getTime() - start.getTime() > 500) {
+                console.log('Timeout matching sentences for ' + this.props.phrase.id)
+
                 return true
             }
         })

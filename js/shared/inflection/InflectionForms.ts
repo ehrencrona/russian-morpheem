@@ -31,7 +31,7 @@ export enum Tense {
 }
 
 export enum GrammaticalCase {
-    NOM = 1, GEN, DAT, ACC, INSTR, PREP, LOC
+    CONTEXT = 1, NOM, GEN, DAT, ACC, INSTR, PREP, LOC
 }
 
 export enum Person {
@@ -143,6 +143,7 @@ CASES[GrammaticalCase.ACC] = 'acc'
 CASES[GrammaticalCase.INSTR] = 'instr'
 CASES[GrammaticalCase.PREP] = 'prep'
 CASES[GrammaticalCase.LOC] = 'loc'
+CASES[GrammaticalCase.CONTEXT] = 'context'
 
 addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),
 addForm('2', 'second person (you)', { person: Person.SECOND, number: Number.SINGULAR, tense: Tense.PRESENT }),
@@ -190,6 +191,8 @@ addForm('masculine', 'masculine', { gender: Gender.M })
 addForm('feminine', 'feminine', { gender: Gender.F })
 addForm('neuter', 'neuter', { gender: Gender.N })
 addForm('plural', 'plural', { number: Number.PLURAL })
+
+addForm('context', 'context', { grammaticalCase: GrammaticalCase.CONTEXT })
 
 addForm('genf', 'genitive feminine', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR, gender: Gender.F })
 addForm('datf', 'dative feminine', { grammaticalCase: GrammaticalCase.DAT, number: Number.SINGULAR, gender: Gender.F })
