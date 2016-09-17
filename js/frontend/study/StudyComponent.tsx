@@ -193,7 +193,7 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], somethingIsUnknown?: boolean) {
+    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], returnToStage: Stage, somethingIsUnknown?: boolean) {
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
@@ -234,7 +234,7 @@ export default class StudyComponent extends Component<Props, State> {
                 didYouKnow: unknown,
                 knownFacts: this.state.knownFacts.concat(known),
                 stage: Stage.DID_YOU_KNOW,
-                returnToStage: this.state.stage,
+                returnToStage: returnToStage,
                 highlightFact: unknown[0]
             })
         }
@@ -256,7 +256,7 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     iWasWrong(hiddenFacts: StudyFact[]) {
-        this.explainFacts(this.getProductionFacts(), hiddenFacts, true)
+        this.explainFacts(this.getProductionFacts(), hiddenFacts, Stage.CONFIRM, true)
     }
 
     getProductionFacts(): StudyFact[] {
@@ -329,7 +329,7 @@ export default class StudyComponent extends Component<Props, State> {
         }
         else if (this.state.stage == Stage.CONFIRM) {
             return <div>
-                <div className='buttonBar'>
+                <div className='studyButtonBar'>
                     <div className='button' onClick={ () => this.next() }>Continue</div>
                 </div>
                 { this.renderSentenceTranslation() }
@@ -337,7 +337,7 @@ export default class StudyComponent extends Component<Props, State> {
         }
         else if (this.state.stage == Stage.REVEAL) {
             return <div>
-                <div className='buttonBar'>
+                <div className='studyButtonBar'>
                     <div className='button left small' onClick={ () => this.iWasRight() }><span className='line'>I was</span> right</div>
                     <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) 
                     }><span className='line'>I was</span> wrong</div>
@@ -347,7 +347,7 @@ export default class StudyComponent extends Component<Props, State> {
         }
         else {
             return <div>
-                <div className='buttonBar'>
+                <div className='studyButtonBar'>
                     <div className='button' onClick={ () => this.reveal() }>Reveal</div>
                 </div>
                 <div className='lower'></div>
@@ -412,13 +412,11 @@ console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
                     facts={ this.props.facts }
                     highlight={ this.state.highlightFact }
                     wordClicked={
-                        (word: StudyWord) => {
-                            this.explainFacts(word.facts, hiddenFacts)
-
-                            if (this.isWordHidden(word) && this.state.stage == Stage.REVEAL) {
-                                this.setState({ stage: Stage.CONFIRM })
-                            }
-                        }
+                        (word: StudyWord) => 
+                            this.explainFacts(word.facts, hiddenFacts, 
+                                (this.isWordHidden(word) && this.state.stage == Stage.REVEAL ?
+                                    Stage.CONFIRM :
+                                    this.state.stage))
                     }
                 />
 

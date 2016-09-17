@@ -58,6 +58,8 @@ export default class ExplainFormComponent extends Component<Props, State> {
 
         let known: InflectableWord[] = []
 
+        let foundByStem = new Set<string>()
+
         let facts = corpus.facts.facts
 
         for (let i = 0; i < facts.length; i++) {
@@ -66,8 +68,11 @@ export default class ExplainFormComponent extends Component<Props, State> {
             if (fact instanceof InflectableWord && 
                 !!fact.inflect(form) &&
                 fact !== this.props.word.word &&
+                !foundByStem.has(fact.toText()) && 
                 inflectionIds.has(fact.inflection.id)) {
                 let list: InflectableWord[]
+
+                foundByStem.add(fact.toText())
 
                 let knowledge = this.props.knowledge.getKnowledge(fact)
 
@@ -347,7 +352,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                             <div>
                                 <p>
                                     { inflectionOfForm.description ? 'Most ' + inflectionOfForm.description : 'These words' } 
-                                    { form == word.word.inflection.defaultForm ? ' have the same ending.' : ' work the same way' }
+                                    { form == word.word.inflection.defaultForm ? ' have the same ending' : ' work the same way' }:
                                 </p>
 
                                 <ul>
@@ -391,7 +396,7 @@ export default class ExplainFormComponent extends Component<Props, State> {
                         .map((inflection) => 
                         <div key={ inflection.id }>
                             <p>
-                                { inflection.description ? 'Most ' + inflection.description : 'These words' } form it the following way:
+                                Compare this to { inflection.description ? 'most ' + inflection.description : 'these words' }, that work differently:
                             </p>
 
                             <ul>
@@ -472,33 +477,34 @@ export default class ExplainFormComponent extends Component<Props, State> {
         let inflection = word.word.inflection
         let corpus = this.props.corpus
 
-        return <div className='overlayContainer'>
+        return <div className='overlayContainer' onClick={ this.props.onClose }>
 
             <div className='overlay'>
-
-                <div className='tabs'>
-                    <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
-                            onClick={ () => this.setState({ tab: Tab.FORM }) }>
-                        <h3>The { getFormName(form) }</h3>
+                <div>
+                    <div className='tabs'>
+                        <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
+                                onClick={ () => this.setState({ tab: Tab.FORM }) }>
+                            <h3>The { getFormName(form) }</h3>
+                        </div>
+                        <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
+                                onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
+                            <h3>{ word.getDefaultInflection().jp }</h3>
+                        </div>
                     </div>
-                    <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
-                            onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
-                        <h3>{ word.getDefaultInflection().jp }</h3>
+
+                    { this.state.tab == Tab.FORM ?
+
+                        this.renderForm() 
+                    
+                        :
+                    
+                        this.renderInflection()}
+
+                    <div className='buttonBar'>
+
+                        <div className='button' onClick={ (e) => { e.stopPropagation(); this.props.onClose() } } > Close </div>
+
                     </div>
-                </div>
-
-                { this.state.tab == Tab.FORM ?
-
-                    this.renderForm() 
-                
-                    :
-                
-                    this.renderInflection()}
-
-                <div className='buttonBar'>
-
-                    <div className='button' onClick={ this.props.onClose } > Close </div>
-
                 </div>
 
             </div>

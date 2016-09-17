@@ -128,7 +128,12 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                                 corpus={ this.props.corpus } 
                                 word={ this.state.explainWord } 
                                 knowledge={ this.props.knowledge }
-                                onClose={ () => this.setState({ explain: false }) }
+                                onClose={ () => {
+
+                                    this.setState({ explain: false });
+
+                                }
+                                 }
                                 onSelect={ (word) => this.setState({ explainWord: word })} 
                             />
 

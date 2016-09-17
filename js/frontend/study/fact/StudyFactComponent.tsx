@@ -80,7 +80,7 @@ let studyFactComponent = (props: Props) => {
         componentType = createFactory(PhraseFactComponent)
     }
 
-    if (!props.hiddenFacts.length) {
+    if (props.hiddenFacts.length) {
         canExplain = false
     }
 
@@ -94,14 +94,7 @@ let studyFactComponent = (props: Props) => {
     let repetition = (lastStudied ? lastStudied.repetition : 0)
 
     return <li>
-            <div className='content'>
-                <div className='repetitionIndicator'>
-                {
-                    INDICATOR.map(i =>
-                        <div key={'rep'+i} className={(i <= repetition ? 'full' : 'empty')}>&nbsp;</div>
-                    )
-                }
-                </div>
+            <div className='content' onClick={ () => canExplain && explainable.explain() }>
 
                  { componentType({
                     fact: fact, 
@@ -112,6 +105,23 @@ let studyFactComponent = (props: Props) => {
                     studyFact: props.studyFact, 
                     ref: (comp) => explainable = comp
                 }, []) }  
+
+                <div className='explain'>
+                    <div className='repetitionIndicator'>
+                    {
+                        INDICATOR.map(i =>
+                            <div key={'rep'+i} className={(i <= repetition ? 'full' : 'empty')}>&nbsp;</div>
+                        )
+                    }
+                    </div>
+                    <div className='space'/>
+                    { canExplain ? 
+                        <div className='button'>
+                            <span className='text'>Explain</span>
+                        </div>
+                        :
+                        [] }
+                </div>
             </div>
         </li>
 }
