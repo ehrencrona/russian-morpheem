@@ -55,6 +55,8 @@ interface State {
     unknownFacts?: StudyFact[],
     knownFacts?: StudyFact[],
     stage?: Stage,
+    // stage to return to after did you know
+    returnToStage?: Stage,
     highlightFact?: StudyFact
 }
 
@@ -232,6 +234,7 @@ export default class StudyComponent extends Component<Props, State> {
                 didYouKnow: unknown,
                 knownFacts: this.state.knownFacts.concat(known),
                 stage: Stage.DID_YOU_KNOW,
+                returnToStage: this.state.stage,
                 highlightFact: unknown[0]
             })
         }
@@ -313,7 +316,8 @@ export default class StudyComponent extends Component<Props, State> {
                         didYouKnow: null,
                         unknownFacts: this.state.unknownFacts.concat(unknown),
                         knownFacts: this.state.unknownFacts.concat(known),
-                        stage: Stage.CONFIRM,
+                        stage: this.state.returnToStage,
+                        returnToStage: null,
                         highlightFact: null
                     })
                 } }
