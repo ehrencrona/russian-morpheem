@@ -110,7 +110,7 @@ export function handleException(e) {
     }
     
     if (onException) {
-        onException(e)
+        onException(message)
     }
     else {
         alert(message)
