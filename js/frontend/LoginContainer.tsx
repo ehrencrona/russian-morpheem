@@ -56,7 +56,7 @@ export default class LoginContainer extends Component<Props, State> {
         }
 
         setOnException((message) => {
-            this.setState({ error: message })
+            this.setState({ error: message.toString() })
         })
     }
 
