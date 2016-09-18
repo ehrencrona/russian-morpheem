@@ -106,8 +106,30 @@ function formTransform(pos: string, forms: string[]): WordToString {
     }
 }
 
+function simplePresentTransform(): WordToString {
+    return (word: Word) => {
+        if (word instanceof InflectedWord && word.pos == 'v') {
+            let inflection = word.word.inflect('inf')
+            
+            if (inflection) {
+                let str = inflection.getEnglish()
+
+                if (str.substr(0, 3) == 'to ') {
+                    return str.substr(3)
+                }
+                else {
+                    return str
+                }
+            }
+        }
+
+        return defaultWordToString(word)
+    }
+}
+
 const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
+    'pres': simplePresentTransform(),
     '1sg': formTransform('v', ['1']),
     'prog': formTransform('v', ['prog']),
     'past': formTransform('v', ['past']),
