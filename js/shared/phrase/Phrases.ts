@@ -36,22 +36,22 @@ export default class Phrases {
     remove(phrase: Phrase) {
         delete this.phraseById[phrase.getId()]
 
-        if (this.onChange) {
-            this.onChange(phrase)
-        }
+        this.phraseChanged(phrase, true)
     }
 
     store(phrase: Phrase) {
         this.phraseById[phrase.getId()] = phrase
 
-        if (this.onChange) {
-            this.onChange(phrase)
-        }
+        this.phraseChanged(phrase, true)
     }
 
     setDescription(phrase: Phrase, description: string) {
         phrase.description = description
 
+        this.phraseChanged(phrase, false)
+    }
+
+    phraseChanged(phrase: Phrase, structurally: boolean) {
         if (this.onChange) {
             this.onChange(phrase)
         }
@@ -60,9 +60,7 @@ export default class Phrases {
     setEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {
         pattern.setEnglish(en)
 
-        if (this.onChange) {
-            this.onChange(phrase)
-        }
+        this.phraseChanged(phrase, true)
     }
 
     setPattern(phrase: Phrase, patterns: PhrasePattern[]) {
@@ -70,9 +68,7 @@ export default class Phrases {
 
         phrase.patterns = patterns
 
-        if (this.onChange) {
-            this.onChange(phrase)
-        }
+        this.phraseChanged(phrase, true)
     }
 
     get(id) {

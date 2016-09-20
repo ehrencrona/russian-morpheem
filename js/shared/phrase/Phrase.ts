@@ -87,6 +87,14 @@ export default class Phrase implements Fact {
         this.getCaseFacts().forEach(visitor)
     }
 
+    getDependencies(): Phrase[] {
+        let result: Phrase[] = []
+
+        this.patterns.forEach(p => result.concat(p.getDependencies()))
+
+        return result
+    }
+
     hasCase(grammaticalCase: GrammaticalCase): boolean {
         return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
     }

@@ -16,6 +16,7 @@ import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
 import EnglishPatternFragment from './EnglishPatternFragment'
 import PhraseMatch from './PhraseMatch'
+import Phrase from './Phrase'
 import AdverbWordMatch from './AdverbWordMatch'
 import Corpus from '../Corpus'
 import MatchContext from './MatchContext'
@@ -426,6 +427,10 @@ export default class PhrasePattern {
     constructor(public wordMatches: WordMatch[], public en: string) {
         this.wordMatches = wordMatches
         this.en = en
+    }
+
+    getDependencies(): Phrase[] {
+        return this.wordMatches.map(m => m instanceof PhraseMatch ? m.phrase : null).filter(p => !!p)
     }
 
     match(context: MatchContext, onlyFirstWord?: boolean): Match {
