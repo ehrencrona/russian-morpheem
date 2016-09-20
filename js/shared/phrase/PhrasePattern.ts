@@ -137,6 +137,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl']),
     'adj': formTransform('adj', ['m']),
+    'adv': formTransform('adj', ['adv'])
 }
 
 class Fragment implements EnglishPatternFragment {
