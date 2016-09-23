@@ -15,7 +15,8 @@ export const POS_NAMES = {
     numeral: 'num',
     pronoun: 'pron',
     adverb: 'adv',
-    particle: 'part'
+    particle: 'part',
+    preposition: 'prep'
 }
 
 function getDefaultQuantifier(pos: string) {
