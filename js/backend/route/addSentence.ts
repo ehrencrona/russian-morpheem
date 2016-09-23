@@ -28,8 +28,6 @@ export default function(corpus: Corpus) {
             corpus.sentenceHistory.recordCreate(sentence, sentence.author)
             corpus.sentenceHistory.setStatus({ status: STATUS_SUBMITTED, author: sentence.author }, sentence.id)
 
-            notify(sentence.toString(), sentence.author, Channel.SENTENCES)
-
             res.status(200).send({ id: sentence.id })
         })
         .catch((e) => res.status(500).send(e.toString()))

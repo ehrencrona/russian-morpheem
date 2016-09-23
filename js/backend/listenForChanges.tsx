@@ -73,7 +73,20 @@ export default function listenForChanges(corpus: Corpus) {
     let corpusDir = getCorpusDir(corpus.lang)
     let lang = corpus.lang
 
-    corpus.sentences.onAdd = saveSentences
+    corpus.sentences.onAdd = (sentence) => {
+        if (process.env.ENV != 'dev') {
+            setTimeout(() => {
+                let editedSentence = corpus.sentences.get(sentence.id)
+
+                if (editedSentence) {
+                    notifyAdd(editedSentence)
+                }
+            }, 180000)
+        }
+
+        saveSentences()
+    }
+
     corpus.sentences.onChange = saveSentences
     corpus.sentences.onDelete = saveSentences
     corpus.facts.onMove = saveFacts
