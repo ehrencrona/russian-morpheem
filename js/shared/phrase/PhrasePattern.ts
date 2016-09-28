@@ -128,6 +128,16 @@ function simplePresentTransform(): WordToString {
     }
 }
 
+function progressiveTransform(): WordToString {
+    return (word: Word) => {
+        if (word instanceof InflectedWord && word.pos == 'v') {
+            return word.word.getEnglish('prog')
+        }
+
+        return defaultWordToString(word)
+    }
+}
+
 const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
     'pres': simplePresentTransform(),

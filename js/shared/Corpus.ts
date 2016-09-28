@@ -1,5 +1,6 @@
 import Facts from '../shared/fact/Facts'
 import Words from '../shared/Words'
+import { Factoids } from '../shared/metadata/Factoids'
 import Sentences from '../shared/Sentences'
 import Phrases from '../shared/phrase/Phrases'
 import Inflections from '../shared/inflection/Inflections'
@@ -27,6 +28,7 @@ export default class Corpus {
     sentenceHistory: SentenceHistory
     phraseHistory: PhraseHistory
     externalCorpus: ExternalCorpus
+    factoids: Factoids
     
     static createEmpty(lang: string) {
         let facts = new Facts()
@@ -86,6 +88,7 @@ export default class Corpus {
         this.sentenceHistory = otherCorpus.sentenceHistory
         this.phraseHistory = otherCorpus.phraseHistory
         this.externalCorpus = otherCorpus.externalCorpus
+        this.factoids = otherCorpus.factoids
         this.lang = otherCorpus.lang
     }
 

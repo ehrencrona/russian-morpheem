@@ -1,20 +1,21 @@
 'use strict'
 
-import readInflectionsFile from './inflection/InflectionFileReader';
-import readFactFile from './FactFileReader';
+import readInflectionsFile from './inflection/InflectionFileReader'
+import readFactFile from './FactFileReader'
 import { resolvePhrases } from '../shared/fact/FactFileParser'
-import readPhraseFile from './PhraseFileReader';
-import SentenceFileReader from './SentenceFileReader';
-import Facts from '../shared/fact/Facts';
-import Corpus from '../shared/Corpus';
-import Words from '../shared/Words';
-import Sentence from '../shared/Sentence';
-import Sentences from '../shared/Sentences';
+import readPhraseFile from './PhraseFileReader'
+import SentenceFileReader from './SentenceFileReader'
+import Facts from '../shared/fact/Facts'
+import Corpus from '../shared/Corpus'
+import Words from '../shared/Words'
+import Sentence from '../shared/Sentence'
+import Sentences from '../shared/Sentences'
 import Phrases from '../shared/phrase/Phrases'
-import Inflections from '../shared/inflection/Inflections';
-import { watch } from 'fs';
-import BackendSentenceHistory from './metadata/BackendSentenceHistory';
+import Inflections from '../shared/inflection/Inflections'
+import { watch } from 'fs'
+import BackendSentenceHistory from './metadata/BackendSentenceHistory'
 import BackendPhraseHistory from './metadata/BackendPhraseHistory'
+import BackendFactoids from './metadata/BackendFactoids'
 
 export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
@@ -71,6 +72,7 @@ export default function readCorpus(lang, doWatch) {
     .then((corpus: Corpus) => {
         corpus.sentenceHistory = new BackendSentenceHistory(corpus.words)
         corpus.phraseHistory = new BackendPhraseHistory()
+        corpus.factoids = new BackendFactoids()
 
         if (doWatch) {
             watchForChangesOnDisk(corpus)

@@ -31,6 +31,8 @@ import setPhrase from './route/setPhrase'
 import getEvents from './route/getEvents'
 import getStatus from './route/getStatus'
 import setStatus from './route/setStatus'
+import getFactoids from './route/getFactoids'
+import setFactoid from './route/setFactoid'
 import getOpenPhrases from './route/getOpenPhrases'
 import getPhraseStatus from './route/getPhraseStatus'
 import setPhraseStatus from './route/setPhraseStatus'
@@ -115,6 +117,9 @@ function registerRoutes(corpus: Corpus) {
     app.put(`/api/${lang}/sentence/:id`, setSentence(corpus))
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
+
+    app.get(`/api/${lang}/factoid/:id`, setFactoid(corpus))
+    app.get(`/api/${lang}/factoid`, getFactoids(corpus))
 
     app.post(`/api/${lang}/sentence/external/:source/:externalid`, importExternalSentence(corpus))
         
