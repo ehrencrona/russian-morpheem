@@ -101,10 +101,7 @@ const AUTHORS: { [id:string] : Author } = {
     },
     '57ea0ae291cb2e0f1fa1277c': {
         numericalId: 21,
-        name: 'eric',
-        slack: {
-            name: 'eric',
-        }
+        name: 'eric'
     }
 
 }
