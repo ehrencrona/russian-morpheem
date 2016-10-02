@@ -10,7 +10,7 @@ export default function(corpus: Corpus) {
                     delete f['_id']
 
                     return f
-                })
+                }))
             })
     }
 }
