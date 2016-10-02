@@ -6,7 +6,11 @@ export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
         corpus.factoids.getAll()
             .then((factoids) => {
-                res.status(200).send(factoids)
+                res.status(200).send(factoids.map(f => {
+                    delete f['_id']
+
+                    return f
+                })
             })
     }
 }

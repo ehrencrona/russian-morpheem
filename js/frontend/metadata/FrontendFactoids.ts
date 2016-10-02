@@ -14,7 +14,7 @@ export default class FrontendFactoids implements Factoids {
     }
 
     setFactoid(factoid: Factoid, fact: Fact) {
-        this.all = this.all.filter(factoid => fact.getId() == factoid.fact)
+        this.all = this.all.filter(factoid => fact.getId() != factoid.fact)
         this.all.push(factoid)
 
         return xr.put(`/api/${ this.lang }/factoid/` + fact.getId(), factoid, this.xrArgs)
@@ -25,6 +25,7 @@ export default class FrontendFactoids implements Factoids {
         return this.getAll().then(all => {
             return all.find(factoid => fact.getId() == factoid.fact) || {
                 explanation: '',
+                relations: [],
                 fact: fact.getId()
             }
         })

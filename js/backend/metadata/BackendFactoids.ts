@@ -29,6 +29,10 @@ export default class BackendFactoids implements Factoids {
             return
         }
 
+        if (factoid.relations == null) {
+            factoid.relations = []
+        }
+
         factoid.fact = fact.getId()
 
         return new Promise((resolve, reject) => {
@@ -83,7 +87,9 @@ export default class BackendFactoids implements Factoids {
 
                     delete doc._id
 
-                    resolve(doc as Factoid)
+                    let factoid: Factoid = doc as Factoid
+
+                    resolve(factoid)
                 })
                 .catch((e) => reject(e))
         })

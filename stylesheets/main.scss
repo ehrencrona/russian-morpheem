@@ -447,6 +447,7 @@ input[type=text], input[type=number], textarea {
             padding: 2 * $unit;
             margin-right: $unit;
             margin-bottom: 2 * $unit;
+            cursor: pointer;
 
             .index {
                 color: $color2;
@@ -650,7 +651,7 @@ ul {
     }
 }
 
-.wordsWithInflection {
+.wordsWithInflection, .factoidRelated {
     .button {
         display: inline-block;
         position: relative;
