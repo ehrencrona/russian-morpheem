@@ -19,6 +19,7 @@ import ExternalSentences from './ExternalSentencesComponent'
 import PhrasesWithWordComponent from './PhrasesWithWordComponent'
 import WordTranslationComponent from './WordTranslationComponent'
 import WordClassifierComponent from './WordClassifierComponent'
+import FactoidComponent from './FactoidComponent'
 
 import Sentence from '../shared/Sentence'
 import InflectableWord from '../shared/InflectableWord'
@@ -96,6 +97,12 @@ export default class WordFactComponent extends Component<Props, State> {
                 <SentencesWithFact ref='sentencesWithFact' corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />                
             </div>
         }
+        else if (this.state.tab == 'factoid') {
+            tab = <FactoidComponent 
+                corpus={ this.props.corpus } 
+                fact={ this.props.fact } 
+                tab={ this.props.tab } />
+        }
         else {
             tab = <ExternalSentences corpus={ this.props.corpus} fact={ this.props.fact } tab={ this.props.tab } />
         }
@@ -118,6 +125,7 @@ export default class WordFactComponent extends Component<Props, State> {
             <div className='buttonBar'>
                 { tabButton('inflection', 'Inflection') }
                 { tabButton('sentences', 'Sentences') }
+                { tabButton('factoid', 'Factoid') }
                 { tabButton('import', 'Import') }
             </div>
 

@@ -13,6 +13,7 @@ import PhrasePatternComponent from './PhrasePatternComponent'
 import PhraseSentencesComponent from './PhraseSentencesComponent'
 import PhraseStatusComponent from '../metadata/PhraseStatusComponent'
 import isConflictFunction from './isConflict'
+import FactoidComponent from '../FactoidComponent'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'
@@ -55,6 +56,18 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         if (this.state.tab == 'sentences') {
             tab = <div>
+                <PhraseStatusComponent 
+                    phrase={ this.props.fact } 
+                    corpus={ this.props.corpus } 
+                />
+
+                <PhrasePatternComponent 
+                    phrase={ this.props.fact } 
+                    corpus={ this.props.corpus } 
+                    onChange={ () => { this.forceUpdate() } }
+                    tab={ this.props.tab }
+                    />
+
                 <h3>Sentences</h3>
 
                 <PhraseSentencesComponent 
@@ -77,6 +90,12 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 />
             </div>
         }
+        else if (this.state.tab == 'factoid') {
+            tab = <FactoidComponent 
+                corpus={ this.props.corpus } 
+                fact={ this.props.fact } 
+                tab={ this.props.tab } />
+        }
         else {
             tab = <AddSentenceToPhraseComponent 
                 corpus={ this.props.corpus } 
@@ -90,6 +109,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
             <div className='buttonBar'>                
                 { tabButton('sentences', 'Sentences') }
                 { tabButton('find', 'Matching') }
+                { tabButton('factoid', 'Factoid') }
                 <MoveFactButton corpus={ this.props.corpus} 
                     fact={ this.props.fact }
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
@@ -103,18 +123,6 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     { this.props.fact.id }
                 </div>
             </div>
-
-            <PhraseStatusComponent 
-                phrase={ this.props.fact } 
-                corpus={ this.props.corpus } 
-            />
-
-            <PhrasePatternComponent 
-                phrase={ this.props.fact } 
-                corpus={ this.props.corpus } 
-                onChange={ () => { this.forceUpdate() } }
-                tab={ this.props.tab }
-                />
         
             { tab }
         </div>)

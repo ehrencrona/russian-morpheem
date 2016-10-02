@@ -118,7 +118,8 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/${lang}/sentence/:id/events`, getEvents(corpus))
 
-    app.get(`/api/${lang}/factoid/:id`, setFactoid(corpus))
+    app.put(`/api/${lang}/factoid/:id`, setFactoid(corpus))
+
     app.get(`/api/${lang}/factoid`, getFactoids(corpus))
 
     app.post(`/api/${lang}/sentence/external/:source/:externalid`, importExternalSentence(corpus))

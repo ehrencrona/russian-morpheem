@@ -23,7 +23,10 @@ export default class FrontendFactoids implements Factoids {
 
     getFactoid(fact: Fact): Promise<Factoid> {
         return this.getAll().then(all => {
-            return all.find(factoid => fact.getId() == factoid.fact)
+            return all.find(factoid => fact.getId() == factoid.fact) || {
+                explanation: '',
+                fact: fact.getId()
+            }
         })
     }
 
@@ -33,10 +36,10 @@ export default class FrontendFactoids implements Factoids {
         }
         else {
             return xr.get(`/api/${ this.lang }/factoid`, {}, this.xrArgs)
-            .then(all => {
-                this.all = all
+            .then(response => {
+                this.all = response.data
 
-                return all
+                return this.all
             })
             .catch(handleException)
         }

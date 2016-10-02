@@ -984,6 +984,13 @@ ul.stats {
     }
 }
 
+textarea.factoid {
+    width: 100%;
+    font-size: inherit;
+    font-family: inherit;
+    height: 7.5em;
+}
+
 .comment {
     textarea {
         width: 100%;
@@ -1435,90 +1442,6 @@ $animationLength: 0.2s;
             font-weight: 600;
             text-align: center;
             font-size: 1.5em;
-        }
-
-        .swimlane {
-            height: 25vh;
-
-            h3 {
-                color: white;
-                font-size: 1.5em;
-                position: absolute;
-                right: 1em;
-                background-color: inherit;
-            }
-
-            ul.unknown {
-                height: 100%;
-                display: flex;
-                flex-wrap: wrap;
-                align-items: stretch;
-
-                > li {
-                    z-index: 10;
-                    @extend .border-box-sizing;
-                    padding: 4*$unit;
-                    width: 50%;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: stretch;
-
-                    .content {
-                        font-size: 1em;
-                        border-radius: 0.5em;
-                        background-color: lighten(lightgray, 5%);
-                        flex-grow: 1;
-
-                        display: flex;
-                        padding: 2 * $unit;
-                        align-items: center;
-
-                        > div {
-                            flex-grow: 1;
-                            text-align: center;
-                        }
-
-                        strong {
-                            white-space: nowrap;
-                        }
-                    }
-
-                    > .buttonBar {
-                        .button {
-                        border-radius: $unit;
-                            border-top-right-radius: 0;
-                            border-top-left-radius: 0;
-                            margin: 0;
-                            flex-grow: 1;
-                            display: block;
-                            text-align: left;
-
-                            background-color: $color2;
-                            color: $color9;
-                            padding: $unit 2 * $unit;
-                            font-size: 80%; 
-                            font-weight: bold;
-                            cursor: pointer;
-                        }
-
-                        .button.iKnew {
-                            text-align: right;
-                        }
-
-                        .button:hover {
-                            background-color: darken($color2, 5%)
-                        }
-                    }
-                }
-            }
-        }
-
-        .swimlane.lower {
-            background-color: #b0b0b0;
-
-            ul li .content {
-                background-color: lighten(#b0b0b0, 10%);
-            }
         }
     }
 }

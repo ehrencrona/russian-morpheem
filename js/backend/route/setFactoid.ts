@@ -5,7 +5,7 @@ import { Factoid } from '../../shared/metadata/Factoids'
 
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
-        let factId = parseInt(req.params['fact'])
+        let factId = req.params['id']
 
         if (!factId) {
             throw new Error('No fact ID')

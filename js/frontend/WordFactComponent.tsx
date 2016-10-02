@@ -16,6 +16,7 @@ import ExternalSentencesComponent from './ExternalSentencesComponent'
 import PhrasesWithWordComponent from './PhrasesWithWordComponent'
 import WordTranslationComponent from './WordTranslationComponent'
 import WordClassifierComponent from './WordClassifierComponent'
+import FactoidComponent from './FactoidComponent'
 
 import DeleteFactButton from './DeleteFactButtonComponent'
 import Sentence from '../shared/Sentence'
@@ -66,8 +67,13 @@ export default class WordFactComponent extends Component<Props, State> {
 
         let tab;    
 
-        if (this.state.tab == 'sentences') {
+        if (this.state.tab == 'word') {
             tab = <div>
+                    <WordClassifierComponent 
+                        corpus={ this.props.corpus} 
+                        word={ this.props.fact } 
+                        tab={ this.props.tab }/>
+
                     <WordTranslationComponent 
                         corpus={ this.props.corpus }
                         word={ fact } />
@@ -76,13 +82,14 @@ export default class WordFactComponent extends Component<Props, State> {
                         word={ this.props.fact }
                         corpus={ this.props.corpus }
                         tab={ this.props.tab } />
-
-                    <SentencesWithFact 
-                        ref='sentencesWithFact'
-                        corpus={ this.props.corpus} 
-                        fact={ this.props.fact } 
-                        tab={ this.props.tab } />
                 </div>
+        }
+        else if (this.state.tab == 'sentences') {
+            tab = <SentencesWithFact 
+                ref='sentencesWithFact'
+                corpus={ this.props.corpus} 
+                fact={ this.props.fact } 
+                tab={ this.props.tab } />
         }
         else if (this.state.tab == 'import') {
             tab = <ExternalSentencesComponent 
@@ -100,6 +107,7 @@ export default class WordFactComponent extends Component<Props, State> {
         return (<div>
 
             <div className='buttonBar'>                
+                { tabButton('word', 'Word') }
                 { tabButton('sentences', 'Sentences') }
                 { tabButton('factoid', 'Factoid') }
                 { tabButton('import', 'Import') }
@@ -110,8 +118,6 @@ export default class WordFactComponent extends Component<Props, State> {
                 <DeleteFactButton corpus={ this.props.corpus} fact={ this.props.fact } onDelete={ () => this.props.tab.close() } />
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
-
-            <WordClassifierComponent corpus={ this.props.corpus} word={ this.props.fact } tab={ this.props.tab }/>
 
             { tab }
         </div>)
