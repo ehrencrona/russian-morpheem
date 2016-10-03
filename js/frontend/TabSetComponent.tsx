@@ -298,7 +298,9 @@ export default class TabSetComponent extends Component<Props, State> {
                 factIndex = this.props.corpus.facts.indexOf(component.props.fact) + 1
             }
 
-            return <div className='tab tab-header' key={tab.id}
+            let shouldHaveCloseAll = index == 0 && addToFirst < 0
+
+            return <div className='tab tab-header' key={tab.id + (shouldHaveCloseAll ? 'closeall' : '')}
                 onClick={ () => {
                     let state = this.state
                     state.first = index + offset + addToFirst
@@ -312,12 +314,6 @@ export default class TabSetComponent extends Component<Props, State> {
                     : <div/>) }
                 { tab.name }</div>
                 <div className='tab-close' onClick={ this.close(index + offset) }>Close</div>
-                {
-                    index == 0 && addToFirst < 0 ?
-                    <div className='tab-close' onClick={ () => this.closeAll() }>All</div>
-                    :
-                    []
-                }
             </div>
         }
 
@@ -353,8 +349,10 @@ export default class TabSetComponent extends Component<Props, State> {
                                 key={ right.id }
                                 corpus={ this.props.corpus }
                                 tab={ right } 
-                                close={ this.close(this.state.first+1) }/>
-                                :
+                                close={ this.close(this.state.first+1) }
+                                closeAll={ () => this.closeAll() }
+                                />
+                            :
                             <div/>
                         }
                     </div>

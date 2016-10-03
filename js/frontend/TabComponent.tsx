@@ -12,6 +12,7 @@ interface Props {
     corpus: Corpus,
     tab: Tab,
     close: (any) => any
+    closeAll?: (any) => any
 }
 
 interface State {
@@ -59,6 +60,12 @@ export default class TabComponent extends Component<Props, State> {
                     <div className='index'><div className='number'>{ factIndex }</div></div>
                     : <div/>) }
                 { tab.name }</div>
+                {
+                    this.props.closeAll ?
+                    <div className='tab-close' onClick={ this.props.closeAll }>Nuke</div>
+                    : 
+                    []
+                }
                 <div className='tab-close' onClick={ this.props.close }>Close</div>
             </div>
             <div className='content' ref={ (element: Element) => this.contentElement = element }>
