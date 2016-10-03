@@ -312,6 +312,12 @@ export default class TabSetComponent extends Component<Props, State> {
                     : <div/>) }
                 { tab.name }</div>
                 <div className='tab-close' onClick={ this.close(index + offset) }>Close</div>
+                {
+                    index == 0 && addToFirst < 0 ?
+                    <div className='tab-close' onClick={ () => this.closeAll() }>All</div>
+                    :
+                    []
+                }
             </div>
         }
 
@@ -338,7 +344,6 @@ export default class TabSetComponent extends Component<Props, State> {
                     </div>
                 </div>
                 <div className='column'>
-                    <div className='closeAll' onClick={ () => this.closeAll() }>Close All</div>
                     <div className='closedTabs'>
                         { this.state.tabs.slice(this.state.first+2).map(toClosedTab(this.state.first+2, -1)).reverse() }
                     </div>

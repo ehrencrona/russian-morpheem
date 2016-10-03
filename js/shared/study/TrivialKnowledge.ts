@@ -12,6 +12,9 @@ interface LastStudied {
 const MIN = 60 * 1000
 const DAY = 24 * 60 * MIN
 
+/**
+ * Keeps track of facts the learner will consider to be trivial and not worth mentioning.
+ */
 export default class TrivialKnowledge {
 
     known: { [ factId: string ]: LastStudied } = {}
