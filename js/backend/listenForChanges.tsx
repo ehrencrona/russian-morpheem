@@ -17,7 +17,9 @@ export let storeSuccess = true
 
 export default function listenForChanges(corpus: Corpus) {    
 
-    function delay(func: () => void) {
+    let pendingSaves = []
+
+    function delay(func: () => Promise<any>) {
         let pending: boolean
 
         return () => {
@@ -25,8 +27,12 @@ export default function listenForChanges(corpus: Corpus) {
                 return
             }
 
+            pendingSaves.push(func)
+
             setTimeout(() => {
                 pending = false
+                pendingSaves = pendingSaves.filter(p => p != func)
+
                 try {
                     func()
                 }
@@ -52,7 +58,7 @@ export default function listenForChanges(corpus: Corpus) {
         return delay(() => {
             lastSave = new Date().getTime()
 
-            saveOperation()
+            return saveOperation()
             .then(handleWriteSuccess)
             .catch(handleWriteError)
         })
@@ -117,4 +123,39 @@ export default function listenForChanges(corpus: Corpus) {
             })
         }, 200)
     }
+
+    let shuttingDown = false
+
+    let gracefulShutdown = () => {
+        // we can get both signals and be called twice.
+        if (shuttingDown) {
+            return
+        }
+
+        shuttingDown = true
+
+        if (!pendingSaves.length) {
+            console.log('Corpus was already saved.')
+
+            process.exit()
+        }
+
+        console.log('Saving corpus...')
+
+        Promise.all(pendingSaves.map(func => func())).then(
+            () => {
+                console.log('Shutdown complete.')
+
+                process.exit()
+            }
+        )
+
+        pendingSaves = []
+    }
+
+    // listen for TERM signal .e.g. kill 
+    process.on ('SIGTERM', gracefulShutdown);
+
+    // listen for INT signal e.g. Ctrl-C
+    process.on ('SIGINT', gracefulShutdown); 
 }

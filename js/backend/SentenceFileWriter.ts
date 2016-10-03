@@ -17,6 +17,9 @@ export default function writeSentenceFile(fileName, sentences: Sentences, words:
             if (err) {
                 return reject(err)
             }
+            else {
+                resolve()
+            }
         })
     })
 }

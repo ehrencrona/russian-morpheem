@@ -17,6 +17,9 @@ export default function writeFactFile(fileName, facts: Facts) {
             if (err) {
                 return reject(err)
             }
+            else {
+                resolve()
+            }
         })
     })
 }

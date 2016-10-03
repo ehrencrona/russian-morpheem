@@ -17,6 +17,9 @@ export default function writePhraseFile(fileName, phrases: Phrases) {
             if (err) {
                 return reject(err)
             }
+            else {
+                resolve()
+            }
         })
     })
 }

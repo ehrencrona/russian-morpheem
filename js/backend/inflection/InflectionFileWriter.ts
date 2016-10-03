@@ -12,6 +12,9 @@ export default function writeInflectionFile(fileName, inflections: Inflections, 
             if (err) {
                 return reject(err)
             }
+            else {
+                resolve()
+            }
         })
     })
 }
