@@ -3,7 +3,9 @@ import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
 import FactScore from './FactScore'
 import { Exposure, Knowledge } from '../study/Exposure'
+import StudentProfile from '../study/StudentProfile'
 import NaiveKnowledge from './NaiveKnowledge'
+import Corpus from '../Corpus'
 import FixedIntervalFactSelector from './FixedIntervalFactSelector'
 
 const REPETITION_COUNT = 8
@@ -36,9 +38,21 @@ for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     } 
 }
 
-export default function createNewFactsSelector(facts: Facts, knowledge: NaiveKnowledge, factSelector: FixedIntervalFactSelector, score: number, count: number ) {
-    return () => {
-        let allFacts = facts.facts
+export type NewFactsSelector = (onlyFromStudyPlan: boolean) => FactScore[] 
+
+export function createNewFactsSelector(profile: StudentProfile, knowledge: NaiveKnowledge, 
+        factSelector: FixedIntervalFactSelector, score: number, count: number, corpus: Corpus) {
+    return (onlyFromStudyPlan: boolean) => {
+        let allFacts: Fact[]
+
+        if (onlyFromStudyPlan) {
+            let studiedFacts = profile.studyPlan.getFacts()
+
+            allFacts = studiedFacts.newFacts.concat(studiedFacts.newFacts)
+        }
+        else {
+            allFacts = corpus.facts.facts
+        }
 
         let foundFacts: FactScore[] = []
 
@@ -65,3 +79,5 @@ export default function createNewFactsSelector(facts: Facts, knowledge: NaiveKno
         return foundFacts
     }
 }
+
+export default createNewFactsSelector

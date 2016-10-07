@@ -45,6 +45,9 @@ import getNewsfeed from './route/getNewsfeed'
 import getExternalSentences from './route/getExternalSentences'
 import importExternalSentence from './route/importExternalSentence'
 import getTranslation from './route/getTranslation'
+import getProfile from './route/getProfile'
+import setPlan from './route/setPlan'
+import addQueuedFact from './route/addQueuedFact'
 
 import registerExposures from './route/registerExposures'
 import getExposures from './route/getExposures'
@@ -161,6 +164,12 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/exposure`, registerExposures(corpus))    
 
     app.get(`/api/${lang}/exposure`, getExposures(corpus))    
+
+    app.get(`/api/user/profile`, getProfile(corpus))    
+
+    app.put(`/api/user/plan`, setPlan(corpus))    
+
+    app.post(`/api/user/queued-fact`, addQueuedFact(corpus))    
 
     app.get(`/api/translate`, getTranslation(corpus))    
 

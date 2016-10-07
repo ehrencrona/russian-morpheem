@@ -1562,3 +1562,36 @@ $overlayPadding: 4 * $unit;
     padding: 2 * $unit;
     text-align: center;     
 }
+
+.studyPlan {
+    .tabs {
+        display: flex;
+
+        .tab {
+            padding: 4*$unit;
+            text-align: center;
+            flex-grow: 1;
+
+            background-color: $color5;
+            color: white;
+        }
+
+        .current {
+            color: $color5;
+            background-color: white;
+        }
+    }
+
+    ul li {
+        display: flex;
+        align-items: center;
+
+        div {
+            flex-grow: 1;
+        }
+
+        .button {
+            flex-grow: 0;
+        } 
+    }
+}

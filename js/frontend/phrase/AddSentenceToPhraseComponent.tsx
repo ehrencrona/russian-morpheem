@@ -64,7 +64,7 @@ export default class FindPhraseComponent extends Component<Props, State> {
                 </div>
                 <div>
 
-                    <input type='checkbox' defaultValue={ this.state.includeConflicts } 
+                    <input type='checkbox' defaultValue={ this.state.includeConflicts.toString() } 
                         onChange={ (e) => {
                             this.setState({ includeConflicts: (e.target as HTMLInputElement).checked })
                         } } 

@@ -102,8 +102,15 @@ const AUTHORS: { [id:string] : Author } = {
     '57ea0ae291cb2e0f1fa1277c': {
         numericalId: 21,
         name: 'eric'
+    },
+    '57f5315d7431d45230a6122e': {
+        numericalId: 22,
+        name: 'jacques',
+        slack: {
+            name: 'jacques',
+            id: 'U2LN84F7A'
+        }
     }
-
 }
 
 export function getSlackOfAuthor(authorName: string): { name: string, id: string } {

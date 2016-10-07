@@ -109,7 +109,7 @@ export default class SentenceComponent extends Component<Props, State> {
             highHighlight = (word: StudyWord) => word.hasFact(highlightFact)
 
             if (highHighlight && highlightFact instanceof PhraseCase) {
-                lowHighlight = (word: StudyWord) => word.hasFact(highlightFact.phrase)
+                lowHighlight = (word: StudyWord) => word.hasFact((highlightFact as PhraseCase).phrase)
             }
             else if (highHighlight && highlightFact instanceof Phrase) {
                 lowHighlight = (word: StudyWord) => word.hasFact(highlightFact)

@@ -69,7 +69,7 @@ export default class SentenceHistoryComponent extends Component<Props, State> {
                 this.state.commentOpen ?
 
                     <form className='comment' onSubmit={ (e) => { this.addComment(); e.preventDefault() }}>
-                        <textarea rows='3' wrap='true' ref='commentTextField'/>
+                        <textarea rows={3} wrap='true' ref='commentTextField'/>
                         <div className='buttonBar'>
                             <input type='submit' value='Post' className='button'/>
                             <div className='button' onClick={() => this.setState({commentOpen: false}) }>Cancel</div>

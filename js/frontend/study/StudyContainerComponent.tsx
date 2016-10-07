@@ -8,13 +8,14 @@ import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelec
 import OldestSentenceSelector from '../../shared/study/OldestSentenceSelector'
 import LastSawSentenceKnowledge from '../../shared/study/LastSawSentenceKnowledge'
 import chooseHighestScoreSentence from '../../shared/study/chooseHighestScoreSentence'
-import createNewFactsSelector from '../../shared/study/NewFactsSelector'
+import { NewFactsSelector, createNewFactsSelector } from '../../shared/study/NewFactsSelector'
 import FactScore from '../../shared/study/FactScore'
 
 import FixedIntervalFactSelectorInspectorComponent from './FixedIntervalFactSelectorInspectorComponent'
 import SentenceComponent from '../SentenceComponent'
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
+import StudyPlanComponent from './StudyPlanComponent'
 
 import sentencesForFacts from '../../shared/study/sentencesForFacts'
 import topScores from '../../shared/study/topScores'
@@ -34,10 +35,12 @@ import Word from '../../shared/Word'
 import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelector'
+import { fetchStudyPlan } from './FrontendStudentProfile'
 
 import ExplainFormComponent  from './ExplainFormComponent'
 import ForgettingStats from './ForgettingStats'
 
+import StudentProfile from '../../shared/study/StudentProfile'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
@@ -51,12 +54,14 @@ interface Props {
 }
 
 interface State {
+    profile?: StudentProfile
     sentence?: Sentence
     facts?: Fact[]
     showDecks?: boolean
     showComments?: boolean
     showTrivial?: boolean
     edit?: boolean
+    done?: boolean
 }
 
 let React = { createElement: createElement }
@@ -81,7 +86,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     trivialKnowledge: TrivialKnowledge
     sentencesByFactIndex: SentencesByFactIndex 
     factSelector: FixedIntervalFactSelector
-    newFactsSelector: () => FactScore[]
+    newFactsSelector: NewFactsSelector
 
     forgettingStats: ForgettingStats
 
@@ -94,7 +99,6 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.factSelector = new FixedIntervalFactSelector(this.props.corpus.facts)
         this.knowledge = new NaiveKnowledge()
         this.trivialKnowledge = new TrivialKnowledge()
-        this.newFactsSelector = createNewFactsSelector(this.props.corpus.facts, this.knowledge, this.factSelector, 0.1, 10)
         this.exposures = new FrontendExposures(this.props.xrArgs, this.props.corpus.lang)
         this.sentenceKnowledge = new LastSawSentenceKnowledge()
         this.forgettingStats = new ForgettingStats(this.props.corpus)
@@ -103,13 +107,18 @@ export default class StudyContainerComponent extends Component<Props, State> {
     chooseSentence() {
         let factScores = this.factSelector.chooseFact(new Date())
 
-        factScores = factScores.concat(this.newFactsSelector())
+        factScores = factScores.concat(this.newFactsSelector(true))
 
         factScores = factScores.filter((fs) => {
             let fact = fs.fact 
 
             return isWorthStudying(fact)
         })
+
+        if (!factScores.length) {
+            this.setState({ done: true })
+            return
+        }
 
         factScores = topScores(factScores, 20)
 
@@ -290,14 +299,28 @@ console.log('Did not ought to know ' + visitedFact.getId())
         return studiedFacts
     }
 
-    componentWillMount() {
-        this.exposures
-            .getExposures(-1)
-            .then((exposures) => {
-                this.processExposures(exposures)
+    studyPlanLoaded() {
+        this.chooseSentence()
+    }
 
-                this.chooseSentence()
+    componentWillMount() {
+        Promise.all([
+            fetchStudyPlan(this.props.corpus, this.props.xrArgs),
+            this.exposures.getExposures(-1)
+        ]).then(result => {
+            let profile = { studyPlan: result[0], knowledge: this.knowledge }
+            this.newFactsSelector = createNewFactsSelector(profile, this.knowledge, this.factSelector, 0.1, 10, this.props.corpus)
+
+            this.processExposures(result[1])
+
+            this.setState({
+                profile: profile
             })
+
+            if (!profile.studyPlan.isEmpty()) {
+                this.studyPlanLoaded()
+            }
+        })
     }
 
     processExposures(exposures: Exposure[]) {
@@ -318,13 +341,28 @@ console.log('Did not ought to know ' + visitedFact.getId())
     }
 
     render() {
-        if (this.state.sentence) {
+        let profile = this.state.profile
+
+        if (profile && profile.studyPlan.isEmpty()) {
+            return <StudyPlanComponent
+                profile={ profile }
+                corpus={ this.props.corpus }
+                factSelector={ this.factSelector }
+                newFactSelector={ this.newFactsSelector }
+                onSubmit={ 
+                    facts => {
+                        profile.studyPlan.setFacts(facts)
+                        this.studyPlanLoaded()
+                    }}
+            />
+        }
+        else if (this.state.sentence) {
             return <div className='studyOuter'>
                 <div className='study'>
                     <StudyComponent 
                         sentence={ this.state.sentence }
                         facts={ this.state.facts }
-                        factSelector={ this.factSelector } 
+                        factSelector={ this.factSelector }
                         corpus={ this.props.corpus }
                         knowledge={ this.knowledge }
                         trivialKnowledge={ this.trivialKnowledge }
@@ -437,6 +475,17 @@ console.log('Did not ought to know ' + visitedFact.getId())
                     )
 
                 }
+            </div>
+        }
+        else if (this.state.done) {
+            return <div>
+                <h2>Study session done.</h2>
+
+                <div class='button' onClick={ () => {
+                    this.state.profile.studyPlan.clear()
+
+                    this.setState({ profile: profile })
+                }}>Start new session</div>     
             </div>
         }
         else {
