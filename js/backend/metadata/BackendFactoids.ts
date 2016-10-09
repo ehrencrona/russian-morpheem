@@ -63,7 +63,6 @@ export default class BackendFactoids implements Factoids {
             let result: Factoid[] = []
 
             cursor
-                .limit(100)
                 .forEach((doc) => {
                     result.push(doc as Factoid)
                 }, () => {

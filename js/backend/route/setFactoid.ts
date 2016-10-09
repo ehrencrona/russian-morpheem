@@ -21,5 +21,9 @@ export default function(corpus: Corpus) {
             .then((events) => {
                 res.status(200).send({ ok: true })
             })
+            .catch(e => {
+                res.status(500).send(e)
+                console.error(e.stack)
+            })
     }
 }

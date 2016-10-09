@@ -9,6 +9,7 @@ import Corpus from '../../shared/Corpus'
 const url = 'mongodb://localhost:27017/study';
 const COLLECTION = 'studyplan'
 import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
+import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 
 let db: Db
 
@@ -31,10 +32,16 @@ class BackendStudyPlan extends AbstractStudyPlan {
         this.userId = userId
     }
 
-    setFacts(facts: StudiedFacts) {
-        super.setFacts(facts)
+    setFacts(facts: StudiedFacts, knowledge: FixedIntervalFactSelector) {
+        super.setFacts(facts, knowledge)
 
-        this.store()
+        return this.store()
+    }
+
+    clear() {
+        super.clear()
+
+        return this.store()
     }
 
     queueFact(fact: Fact) {
@@ -80,7 +87,8 @@ export function fetchPlan(userId: number, corpus: Corpus): Promise<StudyPlan> {
                     studyPlan = {
                         queued: [],
                         repeatedFacts: [],
-                        newFacts: []
+                        newFacts: [],
+                        originalExpectedRepetitions: 0
                     }
                 }
 

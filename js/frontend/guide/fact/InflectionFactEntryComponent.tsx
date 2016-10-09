@@ -36,11 +36,9 @@ export default class InflectionFactEntryComponent extends Component<Props, State
 
         return <div>
 
-            the { FORMS[this.props.fact.form].name } of
-            {
+            the { FORMS[this.props.fact.form].name } of {
                 this.state.exampleWords.map(w => w.word.toText()).join(', ')
-            }: 
-            {
+            }:<br/>{
                 this.state.exampleWords.map(w => w.toText()).join(', ')
             }
 

@@ -2,6 +2,7 @@
 import { StudyPlan, StudiedFacts, SerializedStudyPlan } from './StudyPlan'
 import Fact from '../fact/Fact'
 import Corpus from '../corpus'
+import FixedIntervalFactSelector from './FixedIntervalFactSelector'
 
 function factEqualsFunction(fact: Fact) {
     let factId = fact.getId()
@@ -11,6 +12,7 @@ function factEqualsFunction(fact: Fact) {
 export default class AbstractStudyPlan implements StudyPlan {
     studied: StudiedFacts
     queued: Fact[]
+    originalExpectedRepetitions: number
 
     constructor(studyPlan: SerializedStudyPlan, public corpus: Corpus) {
         let studied: StudiedFacts
@@ -43,8 +45,19 @@ export default class AbstractStudyPlan implements StudyPlan {
         return this.studied
     }
 
-    setFacts(facts: StudiedFacts) {
+    setFacts(facts: StudiedFacts, knowledge: FixedIntervalFactSelector) {
         this.studied = facts
+
+        this.originalExpectedRepetitions = calculateExpectedRepetitions(facts, knowledge)
+    }
+
+    getProgress(knowledge: FixedIntervalFactSelector): number {
+        return 1 - calculateExpectedRepetitions(this.getFacts(), knowledge) / this.originalExpectedRepetitions
+    }
+
+    clear() {
+        this.studied = new StudiedFacts([], [])
+        this.originalExpectedRepetitions = 0
     }
 
     isQueuedFact(fact: Fact): boolean {
@@ -73,7 +86,18 @@ export default class AbstractStudyPlan implements StudyPlan {
         return  {
             newFacts: factsToIds(this.studied.newFacts),
             repeatedFacts: factsToIds(this.studied.repeatedFacts),
-            queued: factsToIds(this.queued)
+            queued: factsToIds(this.queued),
+            originalExpectedRepetitions: this.originalExpectedRepetitions
         }
     }
+}
+
+function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedIntervalFactSelector) {
+    let result = 0
+
+    facts.getAll().forEach(fact => {
+        result += knowledge.getExpectedRepetitions(fact, )
+    })
+
+    return result
 }

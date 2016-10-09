@@ -351,7 +351,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 newFactSelector={ this.newFactsSelector }
                 onSubmit={ 
                     facts => {
-                        profile.studyPlan.setFacts(facts)
+                        profile.studyPlan.setFacts(facts, this.factSelector)
                         this.studyPlanLoaded()
                     }}
             />
@@ -481,7 +481,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
             return <div>
                 <h2>Study session done.</h2>
 
-                <div class='button' onClick={ () => {
+                <div className='button' onClick={ () => {
                     this.state.profile.studyPlan.clear()
 
                     this.setState({ profile: profile })

@@ -8,6 +8,7 @@ import xr from '../xr';
 import Fact from '../../shared/fact/Fact'
 import { SerializedStudyPlan, StudiedFacts, StudyPlan } from '../../shared/study/StudyPlan'  
 import AbstractStudyPlan from '../../shared/study/AbstractStudyPlan'
+import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 
 class FrontendStudyPlan extends AbstractStudyPlan {
 
@@ -17,9 +18,19 @@ class FrontendStudyPlan extends AbstractStudyPlan {
         this.xrArgs = xrArgs
     }
 
-    setFacts(facts: StudiedFacts) {
-        super.setFacts(facts)
+    setFacts(facts: StudiedFacts, knowledge: FixedIntervalFactSelector) {
+        super.setFacts(facts, knowledge)
 
+        return this.store()
+    }
+
+    clear() {
+        super.clear()
+
+        return this.store()
+    }
+
+    store() {
         return xr.put(`/api/user/plan`, this.serialize(), this.xrArgs)
             .catch(handleException)
     }

@@ -73,15 +73,23 @@ export default class StudyPlanComponent extends Component<Props, State> {
         })
     }
 
+    renderKnowledge(fact: Fact) {
+        return this.props.factSelector.getExpectedRepetitions(fact)
+    }
+
     renderFacts(facts: Fact[]) {
 
         return <ul>{ facts.map(fact => {
 
             return <li key={ fact.getId() }>
-                <FactEntryComponent
-                    corpus={ this.props.corpus }
-                    knowledge={ this.props.profile.knowledge } 
-                    fact={ fact }/> <div className='button remove' onClick={ () => this.remove(fact) }>Remove</div>
+                <div className='fact'>
+                    <FactEntryComponent
+                        corpus={ this.props.corpus }
+                        knowledge={ this.props.profile.knowledge } 
+                        fact={ fact }/> 
+                </div>                    
+                <div className='knowledge'>{ this.renderKnowledge(fact) }</div>
+                <div className='button remove' onClick={ () => this.remove(fact) }>Remove</div>
             </li>
 
         }) }</ul>
@@ -134,7 +142,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
             new StudiedFacts(
                 studiedFacts.newFacts.slice(0, this.state.newCount),
                 studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
-            ))
+            ), this.props.factSelector)
     }
 
 }
