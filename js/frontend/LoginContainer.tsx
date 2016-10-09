@@ -57,8 +57,13 @@ export default class LoginContainer extends Component<Props, State> {
             loading: true
         }
 
-        setOnException((message) => {
+        setOnException((message, e) => {
             this.setState({ error: message.toString() })
+
+            if (e.status == 401) {
+                localStorage.removeItem(TOKEN_ITEM)
+                this.lock.show()
+            }
         })
     }
 

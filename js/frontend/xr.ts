@@ -90,9 +90,9 @@ let result: XrInterface = {
 
 export default result;
 
-let onException: (message: string) => any;
+let onException: (message: string, e: any) => any;
 
-export function setOnException(callback: (message: string) => any) {
+export function setOnException(callback: (message: string, e: any) => any) {
     onException = callback
 } 
 
@@ -110,7 +110,7 @@ export function handleException(e) {
     }
     
     if (onException) {
-        onException(message)
+        onException(message, e)
     }
     else {
         alert(message)
