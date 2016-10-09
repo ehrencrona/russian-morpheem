@@ -1,7 +1,7 @@
 
 import { StudyPlan, StudiedFacts, SerializedStudyPlan } from './StudyPlan'
 import Fact from '../fact/Fact'
-import Corpus from '../corpus'
+import Corpus from '../Corpus'
 import FixedIntervalFactSelector from './FixedIntervalFactSelector'
 
 function factEqualsFunction(fact: Fact) {
