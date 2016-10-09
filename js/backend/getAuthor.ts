@@ -111,7 +111,6 @@ const AUTHORS: { [id:string] : Author } = {
             id: 'U2LN84F7A'
         }
     }
-
 }
 
 export function getSlackOfAuthor(authorName: string): { name: string, id: string } {

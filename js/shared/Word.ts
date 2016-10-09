@@ -148,7 +148,7 @@ export default class Word extends AbstractAnyWord {
         return result
     }
 
-    hasMyStem(word: Word | InflectableWord) {
+    hasMyStem(word: Word | InflectableWord): boolean {
         return word.getId() == this.getId()
     }
 

@@ -48,7 +48,7 @@ export default class MoveFactButtonComponent extends Component<Props, State> {
         let factIndex = this.props.corpus.facts.indexOf(this.props.fact) + 1;
 
         return <div>
-            <input type='number' className='position' ref='position' defaultValue={ factIndex }/>
+            <input type='number' className='position' ref='position' defaultValue={ factIndex.toString() }/>
             <div className='button' onClick={ () => { 
                 this.moveTo(parseInt((this.refs['position'] as HTMLInputElement).value)) } }>Move</div>
         </div>;

@@ -73,7 +73,7 @@ export default function readCorpus(lang, doWatch) {
         corpus.sentenceHistory = new BackendSentenceHistory(corpus.words)
         corpus.phraseHistory = new BackendPhraseHistory()
         corpus.factoids = new BackendFactoids()
-
+        
         if (doWatch) {
             watchForChangesOnDisk(corpus)
         }

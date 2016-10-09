@@ -14,6 +14,8 @@ import InflectableWord from '../shared/InflectableWord'
 
 import { Component, createElement } from 'react';
 
+import findExamplesOfInflection from '../shared/inflection/findExamplesOfInflection'
+
 interface Props {
     corpus: Corpus,
     fact: Fact,
@@ -36,48 +38,13 @@ export default class FactNameComponent extends Component<Props, State> {
         }
     }
 
-    getExamples(forFact: InflectionFact) {
-        let inflectionIds = new Set()
-
-        this.props.corpus.inflections.inflections.forEach((inflection) => {
-            if (inflection.pos == forFact.inflection.pos &&
-                inflection.getInflectionId(forFact.form) == forFact.inflection.id) {
-                inflectionIds.add(inflection.id)
-            }
-        })
-
-        let easy: InflectedWord[] = [], hard: InflectedWord[] = []
-        let more = false
-        let foundCount = 0
-
-        let facts = this.props.corpus.facts.facts
-
-        for (let i = 0; i < facts.length && foundCount <= SHOW_COUNT; i++) {
-            let fact = facts[i]
-            
-            if (fact instanceof InflectableWord && 
-                inflectionIds.has(fact.inflection.id)) {
-                
-                if (foundCount == SHOW_COUNT) {
-                    more = true
-                }
-                else {
-                    (i > this.props.index + 10 ? hard : easy).push(fact.inflect(forFact.form))
-                }
-
-                foundCount++
-            }
-        }
-
-        return { easy: easy, hard: hard, more: more }
-    }
-
     render() {
         let fact = this.props.fact
         let examples
 
         if (fact instanceof InflectionFact) {
-            examples = this.getExamples(fact)
+            examples = findExamplesOfInflection(fact, this.props.corpus, SHOW_COUNT, 
+                (fact, index) => index > this.props.index)
         }
 
         if (examples && fact instanceof InflectionFact) { 

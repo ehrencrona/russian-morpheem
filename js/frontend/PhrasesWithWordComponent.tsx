@@ -31,12 +31,15 @@ export default class PhrasesWithWordComponent extends Component<Props, State> {
 
         let phrases: Phrase[] = this.props.corpus.phrases.all().filter((phrase) => 
             !!phrase.patterns.find((pattern) => 
-                !!pattern.wordMatches.find((wordMatch) => 
-                    (wordMatch instanceof ExactWordMatch || wordMatch instanceof WordInFormMatch) &&
-                    !!wordMatch.words.find((w) =>  
-                        this.props.word.hasMyStem(w)
-                    )
-                )
+                !!pattern.wordMatches.find((wordMatch) => {
+                    if (wordMatch instanceof WordInFormMatch) {                        
+                        return !!wordMatch.words.find((w) => this.props.word.hasMyStem(w))
+                    }
+
+                    if (wordMatch instanceof ExactWordMatch) {
+                        return !!wordMatch.words.find((w) => this.props.word.hasMyStem(w))
+                    }
+                })
             )
         )
 

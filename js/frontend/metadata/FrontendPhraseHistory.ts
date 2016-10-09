@@ -15,10 +15,6 @@ export default class FrontendPhraseHistory implements PhraseHistory {
     }
 
     setStatus(status: PhraseStatus, phraseId: string) {
-
-console.log('set status', status.notes)
-
-
         return xr.put(`/api/${ this.lang }/phrase/` + phraseId + '/status', { status: status.status, notes: status.notes }, this.xrArgs)
         .catch(handleException)
     }

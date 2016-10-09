@@ -85,11 +85,10 @@ export default class InflectionFactComponent extends Component<FactComponentProp
                     <ul>
                         {
                             relevantForms.map((form) => {
-                                console.log(form, word.word.inflection.getEnding(form))
 
                                 return <li key={form}>
                                     { FORMS[CASES[FORMS[form].grammaticalCase]].name }: -<strong>{ 
-                                        word.word.inflection.getInflectedForm('', form).form 
+                                        (word as InflectedWord).word.inflection.getInflectedForm('', form).form 
                                     }</strong>
                                 </li>
                             })

@@ -64,7 +64,7 @@ class WordComponent extends Component<WordProps, WordState> {
             formTag = <div className='form'>{ disambiguation }</div>
         }
 
-        return <div draggable='true' className={'word' + 
+        return <div draggable={true} className={'word' + 
             (word instanceof UnparsedWord ? ' unparsed' : '') + 
             (word.omitted ? ' omitted' : '') + 
             (this.props.selected ? ' selected' : '') + 

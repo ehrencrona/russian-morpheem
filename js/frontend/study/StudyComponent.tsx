@@ -25,6 +25,7 @@ import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
+import StudentProfile from '../../shared/study/StudentProfile'
 import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../shared/inflection/InflectionForms'
 import htmlEscape from '../../shared/util/htmlEscape'
 
@@ -43,10 +44,11 @@ interface Props {
     sentence: Sentence,
     corpus: Corpus,
     facts: Fact[],
-    knowledge: NaiveKnowledge,
+    profile: StudentProfile,
     trivialKnowledge: TrivialKnowledge,
     factSelector: FixedIntervalFactSelector
     onAnswer: (exposures: Exposure[]) => void
+    openPlan: () => void
 }
 
 interface State {
@@ -78,7 +80,7 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     oughtToKnow(fact: Fact) {
-        return this.props.knowledge.getKnowledge(fact) == Knowledge.KNEW ||
+        return this.props.profile.knowledge.getKnowledge(fact) == Knowledge.KNEW ||
             this.props.factSelector.isStudied(fact, new Date())
     }
 
@@ -323,7 +325,7 @@ export default class StudyComponent extends Component<Props, State> {
                 } }
                 corpus={ this.props.corpus }
                 sentence={ this.props.sentence }
-                knowledge={ this.props.knowledge }
+                knowledge={ this.props.profile.knowledge }
                 hiddenFacts={ hiddenFacts }    
             />
         }
@@ -423,10 +425,19 @@ console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
             </div>
 
             { this.renderLower(hiddenFacts) }
+
+            {
+                this.renderProgress()
+            }
         </div>
     }
-}
 
+    renderProgress() {
+        return <div onClick={ this.props.openPlan }>{
+            Math.round(this.props.profile.studyPlan.getProgress(this.props.factSelector) * 100) + '%'
+        }</div>
+    }
+}
 
 function getWordMeaningFactId(word: Word) {
     if (word instanceof InflectedWord) {
