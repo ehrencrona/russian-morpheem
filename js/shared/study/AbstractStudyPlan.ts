@@ -23,6 +23,7 @@ export default class AbstractStudyPlan implements StudyPlan {
 
             studied = new StudiedFacts(idsToFacts(studyPlan.newFacts), idsToFacts(studyPlan.repeatedFacts))
             queued = idsToFacts(studyPlan.queued)
+            this.originalExpectedRepetitions = studyPlan.originalExpectedRepetitions
         }
         else {
             studied = new StudiedFacts([], [])
@@ -52,7 +53,7 @@ export default class AbstractStudyPlan implements StudyPlan {
     }
 
     getProgress(knowledge: FixedIntervalFactSelector): number {
-        return 1 - calculateExpectedRepetitions(this.getFacts(), knowledge) / this.originalExpectedRepetitions
+        return 1 - Math.min(1, calculateExpectedRepetitions(this.getFacts(), knowledge) / this.originalExpectedRepetitions)
     }
 
     clear() {
@@ -96,7 +97,7 @@ function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedInter
     let result = 0
 
     facts.getAll().forEach(fact => {
-        result += knowledge.getExpectedRepetitions(fact, )
+        result += knowledge.getExpectedRepetitions(fact)
     })
 
     return result

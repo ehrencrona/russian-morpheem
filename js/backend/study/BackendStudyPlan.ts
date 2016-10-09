@@ -54,6 +54,8 @@ class BackendStudyPlan extends AbstractStudyPlan {
         return new Promise((resolve, reject) => {
             let studyPlan = super.serialize()
 
+            studyPlan.user = this.userId
+
             db.collection(COLLECTION).updateOne({ user: this.userId }, studyPlan, { upsert: true },
                 (error, result) => {
                     if (error) {

@@ -38,6 +38,7 @@ export interface StudyPlan {
 }
 
 export interface SerializedStudyPlan {
+    user?: number
     newFacts: string[]
     repeatedFacts: string[]
     queued: string[]

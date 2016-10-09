@@ -29,15 +29,18 @@ export default function findExamplesOfInflection(fact: InflectionFact, corpus: C
         
         if (fact instanceof InflectableWord && 
             inflectionIds.has(fact.inflection.id)) {
-            
-            if (foundCount == maxCount) {
-                more = true
-            }
-            else {
-                (isHard(fact, i) ? hard : easy).push(fact.inflect(form))
-            }
+            let inflected = fact.inflect(form)
 
-            foundCount++
+            if (inflected) {
+                if (foundCount == maxCount) {
+                    more = true
+                }
+                else {
+                    (isHard(fact, i) ? hard : easy).push(inflected)
+                }
+
+                foundCount++
+            }
         }
     }
 

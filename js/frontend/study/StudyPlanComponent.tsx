@@ -38,6 +38,9 @@ export default class StudyPlanComponent extends Component<Props, State> {
     componentWillMount() {
         let studiedFacts: StudiedFacts
 
+        let repeatCount = DEFAULT_REPEAT_COUNT
+        let newCount = DEFAULT_NEW_COUNT
+
         if (this.props.profile.studyPlan.isEmpty()) {
             let comparator = (s1, s2) => s2.score - s1.score
 
@@ -46,15 +49,20 @@ export default class StudyPlanComponent extends Component<Props, State> {
             let newFacts = this.props.newFactSelector(false).map(s => s.fact)
 
             studiedFacts = new StudiedFacts(newFacts, repeatFacts)
+
+            repeatCount = Math.min(repeatCount, studiedFacts.repeatedFacts.length)
+            newCount = Math.min(newCount, studiedFacts.newFacts.length)
         }
         else {
             studiedFacts = this.props.profile.studyPlan.getFacts()
+            repeatCount = studiedFacts.repeatedFacts.length
+            newCount = studiedFacts.newFacts.length
         }
 
         this.setState({  
             studiedFacts: studiedFacts,
-            repeatCount: Math.min(DEFAULT_REPEAT_COUNT, studiedFacts.repeatedFacts.length),
-            newCount: Math.min(DEFAULT_NEW_COUNT, studiedFacts.newFacts.length),
+            repeatCount: repeatCount,
+            newCount: newCount,
             onTab: OnTab.NEW
         })
     }

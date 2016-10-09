@@ -60,6 +60,7 @@ interface State {
     showDecks?: boolean
     showComments?: boolean
     showTrivial?: boolean
+    showPlan?: boolean
     edit?: boolean
     done?: boolean
 }
@@ -116,7 +117,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
         })
 
         if (!factScores.length) {
-            this.setState({ done: true })
+            this.setState({ sentence: null, done: true })
             return
         }
 
@@ -320,6 +321,9 @@ console.log('Did not ought to know ' + visitedFact.getId())
             if (!profile.studyPlan.isEmpty()) {
                 this.studyPlanLoaded()
             }
+            else {
+                this.setState({ showPlan: true })
+            }
         })
     }
 
@@ -343,7 +347,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
     render() {
         let profile = this.state.profile
 
-        if (profile && profile.studyPlan.isEmpty()) {
+        if (this.state.showPlan) {
             return <StudyPlanComponent
                 profile={ profile }
                 corpus={ this.props.corpus }
@@ -353,6 +357,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
                     facts => {
                         profile.studyPlan.setFacts(facts, this.factSelector)
                         this.studyPlanLoaded()
+                        this.setState({ showPlan: false })
                     }}
             />
         }
@@ -364,9 +369,10 @@ console.log('Did not ought to know ' + visitedFact.getId())
                         facts={ this.state.facts }
                         factSelector={ this.factSelector }
                         corpus={ this.props.corpus }
-                        knowledge={ this.knowledge }
+                        profile={ this.state.profile }
                         trivialKnowledge={ this.trivialKnowledge }
-                        onAnswer={ (exposures) => this.onAnswer(exposures)} />            
+                        onAnswer={ (exposures) => this.onAnswer(exposures)} 
+                        openPlan={ () => this.setState({ showPlan: true }) } />            
                 </div>
 
                 {
@@ -484,7 +490,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 <div className='button' onClick={ () => {
                     this.state.profile.studyPlan.clear()
 
-                    this.setState({ profile: profile })
+                    this.setState({ profile: profile, showPlan: true })
                 }}>Start new session</div>     
             </div>
         }

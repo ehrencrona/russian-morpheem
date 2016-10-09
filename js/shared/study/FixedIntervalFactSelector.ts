@@ -130,6 +130,8 @@ export default class FixedIntervalFactSelector {
             for (let reps = lastStudied.repetition; reps < REPETITION_COUNT; reps++) {
 
                 if (INTERVAL_BY_REP_IN_MS[reps].min > timeSinceLast) {
+console.log(fact.getId(), timeSinceLast, reps,INTERVAL_BY_REP_IN_MS[reps].min)
+
                     // the current repetition will never be done, so the previous one is the last
                     return reps - lastStudied.repetition
                 }
@@ -142,8 +144,9 @@ export default class FixedIntervalFactSelector {
         if (!exposed) {
             return EXPECTED_REPETITIONS_FOR_NEW
         }
-
-        return 0
+        else {
+            return 0
+        }
     }
 
     chooseFact(now: Date): FactScore[] {
