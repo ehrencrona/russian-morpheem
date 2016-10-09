@@ -46,7 +46,7 @@ class FrontendStudyPlan extends AbstractStudyPlan {
 
 export function fetchStudyPlan(corpus: Corpus, xrArgs: { [arg: string] : string }): Promise<StudyPlan> {
 
-    return xr.get(`/api/user/profile`, {}, this.xrArgs)
+    return xr.get(`/api/user/profile`, {}, xrArgs)
         .then((xhr) => {
             return new FrontendStudyPlan(xhr.data as SerializedStudyPlan, corpus, xrArgs) 
         })
