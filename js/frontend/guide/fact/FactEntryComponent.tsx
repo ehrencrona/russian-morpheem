@@ -51,5 +51,8 @@ export default class FactComponent extends Component<Props, State> {
             return <TransformFactEntryComponent 
                 fact={ fact } />
         }
+        else {
+            return <div>Unhandled fact { fact.getId() }</div>
+        }
     }
 }
