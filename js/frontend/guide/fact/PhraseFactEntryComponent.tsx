@@ -26,8 +26,6 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
     constructor() {
         super()
 
-        let fact = this.props.fact
-
         this.state = {
             matches: this.findMatches()
         }
