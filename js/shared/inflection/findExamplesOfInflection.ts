@@ -23,6 +23,7 @@ export default function findExamplesOfInflection(fact: InflectionFact, corpus: C
     let foundCount = 0
 
     let facts = corpus.facts.facts
+    let foundWords = {}
 
     for (let i = 0; i < facts.length && foundCount <= maxCount; i++) {
         let fact = facts[i]
@@ -31,12 +32,13 @@ export default function findExamplesOfInflection(fact: InflectionFact, corpus: C
             inflectionIds.has(fact.inflection.id)) {
             let inflected = fact.inflect(form)
 
-            if (inflected) {
+            if (inflected && !foundWords[inflected.toText()]) {
                 if (foundCount == maxCount) {
                     more = true
                 }
                 else {
                     (isHard(fact, i) ? hard : easy).push(inflected)
+                    foundWords[inflected.toText()] = true
                 }
 
                 foundCount++

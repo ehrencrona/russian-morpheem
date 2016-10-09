@@ -38,6 +38,8 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
         let start = new Date()
         let phrase = props.fact
 
+        let foundFragments: { [fragment: string] : boolean } = {}
+
         props.corpus.sentences.sentences.find(sentence => {
             if (!phrase.isAutomaticallyAssigned() &&
                 !sentence.phrases.find((p) => p.getId() == phrase.getId())) {
@@ -51,14 +53,21 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
             })
             
             if (match) {
-                let simple = !match.words.find(word => 
-                    props.knowledge.getKnowledge(word.word.getWordFact()) != Knowledge.KNEW);
+                let fragment = match.words.map(w => w.word.toText()).join(' ')
 
-                (simple? simpleMatches : hardMatches).push(match)
+                if (!foundFragments[fragment]) {
+                    let simple = !match.words.find(word => 
+                        props.knowledge.getKnowledge(word.word.getWordFact()) != Knowledge.KNEW);
 
-                if (simpleMatches.length >= SENTENCES_WANTED) {
-                    return true
+                    (simple? simpleMatches : hardMatches).push(match)
+
+                    foundFragments[fragment] = true
+
+                    if (simpleMatches.length >= SENTENCES_WANTED) {
+                        return true
+                    }
                 }
+
             }
 
         })
@@ -71,7 +80,7 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
         return <div>
             { 
                 this.state.matches.map(match =>
-                    <div>{
+                    <div key={ match.sentence.id }>{
                         match.words.map(w => w.word.toText()).join(' ') + ' – ' +
                         match.pattern.getEnglishFragments().map(f => f.en(match, (word) => word.getEnglish())).join(' ')
                     }</div>
