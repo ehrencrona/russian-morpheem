@@ -23,22 +23,22 @@ let React = { createElement: createElement }
 const SENTENCES_WANTED = 2
 
 export default class PhraseFactEntryComponent extends Component<Props, State> {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
-            matches: this.findMatches()
+            matches: this.findMatches(props)
         }
     }
 
-    findMatches() {
+    findMatches(props) {
         let simpleMatches: Match[] = []
         let hardMatches: Match[] = []
 
         let start = new Date()
-        let phrase = this.props.fact
+        let phrase = props.fact
 
-        this.props.corpus.sentences.sentences.find(sentence => {
+        props.corpus.sentences.sentences.find(sentence => {
             if (!phrase.isAutomaticallyAssigned() &&
                 !sentence.phrases.find((p) => p.getId() == phrase.getId())) {
                 return
@@ -47,12 +47,12 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
             let match = phrase.match({
                 words: sentence.words,
                 sentence: sentence,
-                facts: this.props.corpus.facts
+                facts: props.corpus.facts
             })
             
             if (match) {
                 let simple = !match.words.find(word => 
-                    this.props.knowledge.getKnowledge(word.word.getWordFact()) != Knowledge.KNEW);
+                    props.knowledge.getKnowledge(word.word.getWordFact()) != Knowledge.KNEW);
 
                 (simple? simpleMatches : hardMatches).push(match)
 
