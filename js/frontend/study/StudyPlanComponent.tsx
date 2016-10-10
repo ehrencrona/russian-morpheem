@@ -122,6 +122,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
         }
 
         let counter = this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount'
+        let studiedFacts = this.state.studiedFacts
 
         return <div className='studyPlan'>
             <h2>Study Plan</h2>
@@ -134,8 +135,8 @@ export default class StudyPlanComponent extends Component<Props, State> {
             { 
                 this.renderFacts(
                     this.state.onTab == OnTab.NEW ?
-                        this.state.studiedFacts.newFacts.slice(0, this.state.newCount) :
-                        this.state.studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
+                        studiedFacts.newFacts.slice(0, this.state.newCount) :
+                        studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
             }
         
             { 
@@ -146,7 +147,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
                     null
             }
             {
-                this.state[counter] < this.state.studiedFacts.repeatedFacts.length ?
+                this.state[counter] < (this.state.onTab == OnTab.NEW ? studiedFacts.newFacts.length : studiedFacts.repeatedFacts.length) ?
                     <div className='button' onClick={ 
                         () => this.changeCount(counter, 1) }>More</div>
                     :
@@ -154,7 +155,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
             }
 
             <div className='button' onClick={ 
-                () => this.props.onSubmit(this.state.studiedFacts) }>Done</div>
+                () => this.props.onSubmit(studiedFacts) }>Done</div>
         </div>
     }
 
