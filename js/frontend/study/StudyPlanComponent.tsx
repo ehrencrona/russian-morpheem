@@ -59,7 +59,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
             repeatCount = studiedFacts.repeatedFacts.length
             newCount = studiedFacts.newFacts.length
 
-            studiedFacts.newFacts = studiedFacts.newFacts.concat(newFacts)
+            studiedFacts.newFacts = eliminateDuplicates(studiedFacts.newFacts.concat(newFacts))
         }
 
         this.setState({  
@@ -169,4 +169,18 @@ export default class StudyPlanComponent extends Component<Props, State> {
             ), this.props.factSelector)
     }
 
+}
+
+function eliminateDuplicates(facts: Fact[]): Fact[] {
+    let result = []
+    let seen = new Set<string>()
+
+    facts.forEach(f => {
+        if (!seen.has(f.getId())) {
+            result.push(f)
+            seen.add(f.getId())
+        }        
+    })
+
+    return result
 }
