@@ -397,25 +397,26 @@ class Fragment implements EnglishPatternFragment {
 
                         let i = -1
                         let en = match.sentence.en()
-                        let found = false
+                        let foundArticle = false, foundWord = false
 
                         do {
                             i = en.indexOf(nextWord, i+1)
 
                             if (i >= 0) {
+                                foundWord = true
                                 ARTICLES.forEach(article => {
                                     if (en.substr(i-article.length, article.length).toLowerCase() == article && 
                                         (i == article.length || !en[i-article.length-1].match(/\w/)) &&
                                         following.substr(0, article.length).toLowerCase() != article) {
                                         result = result.substr(0, atArticle) + article + following
-                                        found = true
+                                        foundArticle = true
                                     }
                                 })
                             }
                         }
-                        while (i >= 0 && !found)
+                        while (i >= 0 && !foundArticle)
 
-                        if (!found) {
+                        if (!foundWord) {
                             console.log(`did not find "${nextWord}" in "${en}"`)
                         }
                     }

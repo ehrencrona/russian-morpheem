@@ -108,6 +108,9 @@ export default class StudyContainerComponent extends Component<Props, State> {
     chooseSentence() {
         let factScores = this.factSelector.chooseFact(new Date())
 
+console.log('new facts', this.newFactsSelector(true).map(f => f.fact.getId() + ' ' + f.score))
+console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
+
         factScores = factScores.concat(this.newFactsSelector(true))
 
         factScores = factScores.filter((fs) => {
@@ -310,7 +313,8 @@ console.log('Did not ought to know ' + visitedFact.getId())
             this.exposures.getExposures(-1)
         ]).then(result => {
             let profile = { studyPlan: result[0], knowledge: this.knowledge }
-            this.newFactsSelector = createNewFactsSelector(profile, this.knowledge, this.factSelector, 0.1, 10, this.props.corpus)
+            this.newFactsSelector = createNewFactsSelector(profile, 
+                this.knowledge, this.factSelector, 0.1, 10, this.props.corpus)
 
             this.processExposures(result[1])
 
