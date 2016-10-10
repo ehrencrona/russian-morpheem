@@ -1,14 +1,16 @@
 
 import Phrase from '../../../shared/phrase/Phrase'
 import Match from '../../../shared/phrase/Match'
+import PhraseCase from '../../../shared/phrase/PhraseCase'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import Corpus from '../../../shared/Corpus'
 
 import findPhraseExamples from './findPhraseExamples'
 import { Component, createElement } from 'react'
+import { FORMS } from '../../../shared/inflection/InflectionForms'
 
 interface Props {
-    fact: Phrase
+    fact: PhraseCase
     corpus: Corpus
     knowledge: NaiveKnowledge
 }
@@ -20,7 +22,7 @@ interface State {
 let React = { createElement: createElement }
 const SENTENCES_WANTED = 2
 
-export default class PhraseFactEntryComponent extends Component<Props, State> {
+export default class PhraseCaseFactEntryComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
@@ -38,8 +40,8 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
                         <dt key={ match.sentence.id }>{
                             match.words.map(w => w.word.toText()).join(' ') 
                         }</dt>,
-                        <dd> {
-                            match.pattern.getEnglishFragments().map(f => f.en(match, (word) => word.getEnglish())).join(' ') 
+                        <dd>using the {
+                            FORMS[this.props.fact.grammaticalCase].name
                         }</dd>
                      ]
                 )

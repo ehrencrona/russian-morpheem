@@ -11,7 +11,6 @@ import chooseHighestScoreSentence from '../../shared/study/chooseHighestScoreSen
 import { NewFactsSelector, createNewFactsSelector } from '../../shared/study/NewFactsSelector'
 import FactScore from '../../shared/study/FactScore'
 
-import FixedIntervalFactSelectorInspectorComponent from './FixedIntervalFactSelectorInspectorComponent'
 import SentenceComponent from '../SentenceComponent'
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
@@ -57,7 +56,6 @@ interface State {
     profile?: StudentProfile
     sentence?: Sentence
     facts?: Fact[]
-    showDecks?: boolean
     showComments?: boolean
     showTrivial?: boolean
     showPlan?: boolean
@@ -93,7 +91,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     chooseSentence() {
-        let factScores = this.factSelector.chooseFact(new Date())
+        let factScores = this.factSelector.chooseFact(new Date(), this.state.profile.studyPlan.getFacts().repeatedFacts)
 
 console.log('new facts', this.newFactsSelector(true).map(f => f.fact.getId() + ' ' + f.score))
 console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
@@ -332,7 +330,16 @@ console.log('Did not ought to know ' + visitedFact.getId())
     render() {
         let profile = this.state.profile
 
-        if (this.state.showPlan) {
+        if (this.state.showPlan 
+        
+        
+        
+        || this.state.sentence
+        
+        
+        
+        
+        ) {
             return <StudyPlanComponent
                 profile={ profile }
                 corpus={ this.props.corpus }
@@ -419,37 +426,12 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 }
 
                 {
-                    (this.state.showDecks ?
 
-                        <div>
-
-                            <div className='debugButtonBar'>
-                                <div className='button' onClick={ () => this.setState({ showDecks: false }) }>Close</div>
-                            </div>
-
-                            <FixedIntervalFactSelectorInspectorComponent 
-                                knowledge={ this.factSelector }
-                                corpus={ this.props.corpus } />
-
-                        </div>
-
-                    :
-
-                        <div/>
-
-                    )
-                }
-
-                {
-
-                    (!this.state.showComments && !this.state.showDecks && !this.state.edit && !this.state.showTrivial ? 
+                    (!this.state.showComments && !this.state.edit && !this.state.showTrivial ? 
 
                         <div className='debugButtonBar'>
                             <div className='button' onClick={ () => this.setState({ showComments: true }) }>
                                 Comment
-                            </div>
-                            <div className='button' onClick={ () => this.setState({ showDecks: true }) }>
-                                What am I studying?
                             </div>
                             <div className='button' onClick={ () => this.setState({ showTrivial: true }) }>
                                 What do I know?

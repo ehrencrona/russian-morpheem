@@ -5,8 +5,10 @@ import Fact from '../../../shared/fact/Fact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import Phrase from '../../../shared/phrase/Phrase'
+import PhraseCase from '../../../shared/phrase/PhraseCase'
 
 import PhraseFactEntryComponent from './PhraseFactEntryComponent'
+import PhraseCaseFactEntryComponent from './PhraseCaseFactEntryComponent'
 import WordFactEntryComponent from './WordFactEntryComponent'
 import InflectionFactEntryComponent from './InflectionFactEntryComponent'
 import TransformFactEntryComponent from './TransformFactEntryComponent'
@@ -43,6 +45,12 @@ export default class FactComponent extends Component<Props, State> {
         }
         else if (fact instanceof Phrase) {
             return <PhraseFactEntryComponent 
+                corpus={ this.props.corpus } 
+                fact={ fact } 
+                knowledge={ this.props.knowledge } />
+        }
+        else if (fact instanceof PhraseCase) {
+            return <PhraseCaseFactEntryComponent 
                 corpus={ this.props.corpus } 
                 fact={ fact } 
                 knowledge={ this.props.knowledge } />

@@ -136,6 +136,8 @@ export default class StudyPlanComponent extends Component<Props, State> {
         let counter = this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount'
         let studiedFacts = this.state.studiedFacts
 
+        let skip = 3
+        
         return <div className='studyPlan'>
             <div className='content'>
                 <div className='tabs'>
@@ -144,27 +146,37 @@ export default class StudyPlanComponent extends Component<Props, State> {
                 </div>
 
                 <div className='scroll'>
-                { 
-                    this.renderFacts(
-                        this.state.onTab == OnTab.NEW ?
-                            studiedFacts.newFacts.slice(0, this.state.newCount) :
-                            studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
-                }
-            
-                { 
-                    this.state[counter] > 0 ?
-                        <div className='button' onClick={ 
-                            () => this.changeCount(counter, -1) }>Less</div>
-                        :
-                        null
-                }
-                {
-                    this.state[counter] < (this.state.onTab == OnTab.NEW ? studiedFacts.newFacts.length : studiedFacts.repeatedFacts.length) ?
-                        <div className='button' onClick={ 
-                            () => this.changeCount(counter, 1) }>More</div>
-                        :
-                        null
-                }
+                    { 
+                        this.renderFacts(
+                            this.state.onTab == OnTab.NEW ?
+                                studiedFacts.newFacts.slice(0, this.state.newCount) :
+                                studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
+                    }
+                
+                    <div className='moreOrLess'>
+                        { 
+                            this.state[counter] > skip ?
+                                <div className='less' onClick={ 
+                                    () => this.changeCount(counter, -skip) }>
+                                    <svg viewBox='0 0 24 21'>
+                                        <path d="M 0 21 L 24 21 L 12 0 z" />
+                                    </svg>
+                                </div>
+                                :
+                                null
+                        }
+                        {
+                            this.state[counter] < (this.state.onTab == OnTab.NEW ? studiedFacts.newFacts.length : studiedFacts.repeatedFacts.length) ?
+                                <div className='more' onClick={ 
+                                    () => this.changeCount(counter, skip) }>
+                                    <svg viewBox='0 0 24 21'>
+                                        <path d="M 0 0 L 24 0 L 12 21 z" />
+                                    </svg>
+                                </div>
+                                :
+                                null
+                        }
+                    </div>
                 </div>
 
                 <div className='button done' onClick={ 

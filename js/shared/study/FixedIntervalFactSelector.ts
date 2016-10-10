@@ -147,10 +147,19 @@ export class FixedIntervalFactSelector {
         }
     }
 
-    chooseFact(now: Date): FactScore[] {
+    chooseFact(now: Date, amongFacts?: Fact[]): FactScore[] {
         let result: FactScore[] = []
 
-        Object.keys(this.studying).forEach((factId) => {
+        let factIds: string[]
+
+        if (amongFacts) {
+            factIds = amongFacts.map(f => f.getId())
+        }
+        else {
+            factIds = Object.keys(this.studying)
+        }
+
+        factIds.forEach((factId) => {
             let lastStudied = this.studying[factId]
 
             let age = timeSince(lastStudied, now)

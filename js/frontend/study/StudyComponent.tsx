@@ -359,7 +359,6 @@ export default class StudyComponent extends Component<Props, State> {
 
     render() {
         let reveal = this.state.stage !== Stage.TEST
-        let capitalize = true
         let sentence = this.props.sentence
 
 console.log('Sentence: ' + sentence.toString() + ' (#' + sentence.id + ')')
