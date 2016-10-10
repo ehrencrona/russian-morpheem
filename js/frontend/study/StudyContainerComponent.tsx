@@ -67,19 +67,6 @@ interface State {
 
 let React = { createElement: createElement }
 
-
-function isWorthStudying(fact: Fact) {
-    if (fact instanceof InflectionFact) {
-        return fact.form != fact.inflection.defaultForm
-    }
-    else if (fact instanceof Word || fact instanceof InflectableWord) {
-        return fact.studied
-    }
-    else {
-        return true
-    }
-}
-
 export default class StudyContainerComponent extends Component<Props, State> {
     exposures: FrontendExposures
     knowledge: NaiveKnowledge
@@ -114,12 +101,6 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         factScores = factScores.concat(this.newFactsSelector(true))
 
 console.log('after concat', factScores.map(f => f.fact.getId() + ' ' + f.score))
-
-        factScores = factScores.filter((fs) => {
-            let fact = fs.fact 
-
-            return isWorthStudying(fact)
-        })
 
 console.log('after filter', factScores.map(f => f.fact.getId() + ' ' + f.score))
 

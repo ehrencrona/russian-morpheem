@@ -7,6 +7,7 @@ import StudentProfile from '../study/StudentProfile'
 import NaiveKnowledge from './NaiveKnowledge'
 import Corpus from '../Corpus'
 import FixedIntervalFactSelector from './FixedIntervalFactSelector'
+import isWorthStudying from './worthStudying'
 
 const REPETITION_COUNT = 8
 
@@ -42,27 +43,30 @@ export type NewFactsSelector = (onlyFromStudyPlan: boolean) => FactScore[]
 
 export function createNewFactsSelector(profile: StudentProfile, knowledge: NaiveKnowledge, 
         factSelector: FixedIntervalFactSelector, score: number, count: number, corpus: Corpus) {
+    let studyableFacts = corpus.facts.facts.filter(isWorthStudying)
+
     return (onlyFromStudyPlan: boolean) => {
         let allFacts: Fact[]
 
         if (onlyFromStudyPlan) {
             let studiedFacts = profile.studyPlan.getFacts()
 
-            allFacts = studiedFacts.newFacts.concat(studiedFacts.newFacts)
+            allFacts = studiedFacts.newFacts
         }
         else {
-            allFacts = corpus.facts.facts
+            allFacts = studyableFacts
         }
 
         let foundFacts: FactScore[] = []
 
         for (let i = 0; i < allFacts.length; i++) {
-            let factKnowledge = knowledge.getKnowledge(allFacts[i])
+            let fact = allFacts[i]
+            let factKnowledge = knowledge.getKnowledge(fact)
 
             if ((factKnowledge == Knowledge.MAYBE || factKnowledge == Knowledge.DIDNT_KNOW) &&
-                !factSelector.isStudied(allFacts[i], new Date())) {
+                !factSelector.isStudied(fact, new Date())) {
                 foundFacts.push({
-                    fact: allFacts[i],
+                    fact: fact,
                     score: score,
                     debug: {
                         newFact: true,
