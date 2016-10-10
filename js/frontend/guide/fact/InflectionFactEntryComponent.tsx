@@ -24,7 +24,7 @@ export default class InflectionFactEntryComponent extends Component<Props, State
     componentWillMount() {
         let fact = this.props.fact
 
-        let examples = findExamplesOfInflection(this.props.fact, this.props.corpus, 3, 
+        let examples = findExamplesOfInflection(this.props.fact, this.props.corpus, 2, 
             (fact) => this.props.knowledge.getKnowledge(fact) == Knowledge.DIDNT_KNOW)
 
         this.state = {
@@ -33,15 +33,11 @@ export default class InflectionFactEntryComponent extends Component<Props, State
     }
 
     render() {
-
-        return <div>
-
-            the { FORMS[this.props.fact.form].name } of {
-                this.state.exampleWords.map(w => w.word.toText()).join(', ')
-            }:<br/>{
-                this.state.exampleWords.map(w => w.toText()).join(', ')
-            }
-
-        </div>
+        return <dl>
+            <dt>{
+                this.state.exampleWords.map(w => <div key={ w.getId() }>{ w.toText() }</div>)
+            }</dt>
+            <dd>{ FORMS[this.props.fact.form].name } forms</dd>
+        </dl>
     }
 }

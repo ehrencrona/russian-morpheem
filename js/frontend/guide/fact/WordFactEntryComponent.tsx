@@ -16,8 +16,9 @@ export default class FactComponent extends Component<Props, State> {
     render() {
         let fact = this.props.fact
 
-        return <div>
-            { fact.toText() } – { fact.getEnglish() }
-        </div>
+        return <dl>
+            <dt>{ fact.toText() }</dt>
+            <dd>{ fact.getEnglish() }</dd>
+        </dl>
     }
 }

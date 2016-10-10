@@ -332,7 +332,13 @@ console.log('Did not ought to know ' + visitedFact.getId())
     render() {
         let profile = this.state.profile
 
-        if (this.state.showPlan) {
+        if (
+            
+            
+            this.state.sentence ||
+            
+
+            this.state.showPlan) {
             return <StudyPlanComponent
                 profile={ profile }
                 corpus={ this.props.corpus }

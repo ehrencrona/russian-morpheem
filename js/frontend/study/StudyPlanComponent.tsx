@@ -5,7 +5,7 @@ import { StudiedFacts } from '../../shared/study/StudyPlan'
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import FactEntryComponent from '../guide/fact/FactEntryComponent'
-import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
+import { EXPECTED_REPETITIONS_FOR_NEW, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
 import FactScore from '../../shared/study/FactScore'
 import { NewFactsSelector } from '../../shared/study/NewFactsSelector'
 
@@ -84,8 +84,20 @@ export default class StudyPlanComponent extends Component<Props, State> {
         })
     }
 
-    renderKnowledge(fact: Fact) {
-        return this.props.factSelector.getExpectedRepetitions(fact)
+    renderProgress(fact: Fact) {
+        let percentage = Math.max(1 - this.props.factSelector.getExpectedRepetitions(fact) / EXPECTED_REPETITIONS_FOR_NEW, 0)
+
+        return <div className='progress'>
+            <div className='barContainer'>
+                <div className={ 'start' + (percentage == 0 ? ' empty' : '')}>&nbsp;</div>
+            
+                <div className='bar'>
+                    <div className='full' style={ { width: percentage + '%' }}/>
+                </div>
+
+                <div className={ 'end'  + (percentage == 100 ? ' full' : '') }>&nbsp;</div>
+            </div>
+        </div>
     }
 
     renderFacts(facts: Fact[]) {
@@ -93,14 +105,14 @@ export default class StudyPlanComponent extends Component<Props, State> {
         return <ul>{ facts.map(fact => {
 
             return <li key={ fact.getId() }>
+                { this.renderProgress(fact) }
                 <div className='fact'>
                     <FactEntryComponent
                         corpus={ this.props.corpus }
                         knowledge={ this.props.profile.knowledge } 
                         fact={ fact }/> 
-                </div>                    
-                <div className='knowledge'>{ this.renderKnowledge(fact) }</div>
-                <div className='button remove' onClick={ () => this.remove(fact) }>Remove</div>
+                </div>
+                <div className='button remove' onClick={ () => this.remove(fact) }>I know</div>
             </li>
 
         }) }</ul>
@@ -117,45 +129,47 @@ export default class StudyPlanComponent extends Component<Props, State> {
 
     render() {
         let tab = (tab: OnTab, label: string) => {
-            return <div className={ 'tab' + (this.state.onTab == tab ? ' current' : '') } 
-                onClick={ () => this.setState({onTab: tab}) }>{ label }</div>
+            return <div className={ 'tab' + (this.state.onTab == tab ? ' current' : ' other') } 
+                onClick={ () => this.setState({onTab: tab}) }><div>{ label }</div></div>
         }
 
         let counter = this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount'
         let studiedFacts = this.state.studiedFacts
 
         return <div className='studyPlan'>
-            <h2>Study Plan</h2>
+            <div className='content'>
+                <div className='tabs'>
+                    { tab(OnTab.NEW, 'New') }
+                    { tab(OnTab.REPEAT, 'Repeat') }
+                </div>
 
-            <div className='tabs'>
-                { tab(OnTab.NEW, 'New') }
-                { tab(OnTab.REPEAT, 'Repeat') }
+                <div className='scroll'>
+                { 
+                    this.renderFacts(
+                        this.state.onTab == OnTab.NEW ?
+                            studiedFacts.newFacts.slice(0, this.state.newCount) :
+                            studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
+                }
+            
+                { 
+                    this.state[counter] > 0 ?
+                        <div className='button' onClick={ 
+                            () => this.changeCount(counter, -1) }>Less</div>
+                        :
+                        null
+                }
+                {
+                    this.state[counter] < (this.state.onTab == OnTab.NEW ? studiedFacts.newFacts.length : studiedFacts.repeatedFacts.length) ?
+                        <div className='button' onClick={ 
+                            () => this.changeCount(counter, 1) }>More</div>
+                        :
+                        null
+                }
+                </div>
+
+                <div className='button done' onClick={ 
+                    () => this.props.onSubmit(studiedFacts) }>Done</div>
             </div>
-        
-            { 
-                this.renderFacts(
-                    this.state.onTab == OnTab.NEW ?
-                        studiedFacts.newFacts.slice(0, this.state.newCount) :
-                        studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
-            }
-        
-            { 
-                this.state[counter] > 0 ?
-                    <div className='button' onClick={ 
-                        () => this.changeCount(counter, -1) }>Less</div>
-                    :
-                    null
-            }
-            {
-                this.state[counter] < (this.state.onTab == OnTab.NEW ? studiedFacts.newFacts.length : studiedFacts.repeatedFacts.length) ?
-                    <div className='button' onClick={ 
-                        () => this.changeCount(counter, 1) }>More</div>
-                    :
-                    null
-            }
-
-            <div className='button' onClick={ 
-                () => this.props.onSubmit(studiedFacts) }>Done</div>
         </div>
     }
 
@@ -179,7 +193,7 @@ function eliminateDuplicates(facts: Fact[]): Fact[] {
         if (!seen.has(f.getId())) {
             result.push(f)
             seen.add(f.getId())
-        }        
+        }
     })
 
     return result

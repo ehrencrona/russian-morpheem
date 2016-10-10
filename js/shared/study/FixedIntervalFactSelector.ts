@@ -38,7 +38,7 @@ for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     } 
 }
 
-const EXPECTED_REPETITIONS_FOR_NEW = calculateExpectedRepetitionsForNew() 
+export const EXPECTED_REPETITIONS_FOR_NEW = calculateExpectedRepetitionsForNew() 
 
 function calculateExpectedRepetitionsForNew() {
     // how many repetitions can we at most do between now and "before", give that all answers are correct?
@@ -50,7 +50,7 @@ function calculateExpectedRepetitionsForNew() {
     }
 }
 
-export default class FixedIntervalFactSelector {
+export class FixedIntervalFactSelector {
 
     exposed: { [ factId: string ]: LastStudied } = {}
     studying: { [ factId: string ]: LastStudied } = {}
@@ -222,6 +222,8 @@ export default class FixedIntervalFactSelector {
         return this.exposed[fact.getId()]
     }
 }
+
+export default FixedIntervalFactSelector
 
 function timeSince(lastStudied: LastStudied, now: Date) {
     return now.getTime() - lastStudied.time.getTime()    

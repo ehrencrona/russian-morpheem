@@ -77,15 +77,19 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
 
     render() {
 
-        return <div>
+        return <dl>
             { 
                 this.state.matches.map(match =>
-                    <div key={ match.sentence.id }>{
-                        match.words.map(w => w.word.toText()).join(' ') + ' – ' +
-                        match.pattern.getEnglishFragments().map(f => f.en(match, (word) => word.getEnglish())).join(' ')
-                    }</div>
+                     [
+                        <dt key={ match.sentence.id }>{
+                            match.words.map(w => w.word.toText()).join(' ') 
+                        }</dt>,
+                        <dd> {
+                            match.pattern.getEnglishFragments().map(f => f.en(match, (word) => word.getEnglish())).join(' ') 
+                        }</dd>
+                     ]
                 )
             }
-        </div>
+        </dl>
     }
 }

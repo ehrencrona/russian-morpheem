@@ -1130,84 +1130,6 @@ $animationLength: 0.2s;
             flex-basis: 0;
         }
 
-        $progressBarFull: $color4;
-        $progressBarEmpty: lighten($color4, 25%);
-        $progressBackgroundColor: lighten($color4, 10%);
-
-        .progress {
-            flex-grow: 0;
-
-            @media (max-height: 550px) {
-                display: none;
-            }
-
-            $barWidth: 8px;
-            padding: $barWidth 2 * $barWidth;
-            background-color: $colorLower;
-
-            .barContainer {
-                height: $barWidth;
-
-                .start, .end {
-                    border-radius: $barWidth / 2;
-                    width: $barWidth / 2;
-                }
-            }
-
-            @media (min-height: 900px) {
-                background-color: $progressBackgroundColor;
-                $barWidth: 12px;
-                padding: $barWidth 2 * $barWidth;
-
-                .barContainer {
-                    height: $barWidth;
-
-                    .start, .end {
-                        border-radius: $barWidth / 2;
-                        width: $barWidth / 2;
-                    }
-                }
-            }
-
-            .barContainer {
-                display: flex;
-                flex-direction: row;
-
-                .start {
-                    border-top-right-radius: initial;
-                    border-bottom-right-radius: initial;
-                    background-color: $progressBarFull;
-                }
-
-                .start.empty {
-                    background-color: $progressBarEmpty;
-                }
-
-                .end {
-                    background-color: $progressBarEmpty;                    
-                }
-
-                .end.full {
-                    background-color: $progressBarFull;                    
-                }
-
-                .full {
-                    min-height: 100%;
-                    background-color: $progressBarFull;
-                }
-
-                .bar {
-                    background-color: $progressBarEmpty;                    
-                    flex-grow: 1;
-                }
-
-                .end {
-                    border-top-left-radius: initial;
-                    border-bottom-left-radius: initial;
-                }
-            }
-        }
-
         .upper {
             display: flex;
             flex-direction: column;
@@ -1531,6 +1453,84 @@ $animationLength: 0.2s;
                 font-size: 1.5em;
             }
         }
+
+        $progressBarFull: $color4;
+        $progressBarEmpty: lighten($color4, 25%);
+        $progressBackgroundColor: lighten($color4, 10%);
+
+        .progress {
+            flex-grow: 0;
+
+            @media (max-height: 550px) {
+                display: none;
+            }
+
+            $barWidth: 8px;
+            padding: $barWidth 2 * $barWidth;
+            background-color: $colorLower;
+
+            .barContainer {
+                height: $barWidth;
+
+                .start, .end {
+                    border-radius: $barWidth / 2;
+                    width: $barWidth / 2;
+                }
+            }
+
+            @media (min-height: 900px) {
+                background-color: $progressBackgroundColor;
+                $barWidth: 12px;
+                padding: $barWidth 2 * $barWidth;
+
+                .barContainer {
+                    height: $barWidth;
+
+                    .start, .end {
+                        border-radius: $barWidth / 2;
+                        width: $barWidth / 2;
+                    }
+                }
+            }
+
+            .barContainer {
+                display: flex;
+                flex-direction: row;
+
+                .start {
+                    border-top-right-radius: initial;
+                    border-bottom-right-radius: initial;
+                    background-color: $progressBarFull;
+                }
+
+                .start.empty {
+                    background-color: $progressBarEmpty;
+                }
+
+                .end {
+                    background-color: $progressBarEmpty;                    
+                }
+
+                .end.full {
+                    background-color: $progressBarFull;                    
+                }
+
+                .full {
+                    min-height: 100%;
+                    background-color: $progressBarFull;
+                }
+
+                .bar {
+                    background-color: $progressBarEmpty;                    
+                    flex-grow: 1;
+                }
+
+                .end {
+                    border-top-left-radius: initial;
+                    border-bottom-left-radius: initial;
+                }
+            }
+        }
     }
 
 }
@@ -1652,34 +1652,218 @@ $overlayPadding: 4 * $unit;
 }
 
 .studyPlan {
-    .tabs {
+    font-size: 12pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #606060;
+
+    $shadowColor: #BBDFDF;
+    $backgroundColor: #ffffff;
+    $highlightColor: #e95f3d; 
+    $weakHighlightColor: #e9d5d0;
+    $foregroundColor: #000000;
+    $tabHeight: 50px;
+
+    > .content {
+        height: 100vh;
+        background-color: $backgroundColor;
+        font-size: 14pt;
+
         display: flex;
+        flex-direction: column;
 
-        .tab {
-            padding: 4*$unit;
-            text-align: center;
-            flex-grow: 1;
+        width: 100%;
+        max-width: 800px;
 
-            background-color: $color5;
-            color: white;
+        .tabs {
+            display: flex;
+            height: $tabHeight;
+
+            .tab {
+                flex-grow: 1;
+                flex-basis: 0;
+                height: $tabHeight;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .other {
+                color: white;
+                background-color: $highlightColor;
+            }
+
+            .other:hover {
+                background-color: darken($highlightColor, 10%);
+            }
+
+            :nth-child(odd).other {
+                border-bottom-right-radius: $tabHeight;
+            }
+
+            :nth-child(even).other {
+                border-bottom-left-radius: $tabHeight;
+            }
         }
 
-        .current {
-            color: $color5;
-            background-color: white;
+        > div {
+            flex-shrink: 0;
+        }
+
+        .scroll {
+            overflow-y: scroll;
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+
+        ul {
+            li {
+                height: 3.5em;
+                padding: 0;
+                padding-left: 1em;
+
+                @media (min-width: 800px) {
+                    padding-left: 2em;
+                }
+
+                display: flex;
+                align-items: center;
+
+                $progressBarFull: #52a7a6;
+                $progressBarEmpty: #a6d3d2;
+
+                .progress {
+                    $barWidth: 8px;
+                    width: 24px;
+                    padding-right: 1.5em;
+                    @media (min-width: 800px) {
+                        padding-right: 2.5em;
+                    }
+                    flex-grow: 0.05;
+
+                    .barContainer {
+                        height: $barWidth;
+
+                        .start, .end {
+                            border-radius: $barWidth / 2;
+                            width: $barWidth / 2;
+                        }
+                    }
+
+                    @media (min-height: 900px) {
+                        $barWidth: 12px;
+
+                        .barContainer {
+                            height: $barWidth;
+
+                            .start, .end {
+                                border-radius: $barWidth / 2;
+                                width: $barWidth / 2;
+                            }
+                        }
+                    }
+
+                    .barContainer {
+                        display: flex;
+                        flex-direction: row;
+
+                        .start {
+                            border-top-right-radius: initial;
+                            border-bottom-right-radius: initial;
+                            background-color: $progressBarFull;
+                        }
+
+                        .start.empty {
+                            background-color: $progressBarEmpty;
+                        }
+
+                        .end {
+                            background-color: $progressBarEmpty;                    
+                        }
+
+                        .end.full {
+                            background-color: $progressBarFull;                    
+                        }
+
+                        .full {
+                            min-height: 100%;
+                            background-color: $progressBarFull;
+                        }
+
+                        .bar {
+                            background-color: $progressBarEmpty;                    
+                            flex-grow: 1;
+                        }
+
+                        .end {
+                            border-top-left-radius: initial;
+                            border-bottom-left-radius: initial;
+                        }
+                    }
+                }
+
+
+                dl {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+
+                    dt, dd {
+                        margin: 0;
+                        width: 50%;
+                    }
+                }
+
+                .fact {
+                    flex-grow: 1;
+                    flex-basis: 0;
+                }
+
+                .button {
+                    align-self: stretch;
+
+                    justify-content: center;
+                    margin: 0;
+                    padding: 0 3*$unit;
+                    border-radius: 0;
+                    flex-grow: 0.2;
+                    flex-basis: 0;
+
+                    background-color: lighten($shadowColor, 3%);
+
+                    &:hover {
+                        background-color: darken($shadowColor, 3%);
+                    }
+                }
+            }
+
+            li:nth-child(even) {
+                background-color: $shadowColor;
+
+                .button {
+                    &:hover {
+                        background-color: darken($shadowColor, 20%);
+                    }
+
+                    background-color: darken($shadowColor, 15%);
+                }
+            } 
         }
     }
 
-    ul li {
-        display: flex;
-        align-items: center;
+    .button.done {
+        background-color: $highlightColor;
+        height: 70px;
+        justify-content: center;
+        margin: 0;
+        border-radius: 0;
+        font-weight: bold;
+    }
 
-        .fact {
-            flex-grow: 1;
-        }
-
-        .button {
-            flex-grow: 0;
-        } 
+    .button.done:hover {
+        background-color: darken($highlightColor, 10%);
     }
 }
