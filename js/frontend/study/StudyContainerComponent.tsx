@@ -100,10 +100,6 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
         factScores = factScores.concat(this.newFactsSelector(true))
 
-console.log('after concat', factScores.map(f => f.fact.getId() + ' ' + f.score))
-
-console.log('after filter', factScores.map(f => f.fact.getId() + ' ' + f.score))
-
         if (!factScores.length) {
             this.setState({ sentence: null, done: true })
             return
