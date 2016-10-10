@@ -39,6 +39,8 @@ $small-font: 60%;
 $highlight: #e6bf0e;
 $lowlight: #636363;
 
+$colorLower: #b9b2d4;
+
 html {
     margin: 0;
     padding: 0;
@@ -1107,7 +1109,6 @@ $animationLength: 0.2s;
 }
 
 .study {
-    height: 100vh;
     font-size: 12pt;
     display: flex;
     flex-direction: column;
@@ -1118,333 +1119,420 @@ $animationLength: 0.2s;
         background-color: $color9; 
         max-width: 650px;
         width: 100%;
-    }
-
-    .upper {
+        height: 100vh;
+        
         display: flex;
         flex-direction: column;
 
-        height: 50vh;
-
-        .sentenceId {
-            margin: 2 * $unit;
-            text-align: right;
-            font-size: 80%; 
-        }
-
-        .explanation {
-            margin: 36pt;
-            margin-bottom: 12pt;
-            font-size: 1em;
-            font-weight: bold;
-        }
-
-        .sentence {
-            margin: 36pt;
-            margin-top: 0;
-            font-size: 2em;
+        > div {
             flex-grow: 1;
-            overflow: hidden;
-            line-height: 125%;
+            flex-shrink: 1;
+            flex-basis: 0;
+        }
 
-            .nobr { 
-                white-space: nowrap
+        $progressBarFull: $color4;
+        $progressBarEmpty: lighten($color4, 25%);
+        $progressBackgroundColor: lighten($color4, 10%);
+
+        .progress {
+            flex-grow: 0;
+
+            @media (max-height: 550px) {
+                display: none;
             }
+
+            $barWidth: 8px;
+            padding: $barWidth 2 * $barWidth;
+            background-color: $colorLower;
+
+            .barContainer {
+                height: $barWidth;
+
+                .start, .end {
+                    border-radius: $barWidth / 2;
+                    width: $barWidth / 2;
+                }
+            }
+
+            @media (min-height: 900px) {
+                background-color: $progressBackgroundColor;
+                $barWidth: 12px;
+                padding: $barWidth 2 * $barWidth;
+
+                .barContainer {
+                    height: $barWidth;
+
+                    .start, .end {
+                        border-radius: $barWidth / 2;
+                        width: $barWidth / 2;
+                    }
+                }
+            }
+
+            .barContainer {
+                display: flex;
+                flex-direction: row;
+
+                .start {
+                    border-top-right-radius: initial;
+                    border-bottom-right-radius: initial;
+                    background-color: $progressBarFull;
+                }
+
+                .start.empty {
+                    background-color: $progressBarEmpty;
+                }
+
+                .end {
+                    background-color: $progressBarEmpty;                    
+                }
+
+                .end.full {
+                    background-color: $progressBarFull;                    
+                }
+
+                .full {
+                    min-height: 100%;
+                    background-color: $progressBarFull;
+                }
+
+                .bar {
+                    background-color: $progressBarEmpty;                    
+                    flex-grow: 1;
+                }
+
+                .end {
+                    border-top-left-radius: initial;
+                    border-bottom-left-radius: initial;
+                }
+            }
+        }
+
+        .upper {
+            display: flex;
+            flex-direction: column;
+
+            .sentenceId {
+                margin: 2 * $unit;
+                text-align: right;
+                font-size: 80%; 
+            }
+
+            .explanation {
+                margin: 36pt;
+                margin-bottom: 12pt;
+                font-size: 1em;
+                font-weight: bold;
+            }
+
+            .sentence {
+                margin: 36pt;
+                margin-top: 0;
+                font-size: 2em;
+                flex-grow: 1;
+                overflow: hidden;
+                line-height: 125%;
+
+                .nobr { 
+                    white-space: nowrap
+                }
+
+                .content {
+                    display: inline-block;
+
+                    .space {
+                        /* if it's not inline-block we get no linebreaks within the studied phrase */
+                        display: inline-block;
+                    }
+
+                    .word {
+                        display: inline;
+                        cursor: pointer;
+                    }
+
+                    .word:hover {
+                        color: $color4;
+                    }               
+                }
+
+                .hidden {
+                    .space.studied {
+                        margin: 0 -0.1em;
+                        background-color: white;
+                    }
+
+                    .word.studied {
+                        color: darkgray;
+                        background-color: white;
+                        padding: 0 0.1em;
+
+                        .form {
+                            color: $color9;
+                            margin-left: 0.4em;
+                            font-size: 40%;
+                            display: block;
+                        }
+                    }
+                }
+
+                @keyframes flash-shadow {
+                    0%   { text-shadow: 0px 0px 0em black; }
+                    66%  { text-shadow: 0px 0px 0.02em black; }
+                    100%  { text-shadow: none; }
+                }
+
+                .revealed {
+                    color: $color14;
+
+                    .word.studied {
+                        animation-name: flash-shadow;
+                        animation-duration: 1s;
+                        animation-delay: 0.2s;
+                        animation-timing-function: linear;
+                        color: black;
+                        font-weight: bold; 
+                    }
+                }            
+            }
+            
+            .sentence.leave {
+                animation-name: swingout;
+                animation-duration: $animationLength;
+
+                transform: translate3d(-100vw, 0, 0);
+            }
+
+            .sentence.enter {
+                animation-name: swingin;
+                animation-duration: $animationLength;
+            }
+        }
+
+        .upper, .lower {
+            overflow: hidden;
+        }
+
+        .upper.dimmed {
+            color: #505050; 
 
             .content {
-                display: inline-block;
-
-                .space {
-                    /* if it's not inline-block we get no linebreaks within the studied phrase */
-                    display: inline-block;
-                }
-
-                .word {
-                    display: inline;
-                    cursor: pointer;
-                }
-
-                .word:hover {
-                    color: $color4;
-                }               
-            }
-
-            .hidden {
-                .space.studied {
-                    margin: 0 -0.1em;
-                    background-color: white;
+                .sentence .revealed {
+                    color: inherit;
                 }
 
                 .word.studied {
-                    color: darkgray;
-                    background-color: white;
-                    padding: 0 0.1em;
+                    color: inherit;
+                }
 
-                    .form {
-                        color: $color9;
-                        margin-left: 0.4em;
-                        font-size: 40%;
+                .word:hover {
+                    color: inherit;
+                }
+
+                .word.highlight {
+                    color: $highlight;
+                }
+
+                .word.highlight.low {
+                    color: $lowlight;
+                }
+            }
+        }
+
+        .studyButtonBar {
+            @extend .buttonBar;
+
+            height: 0;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 20;
+            flex-wrap: nowrap;
+
+            @media (min-width: 600px) {
+                font-size: 1.5em;
+            }
+
+            .button {
+                display: block;
+                margin: 0;
+                font-weight: 700;
+                font-size: 1.5em;
+                padding: 3*$unit 1em;
+                border-radius: 1em;
+
+                .line {
+                    @media (max-width: 400px) {
                         display: block;
                     }
                 }
             }
 
-            @keyframes flash-shadow {
-                0%   { text-shadow: 0px 0px 0em black; }
-                66%  { text-shadow: 0px 0px 0.02em black; }
-                100%  { text-shadow: none; }
+            .button.smallText {
+                font-size: 1.2em;
+                line-height: 125%;
             }
 
-            .revealed {
-                color: $color14;
-
-                .word.studied {
-                    animation-name: flash-shadow;
-                    animation-duration: 1s;
-                    animation-delay: 0.2s;
-                    animation-timing-function: linear;
-                    color: black;
-                    font-weight: bold; 
-                }
-            }            
-        }
-        
-        .sentence.leave {
-            animation-name: swingout;
-            animation-duration: $animationLength;
-
-            transform: translate3d(-100vw, 0, 0);
-        }
-
-        .sentence.enter {
-            animation-name: swingin;
-            animation-duration: $animationLength;
-        }
-    }
-
-    .upper, .lower {
-        overflow: hidden;
-    }
-
-    .upper.dimmed {
-        color: #505050; 
-
-        .content {
-            .sentence .revealed {
-                color: inherit;
+            .button.left {
+                width: 50%;
+                flex-grow: 1;
+                @extend .border-box-sizing;
+                border-bottom-left-radius: 0; 
+                border-top-left-radius: 0;
+                margin-right: 5%;
+                text-align: left;
+                border-left: none;
             }
 
-            .word.studied {
-                color: inherit;
-            }
-
-            .word:hover {
-                color: inherit;
-            }
-
-            .word.highlight {
-                color: $highlight;
-            }
-
-            .word.highlight.low {
-                color: $lowlight;
-            }
-        }
-    }
-
-    .studyButtonBar {
-        @extend .buttonBar;
-
-        height: 0;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 20;
-        flex-wrap: nowrap;
-
-        @media (min-width: 600px) {
-            font-size: 1.5em;
-        }
-
-        .button {
-            display: block;
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.5em;
-            padding: 3*$unit 1em;
-            border-radius: 1em;
-
-            .line {
-                @media (max-width: 400px) {
-                    display: block;
-                }
+            .button.right {
+                width: 50%;
+                text-align: right;
+                margin-left: 5%;
+                flex-grow: 1;
+                @extend .border-box-sizing;
+                border-bottom-right-radius: 0; 
+                border-top-right-radius: 0; 
+                border-right: none;
             }
         }
 
-        .button.smallText {
-            font-size: 1.2em;
-            line-height: 125%;
-        }
-
-        .button.left {
-            width: 50%;
-            flex-grow: 1;
+        .lower {
+            background-color: $colorLower;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 3em;
             @extend .border-box-sizing;
-            border-bottom-left-radius: 0; 
-            border-top-left-radius: 0;
-            margin-right: 5%;
-            text-align: left;
-            border-left: none;
-        }
+            height: 100%;
 
-        .button.right {
-            width: 50%;
-            text-align: right;
-            margin-left: 5%;
-            flex-grow: 1;
-            @extend .border-box-sizing;
-            border-bottom-right-radius: 0; 
-            border-top-right-radius: 0; 
-            border-right: none;
-        }
-    }
+            .didYouKnowFact {
+                display: block;
+                flex-grow: 1;
+                width: 100%;
+                max-width: 500px;
 
-    .lower {
-        background-color: #b9b2d4;
-        height: 50vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 3em;
-        @extend .border-box-sizing;
+                > li {
+                    $padding: 1em;
 
-        .didYouKnowFact {
-            display: block;
-            flex-grow: 1;
-            width: 100%;
-            max-width: 500px;
-
-            > li {
-                $padding: 1em;
-
-                padding: $padding;
-                $borderRadius: 4 * $unit;
-                $buttonColor: #e6a00e;
-
-                .content {
-                    animation-name: swingin;
-                    animation-duration: $animationLength;
-
-                    font-size: 1.5em;
-                    line-height: 130%;
-                    text-align: center;
-                    background-color: $color9;
-                    display: block;
                     padding: $padding;
-                    border-radius: $borderRadius;
+                    $borderRadius: 4 * $unit;
+                    $buttonColor: #e6a00e;
 
-                    color: #636363;
+                    .content {
+                        animation-name: swingin;
+                        animation-duration: $animationLength;
 
-                    .explain {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: stretch;
-                        margin: -$padding;
-                        margin-top: 0;
+                        font-size: 1.5em;
+                        line-height: 130%;
+                        text-align: center;
+                        background-color: $color9;
+                        display: block;
+                        padding: $padding;
+                        border-radius: $borderRadius;
 
-                        .repetitionIndicator {
+                        color: #636363;
+
+                        .explain {
                             display: flex;
                             flex-direction: row;
-                            align-items: center;
-                            $size: 8px;
+                            align-items: stretch;
+                            margin: -$padding;
+                            margin-top: 0;
 
-                            padding: 3*$unit 4*$unit;
-                            background-color: $buttonColor;
-                            border-bottom-left-radius: $borderRadius;
-                            border-top-right-radius: $borderRadius;
+                            .repetitionIndicator {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                $size: 8px;
 
-                            > div {
-                                width: $size;
-                                height: $size;
-                                margin-right: 2px;
-                                background-color: #fbeac5;
+                                padding: 3*$unit 4*$unit;
+                                background-color: $buttonColor;
+                                border-bottom-left-radius: $borderRadius;
+                                border-top-right-radius: $borderRadius;
+
+                                > div {
+                                    width: $size;
+                                    height: $size;
+                                    margin-right: 2px;
+                                    background-color: #fbeac5;
+                                }
+
+                                .full {
+                                    background-color: #dc7018;
+                                }
                             }
 
-                            .full {
-                                background-color: #dc7018;
-                            }
-                        }
-
-                        .space {
-                            flex-grow: 1;
-                        }
-
-                        .button {
-                            margin: 0;
-                            padding: 0 4*$unit;
-                            background-color: $buttonColor;
-                            font-weight: 700;
-
-                            .text {
-                                font-size: 0.7em;
+                            .space {
+                                flex-grow: 1;
                             }
 
-                            display: block;
+                            .button {
+                                margin: 0;
+                                padding: 0 4*$unit;
+                                background-color: $buttonColor;
+                                font-weight: 700;
 
-                            border-radius: 0;
-                            border-bottom-right-radius: $borderRadius;
-                            border-top-left-radius: $borderRadius;
+                                .text {
+                                    font-size: 0.7em;
+                                }
+
+                                display: block;
+
+                                border-radius: 0;
+                                border-bottom-right-radius: $borderRadius;
+                                border-top-left-radius: $borderRadius;
+                            }
                         }
                     }
-                }
 
-                .content:hover {
-                    .explain .button {
-                        background-color: $color13;
+                    .content:hover {
+                        .explain .button {
+                            background-color: $color13;
+                        }
+                    }
+
+                    strong {
+                        color: $lowlight;
+                    }
+
+                    .verbatim {
+                        color: $highlight;
+                    }
+
+                    .nobr {
+                        display: block;
+                        margin: $unit 0;
                     }
                 }
+            }
 
-                strong {
-                    color: $lowlight;
-                }
-
-                .verbatim {
-                    color: $highlight;
-                }
-
-                .nobr {
-                    display: block;
-                    margin: $unit 0;
+            .didYouKnowFact.leave {
+                li .content {
+                    animation-name: swingout;
+                    animation-duration: $animationLength;
                 }
             }
-        }
 
-        .didYouKnowFact.leave {
-            li .content {
-                animation-name: swingout;
-                animation-duration: $animationLength;
+            @keyframes fadein {
+                from { opacity: 0; }
+                to   { opacity: 1; }
             }
-        }
 
-        @keyframes fadein {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        .translation {
-            animation: fadein 0.3s;
-            font-family: Source Sans Pro;
-            @extend .border-box-sizing;
-            padding: 0 2em;
-            margin-top: 2em;
-            width: 100%;
-            color: white;
-            font-style: italic;
-            font-weight: 600;
-            text-align: center;
-            font-size: 1.5em;
+            .translation {
+                animation: fadein 0.3s;
+                font-family: Source Sans Pro;
+                @extend .border-box-sizing;
+                padding: 0 2em;
+                margin-top: 2em;
+                width: 100%;
+                color: white;
+                font-style: italic;
+                font-weight: 600;
+                text-align: center;
+                font-size: 1.5em;
+            }
         }
     }
+
 }
 
 .studyOuter {

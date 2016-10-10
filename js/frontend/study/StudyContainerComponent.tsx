@@ -295,7 +295,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
         ]).then(result => {
             let profile = { studyPlan: result[0], knowledge: this.knowledge }
             this.newFactsSelector = createNewFactsSelector(profile, 
-                this.knowledge, this.factSelector, 0.1, 10, this.props.corpus)
+                this.knowledge, this.factSelector, 0.1, 50, this.props.corpus)
 
             this.processExposures(result[1])
 

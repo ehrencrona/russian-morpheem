@@ -41,12 +41,12 @@ export default class StudyPlanComponent extends Component<Props, State> {
         let repeatCount = DEFAULT_REPEAT_COUNT
         let newCount = DEFAULT_NEW_COUNT
 
+        let newFacts = this.props.newFactSelector(false).map(s => s.fact)
+
         if (this.props.profile.studyPlan.isEmpty()) {
             let comparator = (s1, s2) => s2.score - s1.score
 
             let repeatFacts = this.props.factSelector.chooseFact(new Date()).sort(comparator).map(s => s.fact)
-
-            let newFacts = this.props.newFactSelector(false).map(s => s.fact)
 
             studiedFacts = new StudiedFacts(newFacts, repeatFacts)
 
@@ -55,8 +55,11 @@ export default class StudyPlanComponent extends Component<Props, State> {
         }
         else {
             studiedFacts = this.props.profile.studyPlan.getFacts()
+
             repeatCount = studiedFacts.repeatedFacts.length
             newCount = studiedFacts.newFacts.length
+
+            studiedFacts.newFacts = studiedFacts.newFacts.concat(newFacts)
         }
 
         this.setState({  
@@ -118,6 +121,8 @@ export default class StudyPlanComponent extends Component<Props, State> {
                 onClick={ () => this.setState({onTab: tab}) }>{ label }</div>
         }
 
+        let counter = this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount'
+
         return <div className='studyPlan'>
             <h2>Study Plan</h2>
 
@@ -133,10 +138,20 @@ export default class StudyPlanComponent extends Component<Props, State> {
                         this.state.studiedFacts.repeatedFacts.slice(0, this.state.repeatCount))
             }
         
-            <div className='button' onClick={ 
-                () => this.changeCount(this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount', -1) }>Less</div>
-            <div className='button' onClick={ 
-                () => this.changeCount(this.state.onTab == OnTab.NEW ? 'newCount' : 'repeatCount', 1) }>More</div>
+            { 
+                this.state[counter] > 0 ?
+                    <div className='button' onClick={ 
+                        () => this.changeCount(counter, -1) }>Less</div>
+                    :
+                    null
+            }
+            {
+                this.state[counter] < this.state.studiedFacts.repeatedFacts.length ?
+                    <div className='button' onClick={ 
+                        () => this.changeCount(counter, 1) }>More</div>
+                    :
+                    null
+            }
 
             <div className='button' onClick={ 
                 () => this.props.onSubmit(this.state.studiedFacts) }>Done</div>

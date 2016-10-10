@@ -60,7 +60,6 @@ export default class SentenceComponent extends Component<Props, State> {
 
     render() {
         let reveal = this.props.reveal
-        let capitalize = true
 
         let spacedMap = (list: StudyToken[], callback: (item: StudyToken, index: number) => any) => {
             let result = []
@@ -128,15 +127,14 @@ export default class SentenceComponent extends Component<Props, State> {
                     true))
         }
 
+        let capitalize = (str) => str.toUpperCase() + str.substr(1) 
+        let capitalizeNext = true
+
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
             {
                 spacedMap(tokens, (token, index) => {
                     let className = 'word'
                     let text = token.jp
-
-                    if (capitalize && text) {
-                        text = text[0].toUpperCase() + text.substr(1)
-                    }
 
                     if (token instanceof StudyWord && token.word.omitted) {
                         text = '(' + text + ')'
@@ -152,6 +150,10 @@ export default class SentenceComponent extends Component<Props, State> {
                         className += ' studied'
                     }
 
+                    if (capitalizeNext && text) {
+                        text = capitalize(text)
+                    }
+
                     if (token instanceof StudyWord) {
                         if (highHighlight && highHighlight(token)) {
                             className += ' highlight high'
@@ -159,9 +161,9 @@ export default class SentenceComponent extends Component<Props, State> {
                         else if (lowHighlight && lowHighlight(token)) {
                             className += ' highlight low'
                         }
-                    
-                        capitalize = token.jp && Words.SENTENCE_ENDINGS.indexOf(token.jp) >= 0
                     }
+
+                    capitalizeNext = text && Words.SENTENCE_ENDINGS.indexOf(text) >= 0
 
                     return <div key={ index } className={ className } onClick={ () => token instanceof StudyWord && this.props.wordClicked(token) }>
                             { text || <span>&nbsp;</span>}
@@ -217,6 +219,12 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let trySize = (lo: number, mid: number, hi: number) => {
             if (hi - lo < 4) {
+                return
+            }
+
+            if (isNaN(lo) || isNaN(mid) || isNaN(hi)) {
+                console.error('invalid parameters for trySize', lo, mid, hi)
+
                 return
             }
 
