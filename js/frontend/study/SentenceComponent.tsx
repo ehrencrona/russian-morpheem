@@ -127,7 +127,7 @@ export default class SentenceComponent extends Component<Props, State> {
                     true))
         }
 
-        let capitalize = (str) => str.toUpperCase() + str.substr(1) 
+        let capitalize = (str) => str[0].toUpperCase() + str.substr(1) 
         let capitalizeNext = true
 
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
