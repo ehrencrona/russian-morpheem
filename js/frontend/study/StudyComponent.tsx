@@ -434,7 +434,7 @@ console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
                 <div className={ 'start' + (percentage == 0 ? ' empty' : '')}>&nbsp;</div>
             
                 <div className='bar'>
-                    <div className='full' style={ { width: percentage + '%' }}/>
+                    <div className='full' style={ { width: percentage + '%' }}>&nbsp;</div>
                 </div>
 
                 <div className={ 'end'  + (percentage == 100 ? ' full' : '') }>&nbsp;</div>

@@ -92,7 +92,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
                 <div className={ 'start' + (percentage == 0 ? ' empty' : '')}>&nbsp;</div>
             
                 <div className='bar'>
-                    <div className='full' style={ { width: percentage + '%' }}/>
+                    <div className='full' style={ { width: percentage + '%' }}>&nbsp;</div>
                 </div>
 
                 <div className={ 'end'  + (percentage == 100 ? ' full' : '') }>&nbsp;</div>
