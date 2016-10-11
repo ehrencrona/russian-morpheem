@@ -85,7 +85,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
     }
 
     renderProgress(fact: Fact) {
-        let percentage = Math.max(1 - this.props.factSelector.getExpectedRepetitions(fact) / EXPECTED_REPETITIONS_FOR_NEW, 0)
+        let percentage = 100 * Math.max(1 - this.props.factSelector.getExpectedRepetitions(fact) / EXPECTED_REPETITIONS_FOR_NEW, 0)
 
         return <div className='progress'>
             <div className='barContainer'>
