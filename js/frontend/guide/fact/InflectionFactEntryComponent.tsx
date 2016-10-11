@@ -37,7 +37,7 @@ export default class InflectionFactEntryComponent extends Component<Props, State
             <dt>{
                 this.state.exampleWords.map(w => <div key={ w.getId() }>{ w.toText() }</div>)
             }</dt>
-            <dd>{ FORMS[this.props.fact.form].name } forms</dd>
+            <dd>{ FORMS[this.props.fact.form].name }</dd>
         </dl>
     }
 }

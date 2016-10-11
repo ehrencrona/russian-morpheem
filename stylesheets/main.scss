@@ -1727,6 +1727,7 @@ $overlayPadding: 4 * $unit;
                 justify-content: center;
                 
                 .more, .less {
+                    cursor: pointer;
                     padding: 0.5em 10%;
 
                     svg {

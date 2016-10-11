@@ -180,21 +180,13 @@ export default class StudyPlanComponent extends Component<Props, State> {
                 </div>
 
                 <div className='button done' onClick={ 
-                    () => this.props.onSubmit(studiedFacts) }>Done</div>
+                    () => this.props.onSubmit(new StudiedFacts(
+                        studiedFacts.newFacts.slice(0, this.state.newCount),
+                        studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
+                    )) }>Done</div>
             </div>
         </div>
     }
-
-    submit() {
-        let studiedFacts = this.state.studiedFacts
-
-        this.props.profile.studyPlan.setFacts(
-            new StudiedFacts(
-                studiedFacts.newFacts.slice(0, this.state.newCount),
-                studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
-            ), this.props.factSelector)
-    }
-
 }
 
 function eliminateDuplicates(facts: Fact[]): Fact[] {
