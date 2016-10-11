@@ -219,22 +219,17 @@ export default class StudyComponent extends Component<Props, State> {
 
         facts.forEach(addFact)
 
+        // if you clicked on a word but you ought to know all facts about that word,
+        // we should still show something because you did click it.
         if (!unknown.length && somethingIsUnknown) {
             unknown = known
-            known = []
         }
-
-        this.state.knownFacts.concat(this.state.unknownFacts).forEach(fact => {
-            unknown = excludeFact(fact, unknown)
-            known = excludeFact(fact, known)
-        })
 
         if (unknown.length) {
             this.sortFactsToExplain(unknown)
 
             this.setState({
                 didYouKnow: unknown,
-                knownFacts: this.state.knownFacts.concat(known),
                 stage: Stage.DID_YOU_KNOW,
                 returnToStage: returnToStage,
                 highlightFact: unknown[0]
@@ -358,7 +353,7 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     render() {
-        let reveal = this.state.stage !== Stage.TEST
+        let reveal = this.state.stage !== Stage.TEST && this.state.returnToStage !== Stage.TEST
         let sentence = this.props.sentence
 
 console.log('Sentence: ' + sentence.toString() + ' (#' + sentence.id + ')')
