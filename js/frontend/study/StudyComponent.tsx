@@ -428,7 +428,6 @@ console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
 
     renderProgress() {
         let percentage = Math.round(this.props.profile.studyPlan.getProgress(this.props.factSelector) * 100);
-        percentage = 30
 
         return <div className='progress' onClick={ this.props.openPlan }>
             <div className='barContainer'>
