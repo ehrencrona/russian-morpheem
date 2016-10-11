@@ -162,6 +162,10 @@ export class FixedIntervalFactSelector {
         factIds.forEach((factId) => {
             let lastStudied = this.studying[factId]
 
+            if (!lastStudied) {
+                return
+            }
+
             let age = timeSince(lastStudied, now)
             let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1)]
 
