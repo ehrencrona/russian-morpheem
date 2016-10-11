@@ -215,7 +215,7 @@ export default class StudyComponent extends Component<Props, State> {
         }
 
         facts = facts.filter((f) => 
-            !isGiveaway(f, hiddenFacts) && isWorthExplaining(f.fact, f.words[0].word))
+            !isGiveaway(f, hiddenFacts) && (!f.words.length || isWorthExplaining(f.fact, f.words[0].word)))
 
         facts.forEach(addFact)
 
