@@ -160,7 +160,10 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         let sentenceScore = chooseHighestScoreSentence(sentenceScores)
 
         if (!sentenceScore) {
-            throw new Error('No sentence could be picked.')
+            console.error('No sentence could be picked for ' + factScores.map(f => f.fact.getId()))
+
+            this.setState({ sentence: null, done: true })
+            return
         }
 
         let sentence = sentenceScore.sentence
