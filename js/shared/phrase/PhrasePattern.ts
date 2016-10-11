@@ -128,10 +128,10 @@ function simplePresentTransform(): WordToString {
     }
 }
 
-function progressiveTransform(): WordToString {
+function englishOnlyTransform(pos: string, englishForm: string): WordToString {
     return (word: Word) => {
-        if (word instanceof InflectedWord && word.pos == 'v') {
-            return word.word.getEnglish('prog')
+        if (word instanceof InflectedWord && word.pos == pos) {
+            return word.word.getEnglish(englishForm)
         }
 
         return defaultWordToString(word)
@@ -142,8 +142,8 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'inf': formTransform('v', ['inf']),
     'pres': simplePresentTransform(),
     '1sg': formTransform('v', ['1']),
-    'prog': formTransform('v', ['prog']),
-    'past': formTransform('v', ['past']),
+    'prog': englishOnlyTransform('v', 'prog'),
+    'past': englishOnlyTransform('v', 'past'),
     'sg': formTransform('n', ['nom']),
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl']),
