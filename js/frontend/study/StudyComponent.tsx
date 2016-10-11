@@ -325,7 +325,7 @@ export default class StudyComponent extends Component<Props, State> {
             />
         }
         else if (this.state.stage == Stage.CONFIRM) {
-            return <div>
+            return <div className='lowerContainer'>
                 <div className='studyButtonBar'>
                     <div className='button' onClick={ () => this.next() }>Continue</div>
                 </div>
@@ -333,7 +333,7 @@ export default class StudyComponent extends Component<Props, State> {
             </div>
         }
         else if (this.state.stage == Stage.REVEAL) {
-            return <div>
+            return <div className='lowerContainer'>
                 <div className='studyButtonBar'>
                     <div className='button left small' onClick={ () => this.iWasRight() }><span className='line'>I was</span> right</div>
                     <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) 
@@ -343,7 +343,7 @@ export default class StudyComponent extends Component<Props, State> {
             </div>
         }
         else {
-            return <div>
+            return <div className='lowerContainer'>
                 <div className='studyButtonBar'>
                     <div className='button' onClick={ () => this.reveal() }>Reveal</div>
                 </div>

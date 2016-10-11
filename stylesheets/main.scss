@@ -1317,8 +1317,11 @@ $animationLength: 0.2s;
             }
         }
 
-        .lower {
+        .lowerContainer {
             background-color: $colorLower;
+        }
+        
+        .lower {
             display: flex;
             flex-direction: column;
             align-items: center;
