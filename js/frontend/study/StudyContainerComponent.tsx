@@ -26,6 +26,7 @@ import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
+import AbstractAnyWord from '../../shared/AbstractAnyWord'
 import Word from '../../shared/Word'
 
 import StudyComponent from './StudyComponent'
@@ -41,6 +42,7 @@ import ForgettingStats from './ForgettingStats'
 
 import StudentProfile from '../../shared/study/StudentProfile'
 import Phrase from '../../shared/phrase/Phrase'
+import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 import { WordMatched } from '../../shared/phrase/Match'
@@ -221,8 +223,8 @@ console.log('Fact ' + fact.getId())
                 return result
             }
 
-            let wordsRequireFact = (words: WordMatched[], fact: Fact) => {
-                return !!words.find(word => wordRequiresFact(word.word, fact))
+            let findWordMatched = (words: WordMatched[], fact: Fact) => {
+                return words.find(word => wordRequiresFact(word.word, fact))
             }
 
             let oughtToKnowAllFacts = (words: WordMatched[]) => {
@@ -240,15 +242,16 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 }) 
             }
 
-            let longestPhrase: Fact
-            let longestPhraseLength: number = -1
+            let longestKnownPhrase: Fact
+            let longestKnownPhraseLength: number = -1
+            let mustUseFact: Fact
 
             let candidateFact = (fact: Fact, words: WordMatched[]) => {
                 console.log('Candidate phrase: ' + fact.getId() + ' - ' + words.map(w => w.word.jp).join(' '))
                 
-                if (words.length > longestPhraseLength) {
-                    longestPhrase = fact
-                    longestPhraseLength = words.length
+                if (words.length > longestKnownPhraseLength) {
+                    longestKnownPhrase = fact
+                    longestKnownPhraseLength = words.length
                 }
             }
 
@@ -256,28 +259,55 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 let match = phrase.match({ sentence: sentence, words: sentence.words, facts: this.props.corpus.facts, study: CaseStudy.STUDY_CASE })
 
                 if (match) {
-                    if (wordsRequireFact(match.words, fact) && oughtToKnowAllFacts(match.words)) {
+                    let wordMatched = findWordMatched(match.words, fact)
+
+                    if (wordMatched && oughtToKnowAllFacts(match.words)) {
                         candidateFact(phrase, match.words)
                     }
                     else {
+                        if (wordMatched) { // ...but didn't know the words
+                            let wordMatch = wordMatched.wordMatch
+
+                            // we still need to use the phrase since the phrase 
+                            // might have an entirely different meaning from the word.
+                            // the exception is noun phrases, where the meaning is not transformed
+                            if (!(wordMatch instanceof PhraseMatch && 
+                                wordMatch.phrase.id == 'np')) {
+                                console.log('Didnt know all facts in ' + fact.getId() + ' - ' + 
+                                    match.words.map(w => w.word.jp).join(' ') + ' but must use it anyway since ' +
+                                    wordMatched.word.toText() + ' might mean something else in it')
+
+                                mustUseFact = phrase
+                            }
+                            else {
+                               console.log('Didnt know all facts in ' + fact.getId() + ' - ' + 
+                                    match.words.map(w => w.word.jp).join(' ') + ' and wont use it since ' +
+                                    wordMatched.word.toText() + ' is part of a noun phrase')
+                            } 
+                        }
+
                         phrase.getCaseFacts().forEach((caseFact) => {
                             let words = match.words.filter(wm => wm.wordMatch.isCaseStudy() &&
                                 ((wm.wordMatch as any) as CaseStudyMatch).getCaseStudied() == caseFact.grammaticalCase)
 
-                            if (wordsRequireFact(words, fact) && oughtToKnowAllFacts(words)) {
-                                candidateFact(caseFact, words)
+                            if (findWordMatched(words, fact)) {
+                                if (oughtToKnowAllFacts(words)) {
+                                    candidateFact(caseFact, words)
+                                }
                             }
                         })
                     }
                 }
             })
 
-            if (longestPhrase) {
-                console.log('Switching to fact ' + longestPhrase.getId())
+            let switchTo = longestKnownPhrase || mustUseFact
+
+            if (switchTo) {
+                console.log('Switching to fact ' + switchTo.getId())
 
                 studiedFacts = studiedFacts.filter(f => f.getId() != fact.getId())
 
-                studiedFacts.push(longestPhrase)
+                studiedFacts.push(switchTo)
             }
         }
 
