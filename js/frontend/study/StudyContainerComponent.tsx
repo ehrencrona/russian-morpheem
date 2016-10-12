@@ -118,7 +118,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
 /*
         {
-            let sentence = this.props.corpus.sentences.get(2259)
+            let sentence = this.props.corpus.sentences.get(3405)
 
             this.knowledge.getKnowledge = (fact: Fact) => {
                 return Knowledge.KNEW
@@ -130,7 +130,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
             this.setState({
                 sentence: sentence,
-                facts: this.expandFact(this.props.corpus.facts.get('работа'), sentence)
+                facts: this.expandFact(this.props.corpus.facts.get('ещё'), sentence)
             })
 
             return
@@ -181,11 +181,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
     }
     
     expandFact(fact: Fact, sentence: Sentence) {
-console.log('Sentence: ' + sentence.toString())
-
         let additionalFact: Fact
-
-console.log('Fact ' + fact.getId())
 
         let studiedFacts = [ fact ]
 
@@ -256,7 +252,11 @@ console.log('Did not ought to know ' + visitedFact.getId())
             }
 
             sentence.phrases.forEach(phrase => {
-                let match = phrase.match({ sentence: sentence, words: sentence.words, facts: this.props.corpus.facts, study: CaseStudy.STUDY_CASE })
+                let match = phrase.match({ 
+                    sentence: sentence, 
+                    words: sentence.words, 
+                    facts: this.props.corpus.facts, 
+                    study: CaseStudy.STUDY_BOTH })
 
                 if (match) {
                     let wordMatched = findWordMatched(match.words, fact)
