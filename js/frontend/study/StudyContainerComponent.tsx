@@ -303,12 +303,6 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 profile: profile
             })
 
-
-
-profile.studyPlan.setFacts(new StudiedFacts([ this.props.corpus.facts.get('gen-possession') ], []), this.factSelector)
-
-
-
             if (!profile.studyPlan.isEmpty()) {
                 this.studyPlanLoaded()
             }
