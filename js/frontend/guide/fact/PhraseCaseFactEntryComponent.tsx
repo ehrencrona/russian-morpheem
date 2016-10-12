@@ -26,8 +26,10 @@ export default class PhraseCaseFactEntryComponent extends Component<Props, State
     constructor(props) {
         super(props)
 
+        let phrase: Phrase = props.fact.phrase
+
         this.state = {
-            matches: findPhraseExamples(props.fact, props.corpus, props.knowledge, SENTENCES_WANTED)
+            matches: findPhraseExamples(phrase, props.corpus, props.knowledge, SENTENCES_WANTED)
         }
     }
 

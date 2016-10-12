@@ -161,7 +161,14 @@ export default class Sentence {
     }
 
     toString() {
-        return this.innerToString((word) => word.toString())
+        return this.innerToString((word) => {
+            if (word.omitted) {
+                return '[' + word.toString() + ']'
+            }
+            else {
+                return word.toString()
+            }
+        })
     }
 
     toUnambiguousHtml(words: Words) {
@@ -177,6 +184,10 @@ export default class Sentence {
             }
             else {
                 result = htmlEscape(word.toString())
+            }
+
+            if (word.omitted) {
+                result = '[' + result + ']'
             }
 
             return result

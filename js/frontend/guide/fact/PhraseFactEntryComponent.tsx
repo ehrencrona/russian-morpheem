@@ -30,6 +30,9 @@ export default class PhraseFactEntryComponent extends Component<Props, State> {
     }
 
     render() {
+        if (!this.state.matches.length) {
+            return <dl><dt>{ this.props.fact.description }</dt><dd>&nbsp;</dd></dl>            
+        }
 
         return <dl>
             { 
