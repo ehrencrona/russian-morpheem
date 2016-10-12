@@ -266,24 +266,14 @@ console.log('Did not ought to know ' + visitedFact.getId())
                     }
                     else {
                         if (wordMatched) { // ...but didn't know the words
-                            let wordMatch = wordMatched.wordMatch
-
                             // we still need to use the phrase since the phrase 
                             // might have an entirely different meaning from the word.
-                            // the exception is noun phrases, where the meaning is not transformed
-                            if (!(wordMatch instanceof PhraseMatch && 
-                                wordMatch.phrase.id == 'np')) {
-                                console.log('Didnt know all facts in ' + fact.getId() + ' - ' + 
-                                    match.words.map(w => w.word.jp).join(' ') + ' but must use it anyway since ' +
-                                    wordMatched.word.toText() + ' might mean something else in it')
 
-                                mustUseFact = phrase
-                            }
-                            else {
-                               console.log('Didnt know all facts in ' + fact.getId() + ' - ' + 
-                                    match.words.map(w => w.word.jp).join(' ') + ' and wont use it since ' +
-                                    wordMatched.word.toText() + ' is part of a noun phrase')
-                            } 
+                            console.log('Didnt know all facts in ' + phrase.getId() + ' - ' + 
+                                match.words.map(w => w.word.jp).join(' ') + ' but must use it anyway since ' +
+                                wordMatched.word.toText() + ' might mean something else in it')
+
+                            mustUseFact = phrase
                         }
 
                         phrase.getCaseFacts().forEach((caseFact) => {
