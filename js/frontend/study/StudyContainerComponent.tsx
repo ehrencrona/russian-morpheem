@@ -16,9 +16,6 @@ import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
 import StudyPlanComponent from './StudyPlanComponent'
 
-import sentencesForFacts from '../../shared/study/sentencesForFacts'
-import topScores from '../../shared/study/topScores'
-
 import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/SentencesByFactIndex'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
@@ -34,6 +31,9 @@ import Word from '../../shared/Word'
 import StudyComponent from './StudyComponent'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelector'
+import sentencesForFacts from '../../shared/study/sentencesForFacts'
+import topScores from '../../shared/study/topScores'
+import { StudiedFacts } from '../../shared/study/StudyPlan'
 import { fetchStudyPlan } from './FrontendStudentProfile'
 
 import ExplainFormComponent  from './ExplainFormComponent'
@@ -134,7 +134,6 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
             return
         }
 */
-
         // if studying phrases, remove any sentences that don't actually match the phrase.
         sentenceScores = sentenceScores.filter((score) => {
             let phrase: Phrase
@@ -303,6 +302,12 @@ console.log('Did not ought to know ' + visitedFact.getId())
             this.setState({
                 profile: profile
             })
+
+
+
+profile.studyPlan.setFacts(new StudiedFacts([ this.props.corpus.facts.get('gen-possession') ], []), this.factSelector)
+
+
 
             if (!profile.studyPlan.isEmpty()) {
                 this.studyPlanLoaded()

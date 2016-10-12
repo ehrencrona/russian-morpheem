@@ -79,10 +79,7 @@ export default class Phrase implements Fact {
       * sentence facts.
       */
     visitFactsForSentence(visitor: (Fact) => any) {
-        // the fact "genitive means possession" only has a case fact
-        if (this.hasWordFacts) {
-            visitor(this)
-        }
+        visitor(this)
 
         this.getCaseFacts().forEach(visitor)
     }

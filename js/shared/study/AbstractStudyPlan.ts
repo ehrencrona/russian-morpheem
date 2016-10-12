@@ -53,7 +53,11 @@ export default class AbstractStudyPlan implements StudyPlan {
     }
 
     getProgress(knowledge: FixedIntervalFactSelector): number {
-        return 1 - Math.min(1, calculateExpectedRepetitions(this.getFacts(), knowledge) / this.originalExpectedRepetitions)
+        let expectedRepetitions = calculateExpectedRepetitions(this.getFacts(), knowledge)
+
+console.log('expected reps', expectedRepetitions,'vs originally', this.originalExpectedRepetitions)
+
+        return 1 - Math.min(1, expectedRepetitions / this.originalExpectedRepetitions)
     }
 
     clear() {
