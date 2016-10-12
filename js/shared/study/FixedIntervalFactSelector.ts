@@ -117,8 +117,8 @@ export class FixedIntervalFactSelector {
         }
     }
 
-    getExpectedRepetitions(fact: Fact): number {
-        let before = new Date(new Date().getTime() + STUDY_SESSION_LENGTH_MS)
+    getExpectedRepetitions(fact: Fact, sessionDurationMs?: number): number {
+        let before = new Date(new Date().getTime() + (sessionDurationMs || STUDY_SESSION_LENGTH_MS))
 
         let lastStudied = this.studying[fact.getId()]
         
