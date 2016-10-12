@@ -7,7 +7,7 @@ import Corpus from '../../../shared/Corpus'
 
 import findPhraseExamples from './findPhraseExamples'
 import { Component, createElement } from 'react'
-import { FORMS } from '../../../shared/inflection/InflectionForms'
+import { FORMS, CASES } from '../../../shared/inflection/InflectionForms'
 
 interface Props {
     fact: PhraseCase
@@ -43,7 +43,7 @@ export default class PhraseCaseFactEntryComponent extends Component<Props, State
                             match.words.map(w => w.word.toText()).join(' ') 
                         }</dt>,
                         <dd>using the {
-                            FORMS[this.props.fact.grammaticalCase].name
+                            FORMS[CASES[this.props.fact.grammaticalCase]].name
                         }</dd>
                      ]
                 )
