@@ -17,6 +17,7 @@ interface Props {
     factSelector: FixedIntervalFactSelector
     newFactSelector: NewFactsSelector
     onSubmit: (studiedFacts: StudiedFacts) => any
+    onMarkAsKnown: (fact: Fact) => Promise<any>
 }
 
 enum OnTab {
@@ -82,6 +83,8 @@ export default class StudyPlanComponent extends Component<Props, State> {
             repeatCount: Math.min(this.state.repeatCount, repeatedFacts.length),
             newCount: Math.min(this.state.newCount, newFacts.length)
         })
+
+        this.props.onMarkAsKnown(fact);
     }
 
     renderProgress(fact: Fact) {

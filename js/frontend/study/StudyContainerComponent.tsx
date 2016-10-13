@@ -21,7 +21,7 @@ import { indexSentencesByFact, SentencesByFactIndex } from '../../shared/Sentenc
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Sentence from '../../shared/Sentence'
 
-import { Exposure, Knowledge } from '../../shared/study/Exposure'
+import { Exposure, Knowledge, Skill } from '../../shared/study/Exposure'
 import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
@@ -364,6 +364,20 @@ console.log('Did not ought to know ' + visitedFact.getId())
                         this.studyPlanLoaded()
                         this.setState({ showPlan: false })
                     }}
+                onMarkAsKnown={
+                    (fact: Fact) => {
+                        return this.exposures.registerExposures([
+                            {
+                                fact: fact.getId(),
+                                time: new Date(),
+                                skill: Skill.SAY_SO,
+                                knew: Knowledge.KNEW,
+                                user: -1,
+                                sentence: null
+                            }
+                        ])
+                    }
+                }
             />
         }
         else if (this.state.sentence) {
