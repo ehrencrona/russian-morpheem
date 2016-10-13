@@ -13,6 +13,7 @@ import ChangeInflectionComponent from './ChangeInflectionComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import DeleteFactButton from './DeleteFactButtonComponent'
 import TagButton from './TagButtonComponent'
+import TopicButton from './TopicsButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import SentencesWithFact from './SentencesWithFactComponent'
 import ExternalSentences from './ExternalSentencesComponent'
@@ -120,6 +121,8 @@ export default class WordFactComponent extends Component<Props, State> {
                     onDelete={ () => this.props.tab.close() }/>
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
+
+                <TopicButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
 
             <div className='buttonBar'>

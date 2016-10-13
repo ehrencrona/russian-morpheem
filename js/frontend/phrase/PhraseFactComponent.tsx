@@ -7,6 +7,7 @@ import Tab from '../OpenTab'
 import MoveFactButton from '../MoveFactButtonComponent'
 import DeleteFactButton from '../DeleteFactButtonComponent'
 import TagButton from '../TagButtonComponent'
+import TopicButton from '../TopicsButtonComponent'
 import SentencesWithFact from '../SentencesWithFactComponent'
 import AddSentenceToPhraseComponent from './AddSentenceToPhraseComponent'
 import PhrasePatternComponent from './PhrasePatternComponent'
@@ -119,6 +120,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     onDelete={ () => this.props.tab.close() }/>
 
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <TopicButton corpus={ this.props.corpus} fact={ this.props.fact } />
                 <div className='factId'>
                     { this.props.fact.id }
                 </div>

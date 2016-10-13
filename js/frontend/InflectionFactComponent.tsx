@@ -10,6 +10,7 @@ import Tab from './OpenTab'
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import MoveFactButton from './MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
+import TopicButton from './TopicsButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
 import ExternalSentencesComponent from './ExternalSentencesComponent'
 import SentencesWithFact from './SentencesWithFactComponent';
@@ -98,6 +99,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
                     />
                 <TagButton corpus={ this.props.corpus} fact={ this.props.fact } />
+                <TopicButton corpus={ this.props.corpus} fact={ this.props.fact } />
             </div>
         
             { tab }
