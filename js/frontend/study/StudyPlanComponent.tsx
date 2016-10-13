@@ -44,10 +44,14 @@ export default class StudyPlanComponent extends Component<Props, State> {
 
         let newFacts = this.props.newFactSelector(false).map(s => s.fact)
 
-        if (this.props.profile.studyPlan.isEmpty()) {
+        let studyPlan = this.props.profile.studyPlan
+
+        if (studyPlan.isEmpty()) {
             let comparator = (s1, s2) => s2.score - s1.score
 
             let repeatFacts = this.props.factSelector.chooseFact(new Date()).sort(comparator).map(s => s.fact)
+
+            newFacts = studyPlan.getQueuedFacts().concat(newFacts);
 
             studiedFacts = new StudiedFacts(newFacts, repeatFacts)
 
@@ -55,7 +59,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
             newCount = Math.min(newCount, studiedFacts.newFacts.length)
         }
         else {
-            studiedFacts = this.props.profile.studyPlan.getFacts()
+            studiedFacts = studyPlan.getFacts()
 
             repeatCount = studiedFacts.repeatedFacts.length
             newCount = studiedFacts.newFacts.length

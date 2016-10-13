@@ -10,6 +10,7 @@ import Tab from './Tab'
 import TabComponent from './TabComponent'
 import SentencesComponent from './sentence/SentencesComponent'
 import PhrasesComponent from './sentence/PhrasesComponent'
+import TopicsComponent from './metadata/TopicsComponent'
 
 interface Props {
     corpus: Corpus
@@ -87,6 +88,10 @@ export default class TabSetComponent extends Component<Props, State> {
         if (!state.tabs.find((tab) => tab.id == 'phrases')) {
             state.tabs.push(this.createPhrasesTab())
         }
+
+        if (!state.tabs.find((tab) => tab.id == 'topics')) {
+            state.tabs.push(this.createTopicsTab())
+        }
     }
 
     componentDidUpdate() {
@@ -144,6 +149,10 @@ export default class TabSetComponent extends Component<Props, State> {
                 return this.createPhrasesTab()
             }
 
+            if (id == 'topics') {
+                return this.createTopicsTab()
+            }
+
             console.warn('Could not build tab ' + id)
 
             return null
@@ -173,6 +182,11 @@ export default class TabSetComponent extends Component<Props, State> {
     createPhrasesTab() {
         return new Tab('Phrases', 'phrases',
             <PhrasesComponent corpus={ this.props.corpus } tab={ null } ></PhrasesComponent>, this)
+    }
+
+    createTopicsTab() {
+        return new Tab('Topics', 'topics',
+            <TopicsComponent corpus={ this.props.corpus } tab={ null } ></TopicsComponent>, this)
     }
 
     tabExists(id: string) {

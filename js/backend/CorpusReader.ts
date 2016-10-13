@@ -16,6 +16,7 @@ import { watch } from 'fs'
 import BackendSentenceHistory from './metadata/BackendSentenceHistory'
 import BackendPhraseHistory from './metadata/BackendPhraseHistory'
 import BackendFactoids from './metadata/BackendFactoids'
+import BackendTopics from './metadata/BackendTopics'
 
 export function getCorpusDir(lang) {
     return 'public/corpus/' + (lang == 'ru' ? 'russian' : 'latin') 
@@ -73,7 +74,8 @@ export default function readCorpus(lang, doWatch) {
         corpus.sentenceHistory = new BackendSentenceHistory(corpus.words)
         corpus.phraseHistory = new BackendPhraseHistory()
         corpus.factoids = new BackendFactoids()
-        
+        corpus.topics = new BackendTopics(corpus.facts)
+
         if (doWatch) {
             watchForChangesOnDisk(corpus)
         }

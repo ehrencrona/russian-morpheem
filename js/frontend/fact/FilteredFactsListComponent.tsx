@@ -21,6 +21,7 @@ interface Props {
     filter: (factIndex: FactIndex) => boolean,
     hideTypeFilter?: boolean,
     sort?: (fact1: Fact, fact2: Fact) => number 
+    factEntryChildFactory?: (fact: Fact) => any
 }
 
 interface State {
@@ -120,7 +121,8 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                             corpus={ this.props.corpus }
                             tab={ this.props.tab }
                             onMove={ () => this.forceUpdate() }
-                            />
+                            >{ this.props.factEntryChildFactory ? this.props.factEntryChildFactory(fact) : null 
+                            }</FactsEntryComponent>
                     })
                 }
                 </ul>

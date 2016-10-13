@@ -7,7 +7,7 @@ import Fact from '../../shared/fact/Fact'
 const url = 'mongodb://localhost:27017/factoid';
 const COLLECTION_METADATA = 'factoid'
 
-let db: Db
+export let db: Db
 
 MongoClient.connect(url, function(err, connectedDb) {
     if (err) {

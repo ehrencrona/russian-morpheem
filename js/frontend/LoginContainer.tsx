@@ -15,6 +15,7 @@ import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
 import FrontendPhraseHistory from './metadata/FrontendPhraseHistory'
 import FrontendExternalCorpus from './external/FrontendExternalCorpus'
 import FrontendFactoids from './metadata/FrontendFactoids'
+import FrontendTopics from './metadata/FrontendTopics'
 
 import { setXrArgs } from './sentence/googleTranslate' 
 import { setXrArgs as setRecorderXrArgs } from './Recorder' 
@@ -111,6 +112,7 @@ export default class LoginContainer extends Component<Props, State> {
             corpus.phraseHistory = new FrontendPhraseHistory(xrArgs, corpus.lang)
             corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus)
             corpus.factoids = new FrontendFactoids(xrArgs, corpus.lang)
+            corpus.topics = new FrontendTopics(xrArgs, corpus.lang, corpus.facts)
 
             setXrArgs(xrArgs)
             setRecorderXrArgs(xrArgs)

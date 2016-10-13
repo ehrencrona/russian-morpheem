@@ -653,6 +653,10 @@ ul {
     }
 }
 
+.topics ul li {
+    cursor: pointer;
+}
+
 .wordsWithInflection, .factoidRelated {
     .button {
         display: inline-block;

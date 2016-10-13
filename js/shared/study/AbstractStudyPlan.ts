@@ -50,6 +50,10 @@ export default class AbstractStudyPlan implements StudyPlan {
         this.studied = facts
 
         this.originalExpectedRepetitions = calculateExpectedRepetitions(facts, knowledge)
+
+        let allStudied = new Set<string>(facts.getAll().map(f => f.getId()))
+
+        this.queued = this.queued.filter(fact => !allStudied.has(fact.getId()))
     }
 
     getProgress(knowledge: FixedIntervalFactSelector): number {
@@ -106,9 +110,9 @@ function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedInter
     })
 
 
-    let duration = result * 30000;
+    let duration = result * 20000;
 
-    console.log('assuming full study duratcion, expect ' + result + ' reptitions. so duration is actually ' + duration / 60000 + ' minutes')
+    console.log('assuming full study duration, expect ' + result + ' reptitions. so duration is actually ' + duration / 60000 + ' minutes')
 
     result = 0
 
