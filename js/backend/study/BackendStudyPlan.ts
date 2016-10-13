@@ -11,6 +11,11 @@ const COLLECTION = 'studyplan'
 import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 
+const HOUR_MS = 60 * 60 * 1000;
+
+const EXPIRY_TIME_MS = 12 * HOUR_MS;
+const RENEWAL_TIME_MS = 2 * HOUR_MS;
+
 let db: Db
 
 MongoClient.connect(url, function(err, connectedDb) {
@@ -85,8 +90,28 @@ export function fetchPlan(userId: number, corpus: Corpus): Promise<StudyPlan> {
             .then(doc => {
                 let studyPlan = doc as SerializedStudyPlan
 
+                if (!doc.lastAccess || new Date().getTime() - doc.lastAccess.getTime() > EXPIRY_TIME_MS) {
+                    doc = null
+                }
+
+                if (new Date().getTime() - doc.lastAccess.getTime() > RENEWAL_TIME_MS) {
+                    doc.lastAccess = new Date();
+
+                    db.collection(COLLECTION).updateOne({ user: userId }, doc,
+                        (error, result) => {
+                            if (error) {
+                                console.error('While updating last access time: ', error)
+                            }
+                            else {
+                                console.log('Updated last access time for ' + userId)
+                            }
+                        }
+                    )
+                }
+
                 if (!doc) {
                     studyPlan = {
+                        lastAccess: new Date(),
                         queued: [],
                         repeatedFacts: [],
                         newFacts: [],

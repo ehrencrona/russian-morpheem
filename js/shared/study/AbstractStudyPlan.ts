@@ -89,6 +89,7 @@ console.log('expected reps', expectedRepetitions,'vs originally', this.originalE
         let factsToIds = (facts: Fact[]) => facts.map(f => f.getId())
 
         return  {
+            lastAccess: new Date(),
             newFacts: factsToIds(this.studied.newFacts),
             repeatedFacts: factsToIds(this.studied.repeatedFacts),
             queued: factsToIds(this.queued),

@@ -38,6 +38,7 @@ export interface StudyPlan {
 }
 
 export interface SerializedStudyPlan {
+    lastAccess: Date
     user?: number
     newFacts: string[]
     repeatedFacts: string[]
