@@ -26,6 +26,7 @@ export default class FrontendTopics implements Topics {
     storeTopic(topic: Topic) {
         return xr.put(`/api/${ this.lang }/topic/` + topic.id, topic.serialize(), this.xrArgs)
                 .catch(handleException)
+                .then(() => topic)
     }
 
     setTopic(topic: Topic) {
@@ -48,7 +49,7 @@ export default class FrontendTopics implements Topics {
 
         this.internalSetTopic(topic)
 
-        return this.storeTopic(topic).then(() => topic)
+        return this.storeTopic(topic)
     }
 
     getTopic(id: string): Promise<Topic> {

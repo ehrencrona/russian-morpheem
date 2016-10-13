@@ -35,7 +35,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
         let topic = this.props.topic
         let factSearch, factList
 
-        return <div>
+        return <div className='topic'>
             <div className='field'>
                 <div className='label'>
                     Name
@@ -59,7 +59,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     Description
                 </div>
             
-                <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' 
+                <textarea lang={ this.props.corpus.lang } autoCapitalize='off' 
                     defaultValue={ topic.description } 
                     onBlur={ (e) => {
                         let input = e.target as HTMLInputElement

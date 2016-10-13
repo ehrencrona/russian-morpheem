@@ -653,8 +653,10 @@ ul {
     }
 }
 
-.topics ul li {
-    cursor: pointer;
+.topics {
+    ul li {
+        cursor: pointer;
+    }
 }
 
 .wordsWithInflection, .factoidRelated {
@@ -777,12 +779,7 @@ ul {
     }
 }
 
-.phrase {
-    .error {
-        color: $color7;
-        font-weight: bold;
-    }
-
+.phrase, .topic {
     .field {
         padding: 2 * $unit 0;
 
@@ -795,6 +792,13 @@ ul {
             @extend .border-box-sizing;
             width: 100%
         }
+    }
+}
+
+.phrase {
+    .error {
+        color: $color7;
+        font-weight: bold;
     }
 
     .pattern .phraseFacts {
