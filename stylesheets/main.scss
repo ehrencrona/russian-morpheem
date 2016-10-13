@@ -961,6 +961,54 @@ ul.stats {
     margin: (4 * $unit) 0;
 }
 
+.tab .content .buttonBar .tags {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin-top: $unit;
+
+    h3 {
+        margin: 0;
+    }
+
+    h3:hover {
+        background-color: $color6;
+    }
+
+    .content {
+        background-color: darken($color17, 7%);
+
+        .existing {
+            margin-bottom: 2 * $unit;
+
+            ul {
+                display: flex;
+                flex-wrap: wrap;
+
+                li {
+                    background-color: $color6-light;
+                    padding: $unit 2 * $unit;
+                    margin: $unit;
+                    border-radius: $unit;
+                }
+
+                li:hover {
+                    background-color: darken($color6, 10%);
+                    text-decoration: underline;
+                }
+            }
+        }        
+
+        .add {
+            margin: 0 $unit;
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
 .addWord {
     display: flex;
     padding: 2 * $unit;

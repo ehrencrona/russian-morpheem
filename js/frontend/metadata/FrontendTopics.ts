@@ -9,7 +9,7 @@ import Facts from '../../shared/fact/Facts'
 
 export default class FrontendTopics implements Topics {
     all: Map<string, Topic>
-    topicsByFact: Map<string, Topic[]> = new Map()
+    topicsByFact: Map<string, Topic[]>
 
     constructor(public xrArgs: { [name: string]: string}, public lang: string, public facts: Facts) {
         this.xrArgs = xrArgs
@@ -81,8 +81,11 @@ export default class FrontendTopics implements Topics {
     getTopicsOfFact(fact: Fact): Promise<Topic[]> {
         return this.getAll().then((all) => {
             if (!this.topicsByFact) {
+                this.topicsByFact = new Map()
+
                 for (let topic of all) {
                     topic.getFacts().forEach(f => {
+console.log('tbF', topic.id, fact.getId())
                         let topics = this.topicsByFact.get(f.getId())
 
                         if (!topics) {

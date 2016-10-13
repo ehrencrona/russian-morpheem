@@ -11,7 +11,8 @@ interface Props {
 }
 
 interface State {
-    add: boolean
+    open?: boolean
+    add?: boolean
 }
 
 let React = { createElement: createElement }
@@ -24,10 +25,18 @@ export default class TagButtonComponent extends Component<Props, State> {
         super(props)
         
         this.state = {
-            add: !this.props.corpus.facts.getAllTags().length
+            add: !this.props.corpus.facts.getAllTags().length,
+            open: !!localStorage.getItem('lastTagOpen')
         }
+
     }
     
+    untag(tag: string) {
+        this.props.corpus.facts.untag(this.props.fact, tag)
+        
+        this.forceUpdate()
+    }
+
     tag(tag: string) {
         localStorage.setItem('lastTag', tag)
         
@@ -36,9 +45,13 @@ export default class TagButtonComponent extends Component<Props, State> {
         this.setState({ add: false })
     }
 
-    render() {
-        let factIndex = this.props.corpus.facts.indexOf(this.props.fact) + 1;
+    toggleOpenState() {
+        this.setState({ open: !this.state.open })
 
+        localStorage.setItem('lastTagOpen', (this.state.open ? '' : 'true'))
+    }
+
+    render() {
         let lastTag = localStorage.getItem('lastTag')
 
         let existingTags = this.props.corpus.facts.getTagsOfFact(this.props.fact) 
@@ -46,31 +59,60 @@ export default class TagButtonComponent extends Component<Props, State> {
 
         tags.sort();
 
-        return <div className='tag'>
-            { this.state && this.state.add ?
-                    
-                <input type='text' lang='en' autoCapitalize='off' ref={ (element) => { if (element) element.focus(); this.addTag = element } }/>
-                
-                :
-                
-                <select ref={ (element) => { this.selectTag = element } } defaultValue={ lastTag } onChange={ 
-                        () => this.setState({ add:     
-                            this.selectTag.value == 'newTag' })
-                    } >
-                { [                        
-                        tags.map((tag) =>
-                            <option key={ tag } value={ tag }>{ tag }</option>  
-                        ),
-                        <option key='newTag' value='newTag'>Add Tag</option>
-                ] }
-                </select>
-                
-            }
+        return !this.state.open ?
             <div className='button' onClick={ () => {
-                let tag = (this.selectTag || this.addTag).value
-                 
-                this.tag(tag) 
-            }}>Tag</div>
-        </div>;
+                this.toggleOpenState() 
+            }}>Tags</div>
+
+            :
+
+            <div className='tags'>
+                <h3 onClick={ () => {
+                    this.toggleOpenState() 
+                }}>Tags</h3>
+
+                <div className='content'>
+                    <div className='existing'>
+                    { existingTags.length ? 
+                        <ul>{
+                            existingTags.map(tag => <li
+                                key={ tag } 
+                                className='tag' 
+                                onClick={ () => this.untag(tag) }>{ tag }</li>)
+                        }</ul>
+                        :
+                        <i>No tags.</i>
+                    }
+                    </div>
+
+                    <div className='add'>
+                        { (this.state && this.state.add ?
+                                
+                            <input type='text' lang='en' autoCapitalize='off' ref={ 
+                                (element) => { if (element) element.focus(); this.addTag = element } }/>
+                            
+                            :
+                            
+                            <select ref={ (element) => { this.selectTag = element } } defaultValue={ lastTag } onChange={ 
+                                    () => this.setState({ add:     
+                                        this.selectTag.value == 'newTag' })
+                                } >
+                            { [                        
+                                    tags.map((tag) =>
+                                        <option key={ tag } value={ tag }>{ tag }</option>  
+                                    ),
+                                    <option key='newTag' value='newTag'>Add Tag</option>
+                            ] }
+                            </select>
+                        ) }
+
+                        <div className='button' onClick={ () => {
+                            let tag = (this.selectTag || this.addTag).value
+                            
+                            this.tag(tag) 
+                        }}>Add</div>
+                    </div>
+                </div>
+            </div>
     }
 }
