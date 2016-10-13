@@ -144,6 +144,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     '1sg': formTransform('v', ['1']),
     'prog': englishOnlyTransform('v', 'prog'),
     'past': englishOnlyTransform('v', 'past'),
+    'pastpart': englishOnlyTransform('v', 'pastpart'),
     'sg': formTransform('n', ['nom']),
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl']),

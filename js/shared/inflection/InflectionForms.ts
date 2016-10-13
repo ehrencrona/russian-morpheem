@@ -27,7 +27,7 @@ export enum Gender {
 }
 
 export enum Tense {
-    PRESENT = 1, PAST, PROGRESSIVE
+    PRESENT = 1, PAST, PROGRESSIVE, PAST_PARTICIPLE
 }
 
 export enum GrammaticalCase {
@@ -250,6 +250,7 @@ addForm('std', 'standard form', {})
 
 // English forms
 addForm('prog', 'progressive', { tense: Tense.PROGRESSIVE })
+addForm('pastpart', 'past participle', { tense: Tense.PAST_PARTICIPLE })
 addForm('super', 'superlative', { comparison: Comparison.SUPERLATIVE })
 
 export function getFormName(formId: string) {    
@@ -266,7 +267,7 @@ export function getFormName(formId: string) {
 }
 
 export const ENGLISH_FORMS_BY_POS: { [s: string]: Forms } = {
-    v: new Forms([], [], [['3', 'past', 'prog', 'inf', 'pl', 'pastpl', '1' ]]),
+    v: new Forms([], [], [['3', 'past', 'prog', 'pastpart', 'inf', 'pl', 'pastpl', '1' ]]),
     adj: new Forms([], [], [[ 'adv', 'comp', 'super', 'pl' ]]),
     n: new Forms([], [], [[ 'pl' ]]),
     pron: new Forms([], [], [[ 'acc' ]]),
