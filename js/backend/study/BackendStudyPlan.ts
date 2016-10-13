@@ -90,11 +90,11 @@ export function fetchPlan(userId: number, corpus: Corpus): Promise<StudyPlan> {
             .then(doc => {
                 let studyPlan = doc as SerializedStudyPlan
 
-                if (!doc.lastAccess || new Date().getTime() - doc.lastAccess.getTime() > EXPIRY_TIME_MS) {
+                if (doc && (!doc.lastAccess || new Date().getTime() - doc.lastAccess.getTime() > EXPIRY_TIME_MS)) {
                     doc = null
                 }
 
-                if (new Date().getTime() - doc.lastAccess.getTime() > RENEWAL_TIME_MS) {
+                if (doc && new Date().getTime() - doc.lastAccess.getTime() > RENEWAL_TIME_MS) {
                     doc.lastAccess = new Date();
 
                     db.collection(COLLECTION).updateOne({ user: userId }, doc,
