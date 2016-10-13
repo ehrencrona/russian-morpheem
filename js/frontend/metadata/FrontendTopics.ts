@@ -85,7 +85,6 @@ export default class FrontendTopics implements Topics {
 
                 for (let topic of all) {
                     topic.getFacts().forEach(f => {
-console.log('tbF', topic.id, fact.getId())
                         let topics = this.topicsByFact.get(f.getId())
 
                         if (!topics) {
