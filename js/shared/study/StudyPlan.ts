@@ -27,7 +27,7 @@ export interface StudyPlan {
 
     isQueuedFact(fact: Fact): boolean
     getQueuedFacts(): Fact[]
-    queueFact(fact: Fact)
+    queueFacts(facts: Fact[])
 
     clear() 
     

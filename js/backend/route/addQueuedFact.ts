@@ -8,13 +8,13 @@ import getAuthor from '../getAuthor'
 export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
 
-        let factId = req.body.fact as string
+        let factIds = req.body.facts as string[]
 
-        let fact = corpus.facts.get(factId)
+        let facts = factIds.map(id => corpus.facts.get(id)).filter(f => !!f)
 
         fetchPlan(getAuthor(req).numericalId, corpus)
             .then(plan => {
-                plan.queueFact(fact)
+                plan.queueFacts(facts)
 
                 res.status(200).send({ ok: true })
             })

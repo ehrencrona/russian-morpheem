@@ -175,7 +175,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.put(`/api/user/plan`, setPlan(corpus))    
 
-    app.post(`/api/user/queued-fact`, addQueuedFact(corpus))    
+    app.post(`/api/user/profile/queued-fact`, addQueuedFact(corpus))    
 
     app.get(`/api/translate`, getTranslation(corpus))    
 

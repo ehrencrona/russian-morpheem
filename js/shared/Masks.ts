@@ -15,6 +15,7 @@ const MASKS = {
         allbutshort: (form) => form.substr(0, 5) != 'short',
         allbutpl: (form) => !pl(form),
         allbutadv: (form) => form != 'adv',
+        allbutadvandcomp: (form) => form != 'adv' && form != 'comp',
         allbutplandadv: (form) => !pl(form) && form != 'adv'
     },
     num: {

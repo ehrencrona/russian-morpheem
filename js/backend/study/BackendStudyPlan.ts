@@ -49,8 +49,8 @@ class BackendStudyPlan extends AbstractStudyPlan {
         return this.store()
     }
 
-    queueFact(fact: Fact) {
-        super.queueFact(fact)
+    queueFacts(facts: Fact[]) {
+        super.queueFacts(facts)
 
         this.store()
     }

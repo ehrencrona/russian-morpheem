@@ -35,10 +35,10 @@ class FrontendStudyPlan extends AbstractStudyPlan {
             .catch(handleException)
     }
 
-    queueFact(fact: Fact) {
-        super.queueFact(fact)
+    queueFacts(facts: Fact[]) {
+        super.queueFacts(facts)
 
-        return xr.post(`/api/user/profile/queued-fact`, { fact: fact.getId() }, this.xrArgs)
+        return xr.post(`/api/user/profile/queued-fact`, { facts: facts.map(f => f.getId()) }, this.xrArgs)
             .catch(handleException)
     }
 

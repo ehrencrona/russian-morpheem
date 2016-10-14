@@ -1717,8 +1717,95 @@ $overlayPadding: 4 * $unit;
     text-align: center;     
 }
 
+.progressBar {
+    $progressBarFull: #52a7a6;
+    $progressBarEmpty: #a6d3d2;
+
+    .progress {
+        $barWidth: 8px;
+        width: 24px;
+        padding-right: 1.5em;
+
+        @media (min-width: 800px) {
+            padding-right: 2.5em;
+        }
+
+        @media (max-width: 500px) {
+            display: none;
+        }
+
+        flex-grow: 0.05;
+
+        .barContainer {
+            height: $barWidth;
+
+            .start, .end {
+                border-radius: $barWidth / 2;
+                width: $barWidth / 2;
+            }
+        }
+
+        @media (min-height: 900px) {
+            $barWidth: 12px;
+
+            .barContainer {
+                height: $barWidth;
+
+                .start, .end {
+                    border-radius: $barWidth / 2;
+                    width: $barWidth / 2;
+                }
+            }
+        }
+
+        .barContainer {
+            display: flex;
+            flex-direction: row;
+
+            .start {
+                border-top-right-radius: initial;
+                border-bottom-right-radius: initial;
+                background-color: $progressBarFull;
+            }
+
+            .start.empty {
+                background-color: $progressBarEmpty;
+            }
+
+            .end {
+                background-color: $progressBarEmpty;                    
+            }
+
+            .end.full {
+                background-color: $progressBarFull;                    
+            }
+
+            .full {
+                min-height: 100%;
+                background-color: $progressBarFull;
+            }
+
+            .bar {
+                background-color: $progressBarEmpty;                    
+                flex-grow: 1;
+                overflow: hidden;
+            }
+
+            .end {
+                border-top-left-radius: initial;
+                border-bottom-left-radius: initial;
+            }
+        }
+    }
+}
+
 .studyPlan {
-    font-size: 12pt;
+    font-size: 14pt;
+
+    @media (max-width: 450px) {
+        font-size: 12pt;
+    }
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1735,7 +1822,6 @@ $overlayPadding: 4 * $unit;
     > .content {
         height: 100vh;
         background-color: $backgroundColor;
-        font-size: 14pt;
 
         display: flex;
         flex-direction: column;
@@ -1813,80 +1899,7 @@ $overlayPadding: 4 * $unit;
                     display: flex;
                     align-items: center;
 
-                    $progressBarFull: #52a7a6;
-                    $progressBarEmpty: #a6d3d2;
-
-                    .progress {
-                        $barWidth: 8px;
-                        width: 24px;
-                        padding-right: 1.5em;
-                        @media (min-width: 800px) {
-                            padding-right: 2.5em;
-                        }
-                        flex-grow: 0.05;
-
-                        .barContainer {
-                            height: $barWidth;
-
-                            .start, .end {
-                                border-radius: $barWidth / 2;
-                                width: $barWidth / 2;
-                            }
-                        }
-
-                        @media (min-height: 900px) {
-                            $barWidth: 12px;
-
-                            .barContainer {
-                                height: $barWidth;
-
-                                .start, .end {
-                                    border-radius: $barWidth / 2;
-                                    width: $barWidth / 2;
-                                }
-                            }
-                        }
-
-                        .barContainer {
-                            display: flex;
-                            flex-direction: row;
-
-                            .start {
-                                border-top-right-radius: initial;
-                                border-bottom-right-radius: initial;
-                                background-color: $progressBarFull;
-                            }
-
-                            .start.empty {
-                                background-color: $progressBarEmpty;
-                            }
-
-                            .end {
-                                background-color: $progressBarEmpty;                    
-                            }
-
-                            .end.full {
-                                background-color: $progressBarFull;                    
-                            }
-
-                            .full {
-                                min-height: 100%;
-                                background-color: $progressBarFull;
-                            }
-
-                            .bar {
-                                background-color: $progressBarEmpty;                    
-                                flex-grow: 1;
-                                overflow: hidden;
-                            }
-
-                            .end {
-                                border-top-left-radius: initial;
-                                border-bottom-left-radius: initial;
-                            }
-                        }
-                    }
-
+                    @extend .progressBar;
 
                     dl {
                         display: flex;
@@ -1936,7 +1949,109 @@ $overlayPadding: 4 * $unit;
             }
         }
 
+        .explain {
+            background-color: #e9d5d0;
+
+            line-height: 140%;
+            display: flex;
+            justify-content: stretch;
+
+            > div {
+                padding: 4 * $unit;
+                flex-basis: 0;
+            }
+
+            @media (max-width: 450px) {
+                font-size: 11pt;
+            }
+
+            .content {
+
+                flex-grow: 1;
+            }
+
+            .button {
+                background-color: darken(#e9d5d0, 15%);
+                justify-content: center;
+                margin: 0;
+                border-radius: 0;
+                font-weight: bold;
+            }
+
+            .button:hover {
+                background-color: darken(#e9d5d0, 25%);
+            }
+        }
     }
+
+    .button.done {
+        background-color: $highlightColor;
+        height: 70px;
+        justify-content: center;
+        margin: 0;
+        border-radius: 0;
+        font-weight: bold;
+    }
+
+    .button.done:hover {
+        background-color: darken($highlightColor, 10%);
+    }
+}
+
+.topics {
+    $shadowColor: #BBDFDF;
+    $backgroundColor: #ffffff;
+    $highlightColor: #e95f3d; 
+    $weakHighlightColor: #e9d5d0;
+    $foregroundColor: #000000;
+    $tabHeight: 50px;
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: stretch;
+
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            @extend .progressBar;
+
+            .progress {
+                margin-top: 4 * $unit;
+                padding-right: 0;
+                width: 48px;
+            }
+
+            @extend .border-box-sizing;
+            padding: 4*$unit;
+            width: 50%;
+            text-align: center;
+            background-color: $backgroundColor;
+
+            .name {
+                font-weight: bold;
+                margin-bottom: 2 * $unit;
+            }
+        }
+
+        li:hover {
+            background-color: darken($backgroundColor, 10%);
+        }
+
+        li:nth-child(4n), li:nth-child(4n+1) {
+
+            background-color: $shadowColor;
+
+        }
+
+        li:nth-child(4n):hover, li:nth-child(4n+1):hover {
+
+            background-color: darken($shadowColor, 10%);
+
+        }
+    } 
 
     .button.done {
         background-color: $highlightColor;

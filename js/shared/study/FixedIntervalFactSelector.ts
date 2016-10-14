@@ -106,6 +106,10 @@ export class FixedIntervalFactSelector {
         })
     }
 
+    isEverStudied(fact: Fact): boolean {
+        return !!this.studying[fact.getId()]
+    }
+
     isStudied(fact: Fact, now: Date): boolean {
         let lastStudied = this.studying[fact.getId()]
         

@@ -1,13 +1,20 @@
 
 import { Component, createElement } from 'react'
-import StudentProfile from '../../shared/study/StudentProfile'
-import { StudiedFacts } from '../../shared/study/StudyPlan'
 import Corpus from '../../shared/Corpus'
+
+import { Topic } from '../../shared/metadata/Topics'
+
 import Fact from '../../shared/fact/Fact'
 import FactEntryComponent from '../guide/fact/FactEntryComponent'
-import { EXPECTED_REPETITIONS_FOR_NEW, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
+
+import { Knowledge } from '../../shared/study/Exposure'
+import StudentProfile from '../../shared/study/StudentProfile'
+import { StudiedFacts } from '../../shared/study/StudyPlan'
 import FactScore from '../../shared/study/FactScore'
 import { NewFactsSelector } from '../../shared/study/NewFactsSelector'
+import { EXPECTED_REPETITIONS_FOR_NEW, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
+
+import TopicsComponent from './TopicsComponent'
 
 let React = { createElement: createElement }
 
@@ -29,6 +36,7 @@ interface State {
     repeatCount?: number
     newCount?: number
     onTab?: OnTab
+    showTopics?: boolean
 }
 
 const DEFAULT_REPEAT_COUNT = 25
@@ -48,12 +56,9 @@ export default class StudyPlanComponent extends Component<Props, State> {
 
         if (studyPlan.isEmpty()) {
             let comparator = (s1, s2) => s2.score - s1.score
-
             let repeatFacts = this.props.factSelector.chooseFact(new Date()).sort(comparator).map(s => s.fact)
 
-            newFacts = studyPlan.getQueuedFacts().concat(newFacts);
-
-            studiedFacts = new StudiedFacts(newFacts, repeatFacts)
+            studiedFacts = this.addQueuedFacts(studyPlan.getQueuedFacts(), new StudiedFacts(newFacts, repeatFacts))
 
             repeatCount = Math.min(repeatCount, studiedFacts.repeatedFacts.length)
             newCount = Math.min(newCount, studiedFacts.newFacts.length)
@@ -71,7 +76,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
             studiedFacts: studiedFacts,
             repeatCount: repeatCount,
             newCount: newCount,
-            onTab: OnTab.NEW
+            onTab: OnTab.NEW,
         })
     }
 
@@ -134,7 +139,52 @@ export default class StudyPlanComponent extends Component<Props, State> {
         this.setState(state)
     }
 
+    addQueuedFacts(facts: Fact[], studiedFacts: StudiedFacts): StudiedFacts {
+        let newFacts = studiedFacts.newFacts
+        let repeatFacts = studiedFacts.repeatedFacts
+
+        facts.reverse().forEach(f => {
+            if (this.props.profile.knowledge.getKnowledge(f) != Knowledge.KNEW) {
+console.log(f.getId() + ' should be studied')
+                newFacts = [ f ].concat(newFacts)
+            }
+            else if (this.props.factSelector.isEverStudied(f)) {
+console.log(f.getId() + ' can be repeated')
+                repeatFacts = [ f ].concat(repeatFacts)
+            }
+            else {
+console.log(f.getId() + ' is already known')
+            }
+        })
+        
+        return new StudiedFacts(
+            eliminateDuplicates(newFacts), 
+            eliminateDuplicates(repeatFacts))
+    }
+
+    selectTopic(topic: Topic) {
+        this.props.profile.studyPlan.queueFacts(topic.getFacts())
+
+        this.setState({ 
+            studiedFacts: 
+                this.addQueuedFacts(topic.getFacts(), this.state.studiedFacts)
+        })
+    }
+
     render() {
+        if (this.state.showTopics) {
+            return <TopicsComponent 
+                corpus={ this.props.corpus }
+                factSelector={ this.props.factSelector } 
+                onCancel={ () => 
+                    this.setState({ showTopics: false }) 
+                } 
+                onSelect={ (topic) => {
+                    this.selectTopic(topic)
+                    this.setState({ showTopics: false })
+                } } />
+        }
+
         let tab = (tab: OnTab, label: string) => {
             return <div className={ 'tab' + (this.state.onTab == tab ? ' current' : ' other') } 
                 onClick={ () => this.setState({onTab: tab}) }><div>{ label }</div></div>
@@ -184,6 +234,26 @@ export default class StudyPlanComponent extends Component<Props, State> {
                                 null
                         }
                     </div>
+                </div>
+
+                <div className='explain'>
+
+                    <div className='content'>
+
+                        Review the facts to study today.
+                        If there are facts you already know well, 
+                        use "I know" to remove them.
+
+                        You don't need to memorize everything now; you 
+                        can do that during the session. 
+
+                    </div>
+
+                    <div className='button topics' onClick={ () => { this.setState({ showTopics: true }) } }>
+
+                        Choose another topic 
+
+                    </div> 
                 </div>
 
                 <div className='button done' onClick={ 

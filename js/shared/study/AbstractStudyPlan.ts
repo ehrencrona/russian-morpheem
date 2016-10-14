@@ -79,8 +79,8 @@ console.log('expected reps', expectedRepetitions,'vs originally', this.originalE
         return this.queued
     }
 
-    queueFact(fact: Fact) {
-        this.queued.push(fact)
+    queueFacts(facts: Fact[]) {
+        this.queued = facts.concat(this.queued)
     }
 
     isEmpty(): boolean {
