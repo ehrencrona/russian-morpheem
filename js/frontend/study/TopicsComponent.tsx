@@ -52,12 +52,14 @@ export default class TopicsComponent extends Component<Props, State> {
 
         let totalReps = REPETITION_COUNT * facts.length
 
+console.log('expected', expectedReps, 'total', totalReps)
+
         return Math.max(1 - expectedReps / totalReps, 0)
 
     }
 
     renderProgress(topic: Topic) {
-        let percentage = 100 * Math.round(this.getTopicKnowledge(topic))
+        let percentage = Math.round(100 * this.getTopicKnowledge(topic))
 
         return <div className='progress'>
             <div className='barContainer'>
