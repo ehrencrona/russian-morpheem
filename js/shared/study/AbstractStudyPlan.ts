@@ -112,7 +112,7 @@ function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedInter
 
     let duration = result * 20000;
 
-    console.log('assuming full study duration, expect ' + result + ' reptitions. so duration is actually ' + duration / 60000 + ' minutes')
+    console.log('assuming full study duration, expect ' + result + ' repetitions. so duration is actually ' + Math.round(duration / 60000) + ' minutes')
 
     result = 0
 

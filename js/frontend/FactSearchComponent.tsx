@@ -37,6 +37,10 @@ export default class FactSearchComponent extends Component<Props, State> {
     }
 
     matches(fact: Fact, filter: string): boolean {
+        if (fact.getId().indexOf(filter) >= 0) {
+            return true
+        }
+
         if (fact instanceof Word) {
             if (fact.jp.substr(0, filter.length).toLowerCase() == filter ||
                 fact.getEnglish().indexOf(filter) >= 0) {
