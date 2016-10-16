@@ -38,7 +38,6 @@ for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     } 
 }
 
-export const EXPECTED_REPETITIONS_EVER = calculateExpectedRepetitionsForNew(REPETITION_COUNT) 
 export const EXPECTED_REPETITIONS_IN_SESSION = calculateExpectedRepetitionsForNew(STUDY_SESSION_LENGTH_MS) 
 
 function calculateExpectedRepetitionsForNew(sessionLength: number) {
@@ -155,7 +154,7 @@ export class FixedIntervalFactSelector {
         let exposed = this.exposed[fact.getId()]
 
         if (!exposed) {
-            return (ever ? EXPECTED_REPETITIONS_EVER : EXPECTED_REPETITIONS_IN_SESSION)
+            return (ever ? REPETITION_COUNT : EXPECTED_REPETITIONS_IN_SESSION)
         }
         else {
             return 0
