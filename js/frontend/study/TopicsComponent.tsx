@@ -45,14 +45,11 @@ export default class TopicsComponent extends Component<Props, State> {
         }
 
         facts.forEach(f => {
-
             expectedReps += this.props.factSelector.getExpectedRepetitions(f, true)
 
         })
 
         let totalReps = REPETITION_COUNT * facts.length
-
-console.log('expected', expectedReps, 'total', totalReps)
 
         return Math.max(1 - expectedReps / totalReps, 0)
 

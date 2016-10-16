@@ -24,9 +24,6 @@ const INCREASE_BY_REPETITION = 5
 // only used to determine how many repetitions of a fact can fall due in a session
 const STUDY_SESSION_LENGTH_MS = 30 * 60 * 1000;
 
-// a large number, "forever"
-const EVER_IN_MS = 1000 * STUDY_SESSION_LENGTH_MS;
-
 // URGENCY + BASE_SCORE must equal 1
 const URGENCY = 0.8
 const BASE_SCORE = 0.2
@@ -41,17 +38,19 @@ for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     } 
 }
 
-export const EXPECTED_REPETITIONS_EVER = calculateExpectedRepetitionsForNew(STUDY_SESSION_LENGTH_MS) 
+export const EXPECTED_REPETITIONS_EVER = calculateExpectedRepetitionsForNew(REPETITION_COUNT) 
 export const EXPECTED_REPETITIONS_IN_SESSION = calculateExpectedRepetitionsForNew(STUDY_SESSION_LENGTH_MS) 
 
 function calculateExpectedRepetitionsForNew(sessionLength: number) {
     // how many repetitions can we at most do between now and "before", give that all answers are correct?
     // (note that this is basically a constant since "before"" is always now+sessionLength and could be calculated once and for all) 
     for (let reps = 0; reps < REPETITION_COUNT; reps++) {
-        if (INTERVAL_BY_REP_IN_MS[reps].min > STUDY_SESSION_LENGTH_MS) {
+        if (INTERVAL_BY_REP_IN_MS[reps].min > sessionLength) {
             return reps
         }
     }
+
+    return REPETITION_COUNT
 }
 
 export class FixedIntervalFactSelector {
@@ -129,22 +128,25 @@ export class FixedIntervalFactSelector {
      * ever - true: repetitions made until fact is known over all sessions, false: repetitions in a single session
      */
     getExpectedRepetitions(fact: Fact, ever: boolean): number {
-        let before = new Date(new Date().getTime() + (ever ? EVER_IN_MS : STUDY_SESSION_LENGTH_MS))
 
         let lastStudied = this.studying[fact.getId()]
         
         if (lastStudied) {
-            let timeSinceLast = timeSince(lastStudied, before)
+            if (!ever) {
+                let before = new Date(new Date().getTime() + STUDY_SESSION_LENGTH_MS)
 
-            // how many more repetitions will we at most manage before "before" if all answers
-            // are correct? 
-            for (let reps = lastStudied.repetition; reps < REPETITION_COUNT; reps++) {
+                let timeSinceLast = timeSince(lastStudied, before)
 
-                if (INTERVAL_BY_REP_IN_MS[reps].min > timeSinceLast) {
-                    // the current repetition will never be done, so the previous one is the last
-                    return reps - lastStudied.repetition
+                // how many more repetitions will we at most manage before "before" if all answers
+                // are correct? 
+                for (let reps = lastStudied.repetition; reps < REPETITION_COUNT; reps++) {
+
+                    if (INTERVAL_BY_REP_IN_MS[reps].min > timeSinceLast) {
+                        // the current repetition will never be done, so the previous one is the last
+                        return reps - lastStudied.repetition
+                    }
+
                 }
-
             }
 
             return REPETITION_COUNT - lastStudied.repetition
