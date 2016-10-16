@@ -46,7 +46,7 @@ export default class TopicsComponent extends Component<Props, State> {
 
         facts.forEach(f => {
 
-            expectedReps += this.props.factSelector.getExpectedRepetitions(f, FOREVER)
+            expectedReps += this.props.factSelector.getExpectedRepetitions(f, true)
 
         })
 

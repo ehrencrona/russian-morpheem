@@ -221,10 +221,14 @@ export default class Facts {
         }
     }
 
+    hasTag(fact: Fact) {
+        return (this.tagsByFactIds[fact.getId()] || []).indexOf(fact.getId()) >= 0
+    }
+
     getTagsOfFact(fact: Fact) {
         return this.tagsByFactIds[fact.getId()] || []
     }
-    
+
     static fromJson(json, inflections: Inflections, words: Words, phrases: Phrases) {
         let facts = new Facts()
         

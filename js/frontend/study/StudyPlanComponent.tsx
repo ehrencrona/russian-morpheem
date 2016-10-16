@@ -12,7 +12,7 @@ import StudentProfile from '../../shared/study/StudentProfile'
 import { StudiedFacts } from '../../shared/study/StudyPlan'
 import FactScore from '../../shared/study/FactScore'
 import { NewFactsSelector } from '../../shared/study/NewFactsSelector'
-import { EXPECTED_REPETITIONS_FOR_NEW, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
+import { EXPECTED_REPETITIONS_IN_SESSION, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
 
 import TopicsComponent from './TopicsComponent'
 
@@ -97,7 +97,9 @@ export default class StudyPlanComponent extends Component<Props, State> {
     }
 
     renderProgress(fact: Fact) {
-        let percentage = 100 * Math.max(1 - this.props.factSelector.getExpectedRepetitions(fact) / EXPECTED_REPETITIONS_FOR_NEW, 0)
+        let percentage = 100 * Math.max(1 - 
+            this.props.factSelector.getExpectedRepetitions(fact, false) / 
+            EXPECTED_REPETITIONS_IN_SESSION, 0)
 
         return <div className='progress'>
             <div className='barContainer'>

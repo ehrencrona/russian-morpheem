@@ -24,6 +24,9 @@ const INCREASE_BY_REPETITION = 5
 // only used to determine how many repetitions of a fact can fall due in a session
 const STUDY_SESSION_LENGTH_MS = 30 * 60 * 1000;
 
+// a large number, "forever"
+const EVER_IN_MS = 1000 * STUDY_SESSION_LENGTH_MS;
+
 // URGENCY + BASE_SCORE must equal 1
 const URGENCY = 0.8
 const BASE_SCORE = 0.2
@@ -38,9 +41,10 @@ for (let rep = 1; rep < REPETITION_COUNT; rep++) {
     } 
 }
 
-export const EXPECTED_REPETITIONS_FOR_NEW = calculateExpectedRepetitionsForNew() 
+export const EXPECTED_REPETITIONS_EVER = calculateExpectedRepetitionsForNew(STUDY_SESSION_LENGTH_MS) 
+export const EXPECTED_REPETITIONS_IN_SESSION = calculateExpectedRepetitionsForNew(STUDY_SESSION_LENGTH_MS) 
 
-function calculateExpectedRepetitionsForNew() {
+function calculateExpectedRepetitionsForNew(sessionLength: number) {
     // how many repetitions can we at most do between now and "before", give that all answers are correct?
     // (note that this is basically a constant since "before"" is always now+sessionLength and could be calculated once and for all) 
     for (let reps = 0; reps < REPETITION_COUNT; reps++) {
@@ -121,8 +125,11 @@ export class FixedIntervalFactSelector {
         }
     }
 
-    getExpectedRepetitions(fact: Fact, sessionDurationMs?: number): number {
-        let before = new Date(new Date().getTime() + (sessionDurationMs || STUDY_SESSION_LENGTH_MS))
+    /**
+     * ever - true: repetitions made until fact is known over all sessions, false: repetitions in a single session
+     */
+    getExpectedRepetitions(fact: Fact, ever: boolean): number {
+        let before = new Date(new Date().getTime() + (ever ? EVER_IN_MS : STUDY_SESSION_LENGTH_MS))
 
         let lastStudied = this.studying[fact.getId()]
         
@@ -139,12 +146,14 @@ export class FixedIntervalFactSelector {
                 }
 
             }
+
+            return REPETITION_COUNT - lastStudied.repetition
         }
 
         let exposed = this.exposed[fact.getId()]
 
         if (!exposed) {
-            return EXPECTED_REPETITIONS_FOR_NEW
+            return (ever ? EXPECTED_REPETITIONS_EVER : EXPECTED_REPETITIONS_IN_SESSION)
         }
         else {
             return 0

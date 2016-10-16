@@ -106,7 +106,7 @@ function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedInter
     let result = 0
 
     facts.getAll().forEach(fact => {
-        result += knowledge.getExpectedRepetitions(fact)
+        result += knowledge.getExpectedRepetitions(fact, false)
     })
 
 
@@ -117,7 +117,7 @@ function calculateExpectedRepetitions(facts: StudiedFacts, knowledge: FixedInter
     result = 0
 
     facts.getAll().forEach(fact => {
-        result += knowledge.getExpectedRepetitions(fact, duration)
+        result += knowledge.getExpectedRepetitions(fact, false)
     })
 
     return result
