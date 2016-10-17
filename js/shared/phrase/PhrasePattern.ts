@@ -148,6 +148,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'sg': formTransform('n', ['nom']),
     'pl': formTransform('n', ['pl']),
     'nom': formTransform('pron', ['nom', 'pl']),
+    'acc': formTransform('pron', ['acc']),
     'adj': formTransform('adj', ['m']),
     'adv': formTransform('adj', ['adv'])
 }
