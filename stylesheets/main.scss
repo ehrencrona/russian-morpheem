@@ -195,6 +195,7 @@ input[type=text], input[type=number], textarea {
     .tab-name {
         padding: 2 * $unit;
         flex-grow: 1;
+        cursor: pointer;
     }
 }
 
@@ -1350,6 +1351,8 @@ $animationLength: 0.2s;
             z-index: 20;
             flex-wrap: nowrap;
 
+            font-size: 1.5em;
+
             @media (max-height: $button-height-breakpoint) {
                 font-size: 0.8em;
             }
@@ -1358,7 +1361,6 @@ $animationLength: 0.2s;
                 display: block;
                 margin: 0;
                 font-weight: 700;
-                font-size: 1.5em;
                 padding: 3*$unit 1em;
                 border-radius: 1em;
 
@@ -1371,6 +1373,11 @@ $animationLength: 0.2s;
 
             .button.smallText {
                 font-size: 80%;
+
+                @media (max-height: $button-height-breakpoint) {
+                    font-size: 100%;
+                }
+                
                 line-height: 125%;
             }
 
@@ -1409,11 +1416,20 @@ $animationLength: 0.2s;
             @extend .border-box-sizing;
             height: 100%;
 
+            @media (max-height: $button-height-breakpoint) {
+                padding-top: 20pt;
+            }
+
             .didYouKnowFact {
                 display: block;
                 flex-grow: 1;
                 width: 100%;
                 max-width: 500px;
+
+                @media (max-height: 600px) {
+                    font-size: 0.8em;
+                }
+
 
                 > li {
                     $padding: 1em;

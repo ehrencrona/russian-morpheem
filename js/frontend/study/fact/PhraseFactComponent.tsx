@@ -23,7 +23,8 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
             return htmlEscape(b.enWithJpForCases(match, '--start--', '--end--'))
                 .replace(/--start--/g, '</strong>')
                 .replace(/--end--/g, '<strong>')
-        }).join(' ') 
+        }).join(' ')
+
         explanation = '<strong>' + explanation + '</strong>'
         
         words = match.words
@@ -34,6 +35,7 @@ let phraseFactComponent = (props: FactComponentProps<Phrase>) => {
                     word.getEnglish() : 
                     word.jp)
 
+                // we essentially want to make 
                 if (!m.wordMatch.isCaseStudy()) {
                     text = `<strong>${text}</strong>`
                 }
