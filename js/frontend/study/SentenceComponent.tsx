@@ -208,6 +208,9 @@ export default class SentenceComponent extends Component<Props, State> {
             if (widthRatio > 1 && widthRatio > heightRatio) {
                 result = widthRatio * widthRatio
             }
+            else if (heightRatio > 1) {
+                result = heightRatio * heightRatio
+            }
             else {
                 result = widthRatio * heightRatio 
             }

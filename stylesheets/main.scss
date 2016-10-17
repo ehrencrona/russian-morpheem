@@ -41,6 +41,8 @@ $lowlight: #636363;
 
 $colorLower: #b9b2d4;
 
+$button-height-breakpoint: 600px;
+
 html {
     margin: 0;
     padding: 0;
@@ -1197,16 +1199,27 @@ $animationLength: 0.2s;
             flex-direction: column;
 
             .sentenceId {
-                margin: 2 * $unit;
-                text-align: right;
-                font-size: 80%; 
+                position: absolute;
+                right: $unit;
+                top: $unit;
+                font-size: 70%;
+
+                a {
+                    color: lighten($color4, 30%);
+                    text-decoration: none; 
+                }
             }
 
             .explanation {
                 margin: 36pt;
+
                 margin-bottom: 12pt;
                 font-size: 1em;
                 font-weight: bold;
+
+                @media (max-height: 500px) {
+                    display: none;
+                }
             }
 
             .sentence {
@@ -1216,6 +1229,11 @@ $animationLength: 0.2s;
                 flex-grow: 1;
                 overflow: hidden;
                 line-height: 125%;
+
+                @media (max-height: $button-height-breakpoint) {
+                    margin: 20pt;
+                    margin-top: 8pt;
+                }
 
                 .nobr { 
                     white-space: nowrap
@@ -1332,8 +1350,8 @@ $animationLength: 0.2s;
             z-index: 20;
             flex-wrap: nowrap;
 
-            @media (min-width: 600px) {
-                font-size: 1.5em;
+            @media (max-height: $button-height-breakpoint) {
+                font-size: 0.8em;
             }
 
             .button {
@@ -1352,7 +1370,7 @@ $animationLength: 0.2s;
             }
 
             .button.smallText {
-                font-size: 1.2em;
+                font-size: 80%;
                 line-height: 125%;
             }
 
@@ -1610,6 +1628,10 @@ $animationLength: 0.2s;
         position: fixed;
         bottom: 0;
         right: 0;
+
+        .button {
+            opacity: 0.3;
+        }
     }
 
     .factSelectorInspector {

@@ -105,6 +105,10 @@ export default class Phrase implements Fact {
                 if (m.isCaseStudy()) {
                     let grammaticalCase = ((m as any) as CaseStudyMatch).getCaseStudied()
 
+                    if (grammaticalCase == GrammaticalCase.CONTEXT) {
+                        return
+                    }
+
                     if (!allCases[grammaticalCase]) {
                         allCases[grammaticalCase] = true
 

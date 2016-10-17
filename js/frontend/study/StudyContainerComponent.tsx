@@ -118,7 +118,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
 /*
         {
-            let sentence = this.props.corpus.sentences.get(3405)
+            let sentence = this.props.corpus.sentences.get(1261)
 
             this.knowledge.getKnowledge = (fact: Fact) => {
                 return Knowledge.KNEW
@@ -130,12 +130,13 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
             this.setState({
                 sentence: sentence,
-                facts: this.expandFact(this.props.corpus.facts.get('ещё'), sentence)
+                facts: this.expandFact(this.props.corpus.facts.get('gen-of'), sentence)
             })
 
             return
         }
-*/
+        /*
+
         // if studying phrases, remove any sentences that don't actually match the phrase.
         sentenceScores = sentenceScores.filter((score) => {
             let phrase: Phrase
