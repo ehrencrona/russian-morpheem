@@ -17,9 +17,16 @@ export default function(corpus: Corpus) {
         exposuresToStore.forEach((exposure) => exposure.user = authorId)
 
         exposures.registerExposures(exposuresToStore).then(() => {
-            console.log(new Date() + ' ' + author.name + ' did not know ' +
-                exposuresToStore.filter((e) => e.knew == Knowledge.DIDNT_KNOW).map((e) => e.fact).join(', ') +
-                ' in sentence ' + exposuresToStore[0].sentence + '.')
+            let unknown = exposuresToStore
+                .filter((e) => e.knew == Knowledge.DIDNT_KNOW)
+                .map((e) => e.fact)
+
+            console.log(new Date() + ' ' + author.name 
+                + (unknown.length ?
+                    ' did not know ' + unknown.join(', ') :
+                    ' knew everything'
+                )
+                + ' in sentence ' + exposuresToStore[0].sentence + '.')
 
             res.status(200).send({})
         })

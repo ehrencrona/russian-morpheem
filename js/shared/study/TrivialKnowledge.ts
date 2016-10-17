@@ -2,11 +2,16 @@
 import Fact from '../fact/Fact'
 import { Exposure, Knowledge, Skill } from '../study/Exposure'
 
-interface LastStudied {
+interface SkillStats {
     fact: string,
     firstKnew: Date,
     lastKnew: Date,
     knownTimes: number 
+}
+
+interface LastStudied {
+    production: SkillStats
+    recognition: SkillStats
 }
 
 const MIN = 60 * 1000
@@ -24,23 +29,38 @@ export default class TrivialKnowledge {
         exposures.forEach((exposure) => {
 
             if (exposure.knew == Knowledge.KNEW) {
-                if (exposure.skill != Skill.RECOGNITION) {
-                    let lastStudied = this.known[exposure.fact]
+                let lastStudied = this.known[exposure.fact]
 
-                    if (!lastStudied) {
-                        lastStudied = {
-                            fact: exposure.fact,
-                            firstKnew: exposure.time,
-                            lastKnew: exposure.time,
-                            knownTimes: 0
-                        }
-
-                        this.known[exposure.fact] = lastStudied
+                if (!lastStudied) {
+                    lastStudied = {
+                        production: null, 
+                        recognition: null
                     }
 
-                    lastStudied.lastKnew = exposure.time
-                    lastStudied.knownTimes++
+                    this.known[exposure.fact] = lastStudied
                 }
+
+
+                let skillStats = (exposure.skill == Skill.PRODUCTION ? lastStudied.production : lastStudied.recognition)
+
+                if (!skillStats) {
+                    skillStats = {
+                        fact: exposure.fact,
+                        firstKnew: exposure.time,
+                        lastKnew: exposure.time,
+                        knownTimes: 0
+                    }
+
+                    if (exposure.skill == Skill.PRODUCTION) {
+                        lastStudied.production = skillStats
+                    } 
+                    else {
+                        lastStudied.recognition = skillStats 
+                    } 
+                }
+
+                skillStats.lastKnew = exposure.time
+                skillStats.knownTimes++
             }
             else {
                 delete this.known[exposure.fact]
@@ -50,26 +70,40 @@ export default class TrivialKnowledge {
 
     }
 
-    isKnown(fact: Fact) {
-        return this.isKnownId(fact.getId())
+    isKnown(fact: Fact, skill: Skill) {
+        return this.isKnownId(fact.getId(), skill)
     }
 
-    isKnownId(factId: string) {
+    isKnownId(factId: string, skill: Skill) {
         let lastStudied = this.known[factId]
 
         if (!lastStudied) {
             return false
         }
 
-        if (lastStudied.knownTimes < 2) {
-            return false
+        let hasSkill = (skillStats: SkillStats) => {
+            if (!skillStats) {
+                return false
+            }
+
+            if (skillStats.knownTimes < 2) {
+                return false
+            }
+
+            return new Date().getTime() + skillStats.firstKnew.getTime() <
+                2 * skillStats.lastKnew.getTime()
         }
 
-        return new Date().getTime() + lastStudied.firstKnew.getTime() <
-            2 * lastStudied.lastKnew.getTime()
+        if (skill == Skill.PRODUCTION) {
+            return hasSkill(lastStudied.production)
+        } 
+        else {
+            return hasSkill(lastStudied.recognition) || hasSkill(lastStudied.production)
+        } 
+
     }
 
-    getAllTrivialFacts() {
-        return Object.keys(this.known).filter((id) => this.isKnownId(id)) 
+    getAllTrivialFacts(skill: Skill) {
+        return Object.keys(this.known).filter((id) => this.isKnownId(id, skill)) 
     }
 }

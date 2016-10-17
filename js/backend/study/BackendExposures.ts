@@ -81,7 +81,10 @@ class BackendExposures implements Exposures {
 
             cursor
                 .forEach((doc) => {
-                    result.push((doc as Exposure));
+                    let exposure = doc as Exposure
+                    exposure.time = new Date(doc.time)
+
+                    result.push(doc);
                 }, () => {
                     resolve(result)
                 });

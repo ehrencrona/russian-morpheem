@@ -75,7 +75,10 @@ export default class StudyComponent extends Component<Props, State> {
         this.state = this.getStateForProps(props)
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: Props) {
+console.log('Sentence: ' + nextProps.sentence.toString() + ' (#' + nextProps.sentence.id + ')')
+console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
+
         this.setState(this.getStateForProps(nextProps))
     }
 
@@ -195,7 +198,7 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], returnToStage: Stage, somethingIsUnknown?: boolean) {
+    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], returnToStage: Stage) {
         let known: StudyFact[] = [], 
             unknown: StudyFact[] = []
 
@@ -206,7 +209,7 @@ export default class StudyComponent extends Component<Props, State> {
                 return
             }
 
-            (this.props.trivialKnowledge.isKnown(fact.fact) && 
+            (this.props.trivialKnowledge.isKnown(fact.fact, Skill.RECOGNITION) && 
                 !this.props.facts.find(f => fact.fact.getId() == f.getId()) ?
                 known :
                 unknown).push(fact)
@@ -219,9 +222,13 @@ export default class StudyComponent extends Component<Props, State> {
 
         facts.forEach(addFact)
 
+        console.log('trivial facts: ' + known.map(f => f.fact.getId()))
+
         // if you clicked on a word but you ought to know all facts about that word,
         // we should still show something because you did click it.
-        if (!unknown.length && somethingIsUnknown) {
+        if (!unknown.length) {
+            console.log('no unknown facts among ' + unknown.map(f => f.fact.getId()) + '. explaining all of them.')
+
             unknown = known
         }
 
@@ -253,7 +260,7 @@ export default class StudyComponent extends Component<Props, State> {
     }
 
     iWasWrong(hiddenFacts: StudyFact[]) {
-        this.explainFacts(this.getProductionFacts(), hiddenFacts, Stage.CONFIRM, true)
+        this.explainFacts(this.getProductionFacts(), hiddenFacts, Stage.CONFIRM)
     }
 
     getProductionFacts(): StudyFact[] {
@@ -356,9 +363,6 @@ export default class StudyComponent extends Component<Props, State> {
         let reveal = this.state.stage !== Stage.TEST && this.state.returnToStage !== Stage.TEST
         let sentence = this.props.sentence
 
-console.log('Sentence: ' + sentence.toString() + ' (#' + sentence.id + ')')
-console.log('Facts: ' + this.props.facts.map(f => f.getId()).join(', '))
-
         let tokens = this.state.tokens
 
         let hiddenFacts: StudyFact[] = []
@@ -369,8 +373,8 @@ console.log('Facts: ' + this.props.facts.map(f => f.getId()).join(', '))
                 this.oughtToKnow(fact.fact))
         }
 
-console.log('Production facts: ' + this.getProductionFacts().map(f => f.fact.getId()).join(', '))
-console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
+// console.log('Production facts: ' + this.getProductionFacts().map(f => f.fact.getId()).join(', '))
+// console.log('Hidden facts: ' + hiddenFacts.map(f => f.fact.getId()).join(', '))
 
         return <div className='content'>
             <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>

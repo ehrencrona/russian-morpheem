@@ -146,7 +146,7 @@ export default function getAuthor(req: express.Request): Author {
     }
     else {
         result = {
-            numericalId: 4711,
+            numericalId: 2,
             name: 'Not authenticated'
         }
     }

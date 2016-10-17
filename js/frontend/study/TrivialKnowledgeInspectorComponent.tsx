@@ -7,6 +7,7 @@ import StudyFactComponent from './fact/StudyFactComponent'
 import Fact from '../../shared/fact/Fact'
 
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
+import { Skill } from '../../shared/study/Exposure'
 
 interface Props {
     knowledge: TrivialKnowledge
@@ -28,7 +29,7 @@ export default class TrivialKnowledgeInspectorComponent extends Component<Props,
 
         return <div className='knowledgeInspector'>
                 <div>What you know: { 
-                    this.props.knowledge.getAllTrivialFacts().join(', ')
+                    this.props.knowledge.getAllTrivialFacts(Skill.RECOGNITION).join(', ')
                 }</div>
             </div>
     }
