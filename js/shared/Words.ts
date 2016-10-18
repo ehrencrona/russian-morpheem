@@ -183,8 +183,8 @@ export default class Words {
         return this
     }
 
-    setEnglish(en, word: AnyWord, form?: string) {
-        word.setEnglish(en, form)
+    setEnglish(en, word: AnyWord, form?: string, translationIndex?: number) {
+        word.setEnglish(en, form, translationIndex)
 
         if (this.onChangeWord) {
             this.onChangeWord(word)

@@ -18,9 +18,9 @@ export default class InflectedWord extends Word {
         this.word = word
     }
 
-    setEnglish(en: string, form?: string) {
+    setEnglish(en: string, form?: string, translationIndex?: number) {
         if (form) {
-            this.word.setEnglish(form)
+            this.word.setEnglish(en, form, translationIndex)
         }
         else {
             throw new Error('Cant set English translation on inflected word without specifying form')
@@ -167,15 +167,15 @@ export default class InflectedWord extends Word {
         return result
     }
 
-    getEnglish(form?) {
+    getEnglish(form?, translationIndex?: number) {
         if (!form) {
             form = InflectedWord.getEnglishForm(this.pos, this.form, this.en)
         }
 
-        var result = this.en[form || '']
+        var result = super.getEnglish(form, translationIndex)
 
         if (!result) {
-            result = this.word.getEnglish()
+            result = this.word.getEnglish('', translationIndex)
 
             if (form == 'inf') {
                 result = 'to ' + result

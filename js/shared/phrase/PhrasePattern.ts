@@ -73,10 +73,25 @@ class Placeholder {
     article: boolean
 }
 
-type WordToString = (word: Word) => string;
+type WordToString = (word: Word, enSentence: string) => string;
 type PhraseToString = (phrase: PhraseMatch, wordMatched: WordMatched, wordToString?: WordToString) => string;
 
-const defaultWordToString: WordToString = (word) => word.getEnglish()
+const defaultWordToString: WordToString = (word, enSentence) => {
+    let tc = word.getTranslationCount()
+
+    if (tc > 1 && enSentence) {    
+        for (let i = 1; i < tc; i++) {
+            let en = word.getEnglish('', i)
+
+            if (enSentence.indexOf(en) >= 0) {
+                return en
+            }
+        }
+    }
+
+    return word.getEnglish()
+} 
+
 const defaultPhraseToString: PhraseToString = 
     (phrase: PhraseMatch, wordMatched: WordMatched, wordToString?: WordToString) => {
     let childMatch = wordMatched.childMatch
@@ -85,7 +100,7 @@ const defaultPhraseToString: PhraseToString =
 }
 
 function formTransform(pos: string, forms: string[]): WordToString {
-    return (word: Word) => {
+    return (word: Word, enSentence) => {
         if (word instanceof InflectedWord && word.pos == pos) {
             let inflection
 
@@ -103,12 +118,12 @@ function formTransform(pos: string, forms: string[]): WordToString {
             }
         }
 
-        return defaultWordToString(word)
+        return defaultWordToString(word, enSentence)
     }
 }
 
 function simplePresentTransform(): WordToString {
-    return (word: Word) => {
+    return (word: Word, enSentence) => {
         if (word instanceof InflectedWord && word.pos == 'v') {
             let inflection = word.word.inflect('inf')
             
@@ -124,17 +139,17 @@ function simplePresentTransform(): WordToString {
             }
         }
 
-        return defaultWordToString(word)
+        return defaultWordToString(word, enSentence)
     }
 }
 
 function englishOnlyTransform(pos: string, englishForm: string): WordToString {
-    return (word: Word) => {
+    return (word: Word, enSentence) => {
         if (word instanceof InflectedWord && word.pos == pos) {
             return word.word.getEnglish(englishForm)
         }
 
-        return defaultWordToString(word)
+        return defaultWordToString(word, enSentence)
     }
 }
 
@@ -289,7 +304,9 @@ class Fragment implements EnglishPatternFragment {
             let wordMatch = match.pattern.wordMatches[placeholder.fragmentIndex-1]
 
             if (placeholder.inflections) {
-                let words = match.words.filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord)).map(w => w.word as InflectedWord)
+                let words = match.words.filter(w => 
+                    !!(w.wordMatch == wordMatch && w.word as InflectedWord))
+                        .map(w => w.word as InflectedWord)
 
                 if (words.length) {
                     let inflectAsPoS
@@ -349,7 +366,7 @@ class Fragment implements EnglishPatternFragment {
                 }
                 else {
                     replaceWith = match.words.filter((w) => w.wordMatch == wordMatch)
-                        .map(w => wordToString(w.word)).join(' ')
+                        .map(w => wordToString(w.word, match.sentence.english)).join(' ')
                 }
             }
 

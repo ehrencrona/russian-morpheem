@@ -14,13 +14,11 @@ export function factToString(fact: Fact, facts: Facts) {
     let nonDefaultEnglish = (word: Word | InflectableWord) => {
         let result = ''
 
-        Object.keys(word.en).forEach((form) => {
-
+        for (let form in word.en) {
             if (form && word.en[form]) {
                 result += `, ${form}: ${word.en[form]}` 
             }
-
-        })
+        }
 
         return result
     }

@@ -27,6 +27,7 @@ import transforms from '../Transforms'
 import Transform from '../Transform'
 import Phrase from '../phrase/Phrase'
 import { ENGLISH_FORMS } from '../inflection/InflectionForms'
+import { TRANSLATION_INDEX_SEPARATOR } from '../AbstractAnyWord'
 
 class PhraseFact implements Fact {
     constructor(public id: string) {
@@ -187,11 +188,9 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     fact.setMask(mask)
                 }
                 else {
-                    console.error('Attempt to set mask on ' + fact.getId() + '. It is not an inflectable word. Not that the mask tag should be after the inflect tag.')
+                    console.error('Attempt to set mask on ' + fact.getId() + 
+                        '. It is not an inflectable word. Not that the mask tag should be after the inflect tag.')
                 }
-            }
-            else if (ENGLISH_FORMS[tag]) {
-                word.setEnglish(text, tag)
             }
             else if (!tag) {
                 if (en) {
@@ -203,7 +202,19 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 word.setEnglish(en)
             }
             else {
-                console.error(`Unknown tag ${tag} on line "${rightSide}".`)
+                let translationNumber
+
+                if (tag[tag.length-2] == TRANSLATION_INDEX_SEPARATOR) {
+                    translationNumber = parseInt(tag[tag.length-1]) - 1
+                    tag = tag.substr(0, tag.length-2)
+                }
+
+                if (ENGLISH_FORMS[tag] || tag == '') {
+                    word.setEnglish(text, tag, translationNumber)
+                }
+                else {
+                    console.error(`Unknown tag ${tag} on line "${rightSide}".`)
+                }
             }
         })
         

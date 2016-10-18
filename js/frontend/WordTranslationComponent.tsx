@@ -13,39 +13,73 @@ interface Props {
     corpus: Corpus
 }
 
-export default function WordTranslationComponent(props: Props, children) {
+interface State {
+    translationCount: number
+}
 
-    let setValue = (form: string) => {
-        return (e) => {
-            let value = (e.target as HTMLInputElement).value
+export default class WordTranslationComponent extends Component<Props, State> {
 
-            if (value != props.word.getEnglish(form)) {
-                props.corpus.words.setEnglish(value, props.word, form) 
-            }
-        } 
+    constructor(props: Props) {
+        super(props)
+
+        this.state = {
+            translationCount: props.word.getTranslationCount()
+        }
     }
 
-    return <div className='wordTranslation'>
-        <h3>Translation</h3>
+    render() {
+        let props = this.props
 
-        <input type='text' autoCapitalize='off' defaultValue={ props.word.getEnglish() } onBlur={ setValue('') }/>
+        let setValue = (form: string, translationIndex: number) => {
+            return (e) => {
+                let value = (e.target as HTMLInputElement).value
 
-        {
-            ENGLISH_FORMS_BY_POS[props.word.pos] ?
-
-            ENGLISH_FORMS_BY_POS[props.word.pos].allForms.map((form) => 
-                <div key={ form } className='form'>
-                    <div className='label'>{form }</div>
-
-                    <input type='text' autoCapitalize='off' 
-                            defaultValue={ props.word.en[form] } onBlur={ setValue(form) }/>
-
-                </div>
-            )
-
-            :
-
-            <div/>
+                if (value != props.word.getEnglish(form)) {
+                    props.corpus.words.setEnglish(value, props.word, form, translationIndex) 
+                }
+            } 
         }
-    </div> 
+
+        let translationIndices = []
+
+        for (let i = 0; i < this.state.translationCount; i++) {
+            translationIndices.push(i)
+        }
+
+        return <div className='wordTranslation'>
+            <h3>Translation</h3>
+
+            {
+                translationIndices.map(translationIndex => {
+                    return <div key={ translationIndex }>
+                        <input type='text' autoCapitalize='off' 
+                            defaultValue={ props.word.getEnglish('', translationIndex) } 
+                            onBlur={ setValue('', translationIndex) }/>
+                        {
+                            ENGLISH_FORMS_BY_POS[props.word.pos] ?
+
+                            ENGLISH_FORMS_BY_POS[props.word.pos].allForms.map((form) => 
+                                <div key={ form + translationIndex } className='form'>
+                                    <div className='label'>{ form }</div>
+
+                                    <input type='text'
+                                        autoCapitalize='off' 
+                                        defaultValue={ props.word.getEnglish(form, translationIndex) } 
+                                        onBlur={ setValue(form, translationIndex) }/>
+                                </div>
+                            )
+
+                            :
+
+                            null
+                        }
+                    </div>
+                })
+            }
+
+            <div className='button' onClick={ () => this.setState({ translationCount: this.state.translationCount+1} )}>
+                Add
+            </div>
+        </div> 
+    }
 } 

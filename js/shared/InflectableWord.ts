@@ -53,6 +53,7 @@ export default class InflectableWord extends AbstractAnyWord {
                     result.requiresFact(transform))
 
                 result.en = this.en
+                result.enCount = this.enCount
                 result.pos = this.pos
 
                 result.classifier = this.classifier
@@ -143,6 +144,8 @@ export default class InflectableWord extends AbstractAnyWord {
             
             
         result.en = json.en
+
+        result.calculateEnCount()
 
         if (json.mask) {
             let posMasks = MASKS[inflection.pos]

@@ -123,6 +123,8 @@ export default class Word extends AbstractAnyWord {
         
         result.en = json.en
 
+        result.calculateEnCount()
+
         if (json.unstudied) {
             result.studied = false
         }
