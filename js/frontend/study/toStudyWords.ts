@@ -15,6 +15,7 @@ import WordMatch from '../../shared/phrase/WordMatch'
 import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { Match, WordMatched } from '../../shared/phrase/Match'
+import WildcardMatch from '../../shared/phrase/WildcardMatch'
 
 import StudyFact from './StudyFact'
 import StudyWord from './StudyWord'
@@ -56,11 +57,17 @@ function findWordBlocks(phraseMatch: Match, words: StudyWord[], offset?: number)
         let block: WordBlock
 
         let wordIndex = m.index
-        let matchIndex = phraseMatch.pattern.wordMatches.indexOf(m.wordMatch)
+        let wordMatches = phraseMatch.pattern.wordMatches
+
+        let matchIndex = wordMatches.indexOf(m.wordMatch)
+
+        let previousWasAny = 
+            /* we skip a match index if any is a matcher */
+            matchIndex > lastMatchIndex+1 && 
+            wordMatches[matchIndex-1] instanceof WildcardMatch
 
         if (result.length &&
-            /* we skip a match index if any is a matcher */
-            matchIndex <= lastMatchIndex+1 && 
+            !previousWasAny && 
             wordIndex+offset == result[result.length-1].end) {
             block = result[result.length-1]
 
