@@ -58,9 +58,20 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
         }
     } 
 
+    let inflectedWord = props.fact
+    let translation = word.getEnglish()
+
+    for (let i = 1; i < word.getTranslationCount(); i++) {
+        // note that we are looking for the inflected word but then 
+        // actually using the non-inflected
+        if (props.sentence.en().indexOf(inflectedWord.getEnglish('', i)) >= 0) {
+            translation = word.getEnglish('', i)
+        }
+    }
+
     return <div><strong className='nobr verbatim'>{ 
         props.fact.toText() 
-    }</strong> means <strong className='nobr'>{ word.getEnglish() }</strong> {seeAlso}</div>
+    }</strong> means <strong className='nobr'>{ translation }</strong> {seeAlso}</div>
 }
 
 export default wordFactComponent;
