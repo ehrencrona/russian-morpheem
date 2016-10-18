@@ -64,7 +64,12 @@ export default class WordTranslationComponent extends Component<Props, State> {
 
                                     <input type='text'
                                         autoCapitalize='off' 
-                                        defaultValue={ props.word.getEnglish(form, translationIndex) } 
+                                        defaultValue={ 
+                                            props.word.getEnglish(form, translationIndex) != 
+                                                props.word.getEnglish('', translationIndex) ?
+                                            props.word.getEnglish(form, translationIndex) :
+                                            ''
+                                        } 
                                         onBlur={ setValue(form, translationIndex) }/>
                                 </div>
                             )
