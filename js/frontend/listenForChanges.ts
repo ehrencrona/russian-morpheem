@@ -45,7 +45,7 @@ export default function listenForChanges(corpus: Corpus, xrArgs, onUnauthorized:
     }
 
     corpus.facts.onUntag = (fact: Fact, tag: string) => {
-        xr.del(`/api/${lang}/fact/${fact.getId()}/tag/${tag}`, {}, xrArgs)
+        xr.del(`/api/${lang}/fact/${fact.getId()}/tag/${tag}`, xrArgs)
             .catch(handleException)
     }
 
