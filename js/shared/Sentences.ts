@@ -25,7 +25,7 @@ export default class Sentences {
     constructor() {
     }
 
-    getSentencesByFact(facts: Facts) {
+    getSentencesByFact(facts: Facts): SentencesByFactIndex {
         if (!this.sentencesByFact) {
             this.sentencesByFact = indexSentencesByFact(this, facts)
         }

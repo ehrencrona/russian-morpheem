@@ -23,6 +23,10 @@ export default class KnowledgeSentenceSelector {
         let maybes = 0
         let unknowns = 0
 
+        if (!sentenceScore.debug) {
+            sentenceScore.debug = {}
+        }
+
         sentenceScore.debug['maybeUnknowns'] = []
         sentenceScore.debug['unknowns'] = []
 

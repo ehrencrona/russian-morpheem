@@ -22,7 +22,6 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import Sentence from '../../shared/Sentence'
 
 import { Exposure, Knowledge, Skill } from '../../shared/study/Exposure'
-import FrontendExposures from './FrontendExposures'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
@@ -35,10 +34,6 @@ import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelec
 import sentencesForFacts from '../../shared/study/sentencesForFacts'
 import topScores from '../../shared/study/topScores'
 import { StudiedFacts } from '../../shared/study/StudyPlan'
-import { fetchStudyPlan } from './FrontendStudentProfile'
-
-import ExplainFormComponent  from './ExplainFormComponent'
-import ForgettingStats from './ForgettingStats'
 
 import StudentProfile from '../../shared/study/StudentProfile'
 import Phrase from '../../shared/phrase/Phrase'
@@ -48,6 +43,13 @@ import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 import { WordMatched } from '../../shared/phrase/Match'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
+
+import ExplainFactComponent from '../guide/fact/FactComponent'
+
+import FrontendExposures from './FrontendExposures'
+import { fetchStudyPlan } from './FrontendStudentProfile'
+import ForgettingStats from './ForgettingStats'
+import StudyFact from '../study/StudyFact'
 
 interface Props {
     corpus: Corpus,
@@ -63,6 +65,7 @@ interface State {
     showPlan?: boolean
     edit?: boolean
     done?: boolean
+    explainFact?: StudyFact
 }
 
 let React = { createElement: createElement }
@@ -90,6 +93,10 @@ export default class StudyContainerComponent extends Component<Props, State> {
         this.exposures = new FrontendExposures(this.props.xrArgs, this.props.corpus.lang)
         this.sentenceKnowledge = new LastSawSentenceKnowledge()
         this.forgettingStats = new ForgettingStats(this.props.corpus)
+    }
+
+    explain(fact: StudyFact) {
+        this.setState({ explainFact: fact })
     }
 
     chooseSentence() {
@@ -392,7 +399,8 @@ console.log('Did not ought to know ' + visitedFact.getId())
                         profile={ this.state.profile }
                         trivialKnowledge={ this.trivialKnowledge }
                         onAnswer={ (exposures) => this.onAnswer(exposures)} 
-                        openPlan={ () => this.setState({ showPlan: true }) } />            
+                        openPlan={ () => this.setState({ showPlan: true }) } 
+                        onExplain={ (fact) => this.explain(fact) } />            
                 </div>
 
                 {
@@ -475,6 +483,18 @@ console.log('Did not ought to know ' + visitedFact.getId())
 
                     )
 
+                }
+
+                {
+                    this.state.explainFact ?
+                        <ExplainFactComponent 
+                            corpus={ this.props.corpus }
+                            fact={ this.state.explainFact }
+                            knowledge={ this.knowledge }
+                            onClose={ () => this.setState({ explainFact: null }) }
+                        />
+                    : 
+                        null
                 }
             </div>
         }

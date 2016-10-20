@@ -14,5 +14,8 @@ export default function topScores<S extends Score>(sentenceScores: S[], count): 
         cutoff = 0
     }
 
-    return sentenceScores.filter((ss) => ss.score >= cutoff)
+    return sentenceScores
+        .filter((ss) => ss.score >= cutoff)
+        // there might be many sentences with the same score
+        .slice(0, count)
 }

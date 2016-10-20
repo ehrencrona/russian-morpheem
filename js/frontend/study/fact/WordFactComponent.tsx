@@ -16,7 +16,6 @@ export interface TranslatableFact extends Fact, Translatable {
 }
 
 let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
-    
     let fact = props.fact
 
     let word: Word
@@ -71,7 +70,7 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
 
     return <div><strong className='nobr verbatim'>{ 
         props.fact.toText() 
-    }</strong> means <strong className='nobr'>{ translation }</strong> {seeAlso}</div>
+    }</strong> means <strong className='nobr'>{ translation }</strong> { seeAlso }</div>
 }
 
 export default wordFactComponent;

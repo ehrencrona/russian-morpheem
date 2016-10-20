@@ -24,7 +24,7 @@ export interface FactSentences {
 export type SentencesByFactIndex = { [factId: string]: FactSentences }; 
 
 export function findSentencesForFact(forFact: Fact, sentences: Sentences, facts: Facts, okInterval?: number): FactSentences {
-        if (okInterval == undefined) {
+    if (okInterval == undefined) {
         okInterval = OK_INTERVAL
     } 
     

@@ -20,6 +20,7 @@ interface Props {
     factSelector: FixedIntervalFactSelector
     done: (known: StudyFact[], unknown: StudyFact[]) => any    
     factSelected: (fact: StudyFact) => any
+    onExplain: (fact: StudyFact) => void
 }
 
 interface State {
@@ -90,6 +91,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
                         knowledge={ this.props.knowledge }
                         factSelector={ this.props.factSelector } 
                         onKnew={ (fact: StudyFact) => {} }
+                        onExplain={ this.props.onExplain }
                         known={ true }
                     />
                 </ul>

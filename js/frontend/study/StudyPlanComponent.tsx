@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 import { Topic } from '../../shared/metadata/Topics'
 
 import Fact from '../../shared/fact/Fact'
-import FactEntryComponent from '../guide/fact/FactEntryComponent'
+import FactEntryComponent from '../guide/entry/FactEntryComponent'
 
 import { Knowledge } from '../../shared/study/Exposure'
 import StudentProfile from '../../shared/study/StudentProfile'

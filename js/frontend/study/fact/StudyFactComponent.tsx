@@ -11,6 +11,7 @@ import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 import Sentence from '../../../shared/Sentence'
 import InflectableWord from '../../../shared/InflectableWord'
+import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import FixedIntervalFactSelector from '../../../shared/study/FixedIntervalFactSelector'
@@ -36,6 +37,7 @@ export interface FactComponentProps<FactType> {
 
 interface Props extends FactComponentProps<Fact> {
     onKnew: (fact: StudyFact) => void
+    onExplain: (fact: StudyFact) => void
     factSelector: FixedIntervalFactSelector
     known: boolean
 }
@@ -62,8 +64,10 @@ let studyFactComponent = (props: Props) => {
 
         componentType = createFactory(InflectionFactComponent)
     }
-    else if (fact instanceof InflectableWord || fact instanceof Word) {
+    else if (fact instanceof AbstractAnyWord) {
         componentType = createFactory(WordFactComponent)
+
+        canExplain = true
     }
     else if (fact instanceof EndingTransform) {
         componentType = createFactory(EndingTransformFactComponent)
@@ -94,36 +98,35 @@ let studyFactComponent = (props: Props) => {
     let repetition = (lastStudied ? lastStudied.repetition : 0)
 
     return <li>
-            <div className='content' onClick={ () => canExplain && explainable.explain() }>
+        <div className='content' onClick={ () => canExplain && props.onExplain(props.studyFact) }>
 
-                 { componentType({
-                    fact: fact, 
-                    corpus: props.corpus,
-                    knowledge: props.knowledge,
-                    sentence: props.sentence,
-                    hiddenFacts: props.hiddenFacts,
-                    studyFact: props.studyFact, 
-                    ref: (comp) => explainable = comp
-                }, []) }  
+            { componentType({
+                fact: fact, 
+                corpus: props.corpus,
+                knowledge: props.knowledge,
+                sentence: props.sentence,
+                hiddenFacts: props.hiddenFacts,
+                studyFact: props.studyFact, 
+            }, []) }  
 
-                <div className='explain'>
-                    <div className='repetitionIndicator'>
-                    {
-                        INDICATOR.map(i =>
-                            <div key={'rep'+i} className={(i <= repetition ? 'full' : 'empty')}>&nbsp;</div>
-                        )
-                    }
-                    </div>
-                    <div className='space'/>
-                    { canExplain ? 
-                        <div className='button'>
-                            <span className='text'>Explain</span>
-                        </div>
-                        :
-                        [] }
+            <div className='explain'>
+                <div className='repetitionIndicator'>
+                {
+                    INDICATOR.map(i =>
+                        <div key={'rep'+i} className={(i <= repetition ? 'full' : 'empty')}>&nbsp;</div>
+                    )
+                }
                 </div>
+                <div className='space'/>
+                { canExplain ? 
+                    <div className='button'>
+                        <span className='text'>Explain</span>
+                    </div>
+                    :
+                    [] }
             </div>
-        </li>
+        </div>
+    </li>
 }
 
 export default studyFactComponent;

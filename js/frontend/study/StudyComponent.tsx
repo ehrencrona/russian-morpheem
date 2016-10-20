@@ -49,6 +49,7 @@ interface Props {
     factSelector: FixedIntervalFactSelector
     onAnswer: (exposures: Exposure[]) => void
     openPlan: () => void
+    onExplain: (fact: StudyFact) => void
 }
 
 interface State {
@@ -328,8 +329,8 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                 corpus={ this.props.corpus }
                 sentence={ this.props.sentence }
                 knowledge={ this.props.profile.knowledge }
-                hiddenFacts={ hiddenFacts }    
-            />
+                hiddenFacts={ hiddenFacts }
+                onExplain={ this.props.onExplain } />
         }
         else if (this.state.stage == Stage.CONFIRM) {
             return <div className='lowerContainer'>

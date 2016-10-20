@@ -1,21 +1,21 @@
 
 
 import { Component, createElement } from 'react'
-import Corpus from '../../shared/Corpus'
+import Corpus from '../../../shared/Corpus'
 
-import InflectionsContainerComponent from '../InflectionsComponent'
-import InflectedWord from '../../shared/InflectedWord'
-import InflectableWord from '../../shared/InflectableWord'
-import Fact from '../../shared/fact/Fact'
-import { Knowledge } from '../../shared/study/Exposure'
+import InflectionsContainerComponent from '../../InflectionsComponent'
+import InflectedWord from '../../../shared/InflectedWord'
+import InflectableWord from '../../../shared/InflectableWord'
+import Fact from '../../../shared/fact/Fact'
+import { Knowledge } from '../../../shared/study/Exposure'
 
-import Inflection from '../../shared/inflection/Inflection'
-import Ending from '../../shared/Ending'
-import { getFormName } from '../../shared/inflection/InflectionForms' 
-import InflectionFact from '../../shared/inflection/InflectionFact'
-import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
-import Transform from '../../shared/Transform'
-import { EndingTransform } from '../../shared/Transforms'
+import Inflection from '../../../shared/inflection/Inflection'
+import Ending from '../../../shared/Ending'
+import { getFormName } from '../../../shared/inflection/InflectionForms' 
+import InflectionFact from '../../../shared/inflection/InflectionFact'
+import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
+import Transform from '../../../shared/Transform'
+import { EndingTransform } from '../../../shared/Transforms'
 
 let React = { createElement: createElement }
 
@@ -23,7 +23,6 @@ interface Props {
     corpus: Corpus,
     word: InflectedWord,
     knowledge: NaiveKnowledge,
-    onClose: () => void
     onSelect: (word: InflectedWord) => void
 }
 
@@ -35,7 +34,7 @@ interface State {
     tab: Tab
 }
 
-export default class ExplainFormComponent extends Component<Props, State> {
+export default class InflectionFactComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
@@ -477,40 +476,26 @@ export default class ExplainFormComponent extends Component<Props, State> {
         let inflection = word.word.inflection
         let corpus = this.props.corpus
 
-        return <div className='overlayContainer' onClick={ this.props.onClose }>
-
-            <div className='overlay'>
-                <div>
-                    <div className='tabs'>
-                        <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
-                                onClick={ () => this.setState({ tab: Tab.FORM }) }>
-                            <h3>The { getFormName(form) }</h3>
-                        </div>
-                        <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
-                                onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
-                            <h3>{ word.getDefaultInflection().jp }</h3>
-                        </div>
-                    </div>
-
-                    { this.state.tab == Tab.FORM ?
-
-                        this.renderForm() 
-                    
-                        :
-                    
-                        this.renderInflection()}
-
-                    <div className='buttonBar'>
-
-                        <div className='button' onClick={ (e) => { e.stopPropagation(); this.props.onClose() } } > Close </div>
-
-                    </div>
+        return <div>
+            <div className='tabs'>
+                <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
+                        onClick={ () => this.setState({ tab: Tab.FORM }) }>
+                    <h3>The { getFormName(form) }</h3>
                 </div>
-
+                <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
+                        onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
+                    <h3>{ word.getDefaultInflection().jp }</h3>
+                </div>
             </div>
 
-        </div>
+            { this.state.tab == Tab.FORM ?
 
+                this.renderForm() 
+            
+                :
+            
+                this.renderInflection()}
+        </div>
     }
 }
 

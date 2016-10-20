@@ -34,20 +34,17 @@ export default class PhraseCaseFactEntryComponent extends Component<Props, State
     }
 
     render() {
-
         return <dl>
-            { 
+            <dt>{ 
                 this.state.matches.map(match =>
-                     [
-                        <dt key={ match.sentence.id }>{
-                            match.words.map(w => w.word.toText()).join(' ') 
-                        }</dt>,
-                        <dd>using the {
-                            FORMS[CASES[this.props.fact.grammaticalCase]].name
-                        }</dd>
-                     ]
+                    <div key={ match.sentence.id }>{
+                        match.words.map(w => w.word.toText()).join(' ') 
+                    }</div>
                 )
-            }
+            }</dt>
+            <dd>using the {
+                FORMS[CASES[this.props.fact.grammaticalCase]].name
+            }</dd>
         </dl>
     }
 }

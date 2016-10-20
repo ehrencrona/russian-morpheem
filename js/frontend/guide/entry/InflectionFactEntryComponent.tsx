@@ -20,7 +20,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class InflectionFactEntryComponent extends Component<Props, State> {
+export default class inflectionFactEntryComponent extends Component<Props, State> {
     componentWillMount() {
         let fact = this.props.fact
 
