@@ -22,9 +22,11 @@ import { Component, createElement } from 'react'
 
 interface Props {
     corpus: Corpus,
-    fact: StudyFact
+    fact: Fact
+    context: InflectedWord
     knowledge: NaiveKnowledge
     onClose: () => any
+    onSelectFact: (fact: Fact, context?: InflectedWord) => any
 }
 
 interface State {}
@@ -32,28 +34,28 @@ interface State {}
 let React = { createElement: createElement }
 
 export default function factComponent(props: Props) {
-    let studyFact = props.fact
+    let fact = props.fact
 
     let content
 
-    if (studyFact.fact instanceof InflectionFact) {
+    if (fact instanceof InflectionFact) {
         content = <InflectionFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
-            onSelect={ () => {} }
-            word={ props.fact.words[0].word as InflectedWord } 
+            word={ props.context } 
+            onSelectFact={ props.onSelectFact }
         />
     }
-    else if (studyFact.fact instanceof AbstractAnyWord) {
+    else if (fact instanceof InflectableWord) {
         content = <WordFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
-            onSelect={ () => {} }
-            word={ props.fact.words[0].word as InflectedWord } 
+            word={ fact }
+            onSelectFact={ props.onSelectFact }
         />
     }
     else {
-        content = <div>Unhandled fact { studyFact.fact.getId() }</div>
+        content = <div>Unhandled fact { fact.getId() }</div>
     }
 
     return <div className='overlayContainer' onClick={ props.onClose }>

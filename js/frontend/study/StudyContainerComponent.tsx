@@ -65,7 +65,8 @@ interface State {
     showPlan?: boolean
     edit?: boolean
     done?: boolean
-    explainFact?: StudyFact
+    explainFact?: Fact
+    explainContext?: InflectedWord
 }
 
 let React = { createElement: createElement }
@@ -96,7 +97,14 @@ export default class StudyContainerComponent extends Component<Props, State> {
     }
 
     explain(fact: StudyFact) {
-        this.setState({ explainFact: fact })
+        let context: InflectedWord = null
+        let word = fact.words[0].word
+
+        if (word instanceof InflectedWord) {
+            context = word
+        }
+
+        this.setState({ explainFact: fact.fact, explainContext: context })
     }
 
     chooseSentence() {
@@ -124,8 +132,13 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
 /*
+        this.setState({
+            explainFact: this.props.corpus.facts.get('замок[lock]')
+        })
+*/
+/*
         {
-            let sentence = this.props.corpus.sentences.get(1261)
+            let sentence = this.props.corpus.sentences.get(226)
 
             this.knowledge.getKnowledge = (fact: Fact) => {
                 return Knowledge.KNEW
@@ -137,12 +150,12 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
             this.setState({
                 sentence: sentence,
-                facts: this.expandFact(this.props.corpus.facts.get('gen-of'), sentence)
+                facts: this.expandFact(this.props.corpus.facts.get('быть'), sentence)
             })
 
             return
         }
-*/        
+*/
 
         // if studying phrases, remove any sentences that don't actually match the phrase.
         sentenceScores = sentenceScores.filter((score) => {
@@ -490,8 +503,11 @@ console.log('Did not ought to know ' + visitedFact.getId())
                         <ExplainFactComponent 
                             corpus={ this.props.corpus }
                             fact={ this.state.explainFact }
+                            context={ this.state.explainContext }
                             knowledge={ this.knowledge }
                             onClose={ () => this.setState({ explainFact: null }) }
+                            onSelectFact={ (fact, context?) => 
+                                this.setState({ explainFact: fact, explainContext: context }) }
                         />
                     : 
                         null

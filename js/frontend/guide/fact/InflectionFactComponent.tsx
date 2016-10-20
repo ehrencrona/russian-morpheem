@@ -6,6 +6,7 @@ import Corpus from '../../../shared/Corpus'
 import InflectionsContainerComponent from '../../InflectionsComponent'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
+import AnyWord from '../../../shared/AnyWord'
 import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
 
@@ -17,13 +18,15 @@ import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import Transform from '../../../shared/Transform'
 import { EndingTransform } from '../../../shared/Transforms'
 
+import StudyFact from '../../study/StudyFact'
+
 let React = { createElement: createElement }
 
 interface Props {
     corpus: Corpus,
     word: InflectedWord,
     knowledge: NaiveKnowledge,
-    onSelect: (word: InflectedWord) => void
+    onSelectFact: (fact: Fact, context: InflectedWord) => any
 }
 
 enum Tab {
@@ -220,7 +223,11 @@ export default class InflectionFactComponent extends Component<Props, State> {
         }
 
         return <li key={ word.getId() }>{ word.getDefaultInflection().jp } →&nbsp; 
-            <span className='clickable' onClick={ () => this.props.onSelect(inflected) }>
+            <span className='clickable' onClick={ (e) => {
+                    e.stopPropagation()  
+                    this.props.onSelectFact( 
+                        inflected.word.inflection.getFact(inflected.form), 
+                        inflected) }}>
                 { inflected.toString() }{ transform ? '*' : '' }
             </span> </li>
     }
@@ -466,7 +473,9 @@ export default class InflectionFactComponent extends Component<Props, State> {
             word={ this.props.word.word }
             allowAdd={ false }
             inflection={ this.props.word.word.inflection } 
-            onSelect={ (form) => this.props.onSelect(this.props.word.word.inflect(form)) }/>
+            onSelect={ (form) => this.props.onSelectFact(
+                this.props.word.word.inflection.getFact(form),
+                this.props.word) }/>
 
     }
 
@@ -479,11 +488,17 @@ export default class InflectionFactComponent extends Component<Props, State> {
         return <div>
             <div className='tabs'>
                 <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
-                        onClick={ () => this.setState({ tab: Tab.FORM }) }>
+                        onClick={ (e) => {
+                            e.stopPropagation()
+                            this.setState({ tab: Tab.FORM }) 
+                        }}>
                     <h3>The { getFormName(form) }</h3>
                 </div>
                 <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
-                        onClick={ () => this.setState({ tab: Tab.INFLECTION }) }>
+                        onClick={ (e) => {
+                            e.stopPropagation()
+                            this.setState({ tab: Tab.INFLECTION }) 
+                        }}>
                     <h3>{ word.getDefaultInflection().jp }</h3>
                 </div>
             </div>

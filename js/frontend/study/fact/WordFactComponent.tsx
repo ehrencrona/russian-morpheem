@@ -7,6 +7,7 @@ import InflectableWord from '../../../shared/InflectableWord'
 import Word from '../../../shared/Word'
 import Translatable from '../../../shared/Translatable'
 import Fact from '../../../shared/fact/Fact'
+import getWordTranslationInSentence from '../../../shared/getWordTranslationInSentence'
 
 import { FactComponentProps } from './StudyFactComponent'
 
@@ -58,19 +59,32 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
     } 
 
     let inflectedWord = props.fact
-    let translation = word.getEnglish()
 
-    for (let i = 1; i < word.getTranslationCount(); i++) {
-        // note that we are looking for the inflected word but then 
-        // actually using the non-inflected
-        if (props.sentence.en().indexOf(inflectedWord.getEnglish('', i)) >= 0) {
-            translation = word.getEnglish('', i)
-        }
+    let translation: string
+    
+    if (fact instanceof InflectableWord) {
+        // search for the inflected word but show the uninflected.
+        let originalFormWord = props.studyFact.words[0].word
+
+        translation = word.getEnglish('', 
+            getWordTranslationInSentence(originalFormWord, props.sentence).index)
+    }
+    else {
+        translation = getWordTranslationInSentence(word, props.sentence).string
     }
 
     return <div><strong className='nobr verbatim'>{ 
         props.fact.toText() 
-    }</strong> means <strong className='nobr'>{ translation }</strong> { seeAlso }</div>
+    }</strong> means <strong className='nobr'>{ 
+        translation 
+    }{
+        translation != word.getEnglish() ?
+            ' / ' + word.getEnglish()
+            : 
+            null
+    }</strong> { 
+        seeAlso 
+    }</div>
 }
 
 export default wordFactComponent;

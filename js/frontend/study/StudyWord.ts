@@ -14,6 +14,9 @@ class StudyWord implements StudyToken {
     jp: string
     form: InflectionForm
 
+    // translation override to use the right tranlsation when there are several 
+    en: string
+
     constructor(public word: Word, public studied: boolean) {        
         word.visitFacts((fact: Fact) => this.addFact({ fact: fact, words: [ this ] }))
 
@@ -32,7 +35,7 @@ class StudyWord implements StudyToken {
     }
 
     getHint() {
-        return this.word.getEnglish()
+        return this.en || this.word.getEnglish()
     }
 
     hasFact(fact: Fact): boolean {

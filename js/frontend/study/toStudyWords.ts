@@ -23,6 +23,8 @@ import StudyPhrase from './StudyPhrase'
 import StudyToken from './StudyToken'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
+import getWordTranslationInSentence from '../../shared/getWordTranslationInSentence'
+
 function isWorthExplaining(fact: Fact, word: Word) {
     if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
         return false
@@ -246,6 +248,8 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         studiedFacts.forEach(fact => {
             if (word.hasFact(fact)) {
                 word.studied = true
+
+                word.en = getWordTranslationInSentence(word.word, sentence).string
             }
         })
     })
