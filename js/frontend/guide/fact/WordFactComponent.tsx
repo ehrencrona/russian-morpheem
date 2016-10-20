@@ -72,7 +72,7 @@ export default class WordFactComponent extends Component<Props, State> {
     }
 
     componentWillReceiveProps(props) {
-        if (props.word !+ this.props.word) {
+        if (props.word != this.props.word) {
             this.fetchFactoid(props.word.getWordFact())
         }
     }
@@ -234,7 +234,7 @@ export default class WordFactComponent extends Component<Props, State> {
                             }
                             {
                                 corpus.facts.facts.filter(fact => 
-                                    fact instanceof AbstractAnyWord 
+                                    fact instanceof InflectableWord 
                                         && fact.getIdWithoutClassifier() == thisIdWithoutClassifier 
                                         && fact.getId() != word.getId())
                                     .map(f => 
