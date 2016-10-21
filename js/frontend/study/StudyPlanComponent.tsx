@@ -6,6 +6,7 @@ import { Topic } from '../../shared/metadata/Topics'
 
 import Fact from '../../shared/fact/Fact'
 import FactEntryComponent from '../guide/entry/FactEntryComponent'
+import ExplainFactComponent from '../guide/fact/FactComponent'
 
 import { Knowledge } from '../../shared/study/Exposure'
 import StudentProfile from '../../shared/study/StudentProfile'
@@ -37,6 +38,7 @@ interface State {
     newCount?: number
     onTab?: OnTab
     showTopics?: boolean
+    explainFact?: Fact
 }
 
 const DEFAULT_REPEAT_COUNT = 25
@@ -120,13 +122,17 @@ export default class StudyPlanComponent extends Component<Props, State> {
 
             return <li key={ fact.getId() }>
                 { this.renderProgress(fact) }
-                <div className='fact'>
+                <div className='fact' onClick={ (e) => { 
+                    this.setState({ explainFact: fact })
+                }}>
                     <FactEntryComponent
                         corpus={ this.props.corpus }
                         knowledge={ this.props.profile.knowledge } 
                         fact={ fact }/> 
                 </div>
-                <div className='button remove' onClick={ () => this.remove(fact) }>I know</div>
+                <div className='button remove' onClick={ (e) => { 
+                    this.remove(fact)
+                }}>I know</div>
             </li>
 
         }) }</ul>
@@ -264,6 +270,21 @@ console.log(f.getId() + ' is already known')
                         studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
                     )) }>Done</div>
             </div>
+
+            {
+                this.state.explainFact ?
+                    <ExplainFactComponent 
+                        corpus={ this.props.corpus }
+                        fact={ this.state.explainFact }
+                        context={ null }
+                        knowledge={ this.props.profile.knowledge }
+                        onClose={ () => this.setState({ explainFact: null }) }
+                        onSelectFact={ (fact, context?) => 
+                            this.setState({ explainFact: fact }) }
+                    />
+                : 
+                    null
+            }
         </div>
     }
 }

@@ -203,7 +203,17 @@ export default class WordFactComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let thisIdWithoutClassifier = word.getIdWithoutClassifier() 
 
-        return <div>
+        let otherMeanings = corpus.facts.facts.filter(fact => 
+            { 
+                if (fact instanceof InflectableWord || fact instanceof Word) {
+                    let word = fact as AbstractAnyWord
+
+                    return fact.getIdWithoutClassifier() == thisIdWithoutClassifier &&
+                    fact.getId() != word.getId()
+                }
+            })
+
+        return <div className='fact'>
             <h1>{ word.toText() } ({ word.getEnglish() })</h1>
 
             { 
@@ -214,7 +224,53 @@ export default class WordFactComponent extends Component<Props, State> {
                         { this.state.factoid.explanation }
                     </i>
 
-                    { this.state.factoid.relations.length ?
+                    { 
+                        otherMeanings.length ?
+                        <div>
+                            Other meanings: {
+                                otherMeanings.map((fact, index) =>
+                                    <span>{ index > 0 ? ', ' : ''}<span 
+                                        key={ fact.getId() } onClick={ (e) => {
+                                                this.props.onSelectFact(fact)
+                                                e.stopPropagation()
+                                            }
+                                        } >{ (fact as Word).getEnglish()}
+                                        </span>
+                                    </span>)
+                            }
+                        </div>
+                        :
+                        null
+                    }
+
+                </div>
+
+                :
+
+                null
+            }
+
+            <div className='columns'>
+                <div className='main'>
+                    <h3>Examples of use</h3>
+
+                    <ul>
+                        {
+                            (this.state.sentences || []).map(sentence => 
+                                <li key={ sentence.sentence.id }>
+                                    <div dangerouslySetInnerHTML={ { __html: 
+                                        this.tokensToHtml(sentence.tokens)
+                                    }}/>
+
+                                    <div dangerouslySetInnerHTML={ { __html: 
+                                        this.highlightTranslation(sentence) } }/>
+                                </li>
+                            )
+                        }
+                    </ul>
+                </div>
+                <div className='sidebar'>
+                    { this.state.factoid && this.state.factoid.relations.length ?
                         <div>
                             <h3>See also</h3>
 
@@ -232,48 +288,13 @@ export default class WordFactComponent extends Component<Props, State> {
                                     }</li>
                                 }) 
                             }
-                            {
-                                corpus.facts.facts.filter(fact => 
-                                    fact instanceof InflectableWord 
-                                        && fact.getIdWithoutClassifier() == thisIdWithoutClassifier 
-                                        && fact.getId() != word.getId())
-                                    .map(f => 
-                                        <li key={ f.getId() } onClick={ (e) => {
-                                                this.props.onSelectFact(f)
-                                                e.stopPropagation()
-                                            }
-                                        } >{ 
-                                            this.renderRelatedFact(f) 
-                                        }</li>)
-                            }
                             </ul>
                         </div>
 
                         : null
                     }
                 </div>
-
-                :
-
-                null
-            }
-
-            <h3>Examples of use</h3>
-
-            <ul>
-                {
-                    (this.state.sentences || []).map(sentence => 
-                        <li key={ sentence.sentence.id }>
-                            <div dangerouslySetInnerHTML={ { __html: 
-                                this.tokensToHtml(sentence.tokens)
-                            }}/>
-
-                            <div dangerouslySetInnerHTML={ { __html: 
-                                this.highlightTranslation(sentence) } }/>
-                        </li>
-                    )
-                }
-            </ul>
+            </div>
         </div>
     }
 }

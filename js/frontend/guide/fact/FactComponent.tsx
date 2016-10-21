@@ -60,7 +60,9 @@ export default function factComponent(props: Props) {
 
     return <div className='overlayContainer' onClick={ props.onClose }>
         <div className='overlay'>
-            {content}
+            <div className='content guide'>
+                {content}
+            </div>
         </div>
     </div>
 }

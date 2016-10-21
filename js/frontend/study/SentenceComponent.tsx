@@ -15,8 +15,6 @@ import Phrase from '../../shared/phrase/Phrase'
 
 import animate from './animate'
 
-const MAX_FONT_SIZE = 64;
-
 interface Props {
     facts: Fact[],
     corpus: Corpus,
@@ -261,9 +259,11 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let currentSize = parseInt(window.getComputedStyle(container, null).getPropertyValue("font-size").replace('px',''))
 
-        let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), MAX_FONT_SIZE)
+        let maxFontSize = window.innerWidth < 600 || window.innerHeight < 600 ? 26 : 48;
 
-        trySize(0, guesstimate, Math.min(getWidth(container), MAX_FONT_SIZE))
+        let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), maxFontSize)
+
+        trySize(0, guesstimate, Math.min(getWidth(container), maxFontSize))
     }
 }
 
