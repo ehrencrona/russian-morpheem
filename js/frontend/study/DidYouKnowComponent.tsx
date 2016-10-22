@@ -75,7 +75,7 @@ export default class DidYouKnowComponent extends Component<Props, State> {
         }
 
         return <div className='lowerContainer'>
-            <div className='studyButtonBar'>
+            <div className='buttons'>
                 <div className='button left smallText' onClick={ knew }><span className='line'>I knew</span> this</div>
                 <div className='button right smallText' onClick={ didntKnow }><span className='line'>Study this</span> again</div>
             </div>

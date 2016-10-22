@@ -25,7 +25,8 @@ html {
 
 body {
     background-color: $color16;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -72,23 +73,34 @@ $animationLength: 0.2s;
     to   { transform: translate3d(0, 0, 0) }
 }
 
-.smallFont {
-    font-size: 60%;
-    font-weight: 900;
-}
-
 .border-box-sizing {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
+.smallFont {
+    font-size: 80%;
+}
+
+$buttonPadding: 0.5em;
+
 .study {
-    font-size: 12pt;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #606060;
+
+    font-size: 22pt;
+    font-weight: 600;
+
+    @media (max-height: 600px), (max-width: 600px) {
+        font-size: 18pt;
+    }
+
+    @media (max-height: 400px), (max-width: 400px) {
+        font-size: 16pt;
+    }
 
     > .content {
         background-color: $color9; 
@@ -99,21 +111,36 @@ $animationLength: 0.2s;
         display: flex;
         flex-direction: column;
 
+        // technically not needed, but triggers a weird chrome bug if not present
+        .upper, .lowerContainer {
+            height: 50%;
+        }
+
         > div {
             flex-grow: 1;
             flex-shrink: 1;
             flex-basis: 0;
         }
 
-        .upper {
+        .upper, .lower {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            padding: 0.5em 10% 0.5em 10%;
+            overflow: hidden;
+        }
+
+        // space for buttons
+        $halfButtonHeight: (2 * $buttonPadding + 1em) / 2;
+
+        .upper {
+            margin-bottom: $halfButtonHeight;
 
             .sentenceId {
                 position: absolute;
                 right: $unit;
                 top: $unit;
-                font-size: 70%;
+                font-size: 8pt;
 
                 a {
                     color: lighten($color4, 30%);
@@ -122,11 +149,11 @@ $animationLength: 0.2s;
             }
 
             .explanation {
-                margin: 36pt;
+                @extend .smallFont;
 
-                margin-bottom: 12pt;
-                font-size: 1em;
-                font-weight: bold;
+                font-size: 50%;
+                margin-bottom: 0.5em;
+                margin-top: 0;
 
                 @media (max-height: 500px) {
                     display: none;
@@ -134,17 +161,14 @@ $animationLength: 0.2s;
             }
 
             .sentence {
-                margin: 36pt;
-                margin-top: 0;
-                font-size: 2em;
-                flex-grow: 1;
+                // put the sentence a little bit higher than center
+                flex-grow: 0.2;
+
                 overflow: hidden;
                 line-height: 125%;
 
-                @media (max-height: $button-height-breakpoint) {
-                    margin: 20pt;
-                    margin-top: 8pt;
-                }
+                // Cyrillic letter seem smaller due to the x height so blow it up.
+                font-size: 110%;
 
                 .nobr { 
                     white-space: nowrap
@@ -221,10 +245,6 @@ $animationLength: 0.2s;
             }
         }
 
-        .upper, .lower {
-            overflow: hidden;
-        }
-
         .upper.dimmed {
             color: #505050; 
 
@@ -251,7 +271,7 @@ $animationLength: 0.2s;
             }
         }
 
-        .studyButtonBar {
+        .buttons {
             display: flex;
             flex-wrap: wrap; 
 
@@ -262,17 +282,13 @@ $animationLength: 0.2s;
             z-index: 20;
             flex-wrap: nowrap;
 
-            font-size: 1.5em;
-
-            @media (max-height: $button-height-breakpoint) {
-                font-size: 0.8em;
-            }
-
             .button {
+                @extend .smallFont;
+                @extend .border-box-sizing;
+
                 display: block;
                 margin: 0;
-                font-weight: 700;
-                padding: 3*$unit 1em;
+                padding: $buttonPadding 1em;
                 border-radius: 1em;
 
                 .line {
@@ -282,20 +298,12 @@ $animationLength: 0.2s;
                 }
             }
 
-            .button.smallText {
-                font-size: 80%;
-
-                @media (max-height: $button-height-breakpoint) {
-                    font-size: 100%;
-                }
-                
-                line-height: 125%;
+            .button.left, .button.right {
+                width: 50%;
+                flex-grow: 1;
             }
 
             .button.left {
-                width: 50%;
-                flex-grow: 1;
-                @extend .border-box-sizing;
                 border-bottom-left-radius: 0; 
                 border-top-left-radius: 0;
                 margin-right: 5%;
@@ -304,11 +312,8 @@ $animationLength: 0.2s;
             }
 
             .button.right {
-                width: 50%;
                 text-align: right;
                 margin-left: 5%;
-                flex-grow: 1;
-                @extend .border-box-sizing;
                 border-bottom-right-radius: 0; 
                 border-top-right-radius: 0; 
                 border-right: none;
@@ -316,123 +321,119 @@ $animationLength: 0.2s;
         }
 
         .lowerContainer {
+            @extend .border-box-sizing;
             background-color: $colorLower;
-        }
-
-        .lower {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding-top: 3em;
-            @extend .border-box-sizing;
-            height: 100%;
 
-            @media (max-height: $button-height-breakpoint) {
-                padding-top: 20pt;
-            }
-
-            .didYouKnowFact {
-                display: block;
+            .lower {
                 flex-grow: 1;
-                width: 100%;
-                max-width: 500px;
+                @extend .border-box-sizing;
+        
+                margin-top: (2 * $buttonPadding + 1em) / 2;
+                align-items: center;
 
-                @media (max-height: 600px) {
-                    font-size: 0.8em;
-                }
+                .didYouKnowFact {
+                    flex-grow: 1;
+                    width: 100%;
+                    max-width: 500px;
+                    
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
 
+                    @extend .smallFont;
 
-                > li {
-                    $padding: 1em;
+                    > li {
+                        $padding: 1em;
+                        // push it up a bit above center
+                        flex-grow: 0.3;
 
-                    padding: $padding;
-                    $borderRadius: 4 * $unit;
-                    $buttonColor: #e6a00e;
-
-                    .content {
-                        animation-name: swingin;
-                        animation-duration: $animationLength;
-
-                        font-size: 1.5em;
-                        line-height: 130%;
-                        text-align: center;
-                        background-color: $color9;
-                        display: block;
                         padding: $padding;
-                        border-radius: $borderRadius;
 
-                        color: #636363;
+                        .content {
+                            animation-name: swingin;
+                            animation-duration: $animationLength;
 
-                        .explain {
-                            display: flex;
-                            flex-direction: row;
-                            align-items: stretch;
-                            margin: -$padding;
-                            margin-top: 0;
+                            line-height: 130%;
+                            text-align: center;
+                            background-color: $color9;
+                            display: block;
+                            padding: $padding;
 
-                            .repetitionIndicator {
+                            color: #636363;
+                            font-weight: 600;
+
+                            strong {
+                                font-weight: 700;
+                            }
+
+                            .explain {
                                 display: flex;
                                 flex-direction: row;
-                                align-items: center;
-                                $size: 8px;
+                                align-items: stretch;
+                                margin: -$padding;
+                                margin-top: $padding;
+                                background-color: #f6ab0e;
 
-                                padding: 3*$unit 4*$unit;
-                                background-color: $buttonColor;
-                                border-bottom-left-radius: $borderRadius;
-                                border-top-right-radius: $borderRadius;
+                                .repetitionIndicator {
+                                    display: flex;
+                                    flex-direction: row;
+                                    align-items: center;
+                                    $size: 8px;
 
-                                > div {
-                                    width: $size;
-                                    height: $size;
-                                    margin-right: 2px;
-                                    background-color: #fbeac5;
+                                    padding: 3*$unit 4*$unit;
+
+                                    > div {
+                                        width: $size;
+                                        height: $size;
+                                        margin-right: 2px;
+                                        background-color: #fbeac5;
+                                    }
+
+                                    .full {
+                                        background-color: #dc7018;
+                                    }
                                 }
 
-                                .full {
-                                    background-color: #dc7018;
-                                }
-                            }
-
-                            .space {
-                                flex-grow: 1;
-                            }
-
-                            .button {
-                                margin: 0;
-                                padding: 0 4*$unit;
-                                background-color: $buttonColor;
-                                font-weight: 700;
-
-                                .text {
-                                    font-size: 0.7em;
+                                .space {
+                                    flex-grow: 1;
                                 }
 
-                                display: block;
+                                .button {
+                                    margin: 0;
+                                    padding: 0 4*$unit;
+                                    background-color: inherit;
 
-                                border-radius: 0;
-                                border-bottom-right-radius: $borderRadius;
-                                border-top-left-radius: $borderRadius;
+                                    .text {
+                                        font-size: 0.7em;
+                                    }
+
+                                    display: block;
+
+                                    border-radius: 0;
+                                }
                             }
                         }
-                    }
 
-                    .content:hover {
-                        .explain .button {
-                            background-color: $color13;
+                        .content:hover {
+                            .explain .button {
+                                background-color: $color13;
+                            }
                         }
-                    }
 
-                    strong {
-                        color: $lowlight;
-                    }
+                        strong {
+                            color: $lowlight;
+                        }
 
-                    .verbatim {
-                        color: $highlight;
-                    }
+                        .verbatim {
+                            color: $highlight;
+                        }
 
-                    .nobr {
-                        display: block;
-                        margin: $unit 0;
+                        .nobr {
+                            display: block;
+                            margin: $unit 0;
+                        }
                     }
                 }
             }
@@ -451,16 +452,15 @@ $animationLength: 0.2s;
 
             .translation {
                 animation: fadein 0.3s;
-                font-family: Source Sans Pro;
                 @extend .border-box-sizing;
-                padding: 0 2em;
-                margin-top: 2em;
+
+                flex-grow: 0.2;
+
+                padding-top: 0;
+
                 width: 100%;
                 color: white;
-                font-style: italic;
                 font-weight: 600;
-                text-align: center;
-                font-size: 1.5em;
             }
         }
 

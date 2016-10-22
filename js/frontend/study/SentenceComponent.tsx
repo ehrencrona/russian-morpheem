@@ -258,12 +258,12 @@ export default class SentenceComponent extends Component<Props, State> {
         }
 
         let currentSize = parseInt(window.getComputedStyle(container, null).getPropertyValue("font-size").replace('px',''))
+        
+        let maxSize = parseInt(window.getComputedStyle(container.parentElement, null).getPropertyValue("font-size").replace('px',''))
 
-        let maxFontSize = window.innerWidth < 600 || window.innerHeight < 600 ? 26 : 48;
+        let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), maxSize)
 
-        let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), maxFontSize)
-
-        trySize(0, guesstimate, Math.min(getWidth(container), maxFontSize))
+        trySize(0, guesstimate, Math.min(getWidth(container), currentSize))
     }
 }
 

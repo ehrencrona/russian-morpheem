@@ -334,7 +334,7 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
         }
         else if (this.state.stage == Stage.CONFIRM) {
             return <div className='lowerContainer'>
-                <div className='studyButtonBar'>
+                <div className='buttons'>
                     <div className='button' onClick={ () => this.next() }>Continue</div>
                 </div>
                 { this.renderSentenceTranslation() }
@@ -342,7 +342,7 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
         }
         else if (this.state.stage == Stage.REVEAL) {
             return <div className='lowerContainer'>
-                <div className='studyButtonBar'>
+                <div className='buttons'>
                     <div className='button left small' onClick={ () => this.iWasRight() }><span className='line'>I was</span> right</div>
                     <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) 
                     }><span className='line'>I was</span> wrong</div>
@@ -352,7 +352,7 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
         }
         else {
             return <div className='lowerContainer'>
-                <div className='studyButtonBar'>
+                <div className='buttons'>
                     <div className='button' onClick={ () => this.reveal() }>Reveal</div>
                 </div>
                 <div className='lower'></div>

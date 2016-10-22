@@ -131,11 +131,11 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
         sentenceScores = new KnowledgeSentenceSelector(this.knowledge).scoreSentences(sentenceScores)
 
-
+/*
         this.setState({
             explainFact: this.props.corpus.facts.get('замок[lock]')
         })
-
+*/
 /*
         {
             let sentence = this.props.corpus.sentences.get(226)
