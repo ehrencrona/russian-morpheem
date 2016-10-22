@@ -64,24 +64,11 @@ export default class WordFactComponent extends Component<Props, State> {
         this.state = { }
     }
 
-    fetchFactoid(fact: Fact) {
+    wordChanged(fact: Fact) {
         let corpus = this.props.corpus
 
         corpus.factoids.getFactoid(fact)
             .then(factoid => this.setState({ factoid: factoid } ))
-    }
-
-    componentWillReceiveProps(props) {
-        if (props.word != this.props.word) {
-            this.fetchFactoid(props.word.getWordFact())
-        }
-    }
-
-    componentWillMount() {
-        let corpus = this.props.corpus
-        let fact = this.props.word.getWordFact()
-
-        this.fetchFactoid(fact)
 
         let sentences = corpus.sentences.getSentencesByFact(corpus.facts)[ fact.getId() ]
 
@@ -110,6 +97,18 @@ export default class WordFactComponent extends Component<Props, State> {
                 }
             })
         })
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.word != this.props.word) {
+            this.wordChanged(props.word.getWordFact())
+        }
+    }
+
+    componentWillMount() {
+        let fact = this.props.word.getWordFact()
+
+        this.wordChanged(fact)
     } 
 
     downscoreRepeatedForms(scores: SentenceScore[]) {
@@ -201,10 +200,13 @@ export default class WordFactComponent extends Component<Props, State> {
 
     renderRelatedFact(fact: Fact) {
         if (fact instanceof InflectableWord) {
-            return fact.toText() + ': ' + fact.getEnglish()
+            return <span>
+                    { fact.toText() }
+                    <div className='en'>{ fact.getEnglish()}</div>
+                </span>
         }
         else if (fact instanceof Phrase) {
-            return fact.description
+            return <span>{ fact.description }</span>
         }
         else {
             return null

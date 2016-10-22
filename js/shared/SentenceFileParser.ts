@@ -168,13 +168,13 @@ export default function parseSentenceFile(data, words: Words, phrases: Phrases):
 }
 
 function replaceShortWithLongDashes(english: string) {
-    let r = /(^| )- [A-Z]/g;
+    let r = /(^| )[-–] [A-Z]/g;
 
     let m;
 
     while (!!(m = r.exec(english))) {
         let index = m.index + m[1].length
-        english = english.substr(0, index) + '–' + english.substr(index+1)
+        english = english.substr(0, index) + '—' + english.substr(index+1)
     }
 
     return english
