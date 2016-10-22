@@ -35,12 +35,7 @@ $color-bg-inverted: $color4;
 
 $small-font: 60%;
 
-
-
-html {
-    margin: 0;
-    padding: 0;
-}
+@import 'shared';
 
 body {
     background-color: $color16;
@@ -73,12 +68,6 @@ input[type=text], input[type=number], textarea {
     font-size: 120%;
     background-color: lighten($color-bg-light, 10%);
     border: 2px solid darken($color-bg-light, 10%);;
-}
-
-.border-box-sizing {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
 }
 
 .smallFont {
@@ -123,7 +112,7 @@ input[type=text], input[type=number], textarea {
         }
 
         .closeAll {
-            @extend .border-box-sizing;
+            @extend .borderBoxSizing;
             height: $tabHeight;
             color: $color12;
             margin: $unit;
@@ -236,7 +225,7 @@ input[type=text], input[type=number], textarea {
     }
 
     input {
-        @extend .border-box-sizing;
+        @extend .borderBoxSizing;
         width: 100%;
     }
 }
@@ -333,7 +322,7 @@ input[type=text], input[type=number], textarea {
 
     .sentenceTranslation {    
         input {
-            @extend .border-box-sizing;
+            @extend .borderBoxSizing;
             width: 100%;
             padding: $unit;
         }
@@ -384,7 +373,7 @@ input[type=text], input[type=number], textarea {
 
 .untranslated {    
     input {
-        @extend .border-box-sizing;
+        @extend .borderBoxSizing;
         width: 100%;
         padding: $unit;
     }
@@ -505,7 +494,7 @@ input[type=text], input[type=number], textarea {
     }
 
     .factId {
-        @extend .border-box-sizing;
+        @extend .borderBoxSizing;
         margin: 2*$unit 0;
         border: 2px solid #e9e0d3;
         background: white;
@@ -742,7 +731,7 @@ ul {
 
 .searchSentences {
     input[type=text] {
-        @extend .border-box-sizing;
+        @extend .borderBoxSizing;
         width: 100%
     }
 
@@ -792,7 +781,7 @@ ul {
         }
 
         input, textarea {
-            @extend .border-box-sizing;
+            @extend .borderBoxSizing;
             width: 100%
         }
     }
@@ -1155,21 +1144,3 @@ h3 {
     background-color: $color6-light;
 }
 
-.spinner {
-    position: fixed;
-    top: calc(50% - 43px);
-    left: calc(50% - 43px);
-    width: 86px;
-    height: 86px;
-}
-
-.globalError {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: $color13;
-    color: $color9;
-    padding: 2 * $unit;
-    text-align: center;     
-}

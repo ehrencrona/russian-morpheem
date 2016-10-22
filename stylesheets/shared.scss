@@ -1,0 +1,72 @@
+$unit: 4px;
+$color13: #e95f3d;
+$color9: #f8f7f5;
+
+$studyMaxWidth: 800px;
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.borderBoxSizing {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.spinner {
+    position: fixed;
+    top: calc(50% - 43px);
+    left: calc(50% - 43px);
+    width: 86px;
+    height: 86px;
+}
+
+.globalError {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $color13;
+    color: $color9;
+    padding: 2 * $unit;
+    text-align: center;     
+}
+
+$overlayPadding: 4 * $unit;
+
+.overlayContainer {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .overlay {
+        @extend .borderBoxSizing;
+
+        width: 100%;
+        height: 100%;
+
+        max-width: $studyMaxWidth;
+
+        display: flex;
+        flex-direction: column;
+
+        .content {
+            flex-grow: 1;
+            text-align: left;
+            background-color: white;
+            overflow-y: scroll;
+            margin-left: 10%;
+            margin-top: 10%;
+        }
+    }
+}

@@ -1,0 +1,429 @@
+@import 'shared';
+
+$headlineFont: 'Rubik';
+
+.progressBar {
+    $progressBarFull: #52a7a6;
+    $progressBarEmpty: #a6d3d2;
+
+    .progress {
+        $barWidth: 8px;
+        width: 24px;
+        padding-right: 1.5em;
+
+        @media (min-width: 800px) {
+            padding-right: 2.5em;
+        }
+
+        @media (max-width: 500px) {
+            display: none;
+        }
+
+        flex-grow: 0.05;
+
+        .barContainer {
+            height: $barWidth;
+
+            .start, .end {
+                border-radius: $barWidth / 2;
+                width: $barWidth / 2;
+            }
+        }
+
+        @media (min-height: 900px) {
+            $barWidth: 12px;
+
+            .barContainer {
+                height: $barWidth;
+
+                .start, .end {
+                    border-radius: $barWidth / 2;
+                    width: $barWidth / 2;
+                }
+            }
+        }
+
+        .barContainer {
+            display: flex;
+            flex-direction: row;
+
+            .start {
+                border-top-right-radius: initial;
+                border-bottom-right-radius: initial;
+                background-color: $progressBarFull;
+            }
+
+            .start.empty {
+                background-color: $progressBarEmpty;
+            }
+
+            .end {
+                background-color: $progressBarEmpty;                    
+            }
+
+            .end.full {
+                background-color: $progressBarFull;                    
+            }
+
+            .full {
+                min-height: 100%;
+                background-color: $progressBarFull;
+            }
+
+            .bar {
+                background-color: $progressBarEmpty;                    
+                flex-grow: 1;
+                overflow: hidden;
+            }
+
+            .end {
+                border-top-left-radius: initial;
+                border-bottom-left-radius: initial;
+            }
+        }
+    }
+}
+
+.studyPlan {
+    font-size: 12pt;
+    font-weight: 400;
+
+    @media (max-width: 600px) {
+        font-size: 10pt;
+    }
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #606060;
+
+    $shadowColor: #BBDFDF;
+    $backgroundColor: #ffffff;
+    $highlightColor: #e95f3d; 
+    $weakHighlightColor: #e9d5d0;
+    $foregroundColor: #000000;
+    $tabHeight: 50px;
+
+    > .content {
+        height: 100vh;
+        background-color: $backgroundColor;
+
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        max-width: $studyMaxWidth;
+
+        .tabs {
+            display: flex;
+            height: $tabHeight;
+
+            .tab {
+                font-weight: 600;
+                flex-grow: 1;
+                flex-basis: 0;
+                height: $tabHeight;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .other {
+                color: white;
+                background-color: $highlightColor;
+            }
+
+            .other:hover {
+                background-color: darken($highlightColor, 10%);
+            }
+
+            :nth-child(odd).other {
+                border-bottom-right-radius: $tabHeight;
+            }
+
+            :nth-child(even).other {
+                border-bottom-left-radius: $tabHeight;
+            }
+        }
+
+        > div {
+            flex-shrink: 0;
+        }
+
+        .scroll {
+            overflow-y: scroll;
+            flex-grow: 1;
+            flex-shrink: 1;
+
+            .moreOrLess {
+                display: flex;
+                justify-content: center;
+                
+                .more, .less {
+                    cursor: pointer;
+                    padding: 0.5em 10%;
+
+                    svg {
+                        width: 24px;
+                        height: 24px;
+                        fill: $highlightColor;
+                    }
+                }
+            }
+
+            ul {
+                li {
+                    height: 3.7em;
+                    padding: 0;
+                    padding-left: 1em;
+
+                    @media (min-width: 800px) {
+                        padding-left: 2em;
+                    }
+
+                    display: flex;
+                    align-items: center;
+
+                    @extend .progressBar;
+
+                    dl {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+
+                        dt, dd {
+                            margin: 0;
+                            width: 50%;
+                        }
+                    }
+
+                    .fact {
+                        flex-grow: 1;
+                        flex-basis: 0;
+                    }
+
+                    .button {
+                        align-self: stretch;
+
+                        justify-content: center;
+                        margin: 0;
+                        padding: 0 3*$unit;
+                        border-radius: 0;
+                        flex-grow: 0.2;
+                        flex-basis: 0;
+
+                        background-color: lighten($shadowColor, 3%);
+
+                        &:hover {
+                            background-color: darken($shadowColor, 3%);
+                        }
+                    }
+                }
+
+                li:nth-child(even) {
+                    background-color: $shadowColor;
+
+                    .button {
+                        &:hover {
+                            background-color: darken($shadowColor, 20%);
+                        }
+
+                        background-color: darken($shadowColor, 15%);
+                    }
+                } 
+            }
+        }
+
+        .explain {
+            background-color: #e9d5d0;
+
+            line-height: 140%;
+            display: flex;
+            justify-content: stretch;
+
+            > div {
+                padding: 4 * $unit;
+                flex-basis: 0;
+            }
+
+            @media (max-width: 450px) {
+                font-size: 11pt;
+            }
+
+            .content {
+
+                flex-grow: 1;
+            }
+
+            .button {
+                background-color: darken(#e9d5d0, 15%);
+                justify-content: center;
+                margin: 0;
+                border-radius: 0;
+                font-weight: bold;
+            }
+
+            .button:hover {
+                background-color: darken(#e9d5d0, 25%);
+            }
+        }
+    }
+
+    .button.done {
+        background-color: $highlightColor;
+        height: 70px;
+        justify-content: center;
+        margin: 0;
+        border-radius: 0;
+        font-weight: bold;
+    }
+
+    .button.done:hover {
+        background-color: darken($highlightColor, 10%);
+    }
+}
+
+.topics {
+    $shadowColor: #BBDFDF;
+    $backgroundColor: #ffffff;
+    $highlightColor: #e95f3d; 
+    $weakHighlightColor: #e9d5d0;
+    $foregroundColor: #000000;
+    $tabHeight: 50px;
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: stretch;
+
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            @extend .progressBar;
+
+            .progress {
+                margin-top: 4 * $unit;
+                padding-right: 0;
+                width: 48px;
+            }
+
+            @extend .borderBoxSizing;
+            padding: 4*$unit;
+            width: 50%;
+            text-align: center;
+            background-color: $backgroundColor;
+
+            .name {
+                font-weight: bold;
+                margin-bottom: 2 * $unit;
+            }
+        }
+
+        li:hover {
+            background-color: darken($backgroundColor, 10%);
+        }
+
+        li:nth-child(4n), li:nth-child(4n+1) {
+
+            background-color: $shadowColor;
+
+        }
+
+        li:nth-child(4n):hover, li:nth-child(4n+1):hover {
+
+            background-color: darken($shadowColor, 10%);
+
+        }
+    } 
+
+    .button.done {
+        background-color: $highlightColor;
+        height: 70px;
+        justify-content: center;
+        margin: 0;
+        border-radius: 0;
+        font-weight: bold;
+    }
+
+    .button.done:hover {
+        background-color: darken($highlightColor, 10%);
+    }
+}
+
+.guide {
+    font-weight: 400;
+    font-size: 14pt;
+
+    padding-right: 3em;
+    padding-left: 3em;
+
+    @media (max-width: $studyMaxWidth - 100px) {
+        padding-right: 1em;
+        padding-left: 1em;
+    }
+
+    @media (max-height: 500px), (max-width: 500px) {
+        font-size: 12pt;
+    }
+
+    h3 {
+        font-size: 10pt;
+        padding-bottom: 3px;
+        border-bottom: 1px solid black;
+    }
+    
+    h1 {
+        font-family: $headlineFont;
+        font-size: 400%;
+        font-weight: 900;
+        margin-bottom: 0;
+    }
+
+    h2 {
+        font-family: $headlineFont;
+        font-weight: 700;
+        margin-left: 1em;
+        margin-top: 0;
+        color: $color13;
+    }
+ 
+    li {
+        line-height: 120%;
+        margin-top: 3*$unit;
+        margin-bottom: 3*$unit;
+
+        .match {
+            color: $color13;
+        }
+
+        .en {
+            margin-top: $unit;
+            font-style: normal;
+            font-size: 80%;
+        }
+    }
+
+    .clickable:hover {
+        color: $color13;
+    }
+
+    .columns {
+        display: flex;
+        flex-direction: row;
+        margin-top: 8 * $unit;
+
+        .main {
+            flex-grow: 1;
+        }
+
+        .sidebar {
+            margin-left: 8 * $unit;
+            min-width: 25%;
+
+        }
+    }
+}

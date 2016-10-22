@@ -60,7 +60,7 @@ export default function factComponent(props: Props) {
 
     return <div className='overlayContainer' onClick={ props.onClose }>
         <div className='overlay'>
-            <div className='content guide'>
+            <div className='content guide' onClick={ (e) => e.stopPropagation() }>
                 {content}
             </div>
         </div>

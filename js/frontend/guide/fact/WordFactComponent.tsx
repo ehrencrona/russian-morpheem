@@ -144,19 +144,32 @@ export default class WordFactComponent extends Component<Props, State> {
     }
 
     tokensToHtml(tokens: StudyToken[]) {
+        function isWordWithSpaceBefore(word: StudyToken) {
+            if (word instanceof StudyWord ) {
+                return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
+            }
+            else {
+                return true
+            }
+        }
+
         return tokens.map(t => {
             let html = htmlEscape(t.jp)
 
             if (t.studied) {
-                html = '<b>' + html + '</b>'
+                html = '<span class="match">' + html + '</span>'
+            }
+
+            if (isWordWithSpaceBefore(t)) {
+                html = ' ' + html
             }
 
             return html
-        }).join(' ')
+        }).join('')
     }
 
     highlightTranslation(sentence: TokenizedSentence) {
-        let result = '<i>' + htmlEscape(sentence.sentence.en()) + '</i>'
+        let result = htmlEscape(sentence.sentence.en())
 
         sentence.tokens.forEach(t => {
 
@@ -174,7 +187,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     if (m) {
                         result = result.substr(0, m.index) 
                             + m[1] 
-                            + ' </i><b>' + translation + '</b><i>'
+                            + ' <span class="match">' + translation + '</span>'
                             + m[3] 
                             + result.substr(m.index + m[0].length)
                     }
@@ -206,15 +219,14 @@ export default class WordFactComponent extends Component<Props, State> {
         let otherMeanings = corpus.facts.facts.filter(fact => 
             { 
                 if (fact instanceof InflectableWord || fact instanceof Word) {
-                    let word = fact as AbstractAnyWord
-
                     return fact.getIdWithoutClassifier() == thisIdWithoutClassifier &&
-                    fact.getId() != word.getId()
+                        fact.getId() != word.getId()
                 }
             })
 
         return <div className='fact'>
-            <h1>{ word.toText() } ({ word.getEnglish() })</h1>
+            <h1>{ word.toText() }</h1>
+            <h2>{ word.getEnglish() }</h2>
 
             { 
                 this.state.factoid ?
@@ -229,8 +241,8 @@ export default class WordFactComponent extends Component<Props, State> {
                         <div>
                             Other meanings: {
                                 otherMeanings.map((fact, index) =>
-                                    <span>{ index > 0 ? ', ' : ''}<span 
-                                        key={ fact.getId() } onClick={ (e) => {
+                                    <span key={ fact.getId() }>{ index > 0 ? ', ' : ''}<span 
+                                            className='clickable' onClick={ (e) => {
                                                 this.props.onSelectFact(fact)
                                                 e.stopPropagation()
                                             }
@@ -262,7 +274,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                         this.tokensToHtml(sentence.tokens)
                                     }}/>
 
-                                    <div dangerouslySetInnerHTML={ { __html: 
+                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
                                         this.highlightTranslation(sentence) } }/>
                                 </li>
                             )
@@ -279,7 +291,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                 this.state.factoid.relations.map(f => {
                                     let fact = corpus.facts.get(f.fact)                            
 
-                                    return <li key={ f.fact } onClick={ (e) => {
+                                    return <li className='clickable' key={ f.fact } onClick={ (e) => {
                                                 this.props.onSelectFact(fact)
                                                 e.stopPropagation()
                                             }

@@ -66,7 +66,7 @@ export default class SentenceComponent extends Component<Props, State> {
             list.forEach((item, index) => {
                 if (index > 0) {
                     if (item.jp == '—') {
-                        lines.push(<div className='line'>{ line }</div>)
+                        lines.push(<div key={ 'l' + index } className='line'>{ line }</div>)
                         line = []
 
                         line.push(callback(item, index))
@@ -89,7 +89,7 @@ export default class SentenceComponent extends Component<Props, State> {
             })
 
             if (line.length) {
-                lines.push(<div className='line'>{ line }</div>)
+                lines.push(<div key={ 'l' + lines.length } className='line'>{ line }</div>)
             }
 
             return lines
