@@ -83,6 +83,14 @@ $animationLength: 0.2s;
     font-size: 80%;
 }
 
+.smallestFont {
+    font-size: 55%;
+
+    @media (max-height: 400px), (max-width: 400px) {
+        font-size: 70%;
+    }
+}
+
 $buttonPadding: 0.5em;
 
 .study {
@@ -114,12 +122,16 @@ $buttonPadding: 0.5em;
         // technically not needed, but triggers a weird chrome bug if not present
         .upper, .lowerContainer {
             height: 50%;
-        }
-
-        > div {
             flex-grow: 1;
             flex-shrink: 1;
             flex-basis: 0;
+        }
+
+        @media (max-height: 400px), (max-width: 400px) {
+            .lowerContainer {
+                flex-grow: 0.5;
+                height: 25%;
+            }
         }
 
         .upper, .lower {
@@ -136,6 +148,11 @@ $buttonPadding: 0.5em;
         .upper {
             margin-bottom: $halfButtonHeight;
 
+            > div::last-child {
+                // put the sentence a little bit higher than center
+                flex-grow: 0.2;
+            }
+
             .sentenceId {
                 position: absolute;
                 right: $unit;
@@ -148,26 +165,33 @@ $buttonPadding: 0.5em;
                 }
             }
 
-            .explanation {
-                @extend .smallFont;
+            $paragraphSpacing: 0.2em;
 
-                font-size: 50%;
-                margin-bottom: 0.5em;
-                margin-top: 0;
+            .translation {
+                @extend .smallestFont;
 
-                @media (max-height: 500px) {
-                    display: none;
+                animation: fadein 0.3s;
+                @extend .border-box-sizing;
+
+                margin-top: 1em;
+
+                hr {
+                    border: none;
+                    margin: 0;
+                    padding: 0;
+
+                    margin-bottom: $paragraphSpacing;
                 }
             }
 
             .sentence {
-                // put the sentence a little bit higher than center
-                flex-grow: 0.2;
+                border-left: solid 0.25em $color13;
+                padding-left: 0.5em;
 
                 overflow: hidden;
-                line-height: 125%;
+                line-height: 135%;
 
-                // Cyrillic letter seem smaller due to the x height so blow it up.
+                // Cyrillic letters seem smaller due to the x height so blow it up.
                 font-size: 110%;
 
                 .nobr { 
@@ -175,21 +199,36 @@ $buttonPadding: 0.5em;
                 }
 
                 .content {
-                    display: inline-block;
+                    // space between lines
+                    .line + .line {
+                        margin-top: $paragraphSpacing;
+                    }
 
-                    .space {
-                        /* if it's not inline-block we get no linebreaks within the studied phrase */
+                    .line {
                         display: inline-block;
-                    }
 
-                    .word {
-                        display: inline;
-                        cursor: pointer;
-                    }
+                        .space {
+                            /* if it's not inline-block we get no linebreaks within the studied phrase */
+                            display: inline-block;
+                        }
 
-                    .word:hover {
-                        color: $color4;
-                    }               
+                        .word {
+                            display: inline;
+                            cursor: pointer;
+                        }
+
+                        .word.omitted:after {
+                            content: '*';
+                        }
+
+                        .word.omitted {
+                            color: #c0c0c0;
+                        }
+
+                        .word:hover {
+                            color: $color4;
+                        }               
+                    }
                 }
 
                 .hidden {
@@ -333,6 +372,24 @@ $buttonPadding: 0.5em;
                 margin-top: (2 * $buttonPadding + 1em) / 2;
                 align-items: center;
 
+                .instructions, .omittedExplanation {
+                    @extend .smallestFont;
+
+                    font-style: italic;
+                    color: white;
+                    margin-bottom: 0.7em;
+                    margin-top: 0;
+                    flex-grow: 1;
+
+                    display: flex;
+                    align-items: center;
+                }
+
+                .omittedExplanation {
+                    flex-grow: 0;
+                    font-style: normal;
+                }
+
                 .didYouKnowFact {
                     flex-grow: 1;
                     width: 100%;
@@ -448,19 +505,6 @@ $buttonPadding: 0.5em;
             @keyframes fadein {
                 from { opacity: 0; }
                 to   { opacity: 1; }
-            }
-
-            .translation {
-                animation: fadein 0.3s;
-                @extend .border-box-sizing;
-
-                flex-grow: 0.2;
-
-                padding-top: 0;
-
-                width: 100%;
-                color: white;
-                font-weight: 600;
             }
         }
 

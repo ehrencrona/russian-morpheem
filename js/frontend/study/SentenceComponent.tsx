@@ -60,32 +60,39 @@ export default class SentenceComponent extends Component<Props, State> {
         let reveal = this.props.reveal
 
         let spacedMap = (list: StudyToken[], callback: (item: StudyToken, index: number) => any) => {
-            let result = []
+            let lines = [];
+            let line = []
 
             list.forEach((item, index) => {
                 if (index > 0) {
                     if (item.jp == '—') {
-                        result.push(<br key={'newline' + index }/>)
-                        result.push(callback(item, index))
+                        lines.push(<div className='line'>{ line }</div>)
+                        line = []
+
+                        line.push(callback(item, index))
                     }
                     else if (isWordWithSpaceBefore(item)) {
-                        result.push(' ')
+                        line.push(' ')
 
-                        result.push(callback(item, index))
+                        line.push(callback(item, index))
                     }
                     else {
-                        result[result.length-1] = <span className='nobr' key={'nobr' + index } >
-                            { result[result.length-1] }
+                        line[line.length-1] = <span className='nobr' key={'nobr' + index } >
+                            { line[line.length-1] }
                             { callback(item, index) }
                         </span>
                     }
                 }
                 else {
-                    result.push(callback(item, index))
+                    line.push(callback(item, index))
                 }
             })
 
-            return result
+            if (line.length) {
+                lines.push(<div className='line'>{ line }</div>)
+            }
+
+            return lines
         }
 
         let className = 'content'
@@ -131,11 +138,12 @@ export default class SentenceComponent extends Component<Props, State> {
         return <div className='sentence' ref='container'><div className={ className } ref='content'>
             {
                 spacedMap(tokens, (token, index) => {
+                    
                     let className = 'word'
                     let text = token.jp
 
                     if (token instanceof StudyWord && token.word.omitted) {
-                        text = '(' + text + ')'
+                        className += ' omitted'
                     }
 
                     let formHint

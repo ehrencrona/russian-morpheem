@@ -109,9 +109,17 @@ function parseLine(line, words: Words, phrases: Phrases, lineNumber: number, sen
         id = Math.max(sentenceIndex, lineNumber-1)
     }
 
+    if (Words.PUNCTUATION.indexOf(elements.words[elements.words.length-1]) < 0) {
+        let fullStop = words.get('.')
+
+        if (fullStop) {
+             elements.words.push(fullStop)
+        }
+    }
+
     var sentence = new Sentence(elements.words, id)
 
-    sentence.setEnglish(english)
+    sentence.setEnglish(replaceShortWithLongDashes(english))
 
     for (let tag of tags) {
         let name = tag[0]
@@ -158,3 +166,17 @@ export default function parseSentenceFile(data, words: Words, phrases: Phrases):
 
     return sentences
 }
+
+function replaceShortWithLongDashes(english: string) {
+    let r = /(^| )- [A-Z]/g;
+
+    let m;
+
+    while (!!(m = r.exec(english))) {
+        let index = m.index + m[1].length
+        english = english.substr(0, index) + '–' + english.substr(index+1)
+    }
+
+    return english
+}    
+

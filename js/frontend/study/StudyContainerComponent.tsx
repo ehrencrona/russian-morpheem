@@ -138,7 +138,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 */
 /*
         {
-            let sentence = this.props.corpus.sentences.get(226)
+            let sentence = this.props.corpus.sentences.get(7544)
 
             this.knowledge.getKnowledge = (fact: Fact) => {
                 return Knowledge.KNEW
@@ -150,7 +150,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
             this.setState({
                 sentence: sentence,
-                facts: this.expandFact(this.props.corpus.facts.get('быть'), sentence)
+                facts: this.expandFact(this.props.corpus.facts.get('уже'), sentence)
             })
 
             return

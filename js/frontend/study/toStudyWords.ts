@@ -254,13 +254,5 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         })
     })
 
-    if (Words.PUNCTUATION.indexOf(words[words.length-1].jp) < 0) {
-        let fullStop = corpus.words.get('.')
-
-        if (fullStop) {
-            tokens.push(wordToStudyWord(fullStop, words, studiedFacts))
-        }
-    }
-
     return tokens
 }

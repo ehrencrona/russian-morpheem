@@ -304,10 +304,8 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
     }
 
     renderSentenceTranslation() {
-        return <div className='lower'>
-            <div className='translation'  dangerouslySetInnerHTML={ 
-                { __html: htmlEscape(this.props.sentence.en()).replace(/ — /g, '<br/>— ') } }/>
-        </div>
+        return <div className='translation' dangerouslySetInnerHTML={ 
+            { __html: htmlEscape(this.props.sentence.en()).replace(/ — /g, '<hr/>— ') } }/>
     }
 
     renderLower(hiddenFacts: StudyFact[]) {
@@ -337,7 +335,6 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                 <div className='buttons'>
                     <div className='button' onClick={ () => this.next() }>Continue</div>
                 </div>
-                { this.renderSentenceTranslation() }
             </div>
         }
         else if (this.state.stage == Stage.REVEAL) {
@@ -347,16 +344,40 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                     <div className='button right small' onClick={ () => this.iWasWrong(hiddenFacts) 
                     }><span className='line'>I was</span> wrong</div>
                 </div>
-                { this.renderSentenceTranslation() }
+                <div className='lower'>
+                    <div className='instructions'>
+                        Did you get it right?
+                    </div>
+                    {
+                        this.state.tokens.find(t => !!(t instanceof StudyWord && t.word.omitted)) ?
+                            <div className='omittedExplanation'>
+                                *) helps explain the sentence but is usually dropped. 
+                            </div>
+                            :
+                            null
+                    }
+                </div>
             </div>
         }
-        else {
+        else if (this.state.stage == Stage.TEST) {
             return <div className='lowerContainer'>
                 <div className='buttons'>
                     <div className='button' onClick={ () => this.reveal() }>Reveal</div>
                 </div>
-                <div className='lower'></div>
+                <div className='lower'>
+                    <div className='instructions'>{
+                    
+                    this.props.facts.find(f => f instanceof Phrase) ?
+                        'What words complete the expression?'
+                        :
+                        'What Russian word is missing?'
+                    
+                    }</div>
+                </div>
             </div>
+        }
+        else {
+            return null
         }
     }
 
@@ -385,26 +406,6 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                     </a>
                 </div>
 
-                <div className='explanation'>
-                    {
-                        (this.state.stage == Stage.TEST ?
-
-                            (this.props.facts.find(f => f instanceof Phrase) ?
-                                'What words complete the expression?'
-                                :
-                                'What Russian word is missing?'
-                            )
-
-                            :
-
-                            (this.state.stage == Stage.REVEAL ?
-                                'Did you get it right?'
-                                :
-                                'Check the facts you didn\'t know below')
-                        )
-                    }
-                </div>
-
                 <SentenceComponent
                     ref='sentence'
                     corpus={ this.props.corpus }
@@ -421,6 +422,7 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                     }
                 />
 
+                { (reveal? this.renderSentenceTranslation() : null) }
             </div>
 
             { this.renderLower(hiddenFacts) }
@@ -463,6 +465,10 @@ function excludeFact(exclude: StudyFact, array: StudyFact[]) {
 
 function isWorthExplaining(fact: Fact, word: Word) {
     if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
+        return false
+    }
+
+    if (fact instanceof PhraseCase && !fact.phrase.hasWordFacts) {
         return false
     }
 
