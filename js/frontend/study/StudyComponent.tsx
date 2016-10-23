@@ -4,6 +4,7 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
 import { findSentencesForFact } from '../../shared/SentencesByFactIndex'
+import findExamplesOfInflection from '../../shared/inflection/findExamplesOfInflection'
 
 import InflectionFact from '../../shared/inflection/InflectionFact'
 
@@ -12,6 +13,7 @@ import Sentence from '../../shared/Sentence'
 import InflectableWord from '../../shared/InflectableWord'
 import InflectedWord from '../../shared/InflectedWord'
 import Word from '../../shared/Word'
+import AbstractAnyWord from '../../shared/AbstractAnyWord'
 
 import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
@@ -57,6 +59,7 @@ interface State {
     didYouKnow?: StudyFact[],
     unknownFacts?: StudyFact[],
     knownFacts?: StudyFact[],
+    newFacts?: Fact[],
     stage?: Stage,
     // stage to return to after did you know
     returnToStage?: Stage,
@@ -96,6 +99,8 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
         return {
             unknownFacts: [], 
             knownFacts: [],
+            newFacts: props.facts.filter(fact => 
+                props.profile.knowledge.getKnowledge(fact) == Knowledge.MAYBE),
             stage: Stage.TEST,
             tokens: toStudyWords(sentence, props.facts, props.corpus),
             highlightFact: null
@@ -317,6 +322,9 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                 factSelected={ (fact) => { this.setState({ highlightFact: fact }) } }
                 factSelector={ this.props.factSelector }
                 done={ (known, unknown) => {
+                    // currently, this duplicates unknownFacts if pressed multiple times.
+                    // if dudplicating in the future, make sure to maintain the unknown fact
+                    // from newFacts
                     this.setState({
                         didYouKnow: null,
                         unknownFacts: this.state.unknownFacts.concat(unknown),
@@ -375,12 +383,46 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                         'What Russian word is missing?'
                     
                     }</div>
+
+                    {
+                        this.state.newFacts.map(fact => {
+                            let factName = this.getFactName(fact)
+
+                            if (!factName) {
+                                return null
+                            }
+
+                            return <div className='newFacts' key={ fact.getId() }
+                                onClick={ () => this.explain(fact) }>
+                                <div className='fact'>You have not seen {
+                                    factName
+                                } before.</div>
+
+                                <div className='button'>Study it</div>
+                            </div>
+                        })
+                    }
                 </div>
             </div>
         }
         else {
             return null
         }
+    }
+
+    explain(fact: Fact) {
+        let studyFact = { 
+            fact: fact, 
+            words: this.state.tokens
+                .filter(t => t instanceof StudyWord && t.hasFact(fact) )
+                .map(t => t as StudyWord)
+        }
+
+        this.setState({
+            unknownFacts: this.state.unknownFacts.concat(studyFact)
+        })
+
+        this.props.onExplain(studyFact)
     }
 
     render() {
@@ -453,6 +495,26 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                 <div className={ 'end'  + (percentage == 100 ? ' full' : '') }>&nbsp;</div>
             </div>
         </div>
+    }
+
+    getFactName(fact: Fact) {
+        if (fact instanceof AbstractAnyWord) {
+            return 'the word for "' + fact.getEnglish() + '"'
+        }
+        else if (fact instanceof InflectionFact) {
+            let examples = findExamplesOfInflection(fact, this.props.corpus, 2, 
+                (fact) => this.props.profile.knowledge.getKnowledge(fact) == Knowledge.DIDNT_KNOW) 
+
+            let words = examples.easy.concat(examples.hard)
+
+            return 'the ' + FORMS[fact.form].name + ' of ' +
+                (words.length == 1
+                    ? words[0].toText()
+                    : 'words like ' + words.map(w => w.word.toText()).join(' and '))   
+        }
+        else if (fact instanceof Phrase) {
+            return 'the expression "' + fact.description + '"'
+        }
     }
 }
 

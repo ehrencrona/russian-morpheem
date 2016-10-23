@@ -98,7 +98,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
 
     explain(fact: StudyFact) {
         let context: InflectedWord = null
-        let word = fact.words[0].word
+        let word = fact.words[0] ? fact.words[0].word : null
 
         if (word instanceof InflectedWord) {
             context = word
