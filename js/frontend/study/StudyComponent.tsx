@@ -80,7 +80,9 @@ export default class StudyComponent extends Component<Props, State> {
 console.log('Sentence: ' + nextProps.sentence.toString() + ' (#' + nextProps.sentence.id + ')')
 console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
 
-        this.setState(this.getStateForProps(nextProps))
+        if (!factsEqual(nextProps.facts, this.props.facts) || nextProps.sentence.id != this.props.sentence.id) {
+            this.setState(this.getStateForProps(nextProps))
+        }
     }
 
     oughtToKnow(fact: Fact) {
@@ -428,8 +430,9 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                 { (reveal? this.renderSentenceTranslation() : null) }
             </div>
 
-            { this.renderLower(hiddenFacts) }
-
+            { 
+                this.renderLower(hiddenFacts) 
+            }
             {
                 this.renderProgress()
             }
@@ -480,4 +483,9 @@ function isWorthExplaining(fact: Fact, word: Word) {
         // can't check the default form of the inflection since it might be masked, 
         // so we have to get the default form of the word
         word.getDefaultInflection().form == fact.form)
+}
+
+function factsEqual(facts1: Fact[], facts2: Fact[]) {
+    return facts1.length == facts2.length &&
+        !facts1.find((f, index) => facts2[index].getId() != f.getId())
 }
