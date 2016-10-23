@@ -82,6 +82,7 @@ let studyFactComponent = (props: Props) => {
     }
     else if (fact instanceof Phrase) {
         componentType = createFactory(PhraseFactComponent)
+        canExplain = true
     }
 
     if (props.hiddenFacts.length) {

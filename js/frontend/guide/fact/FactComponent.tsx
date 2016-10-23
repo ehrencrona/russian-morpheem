@@ -15,6 +15,7 @@ import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 
 import InflectionFactComponent from './InflectionFactComponent'
 import WordFactComponent from './WordFactComponent'
+import PhraseFactComponent from './PhraseFactComponent'
 
 import StudyFact from '../../study/StudyFact'
 
@@ -51,6 +52,14 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             word={ fact }
+            onSelectFact={ props.onSelectFact }
+        />
+    }
+    else if (fact instanceof Phrase) {
+        content = <PhraseFactComponent 
+            corpus={ props.corpus } 
+            knowledge={ props.knowledge }
+            phrase={ fact }
             onSelectFact={ props.onSelectFact }
         />
     }
