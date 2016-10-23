@@ -414,11 +414,14 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                     facts={ this.props.facts }
                     highlight={ this.state.highlightFact }
                     wordClicked={
-                        (word: StudyWord) => 
-                            this.explainFacts(word.facts, hiddenFacts, 
-                                (this.isWordHidden(word) && this.state.stage == Stage.REVEAL ?
-                                    Stage.CONFIRM :
-                                    this.state.stage))
+                        (word: StudyWord) => {
+                            if (this.state.stage != Stage.DID_YOU_KNOW) {
+                                this.explainFacts(word.facts, hiddenFacts, 
+                                    (this.isWordHidden(word) && this.state.stage == Stage.REVEAL ?
+                                        Stage.CONFIRM :
+                                        this.state.stage))
+                            }
+                        }
                     }
                 />
 
