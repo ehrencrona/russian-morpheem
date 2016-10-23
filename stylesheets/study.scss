@@ -207,7 +207,7 @@ $buttonPadding: 0.5em;
                             cursor: pointer;
                         }
 
-                        .word.omitted:after {
+                        .word.omitted.last:after {
                             content: '*';
                         }
 

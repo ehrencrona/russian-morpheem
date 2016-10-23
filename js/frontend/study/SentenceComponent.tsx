@@ -144,6 +144,14 @@ export default class SentenceComponent extends Component<Props, State> {
 
                     if (token instanceof StudyWord && token.word.omitted) {
                         className += ' omitted'
+
+                        let next = tokens[index+1]
+
+                        if (!next 
+                            || !(next instanceof StudyWord 
+                                && next.word.omitted)) {
+                            className += ' last'
+                        }
                     }
 
                     let formHint
