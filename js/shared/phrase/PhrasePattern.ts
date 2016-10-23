@@ -80,10 +80,24 @@ const defaultWordToString: WordToString = (word, enSentence) => {
     let tc = word.getTranslationCount()
 
     if (tc > 1 && enSentence) {    
-        for (let i = 1; i < tc; i++) {
-            let en = word.getEnglish('', i)
+        enSentence = enSentence.toLowerCase()
 
-            if (enSentence.indexOf(en) >= 0) {
+        for (let i = 1; i < tc; i++) {
+            let enWord = word.getEnglish('', i) 
+            let en = enWord.toLowerCase()
+
+            let matchIndex = enSentence.indexOf(en)
+
+            if (matchIndex >= 0) {
+                if (matchIndex > 0 && enSentence[matchIndex-1].match(/\w/)) {
+                    continue
+                }
+
+                if (matchIndex + enWord.length < enSentence.length && 
+                    enSentence[matchIndex + enWord.length].match(/\w/)) {
+                    continue
+                }
+
                 return en
             }
         }

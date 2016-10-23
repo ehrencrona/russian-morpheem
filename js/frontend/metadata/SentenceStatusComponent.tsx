@@ -93,7 +93,8 @@ export default class SentenceStatusComponent extends Component<Props, State> {
                     {
                         (this.state.status.status != STATUS_SUBMITTED ?
 
-                            <div key='resubmit' className='button' onClick={ () => this.resubmit() }>Resubmit</div>
+                            <div key='resubmit' className='button' 
+                                onClick={ () => this.resubmit() }>Resubmit</div>
 
                             :
 
