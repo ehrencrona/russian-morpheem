@@ -444,8 +444,9 @@ class Fragment implements EnglishPatternFragment {
         }
 
         result = result.replace(/\(article\)/g, '')
+        result = result.replace(/  /g, ' ')
 
-        return result                           
+        return result.trim()                           
     }
 }
 

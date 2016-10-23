@@ -184,9 +184,6 @@ $buttonPadding: 0.5em;
                 overflow: hidden;
                 line-height: 135%;
 
-                // Cyrillic letters seem smaller due to the x height so blow it up.
-                font-size: 110%;
-
                 .nobr { 
                     white-space: nowrap
                 }

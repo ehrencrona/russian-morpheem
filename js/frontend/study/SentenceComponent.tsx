@@ -156,6 +156,10 @@ export default class SentenceComponent extends Component<Props, State> {
                         className += ' studied'
                     }
 
+                    if (!text) {
+                        return null
+                    }
+
                     if (capitalizeNext && text) {
                         text = capitalize(text)
                     }
@@ -168,10 +172,10 @@ export default class SentenceComponent extends Component<Props, State> {
                             className += ' highlight low'
                         }
                     }
-
                     capitalizeNext = text && Words.SENTENCE_ENDINGS.indexOf(text) >= 0
 
-                    return <div key={ index } className={ className } onClick={ () => token instanceof StudyWord && this.props.wordClicked(token) }>
+                    return <div key={ index } className={ className } onClick={ () => 
+                        token instanceof StudyWord && this.props.wordClicked(token) }>
                             { text || <span>&nbsp;</span>}
                     </div>
                 })
@@ -267,7 +271,10 @@ export default class SentenceComponent extends Component<Props, State> {
 
         let currentSize = parseInt(window.getComputedStyle(container, null).getPropertyValue("font-size").replace('px',''))
         
-        let maxSize = parseInt(window.getComputedStyle(container.parentElement, null).getPropertyValue("font-size").replace('px',''))
+        let maxSize = parseInt(window.getComputedStyle(container.parentElement, null)
+            .getPropertyValue("font-size").replace('px','')) 
+            // Cyrillic letters seem smaller due to the x height so blow it up.
+            * 1.1
 
         let guesstimate = Math.min(currentSize / Math.sqrt(fillRatio()), maxSize)
 
