@@ -30,7 +30,7 @@ export default class Sentences {
             this.sentencesByFact = indexSentencesByFact(this, facts)
         }
 
-        return this.sentencesByFact
+        return this.sentencesByFact || {}
     }
 
     clone(sentences: Sentences) {

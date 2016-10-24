@@ -4,6 +4,7 @@ import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
 import InflectableWord from '../../../shared/InflectableWord'
+import Word from '../../../shared/Word'
 import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
 
@@ -25,6 +26,14 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFa
                     { fact.getEnglish() }
                 </div>
             }                
+        </span>
+    }
+    else if (fact instanceof Word) {
+        inner = <span>
+            { fact.toText() }
+            <div className='en'>
+                { fact.getEnglish() }
+            </div>
         </span>
     }
     else if (fact instanceof Phrase) {

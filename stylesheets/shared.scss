@@ -67,6 +67,11 @@ $overlayPadding: 4 * $unit;
             overflow-y: scroll;
             margin-left: 10%;
             margin-top: 10%;
+
+            @media (max-height: 400px), (max-width: 400px) {
+                margin-left: 5%;
+                margin-top: 5%;
+            }
         }
     }
 }

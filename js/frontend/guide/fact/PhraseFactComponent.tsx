@@ -89,7 +89,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
     renderMatch(match: Match) {
         let wordIndexes = match.words.map((i) => i.index)
 
-        return <li>
+        return <li key={ match.sentence.id }>
             <span 
                 dangerouslySetInnerHTML={ { __html: 
                 match.sentence.innerToString((word, first, index) => {
@@ -112,16 +112,28 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
     getWordsInPhrase() {
         let result: Fact[] = []
+        let seen = {}
+
+        let addWord = (word) => {
+            let fact = word.getWordFact()
+
+            if (seen[fact.getId()]) {
+                return
+            }
+
+            seen[fact.getId()] = true
+            result = result.concat(fact)
+        }
 
         this.props.phrase.patterns.forEach((pattern) => 
             pattern.wordMatches.forEach((wordMatch) => {
-                    if (wordMatch instanceof WordInFormMatch) {
-                        return result = result.concat(wordMatch.words.map(w => w.getWordFact()))
-                    }
+                if (wordMatch instanceof WordInFormMatch) {
+                    wordMatch.words.forEach(addWord)
+                }
 
-                    if (wordMatch instanceof ExactWordMatch) {
-                        return result = result.concat(wordMatch.words.map(w => w.getWordFact()))
-                    }
+                if (wordMatch instanceof ExactWordMatch) {
+                    wordMatch.words.forEach(addWord)
+                }
             })
         )
 
@@ -165,7 +177,10 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let matches = scores.map(score => matchBySentenceId.get(score.sentence.id))
 
-        let relations = (this.state.factoid ? this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
+        let relations = (this.state.factoid ? 
+                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
+                : 
+                [])
             .concat(this.getWordsInPhrase())
 
         return <div>

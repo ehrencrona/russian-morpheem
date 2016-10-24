@@ -32,6 +32,7 @@ import Words from '../../../shared/Words'
 import Word from '../../../shared/Word'
 import AnyWord from '../../../shared/AnyWord'
 
+import InflectionTableComponent from '../../InflectionTableComponent'
 import StudyToken from '../../study/StudyToken'
 import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'
@@ -75,20 +76,27 @@ export default class WordFactComponent extends Component<Props, State> {
 
         let sentences = corpus.sentences.getSentencesByFact(corpus.facts)[ fact.getId() ]
 
-        let scores = sentences.easy.concat(sentences.ok).concat(sentences.hard).map(ss => 
-            { 
-                return {
-                    sentence: ss.sentence,
-                    fact: fact,
-                    score: 1
-                }    
-            })
+        let scores
+        
+        if (sentences) {
+            scores = sentences.easy.concat(sentences.ok).concat(sentences.hard).map(ss => 
+                { 
+                    return {
+                        sentence: ss.sentence,
+                        fact: fact,
+                        score: 1
+                    }    
+                })
 
-        scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
+            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
 
-        scores = this.downscoreRepeatedForms(scores)
+            scores = this.downscoreRepeatedForms(scores)
 
-        scores = topScores(scores, 6)
+            scores = topScores(scores, 6)
+        }
+        else {
+            scores = []
+        }
 
         let ignorePhrases = true
 
@@ -332,19 +340,44 @@ export default class WordFactComponent extends Component<Props, State> {
                         }
                         </ul>
                     </div>
-                    <div>
-                        <h3>Words with similar endings</h3>
-
-                        <ul>
-                        {
-                            this.wordsWithSimilarInflection().map(fact => 
-                                renderRelatedFact(fact, corpus, this.props.onSelectFact) 
-                            ) 
-                        }
-                        </ul>
-                    </div>
                 </div>
             </div>
+
+            { word instanceof InflectableWord ?
+                <div className='columns'>
+                    <div className='main'>
+                        <h3>Forms</h3>
+                        <InflectionTableComponent
+                            corpus={ this.props.corpus }
+                            inflection={ word.inflection }
+                            word={ word }
+                            renderForm={ (inflectedWord, form, factIndex) => {
+                                return <div className='clickable' onClick={ () => { 
+                                        this.props.onSelectFact((word as InflectableWord).inflection.getFact(form), 
+                                            (word as InflectableWord).inflect(form)) 
+                                    } }>{ 
+                                        (word as InflectableWord).inflect(form).jp 
+                                    }</div>
+                            }}
+                            />
+                    </div>
+                    <div className='sidebar'>
+                        <div>
+                            <h3>Words with similar endings</h3>
+
+                            <ul>
+                            {
+                                this.wordsWithSimilarInflection().map(fact => 
+                                    renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                                ) 
+                            }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                :
+                null
+            }
         </div>
     }
 }

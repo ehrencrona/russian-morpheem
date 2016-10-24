@@ -133,7 +133,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
 
         this.setState({
-            explainFact: this.props.corpus.facts.get('замок[lock]')
+            explainFact: this.props.corpus.facts.get('по-place-of-movement')
         })
 
 /*

@@ -5,7 +5,7 @@ import Fact from '../shared/fact/Fact'
 import InflectedWord from '../shared/InflectedWord'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
-import InflectionsComponent from './InflectionsComponent'
+import InflectionTableComponent from './InflectionTableComponent'
 
 import Tab from './OpenTab'
 import openFact from './fact/openFact'
@@ -50,15 +50,31 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
 
     render() {
 
-        return <InflectionsComponent 
+        return <InflectionTableComponent 
             corpus={ this.props.corpus } 
             inflection={ this.props.inflection } 
             word={ this.props.word }
-            allowAdd={ true }
-            onSelect={ (form) => this.onSelect(form) }
-            onAdd={ (form) => this.addFact(form) }
-            hideForms={ this.props.hideForms } 
-            />
+            hideForms={ this.props.hideForms }
+            renderForm={ (inflected, form, factIndex) => {
+                let className = 'form'
 
+                if (factIndex < MISSING_INDEX) {
+                    className += ' clickable'
+
+                    return <div key={ form } className={ className } onClick={ 
+                        () => this.onSelect(form) }>
+                        { inflected } 
+                        <div className='index'><div className='number'>{ factIndex + 1 }</div></div>
+                    </div>
+                }
+                else {
+                    return <div key={ form } className={ className }>{ inflected }
+                        <div className='add' onClick={ () => this.addFact(form) }>
+                            <div className='number'>add</div>
+                        </div>
+                    </div>
+                }
+            }
+        } />
     }
 }

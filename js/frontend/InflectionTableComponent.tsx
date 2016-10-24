@@ -16,10 +16,8 @@ import { MISSING_INDEX } from '../shared/fact/Facts'
 interface Props {
     corpus: Corpus,
     inflection: Inflection,
-    allowAdd?: boolean,
+    renderForm: (inflectedWord: string, form: string, factIndex: number) => any
     word?: InflectableWord,
-    onSelect?: (form: string) => any
-    onAdd?: (form: string) => any
     hideForms?: Object
 }
 
@@ -28,7 +26,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class InflectionsComponent extends Component<Props, State> {
+export default class InflectionTableComponent extends Component<Props, State> {
     getWordsByForm(word: InflectableWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
@@ -64,7 +62,6 @@ export default class InflectionsComponent extends Component<Props, State> {
             let fact = this.props.inflection.getFact(form)
             let index = this.props.corpus.facts.indexOf(fact)
 
-            let className = 'form'
             let inherited = !this.props.inflection.endings[form]
             
             if ((!this.props.word && inherited) ||
@@ -72,25 +69,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                 return <div key={form}/>
             }
 
-            if (index < MISSING_INDEX) {
-                className += ' clickable'
-
-                return <div key={form} className={ className } onClick={ 
-                    () => this.props.onSelect && this.props.onSelect(form) }>
-                    { wordsByForm[form] } 
-                    <div className='index'><div className='number'>{ index + 1 }</div></div>
-                </div>
-            }
-            else {
-                return <div key={form} className={ className }>{ wordsByForm[form] }
-                    { this.props.allowAdd != false ?
-                        <div className='add' onClick={ () => this.props.onAdd && this.props.onAdd(form) }>
-                            <div className='number'>add</div></div>
-                        :
-                        <div/>
-                    }
-                </div>
-            }
+            return this.props.renderForm(wordsByForm[form], form, index)
         }
 
         let table = INFLECTION_FORMS[getLanguage()][this.props.inflection.pos]
@@ -108,7 +87,7 @@ export default class InflectionsComponent extends Component<Props, State> {
                         <tr>
                             <td></td>
                             { table.cols.map((name) => 
-                                <td key={name}>{name}</td>
+                                <td key={name}>{ name }</td>
                             ) }
                         </tr>
                     </thead>
@@ -116,37 +95,47 @@ export default class InflectionsComponent extends Component<Props, State> {
                 }
                     <tbody>
                         { table.forms.map((forms, index) => {
+                            let count = 0
+
+                            let cells = forms.map((form) => {
+                                let endings
+                                
+                                if (typeof form == 'string') {
+                                    if (wordsByForm[form]) {
+                                        endings = formComponent(form) 
+                                    }
+                                }
+                                else {
+                                    endings = form.filter((form) => wordsByForm[form])
+                                        .map(formComponent)
+
+                                    if (!endings.length) {
+                                        endings = null
+                                    }
+                                }
+                                
+                                if (endings) {
+                                    count++
+                                    
+                                    return <td key={form.toString()} className='full'>
+                                        {
+                                            endings
+                                        }
+                                    </td>
+                                }
+                                else {
+                                    return <td key={form.toString()}/> 
+                                }
+                            })
+                     
+                            if (!count) {
+                                return null
+                            }
+
                             return <tr key={ index }>
                                     <td>{ table.rows[index] }</td>
                                 {
-                                    forms.map((form) => {
-                                        let endings
-                                        
-                                        if (typeof form == 'string') {
-                                            if (wordsByForm[form]) {
-                                                endings = formComponent(form) 
-                                            }
-                                        }
-                                        else {
-                                            endings = form.filter((form) => wordsByForm[form])
-                                                .map(formComponent)
-
-                                            if (!endings.length) {
-                                                endings = null
-                                            }
-                                        }
-                                        
-                                        if (endings) {
-                                            return <td key={form.toString()} className='full'>
-                                                {
-                                                    endings
-                                                }
-                                            </td>
-                                        }
-                                        else {
-                                            return <td key={form.toString()}/> 
-                                        }
-                                    })                                    
+                                    cells
                                 }
                             </tr> 
                             

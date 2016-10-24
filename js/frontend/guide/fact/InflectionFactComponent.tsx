@@ -3,7 +3,7 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
-import InflectionsContainerComponent from '../../InflectionsComponent'
+import InflectionTableComponent from '../../InflectionTableComponent'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
 import AnyWord from '../../../shared/AnyWord'
@@ -468,14 +468,18 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
     renderInflection() {
 
-        return <InflectionsContainerComponent 
+        return <InflectionTableComponent 
             corpus={ this.props.corpus}
             word={ this.props.word.word }
-            allowAdd={ false }
+            renderForm={ (inflectedWord, form, factIndex) => 
+                <div onClick={
+                    () => this.props.onSelectFact(
+                        this.props.word.word.inflection.getFact(form),
+                        this.props.word)
+                }>{ InflectedWord }</div>
+            }
             inflection={ this.props.word.word.inflection } 
-            onSelect={ (form) => this.props.onSelectFact(
-                this.props.word.word.inflection.getFact(form),
-                this.props.word) }/>
+        />
 
     }
 
