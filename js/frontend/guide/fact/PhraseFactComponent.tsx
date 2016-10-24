@@ -22,6 +22,8 @@ import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSe
 import topScores from '../../../shared/study/topScores'
 import Phrase from '../../../shared/phrase/Phrase'
 import Match from '../../../shared/phrase/Match'
+import WordInFormMatch from '../../../shared/phrase/WordInFormMatch'
+import ExactWordMatch from '../../../shared/phrase/ExactWordMatch'
 
 import Transform from '../../../shared/Transform'
 import { EndingTransform } from '../../../shared/Transforms'
@@ -40,6 +42,8 @@ import toStudyWords from '../../study/toStudyWords'
 import StudyFact from '../../study/StudyFact'
 
 let React = { createElement: createElement }
+
+import renderRelatedFact from './renderRelatedFact'
 
 interface Props {
     corpus: Corpus,
@@ -65,20 +69,22 @@ export default class PhraseFactComponent extends Component<Props, State> {
         this.state = { }
     }
 
-    renderRelatedFact(fact: Fact) {
-        if (fact instanceof InflectableWord) {
-            return <span>
-                    { fact.toText() }
-                    <div className='en'>{ fact.getEnglish()}</div>
-                </span>
-        }
-        else if (fact instanceof Phrase) {
-            return <span>{ fact.description }</span>
-        }
-        else {
-            return null
+    factChanged(phrase: Phrase) {
+        let corpus = this.props.corpus
+
+        corpus.factoids.getFactoid(phrase)
+            .then(factoid => this.setState({ factoid: factoid } ))
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.phrase.getId() != this.props.phrase.getId()) {
+            this.factChanged(props.phrase)
         }
     }
+
+    componentWillMount() {
+        this.factChanged(this.props.phrase)
+    } 
 
     renderMatch(match: Match) {
         let wordIndexes = match.words.map((i) => i.index)
@@ -102,6 +108,24 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 match.sentence.en()
             }</div>
         </li>
+    }
+
+    getWordsInPhrase() {
+        let result: Fact[] = []
+
+        this.props.phrase.patterns.forEach((pattern) => 
+            pattern.wordMatches.forEach((wordMatch) => {
+                    if (wordMatch instanceof WordInFormMatch) {
+                        return result = result.concat(wordMatch.words.map(w => w.getWordFact()))
+                    }
+
+                    if (wordMatch instanceof ExactWordMatch) {
+                        return result = result.concat(wordMatch.words.map(w => w.getWordFact()))
+                    }
+            })
+        )
+
+        return result
     }
 
     render() {
@@ -141,38 +165,35 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let matches = scores.map(score => matchBySentenceId.get(score.sentence.id))
 
-        return <div className='columns'>
-            <div className='main'>
-                <h3>Examples of use</h3>
+        let relations = (this.state.factoid ? this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
+            .concat(this.getWordsInPhrase())
 
-                <ul>{
-                    matches.map(match => this.renderMatch(match))
-                }</ul>
-            </div>
-            <div className='sidebar'>
-                { this.state.factoid && this.state.factoid.relations.length ?
-                    <div>
-                        <h3>See also</h3>
+        return <div>
+            <h1>{ phrase.description }</h1>
+            <div className='columns'>
+                <div className='main'>
+                    <h3>Examples of use</h3>
 
-                        <ul>
-                        {
-                            this.state.factoid.relations.map(f => {
-                                let fact = corpus.facts.get(f.fact)                            
+                    <ul>{
+                        matches.map(match => this.renderMatch(match))
+                    }</ul>
+                </div>
+                <div className='sidebar'>
+                    { relations.length ?
+                        <div>
+                            <h3>See also</h3>
 
-                                return <li className='clickable' key={ f.fact } onClick={ (e) => {
-                                            this.props.onSelectFact(fact)
-                                            e.stopPropagation()
-                                        }
-                                    } >{ 
-                                    this.renderRelatedFact(fact) 
-                                }</li>
-                            }) 
-                        }
-                        </ul>
-                    </div>
+                            <ul>
+                            {
+                                relations.map(fact => 
+                                    renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
+                            }
+                            </ul>
+                        </div>
 
-                    : null
-                }
+                        : null
+                    }
+                </div>
             </div>
         </div>
     }

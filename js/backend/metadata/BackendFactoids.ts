@@ -72,8 +72,14 @@ export default class BackendFactoids implements Factoids {
     }
 
     getFactoid(fact: Fact): Promise<Factoid> {
+        let empty = {
+            explanation: '',
+            fact: fact.getId(),
+            relations: []
+        }
+        
         if (!db) {
-            return Promise.resolve(null)
+            return Promise.resolve(empty)
         }
 
         return new Promise((resolve, reject) => {
@@ -81,7 +87,7 @@ export default class BackendFactoids implements Factoids {
                 .findOne( { "fact": fact.getId() } )
                 .then((doc) => {
                     if (!doc) {
-                        return null
+                        return resolve(empty)
                     }
 
                     delete doc._id

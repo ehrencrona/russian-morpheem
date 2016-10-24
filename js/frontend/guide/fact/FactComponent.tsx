@@ -47,7 +47,7 @@ export default function factComponent(props: Props) {
             onSelectFact={ props.onSelectFact }
         />
     }
-    else if (fact instanceof InflectableWord) {
+    else if (fact instanceof InflectableWord || fact instanceof Word) {
         content = <WordFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }

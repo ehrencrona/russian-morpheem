@@ -14,6 +14,7 @@ abstract class AbstractAnyWord implements AnyWord {
     abstract getId()
     abstract toText()
     abstract getWordFact()
+    abstract hasMyStem(word: AnyWord)
 
     getTranslationCount() {
         return this.enCount

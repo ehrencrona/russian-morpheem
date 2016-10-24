@@ -5,6 +5,7 @@ import Inflections from './inflection/Inflections'
 import INFLECTION_FORMS from './inflection/InflectionForms'
 import MASKS from './Masks'
 import AbstractAnyWord from './AbstractAnyWord'
+import AnyWord from './AnyWord'
 
 export interface JsonFormat {
     stem: string,
@@ -164,7 +165,7 @@ export default class InflectableWord extends AbstractAnyWord {
         return result
     }
 
-    hasMyStem(word: Word | InflectableWord) {
+    hasMyStem(word: AnyWord) {
         return word.getId() == this.getId() || (
             word instanceof InflectedWord &&
             word.word.getId() == this.getId()

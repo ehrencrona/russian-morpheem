@@ -6,6 +6,8 @@ import InflectableWord from '../shared/InflectableWord'
 import InflectedWord from '../shared/InflectedWord'
 import ExactWordMatch from '../shared/phrase/ExactWordMatch'
 import WordInFormMatch from '../shared/phrase/WordInFormMatch'
+import findPhrasesWithWord from '../shared/phrase/findPhrasesWithWord'
+
 import Tab from './OpenTab'
 import Word from '../shared/Word'
 import Phrase from '../shared/phrase/Phrase'
@@ -29,19 +31,7 @@ export default class PhrasesWithWordComponent extends Component<Props, State> {
 
     render() {
 
-        let phrases: Phrase[] = this.props.corpus.phrases.all().filter((phrase) => 
-            !!phrase.patterns.find((pattern) => 
-                !!pattern.wordMatches.find((wordMatch) => {
-                    if (wordMatch instanceof WordInFormMatch) {                        
-                        return !!wordMatch.words.find((w) => this.props.word.hasMyStem(w))
-                    }
-
-                    if (wordMatch instanceof ExactWordMatch) {
-                        return !!wordMatch.words.find((w) => this.props.word.hasMyStem(w))
-                    }
-                })
-            )
-        )
+        let phrases: Phrase[] = findPhrasesWithWord(this.props.word, this.props.corpus)
 
         if (!phrases.length) {
             return <div/>

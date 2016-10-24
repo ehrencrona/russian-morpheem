@@ -177,6 +177,7 @@ export default class InflectedWord extends Word {
         if (!result) {
             result = this.word.getEnglish('', translationIndex)
 
+            // TODO: remove? 
             if (form == 'inf') {
                 result = 'to ' + result
             }

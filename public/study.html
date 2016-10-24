@@ -17,12 +17,13 @@
     <script src="/js/app.js" defer></script>
 
     <script>
+    var dev = document.location.host == 'grammar.ru.morpheem.com';
     var _rollbarConfig = {
         accessToken: "9bea3a0929ae4cda91d244a846412726",
-        captureUncaught: true,
-        captureUnhandledRejections: true,
+        captureUncaught: !dev,
+        captureUnhandledRejections: !dev,
         payload: {
-            environment: (document.location.host == 'grammar.ru.morpheem.com' ? 'production' : 'development')
+            environment: (dev ? 'production' : 'development')
         }
     };
     // Rollbar Snippet

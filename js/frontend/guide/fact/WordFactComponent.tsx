@@ -21,6 +21,7 @@ import SentenceScore from '../../../shared/study/SentenceScore'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
 import topScores from '../../../shared/study/topScores'
 import Phrase from '../../../shared/phrase/Phrase'
+import findPhrasesWithWord from '../../../shared/phrase/findPhrasesWithWord'
 
 import Transform from '../../../shared/Transform'
 import { EndingTransform } from '../../../shared/Transforms'
@@ -37,6 +38,8 @@ import StudyPhrase from '../../study/StudyPhrase'
 import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
+
+import renderRelatedFact from './renderRelatedFact'
 
 let React = { createElement: createElement }
 
@@ -198,18 +201,46 @@ export default class WordFactComponent extends Component<Props, State> {
         return result
     }
 
-    renderRelatedFact(fact: Fact) {
-        if (fact instanceof InflectableWord) {
-            return <span>
-                    { fact.toText() }
-                    <div className='en'>{ fact.getEnglish()}</div>
-                </span>
-        }
-        else if (fact instanceof Phrase) {
-            return <span>{ fact.description }</span>
-        }
-        else {
-            return null
+    sortByKnowledge(facts: Fact[]) {
+
+        let known: Fact[] = []
+        let unknown: Fact[] = []
+
+        facts.forEach(fact => {
+            if (this.props.knowledge.getKnowledge(fact) == Knowledge.KNEW) {
+                known.push(fact)
+            }
+            else {
+                unknown.push(fact)
+            }
+        })
+
+        return known.concat(unknown)
+    }
+
+    wordsWithSimilarInflection() {
+        let word = this.props.word
+
+        if (word instanceof InflectableWord) {
+            let inflection = word.inflection
+
+            let wordsWithInflection = (inflection: Inflection, word: InflectableWord) =>
+                this.props.corpus.facts.facts.filter(f =>
+                    f instanceof InflectableWord && 
+                    f.inflection == inflection &&
+                    f.getId() != word.getId() &&
+                    f.getDefaultInflection() != word.getDefaultInflection()
+                )
+
+            let result = wordsWithInflection(inflection, word)
+
+            if (!result.length) {
+                inflection = word.inflection.inherits.find(i => i.getId().substr(0, 6) != 'abstr-')
+
+                result = wordsWithInflection(inflection, word)
+            }
+
+            return this.sortByKnowledge(result).slice(0, 5)
         }
     }
 
@@ -225,6 +256,12 @@ export default class WordFactComponent extends Component<Props, State> {
                         fact.getId() != word.getId()
                 }
             })
+
+        let related = (this.state.factoid ? 
+                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
+                : 
+                [])
+            .concat(this.sortByKnowledge(findPhrasesWithWord(word, corpus)))
 
         return <div className='fact'>
             <h1>{ word.toText() }</h1>
@@ -284,29 +321,28 @@ export default class WordFactComponent extends Component<Props, State> {
                     </ul>
                 </div>
                 <div className='sidebar'>
-                    { this.state.factoid && this.state.factoid.relations.length ?
-                        <div>
-                            <h3>See also</h3>
+                    <div>
+                        <h3>See also</h3>
 
-                            <ul>
-                            {
-                                this.state.factoid.relations.map(f => {
-                                    let fact = corpus.facts.get(f.fact)                            
+                        <ul>
+                        {
+                            related.map(fact => 
+                                renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                            ) 
+                        }
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Words with similar endings</h3>
 
-                                    return <li className='clickable' key={ f.fact } onClick={ (e) => {
-                                                this.props.onSelectFact(fact)
-                                                e.stopPropagation()
-                                            }
-                                        } >{ 
-                                        this.renderRelatedFact(fact) 
-                                    }</li>
-                                }) 
-                            }
-                            </ul>
-                        </div>
-
-                        : null
-                    }
+                        <ul>
+                        {
+                            this.wordsWithSimilarInflection().map(fact => 
+                                renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                            ) 
+                        }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

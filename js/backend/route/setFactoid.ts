@@ -21,8 +21,8 @@ export default function(corpus: Corpus) {
         let factoid = req.body as Factoid
 
         let author = getAuthor(req).name
-
-        corpus.factoids.getFactoid(fact)
+        
+        return corpus.factoids.getFactoid(fact)
             .then(oldFactoid => {
                 if (factoid.explanation &&
                     Math.abs(oldFactoid.explanation.length - factoid.explanation.length) > 3) {
@@ -37,6 +37,9 @@ export default function(corpus: Corpus) {
                         res.status(500).send(e)
                         console.error(e.stack)
                     })
+            })
+            .catch(e => {
+                res.status(500).send(e)
             })
 
     }

@@ -498,8 +498,11 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
     }
 
     getFactName(fact: Fact) {
-        if (fact instanceof AbstractAnyWord) {
-            return 'the word for "' + (fact as AbstractAnyWord).getEnglish() + '"'
+        if (fact instanceof InflectedWord) {
+            return 'the word for "' + fact.getEnglish() + '"'
+        }
+        else if (fact instanceof Word) {
+            return 'the word for "' + fact.getEnglish() + '"'
         }
         else if (fact instanceof InflectionFact) {
             let examples = findExamplesOfInflection(fact, this.props.corpus, 2, 

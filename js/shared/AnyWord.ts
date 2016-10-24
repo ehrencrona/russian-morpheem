@@ -12,6 +12,8 @@ interface AnyWord extends Translatable {
     getIdWithoutClassifier(): string
     getId(): string
 
+    hasMyStem(word: AnyWord)
+
     getWordFact(): Fact
 
 }
