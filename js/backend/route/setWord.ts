@@ -42,7 +42,7 @@ export default function(corpus: Corpus) {
                 if (word.getEnglish(form) != existingWord.getEnglish(form)) {
                     corpus.words.setEnglish(word.getEnglish(form), existingWord, form)
 
-                    console.log('Stored translation "' + word.getEnglish() + '" for word ' + existingWord.getId() + ' by ' + author)
+                    console.log('Stored translation "' + word.getEnglish(form) + '" for word ' + existingWord.getId() + ' by ' + author)
                 }
             })
 
