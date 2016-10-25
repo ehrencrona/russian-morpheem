@@ -56,8 +56,7 @@ export default class FactNameComponent extends Component<Props, State> {
             </span>
         }
         else if (fact instanceof Phrase) {
-            return <span>{ (fact.description || fact.getId()) + 
-                (fact.patterns[0] ? ' – ' + fact.patterns[0].en : '') }</span>
+            return <span>{ (fact.description || fact.getId()) + ': ' + fact.en }</span>
         }
         else {
             let name = fact.getId()
