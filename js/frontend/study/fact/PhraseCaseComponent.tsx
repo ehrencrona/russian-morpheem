@@ -20,7 +20,16 @@ function removeCase(word: InflectedWord, corpus: Corpus) {
     clone.grammaticalCase = GrammaticalCase.NOM
 
     let nominative: string = INFLECTION_FORMS[corpus.lang][word.word.pos].allForms.find(
-        formId => FORMS[formId].matches(clone))
+        formId => {
+            let form = FORMS[formId]
+
+            if (!form) {
+                console.warn(formId + ' is in INFLECTION_FORMS but not FORMS')
+                return false
+            }
+
+            return FORMS[formId].matches(clone)
+        })
 
     if (nominative) {
         return word.word.inflect(nominative)        

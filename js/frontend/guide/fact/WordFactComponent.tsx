@@ -151,6 +151,8 @@ export default class WordFactComponent extends Component<Props, State> {
 
             })
         }
+
+        return scores
     }
 
     tokensToHtml(tokens: StudyToken[]) {
