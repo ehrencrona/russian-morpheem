@@ -23,6 +23,7 @@ export interface JsonFormat {
 
 export default class Phrase implements Fact {
     description: string = ''
+    en: string = ''
     casesCache: PhraseCase[]
     corpus: Corpus
 
