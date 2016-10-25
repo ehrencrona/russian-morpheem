@@ -243,7 +243,7 @@ addForm('shortf', 'short form feminine', { gender: Gender.F, number: Number.SING
 addForm('shortn', 'short form neuter', { gender: Gender.N, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
 addForm('shortm', 'short form masculine', { gender: Gender.M, number: Number.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
 addForm('shortpl', 'short form plural', { number: Number.PLURAL, adjectiveForm: AdjectiveForm.SHORT })
-addForm('short', 'short form', { number: Number.PLURAL, adjectiveForm: AdjectiveForm.SHORT })
+addForm('short', 'short form', { adjectiveForm: AdjectiveForm.SHORT })
 
 addForm('alt', 'alternative form', {})
 addForm('alt2', 'alternative form', {})
