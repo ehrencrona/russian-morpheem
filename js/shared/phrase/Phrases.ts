@@ -51,13 +51,19 @@ export default class Phrases {
         this.phraseChanged(phrase, false)
     }
 
+    setPhraseEnglish(phrase: Phrase, en: string) {
+        phrase.en = en
+
+        this.phraseChanged(phrase, false)
+    }
+
     phraseChanged(phrase: Phrase, structurally: boolean) {
         if (this.onChange) {
             this.onChange(phrase)
         }
     }
 
-    setEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {
+    setPatternEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {
         pattern.setEnglish(en)
 
         this.phraseChanged(phrase, true)

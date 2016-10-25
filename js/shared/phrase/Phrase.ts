@@ -19,6 +19,7 @@ export interface JsonFormat {
     id: string,
     patterns: PhrasePatternJsonFormat[],
     description: string
+    en: string
 }
 
 export default class Phrase implements Fact {
@@ -136,6 +137,7 @@ export default class Phrase implements Fact {
         return {
             id: this.id,
             description: this.description,
+            en: this.en,
             patterns: this.patterns.map((p) => p.toJson())
         }
     }
@@ -148,6 +150,7 @@ export default class Phrase implements Fact {
         )
 
         result.description = json.description
+        result.en = json.en
 
         return result
     }

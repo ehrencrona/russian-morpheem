@@ -34,9 +34,9 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
             throw new Error(`Can't parse pattern ${line}. Should be id: "description" pattern`)                
         }
 
-        let patternEn
+        let phraseEn
 
-        patternEn = line.substr(k+1, l-k-1)
+        phraseEn = line.substr(k+1, l-k-1)
 
         let m = line.indexOf('"', l+1)
         let n = line.indexOf('"', m+1)
@@ -45,10 +45,10 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
             throw new Error(`Can't parse pattern ${line}. Should be id: "description" pattern`)                
         }
         
-        let phraseEn
+        let patternEn
         let pattern
         
-        phraseEn = line.substr(m+1, n-m-1)
+        patternEn = line.substr(m+1, n-m-1)
         pattern = line.substr(n + 2)
 
         let phrase: Phrase

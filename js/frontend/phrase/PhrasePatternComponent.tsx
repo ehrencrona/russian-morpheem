@@ -45,12 +45,16 @@ export default class PhrasePatternComponent extends Component<Props, State> {
         this.props.corpus.phrases.setDescription(this.props.phrase, newDescription)
     }
 
-    changeEnglish(english: string, pattern: PhrasePattern, index: number) {
+    changePhraseEnglish(newEnglish: string) {
+        this.props.corpus.phrases.setPhraseEnglish(this.props.phrase, newEnglish)
+    }
+
+    changePatternEnglish(english: string, pattern: PhrasePattern, index: number) {
         if (english == pattern.en) {
             return
         }
 
-        this.props.corpus.phrases.setEnglish(this.props.phrase, pattern, english);
+        this.props.corpus.phrases.setPatternEnglish(this.props.phrase, pattern, english);
 
         (this.refs['studyWords' + index] as PhraseStudyWordsComponent).forceUpdate() 
     }
@@ -163,11 +167,20 @@ export default class PhrasePatternComponent extends Component<Props, State> {
 
             <div className='field'>
                 <div className='label'>
-                    Name
+                    Name (Russian)
                 </div>
             
                 <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' defaultValue={ phrase.description } 
                     onBlur={ (e) => this.changeDescription((e.target as HTMLInputElement).value) }/>
+            </div>
+
+            <div className='field'>
+                <div className='label'>
+                    Name (English)
+                </div>
+            
+                <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' defaultValue={ phrase.en } 
+                    onBlur={ (e) => this.changePhraseEnglish((e.target as HTMLInputElement).value) }/>
             </div>
 
             {  
@@ -182,7 +195,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                             </div>
                         
                             <input type='text' lang='en' autoCapitalize='off' defaultValue={ pattern.en } 
-                                onBlur={ (e) => this.changeEnglish((e.target as HTMLInputElement).value, pattern, index) }/>
+                                onBlur={ (e) => this.changePatternEnglish((e.target as HTMLInputElement).value, pattern, index) }/>
                         </div>
 
                         <div className='field'>
