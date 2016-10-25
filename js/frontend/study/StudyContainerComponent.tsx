@@ -373,33 +373,52 @@ console.log('Did not ought to know ' + visitedFact.getId())
     render() {
         let profile = this.state.profile
 
-        if (this.state.showPlan) {
-            return <StudyPlanComponent
-                profile={ profile }
+        let explain = null
+
+        if (this.state.explainFact) {
+            explain = <ExplainFactComponent 
                 corpus={ this.props.corpus }
-                factSelector={ this.factSelector }
-                newFactSelector={ this.newFactsSelector }
-                onSubmit={ 
-                    facts => {
-                        profile.studyPlan.setFacts(facts, this.factSelector)
-                        this.studyPlanLoaded()
-                        this.setState({ showPlan: false })
-                    }}
-                onMarkAsKnown={
-                    (fact: Fact) => {
-                        return this.exposures.registerExposures([
-                            {
-                                fact: fact.getId(),
-                                time: new Date(),
-                                skill: Skill.SAY_SO,
-                                knew: Knowledge.KNEW,
-                                user: -1,
-                                sentence: null
-                            }
-                        ])
-                    }
-                }
+                fact={ this.state.explainFact }
+                context={ this.state.explainContext }
+                knowledge={ this.knowledge }
+                onClose={ () => this.setState({ explainFact: null }) }
+                onSelectFact={ (fact, context?) => 
+                    this.setState({ explainFact: fact, explainContext: context }) }
             />
+        }
+
+        if (this.state.showPlan) {
+            return <div>
+                <StudyPlanComponent
+                    profile={ profile }
+                    corpus={ this.props.corpus }
+                    factSelector={ this.factSelector }
+                    newFactSelector={ this.newFactsSelector }
+                    onSubmit={ 
+                        facts => {
+                            profile.studyPlan.setFacts(facts, this.factSelector)
+                            this.studyPlanLoaded()
+                            this.setState({ showPlan: false })
+                        }}
+                    onMarkAsKnown={
+                        (fact: Fact) => {
+                            return this.exposures.registerExposures([
+                                {
+                                    fact: fact.getId(),
+                                    time: new Date(),
+                                    skill: Skill.SAY_SO,
+                                    knew: Knowledge.KNEW,
+                                    user: -1,
+                                    sentence: null
+                                }
+                            ])
+                        }
+                    }
+                    onExplain={ (fact) => this.explain(fact) } />
+                {
+                    explain
+                }
+            </div>
         }
         else if (this.state.sentence) {
             return <div className='studyOuter'>
@@ -499,18 +518,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 }
 
                 {
-                    this.state.explainFact ?
-                        <ExplainFactComponent 
-                            corpus={ this.props.corpus }
-                            fact={ this.state.explainFact }
-                            context={ this.state.explainContext }
-                            knowledge={ this.knowledge }
-                            onClose={ () => this.setState({ explainFact: null }) }
-                            onSelectFact={ (fact, context?) => 
-                                this.setState({ explainFact: fact, explainContext: context }) }
-                        />
-                    : 
-                        null
+                    explain
                 }
             </div>
         }

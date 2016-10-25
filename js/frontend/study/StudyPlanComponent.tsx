@@ -15,6 +15,7 @@ import FactScore from '../../shared/study/FactScore'
 import { NewFactsSelector } from '../../shared/study/NewFactsSelector'
 import { EXPECTED_REPETITIONS_IN_SESSION, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
 
+import StudyFact from './StudyFact'
 import TopicsComponent from './TopicsComponent'
 
 let React = { createElement: createElement }
@@ -25,6 +26,7 @@ interface Props {
     factSelector: FixedIntervalFactSelector
     newFactSelector: NewFactsSelector
     onSubmit: (studiedFacts: StudiedFacts) => any
+    onExplain: (fact: StudyFact) => void
     onMarkAsKnown: (fact: Fact) => Promise<any>
 }
 
@@ -38,7 +40,6 @@ interface State {
     newCount?: number
     onTab?: OnTab
     showTopics?: boolean
-    explainFact?: Fact
 }
 
 const DEFAULT_REPEAT_COUNT = 25
@@ -123,15 +124,18 @@ export default class StudyPlanComponent extends Component<Props, State> {
             return <li key={ fact.getId() }>
                 { this.renderProgress(fact) }
                 <div className='fact' onClick={ (e) => { 
-                    this.setState({ explainFact: fact })
+                    this.props.onExplain({ fact: fact, words: [] })
+                    e.stopPropagation()
                 }}>
                     <FactEntryComponent
                         corpus={ this.props.corpus }
                         knowledge={ this.props.profile.knowledge } 
-                        fact={ fact }/> 
+                        fact={ fact }
+                        /> 
                 </div>
                 <div className='button remove' onClick={ (e) => { 
                     this.remove(fact)
+                    e.stopPropagation()
                 }}>I know</div>
             </li>
 
@@ -270,21 +274,6 @@ console.log(f.getId() + ' is already known')
                         studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
                     )) }>Done</div>
             </div>
-
-            {
-                this.state.explainFact ?
-                    <ExplainFactComponent 
-                        corpus={ this.props.corpus }
-                        fact={ this.state.explainFact }
-                        context={ null }
-                        knowledge={ this.props.profile.knowledge }
-                        onClose={ () => this.setState({ explainFact: null }) }
-                        onSelectFact={ (fact, context?) => 
-                            this.setState({ explainFact: fact }) }
-                    />
-                : 
-                    null
-            }
         </div>
     }
 }

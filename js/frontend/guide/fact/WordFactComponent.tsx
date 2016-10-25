@@ -245,9 +245,20 @@ export default class WordFactComponent extends Component<Props, State> {
             let result = wordsWithInflection(inflection, word)
 
             if (!result.length) {
+                // try the parent
                 inflection = word.inflection.inherits.find(i => i.getId().substr(0, 6) != 'abstr-')
 
                 result = wordsWithInflection(inflection, word)
+            }
+
+            if (!result.length) {
+                // find others inheriting the parent (the parent might have no direct users)
+                result = this.props.corpus.facts.facts.filter(f =>
+                    f instanceof InflectableWord && 
+                    f.inflection.inherits.indexOf(inflection) >= 0 &&
+                    f.getId() != word.getId() &&
+                    f.getDefaultInflection() != (word as InflectableWord).getDefaultInflection()
+                )
             }
 
             return this.sortByKnowledge(result).slice(0, 5)
@@ -280,36 +291,36 @@ export default class WordFactComponent extends Component<Props, State> {
             { 
                 this.state.factoid ?
 
-                <div>
-                    <i> 
-                        { this.state.factoid.explanation }
-                    </i>
-
-                    { 
-                        otherMeanings.length ?
-                        <div>
-                            Other meanings: {
-                                otherMeanings.map((fact, index) =>
-                                    <span key={ fact.getId() }>{ index > 0 ? ', ' : ''}<span 
-                                            className='clickable' onClick={ (e) => {
-                                                this.props.onSelectFact(fact)
-                                                e.stopPropagation()
-                                            }
-                                        } >{ (fact as Word).getEnglish()}
-                                        </span>
-                                    </span>)
-                            }
-                        </div>
-                        :
-                        null
-                    }
-
+                <div className='factoid'> 
+                    { this.state.factoid.explanation }
                 </div>
 
                 :
 
                 null
             }
+
+            <div>
+                { 
+                    otherMeanings.length ?
+                    <div className='otherMeanings'>
+                        It can also mean {
+                            otherMeanings.map((fact, index) =>
+                                <span key={ fact.getId() }>{ index > 0 ? ', ' : ''}<span 
+                                        className='clickable' onClick={ (e) => {
+                                            this.props.onSelectFact(fact)
+                                            e.stopPropagation()
+                                        }
+                                    } >{ (fact as Word).getEnglish()}
+                                    </span>
+                                </span>)
+                        }
+                    </div>
+                    :
+                    null
+                }
+
+            </div>
 
             <div className='columns'>
                 <div className='main'>

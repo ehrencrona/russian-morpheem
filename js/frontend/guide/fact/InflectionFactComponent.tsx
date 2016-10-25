@@ -3,7 +3,6 @@
 import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
-import InflectionTableComponent from '../../InflectionTableComponent'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
 import AnyWord from '../../../shared/AnyWord'
@@ -29,19 +28,12 @@ interface Props {
     onSelectFact: (fact: Fact, context: InflectedWord) => any
 }
 
-enum Tab {
-    FORM, INFLECTION
-}
-
 interface State {
-    tab: Tab
 }
 
 export default class InflectionFactComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
-
-        this.state = { tab: Tab.FORM }
     }
 
     getExamplesUsingInflection(form: string, inflection: Inflection) {
@@ -222,8 +214,14 @@ export default class InflectionFactComponent extends Component<Props, State> {
             transforms.push(transform)
         }
 
-        return <li key={ word.getId() }>{ word.getDefaultInflection().jp } →&nbsp; 
+        return <li key={ word.getId() }>
             <span className='clickable' onClick={ (e) => {
+                    e.stopPropagation()  
+                    this.props.onSelectFact( 
+                        word.getWordFact(), inflected) }}>{ 
+                word.getDefaultInflection().jp }</span> <span className='arrow'>
+                →
+            </span> <span className='clickable' onClick={ (e) => {
                     e.stopPropagation()  
                     this.props.onSelectFact( 
                         inflected.word.inflection.getFact(inflected.form), 
@@ -311,8 +309,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                                 </strong>
                             </span>
                         )
-                    }
-                    {' '}to give <strong>
+                    } to give <strong>
                         { word.jp }{ transform ? '*' : '' }
                     </strong>.
                 </p>
@@ -345,11 +342,20 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
         let ending = inflection.getEnding(form)
 
-        return <div>
+        return <div className='inflection fact'>
                 <div> 
                     {
                         this.describeFormation(word, transforms)
                     }
+                </div>
+
+                <div>
+                {
+                    ending.relativeTo ? 
+                        this.describeFormation(word.word.inflect(ending.relativeTo), transforms)
+                        :
+                        <div/>
+                }
                 </div>
 
                 <div>
@@ -418,15 +424,6 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                 }
 
-                <div>
-                {
-                    ending.relativeTo ? 
-                        this.describeFormation(word.word.inflect(ending.relativeTo), transforms)
-                        :
-                        <div/>
-                }
-                </div>
-
                 {
                     this.getHomonymForms().length ? 
 
@@ -466,23 +463,6 @@ export default class InflectionFactComponent extends Component<Props, State> {
             </div>
     }
 
-    renderInflection() {
-
-        return <InflectionTableComponent 
-            corpus={ this.props.corpus}
-            word={ this.props.word.word }
-            renderForm={ (inflectedWord, form, factIndex) => 
-                <div onClick={
-                    () => this.props.onSelectFact(
-                        this.props.word.word.inflection.getFact(form),
-                        this.props.word)
-                }>{ InflectedWord }</div>
-            }
-            inflection={ this.props.word.word.inflection } 
-        />
-
-    }
-
     render() {
         let word = this.props.word
         let form = word.form
@@ -490,30 +470,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let corpus = this.props.corpus
 
         return <div>
-            <div className='tabs'>
-                <div className={ 'tab' + (this.state.tab == Tab.FORM ? ' current' : '') } 
-                        onClick={ (e) => {
-                            e.stopPropagation()
-                            this.setState({ tab: Tab.FORM }) 
-                        }}>
-                    <h3>The { getFormName(form) }</h3>
-                </div>
-                <div className={ 'tab' + (this.state.tab == Tab.INFLECTION ? ' current' : '') } 
-                        onClick={ (e) => {
-                            e.stopPropagation()
-                            this.setState({ tab: Tab.INFLECTION }) 
-                        }}>
-                    <h3>{ word.getDefaultInflection().jp }</h3>
-                </div>
-            </div>
+            <h1>The { getFormName(form) }</h1>
+            <h2>{ word.getDefaultInflection().jp }</h2>
 
-            { this.state.tab == Tab.FORM ?
-
-                this.renderForm() 
-            
-                :
-            
-                this.renderInflection()}
+            { this.renderForm() }
         </div>
     }
 }

@@ -18,6 +18,8 @@ import InflectableWord from '../../../shared/InflectableWord'
 import Word from '../../../shared/Word'
 import { EndingTransform } from '../../../shared/Transforms'
 
+import StudyFact from '../../study/StudyFact'
+
 import { Component, createElement } from 'react'
 
 interface Props {
@@ -33,33 +35,38 @@ let React = { createElement: createElement }
 export default function factComponent(props: Props) {
     let fact = props.fact
 
+    let entry
+
     if (fact instanceof Word || fact instanceof InflectableWord) {
-        return <WordFactEntryComponent fact={ fact } />
+        entry = <WordFactEntryComponent 
+            fact={ fact } />
     }
     else if (fact instanceof InflectionFact) {
-        return <InflectionFactEntryComponent 
+        entry = <InflectionFactEntryComponent 
             corpus={ props.corpus } 
             fact={ fact } 
             knowledge={ props.knowledge } />
     }
     else if (fact instanceof Phrase) {
-        return <PhraseFactEntryComponent 
+        entry = <PhraseFactEntryComponent 
             corpus={ props.corpus } 
             fact={ fact } 
             knowledge={ props.knowledge } />
     }
     else if (fact instanceof PhraseCase) {
-        return <PhraseCaseFactEntryComponent 
+        entry = <PhraseCaseFactEntryComponent 
             corpus={ props.corpus } 
             fact={ fact } 
             knowledge={ props.knowledge } />
     }
     else if (fact instanceof EndingTransform) {
-        return <TransformFactEntryComponent 
+        entry = <TransformFactEntryComponent 
             fact={ fact } />
     }
     else {
-        return <div>Unhandled fact { fact.getId() }</div>
+        entry = <div>Unhandled fact { fact.getId() }</div>
     }
+
+    return entry
 }
 

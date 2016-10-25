@@ -202,6 +202,11 @@ $headlineFont: 'Rubik';
                     .fact {
                         flex-grow: 1;
                         flex-basis: 0;
+
+                        .factoid {
+                            font-style: italic;
+                            margin-bottom: 0.5em;
+                        }
                     }
 
                     .button {
@@ -220,10 +225,18 @@ $headlineFont: 'Rubik';
                             background-color: darken($shadowColor, 3%);
                         }
                     }
+
+                    &:hover {
+                        background-color: darken($backgroundColor, 3%);
+                    }
                 }
 
                 li:nth-child(even) {
                     background-color: $shadowColor;
+
+                    &:hover {
+                        background-color: darken($shadowColor, 3%);
+                    }
 
                     .button {
                         &:hover {
@@ -354,6 +367,22 @@ $headlineFont: 'Rubik';
     }
 }
 
+$smallFontFactor: 0.8;
+$smallFont: percentage($smallFontFactor);
+
+$seeAlsoSize: 0.6em;
+$seeAlsoMargin: 0.1em;
+
+.seeAlso {
+    width: $seeAlsoSize;
+    height: $seeAlsoSize;
+    margin-right: $seeAlsoMargin;
+    background-image: url('/img/see-also.svg');
+    background-size: $seeAlsoSize $seeAlsoSize;
+    display: inline-block;
+    content: '';
+}
+
 .guide {
     font-weight: 400;
     font-size: 14pt;
@@ -403,7 +432,7 @@ $headlineFont: 'Rubik';
         .en {
             margin-top: $unit;
             font-style: normal;
-            font-size: 80%;
+            font-size: $smallFont;
         }
     }
 
@@ -436,6 +465,16 @@ $headlineFont: 'Rubik';
             }
 
             min-width: 25%;
+
+            ul {
+                li::before {
+                    @extend .seeAlso;
+                }
+
+                .en {
+                    margin-left: ($seeAlsoSize + $seeAlsoMargin) / $smallFontFactor;
+                }
+            }
         }
     }
 
@@ -446,14 +485,14 @@ $headlineFont: 'Rubik';
 
             thead {
                 border-bottom: 1px solid gray;
-                font-size: 80%;
+                font-size: $smallFont;
             }
 
             td:nth-child(1) {
                 border-right: 1px solid gray;
                 padding-left: 0;
 
-                font-size: 80%;
+                font-size: $smallFont;
             }
 
             td {
@@ -462,7 +501,29 @@ $headlineFont: 'Rubik';
                 @media (min-width: 600px) {
                     padding: 0.5em 4 * $unit;  
                 }
+                
+                .clickable::before {
+                    @extend .seeAlso;
+                }
             }
+        }
+    }
+
+    .otherMeanings {
+        .clickable::before {
+            @extend .seeAlso;
+        }
+    }
+
+    .fact.inflection {
+        .clickable::before {
+            @extend .seeAlso;
+        }
+
+        .arrow {
+            margin: 0 .2em;
+            position: relative;
+            top: 0.1em;
         }
     }
 }
