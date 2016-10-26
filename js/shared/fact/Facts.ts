@@ -3,6 +3,7 @@ import Grammar from '../Grammar';
 import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import InflectedWord from '../InflectedWord';
+import { FORMS, InflectionForm } from '../inflection/InflectionForms' 
 import Fact from './Fact';
 import Inflections from '../inflection/Inflections';
 import Word from '../Word';
@@ -18,6 +19,7 @@ const INFLECTABLE = 'ib'
 const WORD = 'w'
 const TRANSFORM = 't'
 const PHRASE = 'p'
+const FORM = 'f'
 
 export interface FactJsonFormat {
     id: string,
@@ -273,7 +275,14 @@ export default class Facts {
                 fact = transforms.get(factJson.id);
                 
                 if (!fact) {
-                    throw new Error(`Unknown word "${factJson.id}". Did you mean "${words.getSimilarTo(factJson.id)}"`)
+                    throw new Error(`Unknown word "${factJson.id}".`)
+                }
+            }
+            else if (factJson.type == FORM) {
+                fact = FORMS[factJson.id];
+                
+                if (!fact) {
+                    throw new Error(`Unknown form "${factJson.id}".`)
                 }
             }
             else {
@@ -317,6 +326,9 @@ export default class Facts {
             }
             else if (fact instanceof Phrase) {
                 type = PHRASE
+            }
+            else if (fact instanceof InflectionForm) {
+                type = FORM
             }
             else {
                throw new Error('Unknown fact type ' + fact.constructor.name)

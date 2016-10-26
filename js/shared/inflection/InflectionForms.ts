@@ -1,6 +1,9 @@
+import Fact from '../fact/Fact'
+import Grammar from '../Grammar'
+
 class Forms {
     allForms: string[] = []
-    
+
     constructor(public cols: string[], public rows: string[], public forms: any[][]) {
         this.cols = cols
         this.rows = rows
@@ -75,7 +78,7 @@ interface FormComponents {
     command?: Command
 }
 
-export class InflectionForm {
+export class InflectionForm extends Grammar {
     gender: Gender
     tense: Tense
     grammaticalCase: GrammaticalCase 
@@ -87,8 +90,8 @@ export class InflectionForm {
     adjectiveForm: AdjectiveForm
     pos: PartOfSpeech
 
-    constructor(public id: string, public name: string, used: FormComponents) {
-        this.id = id
+    constructor(id: string, public name: string, used: FormComponents) {
+        super(id)
         this.name = name
         this.gender = used.gender
         this.tense = used.tense
@@ -100,6 +103,14 @@ export class InflectionForm {
         this.command = used.command
         this.adjectiveForm = used.adjectiveForm
         this.pos = used.pos
+    }
+
+    getId() {
+        return this.id
+    }
+
+    visitFacts(visitor: (Fact) => any) {
+        visitor(this)
     }
 
     matches(otherForm: InflectionForm) {

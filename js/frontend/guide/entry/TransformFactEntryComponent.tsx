@@ -16,14 +16,13 @@ export default class TransformFactEntryComponent extends Component<Props, State>
     render() {
         let fact = this.props.fact
         
-        return <div>
-            <strong className='nobr'>
+        return <dl>
+            <dt>
                 { fact.from }
-            </strong> is replaced with <strong className='nobr'>
-                { fact.to }
-            </strong> after <strong className='nobr'>
-                { fact.after.split('').join(', ') }
-            </strong>
-        </div>
+            </dt>
+            <dd>
+                is replaced with { fact.to } after { fact.after.split('').join(', ') }
+            </dd>
+        </dl>
    }
 }

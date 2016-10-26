@@ -3,7 +3,6 @@
 import InflectedWord from '../InflectedWord'
 import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
-import Grammar from '../Grammar'
 import Ending from '../Ending'
 import Transform from '../Transform'
 import allTransforms from '../Transforms'

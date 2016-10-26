@@ -12,10 +12,12 @@ import InflectableWordFactComponent from '../inflection/InflectableWordFactCompo
 import PhraseFactComponent from '../phrase/PhraseFactComponent'
 import WordFactComponent from '../word/WordFactComponent'
 import InflectionFactComponent from '../inflection/InflectionFactComponent'
+import InflectionFormComponent from '../inflection/InflectionFormComponent'
 import TransformFactComponent from '../TransformFactComponent'
 
 import InflectableWord from '../../shared/InflectableWord'
 import Word from '../../shared/Word'
+import { InflectionForm } from '../../shared/inflection/InflectionForms' 
 import { EndingTransform } from '../../shared/Transforms'
 
 import { Component, createElement } from 'react'
@@ -48,6 +50,9 @@ export default class FactComponent extends Component<Props, State> {
         }
         else if (fact instanceof EndingTransform) {
             return <TransformFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        }
+        else if (fact instanceof InflectionForm) {
+            return <InflectionFormComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
     }
 }

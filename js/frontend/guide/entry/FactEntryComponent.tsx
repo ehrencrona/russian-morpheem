@@ -4,6 +4,7 @@ import Corpus from '../../../shared/Corpus'
 import Fact from '../../../shared/fact/Fact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
+import { InflectionForm } from '../../../shared/inflection/InflectionForms'
 import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 
@@ -61,6 +62,10 @@ export default function factComponent(props: Props) {
     }
     else if (fact instanceof EndingTransform) {
         entry = <TransformFactEntryComponent 
+            fact={ fact } />
+    }
+    else if (fact instanceof InflectionForm) {
+        entry = <InflectionFormEntryComponent 
             fact={ fact } />
     }
     else {

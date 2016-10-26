@@ -1,6 +1,5 @@
-import Grammar from './Grammar';
+import Grammar from './Grammar'
 import { FORMS } from './inflection/InflectionForms'
-import InflectionFormFact from './inflection/InflectionFormFact'
 
 export default class Grammars {
     grammarById : { [s: string]: Grammar } = {}
@@ -17,11 +16,11 @@ export default class Grammars {
         for (let formId in FORMS) {
             let inflectionForm = FORMS[formId]
 
-            this.grammarById[formId] = new InflectionFormFact(formId, inflectionForm)
+            this.grammarById[formId] = inflectionForm
         }
     }
 
-    get(id) {
+    get(id): Grammar {
         return this.grammarById[id];
     }
 }

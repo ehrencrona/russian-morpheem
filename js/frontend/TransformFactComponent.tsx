@@ -27,35 +27,18 @@ interface Props {
 }
 
 interface State {
-    tab: string
 }
 
 let React = { createElement: createElement }
 
 export default class TransformFactComponent extends Component<Props, State> {
 
-    constructor(props) {
-        super(props)
-        
-        this.state = {
-            tab: 'words'
-        }
-    }
-
     render() {
         let fact = this.props.fact
 
-        let tabButton = (id, name) =>
-            <div className={ 'button ' + (this.state.tab == id ? ' selected' : '') } 
-                onClick={ () => { this.setState({ tab: id }) }}>{ name }</div>
-
         return (<div>
 
-            <div className='buttonBar'>                
-                { tabButton('sentences', 'Sentences') }
-                { tabButton('inflection', 'Inflection') }
-                { tabButton('import', 'Import') }
-
+            <div className='buttonBar'>
                 <MoveFactButton corpus={ this.props.corpus} fact={ this.props.fact }
                     onMove={ () => (this.refs['sentencesWithFact'] as SentencesWithFact).forceUpdate() } 
                     />

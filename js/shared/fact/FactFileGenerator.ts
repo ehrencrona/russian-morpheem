@@ -5,8 +5,7 @@ import { EndingTransform } from '../Transforms'
 
 import Fact from './Fact';
 import Facts from './Facts';
-import InflectionFact from '../inflection/InflectionFact';
-import InflectionFormFact from '../inflection/InflectionFormFact';
+import Grammar from '../Grammar';
 import InflectableWord from '../InflectableWord';
 import Phrase from '../phrase/Phrase'
 
@@ -25,10 +24,7 @@ export function factToString(fact: Fact, facts: Facts) {
         return result
     }
 
-    if (fact instanceof InflectionFact || fact instanceof InflectionFormFact) {
-        return 'grammar: ' + fact.getId() + tags
-    }
-    else if (fact instanceof InflectableWord) {
+    if (fact instanceof InflectableWord) {
         let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
         let suffix: string = fact.inflection.getSuffix(ending, fact.stem).suffix
 
@@ -53,6 +49,9 @@ export function factToString(fact: Fact, facts: Facts) {
     }
     else if (fact instanceof Phrase) {
         return `phrase: ${fact.id}`
+    }
+    else if (fact instanceof Grammar) {
+        return 'grammar: ' + fact.getId() + tags
     }
     else if (!fact) {
         return ''

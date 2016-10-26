@@ -14,7 +14,6 @@ export default class Grammar {
 
     constructor(public id, public explanation?) {
         this.id = id
-        this.explanation = explanation || ''
     }
 
     visitFacts(visitor) {
@@ -27,20 +26,8 @@ export default class Grammar {
         }
     }
 
-    related() {
-        // TODO: make relations symmetric
-        // not implemented yet
-
-        return this
-    }
-
     getId() {
         return this.id
-    }
-
-    /** Indicates that this fact is more difficult than average (i.e. a vocabulary word) */
-    isHardFact() {
-        return true
     }
 
     toString() {
