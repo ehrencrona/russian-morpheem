@@ -11,7 +11,7 @@ import chooseHighestScoreSentence from '../../shared/study/chooseHighestScoreSen
 import { NewFactsSelector, createNewFactsSelector } from '../../shared/study/NewFactsSelector'
 import FactScore from '../../shared/study/FactScore'
 
-import SentenceComponent from '../SentenceComponent'
+import SentenceComponent from '../sentence/SentenceComponent'
 import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
 import TrivialKnowledgeInspectorComponent from './TrivialKnowledgeInspectorComponent'
 import StudyPlanComponent from './StudyPlanComponent'

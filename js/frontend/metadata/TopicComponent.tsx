@@ -3,7 +3,7 @@
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import FilteredFactsListComponent from '../fact/FilteredFactsListComponent'
-import FactSearchComponent from '../FactSearchComponent'
+import FactSearchComponent from '../fact/FactSearchComponent'
 
 import Tab from '../OpenTab'
 

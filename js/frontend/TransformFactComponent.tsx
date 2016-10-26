@@ -7,12 +7,12 @@ import Inflection from '../shared/inflection/Inflection'
 import InflectionFact from '../shared/inflection/InflectionFact'
 
 import Tab from './OpenTab'
-import MoveFactButton from './MoveFactButtonComponent'
+import MoveFactButton from './fact/MoveFactButtonComponent'
 import TagButton from './TagButtonComponent'
 import TopicButton from './TopicsButtonComponent'
-import WordsWithInflectionComponent from './WordsWithInflectionComponent'
-import ExternalSentencesComponent from './ExternalSentencesComponent'
-import SentencesWithFact from './SentencesWithFactComponent';
+import WordsWithInflectionComponent from './inflection/WordsWithInflectionComponent'
+import ExternalSentencesComponent from './sentence/ExternalSentencesComponent'
+import SentencesWithFact from './fact/SentencesWithFactComponent';
 
 import Sentence from '../shared/Sentence'
 import Word from '../shared/Word'

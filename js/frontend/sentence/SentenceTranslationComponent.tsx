@@ -1,10 +1,10 @@
 
 
 import { Component, createElement } from 'react'
-import Corpus from '../shared/Corpus'
-import Sentence from '../shared/Sentence'
-import Sentences from '../shared/Sentences'
-import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../shared/metadata/SentenceStatus'
+import Corpus from '../../shared/Corpus'
+import Sentence from '../../shared/Sentence'
+import Sentences from '../../shared/Sentences'
+import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 
 interface Props {
     corpus: Corpus,

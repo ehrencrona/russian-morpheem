@@ -32,7 +32,7 @@ import Words from '../../../shared/Words'
 import Word from '../../../shared/Word'
 import AnyWord from '../../../shared/AnyWord'
 
-import InflectionTableComponent from '../../InflectionTableComponent'
+import InflectionTableComponent from '../../inflection/InflectionTableComponent'
 import StudyToken from '../../study/StudyToken'
 import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'

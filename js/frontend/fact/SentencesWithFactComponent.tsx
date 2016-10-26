@@ -1,19 +1,18 @@
 
-
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import Sentence from '../shared/Sentence'
-import htmlEscape from '../shared/util/htmlEscape'
-import InflectedWord from '../shared/InflectedWord'
-import InflectableWord from '../shared/InflectableWord'
-import Word from '../shared/Word'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import Sentence from '../../shared/Sentence'
+import htmlEscape from '../../shared/util/htmlEscape'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectableWord from '../../shared/InflectableWord'
+import Word from '../../shared/Word'
 
 import { Component, createElement } from 'react';
-import { MISSING_INDEX } from '../shared/fact/Facts'
+import { MISSING_INDEX } from '../../shared/fact/Facts'
 
-import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../shared/SentencesByFactIndex'
-import Tab from './OpenTab'
-import openSentence from './sentence/openSentence'
+import { findSentencesForFact, SentenceDifficulty, FactSentences } from '../../shared/SentencesByFactIndex'
+import Tab from '../OpenTab'
+import openSentence from '../sentence/openSentence'
 
 interface Props {
     corpus: Corpus,

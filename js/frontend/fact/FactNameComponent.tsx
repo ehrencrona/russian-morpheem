@@ -1,20 +1,20 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import Inflection from '../shared/inflection/Inflection'
-import Phrase from '../shared/phrase/Phrase'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import Inflection from '../../shared/inflection/Inflection'
+import Phrase from '../../shared/phrase/Phrase'
 
-import InflectionFact from '../shared/inflection/InflectionFact'
-import InflectedWord from '../shared/InflectedWord'
-import Word from '../shared/Word'
+import InflectionFact from '../../shared/inflection/InflectionFact'
+import InflectedWord from '../../shared/InflectedWord'
+import Word from '../../shared/Word'
 
-import Sentence from '../shared/Sentence'
-import InflectableWord from '../shared/InflectableWord'
+import Sentence from '../../shared/Sentence'
+import InflectableWord from '../../shared/InflectableWord'
 
 import { Component, createElement } from 'react';
 
-import findExamplesOfInflection from '../shared/inflection/findExamplesOfInflection'
+import findExamplesOfInflection from '../../shared/inflection/findExamplesOfInflection'
 
 interface Props {
     corpus: Corpus,

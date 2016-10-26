@@ -4,7 +4,7 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 
 import Tab from '../OpenTab'
-import SentenceComponent from '../SentenceComponent'
+import SentenceComponent from '../sentence/SentenceComponent'
 
 import Sentence from '../../shared/Sentence'
 import Word from '../../shared/Word'

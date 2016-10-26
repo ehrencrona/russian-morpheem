@@ -1,17 +1,17 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import { MISSING_INDEX } from '../shared/fact/Facts'
-import Sentence from '../shared/Sentence'
-import Word from '../shared/Word'
-import { ExternalSentence } from '../shared/external/ExternalSentence'
-import { parseSentenceToWords, ParsedWord } from '../shared/external/parseSentenceToWords'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import { MISSING_INDEX } from '../../shared/fact/Facts'
+import Sentence from '../../shared/Sentence'
+import Word from '../../shared/Word'
+import { ExternalSentence } from '../../shared/external/ExternalSentence'
+import { parseSentenceToWords, ParsedWord } from '../../shared/external/parseSentenceToWords'
 
 import { Component, createElement } from 'react';
 
 import SentenceComponent from './SentenceComponent'
-import Tab from './OpenTab'
+import Tab from '../OpenTab'
 
 interface Props {
     corpus: Corpus,

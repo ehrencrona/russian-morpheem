@@ -10,7 +10,7 @@ import Fact from '../../shared/fact/Fact'
 
 import Tab from '../OpenTab'
 import AddPhraseComponent from '../AddPhraseComponent'
-import WordSearchComponent from '../WordSearchComponent'
+import WordSearchComponent from '../word/WordSearchComponent'
 import FilteredFactsListComponent from '../fact/FilteredFactsListComponent'
 
 import { GrammaticalCase, CASES, getFormName } from '../../shared/inflection/InflectionForms'

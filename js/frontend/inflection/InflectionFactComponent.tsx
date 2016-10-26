@@ -1,22 +1,22 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import Inflection from '../shared/inflection/Inflection'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import Inflection from '../../shared/inflection/Inflection'
 
-import InflectionFact from '../shared/inflection/InflectionFact'
+import InflectionFact from '../../shared/inflection/InflectionFact'
 
-import Tab from './OpenTab'
+import Tab from '../OpenTab'
 import InflectionsContainerComponent from './InflectionsContainerComponent'
-import MoveFactButton from './MoveFactButtonComponent'
-import TagButton from './TagButtonComponent'
-import TopicButton from './TopicsButtonComponent'
+import MoveFactButton from '../fact/MoveFactButtonComponent'
+import TagButton from '../TagButtonComponent'
+import TopicButton from '../TopicsButtonComponent'
 import WordsWithInflectionComponent from './WordsWithInflectionComponent'
-import ExternalSentencesComponent from './ExternalSentencesComponent'
-import SentencesWithFact from './SentencesWithFactComponent';
+import ExternalSentencesComponent from '../sentence/ExternalSentencesComponent'
+import SentencesWithFact from '../fact/SentencesWithFactComponent';
 
-import Sentence from '../shared/Sentence'
-import Word from '../shared/Word'
+import Sentence from '../../shared/Sentence'
+import Word from '../../shared/Word'
 
 import { Component, createElement } from 'react';
 

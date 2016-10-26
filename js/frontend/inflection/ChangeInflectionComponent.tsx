@@ -1,14 +1,14 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import InflectableWord from '../shared/InflectableWord'
-import Inflection from '../shared/inflection/Inflection'
-import Tab from './OpenTab'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import InflectableWord from '../../shared/InflectableWord'
+import Inflection from '../../shared/inflection/Inflection'
+import Tab from '../OpenTab'
 
 import InflectionsContainerComponent from './InflectionsContainerComponent'
 import { Component, createElement } from 'react';
-import { FactSentences } from '../shared/SentencesByFactIndex'
+import { FactSentences } from '../../shared/SentencesByFactIndex'
 
 let React = { createElement: createElement }
 

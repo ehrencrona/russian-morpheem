@@ -1,17 +1,16 @@
 
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectableWord from '../../shared/InflectableWord'
+import Inflection from '../../shared/inflection/Inflection'
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import InflectedWord from '../shared/InflectedWord'
-import InflectableWord from '../shared/InflectableWord'
-import Inflection from '../shared/inflection/Inflection'
-
-import Word from '../shared/Word'
-import getLanguage from './getLanguage'
+import Word from '../../shared/Word'
+import getLanguage from '../getLanguage'
 
 import { Component, createElement } from 'react';
-import INFLECTION_FORMS from '../shared/inflection/InflectionForms'
-import { MISSING_INDEX } from '../shared/fact/Facts'
+import INFLECTION_FORMS from '../../shared/inflection/InflectionForms'
+import { MISSING_INDEX } from '../../shared/fact/Facts'
 
 interface Props {
     corpus: Corpus,

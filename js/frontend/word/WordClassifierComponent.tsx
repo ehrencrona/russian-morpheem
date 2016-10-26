@@ -1,11 +1,11 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import InflectableWord from '../shared/InflectableWord'
-import Word from '../shared/Word'
-import Tab from './OpenTab'
-import FilteredFactsListComponent from './fact/FilteredFactsListComponent' 
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import InflectableWord from '../../shared/InflectableWord'
+import Word from '../../shared/Word'
+import Tab from '../OpenTab'
+import FilteredFactsListComponent from '../fact/FilteredFactsListComponent' 
 
 import { Component, createElement } from 'react';
 

@@ -2,7 +2,7 @@
 
 import {Component, cloneElement, createElement} from 'react';
 import Facts from './fact/FactsComponent';
-import Sentence from './SentenceComponent';
+import Sentence from './sentence/SentenceComponent';
 import Corpus from '../shared/Corpus';
 import Tab from './Tab';
 

@@ -1,12 +1,14 @@
 "use strict";
 
+import Word from '../Word';
+import { EndingTransform } from '../Transforms'
+
 import Fact from './Fact';
 import Facts from './Facts';
 import InflectionFact from '../inflection/InflectionFact';
+import InflectionFormFact from '../inflection/InflectionFormFact';
 import InflectableWord from '../InflectableWord';
-import Word from '../Word';
 import Phrase from '../phrase/Phrase'
-import { EndingTransform } from '../Transforms'
 
 export function factToString(fact: Fact, facts: Facts) {
     let tags = facts.getTagsOfFact(fact).map((tag) => ', tag: ' + tag).join('')
@@ -23,8 +25,7 @@ export function factToString(fact: Fact, facts: Facts) {
         return result
     }
 
-
-    if (fact instanceof InflectionFact) {
+    if (fact instanceof InflectionFact || fact instanceof InflectionFormFact) {
         return 'grammar: ' + fact.getId() + tags
     }
     else if (fact instanceof InflectableWord) {

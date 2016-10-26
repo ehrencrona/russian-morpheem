@@ -1,9 +1,7 @@
 import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
-import SentenceComponent from '../SentenceComponent'
+import SentenceComponent from './SentenceComponent'
 import Corpus from '../../shared/Corpus'
-
-
 
 import { Component, createElement } from 'react';
 let React = { createElement: createElement }

@@ -1,10 +1,10 @@
 
-import Corpus from '../shared/Corpus'
-import Translatable from '../shared/Translatable'
-import InflectableWord from '../shared/InflectableWord'
-import Word from '../shared/Word'
+import Corpus from '../../shared/Corpus'
+import Translatable from '../../shared/Translatable'
+import InflectableWord from '../../shared/InflectableWord'
+import Word from '../../shared/Word'
 import { Component, createElement } from 'react';
-import { ENGLISH_FORMS_BY_POS } from '../shared/inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS } from '../../shared/inflection/InflectionForms'
 
 let React = { createElement: createElement }
 

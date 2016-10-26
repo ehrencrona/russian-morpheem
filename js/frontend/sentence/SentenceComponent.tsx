@@ -1,24 +1,25 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import Word from '../shared/Word'
-import Words from '../shared/Words'
-import InflectedWord from '../shared/InflectedWord'
-import UnparsedWord from '../shared/UnparsedWord';
-import Sentence from '../shared/Sentence'
-import { MISSING_INDEX } from '../shared/fact/Facts'
-import Tab from './OpenTab'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import Word from '../../shared/Word'
+import Words from '../../shared/Words'
+import InflectedWord from '../../shared/InflectedWord'
+import UnparsedWord from '../../shared/UnparsedWord';
+import Sentence from '../../shared/Sentence'
+import { MISSING_INDEX } from '../../shared/fact/Facts'
+import Tab from '../OpenTab'
 
-import FactNameComponent from './FactNameComponent'
-import WordSearchComponent from './WordSearchComponent'
-import SentenceEditorComponent from './SentenceEditorComponent'
-import SentenceHistoryComponent from './metadata/SentenceHistoryComponent'
-import SentenceStatusComponent from './metadata/SentenceStatusComponent'
-import SentenceTranslationComponent from './SentenceTranslationComponent'
-import SentencePhrasesComponent from './phrase/SentencePhrasesComponent'
+import FactNameComponent from '../fact/FactNameComponent'
+import WordSearchComponent from '../word/WordSearchComponent'
+import SentenceEditorComponent from '../sentence/SentenceEditorComponent'
+import SentenceHistoryComponent from '../metadata/SentenceHistoryComponent'
+import SentenceStatusComponent from '../metadata/SentenceStatusComponent'
+import SentenceTranslationComponent from '../sentence/SentenceTranslationComponent'
+import SentencePhrasesComponent from '../phrase/SentencePhrasesComponent'
 
-import openFact from './fact/openFact'
+import openFact from '../fact/openFact'
+
 import { Component, createElement } from 'react'
 
 interface Props {

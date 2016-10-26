@@ -2,7 +2,7 @@ import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Tab from '../OpenTab'
-import SentenceComponent from '../SentenceComponent'
+import SentenceComponent from './SentenceComponent'
 import openSentence from '../sentence/openSentence'
 import recorder from '../Recorder'
 

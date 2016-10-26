@@ -10,7 +10,7 @@ import openFact from './openFact'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import FactNameComponent from '../FactNameComponent'
+import FactNameComponent from '../fact/FactNameComponent'
 
 import { SentencesByFactIndex, FactSentences, DESIRED_SENTENCE_COUNT } from '../../shared/SentencesByFactIndex'
 import { MISSING_INDEX } from '../../shared/fact/Facts' 

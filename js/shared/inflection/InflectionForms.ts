@@ -136,13 +136,13 @@ NUMBERS[Number.PLURAL] = 'pl'
 
 export let CASES = {}
 
-CASES[GrammaticalCase.NOM] = 'nom'
-CASES[GrammaticalCase.GEN] = 'gen'
-CASES[GrammaticalCase.DAT] = 'dat'
-CASES[GrammaticalCase.ACC] = 'acc'
-CASES[GrammaticalCase.INSTR] = 'instr'
-CASES[GrammaticalCase.PREP] = 'prep'
-CASES[GrammaticalCase.LOC] = 'loc'
+CASES[GrammaticalCase.NOM] = 'nominative'
+CASES[GrammaticalCase.GEN] = 'genitive'
+CASES[GrammaticalCase.DAT] = 'dative'
+CASES[GrammaticalCase.ACC] = 'accusative'
+CASES[GrammaticalCase.INSTR] = 'instrumental'
+CASES[GrammaticalCase.PREP] = 'prepositional'
+CASES[GrammaticalCase.LOC] = 'locative'
 CASES[GrammaticalCase.CONTEXT] = 'context'
 
 addForm('1', 'first person (I)', { person: Person.FIRST, number: Number.SINGULAR, tense: Tense.PRESENT }),
@@ -164,7 +164,7 @@ addForm('past', 'past', { tense: Tense.PAST })
 addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
 addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
 addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
-addForm('pl', 'plur', { number: Number.PLURAL, grammaticalCase: GrammaticalCase.NOM })
+addForm('pl', 'plural', { number: Number.PLURAL, grammaticalCase: GrammaticalCase.NOM })
 addForm('fpl', 'feminine plural', { number: Number.PLURAL, gender: Gender.F })
 addForm('sg', 'singular', { number: Number.PLURAL })
 
@@ -177,7 +177,7 @@ addForm('prep', 'prepositional', { grammaticalCase: GrammaticalCase.PREP, number
 addForm('loc', 'locative', { grammaticalCase: GrammaticalCase.LOC, number: Number.SINGULAR })
 addForm('locpl', 'locative plural', { grammaticalCase: GrammaticalCase.LOC, number: Number.PLURAL })
 
-// this is a bit of a hack to make it possible select a case independent of number if phrases.
+// this is a bit of a hack to make it possible select a case independent of number in phrases.
 // "gen" should be renamed into "gensg" and "genitive" to "gen" at some point
 addForm('nominative', 'nominative', { grammaticalCase: GrammaticalCase.NOM })
 addForm('genitive', 'genitive', { grammaticalCase: GrammaticalCase.GEN })

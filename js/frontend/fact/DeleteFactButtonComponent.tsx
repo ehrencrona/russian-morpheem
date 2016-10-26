@@ -1,8 +1,8 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
-import { findSentencesForFact } from '../shared/SentencesByFactIndex'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import { findSentencesForFact } from '../../shared/SentencesByFactIndex'
 
 import { Component, createElement } from 'react';
 

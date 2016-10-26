@@ -1,11 +1,11 @@
 
 
-import Corpus from '../shared/Corpus';
-import Fact from '../shared/fact/Fact';
-import Word from '../shared/Word';
-import InflectedWord from '../shared/InflectedWord';
-import UnparsedWord from '../shared/UnparsedWord';
-import Sentence from '../shared/Sentence';
+import Corpus from '../../shared/Corpus';
+import Fact from '../../shared/fact/Fact';
+import Word from '../../shared/Word';
+import InflectedWord from '../../shared/InflectedWord';
+import UnparsedWord from '../../shared/UnparsedWord';
+import Sentence from '../../shared/Sentence';
 
 import { Component, cloneElement, createElement } from 'react';
 

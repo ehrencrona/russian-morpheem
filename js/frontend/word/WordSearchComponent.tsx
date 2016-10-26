@@ -1,12 +1,12 @@
-import Corpus from '../shared/Corpus';
-import Fact from '../shared/fact/Fact';
-import Word from '../shared/Word';
-import UnparsedWord from '../shared/UnparsedWord';
-import InflectedWord from '../shared/InflectedWord';
-import InflectableWord from '../shared/InflectableWord';
-import AnyWord from '../shared/AnyWord'
-import Tab from './OpenTab'
-import InflectionsContainerComponent from './InflectionsContainerComponent';
+import Corpus from '../../shared/Corpus';
+import Fact from '../../shared/fact/Fact';
+import Word from '../../shared/Word';
+import UnparsedWord from '../../shared/UnparsedWord';
+import InflectedWord from '../../shared/InflectedWord';
+import InflectableWord from '../../shared/InflectableWord';
+import AnyWord from '../../shared/AnyWord'
+import Tab from '../OpenTab'
+import InflectionsContainerComponent from '../inflection/InflectionsContainerComponent';
 
 import { Component, createElement } from 'react';
 

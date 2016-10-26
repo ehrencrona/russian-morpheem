@@ -8,10 +8,10 @@ import Phrase from '../../shared/phrase/Phrase'
 
 import Tab from '../OpenTab'
 
-import InflectableWordFactComponent from '../InflectableWordFactComponent'
+import InflectableWordFactComponent from '../inflection/InflectableWordFactComponent'
 import PhraseFactComponent from '../phrase/PhraseFactComponent'
-import WordFactComponent from '../WordFactComponent'
-import InflectionFactComponent from '../InflectionFactComponent'
+import WordFactComponent from '../word/WordFactComponent'
+import InflectionFactComponent from '../inflection/InflectionFactComponent'
 import TransformFactComponent from '../TransformFactComponent'
 
 import InflectableWord from '../../shared/InflectableWord'

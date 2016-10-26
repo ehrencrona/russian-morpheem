@@ -9,7 +9,7 @@ import UntranslatedSentencesComponent from './UntranslatedSentencesComponent'
 import UnrecordedSentencesComponent from './UnrecordedSentencesComponent'
 import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'
-import SentenceComponent from '../SentenceComponent'
+import SentenceComponent from './SentenceComponent'
 import SearchSentencesComponent from './SearchSentencesComponent'
 import Sentence from '../../shared/Sentence'
 

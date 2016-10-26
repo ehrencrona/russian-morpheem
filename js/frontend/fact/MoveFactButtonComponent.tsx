@@ -1,7 +1,7 @@
 
 
-import Corpus from '../shared/Corpus'
-import Fact from '../shared/fact/Fact'
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
 
 import { Component, createElement } from 'react';
 
