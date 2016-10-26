@@ -185,6 +185,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         return <div>
             <h1>{ phrase.description }</h1>
+            <h2>{ phrase.en }</h2>
+
             <div className='columns'>
                 <div className='main'>
                     <h3>Examples of use</h3>

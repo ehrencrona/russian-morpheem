@@ -37,7 +37,13 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFa
         </span>
     }
     else if (fact instanceof Phrase) {
-        inner = <span>{ fact.description }</span>
+        inner = <span>
+            { fact.description }
+            
+            <div className='en'>
+                { fact.en }
+            </div>
+        </span>
     }
 
     if (!inner) {
