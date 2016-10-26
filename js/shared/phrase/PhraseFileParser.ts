@@ -18,7 +18,7 @@ export default function parsePhraseFile(data, words: Words, inflections: Inflect
         }
 
         let i = line.indexOf(': "')
-        let j = line.indexOf('" ', i + 2)
+        let j = line.indexOf('" ', i + 3)
 
         if (i < 0 || j < 0) {
             throw new Error(`Can't parse pattern ${line}. Should be id: "description" pattern`)                

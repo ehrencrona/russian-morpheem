@@ -306,7 +306,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     <div className='otherMeanings'>
                         It can also mean {
                             otherMeanings.map((fact, index) =>
-                                <span key={ fact.getId() }>{ index > 0 ? ', ' : ''}<span 
+                                <span key={ fact.getId() }>{ index > 0 ? ' or ' : ''}<span 
                                         className='clickable' onClick={ (e) => {
                                             this.props.onSelectFact(fact)
                                             e.stopPropagation()

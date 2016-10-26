@@ -184,7 +184,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
             .concat(this.getWordsInPhrase())
 
         return <div>
-            <h1>{ phrase.description }</h1>
+            <h1>"{ phrase.description }"</h1>
             <h2>{ phrase.en }</h2>
 
             <div className='columns'>
