@@ -69,6 +69,10 @@ export default class FactSearchComponent extends Component<Props, State> {
             if (fact.description.indexOf(filter) >= 0) {
                 return true
             }
+
+            if (fact.en.indexOf(filter) >= 0) {
+                return true
+            }
         }
 
         return false
