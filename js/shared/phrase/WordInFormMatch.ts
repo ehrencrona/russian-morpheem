@@ -34,7 +34,7 @@ export class WordInFormMatch extends AbstractFormMatch {
     }
 
     getForm() {
-        return this.form
+        return this.range[0] > 0 && this.form
     }
 
     isCaseStudy() {

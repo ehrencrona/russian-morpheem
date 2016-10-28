@@ -36,7 +36,7 @@ export default class InflectedWord extends Word {
     visitFacts(visitor: (Fact) => any) {
         this.visitRequired(visitor)
 
-        visitor(this.word.inflection.getFact(this.form))
+        this.word.inflection.getFact(this.form).visitFacts(visitor)
 
         this.word.visitFacts(visitor)
     }

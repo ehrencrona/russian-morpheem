@@ -37,7 +37,7 @@ export default function getExamplesUsingInflection(form: string, inflection: Inf
         
         if (fact instanceof InflectableWord && 
             !!fact.inflect(form) &&
-            (!excludeWord || fact !== excludeWord.word) &&
+            (!excludeWord || fact.inflect(form).jp != excludeWord.jp) &&
             !foundByStem.has(fact.toText()) && 
             inflectionIds.has(fact.inflection.id)) {
             let list: InflectableWord[]

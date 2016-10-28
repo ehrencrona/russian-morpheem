@@ -366,7 +366,9 @@ export default class WordFactComponent extends Component<Props, State> {
                             word={ word }
                             onSelectFact={ this.props.onSelectFact }
                             renderForm={ (inflectedWord, form, factIndex) => {
-                                return <div className='clickable' onClick={ () => { 
+                                return <div className='clickable'
+                                        key={ form } 
+                                        onClick={ () => { 
                                         this.props.onSelectFact((word as InflectableWord).inflection.getFact(form), 
                                             (word as InflectableWord).inflect(form)) 
                                     } }>{ 

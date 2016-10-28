@@ -424,6 +424,10 @@ $seeAlsoMargin: 0.1em;
         color: $clickableColor;
     }
  
+    h2.clickable:hover {
+        color: darken($clickableColor, 20%);
+    }
+
     li {
         line-height: 120%;
         margin-top: 3*$unit;
@@ -580,14 +584,24 @@ $seeAlsoMargin: 0.1em;
         }
     }
 
+    .fact.inflection {
+        .form.clickable {
+            display: inline-block;
+
+            &::before {
+                @extend .seeAlso;
+            }
+        }
+    }
+
     .fact.inflection, .inflectionForm {
         .stemToInflected {
             .clickable {
                 white-space: nowrap;
-            }
 
-            .clickable::before {
-                @extend .seeAlso;
+                &::before {
+                    @extend .seeAlso;
+                }
             }
 
             .arrow {

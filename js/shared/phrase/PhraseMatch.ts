@@ -43,8 +43,8 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         
         childContext.depth = (context.depth || 0) + 1
 
-        if (childContext.depth > 5) {
-            console.warn('Maximum phrase deptch reaching. Bailing.')
+        if (childContext.depth > 8) {
+            console.warn('Maximum phrase depth reaching. Bailing.')
             return
         }
 

@@ -135,12 +135,12 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         var dev = document.location.hostname == 'localhost';
 
 
-
+/*
         if (dev)
         this.setState({
-            explainFact: this.props.corpus.facts.get('accusative')
+            explainFact: this.props.corpus.facts.get('short')
         })
-
+*/
 
 
 /*

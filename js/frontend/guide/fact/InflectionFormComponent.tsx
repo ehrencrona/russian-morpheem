@@ -43,6 +43,7 @@ interface State {
     allPhrases?: boolean
 }
 
+/** Gives general information about a form that matches several forms, typically a case */
 export default class InflectionFormComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
@@ -200,7 +201,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         const POS = [ 'n', 'adj', 'v', 'pron' ]
 
         return <div className='inflectionForm'>
-            <h1>{ this.props.form.name }</h1>
+            <h1>The { this.props.form.name }</h1>
             <div className='columns'>
                 <div className='main'>
                     <div>{
@@ -268,8 +269,10 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                         <ul>
                         {
-                            (this.state.factoid ? this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []).map(fact => 
-                                renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                            (this.state.factoid ? 
+                                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
+                                .map(fact =>     
+                                    renderRelatedFact(fact, corpus, this.props.onSelectFact) 
                             ) 
                         }
                         </ul>

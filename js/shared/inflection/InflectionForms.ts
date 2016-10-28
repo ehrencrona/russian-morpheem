@@ -65,16 +65,22 @@ export enum PartOfSpeech {
     ADVERB = 1
 }
 
+export enum PronounForm {
+    STANDARD = 1,
+    ALTERNATIVE
+}
+
 interface FormComponents {
-    gender?: Gender, 
-    tense?: Tense, 
-    grammaticalCase?: GrammaticalCase, 
-    animate?: Animateness, 
-    number?: Number, 
-    person?: Person, 
-    comparison?: Comparison,
-    adjectiveForm?: AdjectiveForm,
-    pos?: PartOfSpeech,
+    gender?: Gender
+    tense?: Tense
+    grammaticalCase?: GrammaticalCase
+    animate?: Animateness
+    number?: Number
+    person?: Person
+    comparison?: Comparison
+    adjectiveForm?: AdjectiveForm
+    pos?: PartOfSpeech
+    pronounForm?: PronounForm
     command?: Command
 }
 
@@ -89,6 +95,7 @@ export class InflectionForm extends Grammar {
     command: Command
     adjectiveForm: AdjectiveForm
     pos: PartOfSpeech
+    pronounForm?: PronounForm
 
     constructor(id: string, public name: string, used: FormComponents) {
         super(id)
@@ -103,6 +110,39 @@ export class InflectionForm extends Grammar {
         this.command = used.command
         this.adjectiveForm = used.adjectiveForm
         this.pos = used.pos
+        this.pronounForm = used.pronounForm
+    }
+
+    getComponents(): InflectionForm[] {
+        let result: InflectionForm[] = []
+
+        let addForm = (form: string) => {
+            if (this.id != form) {
+                result.push(FORMS[form])
+            }
+        }
+
+        if (this.grammaticalCase) {
+            addForm(CASES[this.grammaticalCase])
+        }
+
+        if (this.adjectiveForm == AdjectiveForm.SHORT) {
+            addForm('short')
+        }
+
+        if (this.tense == Tense.PAST) {
+            addForm('past')
+        }
+
+        if (this.pronounForm == PronounForm.ALTERNATIVE) {
+            addForm('alt')
+        }
+
+        if (this.command == Command.IMPERATIVE) {
+            addForm('imperative')
+        }
+
+        return result
     }
 
     getId() {
@@ -123,6 +163,7 @@ export class InflectionForm extends Grammar {
             (this.comparison != null && this.comparison != otherForm.comparison) ||
             (this.command != null && this.command != otherForm.command) ||
             (this.pos != null && this.pos != otherForm.pos) ||
+            (this.pronounForm != null && this.pronounForm != otherForm.pronounForm) ||
             (this.tense != null && this.tense != otherForm.tense))
     }
 
@@ -175,7 +216,7 @@ addForm('pastm', 'masculine past', { gender: Gender.M, number: Number.SINGULAR, 
 addForm('pastn', 'neuter past', { gender: Gender.N, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastf', 'feminine past', { gender: Gender.F, number: Number.SINGULAR, tense: Tense.PAST })
 addForm('pastpl', 'past plural', { number: Number.PLURAL, tense: Tense.PAST })
-addForm('impr', 'imperative', { number: Number.SINGULAR, command: Command.IMPERATIVE })
+addForm('impr', 'imperative singular', { number: Number.SINGULAR, command: Command.IMPERATIVE })
 addForm('imprpl', 'imperative plural', { number: Number.PLURAL, command: Command.IMPERATIVE })
 addForm('inf', 'infinitive', {})
 
@@ -265,9 +306,9 @@ addForm('shortm', 'short form masculine', { gender: Gender.M, number: Number.SIN
 addForm('shortpl', 'short form plural', { number: Number.PLURAL, adjectiveForm: AdjectiveForm.SHORT })
 addForm('short', 'short form', { adjectiveForm: AdjectiveForm.SHORT })
 
-addForm('alt', 'alternative form', {})
-addForm('alt2', 'alternative form', {})
-addForm('std', 'standard form', {})
+addForm('alt', 'alternative form', { pronounForm: PronounForm.ALTERNATIVE })
+addForm('alt2', 'alternative form', { pronounForm: PronounForm.ALTERNATIVE })
+addForm('std', 'standard form', { pronounForm: PronounForm.STANDARD })
 
 // English forms
 addForm('prog', 'progressive', { tense: Tense.PROGRESSIVE })
@@ -315,7 +356,7 @@ export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
         ),
         adj: new Forms(
             [ 'masculine singular', 'neuter singular', 'feminine singular', 'plural' ],
-            [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional', 'short', 'adverb', 'comparative' ],
+            [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional', 'short', 'adv', 'comp' ],
             [
                 ['m','n','f','pl'],
                 ['genm','genn','genf','genpl'],

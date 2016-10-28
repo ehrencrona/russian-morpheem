@@ -9,7 +9,7 @@ import Word from '../../shared/Word'
 import getLanguage from '../getLanguage'
 
 import { Component, createElement } from 'react';
-import INFLECTION_FORMS from '../../shared/inflection/InflectionForms'
+import { INFLECTION_FORMS, FORMS } from '../../shared/inflection/InflectionForms'
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 
 interface Props {
@@ -132,14 +132,15 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
                             let form = table.rows[index]
                             let fact = this.props.corpus.facts.get(form)
+                            let name = FORMS[form].name
 
-                            return <tr key={ index }>
+                            return <tr key={ form }>
                                 {
                                     (fact && this.props.onSelectFact ?
                                         <td className='clickable'  
-                                            onClick={ () => this.props.onSelectFact(fact) }>{ form }</td>
+                                            onClick={ () => this.props.onSelectFact(fact) }>{ name }</td>
                                         :
-                                        <td>{ form }</td>)
+                                        <td>{ name }</td>)
                                 }
                                 {
                                     cells

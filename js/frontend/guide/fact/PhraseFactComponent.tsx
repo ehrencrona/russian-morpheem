@@ -158,7 +158,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     if (grammaticalCase && !casesSeen[grammaticalCase]) {
                         casesSeen[grammaticalCase] = true
                         let fact = this.props.corpus.facts.get(CASES[grammaticalCase])
-    console.log(CASES[grammaticalCase], fact)
+
                         if (fact) {
                             result.push(fact)
                         }
