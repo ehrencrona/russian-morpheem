@@ -42,8 +42,14 @@ export default class FindPhraseComponent extends Component<Props, State> {
         let sentences = this.props.corpus.sentences
 
         sentences.sentences.forEach((sentence) => {
-            if (phrase.patterns[0].match({ sentence: sentence, words: sentence.words, facts: this.props.corpus.facts }) &&
-                !sentence.hasPhrase(this.props.phrase)) {
+            let match = phrase.patterns[0].match({ sentence: sentence, words: sentence.words, facts: this.props.corpus.facts })
+            let isConflict = isConflictFunction(phrase, this.props.corpus.facts)
+
+            if (match &&
+                !sentence.hasPhrase(this.props.phrase) &&
+                (this.state.includeConflicts || !isConflict(sentence, match.words.map(w => w.index)))) {
+
+
                 sentences.addPhrase(phrase, sentence)
             }
         })
