@@ -95,7 +95,7 @@ export class InflectionForm extends Grammar {
     command: Command
     adjectiveForm: AdjectiveForm
     pos: PartOfSpeech
-    pronounForm?: PronounForm
+    pronounForm: PronounForm
 
     constructor(id: string, public name: string, used: FormComponents) {
         super(id)
