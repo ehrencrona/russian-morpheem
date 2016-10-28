@@ -33,6 +33,10 @@ export class WordInFormMatch extends AbstractFormMatch {
         }
     }
 
+    getForm() {
+        return this.form
+    }
+
     isCaseStudy() {
         return false
     }

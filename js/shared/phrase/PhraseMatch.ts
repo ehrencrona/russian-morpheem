@@ -8,6 +8,7 @@ import Phrase from './Phrase'
 import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
 import Fact from '../../shared/fact/Fact'
+
 import MatchContext from './MatchContext'
 import Match from './Match'
 import CaseStudyMatch from './CaseStudyMatch'
@@ -62,6 +63,12 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         }
         else {
             return 0
+        }
+    }
+
+    getForm() {
+        if (this.overrideFormCase) {
+            return FORMS[CASES[this.overrideFormCase]]
         }
     }
 

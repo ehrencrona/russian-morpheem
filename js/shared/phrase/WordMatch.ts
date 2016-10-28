@@ -5,6 +5,7 @@ import Corpus from '../Corpus'
 import { GrammaticalCase } from '../inflection/InflectionForms'
 import MatchContext from './MatchContext'
 import Match from './Match'
+import { InflectionForm } from '../inflection/InflectionForms'
 
 interface WordMatch {
 
@@ -13,6 +14,9 @@ interface WordMatch {
         matchPosition: number): number|Match
 
     allowEmptyMatch(): boolean
+
+    /* may be null */
+    getForm(): InflectionForm
 
     /* must also implement CaseStudyMatch if true */
     isCaseStudy(): boolean

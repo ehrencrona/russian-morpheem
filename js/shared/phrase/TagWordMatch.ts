@@ -47,6 +47,10 @@ export default class TagWordMatch extends AbstractFormMatch implements WordMatch
         return true
     }
 
+    getForm() {
+        return this.form
+    }
+    
     setCorpus(corpus: Corpus) {
         this.corpus = corpus
     }

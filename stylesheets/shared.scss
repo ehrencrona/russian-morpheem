@@ -1,5 +1,5 @@
 $unit: 4px;
-$color13: #e95f3d;
+$clickableColor: #e95f3d;
 $color9: #f8f7f5;
 
 $studyMaxWidth: 1000px;
@@ -28,7 +28,7 @@ html {
     top: 0;
     left: 0;
     right: 0;
-    background-color: $color13;
+    background-color: $clickableColor;
     color: $color9;
     padding: 2 * $unit;
     text-align: center;     

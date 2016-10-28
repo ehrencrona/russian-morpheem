@@ -14,6 +14,9 @@ import Inflection from '../../../shared/inflection/Inflection'
 import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
+import { CASES, GrammaticalCase } from '../../../shared/inflection/InflectionForms'
+import PhraseMatch from '../../../shared/phrase/PhraseMatch'
+
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
@@ -140,6 +143,33 @@ export default class PhraseFactComponent extends Component<Props, State> {
         return result
     }
 
+    getCaseFacts(): Fact[] {
+        let phrase = this.props.phrase
+        let casesSeen = {}
+        let result: Fact[] = []
+
+        phrase.patterns.forEach((pattern) => 
+            pattern.wordMatches.forEach((wordMatch) => {
+                let form = wordMatch.getForm()
+
+                if (form) {
+                    let grammaticalCase = form.grammaticalCase
+
+                    if (grammaticalCase && !casesSeen[grammaticalCase]) {
+                        casesSeen[grammaticalCase] = true
+                        let fact = this.props.corpus.facts.get(CASES[grammaticalCase])
+    console.log(CASES[grammaticalCase], fact)
+                        if (fact) {
+                            result.push(fact)
+                        }
+                    }
+                }
+            })
+        )
+
+        return result 
+    }
+
     render() {
         let phrase = this.props.phrase
         let corpus = this.props.corpus
@@ -177,15 +207,20 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let matches = scores.map(score => matchBySentenceId.get(score.sentence.id))
 
-        let relations = (this.state.factoid ? 
+        let relations = this.getCaseFacts().concat(
+                (this.state.factoid ? 
                 this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
-                [])
+                []))
             .concat(this.getWordsInPhrase())
-
+ 
         return <div>
             <h1>"{ phrase.description }"</h1>
             <h2>{ phrase.en }</h2>
+
+            <div>{
+                this.state.factoid ? this.state.factoid.explanation : '' 
+            }</div>
 
             <div className='columns'>
                 <div className='main'>

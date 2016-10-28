@@ -3,7 +3,7 @@ $color4: #766db0;
 
 $color9: #f8f7f5;
 $color8: #303030; 
-$color13: #e95f3d;
+$clickableColor: #e95f3d;
 $color14: lighten($color8, 20%);
 $color16: #ececec;
 $color-fg: $color8;
@@ -51,7 +51,7 @@ ul {
 }
 
 .button:hover {
-    background-color: $color13;
+    background-color: $clickableColor;
 }
 
 $animationLength: 0.2s;
@@ -178,7 +178,7 @@ $buttonPadding: 0.5em;
             }
 
             .sentence {
-                border-left: solid 0.25em $color13;
+                border-left: solid 0.25em $clickableColor;
                 padding-left: 0.5em;
 
                 overflow: hidden;
@@ -487,7 +487,7 @@ $buttonPadding: 0.5em;
 
                         .content:hover {
                             .explain .button {
-                                background-color: $color13;
+                                background-color: $clickableColor;
                             }
                         }
 

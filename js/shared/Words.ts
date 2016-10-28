@@ -209,7 +209,7 @@ export default class Words {
             result = this.wordsById[id]
         }
 
-        if (omitted) {
+        if (omitted && result) {
             let original = result
 
             result = Object.create(original)

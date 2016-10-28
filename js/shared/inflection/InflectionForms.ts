@@ -145,6 +145,15 @@ export let NUMBERS = {}
 NUMBERS[Number.SINGULAR] = 'sg'
 NUMBERS[Number.PLURAL] = 'pl'
 
+export const POSES = {
+    v: 'verb',
+    n: 'noun',
+    adj: 'adjective',
+    pron: 'pronoun',
+    prep: 'preposition',
+    num: 'number'
+}
+
 export let CASES = {}
 
 CASES[GrammaticalCase.NOM] = 'nominative'
@@ -172,12 +181,12 @@ addForm('inf', 'infinitive', {})
 
 addForm('past', 'past', { tense: Tense.PAST })
 
-addForm('m', 'masculine', { gender: Gender.M, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
-addForm('f', 'feminine', { gender: Gender.F, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
-addForm('n', 'neuter', { gender: Gender.N, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
-addForm('pl', 'plural', { number: Number.PLURAL, grammaticalCase: GrammaticalCase.NOM })
+addForm('m', 'nominative masculine', { gender: Gender.M, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('f', 'nominative feminine', { gender: Gender.F, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('n', 'nominative neuter', { gender: Gender.N, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
+addForm('pl', 'nominative plural', { number: Number.PLURAL, grammaticalCase: GrammaticalCase.NOM })
 addForm('fpl', 'feminine plural', { number: Number.PLURAL, gender: Gender.F })
-addForm('sg', 'singular', { number: Number.PLURAL })
+addForm('sg', 'singular', { number: Number.SINGULAR })
 
 addForm('nom', 'nominative', { grammaticalCase: GrammaticalCase.NOM, number: Number.SINGULAR })
 addForm('gen', 'genitive', { grammaticalCase: GrammaticalCase.GEN, number: Number.SINGULAR })
@@ -346,16 +355,11 @@ export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
             [ ],
             [ [ 'std', 'alt', 'alt2' ] ]
         ),
-        case: new Forms(
-            [ ],
-            [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional' ],
-            [ ['nom', 'nomalt'], ['gen', 'genalt'], ['dat', 'datalt'], ['acc', 'accalt'], ['instr', 'instralt'], ['prep', 'prepalt'] ]
-        ),
         pron: new Forms(
             [ 'singular', 'plural' ], 
             [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional' ],
             [        
-                [ [ 'nom', 'nomalt'], [ 'pl', 'plalt' ]],
+                [ [ 'nom' ], [ 'pl' ]],
                 [ [ 'gen', 'genalt'], [ 'genpl', 'genplalt' ]],
                 [ [ 'dat', 'datalt'], [ 'datpl', 'datplalt' ]],
                 [ [ 'acc', 'accalt'], [ 'accpl', 'accplalt' ]],

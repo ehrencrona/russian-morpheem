@@ -4,12 +4,15 @@ import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
 import MatchContext from './MatchContext'
-import { FORMS, GrammaticalCase } from '../inflection/InflectionForms'
+import Corpus from '../Corpus'
+
+import { FORMS } from '../inflection/InflectionForms'
 
 export type AnyWord = InflectableWord | Word
 
 export class ExactWordMatch implements WordMatch {
     wordIds: { [id:string]: boolean} = {}
+    corpus: Corpus
 
     constructor(public words : AnyWord[]) {
         this.words = words
@@ -38,7 +41,18 @@ export class ExactWordMatch implements WordMatch {
         return (match ? 1 : 0)
     }
 
-    setCorpus() {
+    getForm() {
+        for (let wordId in this.wordIds) {
+            let word = this.corpus.words.get(wordId)
+
+            if (word instanceof InflectedWord) {
+                return FORMS[word.form]
+            }
+        }
+    }
+
+    setCorpus(corpus: Corpus) {
+        this.corpus = corpus
     }
 
     allowEmptyMatch() {

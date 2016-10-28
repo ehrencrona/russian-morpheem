@@ -4,6 +4,7 @@ import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
 import InflectableWord from '../../../shared/InflectableWord'
+import { InflectionForm } from '../../../shared/inflection/InflectionForms'
 import Word from '../../../shared/Word'
 import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
@@ -42,6 +43,14 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFa
             
             <div className='en'>
                 { fact.en }
+            </div>
+        </span>
+    }
+    else if (fact instanceof InflectionForm) {
+        inner = <span>
+            { fact.name }
+            <div className='en'>
+                (form)
             </div>
         </span>
     }

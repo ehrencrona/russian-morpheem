@@ -125,7 +125,7 @@ export default class Inflection {
         }
     }
 
-    getFact(form): InflectionFact {
+    getFact(form: string): InflectionFact {
         if (this.endings[form] != null) {
             return new InflectionFact(this.id + '@' + form, this, form)
         }
@@ -202,8 +202,7 @@ export default class Inflection {
                 }
             }
             else {
-                console.warn(this.id + '@' + form + ' refers to undefined form ' + ending.relativeTo)
-                stem = ''
+                return
             }
         }
 

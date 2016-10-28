@@ -17,7 +17,8 @@ interface Props {
     inflection: Inflection,
     renderForm: (inflectedWord: string, form: string, factIndex: number) => any
     word?: InflectableWord,
-    hideForms?: Object
+    hideForms?: Object,
+    onSelectFact?: (fact: Fact, context?: InflectedWord) => any
 }
 
 interface State {
@@ -85,9 +86,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
                     <thead>
                         <tr>
                             <td></td>
-                            { table.cols.map((name) => 
-                                <td key={name}>{ name }</td>
-                            ) }
+                            { table.cols.map((name) => <td key={name}>{ name }</td>) }
                         </tr>
                     </thead>
                     : []
@@ -131,8 +130,17 @@ export default class InflectionTableComponent extends Component<Props, State> {
                                 return null
                             }
 
+                            let form = table.rows[index]
+                            let fact = this.props.corpus.facts.get(form)
+
                             return <tr key={ index }>
-                                    <td>{ table.rows[index] }</td>
+                                {
+                                    (fact && this.props.onSelectFact ?
+                                        <td className='clickable'  
+                                            onClick={ () => this.props.onSelectFact(fact) }>{ form }</td>
+                                        :
+                                        <td>{ form }</td>)
+                                }
                                 {
                                     cells
                                 }

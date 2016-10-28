@@ -4,6 +4,7 @@ import Corpus from '../../../shared/Corpus'
 import Fact from '../../../shared/fact/Fact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
+import { InflectionForm } from '../../../shared/inflection/InflectionForms' 
 import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 
@@ -14,6 +15,7 @@ import Word from '../../../shared/Word'
 import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 
 import InflectionFactComponent from './InflectionFactComponent'
+import InflectionFormComponent from './InflectionFormComponent'
 import WordFactComponent from './WordFactComponent'
 import PhraseFactComponent from './PhraseFactComponent'
 
@@ -60,6 +62,14 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             phrase={ fact }
+            onSelectFact={ props.onSelectFact }
+        />
+    }
+    else if (fact instanceof InflectionForm) {
+        content = <InflectionFormComponent 
+            corpus={ props.corpus } 
+            knowledge={ props.knowledge }
+            form={ fact }
             onSelectFact={ props.onSelectFact }
         />
     }

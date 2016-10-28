@@ -37,6 +37,8 @@ abstract class AbstractQuantifierMatch implements WordMatch {
     
     abstract isCaseStudy()
 
+    abstract getForm()
+    
     setCorpus(corpus: Corpus) {
     }
 

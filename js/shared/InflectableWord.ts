@@ -73,7 +73,11 @@ export default class InflectableWord extends AbstractAnyWord {
     visitAllInflections(visitor: (InflectedWord) => any) {
         for (let form of this.inflection.getAllForms()) {
             if (!this.mask || !this.mask(form)) {
-                visitor(this.inflect(form))
+                let inflected = this.inflect(form)
+
+                if (inflected) {
+                    visitor(inflected)
+                }
             }
         }
     }

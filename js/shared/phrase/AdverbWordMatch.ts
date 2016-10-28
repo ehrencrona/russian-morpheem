@@ -42,6 +42,10 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     setCorpus() {
     }
 
+    getForm() {
+        return FORMS['adv']
+    }
+
     toString() {
         return 'adverb' + (this.quantifier == EXACT_MATCH_QUANTIFIER ? '' : this.quantifier)
     }

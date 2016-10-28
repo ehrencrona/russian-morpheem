@@ -399,8 +399,12 @@ $seeAlsoMargin: 0.1em;
         font-size: 12pt;
     }
 
-    h3 {
+    .smallFont {
         font-size: 10pt;
+    }
+
+    h3 {
+        @extend .smallFont;
         padding-bottom: 3px;
         border-bottom: 1px solid black;
     }
@@ -417,7 +421,7 @@ $seeAlsoMargin: 0.1em;
         font-weight: 700;
         margin-left: 1em;
         margin-top: 0;
-        color: $color13;
+        color: $clickableColor;
     }
  
     li {
@@ -426,7 +430,7 @@ $seeAlsoMargin: 0.1em;
         margin-bottom: 3*$unit;
 
         .match {
-            color: $color13;
+            color: $clickableColor;
         }
 
         .en {
@@ -437,7 +441,7 @@ $seeAlsoMargin: 0.1em;
     }
 
     .clickable:hover {
-        color: $color13;
+        color: $clickableColor;
     }
 
     $breakColumns: 850px;
@@ -502,11 +506,72 @@ $seeAlsoMargin: 0.1em;
                     padding: 0.5em 4 * $unit;  
                 }
                 
+                .clickable {
+                    white-space: nowrap;
+                }
+
                 .clickable::before {
                     @extend .seeAlso;
                 }
             }
         }
+    }
+
+    .inflectionForm {
+        .posName {
+            @extend .smallFont;
+            font-weight: bold;
+            margin-top: 2em;
+            margin-bottom: 1.5em;
+        }
+
+        .pos .form {
+            display: flex;
+            flex-direction: row;
+            margin-top: 0.5em;
+
+            .name {
+                @extend .smallFont;
+                margin-top: 0.2em;
+                flex-basis: 0;
+                flex-grow: 1;
+            }
+
+            .formation {
+                flex-basis: 0;
+                flex-grow: 2;
+
+                > div {
+                    margin-bottom: 0.5em;
+
+                    li {
+                        list-style: none;
+                        margin: 0;
+                    }
+
+                    .relativeTo {
+                        @extend .smallFont;
+                    }
+                }
+            }
+        }
+
+        .seeAll {
+            @extend .clickable;
+            color: $clickableColor;
+            @extend .smallFont;
+            margin-top: 0.5em;
+
+            &:hover {
+                color: darken($clickableColor, 20%);
+            }
+        }
+
+        ul.phrases {
+            .clickable::before {
+                @extend .seeAlso;
+            }
+        } 
     }
 
     .otherMeanings {
@@ -515,15 +580,21 @@ $seeAlsoMargin: 0.1em;
         }
     }
 
-    .fact.inflection {
-        .clickable::before {
-            @extend .seeAlso;
-        }
+    .fact.inflection, .inflectionForm {
+        .stemToInflected {
+            .clickable {
+                white-space: nowrap;
+            }
 
-        .arrow {
-            margin: 0 .2em;
-            position: relative;
-            top: 0.1em;
+            .clickable::before {
+                @extend .seeAlso;
+            }
+
+            .arrow {
+                margin: 0 .2em;
+                position: relative;
+                top: 0.1em;
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ import PhraseFactEntryComponent from './PhraseFactEntryComponent'
 import PhraseCaseFactEntryComponent from './PhraseCaseFactEntryComponent'
 import WordFactEntryComponent from './WordFactEntryComponent'
 import InflectionFactEntryComponent from './InflectionFactEntryComponent'
+import InflectionFormEntryComponent from './InflectionFormEntryComponent'
 import TransformFactEntryComponent from './TransformFactEntryComponent'
 
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'

@@ -18,7 +18,7 @@ $color10: #4bb6ac;
 $color11: #f0af33;
 
 $color12: #f8f9f3;
-$color13: #e95f3d;
+$clickableColor: #e95f3d;
 $color14: lighten($color8, 20%);
 $color15: #c6c6c6;
 $color16: #ececec;
@@ -60,7 +60,7 @@ body {
 }
 
 .button:hover {
-    background-color: $color13;
+    background-color: $clickableColor;
 }
 
 input[type=text], input[type=number], textarea {
@@ -201,7 +201,7 @@ input[type=text], input[type=number], textarea {
 
     .option.active {
         font-weight: bold;
-        background-color: $color13;
+        background-color: $clickableColor;
     }
 }
 
@@ -306,8 +306,8 @@ input[type=text], input[type=number], textarea {
         fill: $color4;
 
         &:hover {
-            color: $color13;
-            fill: $color13;
+            color: $clickableColor;
+            fill: $clickableColor;
         }
 
         svg {
@@ -476,7 +476,7 @@ input[type=text], input[type=number], textarea {
 
     .selected {
         font-weight: bold;
-        background-color: $color13;
+        background-color: $clickableColor;
     }
     
     input[type=number] {
@@ -889,8 +889,8 @@ ul {
     }
 
     li:hover, .current {
-        background-color: $color13;
-        border-color: $color13;
+        background-color: $clickableColor;
+        border-color: $clickableColor;
         color: $color9;
     }
 }
@@ -916,8 +916,8 @@ ul {
     }
     
     .active {
-        background-color: $color13;
-        border-color: $color13;
+        background-color: $clickableColor;
+        border-color: $clickableColor;
         color: $color9;
     }
 }

@@ -51,6 +51,10 @@ export default class PosFormWordMatch extends AbstractFormMatch implements CaseS
         }
     }
 
+    getForm() {
+        return this.form
+    }
+
     setCorpus() {
     }
 
