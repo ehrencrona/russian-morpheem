@@ -5,7 +5,7 @@ import UnparsedWord from '../../shared/UnparsedWord'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
-import { FORMS } from '../../shared/inflection/InflectionForms'
+import { FORMS, InflectionForm } from '../../shared/inflection/InflectionForms'
 import Phrase from '../../shared/phrase/Phrase'
 import AnyWord from '../../shared/AnyWord'
 import Tab from '../OpenTab'
@@ -62,6 +62,11 @@ export default class FactSearchComponent extends Component<Props, State> {
             }
 
             if (FORMS[fact.form].name.indexOf(filter) >= 0) {
+                return true
+            }
+        }
+        else if (fact instanceof InflectionForm) {
+            if (fact.name.indexOf(filter) >= 0) {
                 return true
             }
         }
