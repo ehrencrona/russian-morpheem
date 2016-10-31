@@ -149,7 +149,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.post(`/api/${lang}/fact/:id/tag/:tag`, tag(corpus))
 
-    app.post(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
+    app.delete(`/api/${lang}/fact/:id/tag/:tag`, untag(corpus))
 
     app.get(`/api/${lang}/sentence/pending`, getPendingSentences(corpus))    
 

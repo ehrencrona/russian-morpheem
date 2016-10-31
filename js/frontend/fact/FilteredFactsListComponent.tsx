@@ -97,13 +97,13 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                         </li>
 
                         <li className={ (this.state.showInflectionForm ? 'active' : '') } 
-                            onClick={ () => this.setState({ showPhrases: !this.state.showInflectionForm }) }>
+                            onClick={ () => this.setState({ showInflectionForm: !this.state.showInflectionForm }) }>
                             Forms
                         </li>
 
-                        <li className={ (this.state.showInflectionForm ? 'active' : '') } 
-                            onClick={ () => this.setState({ showPhrases: !this.state.showInflectionForm }) }>
-                            Forms
+                        <li className={ (this.state.showTags ? 'active' : '') } 
+                            onClick={ () => this.setState({ showTags: !this.state.showTags }) }>
+                            Tags
                         </li>
                     </ul>
                     : 
