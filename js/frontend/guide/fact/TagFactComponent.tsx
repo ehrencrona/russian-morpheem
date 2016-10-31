@@ -48,17 +48,25 @@ export default class TagFactComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let factoid = corpus.factoids.getFactoid(this.props.fact)
 
-        return <div className='tabFact'>
+        return <div className='tagFact'>
             <h1>{ factoid.name || this.props.fact.id }</h1>
             <div className='columns'>
                 <div className='main'>
-                {
-                    factoid ? 
-                        <div className='factoid' 
-                            dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
-                    :
-                        null 
-                }
+                    {
+                        factoid ? 
+                            <div className='factoid' 
+                                dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
+                        :
+                            null 
+                    }
+
+                    <ul className='factsWithTag'>
+                        {
+                            this.props.corpus.facts.getFactsWithTag(this.props.fact.id)
+                                .map(fact =>     
+                                    renderRelatedFact(fact, corpus, this.props.onSelectFact))
+                        }
+                    </ul>
                 </div>
                 <div className='sidebar'>
                     <div>

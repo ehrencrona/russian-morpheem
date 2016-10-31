@@ -263,7 +263,7 @@ export default class Words {
         
         return suggestions
     }
-       
+
     static fromJson(json: JsonFormat, inflections) {
         let result = new Words();
         
@@ -279,7 +279,7 @@ export default class Words {
         
         return result
     }
-    
+
     toJson(): JsonFormat {        
         let result: JsonFormat = []
 
