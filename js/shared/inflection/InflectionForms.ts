@@ -392,8 +392,8 @@ export const INFLECTION_FORMS : { [s: string]: { [s: string]: Forms } } = {
                 ['prepm','prepn','prepf','preppl'],
             ]),
         prep: new Forms(
-            [ ], 
-            [ ],
+            [ '' ], 
+            [ '' ],
             [ [ 'std', 'alt', 'alt2' ] ]
         ),
         pron: new Forms(
