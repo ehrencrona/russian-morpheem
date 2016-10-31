@@ -13,17 +13,11 @@ interface Props {
     knowledge: NaiveKnowledge
 }
 
-interface State {
-}
-
 let React = { createElement: createElement }
-const SENTENCES_WANTED = 2
 
-export default class PhraseFactEntryComponent extends Component<Props, State> {
-    render() {
-        return <dl>
-            <dt>{ this.props.fact.description }</dt>
-            <dd>{ this.props.fact.en }</dd>
-        </dl>            
-    }
+export default function PhraseFactEntryComponent(props: Props) {
+    return <dl>
+        <dt>{ props.fact.description }</dt>
+        <dd>{ props.fact.en }</dd>
+    </dl>            
 }

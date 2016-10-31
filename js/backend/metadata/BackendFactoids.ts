@@ -71,7 +71,7 @@ export default class BackendFactoids implements Factoids {
         })
     }
 
-    getFactoid(fact: Fact): Promise<Factoid> {
+    getFactoidAsync(fact: Fact): Promise<Factoid> {
         let empty = {
             explanation: '',
             fact: fact.getId(),
@@ -98,5 +98,9 @@ export default class BackendFactoids implements Factoids {
                 })
                 .catch((e) => reject(e))
         })
+    }
+
+    getFactoid(fact: Fact): Factoid {
+        throw new Error('Unsupported in the backend.')
     }
 }

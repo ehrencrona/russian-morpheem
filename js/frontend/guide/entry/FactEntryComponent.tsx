@@ -1,5 +1,4 @@
 
-
 import Corpus from '../../../shared/Corpus'
 import Fact from '../../../shared/fact/Fact'
 import InflectedWord from '../../../shared/InflectedWord'
@@ -14,6 +13,7 @@ import WordFactEntryComponent from './WordFactEntryComponent'
 import InflectionFactEntryComponent from './InflectionFactEntryComponent'
 import InflectionFormEntryComponent from './InflectionFormEntryComponent'
 import TransformFactEntryComponent from './TransformFactEntryComponent'
+import TagFactEntryComponent from './TagFactEntryComponent'
 
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import InflectableWord from '../../../shared/InflectableWord'
@@ -21,6 +21,7 @@ import Word from '../../../shared/Word'
 import { EndingTransform } from '../../../shared/Transforms'
 
 import StudyFact from '../../study/StudyFact'
+import TagFact from '../../../shared/TagFact'
 
 import { Component, createElement } from 'react'
 
@@ -68,6 +69,10 @@ export default function factComponent(props: Props) {
     else if (fact instanceof InflectionForm) {
         entry = <InflectionFormEntryComponent 
             fact={ fact } />
+    }
+    else if (fact instanceof TagFact) {
+        entry = <TagFactEntryComponent 
+            fact={ fact } corpus={ this.props.corpus } />
     }
     else {
         entry = <div>Unhandled fact { fact.getId() }</div>

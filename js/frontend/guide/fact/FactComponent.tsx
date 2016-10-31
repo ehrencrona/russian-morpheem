@@ -18,7 +18,9 @@ import InflectionFactComponent from './InflectionFactComponent'
 import InflectionFormComponent from './InflectionFormComponent'
 import WordFactComponent from './WordFactComponent'
 import PhraseFactComponent from './PhraseFactComponent'
+import TagFactComponent from './TagFactComponent'
 
+import TagFact from '../../../shared/TagFact'
 import StudyFact from '../../study/StudyFact'
 
 import { Component, createElement } from 'react'
@@ -73,6 +75,14 @@ export default function factComponent(props: Props) {
             onSelectFact={ props.onSelectFact }
         />
     }
+    else if (fact instanceof TagFact) {
+        content = <TagFactComponent 
+            corpus={ props.corpus } 
+            knowledge={ props.knowledge }
+            fact={ fact }
+            onSelectFact={ props.onSelectFact }
+        />
+    }
     else {
         content = <div>Unhandled fact { fact.getId() }</div>
     }
@@ -85,4 +95,3 @@ export default function factComponent(props: Props) {
         </div>
     </div>
 }
-

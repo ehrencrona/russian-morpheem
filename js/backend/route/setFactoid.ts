@@ -22,25 +22,25 @@ export default function(corpus: Corpus) {
 
         let author = getAuthor(req).name
         
-        return corpus.factoids.getFactoid(fact)
-            .then(oldFactoid => {
-                if (factoid.explanation &&
-                    Math.abs(oldFactoid.explanation.length - factoid.explanation.length) > 3) {
-                    console.log(`Factoid for ${factId} updated by ${author}: "${ factoid.explanation.replace(/\n/g, ' ') }"`)
-                }
+        corpus.factoids.getFactoidAsync(fact)
+        .then(oldFactoid => {
+            if (factoid.explanation &&
+                Math.abs(oldFactoid.explanation.length - factoid.explanation.length) > 3) {
+                console.log(`Factoid for ${factId} updated by ${author}: "${ factoid.explanation.replace(/\n/g, ' ') }"`)
+            }
 
-                corpus.factoids.setFactoid(factoid, fact)
-                    .then((events) => {
-                        res.status(200).send({ ok: true })
-                    })
-                    .catch(e => {
-                        res.status(500).send(e)
-                        console.error(e.stack)
-                    })
-            })
-            .catch(e => {
-                res.status(500).send(e)
-            })
-
+            corpus.factoids.setFactoid(factoid, fact)
+                .then((events) => {
+                    res.status(200).send({ ok: true })
+                })
+                .catch(e => {
+                    res.status(500).send(e)
+                    console.error(e.stack)
+                })
+        })
+        .catch(e => {
+            res.status(500).send(e)
+            console.error(e.stack)
+        })
     }
 }

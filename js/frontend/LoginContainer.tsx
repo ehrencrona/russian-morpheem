@@ -14,7 +14,7 @@ import listenForChanges from './listenForChanges'
 import FrontendSentenceHistory from './metadata/FrontendSentenceHistory'
 import FrontendPhraseHistory from './metadata/FrontendPhraseHistory'
 import FrontendExternalCorpus from './external/FrontendExternalCorpus'
-import FrontendFactoids from './metadata/FrontendFactoids'
+import loadFactoids from './metadata/FrontendFactoids'
 import FrontendTopics from './metadata/FrontendTopics'
 
 import { setXrArgs } from './sentence/googleTranslate' 
@@ -97,8 +97,11 @@ export default class LoginContainer extends Component<Props, State> {
     loadCorpus(xrArgs) {
         this.xrArgs = xrArgs
 
-        xr.get(`/api/${lang}/corpus`, {}, xrArgs)
-        .then((xhr) => {
+        Promise.all([
+            xr.get(`/api/${lang}/corpus`, {}, xrArgs),
+            loadFactoids(xrArgs, lang)
+        ])
+        .then(([ xhr, factoids ]) => {
             let corpus = FrontendCorpus.fromJson(xhr.data)
 
             corpus.setXrArgs(xrArgs)
@@ -111,7 +114,7 @@ export default class LoginContainer extends Component<Props, State> {
             corpus.sentenceHistory = new FrontendSentenceHistory(xrArgs, corpus.lang)
             corpus.phraseHistory = new FrontendPhraseHistory(xrArgs, corpus.lang)
             corpus.externalCorpus = new FrontendExternalCorpus(xrArgs, corpus)
-            corpus.factoids = new FrontendFactoids(xrArgs, corpus.lang)
+            corpus.factoids = factoids
             corpus.topics = new FrontendTopics(xrArgs, corpus.lang, corpus.facts)
 
             setXrArgs(xrArgs)

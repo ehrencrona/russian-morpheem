@@ -138,7 +138,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 
         if (dev)
         this.setState({
-            explainFact: this.props.corpus.facts.get('short')
+            explainFact: this.props.corpus.facts.get('passive')
         })
 
 

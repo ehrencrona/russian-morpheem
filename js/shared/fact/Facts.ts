@@ -13,6 +13,7 @@ import Phrase from '../phrase/Phrase';
 import Phrases from '../phrase/Phrases';
 import { EndingTransform } from '../Transforms'
 import transforms from '../Transforms'
+import TagFact from '../TagFact'
 
 const INFLECTION = 'i'
 const INFLECTABLE = 'ib'
@@ -20,6 +21,7 @@ const WORD = 'w'
 const TRANSFORM = 't'
 const PHRASE = 'p'
 const FORM = 'f'
+const TAG = 'g'
 
 export interface FactJsonFormat {
     id: string,
@@ -275,7 +277,7 @@ export default class Facts {
                 fact = transforms.get(factJson.id);
                 
                 if (!fact) {
-                    throw new Error(`Unknown word "${factJson.id}".`)
+                    throw new Error(`Unknown transform "${factJson.id}".`)
                 }
             }
             else if (factJson.type == FORM) {
@@ -284,6 +286,9 @@ export default class Facts {
                 if (!fact) {
                     throw new Error(`Unknown form "${factJson.id}".`)
                 }
+            }
+            else if (factJson.type == TAG) {
+                fact = new TagFact(factJson.id)
             }
             else {
                 throw new Error(`Unknown fact type "${factJson.type}""`)
@@ -303,8 +308,6 @@ export default class Facts {
     toJson() {
         return this.facts.map((fact) => {
             let type
-            let data
-            let description
             
             let id = fact.getId()
             
@@ -329,6 +332,9 @@ export default class Facts {
             }
             else if (fact instanceof InflectionForm) {
                 type = FORM
+            }
+            else if (fact instanceof TagFact) {
+                type = TAG
             }
             else {
                throw new Error('Unknown fact type ' + fact.constructor.name)

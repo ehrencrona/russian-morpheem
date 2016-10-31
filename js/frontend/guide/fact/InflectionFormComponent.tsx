@@ -40,7 +40,6 @@ interface Props {
 }
 
 interface State {
-    factoid?: Factoid
     allFormations?: boolean,
     allPhrases?: boolean
 }
@@ -52,23 +51,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         this.state = {}
     }
-
-    factChanged(phrase: InflectionForm) {
-        let corpus = this.props.corpus
-
-        corpus.factoids.getFactoid(phrase)
-            .then(factoid => this.setState({ factoid: factoid } ))
-    }
-
-    componentWillReceiveProps(props: Props) {
-        if (props.form.getId() != this.props.form.getId()) {
-            this.factChanged(props.form)
-        }
-    }
-
-    componentWillMount() {
-        this.factChanged(this.props.form)
-    } 
 
     findPhrasesWithForm() {
         let corpus = this.props.corpus
@@ -198,6 +180,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let form = this.props.form
 
+        let factoid = corpus.factoids.getFactoid(form)
+
         let forms: InflectionForm[] = []
 
         const POS = [ 'n', 'adj', 'v', 'pron' ]
@@ -207,9 +191,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
             <div className='columns'>
                 <div className='main'>
                     {
-                        this.state.factoid ? 
+                        factoid ? 
                             <div className='factoid' 
-                                dangerouslySetInnerHTML={ { __html: marked(this.state.factoid.explanation) } }/>
+                                dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
                         :
                             null 
                     }
@@ -275,8 +259,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                         <ul>
                         {
-                            (this.state.factoid ? 
-                                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
+                            (factoid ? 
+                                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
                                 .map(fact =>     
                                     renderRelatedFact(fact, corpus, this.props.onSelectFact) 
                             ) 

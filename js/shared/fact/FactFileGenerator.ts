@@ -1,12 +1,13 @@
-"use strict";
+"use strict"
 
-import Word from '../Word';
+import Word from '../Word'
 import { EndingTransform } from '../Transforms'
 
-import Fact from './Fact';
-import Facts from './Facts';
-import Grammar from '../Grammar';
-import InflectableWord from '../InflectableWord';
+import Fact from './Fact'
+import Facts from './Facts'
+import TagFact from '../TagFact'
+import Grammar from '../Grammar'
+import InflectableWord from '../InflectableWord'
 import Phrase from '../phrase/Phrase'
 
 export function factToString(fact: Fact, facts: Facts) {
@@ -49,6 +50,9 @@ export function factToString(fact: Fact, facts: Facts) {
     }
     else if (fact instanceof Phrase) {
         return `phrase: ${fact.id}`
+    }
+    else if (fact instanceof TagFact) {
+        return `tag: ${fact.id}`
     }
     else if (fact instanceof Grammar) {
         return 'grammar: ' + fact.getId() + tags

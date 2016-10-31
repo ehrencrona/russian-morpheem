@@ -58,7 +58,6 @@ interface TokenizedSentence {
 }
 
 interface State {
-    factoid?: Factoid
     sentences?: TokenizedSentence[]
 }
 
@@ -71,9 +70,6 @@ export default class WordFactComponent extends Component<Props, State> {
 
     wordChanged(fact: Fact) {
         let corpus = this.props.corpus
-
-        corpus.factoids.getFactoid(fact)
-            .then(factoid => this.setState({ factoid: factoid } ))
 
         let sentences = corpus.sentences.getSentencesByFact(corpus.facts)[ fact.getId() ]
 
@@ -213,7 +209,6 @@ export default class WordFactComponent extends Component<Props, State> {
     }
 
     sortByKnowledge(facts: Fact[]) {
-
         let known: Fact[] = []
         let unknown: Fact[] = []
 
@@ -239,7 +234,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 this.props.corpus.facts.facts.filter(f =>
                     f instanceof InflectableWord && 
                     f.inflection == inflection &&
-                    f.getId() != word.getId() &&
+                    f.getIdWithoutClassifier() != word.getIdWithoutClassifier() &&
                     f.getDefaultInflection() != word.getDefaultInflection()
                 )
 
@@ -257,10 +252,12 @@ export default class WordFactComponent extends Component<Props, State> {
                 result = this.props.corpus.facts.facts.filter(f =>
                     f instanceof InflectableWord && 
                     f.inflection.inherits.indexOf(inflection) >= 0 &&
-                    f.getId() != word.getId() &&
+                    f.getIdWithoutClassifier() != word.getIdWithoutClassifier() &&
                     f.getDefaultInflection() != (word as InflectableWord).getDefaultInflection()
                 )
             }
+
+console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as InflectableWord).getDefaultInflection()).join(' '))
 
             return this.sortByKnowledge(result).slice(0, 5)
         }
@@ -271,6 +268,8 @@ export default class WordFactComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let thisIdWithoutClassifier = word.getIdWithoutClassifier() 
 
+        let factoid = this.props.corpus.factoids.getFactoid(this.props.word.getWordFact())
+
         let otherMeanings = corpus.facts.facts.filter(fact => 
             { 
                 if (fact instanceof InflectableWord || fact instanceof Word) {
@@ -279,8 +278,8 @@ export default class WordFactComponent extends Component<Props, State> {
                 }
             })
 
-        let related = (this.state.factoid ? 
-                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
+        let related = (factoid ? 
+                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 [])
             .concat(this.sortByKnowledge(findPhrasesWithWord(word, corpus)))
@@ -290,9 +289,9 @@ export default class WordFactComponent extends Component<Props, State> {
             <h2>{ word.getEnglish() }</h2>
 
             {
-                this.state.factoid ? 
+                factoid ? 
                     <div className='factoid' 
-                        dangerouslySetInnerHTML={ { __html: marked(this.state.factoid.explanation) } }/>
+                        dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
                 :
                     null 
             }

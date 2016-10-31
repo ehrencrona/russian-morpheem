@@ -8,8 +8,8 @@ export interface Relation {
 
 export interface Factoid {
     explanation: string
+    name?: string
     fact?: string
-
     relations: Relation[]
 }
 
@@ -17,7 +17,9 @@ export interface Factoids {
 
     setFactoid(factoid: Factoid, fact: Fact): Promise<any>
 
-    getFactoid(fact: Fact): Promise<Factoid>
+    getFactoidAsync(fact: Fact): Promise<Factoid>
+    
+    getFactoid(fact: Fact): Factoid
 
     getAll(): Promise<Factoid[]>
 

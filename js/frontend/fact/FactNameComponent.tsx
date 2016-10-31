@@ -11,6 +11,7 @@ import Word from '../../shared/Word'
 
 import Sentence from '../../shared/Sentence'
 import InflectableWord from '../../shared/InflectableWord'
+import TagFact from '../../shared/TagFact'
 
 import { Component, createElement } from 'react';
 

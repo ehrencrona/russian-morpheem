@@ -23,6 +23,7 @@ import Phrases from '../phrase/Phrases'
 import Grammars from '../Grammars'
 import Corpus from '../Corpus'
 import MASKS from '../Masks'
+import TagFact from '../TagFact'
 import transforms from '../Transforms'
 import Transform from '../Transform'
 import Phrase from '../phrase/Phrase'
@@ -303,6 +304,9 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             }
 
             fact = new PhraseFact(phraseId)
+        }
+        else if (leftSide == 'tag') {
+            fact = new TagFact(rightSide.trim())
         }
         else {
             let word = parseLeftSideOfDefinition(leftSide)

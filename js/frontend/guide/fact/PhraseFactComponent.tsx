@@ -63,8 +63,6 @@ interface TokenizedSentence {
 }
 
 interface State {
-    factoid?: Factoid
-    sentences?: TokenizedSentence[]
 }
 
 export default class PhraseFactComponent extends Component<Props, State> {
@@ -73,23 +71,6 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         this.state = { }
     }
-
-    factChanged(phrase: Phrase) {
-        let corpus = this.props.corpus
-
-        corpus.factoids.getFactoid(phrase)
-            .then(factoid => this.setState({ factoid: factoid } ))
-    }
-
-    componentWillReceiveProps(props) {
-        if (props.phrase.getId() != this.props.phrase.getId()) {
-            this.factChanged(props.phrase)
-        }
-    }
-
-    componentWillMount() {
-        this.factChanged(this.props.phrase)
-    } 
 
     renderMatch(match: Match) {
         let wordIndexes = match.words.map((i) => i.index)
@@ -209,9 +190,11 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let matches = scores.map(score => matchBySentenceId.get(score.sentence.id))
 
+        let factoid = corpus.factoids.getFactoid(phrase)
+
         let relations = this.getCaseFacts().concat(
-                (this.state.factoid ? 
-                this.state.factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
+                (factoid ? 
+                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 []))
             .concat(this.getWordsInPhrase())
@@ -221,9 +204,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
             <h2>{ phrase.en }</h2>
 
             {
-                this.state.factoid ? 
+                factoid ? 
                     <div className='factoid' 
-                        dangerouslySetInnerHTML={ { __html: marked(this.state.factoid.explanation) } }/>
+                        dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
                 :
                     null 
             }

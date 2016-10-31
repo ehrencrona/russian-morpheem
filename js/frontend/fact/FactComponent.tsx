@@ -2,17 +2,19 @@
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
+import TagFact from '../../shared/TagFact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Phrase from '../../shared/phrase/Phrase'
-
-import Tab from '../OpenTab'
 
 import InflectableWordFactComponent from '../inflection/InflectableWordFactComponent'
 import PhraseFactComponent from '../phrase/PhraseFactComponent'
 import WordFactComponent from '../word/WordFactComponent'
 import InflectionFactComponent from '../inflection/InflectionFactComponent'
 import InflectionFormComponent from '../inflection/InflectionFormComponent'
+
+import Tab from '../OpenTab'
+import TagFactComponent from '../TagFactComponent'
 import TransformFactComponent from '../TransformFactComponent'
 
 import InflectableWord from '../../shared/InflectableWord'
@@ -53,6 +55,9 @@ export default class FactComponent extends Component<Props, State> {
         }
         else if (fact instanceof InflectionForm) {
             return <InflectionFormComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        }
+        else if (fact instanceof TagFact) {
+            return <TagFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
     }
 }

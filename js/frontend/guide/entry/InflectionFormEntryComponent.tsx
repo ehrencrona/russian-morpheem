@@ -12,16 +12,12 @@ interface State {}
 
 let React = { createElement: createElement }
 
-export default class InflectionFormEntryComponent extends Component<Props, State> {
-    render() {
-        let fact = this.props.fact
-        
-        return <dl>
-            <dt>
-            </dt>
-            <dd> the {
-                fact.name 
-            } form</dd>
-        </dl>
-   }
+export default function InflectionFormEntryComponent(props: Props) {
+    return <dl>
+        <dt>
+        </dt>
+        <dd> the {
+            props.fact.name 
+        } form</dd>
+    </dl>
 }

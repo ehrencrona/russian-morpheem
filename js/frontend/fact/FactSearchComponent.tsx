@@ -8,6 +8,7 @@ import InflectionFact from '../../shared/inflection/InflectionFact'
 import { FORMS, InflectionForm } from '../../shared/inflection/InflectionForms'
 import Phrase from '../../shared/phrase/Phrase'
 import AnyWord from '../../shared/AnyWord'
+import TagFact from '../../shared/TagFact'
 import Tab from '../OpenTab'
 import InflectionsContainerComponent from '../inflection/InflectionsContainerComponent'
 import FactNameComponent from './FactNameComponent'
@@ -78,6 +79,9 @@ export default class FactSearchComponent extends Component<Props, State> {
             if (fact.en.indexOf(filter) >= 0) {
                 return true
             }
+        }
+        else if (fact.getId().indexOf(filter) >= 0) {
+            return true
         }
 
         return false
