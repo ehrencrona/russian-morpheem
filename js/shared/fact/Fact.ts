@@ -1,8 +1,9 @@
-"use strict";
+'use strict'
 
 interface Fact {
-    getId(): string,
+    getId(): string
     visitFacts(visitor: (Fact) => any): any
+    requiresFact(fact: Fact)
 }
 
 export default Fact

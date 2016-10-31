@@ -1,5 +1,6 @@
 
 import AnyWord from './AnyWord'
+import Fact from './fact/Fact'
 
 export const TRANSLATION_INDEX_SEPARATOR = '-'
 
@@ -9,12 +10,40 @@ abstract class AbstractAnyWord implements AnyWord {
     pos: string
     en: { [ form: string ]: string } = {}
     enCount: number = 0
+    required: Fact[]
 
     abstract getIdWithoutClassifier()
     abstract getId()
     abstract toText()
     abstract getWordFact()
     abstract hasMyStem(word: AnyWord)
+
+    requiresFact(fact: Fact) {
+        if (!fact) {
+            throw new Error('No fact.')
+        }
+
+        if (!this.required) {
+            this.required = []
+        }
+
+        this.required.push(fact)
+
+        return this
+    }
+
+    visitRequired(visitor) {
+        if (this.required) {
+            for (let fact of this.required) {
+                if (fact.visitFacts) {
+                    fact.visitFacts(visitor)
+                }
+                else {
+                    visitor(fact)
+                }
+            }
+        }
+    }
 
     getTranslationCount() {
         return this.enCount

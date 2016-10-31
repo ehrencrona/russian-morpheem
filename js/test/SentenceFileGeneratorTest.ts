@@ -15,7 +15,7 @@ import Ending from '../shared/Ending'
 import Facts from '../shared/fact/Facts'
 import Phrases from '../shared/phrase/Phrases'
 import Phrase from '../shared/phrase/Phrase'
-import Grammar from '../shared/Grammar'
+import AbstractFact from '../shared/fact/AbstractFact'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Corpus from '../shared/Corpus'
 
@@ -35,7 +35,7 @@ describe('SentenceFileGenerator', function() {
         words.addWord(new Word(':'))
 
         let facts = new Facts()
-        facts.add(new Grammar('grammar'))
+        facts.add(new AbstractFact('grammar'))
 
         let original = '0 a b[1] [colon] b[2] (author: ae, phrase: testPhrase): english'
 

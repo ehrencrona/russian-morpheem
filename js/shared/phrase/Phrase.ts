@@ -14,6 +14,7 @@ import InflectedWord from '../InflectedWord'
 import Word from '../Word'
 import Corpus from '../Corpus'
 import MatchContext from './MatchContext'
+import AbstractFact from '../fact/AbstractFact'
 
 export interface JsonFormat {
     id: string,
@@ -22,7 +23,7 @@ export interface JsonFormat {
     en: string
 }
 
-export default class Phrase implements Fact {
+export default class Phrase extends AbstractFact {
     description: string = ''
     en: string = ''
     casesCache: PhraseCase[]
@@ -32,8 +33,9 @@ export default class Phrase implements Fact {
     // there are some facts that are just about how to use a certain case, e.g. genitive to mean possession.
     hasWordFacts: boolean
 
-    constructor(public id: string, public patterns: PhrasePattern[]) {
-        this.id = id
+    constructor(id: string, public patterns: PhrasePattern[]) {
+        super(id)
+
         this.patterns = patterns
 
         this.hasWordFacts =
@@ -70,10 +72,6 @@ export default class Phrase implements Fact {
 
     getId() {
         return this.id
-    }
-
-    visitFacts(visitor: (Fact) => any) {
-        visitor(this)
     }
 
     /** When visiting a sentence, the phrase implies knowledge of which cases to use with it, but when 

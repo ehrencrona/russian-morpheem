@@ -4,6 +4,9 @@ import Fact from './fact/Fact'
 import InflectableWord from './InflectableWord'
 import Translatable from './Translatable'
 
+/**
+ * Rename to Word
+ */
 interface AnyWord extends Translatable {
 
     studied: boolean

@@ -1,14 +1,7 @@
 'use strict'
 
-import Grammar from './Grammar'
+import AbstractFact from './fact/AbstractFact'
 import Fact from './fact/Fact'
 
-export default class TagFact extends Grammar implements Fact {
-    constructor(public id) {
-        super(id, '')
-    }
-
-    visitFacts(visitor: (Fact) => any) {
-        visitor(this)
-    }
+export default class TagFact extends AbstractFact {
 }

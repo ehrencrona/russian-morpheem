@@ -62,13 +62,13 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
         })
 
         if (!this.state.showInflectionFact || !this.state.showWords) {
-            factIndices = factIndices.filter((index) => {
-                return (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
-                    (this.state.showWords && (index.fact instanceof Word || index.fact instanceof InflectableWord)) ||
-                    (this.state.showPhrases && index.fact instanceof Phrase) ||
-                    (this.state.showInflectionForm && index.fact instanceof InflectionForm) || 
-                    (this.state.showTags && index.fact instanceof TagFact) || 
-            })
+            factIndices = factIndices.filter((index) => 
+                (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
+                (this.state.showWords && (index.fact instanceof Word || index.fact instanceof InflectableWord)) ||
+                (this.state.showPhrases && index.fact instanceof Phrase) ||
+                (this.state.showInflectionForm && index.fact instanceof InflectionForm) || 
+                (this.state.showTags && index.fact instanceof TagFact)  
+            )
         }
 
         factIndices = factIndices.filter(this.props.filter)

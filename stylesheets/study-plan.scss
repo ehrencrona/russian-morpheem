@@ -627,6 +627,6 @@ $seeAlsoMargin: 0.1em;
     }
 
     .tagFact ul.factsWithTag li::before {
-        @extend .seeAlso;
+        @extend .seeAlso;   
     }
 }

@@ -226,8 +226,10 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
                             <ul>
                             {
-                                relations.map(fact => 
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
+                                (this.props.phrase.required || [])
+                                    .concat(relations)
+                                    .map(fact => 
+                                        renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
                             }
                             </ul>
                         </div>

@@ -9,7 +9,6 @@ import Words from '../shared/Words'
 import Facts from '../shared/fact/Facts'
 import Phrases from '../shared/phrase/Phrases'
 import Phrase from '../shared/phrase/Phrase'
-import Grammar from '../shared/Grammar'
 import Corpus from '../shared/Corpus'
 
 describe('SentenceFileParser', function() {

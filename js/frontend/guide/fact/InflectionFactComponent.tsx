@@ -458,6 +458,9 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
         let components = FORMS[form].getComponents()
 
+        let inflectionFact = inflection.getFact(this.props.word.form)
+        let related = (inflectionFact.required || []).concat(components)
+
         return <div className='inflectionFact'>
             <h1>The { this.renderFormName(form) }</h1>
 
@@ -470,14 +473,16 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     { this.renderForm() }
                 </div>
                 {
-                    components.length ?
+                    related.length ?
                     <div className='sidebar'>
                         <div>
                             <h3>See also</h3>
 
                             <ul>
-                                { components.map(fact =>     
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact)) }
+                                {                             
+                                    related.map(fact =>     
+                                        renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
+                                }
                             </ul>
                         </div>
                     </div>

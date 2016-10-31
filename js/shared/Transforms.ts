@@ -2,14 +2,12 @@
 import InflectedWord from '../shared/InflectedWord'
 import Transform from './Transform'
 import Ending from './Ending'
+import AbstractFact from './fact/AbstractFact'
 
-export class EndingTransform implements Transform {
+export class EndingTransform extends AbstractFact implements Transform {
 
     constructor(public from: string, public to: string, public after: string, public id: string) {
-        this.from = from
-        this.to = to
-        this.after = after
-        this.id = id
+        super(id)
     }
     
     visitFacts(visitor: (Fact) => any) {

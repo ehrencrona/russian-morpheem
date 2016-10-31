@@ -8,6 +8,7 @@ import { InflectionForm } from '../../../shared/inflection/InflectionForms'
 import Word from '../../../shared/Word'
 import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
+import TagFact from '../../../shared/TagFact'
 
 let React = { createElement: createElement }
 
@@ -51,6 +52,16 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFa
             { fact.name }
             <div className='en'>
                 (form)
+            </div>
+        </span>
+    }
+    else if (fact instanceof TagFact) {
+        let factoid = corpus.factoids.getFactoid(fact)
+        
+        inner = <span>
+            { (factoid && factoid.name) || fact.id }
+            <div className='en'>
+                (topic)
             </div>
         </span>
     }

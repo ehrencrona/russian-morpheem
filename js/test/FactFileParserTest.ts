@@ -3,7 +3,7 @@ import { parseFactFile as parser } from '../shared/fact/FactFileParser'
 import { expect } from 'chai';
 
 import Word from '../shared/Word'
-import Grammar from '../shared/Grammar'
+import AbstractFact from '../shared/fact/AbstractFact'
 import Inflections from '../shared/inflection/Inflections'
 import Inflection from '../shared/inflection/Inflection'
 import Words from '../shared/Words'
@@ -72,9 +72,9 @@ describe('FactFileParser', function() {
         var facts = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]
         
-        expect(fact).to.be.instanceOf(Grammar)
+        expect(fact).to.be.instanceOf(AbstractFact)
 
-        if (fact instanceof Grammar) {
+        if (fact instanceof AbstractFact) {
             expect(fact.id).to.equal('inflection@nom')
         }
     })
@@ -83,9 +83,9 @@ describe('FactFileParser', function() {
         var facts = parser('grammar:inflection@nom, tag: foo', inflections, 'ru')
         let fact = facts.facts[0]
 
-        expect(fact).to.be.instanceOf(Grammar)
+        expect(fact).to.be.instanceOf(AbstractFact)
 
-        if (fact instanceof Grammar) {
+        if (fact instanceof AbstractFact) {
             expect(fact.id).to.equal('inflection@nom')
         }
         

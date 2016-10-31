@@ -1,12 +1,12 @@
 'use strict'
 
-import Grammar from '../Grammar'
+import AbstractFact from '../fact/AbstractFact'
 import Inflection from './Inflection'
 import { FORMS, CASES, AdjectiveForm, PartOfSpeech, Comparison, PronounForm } from './InflectionForms'
 
-export default class InflectionFact extends Grammar {
-    constructor(public id, public inflection: Inflection, public form: string) {
-        super(id, '');
+export default class InflectionFact extends AbstractFact {
+    constructor(id, public inflection: Inflection, public form: string) {
+        super(id);
     }
 
     visitFacts(visitor: (Fact) => any) {

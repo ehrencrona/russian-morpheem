@@ -6,8 +6,8 @@ import { EndingTransform } from '../Transforms'
 import Fact from './Fact'
 import Facts from './Facts'
 import TagFact from '../TagFact'
-import Grammar from '../Grammar'
 import InflectableWord from '../InflectableWord'
+import InflectionFact from '../inflection/InflectionFact'
 import Phrase from '../phrase/Phrase'
 
 export function factToString(fact: Fact, facts: Facts) {
@@ -54,7 +54,7 @@ export function factToString(fact: Fact, facts: Facts) {
     else if (fact instanceof TagFact) {
         return `tag: ${fact.id}`
     }
-    else if (fact instanceof Grammar) {
+    else if (fact instanceof InflectionFact) {
         return 'grammar: ' + fact.getId() + tags
     }
     else if (!fact) {

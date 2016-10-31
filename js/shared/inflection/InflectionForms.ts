@@ -1,5 +1,5 @@
 import Fact from '../fact/Fact'
-import Grammar from '../Grammar'
+import AbstractFact from '../fact/AbstractFact'
 
 class Forms {
     allForms: string[] = []
@@ -84,7 +84,7 @@ interface FormComponents {
     command?: Command
 }
 
-export class InflectionForm extends Grammar {
+export class InflectionForm extends AbstractFact {
     gender: Gender
     tense: Tense
     grammaticalCase: GrammaticalCase 

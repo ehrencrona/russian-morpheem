@@ -1,23 +1,10 @@
-/**
- * Parses a list of facts (words and grammar) that defines the order in which the facts should be learned.
- * The file also serves to define the English translation of words. Resolves to an array consisting of Words,
- * Particles and Grammar.
- *
- * Each line in the file has the following format:
- *
- * 出る: go out, past: went out, inflect:ruverb
- *
- * This defines "出る" with its translation of "go out", specifies the English past and how the word is infected.
- * "ruverb" is used to look up an inflecting function that generates past, negative form etc.
- *
- * See facts.txt for an example.
- */
 
 import Word from '../Word'
 import InflectableWord from '../InflectableWord'
 import Inflections from '../inflection/Inflections'
 import InflectionFact from '../inflection/InflectionFact'
 import Fact from './Fact'
+import AbstractFact from './AbstractFact'
 import Facts from './Facts'
 import Phrases from '../phrase/Phrases'
 import Grammars from '../Grammars'
@@ -30,18 +17,7 @@ import Phrase from '../phrase/Phrase'
 import { ENGLISH_FORMS } from '../inflection/InflectionForms'
 import { TRANSLATION_INDEX_SEPARATOR } from '../AbstractAnyWord'
 
-class PhraseFact implements Fact {
-    constructor(public id: string) {
-        this.id = id
-    }
-
-    getId() {
-        return this.id
-    }
-
-    visitFacts(visitor: (Fact) => any) {
-        visitor(this)
-    }
+class PhraseFact extends AbstractFact {
 }
 
 export function parseFactFile(data, inflections: Inflections, lang: string): Facts {
@@ -154,15 +130,6 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 }
 
                 fact = iw
-            }
-            else if (tag == 'grammar') {
-                let requiredFact = facts.get(text)
-
-                if (!requiredFact) {
-                    throw new Error('Unknown required fact "' + text + '" in "' + rightSide + '"')
-                }
-
-                word.requiresFact(requiredFact)
             }
             else if (tag == 'tag') {
                 facts.tag(fact, text)

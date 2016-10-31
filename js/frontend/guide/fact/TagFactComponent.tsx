@@ -62,7 +62,8 @@ export default class TagFactComponent extends Component<Props, State> {
 
                     <ul className='factsWithTag'>
                         {
-                            this.props.corpus.facts.getFactsWithTag(this.props.fact.id)
+                            (this.props.fact.required || [])
+                            .concat(this.props.corpus.facts.getFactsWithTag(this.props.fact.id))
                                 .map(fact =>     
                                     renderRelatedFact(fact, corpus, this.props.onSelectFact))
                         }

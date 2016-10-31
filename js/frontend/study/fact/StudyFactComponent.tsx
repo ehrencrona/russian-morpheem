@@ -10,6 +10,7 @@ import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 import Sentence from '../../../shared/Sentence'
+import TagFact from '../../../shared/TagFact'
 import InflectableWord from '../../../shared/InflectableWord'
 import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
@@ -27,6 +28,7 @@ import PhraseCaseComponentNoWords from './PhraseCaseComponentNoWords'
 import PhraseFactComponent from './PhraseFactComponent'
 import { TranslatableFact } from './WordFactComponent'
 import InflectionFormComponent from './InflectionFormComponent'
+import TagFactComponent from './TagFactComponent'
 
 export interface FactComponentProps<FactType> {
     knowledge: NaiveKnowledge,
@@ -88,6 +90,10 @@ let studyFactComponent = (props: Props) => {
     }
     else if (fact instanceof InflectionForm) {
         componentType = createFactory(InflectionFormComponent)
+        canExplain = true
+    }
+    else if (fact instanceof TagFact) {
+        componentType = createFactory(TagFactComponent)
         canExplain = true
     }
 

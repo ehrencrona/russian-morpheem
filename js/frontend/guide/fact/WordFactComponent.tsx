@@ -278,7 +278,9 @@ console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as Inflectabl
                 }
             })
 
-        let related = (factoid ? 
+        let related = 
+            (word.required || [])
+            .concat(factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 [])

@@ -16,16 +16,12 @@ export interface JsonFormat {
 }
 
 /**
- * A word has a Japanese spelling, an English translation an optional list of grammar that is required to understand it.
+ * Rename to UninflectedWord
  */
 export default class Word extends AbstractAnyWord {
-    required: Fact[]
-
     constructor(public jp: string, public classifier?: string) {
         super()
 
-        this.jp = jp
-        this.classifier = classifier
         this.en = { }
     }
 
@@ -43,33 +39,6 @@ export default class Word extends AbstractAnyWord {
         }
         else {
             return this
-        }
-    }
-
-    requiresFact(fact) {
-        if (!fact) {
-            throw new Error('No fact.')
-        }
-
-        if (!this.required) {
-            this.required = []
-        }
-
-        this.required.push(fact)
-
-        return this
-    }
-
-    visitRequired(visitor) {
-        if (this.required) {
-            for (let fact of this.required) {
-                if (fact.visitFacts) {
-                    fact.visitFacts(visitor)
-                }
-                else {
-                    visitor(fact)
-                }
-            }
         }
     }
 

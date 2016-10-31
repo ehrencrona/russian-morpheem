@@ -1,8 +1,8 @@
-import Grammar from './Grammar'
+import Fact from './fact/Fact'
 import { FORMS } from './inflection/InflectionForms'
 
 export default class Grammars {
-    grammarById : { [s: string]: Grammar } = {}
+    grammarById : { [s: string]: Fact } = {}
 
     constructor(inflections) {
         this.grammarById = {};
@@ -20,7 +20,7 @@ export default class Grammars {
         }
     }
 
-    get(id): Grammar {
+    get(id): Fact {
         return this.grammarById[id];
     }
 }

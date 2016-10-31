@@ -259,8 +259,10 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                         <ul>
                         {
-                            (factoid ? 
-                                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
+                            (this.props.form.required || [])
+                            .concat(
+                                (factoid ? 
+                                    factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
                                 .map(fact =>     
                                     renderRelatedFact(fact, corpus, this.props.onSelectFact) 
                             ) 

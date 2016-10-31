@@ -1,5 +1,4 @@
 
-import Grammar from '../Grammar';
 import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import InflectedWord from '../InflectedWord';
@@ -190,6 +189,15 @@ export default class Facts {
         if (!tags) {
             tags = []
             this.tagsByFactIds[fact.getId()] = tags
+        }
+
+        let tagFact = this.get(tag)
+ 
+        // note that this is never removed, but it's not really an issue
+        // as it's only relevant in the frontend where the corpus is basically
+        // read-only
+        if (tagFact instanceof TagFact) {
+            fact.requiresFact(tagFact)
         }
         
         if (tags.indexOf(tag) < 0) {
