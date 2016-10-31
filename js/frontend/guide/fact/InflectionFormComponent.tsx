@@ -28,6 +28,8 @@ import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 
+import marked = require('marked')
+
 let React = { createElement: createElement }
 
 interface Props {
@@ -204,9 +206,13 @@ export default class InflectionFormComponent extends Component<Props, State> {
             <h1>The { this.props.form.name }</h1>
             <div className='columns'>
                 <div className='main'>
-                    <div>{
-                        this.state.factoid ? this.state.factoid.explanation : '' 
-                    }</div>
+                    {
+                        this.state.factoid ? 
+                            <div className='factoid' 
+                                dangerouslySetInnerHTML={ { __html: marked(this.state.factoid.explanation) } }/>
+                        :
+                            null 
+                    }
 
                     <h3>Formation</h3>
 

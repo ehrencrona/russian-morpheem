@@ -385,7 +385,7 @@ $seeAlsoMargin: 0.1em;
 
 .guide {
     font-weight: 400;
-    font-size: 14pt;
+    font-size: 12pt;
 
     padding-right: 3em;
     padding-left: 3em;
@@ -396,7 +396,7 @@ $seeAlsoMargin: 0.1em;
     }
 
     @media (max-height: 500px), (max-width: 500px) {
-        font-size: 12pt;
+        font-size: 11pt;
     }
 
     .smallFont {
@@ -483,6 +483,19 @@ $seeAlsoMargin: 0.1em;
                     margin-left: ($seeAlsoSize + $seeAlsoMargin) / $smallFontFactor;
                 }
             }
+        }
+    }
+
+    p {
+    }
+
+    .factoid {
+        ul  li {
+            font-size: inherit;
+
+            list-style: initial;
+            margin: 0.5em 0;
+            margin-left: 2em;
         }
     }
 

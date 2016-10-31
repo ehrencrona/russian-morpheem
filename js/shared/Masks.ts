@@ -1,5 +1,8 @@
+
+import { FORMS, GrammaticalCase, Number } from './inflection/InflectionForms'
+
 const pl = (form) => form.substr(form.length-2) == 'pl'
-const sg = (form) => form.substr(form.length-2) != 'pl'
+const sg = (form) => FORMS[form].number == Number.SINGULAR
 
 const MASKS = {
     adj: {
@@ -7,10 +10,11 @@ const MASKS = {
         shortandadv: (form) => form.substr(0, 5) == 'short' || form == 'adv',
         nonstd: (form) => form.substr(0, 5) == 'short' || form == 'adv' || form == 'comp',
         pl: pl,
-        sg: (form) => form.substr(form.length-2) != 'pl' && form != 'adv' && form != 'comp',
+        sg: sg,
         adv: (form) => form == 'adv',
         comp: (form) => form == 'comp',
         compandshort: (form) => form == 'comp' || form == 'short',
+        allbutnom: (form) => FORMS[form].grammaticalCase != GrammaticalCase.NOM,
         allbutcomp: (form) => form != 'comp',
         allbutshort: (form) => form.substr(0, 5) != 'short',
         allbutpl: (form) => !pl(form),

@@ -44,6 +44,8 @@ import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 
+import marked = require('marked')
+
 let React = { createElement: createElement }
 
 import renderRelatedFact from './renderRelatedFact'
@@ -218,9 +220,13 @@ export default class PhraseFactComponent extends Component<Props, State> {
             <h1>"{ phrase.description }"</h1>
             <h2>{ phrase.en }</h2>
 
-            <div>{
-                this.state.factoid ? this.state.factoid.explanation : '' 
-            }</div>
+            {
+                this.state.factoid ? 
+                    <div className='factoid' 
+                        dangerouslySetInnerHTML={ { __html: marked(this.state.factoid.explanation) } }/>
+                :
+                    null 
+            }
 
             <div className='columns'>
                 <div className='main'>

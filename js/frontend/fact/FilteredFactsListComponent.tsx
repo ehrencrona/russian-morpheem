@@ -7,6 +7,7 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
 
+import { InflectionForm } from '../../shared/inflection/InflectionForms'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Word from '../../shared/Word'
 import InflectableWord from '../../shared/InflectableWord'
@@ -27,6 +28,7 @@ interface Props {
 interface State {
     startIndex?: number,
     showInflectionFact?: boolean,
+    showInflectionForm?: boolean,
     showWords?: boolean,
     showPhrases?: boolean
 }
@@ -39,7 +41,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
     constructor(props) {
         super(props)
 
-        this.state = { startIndex: 0, showInflectionFact: true, showWords: true, showPhrases: true }
+        this.state = { startIndex: 0, showInflectionFact: true, showInflectionForm: true, showWords: true, showPhrases: true }
     }
 
     render() {
@@ -54,7 +56,8 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
             factIndices = factIndices.filter((index) => {
                 return (this.state.showInflectionFact && index.fact instanceof InflectionFact) || 
                     (this.state.showWords && (index.fact instanceof Word || index.fact instanceof InflectableWord)) ||
-                    (this.state.showPhrases && index.fact instanceof Phrase) 
+                    (this.state.showPhrases && index.fact instanceof Phrase) ||
+                    (this.state.showInflectionForm && index.fact instanceof InflectionForm) 
             })
         }
 
@@ -70,7 +73,7 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                     <ul className='formFilter'>
                         <li className={ (this.state.showInflectionFact ? 'active' : '') } 
                             onClick={ () => this.setState({ showInflectionFact: !this.state.showInflectionFact }) }>
-                            Forms
+                            Endings
                         </li>
 
                         <li className={ (this.state.showWords ? 'active' : '') } 
@@ -81,6 +84,11 @@ export default class FilteredFactsListComponent extends Component<Props, State> 
                         <li className={ (this.state.showPhrases ? 'active' : '') } 
                             onClick={ () => this.setState({ showPhrases: !this.state.showPhrases }) }>
                             Phrases
+                        </li>
+
+                        <li className={ (this.state.showInflectionForm ? 'active' : '') } 
+                            onClick={ () => this.setState({ showPhrases: !this.state.showInflectionForm }) }>
+                            Forms
                         </li>
                     </ul>
                     : 

@@ -11,7 +11,7 @@ import { FactIndex } from './FactIndex'
 import Tab from '../OpenTab'
 import AddWordComponent from '../AddWordComponent'
 import AddPhraseComponent from '../AddPhraseComponent'
-import WordSearchComponent from '../word/WordSearchComponent'
+import FactSearchComponent from './FactSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
 import IncompleteFactsListComponent from './IncompleteFactsListComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
@@ -68,11 +68,11 @@ export default class FactsComponent extends Component<Props, State> {
                 tab={ this.props.tab } />
         }
         else if (this.state.list == SEARCH) {
-            list = <WordSearchComponent 
+            list = <FactSearchComponent 
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } 
-                onWordSelect={ (word) => { 
-                    openFact((word instanceof InflectedWord ? word.word : word), this.props.corpus, this.props.tab) 
+                onFactSelect={ (fact) => { 
+                    openFact(fact, this.props.corpus, this.props.tab) 
                 } } />
         }
         else if (this.state.list == ALL) {
