@@ -22,7 +22,6 @@ interface Props {
 }
 
 interface State {
-    factoid?: Factoid
 }
 
 interface ParsedSentence {
@@ -45,9 +44,7 @@ export default class FactoidComponent extends Component<Props, State> {
         let updated = () => {
             this.props.corpus.factoids.setFactoid(factoid, this.props.fact)
 
-            this.setState({
-                factoid: this.state.factoid
-            })
+            this.forceUpdate()
         }
 
         let factSearch: FactSearchComponent
