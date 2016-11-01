@@ -42,45 +42,50 @@ export default class FactSearchComponent extends Component<Props, State> {
             return true
         }
 
+        filter = filter.toLowerCase()
+
+        let matches = (string: string) =>
+            string.substr(0, filter.length).toLowerCase() == filter
+
         if (fact instanceof Word) {
-            if (fact.jp.substr(0, filter.length).toLowerCase() == filter ||
-                fact.getEnglish().indexOf(filter) >= 0) {
+            if (matches(fact.jp) ||
+                matches(fact.getEnglish())) {
                 return true
             }
         }
         else if (fact instanceof InflectableWord) {
-            if (fact.getDefaultInflection().jp.substr(0, filter.length).toLowerCase() == filter) {
+            if (matches(fact.getDefaultInflection().jp)) {
                 return true
             }
 
-            if (fact.getEnglish().indexOf(filter) >= 0) {
+            if (matches(fact.getEnglish())) {
                 return true
             }
         }
         else if (fact instanceof InflectionFact) {
-            if (fact.inflection.endings[fact.form].suffix.indexOf(filter) >= 0) {
+            if (matches(fact.inflection.endings[fact.form].suffix)) {
                 return true
             }
 
-            if (FORMS[fact.form].name.indexOf(filter) >= 0) {
+            if (matches(FORMS[fact.form].name)) {
                 return true
             }
         }
         else if (fact instanceof InflectionForm) {
-            if (fact.name.indexOf(filter) >= 0) {
+            if (matches(fact.name)) {
                 return true
             }
         }
         else if (fact instanceof Phrase) {
-            if (fact.description.indexOf(filter) >= 0) {
+            if (matches(fact.description)) {
                 return true
             }
 
-            if (fact.en.indexOf(filter) >= 0) {
+            if (matches(fact.en)) {
                 return true
             }
         }
-        else if (fact.getId().indexOf(filter) >= 0) {
+        else if (matches(fact.getId())) {
             return true
         }
 

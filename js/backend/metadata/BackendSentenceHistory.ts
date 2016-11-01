@@ -194,7 +194,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
             throw new Error('Unhandled event type')
         }
 
-        let oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+        let oneWeekAgo = new Date(new Date().getTime() - 14 * 24 * 60 * 60 * 1000)
 
         let cursor = db.collection(collection)
             .find({ '_id.date': { $gt: oneWeekAgo } }).sort({ '_id.date': 1, '_id.author': 1 })
