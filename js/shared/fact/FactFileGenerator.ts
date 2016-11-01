@@ -43,7 +43,6 @@ export function factToString(fact: Fact, facts: Facts) {
             (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
             nonDefaultEnglish(fact) +
             (fact.pos ? ', pos: ' + fact.pos : '') +
-            (fact.required ? ', ' + fact.required.map((fact) => 'grammar: ' + fact.getId()).join(', ') : '') + 
             tags
     }
     else if (fact instanceof EndingTransform) {
