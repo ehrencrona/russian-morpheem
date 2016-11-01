@@ -516,7 +516,7 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
                     : 'words like ' + words.map(w => w.word.toText()).join(' and '))   
         }
         else if (fact instanceof Phrase) {
-            return 'the expression "' + fact.description + '"'
+            return 'the expression "' + fact.en + '"'
         }
     }
 }

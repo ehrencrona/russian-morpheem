@@ -14,7 +14,7 @@ let formComponent = (props: FactComponentProps<InflectionForm>) => {
     return <div>
         <strong className='nobr'>
             { words }
-        </strong> use the form <strong className='nobr'>
+        </strong> uses the form <strong className='nobr'>
             { props.fact.name }
         </strong>
     </div>
