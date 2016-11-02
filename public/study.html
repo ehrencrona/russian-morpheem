@@ -25,7 +25,7 @@
             captureUncaught: !dev,
             captureUnhandledRejections: !dev,
             payload: {
-                environment: (dev ? 'production' : 'development')
+                environment: (!dev ? 'production' : 'development')
             }
         };
         // Rollbar Snippet

@@ -20,7 +20,7 @@
             captureUncaught: !dev,
             captureUnhandledRejections: !dev,
             payload: {
-                environment: (!dev == 'grammar.ru.morpheem.com' ? 'production' : 'development')
+                environment: (!dev ? 'production' : 'development')
             }
         };
         // Rollbar Snippet

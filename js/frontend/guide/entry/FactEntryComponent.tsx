@@ -72,7 +72,7 @@ export default function factComponent(props: Props) {
     }
     else if (fact instanceof TagFact) {
         entry = <TagFactEntryComponent 
-            fact={ fact } corpus={ this.props.corpus } />
+            fact={ fact } corpus={ props.corpus } />
     }
     else {
         entry = <div>Unhandled fact { fact.getId() }</div>
