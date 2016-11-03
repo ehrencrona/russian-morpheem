@@ -9,10 +9,10 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import PhraseFactComponent from './PhraseFactComponent'
 import Tab from '../OpenTab'
-import StudyPhrase from '../study/StudyPhrase'
-import StudyWord from '../study/StudyWord'
-import StudyToken from '../study/StudyToken'
-import toStudyWords from '../study/toStudyWords'
+import StudyPhrase from '../../shared/study/StudyPhrase'
+import StudyWord from '../../shared/study/StudyWord'
+import StudyToken from '../../shared/study/StudyToken'
+import toStudyWords from '../../shared/study/toStudyWords'
 
 interface Props {
     corpus: Corpus

@@ -24,9 +24,8 @@ import getExamplesUsingInflection from './getExamplesUsingInflection'
 import renderRelatedFact from './renderRelatedFact'
 import capitalize from './capitalize'
 
-import InflectionTableComponent from '../../inflection/InflectionTableComponent'
-
-import StudyFact from '../../study/StudyFact'
+import InflectionTableComponent from '../InflectionTableComponent'
+import FactLinkComponent from './FactLinkComponent'
 
 let React = { createElement: createElement }
 
@@ -34,7 +33,7 @@ interface Props {
     corpus: Corpus,
     word: InflectedWord,
     knowledge: NaiveKnowledge,
-    onSelectFact: (fact: Fact, context?: InflectedWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface State {
@@ -173,7 +172,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
     }
 
     renderStemToInflected(word: InflectableWord, transforms?: Transform[]) {
-        return renderStemToInflected(word, this.props.word.form, this.props.onSelectFact, transforms)
+        return renderStemToInflected(word, this.props.word.form, this.props.factLinkComponent, transforms)
     }
 
     renderFormName(form: string): any {
@@ -181,8 +180,11 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let fact = this.props.corpus.facts.get(name)
 
         if (fact) {
-            return <span className='form clickable' 
-                onClick={ () => this.props.onSelectFact(FORMS[form]) }>{ name }</span>
+            return <span className='form clickable'>{
+                React.createElement(this.props.factLinkComponent, 
+                    { fact: FORMS[form] }, 
+                    name)
+            }</span>
         }
         else {
             return name
@@ -312,8 +314,12 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 <div>
                     {
                         this.describeFormation(
-                            <span className='clickable' onClick={ () => this.props.onSelectFact(word.word) }>
-                                <strong>{ word.word.getDefaultInflection().jp }</strong> ("{ word.word.getEnglish() }")
+                            <span className='clickable'>{
+                                React.createElement(this.props.factLinkComponent, 
+                                    { fact: word.word }, 
+                                    <span><strong>{ word.word.getDefaultInflection().jp }</strong> ("{ word.word.getEnglish() }")</span>
+                                )
+                            }
                             </span>,
                             word, transforms)
                     }
@@ -437,14 +443,13 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     corpus={ this.props.corpus }
                     inflection={ word.word.inflection }
                     word={ word.word }
-                    onSelectFact={ this.props.onSelectFact }
+                    factLinkComponent={ this.props.factLinkComponent }
                     renderForm={ (inflectedWord, form, factIndex) => {
-                        return <div className='clickable' key={ form } onClick={ () => { 
-                                this.props.onSelectFact(word.word.inflection.getFact(form), 
-                                    word.word.inflect(form)) 
-                            } }>{ 
-                                word.word.inflect(form).jp 
-                            }</div>
+                        return <div className='clickable' key={ form }>{
+                            React.createElement(this.props.factLinkComponent, 
+                                { fact: word.word.inflection.getFact(form) }, 
+                                word.word.inflect(form).jp)
+                        }</div>
                     }}
                     />
             </div>
@@ -464,8 +469,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
         return <div className='inflectionFact'>
             <h1>The { this.renderFormName(form) }</h1>
 
-            <h2 className='clickable' onClick={ () => this.props.onSelectFact(word.getWordFact()) }>{ 
-                word.getDefaultInflection().jp 
+            <h2 className='clickable'>{ 
+                React.createElement(this.props.factLinkComponent, 
+                    { fact: word.word.inflection.getFact(form) }, 
+                    word.getDefaultInflection().jp)
             }</h2>
 
             <div className='columns'>
@@ -481,7 +488,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                             <ul>
                                 {                             
                                     related.map(fact =>     
-                                        renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
+                                        renderRelatedFact(fact, corpus, this.props.factLinkComponent)) 
                                 }
                             </ul>
                         </div>
@@ -495,7 +502,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
 }
 
 export function renderStemToInflected(word: InflectableWord, form: string, 
-        onSelectFact: (fact: Fact, context: InflectedWord) => any, transforms?: Transform[]) {
+        factLinkComponent: FactLinkComponent, transforms?: Transform[]) {
     let inflected = word.inflect(form)
     let transform
 
@@ -508,19 +515,17 @@ export function renderStemToInflected(word: InflectableWord, form: string,
     }
 
     return <li className='stemToInflected' key={ word.getId() }>
-        <span className='clickable' onClick={ (e) => {
-                e.stopPropagation()  
-                onSelectFact( 
-                    word.getWordFact(), inflected) }}>{ 
-            word.getDefaultInflection().jp }</span>&nbsp;<span className='arrow'>
+        <span className='clickable'>{ 
+            React.createElement(factLinkComponent, 
+                { fact: word.getWordFact(), context: inflected }, 
+                word.getDefaultInflection().jp) 
+            }</span>&nbsp;<span className='arrow'>
             →
-        </span> <span className='clickable' onClick={ (e) => {
-                e.stopPropagation()  
-                onSelectFact( 
-                    inflected.word.inflection.getFact(inflected.form), 
-                    inflected) }}>
-            { inflected.toString() }{ transform ? '*' : '' }
-        </span> </li>
+        </span> <span className='clickable'>{ 
+            React.createElement(factLinkComponent, 
+                { fact: inflected.word.inflection.getFact(inflected.form), context: inflected }, 
+                inflected.toString() + (transform ? '*' : '')) 
+        }</span> </li>
 }
 
 function joinWithAnd(arr: string[]) {

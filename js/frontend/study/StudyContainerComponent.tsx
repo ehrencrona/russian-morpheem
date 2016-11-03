@@ -1,5 +1,4 @@
 
-
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 
@@ -34,6 +33,7 @@ import KnowledgeSentenceSelector from '../../shared/study/KnowledgeSentenceSelec
 import sentencesForFacts from '../../shared/study/sentencesForFacts'
 import topScores from '../../shared/study/topScores'
 import { StudiedFacts } from '../../shared/study/StudyPlan'
+import StudyFact from '../../shared/study/StudyFact'
 
 import StudentProfile from '../../shared/study/StudentProfile'
 import Phrase from '../../shared/phrase/Phrase'
@@ -44,12 +44,11 @@ import { WordMatched } from '../../shared/phrase/Match'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
-import ExplainFactComponent from '../guide/fact/FactComponent'
+import ExplainFactComponent from '../../shared/guide/fact/FactComponent'
 
 import FrontendExposures from './FrontendExposures'
 import { fetchStudyPlan } from './FrontendStudentProfile'
 import ForgettingStats from './ForgettingStats'
-import StudyFact from '../study/StudyFact'
 
 interface Props {
     corpus: Corpus,
@@ -390,8 +389,11 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 context={ this.state.explainContext }
                 knowledge={ this.knowledge }
                 onClose={ () => this.setState({ explainFact: null }) }
-                onSelectFact={ (fact, context?) => 
-                    this.setState({ explainFact: fact, explainContext: context }) }
+                factLinkComponent={ (props) => 
+                    <span onClick={ () => 
+                        this.setState({ explainFact: props.fact, explainContext: props.context }) 
+                    }>{ props.children }</span> 
+                }
             />
         }
 

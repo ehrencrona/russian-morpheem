@@ -1,6 +1,6 @@
 import Word from '../../shared/Word'
 import Fact from '../../shared/fact/Fact'
-import StudyFact from './StudyFact'
+import StudyFact from '../../shared/study/StudyFact'
 
 export default function shouldHideWord(word: Word, hiddenFacts: StudyFact[]) {
     let wordFacts: Fact[] = []

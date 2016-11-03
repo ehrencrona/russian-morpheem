@@ -8,12 +8,15 @@ import { JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 import { CaseStudy } from './PhrasePattern'
 import { Match } from './Match'
+import MatchContext from './MatchContext'
+
 import Words from '../Words'
-import Inflections from '../inflection/Inflections'
 import InflectedWord from '../InflectedWord'
 import Word from '../Word'
 import Corpus from '../Corpus'
-import MatchContext from './MatchContext'
+import AnyWord from '../AnyWord'
+
+import Inflections from '../inflection/Inflections'
 import AbstractFact from '../fact/AbstractFact'
 
 export interface JsonFormat {
@@ -96,6 +99,8 @@ export default class Phrase extends AbstractFact {
         return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
     }
 
+    // todo: join with getCases()? note that the semantics are slightly different: getCases requires
+    // the case in all phrases and this only in any. getCaseFact also has a different definition of case.
     getCaseFacts() {
         if (!this.casesCache) {
             this.casesCache = []
@@ -123,6 +128,52 @@ export default class Phrase extends AbstractFact {
 
     getCaseFact(grammaticalCase: GrammaticalCase): PhraseCase {
         return new PhraseCase(this, grammaticalCase)
+    }
+
+    getWords(): AnyWord[] {
+        let allWords: Set<AnyWord>
+
+        this.patterns.forEach((pattern) => {
+            let words = pattern.getWords() 
+
+            if (!allWords) {
+                allWords = words
+            }
+            else {
+                let phraseWords = words
+
+                allWords.forEach((word) => {
+                    if (!phraseWords.has(word)) {
+                        allWords.delete(word)
+                    }
+                })
+            }
+        })
+
+        return Array.from(allWords)
+    }
+
+    getCases(): GrammaticalCase[] {
+        let phrase = this
+
+        let allCases: Set<GrammaticalCase>
+
+        phrase.patterns.forEach((pattern) => {
+            let patternCases = pattern.getCases()
+
+            if (!allCases) {
+                allCases = patternCases
+            }
+            else {
+                allCases.forEach((grammaticalCase) => {
+                    if (!patternCases.has(grammaticalCase)) {
+                        allCases.delete(grammaticalCase)
+                    }
+                })
+            }
+        })
+
+        return Array.from(allCases) 
     }
 
     setCorpus(corpus: Corpus) {

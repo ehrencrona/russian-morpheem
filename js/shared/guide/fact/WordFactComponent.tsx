@@ -32,7 +32,7 @@ import Words from '../../../shared/Words'
 import Word from '../../../shared/Word'
 import AnyWord from '../../../shared/AnyWord'
 
-import InflectionTableComponent from '../../inflection/InflectionTableComponent'
+import InflectionTableComponent from '../../../shared/guide/InflectionTableComponent'
 import StudyToken from '../../study/StudyToken'
 import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'
@@ -40,7 +40,9 @@ import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 
+import FactLinkComponent from './FactLinkComponent'
 import renderRelatedFact from './renderRelatedFact'
+
 import marked = require('marked')
 
 let React = { createElement: createElement }
@@ -49,7 +51,7 @@ interface Props {
     corpus: Corpus,
     word: AbstractAnyWord,
     knowledge: NaiveKnowledge,
-    onSelectFact: (fact: Fact, context?: AnyWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface TokenizedSentence {
@@ -257,8 +259,6 @@ export default class WordFactComponent extends Component<Props, State> {
                 )
             }
 
-console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as InflectableWord).getDefaultInflection()).join(' '))
-
             return this.sortByKnowledge(result).slice(0, 5)
         }
     }
@@ -305,12 +305,11 @@ console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as Inflectabl
                         It can also mean {
                             otherMeanings.map((fact, index) =>
                                 <span key={ fact.getId() }>{ index > 0 ? ' or ' : ''}<span 
-                                        className='clickable' onClick={ (e) => {
-                                            this.props.onSelectFact(fact)
-                                            e.stopPropagation()
-                                        }
-                                    } >{ (fact as Word).getEnglish()}
-                                    </span>
+                                    className='clickable'>{
+                                        React.createElement(this.props.factLinkComponent, 
+                                            { fact: fact }, 
+                                            (fact as Word).getEnglish())
+                                    }</span>
                                 </span>)
                         }
                     </div>
@@ -346,7 +345,7 @@ console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as Inflectabl
                         <ul>
                         {
                             related.map(fact => 
-                                renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                                renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
                             ) 
                         }
                         </ul>
@@ -362,15 +361,12 @@ console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as Inflectabl
                             corpus={ this.props.corpus }
                             inflection={ word.inflection }
                             word={ word }
-                            onSelectFact={ this.props.onSelectFact }
+                            factLinkComponent={ this.props.factLinkComponent }
                             renderForm={ (inflectedWord, form, factIndex) => {
-                                return <div className='clickable'
-                                        key={ form } 
-                                        onClick={ () => { 
-                                        this.props.onSelectFact((word as InflectableWord).inflection.getFact(form), 
-                                            (word as InflectableWord).inflect(form)) 
-                                    } }>{ 
-                                        (word as InflectableWord).inflect(form).jp 
+                                return <div className='clickable' key={ form }>{
+                                    React.createElement(this.props.factLinkComponent, 
+                                        { fact: (word as InflectableWord).inflection.getFact(form), context: (word as InflectableWord).inflect(form) }, 
+                                        (word as InflectableWord).inflect(form).jp) 
                                     }</div>
                             }}
                             />
@@ -382,7 +378,7 @@ console.log(word.getDefaultInflection() + ' ' + result.map(f => (f as Inflectabl
                             <ul>
                             {
                                 this.wordsWithSimilarInflection().map(fact => 
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
                                 ) 
                             }
                             </ul>

@@ -27,6 +27,7 @@ import capitalize from './capitalize'
 import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
+import FactLinkComponent from './FactLinkComponent'
 
 import marked = require('marked')
 
@@ -36,7 +37,7 @@ interface Props {
     corpus: Corpus,
     fact: TagFact,
     knowledge: NaiveKnowledge,
-    onSelectFact: (fact: Fact, context?: InflectedWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface State {
@@ -65,7 +66,7 @@ export default class TagFactComponent extends Component<Props, State> {
                             (this.props.fact.required || [])
                             .concat(this.props.corpus.facts.getFactsWithTag(this.props.fact.id))
                                 .map(fact =>     
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact))
+                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent))
                         }
                     </ul>
                 </div>
@@ -78,7 +79,7 @@ export default class TagFactComponent extends Component<Props, State> {
                             (factoid ? 
                                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])
                                 .map(fact =>     
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent)
                             ) 
                         }
                         </ul>

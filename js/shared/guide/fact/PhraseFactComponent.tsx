@@ -24,6 +24,7 @@ import SentenceScore from '../../../shared/study/SentenceScore'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
 import topScores from '../../../shared/study/topScores'
 import Phrase from '../../../shared/phrase/Phrase'
+import PhrasePattern from '../../../shared/phrase/PhrasePattern'
 import Match from '../../../shared/phrase/Match'
 import WordInFormMatch from '../../../shared/phrase/WordInFormMatch'
 import ExactWordMatch from '../../../shared/phrase/ExactWordMatch'
@@ -47,6 +48,7 @@ import StudyFact from '../../study/StudyFact'
 import marked = require('marked')
 
 let React = { createElement: createElement }
+import FactLinkComponent from './FactLinkComponent'
 
 import renderRelatedFact from './renderRelatedFact'
 
@@ -54,7 +56,7 @@ interface Props {
     corpus: Corpus,
     phrase: Phrase,
     knowledge: NaiveKnowledge,
-    onSelectFact: (fact: Fact, context?: AnyWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface TokenizedSentence {
@@ -96,63 +98,6 @@ export default class PhraseFactComponent extends Component<Props, State> {
         </li>
     }
 
-    getWordsInPhrase() {
-        let result: Fact[] = []
-        let seen = {}
-
-        let addWord = (word) => {
-            let fact = word.getWordFact()
-
-            if (seen[fact.getId()]) {
-                return
-            }
-
-            seen[fact.getId()] = true
-            result = result.concat(fact)
-        }
-
-        this.props.phrase.patterns.forEach((pattern) => 
-            pattern.wordMatches.forEach((wordMatch) => {
-                if (wordMatch instanceof WordInFormMatch) {
-                    wordMatch.words.forEach(addWord)
-                }
-
-                if (wordMatch instanceof ExactWordMatch) {
-                    wordMatch.words.forEach(addWord)
-                }
-            })
-        )
-
-        return result
-    }
-
-    getCaseFacts(): Fact[] {
-        let phrase = this.props.phrase
-        let casesSeen = {}
-        let result: Fact[] = []
-
-        phrase.patterns.forEach((pattern) => 
-            pattern.wordMatches.forEach((wordMatch) => {
-                let form = wordMatch.getForm()
-
-                if (form) {
-                    let grammaticalCase = form.grammaticalCase
-
-                    if (grammaticalCase && !casesSeen[grammaticalCase]) {
-                        casesSeen[grammaticalCase] = true
-                        let fact = this.props.corpus.facts.get(CASES[grammaticalCase])
-
-                        if (fact) {
-                            result.push(fact)
-                        }
-                    }
-                }
-            })
-        )
-
-        return result 
-    }
-
     render() {
         let phrase = this.props.phrase
         let corpus = this.props.corpus
@@ -192,17 +137,19 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let factoid = corpus.factoids.getFactoid(phrase)
 
-        let relations = this.getCaseFacts().concat(
+        let relations = this.props.phrase.getCases()
+            .map(grammaticalCase => 
+                this.props.corpus.facts.get(CASES[grammaticalCase]))
+            .concat(
                 (factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 []))
-            .concat(this.getWordsInPhrase())
+            .concat(this.props.phrase.getWords().map(word => word.getWordFact()))
  
         return <div>
             <h1>"{ phrase.description }"</h1>
             <h2>{ phrase.en }</h2>
-
             {
                 factoid ? 
                     <div className='factoid' 
@@ -229,7 +176,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                                 (this.props.phrase.required || [])
                                     .concat(relations)
                                     .map(fact => 
-                                        renderRelatedFact(fact, corpus, this.props.onSelectFact)) 
+                                        renderRelatedFact(fact, corpus, this.props.factLinkComponent)) 
                             }
                             </ul>
                         </div>

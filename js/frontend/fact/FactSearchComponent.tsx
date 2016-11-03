@@ -47,6 +47,9 @@ export default class FactSearchComponent extends Component<Props, State> {
         let matches = (string: string) =>
             string.substr(0, filter.length).toLowerCase() == filter
 
+        let matchesAnywhere = (string: string) =>
+            string.toLowerCase().indexOf(filter) >= 0
+
         if (fact instanceof Word) {
             if (matches(fact.jp) ||
                 matches(fact.getEnglish())) {
@@ -77,11 +80,11 @@ export default class FactSearchComponent extends Component<Props, State> {
             }
         }
         else if (fact instanceof Phrase) {
-            if (matches(fact.description)) {
+            if (matchesAnywhere(fact.description)) {
                 return true
             }
 
-            if (matches(fact.en)) {
+            if (matchesAnywhere(fact.en)) {
                 return true
             }
         }

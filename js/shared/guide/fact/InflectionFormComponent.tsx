@@ -27,6 +27,7 @@ import capitalize from './capitalize'
 import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
+import FactLinkComponent from './FactLinkComponent'
 
 import marked = require('marked')
 
@@ -36,7 +37,7 @@ interface Props {
     corpus: Corpus,
     form: InflectionForm,
     knowledge: NaiveKnowledge,
-    onSelectFact: (fact: Fact, context?: InflectedWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface State {
@@ -147,7 +148,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                                                 return <div key={ i.form }>
                                                     {
-                                                        renderStemToInflected(w, i.form, this.props.onSelectFact)
+                                                        renderStemToInflected(w, i.form, this.props.factLinkComponent)
                                                     }
                                                     {
                                                         ending.relativeTo ?
@@ -247,7 +248,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         {
                             (this.state.allPhrases ? phrases : phrases.slice(0, 10))
                                 .map(phrase => 
-                                    renderRelatedFact(phrase, corpus, this.props.onSelectFact) 
+                                    renderRelatedFact(phrase, corpus, this.props.factLinkComponent) 
                                 )
                         }
                         </ul>
@@ -264,7 +265,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 (factoid ? 
                                     factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
                                 .map(fact =>     
-                                    renderRelatedFact(fact, corpus, this.props.onSelectFact) 
+                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
                             ) 
                         }
                         </ul>

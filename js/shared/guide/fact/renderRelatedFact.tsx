@@ -1,4 +1,3 @@
-
 import { Component, createElement } from 'react'
 
 import Corpus from '../../../shared/Corpus'
@@ -10,9 +9,11 @@ import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
 import TagFact from '../../../shared/TagFact'
 
+import FactLinkComponent from './FactLinkComponent'
+
 let React = { createElement: createElement }
 
-export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFact: (fact: Fact) => void) {
+export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkComponent: FactLinkComponent) {
     let inner
 
     if (fact instanceof InflectableWord) {
@@ -70,11 +71,9 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, onSelectFa
         return null
     }
 
-    return <li className='clickable' key={ fact.getId() } onClick={ (e) => {
-            onSelectFact(fact)
-            e.stopPropagation()
+    return <li className='clickable' key={ fact.getId() }>
+        {
+            React.createElement(factLinkComponent, { fact: fact }, inner)
         }
-    } >{
-        inner
-    }</li>
+        </li>
 }

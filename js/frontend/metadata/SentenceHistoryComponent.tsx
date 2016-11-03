@@ -1,7 +1,4 @@
 
-/// <reference path="../../../typings/human-time.d.ts" />
-/// <reference path="../../../typings/marked.d.ts" />
-
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import { AUTHOR_ME } from '../../frontend/metadata/FrontendSentenceHistory'

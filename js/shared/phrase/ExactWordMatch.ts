@@ -6,9 +6,8 @@ import InflectableWord from '../InflectableWord'
 import MatchContext from './MatchContext'
 import Corpus from '../Corpus'
 
+import AnyWord from '../AnyWord'
 import { FORMS } from '../inflection/InflectionForms'
-
-export type AnyWord = InflectableWord | Word
 
 export class ExactWordMatch implements WordMatch {
     wordIds: { [id:string]: boolean} = {}

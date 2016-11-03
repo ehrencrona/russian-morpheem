@@ -24,10 +24,7 @@ export default function(corpus: Corpus) {
 
         let author = getAuthor(req).name
 
-console.log('set audio')
-
         foo.busboy.on('file', function (fieldname, file, filename) {
-console.log('stored file ' + getPath(getFileName(sentence)))
             var fstream = createWriteStream(getPath(getFileName(sentence)))
 
             file.pipe(fstream)

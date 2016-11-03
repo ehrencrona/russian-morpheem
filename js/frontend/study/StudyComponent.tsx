@@ -32,14 +32,14 @@ import { InflectionForm, CASES, FORMS, Tense, Number, Gender } from '../../share
 import htmlEscape from '../../shared/util/htmlEscape'
 
 import DidYouKnowComponent from './DidYouKnowComponent'
-import StudyPhrase from './StudyPhrase'
-import StudyFact from './StudyFact'
-import StudyWord from './StudyWord'
-import StudyToken from './StudyToken'
+import StudyPhrase from '../../shared/study/StudyPhrase'
+import StudyFact from '../../shared/study/StudyFact'
+import StudyWord from '../../shared/study/StudyWord'
+import StudyToken from '../../shared/study/StudyToken'
 import FrontendExposures from './FrontendExposures'
 import SentenceComponent from './SentenceComponent'
 
-import toStudyWords from './toStudyWords'
+import toStudyWords from '../../shared/study/toStudyWords'
 import isGiveaway from './isGiveaway'
 
 interface Props {

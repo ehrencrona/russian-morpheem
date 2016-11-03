@@ -9,3 +9,5 @@
 /// <reference path="globals/react-addons-update/index.d.ts" />
 /// <reference path="globals/react-dom/index.d.ts" />
 /// <reference path="globals/react/index.d.ts" />
+/// <reference path="./human-time.d.ts" />
+/// <reference path="./marked.d.ts" />

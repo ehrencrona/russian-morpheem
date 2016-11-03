@@ -21,7 +21,7 @@ import PhraseFactComponent from './PhraseFactComponent'
 import TagFactComponent from './TagFactComponent'
 
 import TagFact from '../../../shared/TagFact'
-import StudyFact from '../../study/StudyFact'
+import FactLinkComponent from './FactLinkComponent'
 
 import { Component, createElement } from 'react'
 
@@ -31,7 +31,7 @@ interface Props {
     context: InflectedWord
     knowledge: NaiveKnowledge
     onClose: () => any
-    onSelectFact: (fact: Fact, context?: InflectedWord) => any
+    factLinkComponent: FactLinkComponent
 }
 
 interface State {}
@@ -48,7 +48,7 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             word={ props.context } 
-            onSelectFact={ props.onSelectFact }
+            factLinkComponent={ props.factLinkComponent }
         />
     }
     else if (fact instanceof InflectableWord || fact instanceof Word) {
@@ -56,7 +56,7 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             word={ fact }
-            onSelectFact={ props.onSelectFact }
+            factLinkComponent={ props.factLinkComponent }
         />
     }
     else if (fact instanceof Phrase) {
@@ -64,7 +64,7 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             phrase={ fact }
-            onSelectFact={ props.onSelectFact }
+            factLinkComponent={ props.factLinkComponent }
         />
     }
     else if (fact instanceof InflectionForm) {
@@ -72,7 +72,7 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             form={ fact }
-            onSelectFact={ props.onSelectFact }
+            factLinkComponent={ props.factLinkComponent }
         />
     }
     else if (fact instanceof TagFact) {
@@ -80,7 +80,7 @@ export default function factComponent(props: Props) {
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             fact={ fact }
-            onSelectFact={ props.onSelectFact }
+            factLinkComponent={ props.factLinkComponent }
         />
     }
     else {

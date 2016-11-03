@@ -1,6 +1,5 @@
 
-
-import {Component,createElement} from 'react'
+import { Component,createElement } from 'react'
 import Corpus from '../../shared/Corpus'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'

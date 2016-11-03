@@ -19,7 +19,7 @@ import { InflectionForm } from '../../../shared/inflection/InflectionForms'
 import FixedIntervalFactSelector from '../../../shared/study/FixedIntervalFactSelector'
 import { REPETITION_COUNT } from '../../../shared/study/FixedIntervalFactSelector'
 
-import StudyFact from '../StudyFact'
+import StudyFact from '../../../shared/study/StudyFact'
 import InflectionFactComponent from './InflectionFactComponent'
 import EndingTransformFactComponent from './EndingTransformFactComponent'
 import WordFactComponent from './WordFactComponent'

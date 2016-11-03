@@ -1,11 +1,13 @@
-
+// somehow this one reference makes all the components in this folder work.
+// excluding it currently makes the import 'react' fail in the entire folder. 
+/// <reference path="../../../typings/index.d.ts" />
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 import Inflection from '../../shared/inflection/Inflection'
-import InflectionTableComponent from './InflectionTableComponent'
+import InflectionTableComponent from '../../shared/guide/InflectionTableComponent'
 
 import Tab from '../OpenTab'
 import openFact from '../fact/openFact'

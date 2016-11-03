@@ -1,24 +1,28 @@
 
 import WordMatch from './WordMatch'
 import WildcardMatch from './WildcardMatch'
-import { ExactWordMatch, AnyWord } from './ExactWordMatch'
+import { ExactWordMatch } from './ExactWordMatch'
 import PosFormWordMatch from './PosFormWordMatch'
 import WordInFormMatch from './WordInFormMatch'
 import { POS_NAMES } from './PosFormWordMatch'
 import TagWordMatch from './TagWordMatch'
 import { QUANTIFIERS } from './AbstractQuantifierMatch'
-import Words from '../Words'
+
 import Inflections from '../inflection/Inflections'
-import Facts from '../fact/Facts'
-import Word from '../Word'
 import { ENGLISH_FORMS_BY_POS, FORMS, Number, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
+import Facts from '../fact/Facts'
+
+import AnyWord from '../AnyWord'
+import Words from '../Words'
+import Word from '../Word'
 import InflectableWord from '../InflectableWord'
 import InflectedWord from '../InflectedWord'
+import Corpus from '../Corpus'
+
 import EnglishPatternFragment from './EnglishPatternFragment'
 import PhraseMatch from './PhraseMatch'
 import Phrase from './Phrase'
 import AdverbWordMatch from './AdverbWordMatch'
-import Corpus from '../Corpus'
 import MatchContext from './MatchContext'
 import { Match, WordMatched } from './Match'
 
@@ -628,6 +632,42 @@ export default class PhrasePattern {
         }
 
         return new PosFormWordMatch(posStr, FORMS[formStr], formStr, quantifier)
+    }
+
+    getWords(): Set<AnyWord> {
+        let result = new Set<AnyWord>()
+
+        let addWord = (word: AnyWord) => result.add(word)
+
+        this.wordMatches.forEach((wordMatch) => {
+            if (wordMatch instanceof WordInFormMatch) {
+                wordMatch.words.forEach(addWord)
+            }
+
+            if (wordMatch instanceof ExactWordMatch) {
+                wordMatch.words.forEach(addWord)
+            }
+        })
+
+        return result
+    }
+
+    getCases(): Set<GrammaticalCase> {
+        let result = new Set<GrammaticalCase>()
+
+        this.wordMatches.forEach((wordMatch) => {
+            let form = wordMatch.getForm()
+
+            if (form) {
+                let grammaticalCase = form.grammaticalCase
+
+                if (grammaticalCase) {
+                    result.add(grammaticalCase)
+                }
+            }
+        })
+
+        return result
     }
 
     static fromString(line: string, en: string, words: Words, inflections: Inflections) {

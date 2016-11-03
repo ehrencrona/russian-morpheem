@@ -18,9 +18,9 @@ import InflectableWord from '../shared/InflectableWord';
 
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 
-import toStudyWords from '../frontend/study/toStudyWords'
-import StudyWord from '../frontend/study/StudyWord'
-import StudyPhrase from '../frontend/study/StudyPhrase'
+import toStudyWords from '../shared/study/toStudyWords'
+import StudyWord from '../shared/study/StudyWord'
+import StudyPhrase from '../shared/study/StudyPhrase'
 
 import { expect } from 'chai';
 

@@ -19,8 +19,10 @@ MongoClient.connect(url, function(err, connectedDb) {
 });
 
 export default class BackendFactoids implements Factoids {
+    byId: Factoids[] = []
 
     constructor() {
+        this.getAll().then(all => all.forEach(factoid => this.byId[factoid.fact] = factoid))
     }
 
     setFactoid(factoid: Factoid, fact: Fact) {
@@ -34,6 +36,8 @@ export default class BackendFactoids implements Factoids {
         }
 
         factoid.fact = fact.getId()
+
+        this.byId[factoid.fact] = factoid
 
         return new Promise((resolve, reject) => {
             db.collection(COLLECTION_METADATA).updateOne({ fact: fact.getId() }, factoid, { upsert: true },
@@ -101,6 +105,10 @@ export default class BackendFactoids implements Factoids {
     }
 
     getFactoid(fact: Fact): Factoid {
-        throw new Error('Unsupported in the backend.')
+        return this.byId[fact.getId()] || {
+            explanation: '',
+            fact: fact.getId(),
+            relations: []
+        }
     }
 }

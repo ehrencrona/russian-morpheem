@@ -5,8 +5,8 @@ import Corpus from '../../shared/Corpus'
 import { Topic } from '../../shared/metadata/Topics'
 
 import Fact from '../../shared/fact/Fact'
-import FactEntryComponent from '../guide/entry/FactEntryComponent'
-import ExplainFactComponent from '../guide/fact/FactComponent'
+import FactEntryComponent from '../../shared/guide/entry/FactEntryComponent'
+import ExplainFactComponent from '../../shared/guide/fact/FactComponent'
 
 import { Knowledge } from '../../shared/study/Exposure'
 import StudentProfile from '../../shared/study/StudentProfile'
@@ -15,7 +15,7 @@ import FactScore from '../../shared/study/FactScore'
 import { NewFactsSelector } from '../../shared/study/NewFactsSelector'
 import { EXPECTED_REPETITIONS_IN_SESSION, FixedIntervalFactSelector } from '../../shared/study/FixedIntervalFactSelector'
 
-import StudyFact from './StudyFact'
+import StudyFact from '../../shared/study/StudyFact'
 import TopicsComponent from './TopicsComponent'
 
 let React = { createElement: createElement }

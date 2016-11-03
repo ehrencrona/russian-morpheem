@@ -1,3 +1,3 @@
 #!/bin/bash
 
-supervisor -w build/shared,build/backend build/backend/server.js
+supervisor -w build/shared,build/frontend build/backend/server.js

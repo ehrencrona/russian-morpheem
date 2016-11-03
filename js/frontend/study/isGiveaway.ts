@@ -1,7 +1,7 @@
 
-import StudyWord from './StudyWord'
+import StudyWord from '../../shared/study/StudyWord'
 import Fact from '../../shared/fact/Fact'
-import StudyFact from './StudyFact'
+import StudyFact from '../../shared/study/StudyFact'
 import Phrase from '../../shared/phrase/Phrase'
 
 export default function isGiveaway(fact: StudyFact, hiddenFacts: StudyFact[]) {

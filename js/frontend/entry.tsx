@@ -27,7 +27,7 @@ function renderIntoId(component, elementId) {
 
 renderIntoId(
     <LoginContainer factory={ createFactory(TabSetComponent) }/>,
-    'react-root'
+    'react-admin-root'
 )
 
 renderIntoId(

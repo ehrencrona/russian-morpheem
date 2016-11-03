@@ -190,6 +190,7 @@ export const POSES = {
     v: 'verb',
     n: 'noun',
     adj: 'adjective',
+    adv: 'adverb',
     pron: 'pronoun',
     prep: 'preposition',
     num: 'number'

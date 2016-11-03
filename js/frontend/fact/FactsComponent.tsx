@@ -29,7 +29,7 @@ const ALL = 'all'
 const INCOMPLETE = 'incomplete' 
 const SEARCH = 'search'
 const TAGS = 'tags'
-const MISSING = 'missing'
+const NO_FACTOID = 'no factoid'
 
 const ADD_WORD = 'addWord'
 const ADD_PHRASE = 'addPhrase'
@@ -71,9 +71,9 @@ export default class FactsComponent extends Component<Props, State> {
             list = <FactSearchComponent 
                 corpus={ this.props.corpus }
                 tab={ this.props.tab } 
-                onFactSelect={ (fact) => { 
+                onFactSelect={ (fact) =>  
                     openFact(fact, this.props.corpus, this.props.tab) 
-                } } />
+                } />
         }
         else if (this.state.list == ALL) {
             list = <FilteredFactsListComponent
@@ -91,11 +91,15 @@ export default class FactsComponent extends Component<Props, State> {
                 }
                 tab={ this.props.tab } />
         }
-        else if (this.state.list == MISSING) {
+        else if (this.state.list == NO_FACTOID) {
             let lastIds = this.props.tab.getLastTabIds()
 
-            list = <MissingFactsListComponent
+            list = <FilteredFactsListComponent
                 corpus={ this.props.corpus }
+                filter={ (factIndex) =>
+                    !(factIndex.fact instanceof InflectionFact) &&
+                    !this.props.corpus.factoids.getFactoid(factIndex.fact).explanation 
+                }
                 tab={ this.props.tab } />
         }
         else if (this.state.list == ADD_WORD) {
@@ -123,8 +127,8 @@ export default class FactsComponent extends Component<Props, State> {
                         { filterButton(ALL, 'All') }
                         { filterButton(RECENT, 'Recent') }
                         { filterButton(SEARCH, 'Search') }
-                        { filterButton(MISSING, 'Missing') }
                         { filterButton(TAGS, 'Tags') }
+                        { filterButton(NO_FACTOID, 'No Factoid') }
                     </div>
                 </div>
 

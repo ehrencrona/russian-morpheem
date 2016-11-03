@@ -1,4 +1,5 @@
 /// <reference path="../../typings/express.d.ts"/>
+/// <reference path="../../typings/index.d.ts" />
 
 import * as express from "express"
 import 'source-map-support/register'
@@ -14,6 +15,7 @@ import Corpus from '../shared/Corpus'
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
 
+import getGuide from './route/getGuide'
 import addFact from './route/addFact'
 import deleteFact from './route/deleteFact'
 import setFact from './route/setFact'
@@ -179,6 +181,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/translate`, getTranslation(corpus))    
 
+    app.get(`/guide/:fact`, getGuide(corpus))    
 }
 
 readCorpus('ru', true).catch((e) => {

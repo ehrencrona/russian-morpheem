@@ -3,14 +3,16 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
+import { MISSING_INDEX } from '../../shared/fact/Facts'
+
 import Inflection from '../../shared/inflection/Inflection'
+import { INFLECTION_FORMS, FORMS } from '../../shared/inflection/InflectionForms'
+
+import FactLinkComponent from './fact/FactLinkComponent'
 
 import Word from '../../shared/Word'
-import getLanguage from '../getLanguage'
 
 import { Component, createElement } from 'react';
-import { INFLECTION_FORMS, FORMS } from '../../shared/inflection/InflectionForms'
-import { MISSING_INDEX } from '../../shared/fact/Facts'
 
 interface Props {
     corpus: Corpus,
@@ -18,7 +20,7 @@ interface Props {
     renderForm: (inflectedWord: string, form: string, factIndex: number) => any
     word?: InflectableWord,
     hideForms?: Object,
-    onSelectFact?: (fact: Fact, context?: InflectedWord) => any
+    factLinkComponent?: FactLinkComponent
 }
 
 interface State {
@@ -72,7 +74,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
             return this.props.renderForm(wordsByForm[form], form, index)
         }
 
-        let table = INFLECTION_FORMS[getLanguage()][this.props.inflection.pos]
+        let table = INFLECTION_FORMS['ru'][this.props.inflection.pos]
         
         if (!table) {
             console.log('Unknown PoS ' + this.props.inflection.pos + ' of ' + this.props.inflection.getId())
@@ -137,9 +139,12 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
                             return <tr key={ form }>
                                 {
-                                    (fact && this.props.onSelectFact ?
-                                        <td className='clickable'  
-                                            onClick={ () => this.props.onSelectFact(fact) }>{ name }</td>
+                                    (fact && this.props.factLinkComponent ?
+                                        <td className='clickable'>{
+                                            React.createElement(this.props.factLinkComponent, 
+                                            { fact: fact }, 
+                                            name) 
+                                        }</td>
                                         :
                                         <td>{ name }</td>)
                                 }

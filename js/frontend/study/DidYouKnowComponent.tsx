@@ -5,7 +5,7 @@ import Corpus from '../../shared/Corpus'
 
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
 import StudyFactComponent from './fact/StudyFactComponent'
-import StudyFact from './StudyFact'
+import StudyFact from '../../shared/study/StudyFact'
 import Fact from '../../shared/fact/Fact'
 import Sentence from '../../shared/Sentence'
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
