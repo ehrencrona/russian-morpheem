@@ -47,6 +47,7 @@ export default function factComponent(props: Props) {
         content = <InflectionFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
+            inflection={ fact }
             word={ props.context } 
             factLinkComponent={ props.factLinkComponent }
         />

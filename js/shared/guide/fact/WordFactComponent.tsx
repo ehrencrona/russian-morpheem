@@ -321,7 +321,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
             <div className='columns'>
                 <div className='main'>
-                    <h3>Examples of use</h3>
+                    <h3>Examples of usage</h3>
 
                     <ul>
                         {
@@ -356,7 +356,8 @@ export default class WordFactComponent extends Component<Props, State> {
             { word instanceof InflectableWord ?
                 <div className='columns'>
                     <div className='main'>
-                        <h3>Forms</h3>
+                        <h3>{ word.pos == 'v' ? 'Conjugation' : 
+                                (word.pos == 'n' ? 'Declension' : 'Forms') }</h3>
                         <InflectionTableComponent
                             corpus={ this.props.corpus }
                             inflection={ word.inflection }

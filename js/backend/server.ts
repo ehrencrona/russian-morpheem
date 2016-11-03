@@ -15,6 +15,7 @@ import Corpus from '../shared/Corpus'
 import NoSuchWordError from '../shared/NoSuchWordError'
 import { generateInflection } from '../shared/GenerateInflection'
 
+import getSitemap from './route/getSitemap'
 import getGuide from './route/getGuide'
 import addFact from './route/addFact'
 import deleteFact from './route/deleteFact'
@@ -181,7 +182,11 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/translate`, getTranslation(corpus))    
 
-    app.get(`/guide/:fact`, getGuide(corpus))    
+    app.get(`/word/:fact`, getGuide(corpus))    
+    app.get(`/phrase/:fact`, getGuide(corpus))    
+    app.get(`/form/:fact`, getGuide(corpus))    
+
+    app.get(`/sitemap.xml`, getSitemap(corpus))    
 }
 
 readCorpus('ru', true).catch((e) => {

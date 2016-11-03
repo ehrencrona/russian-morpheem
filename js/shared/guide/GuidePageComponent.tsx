@@ -4,8 +4,14 @@ import { Component, createElement } from 'react'
 import { CASES, POSES } from '../inflection/InflectionForms'
 import Corpus from '../Corpus'
 import Fact from '../fact/Fact'
-import Phrase from '../phrase/Phrase'
+import Sentence from '../Sentence'
 import AbstractAnyWord from '../AbstractAnyWord'
+
+import capitalize from './fact/capitalize'
+
+import { InflectionForm } from '../inflection/InflectionForms'
+
+import Phrase from '../phrase/Phrase'
 
 let React = { createElement: createElement }
 
@@ -26,7 +32,24 @@ export default function guidePageComponent(props: Props) {
     }
 
     if (factoid.explanation) {
-        description = factoid.explanation.substr(0, 250)
+        description = factoid.explanation
+        
+        if (description.length > 100) {
+            let i = description.indexOf('.', 60)
+
+            if (i < 0) {
+                i = description.length
+            }
+            else {
+                i++
+            }
+
+            if (i > 140) {
+                i = 140
+            }
+
+            description = description.substr(0, i)
+        }
     }
 
     let fact = props.fact
@@ -37,17 +60,21 @@ export default function guidePageComponent(props: Props) {
         if (!title) {
             title = phrase.getWords().map(w => w.toText()).join(' and ') 
                 + ' with the '
-                + phrase.getCases().map(c => CASES[c]).join(' ')
+                + phrase.getCases().map(c => CASES[c]).join(' and ')
                 + ' e.g. '
                 + phrase.description
                 + ' ("' 
                 + phrase.en 
                 + '")'
         }
+    }
+    else if (fact instanceof InflectionForm) {
+        if (!title) {
+            title = 'The ' + capitalize(fact.name)
 
-        if (!description) {
-            description = ' Usage: '
-//                + matches[0].sentence.toString() + ' - ' + matches[0].sentence.en()    
+            if (fact.grammaticalCase) {
+                title += ' Case in Russian Grammar'
+            }
         }
     }
     else if (fact instanceof AbstractAnyWord) {
@@ -71,6 +98,29 @@ export default function guidePageComponent(props: Props) {
         }
     }
 
+    if (!description) {
+        let index = props.corpus.sentences.getSentencesByFact(props.corpus.facts)
+
+        let sentences = index[fact.getId()]
+
+        if (sentences) {
+            let shortest: Sentence
+
+            sentences.easy.concat(sentences.ok).concat(sentences.hard).forEach(sentenceDifficulty => {
+                let sentence = sentenceDifficulty.sentence
+                
+                if (!shortest) {
+                    shortest = sentence
+                }
+                else if (shortest.words.length > sentence.words.length) {
+                    shortest = sentence
+                }
+            })            
+
+            description = 'Usage: ' + shortest.toString() + ' - ' + shortest.en()    
+        }
+    }
+    
     if (!title) {
         title = props.fact.getId()
     }
@@ -85,11 +135,19 @@ export default function guidePageComponent(props: Props) {
 
             <title>{ title }</title>
             <meta name="description" content={ description }/>
+
+            <script dangerouslySetInnerHTML={ { __html: 
+                "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){"
+                + "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),"
+                + "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)"
+                + "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');"
+                + "ga('create', 'UA-56615416-5', 'auto');"
+                + "ga('send', 'pageview');"
+            } }/>
         </head>
 
         <body>
             { props.children }
         </body>
-
     </html>;
 }

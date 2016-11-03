@@ -60,8 +60,8 @@ export default class AddWordComponent extends Component<Props, State> {
 
                         openFact(word, this.props.corpus, this.props.tab)
 
+                        this.setState({ word: '' })
                         this.props.onClose();
-                        this.word.value = ''
                     }
                     else {
                         alert('Something went wrong: ' + e)
@@ -79,8 +79,8 @@ export default class AddWordComponent extends Component<Props, State> {
 
                     openFact(word, this.props.corpus, this.props.tab)
                                     
+                    this.setState({ word: '' })
                     this.props.onClose();
-                    this.word.value = ''
                 })
         }
 
@@ -88,8 +88,9 @@ export default class AddWordComponent extends Component<Props, State> {
     
     render() {
         return <div className='addWord'>
-            <input type='text' lang={ this.props.corpus.lang } autoCapitalize='off' 
-                ref={ (input) => this.word = input }
+            <input type='text' lang={ this.props.corpus.lang }
+                value={ this.state.word } 
+                autoCapitalize='off' 
                 onChange={ (event) => {
                         let target = event.target
 

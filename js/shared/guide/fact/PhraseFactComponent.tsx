@@ -47,10 +47,11 @@ import StudyFact from '../../study/StudyFact'
 
 import marked = require('marked')
 
-let React = { createElement: createElement }
 import FactLinkComponent from './FactLinkComponent'
 
 import renderRelatedFact from './renderRelatedFact'
+
+let React = { createElement: createElement }
 
 interface Props {
     corpus: Corpus,
@@ -147,9 +148,17 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 []))
             .concat(this.props.phrase.getWords().map(word => word.getWordFact()))
  
+        let words = phrase.getWords()
+        let phraseSeoText = (words.length ? 
+            words.map(w => w.toText()).join(' and ') 
+                + ' with the '
+                + phrase.getCases().map(c => CASES[c]).join(' and ') 
+            :
+            '')
+            
         return <div>
             <h1>"{ phrase.description }"</h1>
-            <h2>{ phrase.en }</h2>
+            <h2>{ phrase.en } – { phraseSeoText }</h2>
             {
                 factoid ? 
                     <div className='factoid' 
@@ -160,7 +169,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
             <div className='columns'>
                 <div className='main'>
-                    <h3>Examples of use</h3>
+                    <h3>Examples of usage</h3>
 
                     <ul>{
                         matches.map(match => this.renderMatch(match))

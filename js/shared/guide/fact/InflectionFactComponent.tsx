@@ -31,7 +31,8 @@ let React = { createElement: createElement }
 
 interface Props {
     corpus: Corpus,
-    word: InflectedWord,
+    inflection: InflectionFact
+    word?: InflectedWord,
     knowledge: NaiveKnowledge,
     factLinkComponent: FactLinkComponent
 }
@@ -76,15 +77,14 @@ export default class InflectionFactComponent extends Component<Props, State> {
         })
     }
 
-    getHomonymForms() {
-        let homonyms = this.props.corpus.words.ambiguousForms[this.props.word.jp]
+    getHomonymForms(word: InflectedWord) {
+        let homonyms = this.props.corpus.words.ambiguousForms[word.jp]
 
-        let word = this.props.word
         let ending = word.word.inflection.getEnding(word.form)
         
         if (homonyms) {
-            return homonyms.slice(0).filter((w) => w !== this.props.word)
-                .filter((w) => w instanceof InflectedWord && w.word === this.props.word.word)
+            return homonyms.slice(0).filter((w) => w !== word)
+                .filter((w) => w instanceof InflectedWord && w.word === word.word)
                 .filter((w: InflectedWord) => w.form != ending.relativeTo)
                 .map((w) => (w as InflectedWord).form)
         }
@@ -93,18 +93,18 @@ export default class InflectionFactComponent extends Component<Props, State> {
         }
     }
 
-    getOtherInflectionsDefiningForm() {
+    getOtherInflectionsDefiningForm(word: InflectedWord) {
         let corpus = this.props.corpus
-        let inflection = this.props.word.word.inflection
-        let form = this.props.word.form
+        let inflection = word.word.inflection
+        let form = word.form
 
         let result: Inflection[] = []
 
-        let wordInflectionId = this.props.word.word.inflection.getInflectionId(form) 
+        let wordInflectionId = word.word.inflection.getInflectionId(form) 
 
         corpus.inflections.inflections.forEach((candidate) => {
             if (candidate !== inflection && 
-                candidate.pos == this.props.word.word.inflection.pos &&
+                candidate.pos == word.word.inflection.pos &&
                 candidate.id != wordInflectionId &&
                 !!candidate.endings[form]) {
                 result.push(candidate)
@@ -114,8 +114,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
         return result
     }
 
-    sortInflectionsByDistance(from: Inflection) {
-
+    sortInflectionsByDistance(from: Inflection, word: InflectedWord) {
         let distance: { [id:string]: number } = {}
 
         distance[from.id] = 0
@@ -151,10 +150,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
         while (foundAny)
         
         delete distance[from.id]
-        delete distance[this.props.word.word.inflection.getInflectionId(this.props.word.form)] 
+        delete distance[word.word.inflection.getInflectionId(word.form)] 
 
         return Object.keys(distance).sort((k1, k2) => distance[k1] - distance[k2]).map((id) => inflections.get(id))
-            .filter((i) => !!i.endings[this.props.word.form])
+            .filter((i) => !!i.endings[word.form])
     }
 
     filterInflectionsByKnowledge(inflections: Inflection[], form: string) {
@@ -171,8 +170,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
         return known
     }
 
-    renderStemToInflected(word: InflectableWord, transforms?: Transform[]) {
-        return renderStemToInflected(word, this.props.word.form, this.props.factLinkComponent, transforms)
+    renderStemToInflected(word: InflectableWord, inflectedWord: InflectedWord, transforms?: Transform[]) {
+        return renderStemToInflected(word, inflectedWord.form, this.props.factLinkComponent, transforms)
     }
 
     renderFormName(form: string): any {
@@ -249,12 +248,16 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     
                     { !relativeTo ?
                     
-                        <span> replacing <strong>
-                                { (ending.subtractFromStem ? word.word.stem.substr(-ending.subtractFromStem) : '') + fromEnding.suffix }
-                            </strong> with <strong>
-                                { ending.suffix }
-                            </strong>
-                        </span>
+                        (!ending.subtractFromStem && !fromEnding.suffix ?
+                            <span> adding <strong>{ ending.suffix }</strong>
+                            </span>
+                            :
+                            <span> replacing <strong>
+                                    { (ending.subtractFromStem ? word.word.stem.substr(-ending.subtractFromStem) : '') + fromEnding.suffix }
+                                </strong> with <strong>
+                                    { ending.suffix }
+                                </strong>
+                            </span>)
 
                         :
 
@@ -281,24 +284,23 @@ export default class InflectionFactComponent extends Component<Props, State> {
         </div>
     }
 
-    getExamplesUsingInflection(form: string, inflection: Inflection, count?: number) {
-        return getExamplesUsingInflection(form, inflection, this.props.corpus, this.props.knowledge, this.props.word, count)
+    getExamplesUsingInflection(form: string, inflection: Inflection, inflectedWord: InflectedWord, count?: number) {
+        return getExamplesUsingInflection(form, inflection, this.props.corpus, this.props.knowledge, inflectedWord, count)
     }
 
-    renderForm() {
-        let word = this.props.word
+    renderForm(word: InflectedWord) {
         let form = word.form
         let inflection = word.word.inflection
         let corpus = this.props.corpus
 
         let otherExamplesOfInflection = 
-            this.getExamplesUsingInflection(this.props.word.form, inflection)
+            this.getExamplesUsingInflection(form, inflection, word)
 
         let sameDefaultSuffix = 
-            this.filterOnlySameDefaultSuffix(otherExamplesOfInflection, this.props.word.form, inflection)
+            this.filterOnlySameDefaultSuffix(otherExamplesOfInflection, form, inflection)
 
         let differentDefaultSuffix = 
-            this.filterOnlyDifferentDefaultSuffix(otherExamplesOfInflection, this.props.word.form, inflection)
+            this.filterOnlyDifferentDefaultSuffix(otherExamplesOfInflection, form, inflection)
 
         let inflectionOfForm = corpus.inflections.get(inflection.getInflectionId(form))
 
@@ -345,8 +347,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                                 <ul>
                                     {
-                                        sameDefaultSuffix.slice(0, 3).map((word) => 
-                                            this.renderStemToInflected(word, transforms))
+                                        sameDefaultSuffix.slice(0, 3).map((otherWord) => 
+                                            this.renderStemToInflected(otherWord, word, transforms))
                                     }
                                 </ul>
                             </div>
@@ -366,8 +368,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                                 <ul>
                                     {
-                                        differentDefaultSuffix.slice(0, 3).map((word) => 
-                                            this.renderStemToInflected(word, transforms))          
+                                        differentDefaultSuffix.slice(0, 3).map((otherWord) => 
+                                            this.renderStemToInflected(otherWord, word, transforms))          
                                     }
                                 </ul>
                             </div>
@@ -378,8 +380,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                 {
 
-                    this.filterInflectionsByKnowledge(this.sortInflectionsByDistance(word.word.inflection), form)
-                        .filter((inflection) => this.getExamplesUsingInflection(word.form, inflection, 2).length > 1)
+                    this.filterInflectionsByKnowledge(this.sortInflectionsByDistance(word.word.inflection, word), form)
+                        .filter((inflection) => this.getExamplesUsingInflection(word.form, inflection, word, 2).length > 1)
                         .slice(0, 2)
                         .map((inflection) => 
                         <div key={ inflection.id }>
@@ -389,9 +391,9 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                             <ul>
                                 {
-                                    this.getExamplesUsingInflection(word.form, inflection, 2)
+                                    this.getExamplesUsingInflection(word.form, inflection, word, 2)
                                         .slice(0, 2)
-                                        .map((word) => this.renderStemToInflected(word, transforms))
+                                        .map((otherWord) => this.renderStemToInflected(otherWord, word, transforms))
                                 }
                             </ul>
 
@@ -401,12 +403,12 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 }
 
                 {
-                    this.getHomonymForms().length ? 
+                    this.getHomonymForms(word).length ? 
 
                     <p>
 
                         <strong>{ word.jp }</strong> is also the <strong>{
-                            joinWithAnd(this.getHomonymForms().map((form) => FORMS[form].name))
+                            joinWithAnd(this.getHomonymForms(word).map((form) => FORMS[form].name))
                         }</strong> form.
 
                     </p>
@@ -456,14 +458,23 @@ export default class InflectionFactComponent extends Component<Props, State> {
     }
 
     render() {
-        let word = this.props.word
-        let form = word.form
-        let inflection = word.word.inflection
         let corpus = this.props.corpus
+        let word = this.props.word
+
+        let inflection = this.props.inflection.inflection
+
+        if (!word) {
+            let inflectable = corpus.facts.facts.find(f => f instanceof InflectableWord 
+                && f.inflection == inflection) as InflectableWord
+
+            word = inflectable.inflect(this.props.inflection.form) 
+        }
+
+        let form = word.form
 
         let components = FORMS[form].getComponents()
 
-        let inflectionFact = inflection.getFact(this.props.word.form)
+        let inflectionFact = inflection.getFact(form)
         let related = (inflectionFact.required || []).concat(components)
 
         return <div className='inflectionFact'>
@@ -477,7 +488,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
             <div className='columns'>
                 <div className='main'>
-                    { this.renderForm() }
+                    { this.renderForm(word) }
                 </div>
                 {
                     related.length ?
@@ -517,7 +528,7 @@ export function renderStemToInflected(word: InflectableWord, form: string,
     return <li className='stemToInflected' key={ word.getId() }>
         <span className='clickable'>{ 
             React.createElement(factLinkComponent, 
-                { fact: word.getWordFact(), context: inflected }, 
+                { fact: word.getWordFact() }, 
                 word.getDefaultInflection().jp) 
             }</span>&nbsp;<span className='arrow'>
             →
