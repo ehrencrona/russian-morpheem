@@ -29,7 +29,7 @@ export function notify(message: string, author: string, channel: Channel) {
 }
 
 function getOpenLink(sentence: Sentence) {
-    return ' <http://grammar.ru.morpheem.com#' + sentence.id + '|Open>'
+    return ' <http://grammar.ru.morpheem.com/admin.html#' + sentence.id + '|Open>'
 }
 
 export function notifyAdd(sentence : Sentence) {
