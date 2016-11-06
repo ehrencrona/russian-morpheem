@@ -130,6 +130,10 @@ export class InflectionForm extends AbstractFact {
             addForm('short')
         }
 
+        if (this.number == Number.PLURAL) {
+            addForm('pl')
+        }
+
         if (this.tense == Tense.PAST) {
             addForm('past')
         }

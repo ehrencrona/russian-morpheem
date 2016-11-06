@@ -58,8 +58,12 @@ export default function guidePageComponent(props: Props) {
         let phrase = fact
 
         if (!title) {
-            title = phrase.getWords().map(w => w.toText()).join(' and ') 
-                + ' with the '
+            let words = phrase.getWords()
+
+            title = (words.length ? 
+                    words.map(w => w.toText()).join(' and ') + ' with ' 
+                    : '') 
+                + 'the '
                 + phrase.getCases().map(c => CASES[c]).join(' and ')
                 + ' e.g. '
                 + phrase.description

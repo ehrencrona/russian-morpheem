@@ -10,6 +10,7 @@ import { CaseStudy } from './PhrasePattern'
 import { Match } from './Match'
 import MatchContext from './MatchContext'
 
+import PhraseMatch from './PhraseMatch'
 import Words from '../Words'
 import InflectedWord from '../InflectedWord'
 import Word from '../Word'
@@ -135,6 +136,12 @@ export default class Phrase extends AbstractFact {
 
         this.patterns.forEach((pattern) => {
             let words = pattern.getWords() 
+
+            if (words.size == 0 && 
+                pattern.wordMatches.length == 1 && 
+                pattern.wordMatches[0] instanceof PhraseMatch) {
+                return
+            }
 
             if (!allWords) {
                 allWords = words

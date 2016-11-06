@@ -3,7 +3,7 @@ import * as express from 'express'
 import FactComponent from '../../shared/guide/fact/FactComponent'
 import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
-import { InflectionForm } from '../../shared/inflection/InflectionForms'
+import { InflectionForm, FORMS } from '../../shared/inflection/InflectionForms'
 import AbstractAnyWord from '../../shared/AbstractAnyWord'
 
 let sitemap = require('express-sitemap')
@@ -27,6 +27,10 @@ export default function(corpus: Corpus) {
                 map[getGuideUrl(fact)] = get 
             }
         })
+
+        for (let formId in FORMS) {
+            map[getGuideUrl(FORMS[formId])] = get 
+        }
 
         var host = 'russian.morpheem.com'
 

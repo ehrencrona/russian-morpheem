@@ -188,7 +188,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         const POS = [ 'n', 'adj', 'v', 'pron' ]
 
         return <div className='inflectionForm'>
-            <h1>The { this.props.form.name }</h1>
+            <h1>The { form.name }</h1>
             <div className='columns'>
                 <div className='main'>
                     {
@@ -232,13 +232,13 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         <h3>Expressions</h3>
                         { !this.state.allPhrases ?
                             <div>
-                                These are the most important expressions using the { this.props.form.name }:
+                                These are the most important expressions using the { form.name }:
                                 
                                 <div className='seeAll' onClick={ () => this.setState({ allPhrases : true })}>See all</div>
                             </div>
                             :                        
                             <div>
-                                These are all expressions using the { this.props.form.name } (in order of commonness):
+                                These are all expressions using the { form.name } (in order of commonness):
                                 
                                 <div className='seeAll' onClick={ () => this.setState({ allPhrases : false })}>See less</div>
                             </div>
@@ -260,7 +260,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                         <ul>
                         {
-                            (this.props.form.required || [])
+                            (form.required || [])
+                            .concat(form.getComponents())
                             .concat(
                                 (factoid ? 
                                     factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
