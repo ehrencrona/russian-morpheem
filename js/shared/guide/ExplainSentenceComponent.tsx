@@ -51,19 +51,20 @@ export default class InflectionTableComponent extends Component<Props, State> {
             return null
         } 
 
-        return [
-            <div key='jp' className='jp'>{ word.toText() }</div>,
-            <div key='en' className='en'>{ word.getEnglish() }</div>
-        ]
+        return React.createElement(this.props.factLinkComponent, { fact: word.getWordFact() }, 
+            [
+                <div key='jp' className='jp'>{ word.toText() }</div>,
+                <div key='en' className='en'>{ word.getEnglish() }</div>
+            ])
     }
 
     renderInflectionOfWord(studyWord: StudyWord) {
         let word: AnyWord = studyWord.word
 
         if (word instanceof InflectedWord && word.form != word.word.inflection.defaultForm) {
-            return [
-                <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>
-            ]
+            return React.createElement(this.props.factLinkComponent, 
+                    { fact: word.word.inflection.getFact(word.form), context: word },
+                <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>)
         }
     }
 
@@ -111,8 +112,6 @@ export default class InflectionTableComponent extends Component<Props, State> {
                 facts: this.props.corpus.facts,
                 study: CaseStudy.STUDY_BOTH
             })
-
-
 
             let words = studyWords.map(st => st as StudyWord)
             let tokens = studyWords.slice(0)
@@ -203,8 +202,14 @@ export default class InflectionTableComponent extends Component<Props, State> {
                             if (lastPhrase != studyPhrase) {
                                 if (lastPhrase) {
                                     cells.push(<td key={ cells.length } className='phrase' 
-                                        colSpan={ colSpan } >{ lastPhrase.getHint() }
-                                        <div className='phraseName'>{ lastPhrase.phrase.en }</div>    
+                                        colSpan={ colSpan } >{
+                                        React.createElement(this.props.factLinkComponent, 
+                                            { fact: lastPhrase.phrase },
+                                            [
+                                                lastPhrase.getHint(), 
+                                                <div className='phraseName'>{ lastPhrase.phrase.en }</div>
+                                            ])    
+                                    }
                                     </td>)
                                 }
 
