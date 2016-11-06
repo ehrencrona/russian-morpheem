@@ -187,6 +187,9 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/form/:fact`, getGuide(corpus))    
 
     app.get(`/sitemap.xml`, getSitemap(corpus))    
+
+    app.get(`/`, (req, res) => 
+        res.redirect('/word/nominative'))    
 }
 
 readCorpus('ru', true).catch((e) => {
@@ -198,10 +201,10 @@ readCorpus('ru', true).catch((e) => {
 
     return corpus
 }).then((corpus) => {
-    app.use('/', express.static('public'));
-
     listenForChanges(corpus)
     registerRoutes(corpus)
+
+    app.use('/', express.static('public'));
 
     app.listen(port)
 }).catch((e) => {
