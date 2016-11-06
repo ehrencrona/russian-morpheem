@@ -13,5 +13,5 @@ export default function getGuideUrl(fact: Fact, context?: InflectedWord) {
         type = 'phrase'
     }
 
-    return `/${type}/${ fact.getId()}${ context ? '?word=' + context.getId() : '' }`
+    return `/${type}/${ fact.getId()}${ context ? '?word=' + encodeURI(context.getId()) : '' }`
 }

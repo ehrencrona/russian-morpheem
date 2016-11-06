@@ -44,6 +44,16 @@ export default function(corpus: Corpus) {
             context = corpus.words.get(req.query.word)
         }
 
+        let canonical = getGuideUrl(fact, context)
+
+        if (req.url != canonical) {
+            console.warn(`Non-canonical URL ${ decodeURI(req.url) }. Using ${ decodeURI(canonical) } instead.`)
+
+            res.redirect(301, canonical)
+
+            return
+        }
+
         let html = DOMServer.renderToString(
             <GuidePageComponent
                 corpus={ corpus }
