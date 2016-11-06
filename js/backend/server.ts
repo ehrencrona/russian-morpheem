@@ -189,7 +189,7 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/sitemap.xml`, getSitemap(corpus))    
 
     app.get(`/`, (req, res) => 
-        res.redirect('/word/nominative'))    
+        res.redirect('/form/nominative'))    
 }
 
 readCorpus('ru', true).catch((e) => {
