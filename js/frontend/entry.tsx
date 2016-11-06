@@ -5,6 +5,8 @@ import LoginContainer from './LoginContainer'
 import StudyContainerComponent from './study/StudyContainerComponent'
 import TabSetComponent from './TabSetComponent'
 
+import ExplainSentenceComponent from '../shared/guide/ExplainSentenceComponent'
+
 import 'drag-drop-webkit-mobile';
 import xr from 'xr';
 
@@ -24,7 +26,12 @@ function renderIntoId(component, elementId) {
         );
     }
 }
-
+/*
+renderIntoId(
+    <LoginContainer factory={ createFactory(ExplainSentenceComponent) }/>,
+    'react-dev-root'
+)
+*/
 renderIntoId(
     <LoginContainer factory={ createFactory(TabSetComponent) }/>,
     'react-admin-root'

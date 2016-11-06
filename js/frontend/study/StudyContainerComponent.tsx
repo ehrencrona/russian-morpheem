@@ -390,8 +390,9 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 knowledge={ this.knowledge }
                 onClose={ () => this.setState({ explainFact: null }) }
                 factLinkComponent={ (props) => 
-                    <span onClick={ () => 
-                        this.setState({ explainFact: props.fact, explainContext: props.context }) 
+                    <span onClick={ () => {
+                        this.setState({ explainFact: props.fact as Fact, explainContext: props.context }) 
+                    } 
                     }>{ props.children }</span> 
                 }
             />

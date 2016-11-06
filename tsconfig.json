@@ -12,8 +12,9 @@
     ],
     "include": [
         "js/**/*.ts*"
-    ],
+    ]
+    /* ,
     "exclude": [
         "js/frontend"
-    ]
+    ] */
 }

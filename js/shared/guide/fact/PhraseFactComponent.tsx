@@ -79,19 +79,24 @@ export default class PhraseFactComponent extends Component<Props, State> {
         let wordIndexes = match.words.map((i) => i.index)
 
         return <li key={ match.sentence.id }>
-            <span 
-                dangerouslySetInnerHTML={ { __html: 
-                match.sentence.innerToString((word, first, index) => {
-                    let wordString = htmlEscape(word.toString())
+            {
+                React.createElement(this.props.factLinkComponent, { fact: match.sentence }, 
+                    <span 
+                        dangerouslySetInnerHTML={ { __html: 
+                        match.sentence.innerToString((word, first, index) => {
+                            let wordString = htmlEscape(word.toString())
 
-                    if (wordIndexes.indexOf(index) >= 0) {
-                        return '<span class="match">' + wordString + '</span> ' 
-                    }
-                    else {
-                        return wordString
-                    }
-                })
-            } }/>
+                            if (wordIndexes.indexOf(index) >= 0) {
+                                return '<span class="match">' + wordString + '</span> ' 
+                            }
+                            else {
+                                return wordString
+                            }
+                        })
+                    } }/>
+                )
+            }
+            
 
             <div className='en'>{
                 match.sentence.en()

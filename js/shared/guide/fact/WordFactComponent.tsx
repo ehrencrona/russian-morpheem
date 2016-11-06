@@ -327,10 +327,12 @@ export default class WordFactComponent extends Component<Props, State> {
                         {
                             (this.state.sentences || []).map(sentence => 
                                 <li key={ sentence.sentence.id }>
-                                    <div dangerouslySetInnerHTML={ { __html: 
-                                        this.tokensToHtml(sentence.tokens)
-                                    }}/>
-
+                                    {
+                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
+                                            <div dangerouslySetInnerHTML={ { __html: 
+                                                this.tokensToHtml(sentence.tokens)
+                                            }}/>)
+                                    }
                                     <div className='en' dangerouslySetInnerHTML={ { __html: 
                                         this.highlightTranslation(sentence) } }/>
                                 </li>

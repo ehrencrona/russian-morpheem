@@ -7,6 +7,7 @@ import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 
 import Corpus from '../../shared/Corpus'
 import Grammars from '../../shared/Grammars'
+import Sentence from '../../shared/Sentence'
 
 import getGuideUrl from './getGuideUrl'
 
@@ -64,7 +65,9 @@ export default function(corpus: Corpus) {
                     context={ context }
                     onClose={ () => {} }
                     factLinkComponent={ (props) => {
-                        return <a href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
+                        return <a 
+                            rel={ props.fact instanceof Sentence ? 'nofollow' : '' }
+                            href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
                     }
                     knowledge={ new NaiveKnowledge() }
                 />

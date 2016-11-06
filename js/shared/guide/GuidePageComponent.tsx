@@ -25,7 +25,17 @@ export default function guidePageComponent(props: Props) {
     let description =  ''
     let title = ''
 
-    let factoid = props.corpus.factoids.getFactoid(props.fact)
+    let factoid 
+    
+    if (props.fact) {
+        factoid = props.corpus.factoids.getFactoid(props.fact)
+    }
+    else {
+        factoid = {
+            explanation: '',
+            relations: []
+        }
+    }
 
     if (factoid.name) {
         title = factoid.name
@@ -102,7 +112,7 @@ export default function guidePageComponent(props: Props) {
         }
     }
 
-    if (!description) {
+    if (fact && !description) {
         let index = props.corpus.sentences.getSentencesByFact(props.corpus.facts)
 
         let sentences = index[fact.getId()]
@@ -125,8 +135,8 @@ export default function guidePageComponent(props: Props) {
         }
     }
     
-    if (!title) {
-        title = props.fact.getId()
+    if (fact && !title) {
+        title = fact.getId()
     }
 
     return <html>

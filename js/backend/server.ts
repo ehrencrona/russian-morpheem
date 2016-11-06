@@ -17,6 +17,7 @@ import { generateInflection } from '../shared/GenerateInflection'
 
 import getSitemap from './route/getSitemap'
 import getGuide from './route/getGuide'
+import getGuideSentence from './route/getGuideSentence'
 import addFact from './route/addFact'
 import deleteFact from './route/deleteFact'
 import setFact from './route/setFact'
@@ -185,6 +186,8 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/word/:fact`, getGuide(corpus))    
     app.get(`/phrase/:fact`, getGuide(corpus))    
     app.get(`/form/:fact`, getGuide(corpus))    
+
+    app.get(`/sentence/:sentence`, getGuideSentence(corpus))    
 
     app.get(`/sitemap.xml`, getSitemap(corpus))    
 

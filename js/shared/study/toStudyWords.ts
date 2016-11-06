@@ -50,7 +50,7 @@ export interface WordBlock {
     match: WordMatch
 }
 
-function findWordBlocks(phraseMatch: Match, words: StudyWord[], offset?: number) {
+export function findWordBlocks(phraseMatch: Match, words: StudyWord[], offset?: number) {
     let result: WordBlock[] = []
     offset = offset || 0
     let lastMatchIndex
@@ -93,7 +93,7 @@ function findWordBlocks(phraseMatch: Match, words: StudyWord[], offset?: number)
     return result
 }
 
-function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens: StudyToken[], wordBlocks: WordBlock[], phraseMatch: Match) {
+export function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens: StudyToken[], wordBlocks: WordBlock[], phraseMatch: Match) {
     let fragments = phraseMatch.pattern.getEnglishFragments()
 
     let atWordBlock = 0, atFragment = 0
@@ -147,7 +147,9 @@ function replaceWordsWithStudyPhrase(phrase: Phrase, words: StudyWord[], tokens:
     }
 }
 
-export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyToken[] {
+export default toStudyWords
+
+export function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyToken[] {
     let words: StudyWord[] = []
     
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
@@ -161,8 +163,6 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
             console.warn(`Phrase ${phrase.id} does not match sentence ${sentence.id}.`)
             return
         }
-
-        let wordBlocks: WordBlock[] = findWordBlocks(phraseMatch, words)
 
         let wordsFact: StudyFact = { fact: phrase, words: [] } 
         let caseFacts: { [id: string]: StudyFact } = {}
@@ -204,7 +204,8 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
                     lastWordMatch !== m.wordMatch &&
                     !isStudyingThisPhrase &&
                     isStudyingPhraseCase(caseStudied)) {
-                    replaceWordsWithStudyPhrase(wordMatch.phrase, words, tokens, findWordBlocks(m.childMatch, words, m.index), m.childMatch)
+                    replaceWordsWithStudyPhrase(wordMatch.phrase, words, tokens, 
+                        findWordBlocks(m.childMatch, words, m.index), m.childMatch)
                 }
 
                 lastWordMatch = m.wordMatch
@@ -214,6 +215,8 @@ export default function toStudyWords(sentence: Sentence, studiedFacts: Fact[], c
         })
 
         if (isStudyingThisPhrase) {
+            let wordBlocks: WordBlock[] = findWordBlocks(phraseMatch, words)
+
             replaceWordsWithStudyPhrase(phrase, words, tokens, wordBlocks, phraseMatch)
         }
     }

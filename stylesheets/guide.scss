@@ -270,3 +270,66 @@ a {
         @extend .seeAlso;   
     }
 }
+
+$color2: #2CAAA9;
+
+
+table.explainSentence {
+    font-weight: normal;
+    font-size: 14pt;
+    border-collapse: collapse;
+
+
+    tr {
+        font-size: 80%;
+
+        td {
+            vertical-align: top;
+            padding: 2 * $unit;
+
+            .jp::before {
+                @extend .seeAlso;
+            }
+
+            .jp {
+                font-weight: 600;
+                margin-left: $seeAlsoSize + $seeAlsoMargin;
+                text-indent: -($seeAlsoSize + $seeAlsoMargin);
+            }
+
+            .en {
+                margin-left: $seeAlsoSize + $seeAlsoMargin;
+            }
+
+            .form {
+                border-top: 1px $color2 solid;
+                text-transform: uppercase;
+                color: $color2;
+                font-size: 80%;
+                padding: 1px;
+                display: block;
+            }
+
+            &.phrase {
+                border-top: solid 2px $color2;
+
+                .phraseName::before {
+                    @extend .seeAlso;
+                }
+
+                .phraseName {
+                    margin-top: 0.1em;
+                    font-weight: 600;
+                    margin-left: $seeAlsoSize + $seeAlsoMargin;
+                    text-indent: -($seeAlsoSize + $seeAlsoMargin);
+                }
+            }
+        }
+    }
+
+    tr.jp {
+        font-size: 120%;
+        font-weight: 600;
+    }
+
+}
