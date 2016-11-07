@@ -30,6 +30,8 @@ export default function(corpus: Corpus) {
                 throw new Error('Inconsistent ID.');
             }
 
+            phrase.setCorpus(corpus)
+
             let author = getAuthor(req).name
 
             let previous = corpus.phrases.get(phrase.id)
