@@ -19,9 +19,6 @@ export default function getWordTranslationInSentence(word: AnyWord, sentence: Se
     let sentenceTranslation = sentence.en().toLowerCase()
 
     for (let i = 1; i < word.getTranslationCount(); i++) {
-        // note that we are looking for the inflected word but then 
-        // actually using the non-inflected
-
         let wordTranslation = word.getEnglish('', i)
         let index = sentenceTranslation.indexOf(wordTranslation.toLowerCase())
         let end = index + wordTranslation.length

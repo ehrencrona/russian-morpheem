@@ -87,14 +87,6 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
             let translation = getWordTranslationInSentence(word, this.props.sentence)
 
-            if (FORMS[word.form].grammaticalCase == GrammaticalCase.DAT) {
-                translation.string = 'to ' + translation.string
-            }
-
-            if (FORMS[word.form].grammaticalCase == GrammaticalCase.GEN) {
-                translation.string = 'of ' + translation.string
-            }
-
             if (word.word.getEnglish('', translation.index) != translation.string) {
                 content.push(
                     <div key='en' className='en'>{ translation.string }</div>)
@@ -175,23 +167,36 @@ export default class InflectionTableComponent extends Component<Props, State> {
             replaceWordsWithStudyPhrase(phrase, words, tokens,
                 findWordBlocks(match, words), match)
 
+            let lastPhrase: StudyPhrase
+
             tokens.forEach(maybePhrase => {
 
                 if (maybePhrase instanceof StudyPhrase) {
+                    let phrase: StudyPhrase = maybePhrase
 
-                    maybePhrase.words.forEach(word => {
+                    // if there is an "any" but not actually a word between 
+                    // the two: merge the phrases
+                    if (!phrase.getHint() && lastPhrase) {
+                        lastPhrase.words = lastPhrase.words.concat(phrase.words)
 
+                        phrase = lastPhrase
+                    }
+
+                    phrase.words.forEach(word => {
                         let index = studyWords.indexOf(word)
 
                         if (index >= 0) {
-                            freeRow[index] = maybePhrase
+                            freeRow[index] = phrase
                         }
                         else {
                             console.warn('Could not locate word')
                         }
-
                     })
 
+                    lastPhrase = phrase
+                }
+                else {
+                    lastPhrase = null
                 }
 
             })
@@ -223,6 +228,13 @@ export default class InflectionTableComponent extends Component<Props, State> {
         let sentence = this.props.sentence
         
         let studyWords = toStudyWords(sentence, [], this.props.corpus)
+
+        studyWords.forEach(studyWord => {
+            if (studyWord instanceof StudyWord) {
+                studyWord.en = getWordTranslationInSentence(studyWord.word, this.props.sentence).string
+            }
+        })
+
 
         let phraseCells = this.getPhraseCells(studyWords, sentence)
 
