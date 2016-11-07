@@ -186,7 +186,7 @@ export default class Phrase extends AbstractFact {
             }
         })
 
-        return Array.from(allCases) 
+        return allCases ? Array.from(allCases) : [] 
     }
 
     setCorpus(corpus: Corpus) {

@@ -9,7 +9,7 @@ import Sentence from '../../shared/Sentence'
 
 import Fact from '../../shared/fact/Fact'
 import Inflection from '../../shared/inflection/Inflection'
-import { FORMS } from '../../shared/inflection/InflectionForms'
+import { FORMS, GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
@@ -50,9 +50,9 @@ export default class InflectionTableComponent extends Component<Props, State> {
             word = word.word
         }
 
-        if (Words.PUNCTUATION.indexOf(word.toText()) >= 0) {
+        if (isPunctuation(word)) {
             return null
-        } 
+        }
 
         let translation = getWordTranslationInSentence(word, this.props.sentence)
 
@@ -78,20 +78,42 @@ export default class InflectionTableComponent extends Component<Props, State> {
     renderInflectionOfWord(studyWord: StudyWord) {
         let word: AnyWord = studyWord.word
 
-        if (word instanceof InflectedWord && word.form != word.word.inflection.defaultForm) {
+        let result = []
+
+        if (word instanceof InflectedWord && word != word.word.getDefaultInflection()) {
             let content = [
                 <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>
             ]
 
-            if (word.word.getEnglish() != word.getEnglish()) {
-                content.push(
-                    <div key='en' className='en'>{ word.getEnglish() }</div>)
+            let translation = getWordTranslationInSentence(word, this.props.sentence)
+
+            if (FORMS[word.form].grammaticalCase == GrammaticalCase.DAT) {
+                translation.string = 'to ' + translation.string
             }
 
-            return React.createElement(this.props.factLinkComponent, 
+            if (FORMS[word.form].grammaticalCase == GrammaticalCase.GEN) {
+                translation.string = 'of ' + translation.string
+            }
+
+            if (word.word.getEnglish('', translation.index) != translation.string) {
+                content.push(
+                    <div key='en' className='en'>{ translation.string }</div>)
+            }
+
+            result.push(React.createElement(this.props.factLinkComponent, 
                     { fact: word.word.inflection.getFact(word.form), context: word },
-                content)
+                content))
         }
+
+        if (word.pos == 'v' && this.props.corpus.facts.getTagsOfFact(word.getWordFact()).indexOf('perfective') >= 0) {
+            let fact = this.props.corpus.facts.get('perfective')
+
+            result.push(React.createElement(this.props.factLinkComponent, 
+                    { fact: fact },
+                <div key='jp' className='jp'>perfective</div>))
+        }
+
+        return result
     }
 
     getPhraseCells(studyWords: StudyToken[], sentence: Sentence) {
@@ -237,8 +259,13 @@ export default class InflectionTableComponent extends Component<Props, State> {
                                 let translation = ''
 
                                 if (rowIndex == 0 && !phraseCells.find(row => !!row[wordIndex-1])) {
-                                    translation = (article ? '(' + article + ') ' : '') + 
-                                        studyWords[wordIndex-1].getHint()
+                                    let studyWord = studyWords[wordIndex-1] 
+                                    let hint = studyWord.getHint()
+
+                                    let word = (studyWord as StudyWord).word
+
+                                    translation = (article ? '(' + article + ') ' : '') +
+                                        (isPunctuation(word) ? word.jp : studyWord.getHint())
                                 }
 
                                 cells.push(<td key={ cells.length }>{
@@ -254,8 +281,8 @@ export default class InflectionTableComponent extends Component<Props, State> {
                                             { fact: lastPhrase.phrase },
                                             [
                                                 lastPhrase.getHint(), 
-                                                <div className='phraseName'>{ lastPhrase.phrase.en }</div>
-                                            ])    
+                                                <div className='phraseName'>see "{ lastPhrase.phrase.en }"</div>
+                                            ])
                                     }
                                     </td>)
                                 }
@@ -302,4 +329,8 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
     }
 
+}
+
+function isPunctuation(word: AnyWord) {
+    return Words.PUNCTUATION.indexOf(word.toText()) >= 0
 }

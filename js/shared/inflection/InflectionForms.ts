@@ -226,6 +226,7 @@ addForm('imprpl', 'imperative plural', { number: Number.PLURAL, command: Command
 addForm('inf', 'infinitive', {})
 
 addForm('past', 'past', { tense: Tense.PAST })
+addForm('present', 'present', { tense: Tense.PRESENT })
 
 addForm('m', 'nominative masculine', { gender: Gender.M, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
 addForm('f', 'nominative feminine', { gender: Gender.F, number: Number.SINGULAR, grammaticalCase: GrammaticalCase.NOM })
