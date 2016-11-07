@@ -101,7 +101,7 @@ export default class Phrase extends AbstractFact {
     }
 
     // todo: join with getCases()? note that the semantics are slightly different: getCases requires
-    // the case in all phrases and this only in any. getCaseFact also has a different definition of case.
+    // the case in all phrases and this only in any.
     getCaseFacts() {
         if (!this.casesCache) {
             this.casesCache = []
@@ -157,7 +157,7 @@ export default class Phrase extends AbstractFact {
             }
         })
 
-        return Array.from(allWords)
+        return allWords ? Array.from(allWords) : []
     }
 
     getCases(): GrammaticalCase[] {
@@ -167,6 +167,12 @@ export default class Phrase extends AbstractFact {
 
         phrase.patterns.forEach((pattern) => {
             let patternCases = pattern.getCases()
+
+            if (patternCases.size == 0 && 
+                pattern.wordMatches.length == 1 && 
+                pattern.wordMatches[0] instanceof PhraseMatch) {
+                return
+            }
 
             if (!allCases) {
                 allCases = patternCases

@@ -68,6 +68,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
             
             if ((!this.props.word && inherited) ||
                 (this.props.hideForms && this.props.hideForms[form] != undefined)) {
+
                 return <div key={form}/>
             }
 
@@ -82,7 +83,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
         }
 
         return (
-            <div className='inflections'>
+            <div className='inflections' key={ this.props.inflection.getId() }>
                 <table>
                 { table.cols.length > 1 ?                            
                     <thead>

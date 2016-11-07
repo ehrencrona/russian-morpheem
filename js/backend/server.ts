@@ -195,6 +195,22 @@ function registerRoutes(corpus: Corpus) {
         res.redirect('/form/nominative'))    
 }
 
+function triggerLivereload() {
+    var livereload = require('livereload');
+    var lrserver = livereload.createServer();
+
+    let waitForConnect = () => {
+        if (lrserver.server.clients.length) {
+            lrserver.refresh('/js/app.js')
+        }
+        else {
+            setTimeout(waitForConnect, 1000)
+        }
+    }
+
+    waitForConnect()
+}
+
 readCorpus('ru', true).catch((e) => {
     console.log(e.stack)
 
@@ -210,6 +226,10 @@ readCorpus('ru', true).catch((e) => {
     app.use('/', express.static('public'));
 
     app.listen(port)
+
+    if (process.env['ENV'] == 'dev') {
+        triggerLivereload()
+    }
 }).catch((e) => {
     console.error(e)
 })

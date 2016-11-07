@@ -23,8 +23,11 @@ import EnglishPatternFragment from './EnglishPatternFragment'
 import PhraseMatch from './PhraseMatch'
 import Phrase from './Phrase'
 import AdverbWordMatch from './AdverbWordMatch'
+import CaseStudyMatch from './CaseStudyMatch'
 import MatchContext from './MatchContext'
 import { Match, WordMatched } from './Match'
+
+import findPotentialArticle from './findPotentialArticle'
 
 export enum CaseStudy {
     STUDY_CASE, STUDY_BOTH
@@ -421,7 +424,6 @@ class Fragment implements EnglishPatternFragment {
             
             do {
                 const ARTICLE_PLACEHOLDER = '(article)'
-                const ARTICLES = ['a ', 'an ', 'the ']
 
                 atArticle = result.indexOf(ARTICLE_PLACEHOLDER, atArticle + 1)
 
@@ -429,33 +431,12 @@ class Fragment implements EnglishPatternFragment {
                     let following = result.substr(atArticle + ARTICLE_PLACEHOLDER.length)
                     let m = following.match(/\w+/)
 
-                    if (m) {
-                        let nextWord = m[0]
+                    let nextWord = (m && m[0]) || following
 
-                        let i = -1
-                        let en = match.sentence.en()
-                        let foundArticle = false, foundWord = false
+                    let article = findPotentialArticle(match.sentence.en(), nextWord) 
 
-                        do {
-                            i = en.indexOf(nextWord, i+1)
-
-                            if (i >= 0) {
-                                foundWord = true
-                                ARTICLES.forEach(article => {
-                                    if (en.substr(i-article.length, article.length).toLowerCase() == article && 
-                                        (i == article.length || !en[i-article.length-1].match(/\w/)) &&
-                                        following.substr(0, article.length).toLowerCase() != article) {
-                                        result = result.substr(0, atArticle) + article + following
-                                        foundArticle = true
-                                    }
-                                })
-                            }
-                        }
-                        while (i >= 0 && !foundArticle)
-
-                        if (!foundWord) {
-                            console.log(`did not find "${nextWord}" in "${en}"`)
-                        }
+                    if (article) {
+                        result = result.substr(0, atArticle) + article + following
                     }
                 }
             } while (atArticle >= 0)
@@ -637,7 +618,11 @@ export default class PhrasePattern {
     getWords(): Set<AnyWord> {
         let result = new Set<AnyWord>()
 
-        let addWord = (word: AnyWord) => result.add(word)
+        let addWord = (word: AnyWord) => {
+            if (Words.PUNCTUATION.indexOf(word.toText()) < 0) {
+                result.add(word)
+            }
+        }
 
         this.wordMatches.forEach((wordMatch) => {
             if (wordMatch instanceof WordInFormMatch) {
@@ -656,10 +641,8 @@ export default class PhrasePattern {
         let result = new Set<GrammaticalCase>()
 
         this.wordMatches.forEach((wordMatch) => {
-            let form = wordMatch.getForm()
-
-            if (form) {
-                let grammaticalCase = form.grammaticalCase
+            if (wordMatch.isCaseStudy()) {
+                let grammaticalCase = (wordMatch as CaseStudyMatch).getCaseStudied()
 
                 if (grammaticalCase) {
                     result.add(grammaticalCase)

@@ -1,7 +1,8 @@
 
 import { GrammaticalCase } from '../inflection/InflectionForms'
+import WordMatch from './WordMatch'
 
-interface CaseStudyMatch {
+interface CaseStudyMatch extends WordMatch {
 
     isCaseStudy(): boolean
 

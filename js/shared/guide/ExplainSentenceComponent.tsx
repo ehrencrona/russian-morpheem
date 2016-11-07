@@ -14,6 +14,7 @@ import { FORMS } from '../../shared/inflection/InflectionForms'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
+import findPotentialArticle from '../../shared/phrase/findPotentialArticle'
 
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
@@ -40,7 +41,7 @@ let React = { createElement: createElement }
 
 export default class InflectionTableComponent extends Component<Props, State> {
 
-    renderMeaningOfWord(studyWord: StudyWord) {
+    renderMeaningOfWord(studyWord: StudyWord, forceTranslation: boolean) {
         let word: AnyWord = studyWord.word
 
         if (word instanceof InflectedWord) {
@@ -51,20 +52,44 @@ export default class InflectionTableComponent extends Component<Props, State> {
             return null
         } 
 
-        return React.createElement(this.props.factLinkComponent, { fact: word.getWordFact() }, 
-            [
-                <div key='jp' className='jp'>{ word.toText() }</div>,
-                <div key='en' className='en'>{ word.getEnglish() }</div>
-            ])
+        let translate = forceTranslation || word.getEnglish() != studyWord.getHint()
+
+        let lines = [
+            <div key='jp' className='jp'>{ word.toText() }</div>,
+        ]
+
+        if (translate) {
+            let translation 
+
+            if (word.pos == 'v') {
+                translation = 'to ' + word.getEnglish('inf')                
+            }
+            else {
+                translation = word.getEnglish() 
+            }
+            
+            lines.push(<div key='en' className='en'>{ translation }</div>)
+        }
+
+        return React.createElement(this.props.factLinkComponent, { fact: word.getWordFact() }, lines)
     }
 
     renderInflectionOfWord(studyWord: StudyWord) {
         let word: AnyWord = studyWord.word
 
         if (word instanceof InflectedWord && word.form != word.word.inflection.defaultForm) {
+            let content = [
+                <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>
+            ]
+
+            if (word.word.getEnglish() != word.getEnglish()) {
+                content.push(
+                    <div key='en' className='en'>{ word.getEnglish(word.form) }</div>)
+            }
+
             return React.createElement(this.props.factLinkComponent, 
                     { fact: word.word.inflection.getFact(word.form), context: word },
-                <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>)
+                content)
         }
     }
 
@@ -145,6 +170,24 @@ export default class InflectionTableComponent extends Component<Props, State> {
         return rows
     }
 
+    getPossibleArticle(wordIndex: number, studyWords: StudyToken[]) {
+        let np = this.props.corpus.phrases.get('auto-np')
+
+        if (!np) {
+            return ''
+        }
+
+        let match = np.match({
+            sentence: this.props.sentence,
+            words: this.props.sentence.words.slice(wordIndex),
+            facts: this.props.corpus.facts
+        }, true)
+
+        if (match) { 
+            return findPotentialArticle(this.props.sentence.en(), studyWords[wordIndex].getHint())
+        }
+    }
+
     render() {
         let sentence = this.props.sentence
         
@@ -172,31 +215,26 @@ export default class InflectionTableComponent extends Component<Props, State> {
                 }
                 </tr>
 
-                <tr>{
-                    studyWords.map((sw, index) => {
-
-                        return <td key={ index } >{ sw instanceof StudyWord ? this.renderMeaningOfWord(sw) : null }</td>
-
-                    })
-                }</tr>
-
-                <tr>{
-                    studyWords.map((sw, index) => {
-
-                        return <td key={ index } >{ sw instanceof StudyWord ? this.renderInflectionOfWord(sw) : null }</td>
-
-                    })
-                }</tr>
-
                 {
-                    phraseCells.map((row, index) => {
+                    phraseCells.map((row, rowIndex) => {
                         let cells = []
                         let lastPhrase: StudyPhrase
                         let colSpan
 
-                        let onPhrase = studyPhrase => {
+                        let onPhrase = (studyPhrase, wordIndex) => {
                             if (lastPhrase === null) {
-                                cells.push(<td key={ cells.length }></td>)
+                                let article = this.getPossibleArticle(wordIndex-1, studyWords)
+
+                                let translation = ''
+
+                                if (rowIndex == 0 && !phraseCells.find(row => !!row[wordIndex-1])) {
+                                    translation = (article ? '(' + article + ') ' : '') + 
+                                        studyWords[wordIndex-1].getHint()
+                                }
+
+                                cells.push(<td key={ cells.length }>{
+                                    translation 
+                                }</td>)
                             }
 
                             if (lastPhrase != studyPhrase) {
@@ -224,13 +262,32 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
                         row.forEach(onPhrase)
 
-                        onPhrase(null)
+                        onPhrase(null, row.length)
 
-                        return <tr key={ index }>{
+                        return <tr key={ rowIndex }>{
                             cells
                         }</tr>
                     })
                 }
+
+                <tr>{
+                    studyWords.map((sw, index) => {
+
+                        return <td key={ index } >{ sw instanceof StudyWord 
+                            ? this.renderMeaningOfWord(sw, !!phraseCells.find(row => !!row[index])) 
+                            : null }</td>
+
+                    })
+                }</tr>
+
+                <tr>{
+                    studyWords.map((sw, index) => {
+
+                        return <td key={ index } >{ sw instanceof StudyWord ? this.renderInflectionOfWord(sw) : null }</td>
+
+                    })
+                }</tr>
+
             </tbody>
         </table>
 

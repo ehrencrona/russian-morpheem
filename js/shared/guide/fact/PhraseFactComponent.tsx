@@ -50,6 +50,7 @@ import marked = require('marked')
 import FactLinkComponent from './FactLinkComponent'
 
 import renderRelatedFact from './renderRelatedFact'
+import getPhraseSeoText from './getPhraseSeoText'
 
 let React = { createElement: createElement }
 
@@ -81,8 +82,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
         return <li key={ match.sentence.id }>
             {
                 React.createElement(this.props.factLinkComponent, { fact: match.sentence }, 
-                    <span 
-                        dangerouslySetInnerHTML={ { __html: 
+                    <span dangerouslySetInnerHTML={ { __html: 
                         match.sentence.innerToString((word, first, index) => {
                             let wordString = htmlEscape(word.toString())
 
@@ -143,7 +143,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let factoid = corpus.factoids.getFactoid(phrase)
 
-        let relations = this.props.phrase.getCases()
+        let relations = dedup(this.props.phrase.getCases()
             .map(grammaticalCase => 
                 this.props.corpus.facts.get(CASES[grammaticalCase]))
             .concat(
@@ -151,19 +151,13 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 []))
-            .concat(this.props.phrase.getWords().map(word => word.getWordFact()))
+            .concat(this.props.phrase.getWords().map(word => word.getWordFact())))
  
-        let words = phrase.getWords()
-        let phraseSeoText = (words.length ? 
-            words.map(w => w.toText()).join(' and ') 
-                + ' with the '
-                + phrase.getCases().map(c => CASES[c]).join(' and ') 
-            :
-            '')
-            
+        let phraseSeoText = getPhraseSeoText(phrase)
+
         return <div>
             <h1>"{ phrase.description }"</h1>
-            <h2>{ phrase.en } – { phraseSeoText }</h2>
+            <h2>{ phrase.en } { phraseSeoText ? ' – ' + phraseSeoText : '' }</h2>
             {
                 factoid ? 
                     <div className='factoid' 
@@ -201,4 +195,16 @@ export default class PhraseFactComponent extends Component<Props, State> {
             </div>
         </div>
     }
+}
+
+function dedup(facts: Fact[]) {
+    let seen = {}
+
+    return facts.filter(fact => {
+        let result = !seen[fact.getId()]
+
+        seen[fact.getId()] = true
+        
+        return result
+    })
 }

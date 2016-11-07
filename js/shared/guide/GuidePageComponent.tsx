@@ -10,6 +10,7 @@ import AbstractAnyWord from '../AbstractAnyWord'
 import capitalize from './fact/capitalize'
 
 import { InflectionForm } from '../inflection/InflectionForms'
+import getPhraseSeoText from './fact/getPhraseSeoText'
 
 import Phrase from '../phrase/Phrase'
 
@@ -68,14 +69,9 @@ export default function guidePageComponent(props: Props) {
         let phrase = fact
 
         if (!title) {
-            let words = phrase.getWords()
+            let seoText = getPhraseSeoText(phrase)
 
-            title = (words.length ? 
-                    words.map(w => w.toText()).join(' and ') + ' with ' 
-                    : '') 
-                + 'the '
-                + phrase.getCases().map(c => CASES[c]).join(' and ')
-                + ' e.g. '
+            title = (seoText ? seoText + ' e.g. ' : '')
                 + phrase.description
                 + ' ("' 
                 + phrase.en 
