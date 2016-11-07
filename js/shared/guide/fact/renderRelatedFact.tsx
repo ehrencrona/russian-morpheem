@@ -28,7 +28,7 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
                 <div className='en'>
                     { fact.getEnglish() }
                 </div>
-            }                
+            }
         </span>
     }
     else if (fact instanceof Word) {

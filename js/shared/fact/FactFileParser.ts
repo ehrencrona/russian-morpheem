@@ -124,6 +124,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
 
                 let iw = new InflectableWord(stem, inflection, word.classifier)
                 iw.en = word.en
+                iw.enCount = word.enCount
 
                 if (word.pos) {
                     iw.pos = word.pos

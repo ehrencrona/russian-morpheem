@@ -13,6 +13,7 @@ const MASKS = {
         sg: sg,
         adv: (form) => form == 'adv',
         comp: (form) => form == 'comp',
+        advandcomp: (form) => form == 'adv' || form == 'comp',
         compandshort: (form) => form == 'comp' || form == 'short',
         allbutnom: (form) => FORMS[form].grammaticalCase != GrammaticalCase.NOM,
         allbutcomp: (form) => form != 'comp',

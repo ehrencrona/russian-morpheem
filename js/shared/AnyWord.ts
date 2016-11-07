@@ -19,6 +19,8 @@ interface AnyWord extends Translatable {
 
     getWordFact(): Fact
 
+    getTranslationCount(): number
+    
 }
 
 export default AnyWord

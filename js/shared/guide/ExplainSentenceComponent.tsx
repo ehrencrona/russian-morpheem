@@ -18,6 +18,7 @@ import findPotentialArticle from '../../shared/phrase/findPotentialArticle'
 
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
+import getWordTranslationInSentence from '../../shared/getWordTranslationInSentence'
 
 import { findWordBlocks, toStudyWords, replaceWordsWithStudyPhrase } from '../../shared/study/toStudyWords'
 
@@ -25,6 +26,7 @@ import StudyWord from '../../shared/study/StudyWord'
 import StudyToken from '../../shared/study/StudyToken'
 import StudyFact from '../../shared/study/StudyFact'
 import StudyPhrase from '../../shared/study/StudyPhrase'
+
 
 import { Component, createElement } from 'react';
 
@@ -52,23 +54,22 @@ export default class InflectionTableComponent extends Component<Props, State> {
             return null
         } 
 
-        let translate = forceTranslation || word.getEnglish() != studyWord.getHint()
+        let translation = getWordTranslationInSentence(word, this.props.sentence)
+
+        let translate = forceTranslation || translation.string != studyWord.getHint()
 
         let lines = [
             <div key='jp' className='jp'>{ word.toText() }</div>,
         ]
 
         if (translate) {
-            let translation 
+            let en = translation.string
 
             if (word.pos == 'v') {
-                translation = 'to ' + word.getEnglish('inf')                
-            }
-            else {
-                translation = word.getEnglish() 
+                en = 'to ' + word.getEnglish('inf', translation.index)                
             }
             
-            lines.push(<div key='en' className='en'>{ translation }</div>)
+            lines.push(<div key='en' className='en'>{ en }</div>)
         }
 
         return React.createElement(this.props.factLinkComponent, { fact: word.getWordFact() }, lines)
@@ -84,7 +85,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
             if (word.word.getEnglish() != word.getEnglish()) {
                 content.push(
-                    <div key='en' className='en'>{ word.getEnglish(word.form) }</div>)
+                    <div key='en' className='en'>{ word.getEnglish() }</div>)
             }
 
             return React.createElement(this.props.factLinkComponent, 

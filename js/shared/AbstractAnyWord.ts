@@ -109,7 +109,6 @@ abstract class AbstractAnyWord implements AnyWord {
             }
         }
     }
-
 }
 
 export default AbstractAnyWord

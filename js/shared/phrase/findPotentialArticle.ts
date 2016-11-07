@@ -3,6 +3,7 @@ const ARTICLES = ['a ', 'an ', 'the ']
 export default function findPotentialArticle(inEnglishString: string, before: string): string {
     let i = -1
     let foundArticle = false
+
     inEnglishString = inEnglishString.toLowerCase()
 
     do {
