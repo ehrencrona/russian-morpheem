@@ -96,6 +96,18 @@ export default class InflectionTableComponent extends Component<Props, State> {
     getPhraseCells(studyWords: StudyToken[], sentence: Sentence) {
         let rows: StudyPhrase[][] = []
 
+        let addRow = () => {
+            let row = []
+
+            studyWords.forEach(w => row.push(null))
+
+            rows.push(row)
+
+            return row
+        }
+
+        addRow()
+        
         let phrases = new Set<StudyFact>()
 
         studyWords.forEach((word, wordIndex) => {
@@ -122,11 +134,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
             })
 
             if (!freeRow) {
-                freeRow = []
-
-                studyWords.forEach(w => freeRow.push(null))
-
-                rows.push(freeRow)
+                freeRow = addRow()
             }
 
             let phrase = (studyFact.fact as Phrase)

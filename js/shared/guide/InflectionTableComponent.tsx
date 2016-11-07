@@ -85,7 +85,7 @@ export default class InflectionTableComponent extends Component<Props, State> {
         return (
             <div className='inflections' key={ this.props.inflection.getId() }>
                 <table>
-                { table.cols.length > 1 ?                            
+                { table.cols.length > 1 ?
                     <thead>
                         <tr>
                             <td></td>
