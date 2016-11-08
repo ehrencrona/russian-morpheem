@@ -265,13 +265,28 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
             }
         }
         else if (leftSide == 'phrase') {
-            let phraseId = rightSide.trim()
-            
-            if (!phraseId || phraseId.indexOf(' ') >= 0) {
-                throw new Error(`${phraseId} does not look like a phrase ID.`)
-            }
+            splitRightSide(rightSide.trim()).forEach((pair) => {
+                let tag = pair[0]
+                let text = pair[1]
+                
+                if (!tag) {
+                    if (tag) {
+                        throw new Error(`There seem to be two phrase IDs in ${rightSide}.`)
+                    }
+                    
+                    if (!text || text.indexOf(' ') >= 0) {
+                        throw new Error(`In ${rightSide}, ${text} does not look like a phrase ID.`)
+                    }
 
-            fact = new PhraseFact(phraseId)
+                    fact = new PhraseFact(text)
+                }
+                else if (tag == 'tag') {
+                    if (!fact) {
+                        throw new Error(`In ${rightSide}, a tag comes before the phrase ID.`)
+                    }
+                    facts.tag(fact, text)
+                }
+            })
         }
         else if (leftSide == 'tag') {
             fact = new TagFact(rightSide.trim())
