@@ -111,7 +111,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
 
                 if (dictionaryForm != translation.string) {
                     content.push(
-                        <div key='en' className='en'>{ translation.string }</div>)
+                        <div key='en' className='en'>{ FORMS[word.form].name }</div>)
                 }
             }
 
@@ -258,6 +258,34 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         }
     }
 
+    renderHeader() {
+        let previousSentence
+        let id = this.props.sentence.id - 1
+
+        while (id >= 0 && !previousSentence) {
+            previousSentence = this.props.corpus.sentences.get(id--)
+        }
+
+        let nextSentence
+        id = this.props.sentence.id + 1
+
+        while (id >= 0 && !nextSentence) {
+            nextSentence = this.props.corpus.sentences.get(id++)
+        }
+
+        return <div className='nav'>{
+                React.createElement(this.props.factLinkComponent, 
+                    { fact: previousSentence }, '<<< ') 
+            }
+            #<a href={ '/admin.html#' + this.props.sentence.id }>{
+                this.props.sentence.id   
+            }</a>
+            {
+                React.createElement(this.props.factLinkComponent, 
+                    { fact: nextSentence }, ' >>>') 
+        }</div>
+    }
+
     render() {
         let sentence = this.props.sentence
         
@@ -269,110 +297,119 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
             }
         })
 
-
         let phraseCells = this.getPhraseCells(studyWords, sentence)
 
-        return <table className='explainSentence'>
-            <colgroup>
-                {
-                    studyWords.map((sw, index) => {
+        return <div className='explainSentence'>
+            <div id='beforeTable'>{
+                this.renderHeader()
+            }</div>
+            <table>
+                <colgroup>
+                    <col />
+                    {
+                        studyWords.map((sw, index) => {
 
-                        return <col key={ index } />
+                            return <col key={ index } />
 
-                    })
-                }
-            </colgroup>
-            <tbody>
-                <tr className='jp'>{
-                    studyWords.map((sw, index) => {
+                        })
+                    }
+                </colgroup>
+                <tbody>
+                    <tr className='jp'><td></td>{
+                        studyWords.map((sw, index) => {
 
-                        return <td key={ index } >{ sw.jp }</td>
+                            return <td key={ index } >{ sw.jp }</td>
 
-                    })
-                }
-                </tr>
+                        })
+                    }
+                    </tr>
 
-                {
-                    phraseCells.map((row, rowIndex) => {
-                        let cells = []
-                        let lastPhrase: StudyPhrase
-                        let colSpan
+                    {
+                        phraseCells.map((row, rowIndex) => {
+                            let cells = []
+                            let lastPhrase: StudyPhrase
+                            let colSpan
 
-                        let onPhrase = (studyPhrase, wordIndex) => {
-                            if (lastPhrase === null) {
-                                let article = this.getPossibleArticle(wordIndex-1, studyWords)
+                            let onPhrase = (studyPhrase, wordIndex) => {
+                                if (lastPhrase === null) {
+                                    let article = this.getPossibleArticle(wordIndex-1, studyWords)
 
-                                let translation = ''
+                                    let translation = ''
 
-                                if (rowIndex == 0 && !phraseCells.find(row => !!row[wordIndex-1])) {
-                                    let studyWord = studyWords[wordIndex-1] 
-                                    let hint = studyWord.getHint()
+                                    if (rowIndex == 0 && !phraseCells.find(row => !!row[wordIndex-1])) {
+                                        let studyWord = studyWords[wordIndex-1] 
+                                        let hint = studyWord.getHint()
 
-                                    let word = (studyWord as StudyWord).word
+                                        let word = (studyWord as StudyWord).word
 
-                                    translation = (article ? '(' + article + ') ' : '') +
-                                        (isPunctuation(word) ? word.jp : studyWord.getHint())
-                                }
-
-                                cells.push(<td key={ cells.length }>{
-                                    translation 
-                                }</td>)
-                            }
-
-                            if (lastPhrase != studyPhrase) {
-                                if (lastPhrase) {
-                                    cells.push(<td key={ cells.length } className='phrase' 
-                                        colSpan={ colSpan } >{
-                                        React.createElement(this.props.factLinkComponent, 
-                                            { fact: lastPhrase.phrase },
-                                            [
-                                                lastPhrase.getHint(), 
-                                                <div className='phraseName'>see "{ lastPhrase.phrase.en }"</div>
-                                            ])
+                                        translation = (article ? '(' + article + ') ' : '') +
+                                            (isPunctuation(word) ? word.jp : studyWord.getHint())
                                     }
-                                    </td>)
+
+                                    cells.push(<td key={ cells.length }>{
+                                        translation 
+                                    }</td>)
                                 }
 
-                                colSpan = 1
+                                if (lastPhrase != studyPhrase) {
+                                    if (lastPhrase) {
+                                        cells.push(<td key={ cells.length } className='phrase' 
+                                            colSpan={ colSpan } >{
+                                            React.createElement(this.props.factLinkComponent, 
+                                                { fact: lastPhrase.phrase },
+                                                [
+                                                    lastPhrase.getHint(), 
+                                                    <div className='phraseName'>see "{ lastPhrase.phrase.en }"</div>
+                                                ])
+                                        }
+                                        </td>)
+                                    }
+
+                                    colSpan = 1
+                                }
+                                else if (lastPhrase) {
+                                    colSpan++
+                                }
+
+                                lastPhrase = studyPhrase
                             }
-                            else if (lastPhrase) {
-                                colSpan++
-                            }
 
-                            lastPhrase = studyPhrase
-                        }
+                            row.forEach(onPhrase)
 
-                        row.forEach(onPhrase)
+                            onPhrase(null, row.length)
 
-                        onPhrase(null, row.length)
+                            return <tr key={ rowIndex }><td></td>{
+                                cells
+                            }</tr>
+                        })
+                    }
 
-                        return <tr key={ rowIndex }>{
-                            cells
-                        }</tr>
-                    })
-                }
+                    <tr><td></td>{
+                        studyWords.map((sw, index) => {
 
-                <tr>{
-                    studyWords.map((sw, index) => {
+                            return <td key={ index } >{ sw instanceof StudyWord 
+                                ? this.renderMeaningOfWord(sw, !!phraseCells.find(row => !!row[index])) 
+                                : null }</td>
 
-                        return <td key={ index } >{ sw instanceof StudyWord 
-                            ? this.renderMeaningOfWord(sw, !!phraseCells.find(row => !!row[index])) 
-                            : null }</td>
+                        })
+                    }</tr>
 
-                    })
-                }</tr>
+                    <tr><td></td>{
+                        studyWords.map((sw, index) => {
 
-                <tr>{
-                    studyWords.map((sw, index) => {
+                            return <td key={ index } >{ sw instanceof StudyWord ? this.renderInflectionOfWord(sw) : null }</td>
 
-                        return <td key={ index } >{ sw instanceof StudyWord ? this.renderInflectionOfWord(sw) : null }</td>
+                        })
+                    }</tr>
 
-                    })
-                }</tr>
-
-            </tbody>
-        </table>
-
+                </tbody>
+            </table>
+            <div id='afterTable'>
+                <div className='manualTranslation'>{
+                    this.props.sentence.en()
+                }</div>
+            </div>
+        </div>
     }
 
 }
