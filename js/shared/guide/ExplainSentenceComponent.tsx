@@ -79,6 +79,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         let word: AnyWord = studyWord.word
 
         let result = []
+        let facts = this.props.corpus.facts
 
         if (word instanceof InflectedWord && word != word.word.getDefaultInflection()) {
             let translation = getWordTranslationInSentence(word, this.props.sentence)
@@ -97,10 +98,12 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                     }</div>
                 ]
 
-                if (dictionaryForm != translation.string) {
-                    content.push(
-                        <div key='en' className='en'>{ EN_PRON[word.form] + ' ' + translation.string }</div>)
+                if (facts.getTagsOfFact(word.getWordFact()).indexOf('perfective') >= 0) {
+                    translation.string = 'will ' + dictionaryForm
                 }
+
+                content.push(
+                    <div key='en' className='en'>{ EN_PRON[word.form] + ' ' + translation.string }</div>)
             }
             else {
                 content = [
@@ -110,6 +113,10 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                 ]
 
                 if (dictionaryForm != translation.string) {
+                    content.push(
+                        <div key='en' className='en'>{ translation.string }</div>)
+                }
+                else {
                     content.push(
                         <div key='en' className='en'>{ FORMS[word.form].name }</div>)
                 }
