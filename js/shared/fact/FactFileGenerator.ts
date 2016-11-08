@@ -49,7 +49,7 @@ export function factToString(fact: Fact, facts: Facts) {
         return 'transform: ' + fact.getId()
     }
     else if (fact instanceof Phrase) {
-        return `phrase: ${fact.id}`
+        return `phrase: ${fact.id}` + tags
     }
     else if (fact instanceof TagFact) {
         return `tag: ${fact.id}`
