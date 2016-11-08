@@ -41,7 +41,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class InflectionTableComponent extends Component<Props, State> {
+export default class ExplainSentenceComponent extends Component<Props, State> {
 
     renderMeaningOfWord(studyWord: StudyWord, forceTranslation: boolean) {
         let word: AnyWord = studyWord.word
@@ -81,29 +81,63 @@ export default class InflectionTableComponent extends Component<Props, State> {
         let result = []
 
         if (word instanceof InflectedWord && word != word.word.getDefaultInflection()) {
-            let content = [
-                <div key='jp' className='jp'>{ FORMS[ word.form ].name }</div>
-            ]
-
             let translation = getWordTranslationInSentence(word, this.props.sentence)
 
-            if (word.word.getEnglish('', translation.index) != translation.string) {
-                content.push(
-                    <div key='en' className='en'>{ translation.string }</div>)
+            let dictionaryForm = word.word.getEnglish('', translation.index)
+
+            let content
+            
+            if (word.pos == 'v') {
+                let EN_PRON = { 1: 'I', 2: 'you', 3: 's/he/it', '1pl': 'we', '2pl': 'you (pl)', '3pl': 'they', 'pastm': 'he', 'pastf': 'she', 'pastpl': 'we/they' }
+                let RU_PRON = { 1: 'я', 2: 'ты', 3: 'он/а', '1pl': 'мы', '2pl': 'вы', '3pl': 'они', 'pastm': 'он', 'pastf': 'она', 'pastpl': 'мы/вы/они' }
+
+                content = [
+                    <div key='jp' className='jp'>{ 
+                        renderEnding(word.toText(), word.word.toText())   
+                    }</div>
+                ]
+
+                if (dictionaryForm != translation.string) {
+                    content.push(
+                        <div key='en' className='en'>{ EN_PRON[word.form] + ' ' + translation.string }</div>)
+                }
+            }
+            else {
+                content = [
+                    <div key='jp' className='jp'>{ 
+                        renderEnding(word.toText(), word.word.toText()) 
+                    }</div>
+                ]
+
+                if (dictionaryForm != translation.string) {
+                    content.push(
+                        <div key='en' className='en'>{ translation.string }</div>)
+                }
             }
 
             result.push(React.createElement(this.props.factLinkComponent, 
-                    { fact: word.word.inflection.getFact(word.form), context: word },
+                    { 
+                        key: word.form,
+                        fact: word.word.inflection.getFact(word.form), 
+                        context: word 
+                    },
                 content))
         }
 
-        if (word.pos == 'v' && this.props.corpus.facts.getTagsOfFact(word.getWordFact()).indexOf('perfective') >= 0) {
-            let fact = this.props.corpus.facts.get('perfective')
+        let corpus = this.props.corpus 
+        let tags = corpus.facts.getTagsOfFact(word.getWordFact())
 
-            result.push(React.createElement(this.props.factLinkComponent, 
-                    { fact: fact },
-                <div key='jp' className='jp'>perfective</div>))
-        }
+        tags.forEach(tag => {
+            let tagFact = corpus.facts.get(tag)
+
+            if (tagFact) {
+                result.push(React.createElement(this.props.factLinkComponent, 
+                        { fact: tagFact, key: tag },
+                    <div key={ tagFact.getId() } className='jp'>{ 
+                        corpus.factoids.getFactoid(tagFact).name || tagFact.getId() 
+                    }</div>))
+            }
+        })
 
         return result
     }
@@ -345,4 +379,28 @@ export default class InflectionTableComponent extends Component<Props, State> {
 
 function isPunctuation(word: AnyWord) {
     return Words.PUNCTUATION.indexOf(word.toText()) >= 0
+}
+
+function renderEnding(inflected, base: string) {
+    let len = Math.min(inflected.length, base.length)
+
+    let lastCommonIndex = 0
+
+    for (lastCommonIndex = 0; 
+        lastCommonIndex < len && inflected[lastCommonIndex] == base[lastCommonIndex]; 
+        lastCommonIndex++) {
+    }
+
+    if (lastCommonIndex == 0) {
+        return inflected
+    }
+
+    return <span className='formation'>{
+            base.substr(0, lastCommonIndex) 
+        }<span className='removed'>{ 
+            base.substr(lastCommonIndex) 
+        }</span><span className='added'>{
+            inflected.substr(lastCommonIndex)
+        }</span>
+    </span>
 }

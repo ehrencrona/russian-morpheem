@@ -119,6 +119,11 @@ a {
                     @extend .seeAlso;
                 }
 
+                li {
+                    text-indent: -($seeAlsoSize + $seeAlsoMargin);
+                    margin-left: ($seeAlsoSize + $seeAlsoMargin);
+                }
+
                 .en {
                     margin-left: ($seeAlsoSize + $seeAlsoMargin) / $smallFontFactor;
                 }
@@ -322,6 +327,17 @@ table.explainSentence {
                     font-weight: 600;
                     margin-left: $seeAlsoSize + $seeAlsoMargin;
                     text-indent: -($seeAlsoSize + $seeAlsoMargin);
+                }
+            }
+
+            .formation {
+                .removed {
+                    text-decoration: line-through;
+                    color: gray;
+                }
+
+                .added {
+                    font-weight: bold;
                 }
             }
         }

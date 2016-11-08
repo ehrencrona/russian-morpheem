@@ -66,6 +66,7 @@ export default function(corpus: Corpus) {
                     onClose={ () => {} }
                     factLinkComponent={ (props) => {
                         return <a 
+                            key={ props.fact.getId() }
                             rel={ props.fact instanceof Sentence ? 'nofollow' : '' }
                             href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
                     }
