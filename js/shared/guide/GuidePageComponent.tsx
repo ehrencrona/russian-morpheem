@@ -86,13 +86,15 @@ export default function guidePageComponent(props: Props) {
         if (!title && props.context) {
             let form = FORMS[fact.form]
 
+            let inflected = props.context.word
+
             title = 'The ' + form.name 
                 + ' of the Russian ' 
-                + props.context.word.toText() 
+                + inflected.toText() 
 
             description = 'The ' + form.name 
                 + ' of the Russian ' + POSES[props.context.pos] + ' ' 
-                + props.context.word.toText() + ' is ' + props.context.toText() + '.'
+                + inflected.toText() + ' ("' + inflected.getEnglish() + '") is ' + props.context.toText() + '.'
         }
     }
     else if (fact instanceof InflectionForm) {
