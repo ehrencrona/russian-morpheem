@@ -10,6 +10,7 @@ import renderRelatedFact from './fact/renderRelatedFact'
 import doesFactMatchQuery from '../../frontend/fact/doesFactMatchQuery'
 import Phrase from '../phrase/Phrase'
 import getGuideUrl from './getGuideUrl'
+import { FORMS } from '../inflection/InflectionForms'
 
 let React = { createElement: createElement }
 
@@ -46,7 +47,10 @@ export default class GuideSearchComponent extends Component<Props, State> {
         let query = this.state.query
 
         if (query) {
-            let factWeights = this.props.corpus.facts.facts
+            let corpus = this.props.corpus
+
+            let factWeights = corpus.facts.facts
+                .concat(Object.keys(FORMS).filter(f => !corpus.facts.get(f)).map(k => FORMS[k]))
                 .map(f => { return { fact: f, weight: doesFactMatchQuery(f, query) } })
                 .filter(fw => fw.weight > 0)
                 .sort((fw1, fw2) => fw2.weight - fw1.weight)
@@ -67,9 +71,10 @@ export default class GuideSearchComponent extends Component<Props, State> {
 
         return <div id='search' onClick={ (e) => e.stopPropagation() }>
             <div className='form'>
-                <input type='text' value={ query } 
+                <input type='text' value={ query }
+                    placeholder="search e.g. 'eat' or 'ем'" 
                     onChange={ event => this.setState({ query: (event.target as HTMLInputElement).value })}
-                    onKeyPress={ (event) => {                    
+                    onKeyPress={ (event) => {
                         if (event.charCode == 13 && facts[0]) {
                             window.location.href = getGuideUrl(facts[0])
                         }
@@ -80,14 +85,27 @@ export default class GuideSearchComponent extends Component<Props, State> {
                         }
                     }
                     }/>
-                <div className='label'>Search</div>
             </div>
-            <div className='results'><ul>{
-                facts.map(f =>
-                    renderRelatedFact(f, this.props.corpus, factLinkComponent)
-                )
-            }</ul>
-            </div>
+            {
+                query ?
+                    <div className='results'>
+                        {
+                            facts.length ?
+                                <ul>{
+                                    facts.map(f =>
+                                        renderRelatedFact(f, this.props.corpus, factLinkComponent)
+                                    )
+                                }</ul>
+                            :
+                            <div className='error'>Could not find anything. Search for a word (in Russian or English), 
+                                an expression or a grammatical term. 
+                                <br/><br/>
+                                Morpheem contains a limited vocabulary up to intermediate level.</div>
+                        }
+                    </div>
+                    :
+                    null
+            }
         </div>
     }
 }

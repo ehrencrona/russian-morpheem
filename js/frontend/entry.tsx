@@ -5,14 +5,15 @@ import LoginContainer from './LoginContainer'
 import StudyContainerComponent from './study/StudyContainerComponent'
 import TabSetComponent from './TabSetComponent'
 
+import HomeSearchComponent from '../shared/guide/search/HomeSearchComponent'
 import ExplainSentenceComponent from '../shared/guide/ExplainSentenceComponent'
 import GuideSearchComponent from '../shared/guide/GuideSearchComponent'
 
-import 'drag-drop-webkit-mobile';
-import xr from 'xr';
+import 'drag-drop-webkit-mobile'
+import xr from 'xr'
 
-import {render} from 'react-dom';
-import {createElement, createFactory} from 'react';
+import { render } from 'react-dom'
+import { createElement, createFactory } from 'react'
 
 let React = { createElement: createElement }
 
@@ -41,4 +42,9 @@ renderIntoId(
 renderIntoId(
     <LoginContainer bypass={ true } factory={ createFactory(GuideSearchComponent) }/>,
     'react-guide-search'
+)
+
+renderIntoId(
+    <LoginContainer bypass={ true } factory={ createFactory(HomeSearchComponent) }/>,
+    'react-home-search'
 )

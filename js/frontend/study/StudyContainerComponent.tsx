@@ -45,6 +45,7 @@ import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
 
 import ExplainFactComponent from '../../shared/guide/fact/FactComponent'
+import OverlayComponent from '../../shared/guide/fact/OverlayComponent'
 
 import FrontendExposures from './FrontendExposures'
 import { fetchStudyPlan } from './FrontendStudentProfile'
@@ -383,19 +384,21 @@ console.log('Did not ought to know ' + visitedFact.getId())
         let explain = null
 
         if (this.state.explainFact) {
-            explain = <ExplainFactComponent 
-                corpus={ this.props.corpus }
-                fact={ this.state.explainFact }
-                context={ this.state.explainContext }
-                knowledge={ this.knowledge }
-                onClose={ () => this.setState({ explainFact: null }) }
-                factLinkComponent={ (props) => 
-                    <span onClick={ () => {
-                        this.setState({ explainFact: props.fact as Fact, explainContext: props.context }) 
-                    } 
-                    }>{ props.children }</span> 
-                }
-            />
+            explain = <OverlayComponent
+                onClose={ () => this.setState({ explainFact: null }) }>
+                <ExplainFactComponent 
+                    corpus={ this.props.corpus }
+                    fact={ this.state.explainFact }
+                    context={ this.state.explainContext }
+                    knowledge={ this.knowledge }
+                    factLinkComponent={ (props) => 
+                        <span onClick={ () => {
+                            this.setState({ explainFact: props.fact as Fact, explainContext: props.context }) 
+                        } 
+                        }>{ props.children }</span> 
+                    }
+                />
+            </OverlayComponent>
         }
 
         if (this.state.showPlan) {
@@ -548,5 +551,4 @@ console.log('Did not ought to know ' + visitedFact.getId())
             return <div/>
         }
     }
-
 }

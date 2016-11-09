@@ -13,6 +13,8 @@ export default function doesFactMatchQuery(fact: Fact, filter: string): number {
 
     let result = 0
 
+    let searchIsInEnglish = filter.match(/[a-z]/)
+
     let matches = (string: string, weight?: number): void => {
         let i = string.toLowerCase().indexOf(filter) 
 
@@ -66,6 +68,10 @@ export default function doesFactMatchQuery(fact: Fact, filter: string): number {
     matches(fact.getId())
 
     let matchesAnyTranslation = (en: {}) => {
+        if (!searchIsInEnglish) {
+            return
+        }
+
         for (let key in en) {
             matches(en[key])
         }
@@ -78,6 +84,10 @@ export default function doesFactMatchQuery(fact: Fact, filter: string): number {
     else if (fact instanceof InflectableWord) {
         matches(fact.getDefaultInflection().jp)
         matchesAnyTranslation(fact.en)
+
+        if (!searchIsInEnglish) {
+            fact.visitAllInflections((word) => matches(word.jp, 8))
+        }
     }
     else if (fact instanceof InflectionFact) {
         matches(fact.inflection.endings[fact.form].suffix)

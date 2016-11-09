@@ -190,9 +190,6 @@ function registerRoutes(corpus: Corpus) {
     app.get(`/sentence/:sentence`, getGuideSentence(corpus))    
 
     app.get(`/sitemap.xml`, getSitemap(corpus))    
-
-    app.get(`/`, (req, res) => 
-        res.redirect('/form/nominative'))    
 }
 
 function triggerLivereload() {

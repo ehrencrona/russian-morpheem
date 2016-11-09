@@ -3,10 +3,34 @@ $clickableColor: #e95f3d;
 $color9: #f8f7f5;
 
 $studyMaxWidth: 1000px;
+$color16: #ececec;
+$color-fg: #303030;
 
 html {
     margin: 0;
     padding: 0;
+}
+
+body {
+    background-color: $color16;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+    color: $color-fg;
+}
+ 
+ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        padding-bottom: $unit;
+        margin: 0;
+    }
 }
 
 .borderBoxSizing {

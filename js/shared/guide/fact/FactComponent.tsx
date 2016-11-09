@@ -30,7 +30,6 @@ interface Props {
     fact: Fact
     context: InflectedWord
     knowledge: NaiveKnowledge
-    onClose: () => any
     factLinkComponent: FactLinkComponent
 }
 
@@ -88,11 +87,7 @@ export default function factComponent(props: Props) {
         content = <div>Unhandled fact { fact.getId() }</div>
     }
 
-    return <div className='overlayContainer' onClick={ props.onClose }>
-        <div className='overlay'>
-            <div className='content guide' onClick={ (e) => e.stopPropagation() }>
-                {content}
-            </div>
+    return <div className='content guide' onClick={ (e) => e.stopPropagation() }>
+            {content}
         </div>
-    </div>
 }

@@ -75,5 +75,5 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
         {
             React.createElement(factLinkComponent, { fact: fact }, inner)
         }
-        </li>
+    </li>
 }

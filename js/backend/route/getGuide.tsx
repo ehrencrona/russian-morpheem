@@ -60,20 +60,22 @@ export default function(corpus: Corpus) {
                 corpus={ corpus }
                 fact={ fact }
                 bodyClass='guide'>
-                <FactComponent
-                    corpus={ corpus }
-                    fact={ fact }
-                    context={ context }
-                    onClose={ () => {} }
-                    factLinkComponent={ (props) => {
-                        return <a 
-                            key={ props.fact.getId() }
-                            rel={ props.fact instanceof Sentence ? 'nofollow' : '' }
-                            href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
-                    }
-                    knowledge={ new NaiveKnowledge() }
-                />
-            </GuidePageComponent>)
+                <div className='guideContainer'>
+                    <FactComponent
+                        corpus={ corpus }
+                        fact={ fact }
+                        context={ context }
+                        factLinkComponent={ (props) => {
+                            return <a 
+                                key={ props.fact.getId() }
+                                rel={ props.fact instanceof Sentence ? 'nofollow' : '' }
+                                href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
+                        }
+                        knowledge={ new NaiveKnowledge() }
+                    />
+                </div>
+            </GuidePageComponent>
+        )
 
         res.send(html).status(200);
 

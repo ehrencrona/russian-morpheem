@@ -139,13 +139,14 @@ export default function guidePageComponent(props: Props) {
     return <html>
 
         <head>
-            <link rel="stylesheet" type="text/css" href="/stylesheets/study.css"/>
+            <link rel="stylesheet" type="text/css" href="/stylesheets/guide.css"/>
 
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Rubik:700,900" rel="stylesheet"/>
 
             <title>{ title }</title>
             <meta name="description" content={ description }/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
             <script dangerouslySetInnerHTML={ { __html: 
                 "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){"
@@ -164,5 +165,5 @@ export default function guidePageComponent(props: Props) {
 
             { props.children }
         </body>
-    </html>;
+    </html>
 }
