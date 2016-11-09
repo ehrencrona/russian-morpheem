@@ -9,7 +9,9 @@ import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 import Corpus from '../../shared/Corpus'
 import Grammars from '../../shared/Grammars'
 import Sentence from '../../shared/Sentence'
-
+import InflectableWord from '../../shared/InflectableWord'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectionFact from '../../shared/inflection/InflectionFact'
 
 import { Component, createElement } from 'react'
 
@@ -39,10 +41,14 @@ export default function(corpus: Corpus) {
             return res.send(`Unknown fact ${ factId }.`).status(404)
         }
 
-        let context
+        let context: InflectedWord
         
         if (req.query.word) {
-            context = corpus.words.get(req.query.word)
+            let wordFact = corpus.facts.get(req.query.word)
+
+            if (wordFact instanceof InflectableWord && fact instanceof InflectionFact) {
+                context = wordFact.inflect(fact.form)
+            }
         }
 
         let canonical = getGuideUrl(fact, context)
