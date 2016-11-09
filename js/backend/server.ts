@@ -94,7 +94,7 @@ app.use('/api', (req, res, next) => {
 function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
 
-    app.get(`/api/${lang}/corpus`, function(req, res) {
+    app.get(`/public-api/${lang}/corpus`, function(req, res) {
         res.contentType('application/json')
         res.status(200).json(corpus.toJson())
     })
@@ -129,7 +129,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.put(`/api/${lang}/factoid/:id`, setFactoid(corpus))
 
-    app.get(`/api/${lang}/factoid`, getFactoids(corpus))
+    app.get(`/public-api/${lang}/factoid`, getFactoids(corpus))
 
     app.put(`/api/${lang}/topic/:id`, setTopic(corpus))
 
@@ -228,7 +228,7 @@ readCorpus('ru', true).catch((e) => {
     app.listen(port)
 
     if (process.env['ENV'] == 'dev') {
-        triggerLivereload()
+//        triggerLivereload()
     }
 }).catch((e) => {
     console.error(e)

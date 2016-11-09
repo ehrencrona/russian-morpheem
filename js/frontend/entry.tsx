@@ -6,6 +6,7 @@ import StudyContainerComponent from './study/StudyContainerComponent'
 import TabSetComponent from './TabSetComponent'
 
 import ExplainSentenceComponent from '../shared/guide/ExplainSentenceComponent'
+import GuideSearchComponent from '../shared/guide/GuideSearchComponent'
 
 import 'drag-drop-webkit-mobile';
 import xr from 'xr';
@@ -26,12 +27,7 @@ function renderIntoId(component, elementId) {
         );
     }
 }
-/*
-renderIntoId(
-    <LoginContainer factory={ createFactory(ExplainSentenceComponent) }/>,
-    'react-dev-root'
-)
-*/
+
 renderIntoId(
     <LoginContainer factory={ createFactory(TabSetComponent) }/>,
     'react-admin-root'
@@ -40,4 +36,9 @@ renderIntoId(
 renderIntoId(
     <LoginContainer factory={ createFactory(StudyContainerComponent) }/>,
     'react-study-root'
+)
+
+renderIntoId(
+    <LoginContainer bypass={ true } factory={ createFactory(GuideSearchComponent) }/>,
+    'react-guide-search'
 )

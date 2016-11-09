@@ -53,7 +53,7 @@ class FrontendFactoids implements Factoids {
 }
 
 export default function getFactoids(xrArgs: { [name: string]: string}, lang: string): Promise<Factoids> {
-    return xr.get(`/api/${ lang }/factoid`, {}, xrArgs)
+    return xr.get(`/public-api/${ lang }/factoid`, {}, xrArgs)
     .then(response => {
         this.all = response.data
 

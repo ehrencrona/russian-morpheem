@@ -7,7 +7,7 @@ import Corpus from '../../shared/Corpus'
 import Sentence from '../../shared/Sentence'
 import Fact from '../../shared/fact/Fact'
 
-import getGuideUrl from './getGuideUrl'
+import getGuideUrl from '../../shared/guide/getGuideUrl'
 
 import { Component, createElement } from 'react'
 

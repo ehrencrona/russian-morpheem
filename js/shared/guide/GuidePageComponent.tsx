@@ -155,9 +155,13 @@ export default function guidePageComponent(props: Props) {
                 + "ga('create', 'UA-56615416-5', 'auto');"
                 + "ga('send', 'pageview');"
             } }/>
+
+            <script src="/js/app.js" defer></script>
         </head>
 
         <body className={ props.bodyClass }>
+            <div id="react-guide-search"></div>
+
             { props.children }
         </body>
     </html>;

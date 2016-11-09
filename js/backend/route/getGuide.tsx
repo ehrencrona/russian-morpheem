@@ -2,6 +2,7 @@ import * as express from 'express'
 
 import FactComponent from '../../shared/guide/fact/FactComponent'
 import GuidePageComponent from '../../shared/guide/GuidePageComponent'
+import getGuideUrl from '../../shared/guide/getGuideUrl'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
 
@@ -9,7 +10,6 @@ import Corpus from '../../shared/Corpus'
 import Grammars from '../../shared/Grammars'
 import Sentence from '../../shared/Sentence'
 
-import getGuideUrl from './getGuideUrl'
 
 import { Component, createElement } from 'react'
 
@@ -47,7 +47,7 @@ export default function(corpus: Corpus) {
 
         let canonical = getGuideUrl(fact, context)
 
-        if (req.url != canonical) {
+        if (req.url != canonical && decodeURI(req.url) != decodeURI(canonical)) {
             console.warn(`Non-canonical URL ${ decodeURI(req.url) }. Using ${ decodeURI(canonical) } instead.`)
 
             res.redirect(301, canonical)
@@ -58,7 +58,8 @@ export default function(corpus: Corpus) {
         let html = DOMServer.renderToString(
             <GuidePageComponent
                 corpus={ corpus }
-                fact={ fact }>
+                fact={ fact }
+                bodyClass='guide'>
                 <FactComponent
                     corpus={ corpus }
                     fact={ fact }

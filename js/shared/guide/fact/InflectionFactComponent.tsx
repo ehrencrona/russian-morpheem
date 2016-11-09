@@ -309,6 +309,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let transforms = []
 
         let ending = inflection.getEnding(form)
+        let relativeToWord = ending.relativeTo && word.word.inflect(ending.relativeTo)
 
         return <div className='inflection fact'>
                 <h3>Formation</h3>
@@ -329,8 +330,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                 <div>
                 {
-                    ending.relativeTo ? 
-                        this.describeFormation(<span>It</span>, word.word.inflect(ending.relativeTo), transforms)
+                    relativeToWord ? 
+                        this.describeFormation(<span>It</span>, relativeToWord, transforms)
                         :
                         <div/>
                 }

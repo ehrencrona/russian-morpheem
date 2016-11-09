@@ -5,9 +5,9 @@ import Corpus from '../../shared/Corpus'
 import Phrase from '../../shared/phrase/Phrase'
 import { InflectionForm, FORMS } from '../../shared/inflection/InflectionForms'
 import AbstractAnyWord from '../../shared/AbstractAnyWord'
+import getGuideUrl from '../../shared/guide/getGuideUrl'
 
 let sitemap = require('express-sitemap')
-import getGuideUrl from './getGuideUrl'
 
 import { Component, createElement } from 'react'
 

@@ -32,6 +32,7 @@ interface BuiltProps {
 
 interface Props {
     factory: Factory<BuiltProps>
+    bypass?: boolean
 }
 
 interface State {
@@ -54,7 +55,7 @@ export default class LoginContainer extends Component<Props, State> {
         super(props)
 
         this.state = {
-            bypass: document.location.hostname == 'localhost',
+            bypass: document.location.hostname == 'localhost' || props.bypass,
             loading: true
         }
 
@@ -98,7 +99,7 @@ export default class LoginContainer extends Component<Props, State> {
         this.xrArgs = xrArgs
 
         Promise.all([
-            xr.get(`/api/${lang}/corpus`, {}, xrArgs),
+            xr.get(`/public-api/${lang}/corpus`, {}, xrArgs),
             loadFactoids(xrArgs, lang)
         ])
         .then(([ xhr, factoids ]) => {

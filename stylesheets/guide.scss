@@ -400,3 +400,69 @@ $lowerColor: lighten($color2, 40%);
     }
 
 }
+
+$searchColor: lightgray;
+
+.sentence #search, .guide #search {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+
+    .form {
+        border: 1px solid $searchColor;
+        display: flex;
+        border-top: none;
+        border-right: none;
+
+        input {
+            padding: 0 $unit;
+
+            font-family: inherit;
+            font-size: inherit;
+            width: 15em;
+
+            border: none;
+            margin-right: 0;
+
+            flex-grow: 1;
+            align-items: stretch; 
+        }
+        
+        .label {
+            font-weight: normal; 
+            padding: $unit;
+            color: #c0c0c0;
+            border-radius: 0;
+        }
+    }
+
+    .results {
+        background-color: rgba(255, 255, 255, 0.85);
+
+        ul {
+            margin: 2 * $unit;
+
+            li::before {
+                @extend .seeAlso;
+            }
+
+            li {
+                text-indent: -($seeAlsoSize + $seeAlsoMargin);
+                margin-left: ($seeAlsoSize + $seeAlsoMargin);
+            }
+
+            .en {
+                margin-left: ($seeAlsoSize + $seeAlsoMargin) / $smallFontFactor;
+            }
+        }
+
+    }
+
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+.guide #search .label {
+    background-color: white;
+}
