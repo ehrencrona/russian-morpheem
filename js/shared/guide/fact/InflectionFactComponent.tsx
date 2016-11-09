@@ -470,7 +470,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 && f.inflection == inflection 
                 && !!f.inflect(form)) as InflectableWord
 
-            if (!word) {
+            if (!inflectable) {
                 console.warn('Found no word with inflection ' + inflection.getId()) 
                 return <div/>
             }
