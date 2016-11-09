@@ -5,6 +5,10 @@ import Corpus from '../../../shared/Corpus'
 
 import { Knowledge } from '../../../shared/study/Exposure'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
+import topScores from '../../../shared/study/topScores'
+import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
+import toStudyWords from '../../study/toStudyWords'
+import SentenceScore from '../../../shared/study/SentenceScore'
 
 import Inflection from '../../../shared/inflection/Inflection'
 import { FORMS } from '../../../shared/inflection/InflectionForms' 
@@ -12,6 +16,8 @@ import InflectionFact from '../../../shared/inflection/InflectionFact'
 
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
+
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
 
 import Fact from '../../../shared/fact/Fact'
 
@@ -487,6 +493,8 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let inflectionFact = inflection.getFact(form)
         let related = (inflectionFact.required || []).concat(components)
 
+        let sentences = this.getSentences(this.props.inflection)
+
         return <div className='inflectionFact'>
             <h1>The { this.renderFormName(form) }</h1>
 
@@ -499,6 +507,25 @@ export default class InflectionFactComponent extends Component<Props, State> {
             <div className='columns'>
                 <div className='main'>
                     { this.renderForm(word) }
+
+                    <h3>Examples of usage</h3>
+
+                    <ul>
+                        {
+                            (sentences || []).map(sentence => 
+                                <li key={ sentence.sentence.id }>
+                                    {
+                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
+                                            <div dangerouslySetInnerHTML={ { __html: 
+                                                tokensToHtml(sentence.tokens)
+                                            }}/>)
+                                    }
+                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
+                                        highlightTranslation(sentence) } }/>
+                                </li>
+                            )
+                        }
+                    </ul>
                 </div>
                 {
                     related.length ?
@@ -519,6 +546,48 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 }
             </div>
         </div>
+    }
+
+    getSentences(fact: InflectionFact) {
+        let corpus = this.props.corpus
+
+        let matchWord = (w) => w instanceof InflectedWord && 
+            fact.form == w.form &&
+            w.word.inflection.getInflectionId(w.form) == fact.inflection.getId()
+
+        let sentences = this.props.corpus.sentences.sentences.filter(sentence => {
+            return !!sentence.words.find(matchWord)
+        })
+        
+        let scores
+
+        if (sentences.length) {
+            scores = sentences.map(sentence => 
+                { 
+                    return {
+                        sentence: sentence,
+                        fact: fact,
+                        score: 1
+                    }    
+                })
+
+            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
+
+            scores = downscoreRepeatedWord(scores, matchWord)
+            scores = topScores(scores, 6)
+        }
+        else {
+            scores = []
+        }
+
+        let ignorePhrases = true
+
+        return scores.map(s => {
+            return {
+                sentence: s.sentence,
+                tokens: toStudyWords(s.sentence, [ fact ], this.props.corpus, ignorePhrases)
+            }
+        })
     }
 }
 

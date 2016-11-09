@@ -272,7 +272,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         null
                     }
 
-
                     <h3>Examples of usage</h3>
 
                     <ul>
