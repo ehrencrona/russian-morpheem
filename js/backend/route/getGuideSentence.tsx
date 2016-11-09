@@ -33,7 +33,8 @@ export default function(corpus: Corpus) {
         let html = DOMServer.renderToString(
             <GuidePageComponent
                 corpus={ corpus }
-                fact={ null }>
+                fact={ null }
+                bodyClass='sentence'>
                 <ExplainSentenceComponent
                     corpus={ corpus }
                     sentence={ sentence }

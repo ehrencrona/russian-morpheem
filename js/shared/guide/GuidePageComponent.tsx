@@ -20,6 +20,7 @@ interface Props {
     corpus: Corpus
     fact: Fact
     children?: Element
+    bodyClass?: string
 }
 
 export default function guidePageComponent(props: Props) {
@@ -156,7 +157,7 @@ export default function guidePageComponent(props: Props) {
             } }/>
         </head>
 
-        <body>
+        <body className={ props.bodyClass }>
             { props.children }
         </body>
     </html>;
