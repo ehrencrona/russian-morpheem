@@ -73,6 +73,7 @@ export default function(corpus: Corpus) {
             <GuidePageComponent
                 corpus={ corpus }
                 fact={ fact }
+                context={ context }
                 bodyClass='guide'>
                 <div className='guideContainer'>
                     <FactComponent

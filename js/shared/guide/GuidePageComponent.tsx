@@ -9,7 +9,9 @@ import AbstractAnyWord from '../AbstractAnyWord'
 
 import capitalize from './fact/capitalize'
 
-import { InflectionForm } from '../inflection/InflectionForms'
+import { InflectionForm, FORMS } from '../inflection/InflectionForms'
+import InflectionFact from '../inflection/InflectionFact'
+import InflectedWord from '../InflectedWord'
 import getPhraseSeoText from './fact/getPhraseSeoText'
 
 import Phrase from '../phrase/Phrase'
@@ -19,6 +21,7 @@ let React = { createElement: createElement }
 interface Props {
     corpus: Corpus
     fact: Fact
+    context?: InflectedWord
     children?: Element
     bodyClass?: string
 }
@@ -79,12 +82,28 @@ export default function guidePageComponent(props: Props) {
                 + '")'
         }
     }
+    else if (fact instanceof InflectionFact) {
+        if (!title && props.context) {
+            let form = FORMS[fact.form]
+
+            title = 'The ' + form.name 
+                + ' of the Russian ' 
+                + props.context.word.toText() 
+
+            description = 'The ' + form.name 
+                + ' of the Russian ' + POSES[props.context.pos] + ' ' 
+                + props.context.word.toText() + ' is ' + props.context.toText() + '.'
+        }
+    }
     else if (fact instanceof InflectionForm) {
         if (!title) {
-            title = 'The ' + capitalize(fact.name)
+            title = 'The ' + fact.name
 
             if (fact.grammaticalCase) {
                 title += ' Case in Russian Grammar'
+            }
+            else {
+                 title += ' form in Russian'
             }
         }
     }
