@@ -40,6 +40,8 @@ import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
+
 import FactLinkComponent from './FactLinkComponent'
 import renderRelatedFact from './renderRelatedFact'
 
@@ -52,11 +54,6 @@ interface Props {
     word: AbstractAnyWord,
     knowledge: NaiveKnowledge,
     factLinkComponent: FactLinkComponent
-}
-
-interface TokenizedSentence {
-    sentence: Sentence,
-    tokens: StudyToken[]
 }
 
 interface State {
@@ -72,6 +69,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
     wordChanged(fact: Fact) {
         let corpus = this.props.corpus
+        let word = this.props.word
 
         let sentences = corpus.sentences.getSentencesByFact(corpus.facts)[ fact.getId() ]
 
@@ -89,7 +87,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
             scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
 
-            scores = this.downscoreRepeatedForms(scores)
+            scores = downscoreRepeatedWord(scores, w => w instanceof InflectedWord && w.word == word)
 
             scores = topScores(scores, 6)
         }
@@ -121,110 +119,6 @@ export default class WordFactComponent extends Component<Props, State> {
         this.wordChanged(fact)
     } 
 
-    downscoreRepeatedForms(scores: SentenceScore[]) {
-        let word = this.props.word
-
-        if (word instanceof InflectableWord) {
-            let foundCountByForm = {}
-
-            return scores.map(score => {
-
-                let wordInSentence = score.sentence.words.find(w => w instanceof InflectedWord && w.word == word)
-
-                if (wordInSentence) {
-                    let form = wordInSentence.toText()
-
-                    if (!foundCountByForm[form]) {
-                        foundCountByForm[form] = 1
-                    }
-                    else {
-                        foundCountByForm[form]++
-                    }
-
-                    if (foundCountByForm[form] > 2) {
-                        score.score = score.score / 2
-                    }
-                }
-
-                return score 
-
-            })
-        }
-
-        return scores
-    }
-
-    tokensToHtml(tokens: StudyToken[]) {
-        function isWordWithSpaceBefore(word: StudyToken) {
-            if (word instanceof StudyWord ) {
-                return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
-            }
-            else {
-                return true
-            }
-        }
-
-        return tokens.map(t => {
-            let html = htmlEscape(t.jp)
-
-            if (t.studied) {
-                html = '<span class="match">' + html + '</span>'
-            }
-
-            if (isWordWithSpaceBefore(t)) {
-                html = ' ' + html
-            }
-
-            return html
-        }).join('')
-    }
-
-    highlightTranslation(sentence: TokenizedSentence) {
-        let result = htmlEscape(sentence.sentence.en())
-
-        sentence.tokens.forEach(t => {
-
-            if (t instanceof StudyWord && t.studied) {
-                let word = t.word
-
-                for (let i = 0; i < word.getTranslationCount(); i++) {
-                    let separator = '([\\\s' + Words.PUNCTUATION + ']|^|$)'
-                    let translation = word.getEnglish('', i)
-
-                    let regex = new RegExp(separator + '(' + translation + ')' + separator, 'i')
-
-                    let m = regex.exec(result)
-
-                    if (m) {
-                        result = result.substr(0, m.index) 
-                            + m[1] 
-                            + ' <span class="match">' + translation + '</span>'
-                            + m[3] 
-                            + result.substr(m.index + m[0].length)
-                    }
-                }
-            }
-
-        })
-
-        return result
-    }
-
-    sortByKnowledge(facts: Fact[]) {
-        let known: Fact[] = []
-        let unknown: Fact[] = []
-
-        facts.forEach(fact => {
-            if (this.props.knowledge.getKnowledge(fact) == Knowledge.KNEW) {
-                known.push(fact)
-            }
-            else {
-                unknown.push(fact)
-            }
-        })
-
-        return known.concat(unknown)
-    }
 
     wordsWithSimilarInflection() {
         let word = this.props.word
@@ -259,7 +153,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 )
             }
 
-            return this.sortByKnowledge(result).slice(0, 5)
+            return sortByKnowledge(result, this.props.knowledge).slice(0, 5)
         }
     }
 
@@ -284,7 +178,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 [])
-            .concat(this.sortByKnowledge(findPhrasesWithWord(word, corpus)))
+            .concat(sortByKnowledge(findPhrasesWithWord(word, corpus), this.props.knowledge))
 
         return <div className='fact'>
             <h1>{ word.toText() }</h1>
@@ -330,11 +224,11 @@ export default class WordFactComponent extends Component<Props, State> {
                                     {
                                         React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
                                             <div dangerouslySetInnerHTML={ { __html: 
-                                                this.tokensToHtml(sentence.tokens)
+                                                tokensToHtml(sentence.tokens)
                                             }}/>)
                                     }
                                     <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                        this.highlightTranslation(sentence) } }/>
+                                        highlightTranslation(sentence) } }/>
                                 </li>
                             )
                         }

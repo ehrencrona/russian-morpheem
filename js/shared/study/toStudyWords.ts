@@ -151,7 +151,7 @@ export default toStudyWords
 
 export function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: Corpus, ignorePhrases?: boolean): StudyToken[] {
     let words: StudyWord[] = []
-    
+
     sentence.words.forEach((word) => words.push(wordToStudyWord(word, words, studiedFacts)))
 
     let tokens: StudyToken[] = words.slice(0)
@@ -247,9 +247,14 @@ export function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: C
         }
     })
 
+    let hasForm = (word, form: InflectionForm) => {
+        return word instanceof InflectedWord && form.matches(FORMS[word.form]) 
+    }
+
     words.forEach(word => {
         studiedFacts.forEach(fact => {
-            if (word.hasFact(fact)) {
+            if (word.hasFact(fact) 
+                || (fact instanceof InflectionForm && hasForm(word.word, fact))) {
                 word.studied = true
 
                 word.en = getWordTranslationInSentence(word.word, sentence).string

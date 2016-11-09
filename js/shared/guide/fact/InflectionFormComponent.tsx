@@ -13,6 +13,10 @@ import { Factoid } from '../../../shared/metadata/Factoids'
 import { FORMS, CASES, InflectionForm, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms'
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
+import topScores from '../../../shared/study/topScores'
+import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
+import toStudyWords from '../../study/toStudyWords'
+import SentenceScore from '../../../shared/study/SentenceScore'
 
 import WordInFormMatch from '../../../shared/phrase/WordInFormMatch'
 import PhraseMatch from '../../../shared/phrase/PhraseMatch'
@@ -28,6 +32,7 @@ import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
 
 import marked = require('marked')
 
@@ -187,6 +192,14 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         const POS = [ 'n', 'adj', 'v', 'pron' ]
 
+        let related = (form.required || [])
+            .concat(form.getComponents())
+            .concat(
+                (factoid ? 
+                    factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
+
+        let sentences = this.getSentences(form)
+
         return <div className='inflectionForm'>
             <h1>The { form.name }</h1>
             <div className='columns'>
@@ -228,51 +241,116 @@ export default class InflectionFormComponent extends Component<Props, State> {
                             }
                         })            
                     }
-                    <div>
-                        <h3>Expressions</h3>
-                        { !this.state.allPhrases ?
-                            <div>
-                                These are the most important expressions using the { form.name }:
-                                
-                                <div className='seeAll' onClick={ () => this.setState({ allPhrases : true })}>See all</div>
-                            </div>
-                            :                        
-                            <div>
-                                These are all expressions using the { form.name } (in order of commonness):
-                                
-                                <div className='seeAll' onClick={ () => this.setState({ allPhrases : false })}>See less</div>
-                            </div>
-                        }
 
-                        <ul className='phrases'>
+                    { phrases.length ?
+                        <div>
+                            <h3>Expressions</h3>
+                            { !this.state.allPhrases ?
+                                <div>
+                                    These are the most important expressions using the { form.name }:
+                                    
+                                    <div className='seeAll' onClick={ () => this.setState({ allPhrases : true })}>See all</div>
+                                </div>
+                                :                        
+                                <div>
+                                    These are all expressions using the { form.name } (in order of commonness):
+                                    
+                                    <div className='seeAll' onClick={ () => this.setState({ allPhrases : false })}>See less</div>
+                                </div>
+                            }
+
+                            <ul className='phrases'>
+                            {
+                                (this.state.allPhrases ? phrases : phrases.slice(0, 10))
+                                    .map(phrase => 
+                                        renderRelatedFact(phrase, corpus, this.props.factLinkComponent) 
+                                    )
+                            }
+                            </ul>
+                        </div>
+                        :
+                        null
+                    }
+
+
+                    <h3>Examples of usage</h3>
+
+                    <ul>
                         {
-                            (this.state.allPhrases ? phrases : phrases.slice(0, 10))
-                                .map(phrase => 
-                                    renderRelatedFact(phrase, corpus, this.props.factLinkComponent) 
-                                )
+                            (sentences || []).map(sentence => 
+                                <li key={ sentence.sentence.id }>
+                                    {
+                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
+                                            <div dangerouslySetInnerHTML={ { __html: 
+                                                tokensToHtml(sentence.tokens)
+                                            }}/>)
+                                    }
+                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
+                                        highlightTranslation(sentence) } }/>
+                                </li>
+                            )
                         }
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
-                <div className='sidebar'>
-                    <div>
-                        <h3>See also</h3>
+                { related.length ?
+                    <div className='sidebar'>
+                        <div>
+                            <h3>See also</h3>
 
-                        <ul>
-                        {
-                            (form.required || [])
-                            .concat(form.getComponents())
-                            .concat(
-                                (factoid ? 
-                                    factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
-                                .map(fact =>     
+                            <ul>
+                            {
+                                related.map(fact =>     
                                     renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
-                            ) 
-                        }
-                        </ul>
+                                ) 
+                            }
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                    :
+                    null
+                }
             </div>
         </div>
+    }
+
+
+    getSentences(form: InflectionForm) {
+        let corpus = this.props.corpus
+
+        let sentences = this.props.corpus.sentences.sentences.filter(sentence => {
+            return !!sentence.words.find(w => w instanceof InflectedWord && form.matches(FORMS[w.form]))
+        })
+        
+        let scores
+
+        if (sentences.length) {
+            scores = sentences.map(sentence => 
+                { 
+                    return {
+                        sentence: sentence,
+                        fact: form,
+                        score: 1
+                    }    
+                })
+
+            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
+
+            scores = downscoreRepeatedWord(scores, 
+                (word) => word instanceof InflectedWord && form.matches(FORMS[word.form]))
+
+            scores = topScores(scores, 6)
+        }
+        else {
+            scores = []
+        }
+
+        let ignorePhrases = true
+
+        return scores.map(s => {
+            return {
+                sentence: s.sentence,
+                tokens: toStudyWords(s.sentence, [ form ], this.props.corpus, ignorePhrases)
+            }
+        })
     }
 }
