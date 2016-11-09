@@ -46,6 +46,14 @@ export default function(corpus: Corpus) {
         if (req.query.word) {
             let wordFact = corpus.facts.get(req.query.word)
 
+            if (!wordFact) {
+                wordFact = corpus.words.get(req.query.word)
+            }
+
+            if (wordFact instanceof InflectedWord) {
+                wordFact = wordFact.getWordFact()
+            }
+
             if (wordFact instanceof InflectableWord && fact instanceof InflectionFact) {
                 context = wordFact.inflect(fact.form)
             }

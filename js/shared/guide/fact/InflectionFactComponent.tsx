@@ -466,18 +466,19 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
         if (!word) {
             let form = this.props.inflection.form
-            let inflectable = corpus.facts.facts.find(f => f instanceof InflectableWord 
-                && f.inflection == inflection 
-                && !!f.inflect(form)) as InflectableWord
 
-            if (!inflectable) {
+            let inflectable = getExamplesUsingInflection(form, inflection, 
+                this.props.corpus, this.props.knowledge, null, 1)[0]
+
+            if (inflectable) {
+                word = inflectable.inflect(form)
+            }
+
+            if (!word) {
                 console.warn('Found no word with inflection ' + inflection.getId()) 
                 return <div/>
             }
-
-            word = inflectable.inflect(form) 
         }
-
 
         let form = word.form
 

@@ -11,7 +11,7 @@ import InflectionFact from '../../../shared/inflection/InflectionFact'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 
 export default function getExamplesUsingInflection(form: string, inflection: Inflection, 
-        corpus: Corpus, knowledge: NaiveKnowledge, excludeWord?: InflectedWord, count?: number) {
+        corpus: Corpus, knowledge: NaiveKnowledge, excludeWord?: InflectedWord, count?: number): InflectableWord[] {
     count = count || 99;
 
     let inflectionIds = new Set()

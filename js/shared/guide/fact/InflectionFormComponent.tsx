@@ -313,7 +313,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
-
     getSentences(form: InflectionForm) {
         let corpus = this.props.corpus
 
