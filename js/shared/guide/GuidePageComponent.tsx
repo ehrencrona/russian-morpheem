@@ -177,9 +177,14 @@ export default function guidePageComponent(props: Props) {
                 + "ga('create', 'UA-56615416-5', 'auto');"
                 + "ga('send', 'pageview');"
             } }/>
-            <script dangerouslySetInnerHTML={ { __html: 
-                ` var factId="${ fact.getId() }"`
-            } } />
+            {
+                fact?
+                <script dangerouslySetInnerHTML={ { __html: 
+                    ` var factId="${ fact.getId() }"`
+                } } />
+                :
+                null
+            }
             <script src="/js/app.js" defer></script>
         </head>
 
