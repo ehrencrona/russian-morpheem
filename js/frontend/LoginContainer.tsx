@@ -33,6 +33,7 @@ interface BuiltProps {
 interface Props {
     factory: Factory<BuiltProps>
     bypass?: boolean
+    noSpinner?: boolean
 }
 
 interface State {
@@ -166,7 +167,12 @@ export default class LoginContainer extends Component<Props, State> {
                 <div/>)
 
             if (this.state.loading) {
-                return <img className='spinner' src='/img/spinner.gif'/>
+                if (this.props.noSpinner) {
+                    return <div/>
+                }
+                else {
+                    return <img className='spinner' src='/img/spinner.gif'/>
+                }
             }
             else if (this.state.error) {
                 return <div>

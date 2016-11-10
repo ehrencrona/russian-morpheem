@@ -16,62 +16,49 @@ let React = { createElement: createElement }
 export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkComponent: FactLinkComponent) {
     let inner
 
+    let pair = (jp, en) => {
+        return [
+            <div key='jp' className='jp'>{ jp }</div>,
+            <div key='en' className='en'>{ en }</div>
+        ]
+    }
+
     if (fact instanceof InflectableWord) {
-        inner = <span>
-            { fact.toText() }
-            { fact.pos == 'v' ?
-                <div className='en'>
-                    to { fact.getEnglish('inf') }
-                    { corpus.facts.getTagsOfFact(fact).indexOf('perfective') >= 0 ? ' (perfective)' : '' }
-                </div>
+        inner = pair(fact.toText(),
+            fact.pos == 'v' ?
+                'to ' + fact.getEnglish('inf') 
+                + (corpus.facts.getTagsOfFact(fact).indexOf('perfective') >= 0 ? ' (perfective)' : '') 
                 :
-                <div className='en'>
-                    { fact.getEnglish() }
-                </div>
-            }
-        </span>
+                fact.getEnglish())
     }
     else if (fact instanceof Word) {
-        inner = <span>
-            { fact.toText() }
-            <div className='en'>
-                { fact.getEnglish() }
-            </div>
-        </span>
+        inner = pair(
+            fact.toText(),
+            fact.getEnglish())
     }
     else if (fact instanceof Phrase) {
-        inner = <span>
-            { fact.description }
-            
-            <div className='en'>
-                { fact.en }
-            </div>
-        </span>
+        inner = pair(
+            fact.description,
+            fact.en)
     }
     else if (fact instanceof InflectionForm) {
-        inner = <span>
-            { fact.name }
-            <div className='en'>
-                (form)
-            </div>
-        </span>
+        inner = pair(
+            fact.name,
+            '(form)')
     }
     else if (fact instanceof TagFact) {
         let factoid = corpus.factoids.getFactoid(fact)
         
-        inner = <span>
-            { (factoid && factoid.name) || fact.id }
-            <div className='en'>
-                (topic)
-            </div>
-        </span>
+        inner = pair(
+            (factoid && factoid.name) || fact.id,
+            '(topic)')
     }
 
     if (!inner) {
         return null
     }
 
-    return <li className='clickable' key={ fact.getId() }>
+    return <li className='related clickable' key={ fact.getId() }>
         {
             React.createElement(factLinkComponent, { fact: fact }, inner)
         }

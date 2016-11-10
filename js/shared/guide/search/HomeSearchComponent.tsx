@@ -11,6 +11,8 @@ import doesFactMatchQuery from '../../../frontend/fact/doesFactMatchQuery'
 import Phrase from '../../phrase/Phrase'
 import getGuideUrl from '../getGuideUrl'
 import { FORMS } from '../../inflection/InflectionForms'
+import allGuideFacts from '../allGuideFacts'
+import { getLastSeenFacts } from '../lastSeenFact'
 
 let React = { createElement: createElement }
 
@@ -32,16 +34,6 @@ export default class HomeSearchComponent extends Component<Props, State> {
         }
     }
 
-    documentClickListener = () => this.setState({ query: '' })
-
-    componentWillMount() {
-        document.addEventListener('click', this.documentClickListener)
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('click', this.documentClickListener)
-    }
-
     getSearchResults() {
         let facts = []
         let query = this.state.query
@@ -49,8 +41,8 @@ export default class HomeSearchComponent extends Component<Props, State> {
         if (query) {
             let corpus = this.props.corpus
 
-            let factWeights = corpus.facts.facts
-                .concat(Object.keys(FORMS).filter(f => !corpus.facts.get(f)).map(k => FORMS[k]))
+            let factWeights = 
+                allGuideFacts(this.props.corpus)
                 .map(f => { return { fact: f, weight: doesFactMatchQuery(f, query) } })
                 .filter(fw => fw.weight > 0)
                 .sort((fw1, fw2) => fw2.weight - fw1.weight)
@@ -64,6 +56,9 @@ export default class HomeSearchComponent extends Component<Props, State> {
 
             facts = factWeights.map(fw => fw.fact)   
         }
+        else {
+            facts = getLastSeenFacts(this.props.corpus)
+        }
 
         return facts
     }
@@ -71,7 +66,7 @@ export default class HomeSearchComponent extends Component<Props, State> {
     renderSearchForm(results: Fact[]) {
         let query = this.state.query
 
-        return <div id='search' onClick={ (e) => e.stopPropagation() }>
+        return <div id='search'>
             <div className='form'>
                 <input type='text' ref='input' value={ query }
                     onChange={ event => this.setState({ query: (event.target as HTMLInputElement).value })}
@@ -97,7 +92,7 @@ export default class HomeSearchComponent extends Component<Props, State> {
 
         let query = this.state.query
 
-        if (query) {                
+        if (query || facts.length) {                
             return <div className='results'>
                 {
                     facts.length ?
@@ -107,10 +102,14 @@ export default class HomeSearchComponent extends Component<Props, State> {
                             )
                         }</ul>
                     :
-                    <div className='error'>Could not find anything. Search for a word (in Russian or English), 
-                        an expression or a grammatical term. 
-                        <br/><br/>
-                        Morpheem contains a limited vocabulary up to intermediate level.</div>
+                    <div className='errorContainer'>
+                        <div className='error'>Could not find anything matching "{ query }". 
+                            Search for a word (in Russian or English), 
+                            an expression or a grammatical term. 
+                            <br/><br/>
+                            Morpheem contains a limited vocabulary up to intermediate level.
+                        </div>
+                    </div>
                 }
             </div>
         }
@@ -168,7 +167,6 @@ export default class HomeSearchComponent extends Component<Props, State> {
 
     render() {
         let results = this.getSearchResults();
-
 
         return <div>
             <div id="upper">

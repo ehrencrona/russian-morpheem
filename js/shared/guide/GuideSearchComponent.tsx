@@ -11,6 +11,8 @@ import doesFactMatchQuery from '../../frontend/fact/doesFactMatchQuery'
 import Phrase from '../phrase/Phrase'
 import getGuideUrl from './getGuideUrl'
 import { FORMS } from '../inflection/InflectionForms'
+import allGuideFacts from './allGuideFacts'
+import { sawFact } from './lastSeenFact'
 
 let React = { createElement: createElement }
 
@@ -49,8 +51,8 @@ export default class GuideSearchComponent extends Component<Props, State> {
         if (query) {
             let corpus = this.props.corpus
 
-            let factWeights = corpus.facts.facts
-                .concat(Object.keys(FORMS).filter(f => !corpus.facts.get(f)).map(k => FORMS[k]))
+            let factWeights = 
+                allGuideFacts(this.props.corpus)
                 .map(f => { return { fact: f, weight: doesFactMatchQuery(f, query) } })
                 .filter(fw => fw.weight > 0)
                 .sort((fw1, fw2) => fw2.weight - fw1.weight)
@@ -63,6 +65,10 @@ export default class GuideSearchComponent extends Component<Props, State> {
             }
 
             facts = factWeights.map(fw => fw.fact)   
+        }
+
+        if (window['factId'] != 'undefined') {
+            sawFact(window['factId'])
         }
 
         let factLinkComponent= (props) => 

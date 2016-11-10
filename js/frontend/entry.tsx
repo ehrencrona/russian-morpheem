@@ -40,7 +40,7 @@ renderIntoId(
 )
 
 renderIntoId(
-    <LoginContainer bypass={ true } factory={ createFactory(GuideSearchComponent) }/>,
+    <LoginContainer bypass={ true } noSpinner={ true } factory={ createFactory(GuideSearchComponent) }/>,
     'react-guide-search'
 )
 

@@ -177,11 +177,19 @@ export default function guidePageComponent(props: Props) {
                 + "ga('create', 'UA-56615416-5', 'auto');"
                 + "ga('send', 'pageview');"
             } }/>
-
+            <script dangerouslySetInnerHTML={ { __html: 
+                ` var factId="${ fact.getId() }"`
+            } } />
             <script src="/js/app.js" defer></script>
         </head>
 
         <body className={ props.bodyClass }>
+            <div id='logo'>
+                <a href='/'>
+                    <img src='/img/logo-orange.png'/>
+                </a>
+            </div>
+
             <div id="react-guide-search"></div>
 
             { props.children }
