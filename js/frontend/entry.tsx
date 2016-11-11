@@ -9,7 +9,6 @@ import HomeSearchComponent from '../shared/guide/search/HomeSearchComponent'
 import ExplainSentenceComponent from '../shared/guide/ExplainSentenceComponent'
 import GuideSearchComponent from '../shared/guide/GuideSearchComponent'
 
-import 'drag-drop-webkit-mobile'
 import xr from 'xr'
 
 import { render } from 'react-dom'
@@ -27,6 +26,10 @@ function renderIntoId(component, elementId) {
             element
         );
     }
+}
+
+if (document.getElementById('react-admin-root')) {
+    require('drag-drop-webkit-mobile')
 }
 
 renderIntoId(
