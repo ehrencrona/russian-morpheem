@@ -186,6 +186,8 @@ export default class Phrase extends AbstractFact {
             }
         })
 
+        allCases.delete(GrammaticalCase.CONTEXT)
+
         return allCases ? Array.from(allCases) : [] 
     }
 
