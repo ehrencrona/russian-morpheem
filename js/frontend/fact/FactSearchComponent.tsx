@@ -1,6 +1,10 @@
+import allGuideFacts from '../../shared/guide/allGuideFacts'
+
 import Corpus from '../../shared/Corpus'
-import Fact from '../../shared/fact/Fact'
 import TagFact from '../../shared/TagFact'
+
+import Fact from '../../shared/fact/Fact'
+
 import Tab from '../OpenTab'
 import FactNameComponent from './FactNameComponent'
 import { Component, createElement } from 'react'
@@ -45,7 +49,7 @@ export default class FactSearchComponent extends Component<Props, State> {
         let facts = []
         
         if (filterString) {
-            facts = this.props.corpus.facts.facts.filter(
+            facts = allGuideFacts(corpus).filter(
                 f => doesFactMatchQuery(f, filterString)).slice(0, MAX_SUGGESTIONS)
         }
 

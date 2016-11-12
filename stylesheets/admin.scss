@@ -1035,11 +1035,15 @@ ul.stats {
     }
 }
 
+input.factoid {
+    width: 100%;
+}
+
 textarea.factoid {
     width: 100%;
     font-size: inherit;
     font-family: inherit;
-    height: 15em;
+    height: 40em;
 }
 
 .comment {

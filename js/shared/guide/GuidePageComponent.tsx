@@ -77,11 +77,17 @@ export default function guidePageComponent(props: Props) {
         if (!title) {
             let seoText = getPhraseSeoText(phrase)
 
-            title = (seoText ? seoText + ' e.g. ' : '')
-                + phrase.description
-                + ' ("' 
-                + phrase.en 
-                + '")'
+            if (seoText) {
+                title = seoText + ' ('
+                    + phrase.description
+                    + ' – ' 
+                    + phrase.en 
+                    + ') in Russian'
+            }
+            else {
+                title = phrase.description
+                    + ' ("' + phrase.en + '") in Russian'
+            }
         }
     }
     else if (fact instanceof InflectionFact) {
@@ -113,13 +119,11 @@ export default function guidePageComponent(props: Props) {
     }
     else if (fact instanceof InflectionForm) {
         if (!title) {
-            title = 'The ' + fact.name
-
             if (fact.grammaticalCase) {
-                title += ' Case in Russian Grammar'
+                title += 'The ' + capitalize(fact.name) + ' Case in Russian Grammar'
             }
             else {
-                 title += ' form in Russian'
+                 title += 'The ' + fact.name + ' form in Russian'
             }
         }
     }

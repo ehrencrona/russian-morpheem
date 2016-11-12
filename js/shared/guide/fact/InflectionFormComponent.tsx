@@ -200,8 +200,15 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let sentences = this.getSentences(form)
 
+        let title = corpus.factoids.getFactoid(form).name || form.name
+
+        let formationExists = !!POS.find(pos => 
+            !!INFLECTION_FORMS['ru'][pos].allForms
+                .find(oneForm => 
+                    form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
+
         return <div className='inflectionForm'>
-            <h1>The { form.name }</h1>
+            <h1>The { title }</h1>
             <div className='columns'>
                 <div className='main'>
                     {
@@ -212,34 +219,40 @@ export default class InflectionFormComponent extends Component<Props, State> {
                             null 
                     }
 
-                    <h3>Formation</h3>
-
-                    { !this.state.allFormations ?
+                    { formationExists ? 
                         <div>
-                            These are the most important ways of forming the { form.name }.
-                            
-                            <div className='seeAll' onClick={ () => this.setState({ allFormations : true })}>See all</div>
-                        </div>
-                        :                        
-                        <div>
-                            These are all ways of forming the { form.name }.
-                            
-                            <div className='seeAll' onClick={ () => this.setState({ allFormations : false })}>See less</div>
-                        </div>
-                    }
-                    {
-                        POS.map(pos => {
-                            let forms = INFLECTION_FORMS['ru'][pos].allForms
-                                .filter(oneForm => 
-                                    form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0)
+                            <h3>Formation</h3>
 
-                            if (forms.length) {
-                                return this.renderFormation(pos, forms)
+                            { !this.state.allFormations ?
+                                <div>
+                                    These are the most important ways of forming the { form.name }.
+                                    
+                                    <div className='seeAll' onClick={ () => this.setState({ allFormations : true })}>See all</div>
+                                </div>
+                                :                        
+                                <div>
+                                    These are all ways of forming the { form.name }.
+                                    
+                                    <div className='seeAll' onClick={ () => this.setState({ allFormations : false })}>See less</div>
+                                </div>
                             }
-                            else {
-                                return null
+                            {
+                                POS.map(pos => {
+                                    let forms = INFLECTION_FORMS['ru'][pos].allForms
+                                        .filter(oneForm => 
+                                            form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0)
+
+                                    if (forms.length) {
+                                        return this.renderFormation(pos, forms)
+                                    }
+                                    else {
+                                        return null
+                                    }
+                                })            
                             }
-                        })            
+                        </div>
+                        : 
+                        null
                     }
 
                     { phrases.length ?

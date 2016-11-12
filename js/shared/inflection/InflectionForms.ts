@@ -163,6 +163,7 @@ export class InflectionForm extends AbstractFact {
             (this.gender != null && this.gender != otherForm.gender) ||
             (this.person != null && this.person != otherForm.person) ||
             (this.number != null && this.number != otherForm.number) ||
+            (this.animate != null && this.animate != otherForm.animate) ||
             (this.adjectiveForm != null && this.adjectiveForm != otherForm.adjectiveForm) ||
             (this.comparison != null && this.comparison != otherForm.comparison) ||
             (this.command != null && this.command != otherForm.command) ||
