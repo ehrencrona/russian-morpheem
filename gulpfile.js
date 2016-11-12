@@ -18,10 +18,10 @@ gulp.task('livereload', () => {
 	livereload.listen();
 })
  
-gulp.task('sass:watch', function () {
-	gulp.watch('./stylesheets/*.scss', [ 'sass' ]);
+gulp.task('sass:watch', () => {
+	gulp.watch('./stylesheets/*.scss', gulp.series( 'sass' ));
 });
 
-gulp.task('watch', [ 'livereload', 'sass:watch', 'js:watch' ]);
+gulp.task('watch', gulp.parallel('livereload', 'sass:watch', 'js:watch'));
 
-gulp.task('default', [ 'sass', 'js' ]);
+gulp.task('default', gulp.parallel('sass', 'js'));
