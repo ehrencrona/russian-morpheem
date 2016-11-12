@@ -200,7 +200,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let sentences = this.getSentences(form)
 
-        let title = corpus.factoids.getFactoid(form).name || form.name
+        let title = corpus.factoids.getFactoid(form).name || ('The ' + form.name)
 
         let formationExists = !!POS.find(pos => 
             !!INFLECTION_FORMS['ru'][pos].allForms
@@ -208,7 +208,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                     form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
 
         return <div className='inflectionForm'>
-            <h1>The { title }</h1>
+            <h1>{ title }</h1>
             <div className='columns'>
                 <div className='main'>
                     {

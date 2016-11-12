@@ -119,7 +119,7 @@ export default function guidePageComponent(props: Props) {
     }
     else if (fact instanceof InflectionForm) {
         if (!title) {
-            if (fact.grammaticalCase) {
+            if (fact.grammaticalCase && fact.name.indexOf(' ') < 0) {
                 title += 'The ' + capitalize(fact.name) + ' Case in Russian Grammar'
             }
             else {

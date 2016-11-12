@@ -430,7 +430,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     transforms.length ?
 
                     transforms.map((transform) => 
-                        <div> 
+                        <div key={ transform.from + transform.to } > 
                             *) <strong>
                                 { transform.from }
                             </strong> is replaced with <strong>
