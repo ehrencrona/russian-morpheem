@@ -65,6 +65,10 @@ abstract class AbstractAnyWord implements AnyWord {
             }
         }
 
+        if (form == 'inf') {
+            result = 'to ' + result
+        }
+
         return result
     }
 

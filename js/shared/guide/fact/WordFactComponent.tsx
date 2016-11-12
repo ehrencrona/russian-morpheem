@@ -182,7 +182,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
         return <div className='fact'>
             <h1>{ word.toText() }</h1>
-            <h2>{ word.getEnglish() }</h2>
+            <h2>{ word.getEnglish((word.pos == 'v' ? 'inf' : '')) }</h2>
 
             {
                 factoid ? 

@@ -66,7 +66,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
             let en = translation.string
 
             if (word.pos == 'v') {
-                en = 'to ' + word.getEnglish('inf', translation.index)                
+                en = word.getEnglish('inf', translation.index)                
             }
             
             lines.push(<div key='en' className='en'>{ en }</div>)

@@ -26,10 +26,9 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
     if (fact instanceof InflectableWord) {
         inner = pair(fact.toText(),
             fact.pos == 'v' ?
-                'to ' + fact.getEnglish('inf') 
-                + (corpus.facts.hasTag(fact, 'perfective') ? ' (perfective)' : '') 
+                fact.getEnglish('inf') + (corpus.facts.hasTag(fact, 'perfective') ? ' (perfective)' : '') 
                 :
-                fact.getEnglish())
+                fact.getEnglish())            
     }
     else if (fact instanceof Word) {
         inner = pair(
