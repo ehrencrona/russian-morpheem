@@ -38,6 +38,19 @@ export default class PosFormWordMatch extends AbstractFormMatch implements CaseS
     wordMatches(word: Word, context: MatchContext) {
         if (this.posName &&
             word.pos != this.posName) {
+
+            // possessives are pronouns but can for most purposes be treated as adjectives
+            if (this.posName == 'adj' && context.facts.hasTag(word, 'possessive')) {
+                if (word instanceof InflectedWord) {
+                    let wordForm = FORMS[word.form]
+
+                    return wordForm && this.matchesForm(wordForm, context) 
+                }
+                else {
+                    return true
+                }
+            }
+
             return false
         }
 

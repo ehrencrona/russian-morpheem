@@ -25,7 +25,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class SentenceStatusComponent extends Component<Props, State> {
+export default class SentencePhrasesComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
@@ -158,7 +158,7 @@ export default class SentenceStatusComponent extends Component<Props, State> {
                     {
 
                         potentialPhrases.map((p) => 
-                            <li>
+                            <li key={ p.id }>
                                 <div className='clickable button' onClick={ () => this.addPhrase(p) } >Add</div>
                                 { renderPhrase(p) }
                             </li>

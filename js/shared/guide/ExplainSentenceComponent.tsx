@@ -98,7 +98,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                     }</div>
                 ]
 
-                if (facts.getTagsOfFact(word.getWordFact()).indexOf('perfective') >= 0) {
+                if (facts.hasTag(word.getWordFact(), 'perfective')) {
                     translation.string = 'will ' + dictionaryForm
                 }
 
@@ -276,20 +276,26 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         let nextSentence
         id = this.props.sentence.id + 1
 
-        while (id >= 0 && !nextSentence) {
+        while (id < this.props.corpus.sentences.sentences.length && !nextSentence) {
             nextSentence = this.props.corpus.sentences.get(id++)
         }
 
         return <div className='nav'>{
-                React.createElement(this.props.factLinkComponent, 
-                    { fact: previousSentence }, '<<< ') 
+                previousSentence ? 
+                    React.createElement(this.props.factLinkComponent, 
+                        { fact: previousSentence }, '<<< ')
+                    :
+                    null 
             }
             #<a href={ '/admin.html#' + this.props.sentence.id }>{
                 this.props.sentence.id   
             }</a>
             {
-                React.createElement(this.props.factLinkComponent, 
-                    { fact: nextSentence }, ' >>>') 
+                nextSentence ?
+                    React.createElement(this.props.factLinkComponent, 
+                        { fact: nextSentence }, ' >>>')
+                    :
+                    null 
         }</div>
     }
 

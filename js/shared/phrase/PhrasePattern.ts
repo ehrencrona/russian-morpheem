@@ -492,6 +492,12 @@ export default class PhrasePattern {
 
                 let m = wordMatch.matches(context, at, this.wordMatches, j)
 
+                if (!m && j > 0 && words[at].pos == 'part') {
+                    at++
+
+                    m = wordMatch.matches(context, at, this.wordMatches, j)
+                }
+
                 if (!m && !wordMatch.allowEmptyMatch()) {
                     found = false
                     break

@@ -233,8 +233,10 @@ export default class Facts {
         }
     }
 
-    hasTag(fact: Fact) {
-        return (this.tagsByFactIds[fact.getId()] || []).indexOf(fact.getId()) >= 0
+    hasTag(fact: Fact, tag: string) {
+        let tags = this.tagsByFactIds[fact.getId()]
+        
+        return tags && tags.indexOf(tag) >= 0
     }
 
     getTagsOfFact(fact: Fact) {

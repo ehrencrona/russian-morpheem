@@ -60,32 +60,23 @@ export default class InflectedWord extends Word {
 
             homonyms = homonyms.filter((other) => other !== this && other != this.omitted)
 
-            if (!homonyms.find((otherWord) => otherWord.getEnglish() == this.getEnglish())) {
-                disambiguation = this.getEnglish()
-            }
-            else if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
-                disambiguation = this.classifier
-            }
-            else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
-                    otherWord.form == this.form)) {
+            if (!homonyms.find((otherWord) => otherWord.getWordFact().getId() != this.getWordFact().getId())) {
                 disambiguation = this.form
             }
+            else if (!homonyms.find((otherWord) => !(otherWord instanceof InflectedWord) ||
+                otherWord.word.getIdWithoutClassifier() != this.word.getIdWithoutClassifier())) {
+                disambiguation = this.getEnglish()
+            }
+            else if (!homonyms.find((otherWord) => otherWord.getWordFact().getId() == this.getWordFact().getId())) {
+                disambiguation = this.word.toText()
+            }
             else {
-                let defaultInflection = this.word.getDefaultInflection().jp
-
-                if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
-                    otherWord.word.getDefaultInflection().jp == defaultInflection)) {
-                    disambiguation = defaultInflection
-                } 
-                else if (!homonyms.find((otherWord) => (otherWord instanceof InflectedWord) && 
-                    otherWord.word.getEnglish() == this.getEnglish() && 
-                    otherWord.form == this.form)) {
-                    disambiguation = this.form + ', ' + this.getEnglish()
+                if (!homonyms.find((otherWord) => otherWord instanceof InflectedWord && 
+                    otherWord.form == this.form && otherWord.word.toText() == this.word.toText())) {
+                    disambiguation = this.form + ', ' + this.word.toText()
                 }
                 else {
-                    console.warn(this + ' is ambiguous no matter what.', this.getId(), homonyms.map((w) => w.getId()))
-
-                    disambiguation = this.form + (this.classifier ? ', ' + this.classifier : '') 
+                    disambiguation = this.form + ', ' + this.word.toText() + ', ' + this.getEnglish()
                 }
             }
 

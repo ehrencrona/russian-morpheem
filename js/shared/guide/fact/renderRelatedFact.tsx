@@ -27,7 +27,7 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
         inner = pair(fact.toText(),
             fact.pos == 'v' ?
                 'to ' + fact.getEnglish('inf') 
-                + (corpus.facts.getTagsOfFact(fact).indexOf('perfective') >= 0 ? ' (perfective)' : '') 
+                + (corpus.facts.hasTag(fact, 'perfective') ? ' (perfective)' : '') 
                 :
                 fact.getEnglish())
     }

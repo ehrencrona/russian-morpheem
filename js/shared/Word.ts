@@ -61,14 +61,13 @@ export default class Word extends AbstractAnyWord {
 
             homonyms = homonyms.filter((other) => other !== this)
 
-            if (!homonyms.find((otherWord) => otherWord.getEnglish() == this.getEnglish())) {
-                form = this.getEnglish()
-            }
-            else if (!homonyms.find((otherWord) => otherWord.classifier == this.classifier)) {
+            if (!homonyms.find((otherWord) =>  
+                    otherWord.getWordFact() != otherWord ||
+                    otherWord.getIdWithoutClassifier() != this.getIdWithoutClassifier())) {
                 form = this.classifier
             }
             else {
-                form = (this.classifier ? this.classifier : 'uninfl.')
+                form = this.getEnglish()
             }
 
             return form
