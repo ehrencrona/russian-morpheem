@@ -13,6 +13,8 @@ import { InflectionForm, FORMS } from '../inflection/InflectionForms'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectedWord from '../InflectedWord'
 import getPhraseSeoText from './fact/getPhraseSeoText'
+import getExamplesUsingInflection from './fact/getExamplesUsingInflection'
+import NaiveKnowledge from '../study/NaiveKnowledge'
 
 import Phrase from '../phrase/Phrase'
 
@@ -83,9 +85,9 @@ export default function guidePageComponent(props: Props) {
         }
     }
     else if (fact instanceof InflectionFact) {
-        if (!title && props.context) {
-            let form = FORMS[fact.form]
+        let form = FORMS[fact.form]
 
+        if (!title && props.context) {
             let inflected = props.context.word
 
             title = 'The ' + form.name 
@@ -95,6 +97,18 @@ export default function guidePageComponent(props: Props) {
             description = 'The ' + form.name 
                 + ' of the Russian ' + POSES[props.context.pos] + ' ' 
                 + inflected.toText() + ' ("' + inflected.getEnglish() + '") is ' + props.context.toText() + '.'
+        }
+        else {
+            title = 'Forming the ' 
+                + form.name 
+                + ' of Russian ' + POSES[fact.inflection.pos] + 's' 
+                + ' using -' + fact.inflection.getEnding([fact.form]).suffix
+
+            description = 'Some ' + POSES[fact.inflection.pos] + 's use the ending -' 
+                + fact.inflection.getEnding([fact.form]).suffix + ' to form the ' 
+                + form.name + ' form in Russian, for example ' + 
+                getExamplesUsingInflection(fact.form, fact.inflection, props.corpus, 
+                    new NaiveKnowledge(), null, 2).map(w => w.toText()).join(' and ') + '.' 
         }
     }
     else if (fact instanceof InflectionForm) {
