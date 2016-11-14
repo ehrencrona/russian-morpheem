@@ -99,7 +99,7 @@ client.on('connect', () => {
                     if (fact instanceof InflectableWord) {
                         let word = fact.getDefaultInflection().jp.toLowerCase()
 
-                        let key = 'ru->en.' + word + '-' + OLD_POS_BY_NEW[fact.inflection.pos]
+                        let key = 'ru->en.' + word + '-' + OLD_POS_BY_NEW[fact.inflection.wordForm.pos]
 
                         promise = new Promise((resolve, reject) => {
                             client.lrange(key, 0, 1,

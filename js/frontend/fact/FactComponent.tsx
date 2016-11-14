@@ -19,7 +19,7 @@ import TransformFactComponent from '../TransformFactComponent'
 
 import InflectableWord from '../../shared/InflectableWord'
 import Word from '../../shared/Word'
-import { InflectionForm } from '../../shared/inflection/InflectionForms' 
+import InflectionForm from '../../shared/inflection/InflectionForm' 
 import { EndingTransform } from '../../shared/Transforms'
 
 import { Component, createElement } from 'react'

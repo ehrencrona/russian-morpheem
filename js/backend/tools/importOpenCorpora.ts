@@ -6,7 +6,7 @@ import { createInterface } from 'readline'
 
 import 'source-map-support/register'
 
-import INFLECTION_FORMS from '../../shared/inflection/InflectionForms'
+import { INFLECTION_FORMS } from '../../shared/inflection/InflectionForms'
 
 var lineReader = createInterface({
 	input: createReadStream('data/dict.opcorpora.txt')
@@ -45,11 +45,11 @@ function resetWord() {
 }
 
 function wordEnded() {
-	if (!INFLECTION_FORMS['ru'][word.pos]) {
+	if (!INFLECTION_FORMS[word.pos]) {
 		return
 	}
 
-	let defaultForm = INFLECTION_FORMS['ru'][word.pos].allForms[0]
+	let defaultForm = INFLECTION_FORMS[word.pos].allForms[0]
 
 	let existingWord = wordsByDefaultForm[defaultForm]
 

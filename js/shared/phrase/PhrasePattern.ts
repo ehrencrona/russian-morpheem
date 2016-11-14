@@ -4,12 +4,13 @@ import WildcardMatch from './WildcardMatch'
 import { ExactWordMatch } from './ExactWordMatch'
 import PosFormWordMatch from './PosFormWordMatch'
 import WordInFormMatch from './WordInFormMatch'
-import { POS_NAMES } from './PosFormWordMatch'
 import TagWordMatch from './TagWordMatch'
 import { QUANTIFIERS } from './AbstractQuantifierMatch'
 
 import Inflections from '../inflection/Inflections'
-import { ENGLISH_FORMS_BY_POS, FORMS, Number, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS, FORMS } from '../inflection/InflectionForms'
+import { GrammarNumber, GrammarCase, PartOfSpeech as PoS } from '../inflection/Dimensions'
+import InflectionForm from '../inflection/InflectionForm'
 import Facts from '../fact/Facts'
 
 import AnyWord from '../AnyWord'
@@ -39,6 +40,24 @@ export interface JsonFormat {
 }
 
 let counter = 0
+
+export const POS_BY_NAME = {
+    'verb': PoS.VERB,
+    'noun': PoS.NOUN,
+    'adjective': PoS.ADJECTIVE,
+    'adverb': PoS.ADVERB,
+    'pronoun': PoS.PRONOUN,
+    'preposition': PoS.PREPOSITION,
+    'numeral': PoS.NUMBER,
+    'question': PoS.QUESTION,
+    'conjunction': PoS.CONJUNCTION
+}
+
+export let POS_NAMES: { [pos: number] : string } = {}
+
+for (let name in POS_BY_NAME) {
+    POS_NAMES[POS_BY_NAME[name]] = name
+}
 
 function getEnglishInflectionFromList(pos, form, inflectionList) {
     let en: { [ form: string ]: string } = {}
@@ -120,9 +139,9 @@ const defaultPhraseToString: PhraseToString =
     return childMatch.pattern.getEnglishFragments().map(f => f.en(childMatch, wordToString)).join(' ')
 }
 
-function formTransform(pos: string, forms: string[]): WordToString {
+function formTransform(pos: PoS, forms: string[]): WordToString {
     return (word: Word, enSentence) => {
-        if (word instanceof InflectedWord && word.pos == pos) {
+        if (word instanceof InflectedWord && word.wordForm.pos == pos) {
             let inflection
 
             forms.find(form => {
@@ -145,7 +164,7 @@ function formTransform(pos: string, forms: string[]): WordToString {
 
 function simplePresentTransform(): WordToString {
     return (word: Word, enSentence) => {
-        if (word instanceof InflectedWord && word.pos == 'v') {
+        if (word instanceof InflectedWord && word.wordForm.pos == PoS.VERB) {
             let inflection = word.word.inflect('inf')
             
             if (inflection) {
@@ -164,9 +183,9 @@ function simplePresentTransform(): WordToString {
     }
 }
 
-function englishOnlyTransform(pos: string, englishForm: string): WordToString {
+function englishOnlyTransform(pos: PoS, englishForm: string): WordToString {
     return (word: Word, enSentence) => {
-        if (word instanceof InflectedWord && word.pos == pos) {
+        if (word instanceof InflectedWord && word.wordForm.pos == pos) {
             return word.word.getEnglish(englishForm)
         }
 
@@ -175,18 +194,18 @@ function englishOnlyTransform(pos: string, englishForm: string): WordToString {
 }
 
 const TRANSFORMS: { [id: string]: WordToString } = {
-    'inf': formTransform('v', ['inf']),
+    'inf': formTransform(PoS.VERB, ['inf']),
     'pres': simplePresentTransform(),
-    '1sg': formTransform('v', ['1']),
-    'prog': englishOnlyTransform('v', 'prog'),
-    'past': englishOnlyTransform('v', 'past'),
-    'pastpart': englishOnlyTransform('v', 'pastpart'),
-    'sg': formTransform('n', ['nom']),
-    'pl': formTransform('n', ['pl']),
-    'nom': formTransform('pron', ['nom', 'pl']),
-    'acc': formTransform('pron', ['acc']),
-    'adj': formTransform('adj', ['m']),
-    'adv': formTransform('adj', ['adv'])
+    '1sg': formTransform(PoS.VERB, ['1']),
+    'prog': englishOnlyTransform(PoS.VERB, 'prog'),
+    'past': englishOnlyTransform(PoS.VERB, 'past'),
+    'pastpart': englishOnlyTransform(PoS.VERB, 'pastpart'),
+    'sg': formTransform(PoS.NOUN, ['nom']),
+    'pl': formTransform(PoS.NOUN, ['pl']),
+    'nom': formTransform(PoS.PRONOUN, ['nom', 'pl']),
+    'acc': formTransform(PoS.PRONOUN, ['acc']),
+    'adj': formTransform(PoS.ADJECTIVE, ['m']),
+    'adv': formTransform(PoS.ADJECTIVE, ['adv'])
 }
 
 class Fragment implements EnglishPatternFragment {
@@ -293,7 +312,7 @@ class Fragment implements EnglishPatternFragment {
         else if (words.find(w => w instanceof InflectedWord && w.word.getId() == 'ты')) {
             form = '2'
         }
-        else if (words.find(w => w instanceof InflectedWord && FORMS[w.form].number == Number.PLURAL)) {
+        else if (words.find(w => w instanceof InflectedWord && FORMS[w.form].number == GrammarNumber.PLURAL)) {
             form = '1pl'
         }
         else {
@@ -340,7 +359,7 @@ class Fragment implements EnglishPatternFragment {
                         inflectAsPoS = 'v'
                     }
 
-                    let accordWith = words.find(w => w.pos == inflectAsPoS) 
+                    let accordWith = words.find(w => w.wordForm.pos == inflectAsPoS) 
                     let form: string
                     
                     if (!accordWith) {
@@ -370,7 +389,7 @@ class Fragment implements EnglishPatternFragment {
                             let words = match.words.filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord)).map(w => w.word as InflectedWord)
 
                             let form = this.getVerbForm(words)
-                            wordToString = formTransform('v', [ form ])
+                            wordToString = formTransform(PoS.VERB, [ form ])
                         }
                         else {
                             console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)
@@ -492,7 +511,7 @@ export default class PhrasePattern {
 
                 let m = wordMatch.matches(context, at, this.wordMatches, j)
 
-                if (!m && j > 0 && words[at].pos == 'part') {
+                if (!m && j > 0 && words[at].wordForm.pos == PoS.PARTICLE) {
                     at++
 
                     m = wordMatch.matches(context, at, this.wordMatches, j)
@@ -574,7 +593,7 @@ export default class PhrasePattern {
         this.wordMatches.forEach((m) => m.setCorpus(corpus))
     }
 
-    hasCase(grammaticalCase: GrammaticalCase): boolean {
+    hasCase(grammaticalCase: GrammarCase): boolean {
         return !!this.wordMatches.find((m) => {
             if (m instanceof PhraseMatch) {
                 return m.overrideFormCase == grammaticalCase
@@ -610,15 +629,15 @@ export default class PhrasePattern {
             posStr = null
         }
 
-        if (posStr && !POS_NAMES[posStr]) {
-            throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_NAMES).join(', ') }.`)
+        if (posStr && !POS_BY_NAME[posStr]) {
+            throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_BY_NAME).join(', ') }.`)
         }
 
         if (posStr == 'adverb' && !formStr) {
             return new AdverbWordMatch(quantifier)
         }
 
-        return new PosFormWordMatch(posStr, FORMS[formStr], formStr, quantifier)
+        return new PosFormWordMatch(POS_BY_NAME[posStr], FORMS[formStr], formStr, quantifier)
     }
 
     getWords(): Set<AnyWord> {
@@ -643,8 +662,8 @@ export default class PhrasePattern {
         return result
     }
 
-    getCases(): Set<GrammaticalCase> {
-        let result = new Set<GrammaticalCase>()
+    getCases(): Set<GrammarCase> {
+        let result = new Set<GrammarCase>()
 
         this.wordMatches.forEach((wordMatch) => {
             if (wordMatch.isCaseStudy()) {
@@ -669,21 +688,21 @@ export default class PhrasePattern {
 
             let match: WordMatch
 
-            if (str.indexOf('@') == 0 || (str.indexOf('@') > 0 && POS_NAMES[str.substr(0, str.indexOf('@'))])) {
+            if (str.indexOf('@') == 0 || (str.indexOf('@') > 0 && POS_BY_NAME[str.substr(0, str.indexOf('@'))])) {
                 match = this.parseFormMatch(str, line)
             }
             else if (FORMS[str]) {
                 match = new PosFormWordMatch(null, FORMS[str], str, null)
             }
-            else if (POS_NAMES[str]) {
+            else if (POS_BY_NAME[str]) {
                 if (str == 'adverb') {
                     match = new AdverbWordMatch()
                 }
                 else {
-                    match = new PosFormWordMatch(str, null, null, null)
+                    match = new PosFormWordMatch(POS_BY_NAME[str], null, null, null)
                 }
             }
-            else if (POS_NAMES[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
+            else if (POS_BY_NAME[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
                 let posStr = str.substr(0, str.length-1) 
                 let quantifier = str[str.length-1]
 
@@ -691,7 +710,7 @@ export default class PhrasePattern {
                     match = new AdverbWordMatch(quantifier)
                 }
                 else {
-                    match = new PosFormWordMatch(posStr, null, null, quantifier)
+                    match = new PosFormWordMatch(POS_BY_NAME[str], null, null, quantifier)
                 }
             }
             else if (str.substr(0, 7) == 'phrase:') {
@@ -700,7 +719,7 @@ export default class PhrasePattern {
                 let hash = str.match(/#([^@]*)/)
                 let at = str.match(/@([^#]*)/)
 
-    	        let grammaticalCase: GrammaticalCase
+    	        let grammaticalCase: GrammarCase
                 let tag
 
                 if (at) {
@@ -812,7 +831,7 @@ export default class PhrasePattern {
                 }
             }
             else {
-                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speech (${ Object.keys(POS_NAMES).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
+                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speech (${ Object.keys(POS_BY_NAME).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
             }
 
             wordMatches.push(match)

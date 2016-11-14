@@ -1,3 +1,4 @@
+import { WordForm } from '../shared/inflection/WordForm';
 
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
@@ -16,25 +17,26 @@ import Phrases from '../shared/phrase/Phrases'
 import Sentences from '../shared/Sentences'
 import PhrasePattern from '../shared/phrase/PhrasePattern'
 import PhraseMatch from '../shared/phrase/PhraseMatch'
+import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 
 import { expect } from 'chai';
 
 let mascInflection =
-    new Inflection('m', 'nom', 'n', 
-        parseEndings('nom , acc , gen и, genpl ах, prep е', 'ru', 'n').endings)
+    new Inflection('m', 'nom', new WordForm({ pos: PoS.NOUN }), 
+        parseEndings('nom , acc , gen и, genpl ах, prep е', 'ru', PoS.NOUN).endings)
 
 let femInflection =
-    new Inflection('f', 'nom', 'n', 
-        parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', 'ru', 'n').endings)
+    new Inflection('f', 'nom', new WordForm({ pos: PoS.NOUN }),
+        parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', 'ru', PoS.NOUN).endings)
 
 let verbInflection =
-    new Inflection('verb', '1', 'v', 
-        parseEndings('1 ю, 2 ешь, 3 ет', 'ru', 'v').endings)
+    new Inflection('verb', '1', new WordForm({ pos: PoS.VERB }),
+        parseEndings('1 ю, 2 ешь, 3 ет', 'ru', PoS.VERB).endings)
 
 let inflections = new Inflections([
     femInflection,
-    new Inflection('adj', 'm', 'adj', 
-        parseEndings('m ий, adv о, genpl ах, gen а', 'ru', 'adj').endings),
+    new Inflection('adj', 'm', new WordForm({ pos: PoS.ADJECTIVE }),
+        parseEndings('m ий, adv о, genpl ах, gen а', 'ru', PoS.ADJECTIVE).endings),
     mascInflection,
     verbInflection
 ])

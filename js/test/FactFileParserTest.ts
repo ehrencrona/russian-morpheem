@@ -65,7 +65,7 @@ describe('FactFileParser', function() {
         var facts = parser(
             'word:meaning, pos: verb', inflections, 'ru')
 
-        expect((facts.facts[0] as Word).pos).to.equal('verb')
+        expect((facts.facts[0] as Word).wordForm.pos).to.equal('verb')
     })
 
     it('parses grammar facts', function () {

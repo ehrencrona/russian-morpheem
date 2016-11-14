@@ -42,7 +42,7 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 import { WordMatched } from '../../shared/phrase/Match'
 import { CaseStudy } from '../../shared/phrase/PhrasePattern'
-import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
+import { GrammarCase } from '../../shared/inflection/Dimensions'
 
 import ExplainFactComponent from '../../shared/guide/fact/FactComponent'
 import OverlayComponent from '../../shared/guide/fact/OverlayComponent'

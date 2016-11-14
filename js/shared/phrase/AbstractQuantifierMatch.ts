@@ -2,7 +2,7 @@
 import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
-import { FORMS, InflectionForm } from '../inflection/InflectionForms'
+import FORMS from '../inflection/InflectionForms'
 import MatchContext from './MatchContext'
 import Corpus from '../Corpus'
 

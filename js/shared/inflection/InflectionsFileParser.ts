@@ -1,4 +1,5 @@
 'use strict'
+import { WordForm } from './WordForm';
 
 import Inflection from './Inflection'
 import Inflections from './Inflections'
@@ -6,7 +7,8 @@ import Ending from '../Ending'
 import Transform from '../Transform'
 import allTransforms from '../Transforms'
 import { formExists } from './InflectionForms'
-import INFLECTION_FORMS from './InflectionForms'
+import { INFLECTION_FORMS, POS_BY_NAME } from './InflectionForms'
+import { PartOfSpeech as PoS } from './Dimensions'
 
 interface Endings {
     default: string, 
@@ -16,7 +18,7 @@ interface Endings {
     description: string
 }
 
-export function parseEndings(str: string, lang?: string, pos?: string, id?: string): Endings {
+export function parseEndings(str: string, lang?: string, pos?: PoS, id?: string): Endings {
     let result : { [s: string]: Ending } = {}
     let inherits: string[] = []
     let defaultForm 
@@ -71,7 +73,7 @@ export function parseEndings(str: string, lang?: string, pos?: string, id?: stri
                 endingString = endingString.substr(1)
             }
 
-            if (lang && !formExists(lang, pos, form)) {
+            if (lang && !formExists(pos, form)) {
                 console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang} when parsing "${id}".`)
             }
 
@@ -131,18 +133,18 @@ export default function parseInflectionsFile(data, lang?: string) {
             new Error('Every line should start with the ID of the inflection followed by colon. "' + line + '" does not.')
         }
 
-        let id, pos
+        let id, pos: PoS
         
         let m = line.substr(0, i).match(/(.*)\[(.*)\]/)
 
         if (m) {
             id = m[1]
-            pos = m[2]
+            pos = POS_BY_NAME[m[2]]
 
-            let forms = INFLECTION_FORMS[lang][pos]
-            
-            if (!forms) {
-                throw new Error(`Unknown PoS ${pos} in language ${lang} for inflection ${id}.`)
+            let forms = INFLECTION_FORMS[pos]
+
+            if (!pos || !forms) {
+                throw new Error(`Unknown PoS ${m[2]} in language ${lang} for inflection ${id}.`)
             }
         }
         else {
@@ -153,9 +155,9 @@ export default function parseInflectionsFile(data, lang?: string) {
 
         let endings = parseEndings(rightSide, lang, pos, id)
 
-        let defaultForm = INFLECTION_FORMS[lang][pos].allForms[0]
+        let defaultForm = INFLECTION_FORMS[pos].allForms[0]
 
-        let inflection = new Inflection(id, defaultForm, pos, endings.endings, endings.description)
+        let inflection = new Inflection(id, defaultForm, new WordForm({ pos: pos }), endings.endings, endings.description)
 
         endings.inherits.forEach((parentId) => {
             let parent = inflectionById[parentId]
@@ -167,7 +169,7 @@ export default function parseInflectionsFile(data, lang?: string) {
             inflection.inherit(parent)  
         })
 
-        inflection.defaultForm = INFLECTION_FORMS[lang][pos].allForms.find((form) => inflection.hasForm(form))
+        inflection.defaultForm = INFLECTION_FORMS[pos].allForms.find((form) => inflection.hasForm(form))
 
         inflection.transforms = endings.transforms
 

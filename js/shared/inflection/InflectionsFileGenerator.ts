@@ -3,7 +3,7 @@
 import Inflections from './Inflections'
 import Inflection from './Inflection'
 import Ending from '../Ending'
-import INFLECTION_FORMS from './InflectionForms'
+import { INFLECTION_FORMS } from './InflectionForms'
 
 function endingToString(ending: Ending) {
     let result = ''
@@ -22,10 +22,10 @@ function endingToString(ending: Ending) {
 }
 
 function inflectionToString(inflection: Inflection, lang: string) {
-    let forms = INFLECTION_FORMS[lang][inflection.pos]
+    let forms = INFLECTION_FORMS[inflection.wordForm.pos]
     
     if (!forms) {
-        console.error(`Unknown PoS ${inflection.pos} in language ${lang} for inflection ${inflection.id}. It will not be stored.`)
+        console.error(`Unknown PoS ${inflection.wordForm.pos} in language ${lang} for inflection ${inflection.id}. It will not be stored.`)
         return
     }
     
@@ -65,7 +65,7 @@ function inflectionToString(inflection: Inflection, lang: string) {
         description = '"' + inflection.description + '" '
     }
 
-    return `${inflection.id}[${inflection.pos}]: ${ description }${ endings.join(', ') }${ inherit }${ transformString }`
+    return `${inflection.id}[${inflection.wordForm.pos}]: ${ description }${ endings.join(', ') }${ inherit }${ transformString }`
 }
 
 export default function inflectionsToString(inflections: Inflections, lang: string) {

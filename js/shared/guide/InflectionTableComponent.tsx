@@ -75,10 +75,10 @@ export default class InflectionTableComponent extends Component<Props, State> {
             return this.props.renderForm(wordsByForm[form], form, index)
         }
 
-        let table = INFLECTION_FORMS['ru'][this.props.inflection.pos]
+        let table = INFLECTION_FORMS[this.props.inflection.wordForm.pos]
         
         if (!table) {
-            console.log('Unknown PoS ' + this.props.inflection.pos + ' of ' + this.props.inflection.getId())
+            console.log('Unknown PoS ' + this.props.inflection.wordForm.pos + ' of ' + this.props.inflection.getId())
             return <div/>;
         }
 

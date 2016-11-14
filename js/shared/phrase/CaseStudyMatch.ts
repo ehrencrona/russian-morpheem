@@ -1,12 +1,12 @@
 
-import { GrammaticalCase } from '../inflection/InflectionForms'
+import { GrammarCase } from '../inflection/Dimensions'
 import WordMatch from './WordMatch'
 
 interface CaseStudyMatch extends WordMatch {
 
     isCaseStudy(): boolean
 
-    getCaseStudied(): GrammaticalCase
+    getCaseStudied(): GrammarCase
 
 }
 

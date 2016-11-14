@@ -110,7 +110,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
         corpus.inflections.inflections.forEach((candidate) => {
             if (candidate !== inflection && 
-                candidate.pos == word.word.inflection.pos &&
+                candidate.wordForm.pos == word.word.inflection.wordForm.pos &&
                 candidate.id != wordInflectionId &&
                 !!candidate.endings[form]) {
                 result.push(candidate)

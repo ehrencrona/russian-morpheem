@@ -3,7 +3,8 @@ import WordMatch from './WordMatch'
 import CaseStudyMatch from './CaseStudyMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
-import { FORMS, InflectionForm } from '../inflection/InflectionForms'
+import FORMS from '../inflection/InflectionForms'
+import { PartOfSpeech as PoS } from '../inflection/Dimensions'
 import { EXACT_MATCH_QUANTIFIER, ANY_MATCH_QUANTIFIER, AT_LEAST_ONE_QUANTIFIER } from './AbstractQuantifierMatch'
 import AbstractQuantifierMatch from './AbstractQuantifierMatch'
 
@@ -23,7 +24,7 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     }
 
     wordMatches(word: Word): boolean {
-        if (word.pos == 'adv') {
+        if (word.wordForm.pos == PoS.ADVERB) {
             return true
         } 
         else if (word instanceof InflectedWord && word.form == 'adv') {

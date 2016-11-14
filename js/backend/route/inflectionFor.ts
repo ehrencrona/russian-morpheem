@@ -1,4 +1,5 @@
-import * as express from 'express'
+import { POS_BY_NAME } from '../../shared/inflection/InflectionForms';
+import * as express from 'express';
 
 import Corpus from '../../shared/Corpus'
 import InflectableWord from '../../shared/InflectableWord'
@@ -60,7 +61,7 @@ export default function(corpus: Corpus) {
                 return
             }
 
-            let generated = generateInflection(forms, gotInflections.pos, corpus.lang, corpus.inflections)
+            let generated = generateInflection(forms, POS_BY_NAME[gotInflections.pos], corpus.lang, corpus.inflections)
             let inflection = generated.inflection
 
             if (generated.isNew) {

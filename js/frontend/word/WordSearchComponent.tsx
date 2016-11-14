@@ -1,10 +1,12 @@
-import Corpus from '../../shared/Corpus';
-import Fact from '../../shared/fact/Fact';
-import Word from '../../shared/Word';
-import UnparsedWord from '../../shared/UnparsedWord';
-import InflectedWord from '../../shared/InflectedWord';
-import InflectableWord from '../../shared/InflectableWord';
+import Corpus from '../../shared/Corpus'
+import Fact from '../../shared/fact/Fact'
+import Word from '../../shared/Word'
+import UnparsedWord from '../../shared/UnparsedWord'
+import InflectedWord from '../../shared/InflectedWord'
+import InflectableWord from '../../shared/InflectableWord'
 import AnyWord from '../../shared/AnyWord'
+import { POSES } from '../../shared/inflection/InflectionForms'
+import { PartOfSpeech as PoS } from '../../shared/inflection/Dimensions'
 import Tab from '../OpenTab'
 import InflectionsContainerComponent from '../inflection/InflectionsContainerComponent';
 
@@ -21,7 +23,7 @@ interface Props {
 }
 
 interface State {
-    filterPos?: string,
+    filterPos?: PoS,
     filterString?: string,
     filterWord?: InflectableWord
 }
@@ -176,12 +178,12 @@ export default class WordSearchComponent extends Component<Props, State> {
         let filterFact = (filterString) => (fact: Fact) => {
             if (filterPos) {
                 if (fact instanceof Word || fact instanceof InflectableWord) {
-                    if (!(fact.pos == filterPos || 
-                        (filterPos == NO_POS && !fact.pos))) {
+                    if (!(fact.wordForm.pos == filterPos || 
+                        (!filterPos && !fact.wordForm.pos))) {
                         return
                     }
                 }
-                else if (!(filterPos == NO_POS && fact instanceof Word)) {
+                else if (!(filterPos && fact instanceof Word)) {
                     return
                 }
             }
@@ -394,7 +396,9 @@ export default class WordSearchComponent extends Component<Props, State> {
         
             <div className='filter'>
             {
-                this.props.corpus.inflections.getAllPos().concat(NO_POS).map((pos: string) => {
+                Object.keys(POSES).map((posStr: string) => {
+                    let pos = parseInt(posStr) as PoS
+
                     return <div key={pos} onClick={ () => 
                         this.setState({ filterPos: (pos == this.state.filterPos ? null : pos), 
                             filterWord: null })

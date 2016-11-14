@@ -1,7 +1,7 @@
 
 
 import { Component, createElement } from 'react'
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
 
 import { FactComponentProps } from './StudyFactComponent'
 

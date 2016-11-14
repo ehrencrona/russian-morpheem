@@ -3,6 +3,7 @@ import { indexSentencesByFact, FactSentences } from  '../../shared/SentencesByFa
 
 import readCorpus from '../CorpusReader'
 import InflectionFact from '../../shared/inflection/InflectionFact'
+import { PartOfSpeech as PoS } from '../../shared/inflection/Dimensions'
 
 import writeFactFile from '../FactFileWriter'
 import { getCorpusDir } from '../CorpusReader'
@@ -22,7 +23,8 @@ readCorpus('ru', false)
 
     let scores = corpus.facts.facts
     .filter((fact) => fact instanceof InflectionFact)
-    .filter((fact: InflectionFact) => fact.inflection.pos == 'n' || fact.inflection.pos == 'v' || fact.inflection.pos == 'adj')
+    .filter((fact: InflectionFact) => fact.inflection.wordForm.pos == PoS.NOUN || 
+        fact.inflection.wordForm.pos == PoS.VERB || fact.inflection.wordForm.pos == PoS.ADJECTIVE)
     .filter((fact: InflectionFact) => corpus.facts.indexOf(fact) > LOWEST_FACT)
     .map((fact: InflectionFact) => {
 

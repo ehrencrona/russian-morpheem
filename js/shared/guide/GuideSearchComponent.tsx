@@ -10,7 +10,7 @@ import renderRelatedFact from './fact/renderRelatedFact'
 import doesFactMatchQuery from '../../frontend/fact/doesFactMatchQuery'
 import Phrase from '../phrase/Phrase'
 import getGuideUrl from './getGuideUrl'
-import { FORMS } from '../inflection/InflectionForms'
+import FORMS from '../inflection/InflectionForms'
 import allGuideFacts from './allGuideFacts'
 import { sawFact } from './lastSeenFact'
 

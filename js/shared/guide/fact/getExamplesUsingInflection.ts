@@ -19,7 +19,7 @@ export default function getExamplesUsingInflection(form: string, inflection: Inf
     let inflectionId = inflection.getInflectionId(form) 
 
     corpus.inflections.inflections.forEach((potentialChild) => {
-        if (potentialChild.pos == inflection.pos &&
+        if (potentialChild.wordForm.pos == inflection.wordForm.pos &&
             potentialChild.getInflectionId(form) == inflectionId) {
             inflectionIds.add(potentialChild.id)
         }

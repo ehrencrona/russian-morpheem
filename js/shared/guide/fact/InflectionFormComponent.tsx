@@ -10,8 +10,10 @@ import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
 
 import { Factoid } from '../../../shared/metadata/Factoids'
-import { FORMS, CASES, InflectionForm, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms'
-import { getFormName } from '../../../shared/inflection/InflectionForms' 
+import { getFormName, FORMS, CASES, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms'
+import { POS_NAMES, POS_BY_NAME } from '../../../shared/phrase/PhrasePattern'
+import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions'
+import { InflectionForm } from '../../../shared/inflection/InflectionForm'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import topScores from '../../../shared/study/topScores'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
@@ -84,12 +86,12 @@ export default class InflectionFormComponent extends Component<Props, State> {
         return allPhrases
     }
 
-    mostCommonInflections(formArray: string[], pos: string) {
+    mostCommonInflections(formArray: string[], pos: PoS) {
         let wordsByInflection = {}
         let corpus = this.props.corpus
 
         corpus.facts.facts.forEach(fact => {
-            if (fact instanceof InflectableWord && fact.pos == pos && fact.inflection.pos == pos) {
+            if (fact instanceof InflectableWord && fact.wordForm.pos == pos && fact.inflection.wordForm.pos == pos) {
                 wordsByInflection[fact.inflection.id] = (wordsByInflection[fact.inflection.id] || 0) + 1
             }
         })
@@ -118,7 +120,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
             let inflectionIds = Object.keys(wordsByInflection).sort((form1, form2) => wordsByInflection[form2] - wordsByInflection[form1])
 
-            inflectionIds = inflectionIds.slice(0, (this.state.allFormations ? 99 : (pos == 'pron' ? 5 : 3)))
+            inflectionIds = inflectionIds.slice(0, (this.state.allFormations ? 99 : (pos == PoS.PRONOUN ? 5 : 3)))
 
             return {
                 form: form,
@@ -129,7 +131,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         })
     }
 
-    renderFormation(pos: string, forms: string[]) {
+    renderFormation(pos: PoS, forms: string[]) {
         let form = this.props.form
 
         return <div key={ pos }>
@@ -190,7 +192,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let forms: InflectionForm[] = []
 
-        const POS = [ 'n', 'adj', 'v', 'pron' ]
+        const POS = [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB, PoS.PRONOUN ]
 
         let related = (form.required || [])
             .concat(form.getComponents())
@@ -203,7 +205,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let title = corpus.factoids.getFactoid(form).name || ('The ' + form.name)
 
         let formationExists = !!POS.find(pos => 
-            !!INFLECTION_FORMS['ru'][pos].allForms
+            !!INFLECTION_FORMS[pos].allForms
                 .find(oneForm => 
                     form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
 
@@ -238,7 +240,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                             }
                             {
                                 POS.map(pos => {
-                                    let forms = INFLECTION_FORMS['ru'][pos].allForms
+                                    let forms = INFLECTION_FORMS[pos].allForms
                                         .filter(oneForm => 
                                             form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0)
 

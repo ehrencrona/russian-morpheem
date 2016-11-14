@@ -2,10 +2,10 @@
 import Word from '../Word'
 import Facts from '../fact/Facts'
 import Corpus from '../Corpus'
-import { GrammaticalCase } from '../inflection/InflectionForms'
 import MatchContext from './MatchContext'
 import Match from './Match'
-import { InflectionForm } from '../inflection/InflectionForms'
+import InflectionForm from '../inflection/InflectionForm'
+import { GrammarCase } from '../inflection/Dimensions'
 
 interface WordMatch {
 

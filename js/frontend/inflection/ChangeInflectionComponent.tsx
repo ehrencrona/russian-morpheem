@@ -4,6 +4,7 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import InflectableWord from '../../shared/InflectableWord'
 import Inflection from '../../shared/inflection/Inflection'
+import { POSES } from '../../shared/inflection/InflectionForms'
 import Tab from '../OpenTab'
 
 import InflectionsContainerComponent from './InflectionsContainerComponent'
@@ -60,7 +61,7 @@ export default class ChangeInflectionComponent extends Component<Props, State> {
                     
                     <span className='name clickable' onClick={ () => this.inflectionClicked(inflection) }>
                         { inflection.id }
-                        { (inflection.pos ? ' (' + inflection.pos + ')' : '') }
+                        { (inflection.wordForm.pos ? ' (' + POSES[inflection.wordForm.pos] + ')' : '') }
                     </span>
                 </div>
             </div>)

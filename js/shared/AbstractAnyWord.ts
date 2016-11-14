@@ -1,16 +1,18 @@
 
 import AnyWord from './AnyWord'
 import Fact from './fact/Fact'
-
+import WordForm from './inflection/WordForm'
+import * as Dimension from './inflection/Dimensions'
 export const TRANSLATION_INDEX_SEPARATOR = '-'
 
-abstract class AbstractAnyWord implements AnyWord {
+export abstract class AbstractAnyWord implements AnyWord {
     studied: boolean = true
     omitted: AnyWord
-    pos: string
     en: { [ form: string ]: string } = {}
-    enCount: number = 0
+    enCount: number = 0 
     required: Fact[]
+
+    wordForm: WordForm = new WordForm({ })
 
     abstract getIdWithoutClassifier()
     abstract getId()
@@ -112,6 +114,10 @@ abstract class AbstractAnyWord implements AnyWord {
                 this.enCount = index+1
             }
         }
+    }
+
+    setWordForm(wordForm: WordForm) {
+        this.wordForm = new WordForm(wordForm)
     }
 }
 

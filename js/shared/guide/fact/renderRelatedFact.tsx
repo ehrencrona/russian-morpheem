@@ -3,7 +3,8 @@ import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
 import InflectableWord from '../../../shared/InflectableWord'
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
+import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions'
 import Word from '../../../shared/Word'
 import Fact from '../../../shared/fact/Fact'
 import Phrase from '../../../shared/phrase/Phrase'
@@ -25,7 +26,7 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
 
     if (fact instanceof InflectableWord) {
         inner = pair(fact.toText(),
-            fact.pos == 'v' ?
+            fact.wordForm.pos == PoS.VERB ?
                 fact.getEnglish('inf') + (corpus.facts.hasTag(fact, 'perfective') ? ' (perfective)' : '') 
                 :
                 fact.getEnglish())            

@@ -5,7 +5,9 @@ import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
 import AbstractFormMatch from './AbstractFormMatch'
 import MatchContext from './MatchContext'
-import { FORMS, GrammaticalCase, InflectionForm } from '../inflection/InflectionForms'
+import FORMS from '../inflection/InflectionForms'
+import { GrammarCase } from '../inflection/Dimensions'
+import InflectionForm from '../inflection/InflectionForm'
 
 export class WordInFormMatch extends AbstractFormMatch {
     wordIds: { [id:string]: boolean}

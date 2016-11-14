@@ -23,7 +23,7 @@ export default function inflectionFactComponent(props: FactComponentProps<Inflec
         // if we are not allowed to name the case, show an inflection table.
         if (!!props.hiddenFacts.find((fact) => fact.fact instanceof PhraseCase && fact.words.indexOf(studyWord) >= 0)) {
 
-            let allForms = INFLECTION_FORMS[props.corpus.lang][word.word.inflection.pos].allForms
+            let allForms = INFLECTION_FORMS[word.word.inflection.wordForm.pos].allForms
 
             let thisForm = FORMS[word.form]
 

@@ -1,4 +1,4 @@
-import { InflectionForm } from '../../shared/inflection/InflectionForms'
+import InflectionForm from '../../shared/inflection/InflectionForm'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
 

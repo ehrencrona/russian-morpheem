@@ -559,6 +559,28 @@ ul {
     }
 }
 
+ul.wordForms {
+    display: flex;
+    flex-wrap: wrap;
+    
+    li {
+        margin-right: $unit;
+        padding: 2px 6px;
+        margin: 2px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    li:hover {
+        background-color: $clickableColor;
+        color: white;
+    }
+
+    .current {
+        background-color: $color6;
+    }
+}
+
 .inflections {
     padding-top: 2 * $unit;
     

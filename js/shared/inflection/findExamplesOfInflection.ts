@@ -12,7 +12,7 @@ export default function findExamplesOfInflection(fact: InflectionFact, corpus: C
     let form = fact.form
 
     corpus.inflections.inflections.forEach((inflection) => {
-        if (inflection.pos == fact.inflection.pos &&
+        if (inflection.wordForm.pos == fact.inflection.wordForm.pos &&
             inflection.getInflectionId(fact.form) == fact.inflection.id) {
             inflectionIds.add(inflection.id)
         }

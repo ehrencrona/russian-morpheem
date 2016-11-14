@@ -1,9 +1,11 @@
+import { PartOfSpeech as PoS } from './inflection/Dimensions';
+import { WordForm } from './inflection/WordForm';
 
 import Inflection from './inflection/Inflection'
 import Ending from './Ending'
 import Inflections from './inflection/Inflections'
 import InflectableWord from './InflectableWord'
-import INFLECTION_FORMS from './inflection/InflectionForms'
+import { INFLECTION_FORMS } from './inflection/InflectionForms'
 
 interface BestInflection {
     stem: string,
@@ -84,7 +86,7 @@ export default function findBestExistingInflection(words: { [form: string]: stri
     let best: BestInflection
         
     for (let inflection of inflections.inflections) {
-        if (inflection.pos == pos) {
+        if (inflection.wordForm.pos == pos) {
             let potentialStems = findPotentialStems(words, inflection)
 
             let lowestWrong = 999
@@ -178,7 +180,7 @@ export function findStem(words: { [form: string]: string }) {
     return stem
 }
 
-function buildInflection(id, stem, forms: string[], words: { [form: string]: string }, defaultForm: string, pos: string) {
+function buildInflection(id, stem, forms: string[], words: { [form: string]: string }, defaultForm: string, pos: PoS) {
     let endings: { [s: string]: Ending } = {}
 
     for (let form of forms) {
@@ -187,10 +189,10 @@ function buildInflection(id, stem, forms: string[], words: { [form: string]: str
         }
     }
 
-    return new Inflection(id, defaultForm, pos, endings)
+    return new Inflection(id, defaultForm, new WordForm({ pos: pos }), endings)
 }
 
-export function generateInflection(words: { [form: string]: string }, pos: string, lang: string, inflections: Inflections): GeneratedInflection  {
+export function generateInflection(words: { [form: string]: string }, pos: PoS, lang: string, inflections: Inflections): GeneratedInflection  {
     let best = findBestExistingInflection(words, pos, inflections)
 
     if (best && best.wrongForms.length == 0 && best.missingForms.length == 0) {
@@ -219,7 +221,7 @@ export function generateInflection(words: { [form: string]: string }, pos: strin
         }
     }
     else {
-        let allForms = INFLECTION_FORMS[lang][pos].allForms
+        let allForms = INFLECTION_FORMS[pos].allForms
         
         let defaultForm = allForms[0]
         let wrongForms = allForms

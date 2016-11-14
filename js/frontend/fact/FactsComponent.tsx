@@ -13,6 +13,7 @@ import AddWordComponent from '../AddWordComponent'
 import AddPhraseComponent from '../AddPhraseComponent'
 import FactSearchComponent from './FactSearchComponent'
 import FactsTagComponent from './FactsTagComponent'
+import FactsWordFormComponent from './FactsWordFormComponent'
 import IncompleteFactsListComponent from './IncompleteFactsListComponent'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
 import MissingFactsListComponent from './MissingFactsListComponent'
@@ -29,6 +30,7 @@ const ALL = 'all'
 const INCOMPLETE = 'incomplete' 
 const SEARCH = 'search'
 const TAGS = 'tags'
+const FORMS = 'forms'
 const NO_FACTOID = 'no factoid'
 
 const ADD_WORD = 'addWord'
@@ -74,6 +76,11 @@ export default class FactsComponent extends Component<Props, State> {
                 onFactSelect={ (fact) =>  
                     openFact(fact, this.props.corpus, this.props.tab) 
                 } />
+        }
+        else if (this.state.list == FORMS) {
+            list = <FactsWordFormComponent
+                corpus={ this.props.corpus }
+                tab={ this.props.tab } />
         }
         else if (this.state.list == ALL) {
             list = <FilteredFactsListComponent
@@ -128,6 +135,7 @@ export default class FactsComponent extends Component<Props, State> {
                         { filterButton(RECENT, 'Recent') }
                         { filterButton(SEARCH, 'Search') }
                         { filterButton(TAGS, 'Tags') }
+                        { filterButton(FORMS, 'Forms') }
                         { filterButton(NO_FACTOID, 'No Factoid') }
                     </div>
                 </div>

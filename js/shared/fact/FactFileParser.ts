@@ -1,3 +1,6 @@
+import { inflate } from 'zlib';
+import { Animateness, Aspect } from '../inflection/Dimensions';
+import WORD_FORMS from '../inflection/WordForms';
 
 import Word from '../Word'
 import InflectableWord from '../InflectableWord'
@@ -14,8 +17,8 @@ import TagFact from '../TagFact'
 import transforms from '../Transforms'
 import Transform from '../Transform'
 import Phrase from '../phrase/Phrase'
-import { ENGLISH_FORMS } from '../inflection/InflectionForms'
-import { TRANSLATION_INDEX_SEPARATOR } from '../AbstractAnyWord'
+import { POS_BY_NAME, ENGLISH_FORMS } from '../inflection/InflectionForms'
+import { AbstractAnyWord, TRANSLATION_INDEX_SEPARATOR } from '../AbstractAnyWord';
 
 class PhraseFact extends AbstractFact {
 }
@@ -81,8 +84,8 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         let en = ''
 
         splitRightSide(rightSide).forEach((pair) => {
-            let tag = pair[0]
-            let text = pair[1]
+            let tag = pair[0] as string
+            let text = pair[1] as string
 
             if (tag == 'inflect') {
                 let inflection = inflections.getInflection(text)
@@ -125,30 +128,58 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 let iw = new InflectableWord(stem, inflection, word.classifier)
                 iw.en = word.en
                 iw.enCount = word.enCount
-
-                if (word.pos) {
-                    iw.pos = word.pos
+                
+                if (iw.wordForm.matches(inflection.wordForm)) {
+                    iw.wordForm.add(inflection.wordForm)
                 }
 
                 fact = iw
             }
             else if (tag == 'tag') {
-                facts.tag(fact, text)
+                // legacy. remove
+                if (text == 'perfective') {
+                    if (fact instanceof AbstractAnyWord) {
+                        (fact as AbstractAnyWord).wordForm.aspect = Aspect.PERFECTIVE
+                    }
+                }
+                else if (text == 'animate') {
+                    if (fact instanceof AbstractAnyWord) {
+                        (fact as AbstractAnyWord).wordForm.animate = Animateness.ANIMATE
+                    }
+                }
+                else {
+                    facts.tag(fact, text)
 
-                if (text == 'untranslatable' && (fact instanceof Word || fact instanceof InflectableWord)) {
-                    fact.studied = false
+                    if (text == 'untranslatable' && (fact instanceof Word || fact instanceof InflectableWord)) {
+                        fact.studied = false
+                    }
                 }
             }
+            else if (tag == 'form') {
+                if (WORD_FORMS[text]) {
+                    word.wordForm.add(WORD_FORMS[text])
+                }
+                else {
+                    throw new Error(`Unknown word form ${text}.`)
+                }
+            }
+            // TODO: legacy. delete once server is updated.
             else if (tag == 'pos') {
-                word.pos = text
+                let pos = POS_BY_NAME[text]
+
+                if (!pos) {
+                    throw new Error(`Unknown PoS "${text}" for ${word.getId()}.`)
+                }
+
+                word.wordForm.pos = pos
 
                 if (fact instanceof InflectableWord) {
-                    fact.pos = text
+                    fact.wordForm.pos = pos
                 }
             }
             else if (tag == 'mask') {
                 if (fact instanceof InflectableWord) {
-                    let mask = MASKS[fact.inflection.pos][text]
+                    let mask = MASKS[fact.inflection.wordForm.pos][text]
 
                     if (!mask) {
                         throw new Error('Unknown mask "' + text + '" in "' + rightSide + '"')
@@ -223,27 +254,6 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     if (!fact) {
                         console.warn('Unknown grammar "' + text + '"'
                             + '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
-                    }
-
-                    if (fact instanceof InflectionFact) {
-                        if (fact.inflection.pos == 'v') {
-                            facts.tag(fact, 'verb')
-                        }
-                        if (fact.form.substr(0, 3) == 'acc') {
-                            facts.tag(fact, 'accusative')
-                        }
-                        if (fact.form.substr(0, 3) == 'dat') {
-                            facts.tag(fact, 'dative')
-                        }
-                        if (fact.form.substr(0, 3) == 'gen') {
-                            facts.tag(fact, 'genitive')
-                        }
-                        if (fact.form.substr(0, 5) == 'instr') {
-                            facts.tag(fact, 'instrumental')
-                        }
-                        if (fact.form.substr(0, 4) == 'prep') {
-                            facts.tag(fact, 'prepositional')
-                        }
                     }
                 }
                 else if (tag == 'tag') {

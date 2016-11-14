@@ -56,9 +56,9 @@ export default class WordTranslationComponent extends Component<Props, State> {
                             defaultValue={ props.word.getEnglish('', translationIndex) } 
                             onBlur={ setValue('', translationIndex) }/>
                         {
-                            ENGLISH_FORMS_BY_POS[props.word.pos] ?
+                            ENGLISH_FORMS_BY_POS[props.word.wordForm.pos] ?
 
-                            ENGLISH_FORMS_BY_POS[props.word.pos].allForms.map((form) => 
+                            ENGLISH_FORMS_BY_POS[props.word.wordForm.pos].allForms.map((form) => 
                                 <div key={ form + translationIndex } className='form'>
                                     <div className='label'>{ form }</div>
 

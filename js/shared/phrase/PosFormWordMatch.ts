@@ -3,44 +3,29 @@ import WordMatch from './WordMatch'
 import CaseStudyMatch from './CaseStudyMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
-import { FORMS, InflectionForm } from '../inflection/InflectionForms'
+import { FORMS } from '../inflection/InflectionForms'
+import { POS_BY_NAME, POS_NAMES } from './PhrasePattern'
+
+import { PartOfSpeech } from '../inflection/Dimensions'
+import InflectionForm from '../inflection/InflectionForm'
 import { EXACT_MATCH_QUANTIFIER, ANY_MATCH_QUANTIFIER, AT_LEAST_ONE_QUANTIFIER } from './AbstractQuantifierMatch'
 import AbstractFormMatch from './AbstractFormMatch'
 import MatchContext from './MatchContext'
 
-export const POS_NAMES = {
-    noun: 'n',
-    adjective: 'adj',
-    verb: 'v',
-    numeral: 'num',
-    pronoun: 'pron',
-    adverb: 'adv',
-    particle: 'part',
-    preposition: 'prep'
-}
-
-function getDefaultQuantifier(pos: string) {
+function getDefaultQuantifier(pos: PartOfSpeech) {
     return pos ? AT_LEAST_ONE_QUANTIFIER : EXACT_MATCH_QUANTIFIER
 }
 
 export default class PosFormWordMatch extends AbstractFormMatch implements CaseStudyMatch, WordMatch {
-    posName: string 
-
-    constructor(public pos: string, form : InflectionForm, public formStr: string, quantifier?: string) {
+    constructor(public pos: PartOfSpeech, form : InflectionForm, public formStr: string, quantifier?: string) {
         super(form, quantifier || getDefaultQuantifier(pos))
-
-        this.formStr = formStr
-
-        this.pos = pos
-        this.posName = POS_NAMES[pos]
     }
 
     wordMatches(word: Word, context: MatchContext) {
-        if (this.posName &&
-            word.pos != this.posName) {
+        if (this.pos && word.wordForm.pos != this.pos) {
 
             // possessives are pronouns but can for most purposes be treated as adjectives
-            if (this.posName == 'adj' && context.facts.hasTag(word, 'possessive')) {
+            if (this.pos == PartOfSpeech.ADJECTIVE && context.facts.hasTag(word, 'possessive')) {
                 if (word instanceof InflectedWord) {
                     let wordForm = FORMS[word.form]
 
@@ -80,15 +65,15 @@ export default class PosFormWordMatch extends AbstractFormMatch implements CaseS
     }
 
     toString() {
-        if (this.form && !this.pos && this.quantifier == getDefaultQuantifier(this.pos) && !POS_NAMES[this.formStr]) {
+        if (this.form && !this.pos && this.quantifier == getDefaultQuantifier(this.pos) && !POS_BY_NAME[this.formStr]) {
             return this.formStr
         }
 
-        if (this.pos && !this.form && this.quantifier == getDefaultQuantifier(this.pos) && !FORMS[this.pos]) {
-            return this.pos
+        if (this.pos && !this.form && this.quantifier == getDefaultQuantifier(this.pos) && !FORMS[POS_NAMES[this.pos]]) {
+            return POS_NAMES[this.pos]
         }
 
-        return (this.pos ? this.pos : '') + '@' + 
+        return (this.pos ? POS_NAMES[this.pos] : '') + '@' + 
             (this.formStr ? this.formStr : '') + 
             (this.quantifier != getDefaultQuantifier(this.pos) ? this.quantifier : '')
     }

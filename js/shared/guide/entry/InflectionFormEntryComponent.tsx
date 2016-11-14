@@ -1,6 +1,6 @@
 
 
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
 
 import { Component, createElement } from 'react'
 

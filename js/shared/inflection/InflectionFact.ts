@@ -2,7 +2,8 @@
 
 import AbstractFact from '../fact/AbstractFact'
 import Inflection from './Inflection'
-import { FORMS, CASES, AdjectiveForm, PartOfSpeech, Comparison, PronounForm } from './InflectionForms'
+import { AdjectiveForm, PartOfSpeech, PronounForm } from './Dimensions'
+import { FORMS, CASES } from './InflectionForms'
 
 export default class InflectionFact extends AbstractFact {
     constructor(id, public inflection: Inflection, public form: string) {
@@ -23,7 +24,7 @@ export default class InflectionFact extends AbstractFact {
             visitor(FORMS["adv"])
         }
 
-        if (form.comparison == Comparison.COMPARATIVE) {
+        if (form.adjectiveForm == AdjectiveForm.COMPARATIVE) {
             visitor(FORMS["comp"])
         }
 

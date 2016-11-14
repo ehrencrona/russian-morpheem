@@ -1,16 +1,18 @@
+import { WordCoordinates } from './inflection/WordForm';
 
 import Word from './Word'
 import Fact from './fact/Fact'
 import InflectableWord from './InflectableWord'
 import Translatable from './Translatable'
+import WordForm from './inflection/WordForm'
 
 /**
  * Rename to Word
  */
 interface AnyWord extends Translatable {
 
+    wordForm: WordForm
     studied: boolean
-    pos: string
 
     getIdWithoutClassifier(): string
     getId(): string
@@ -20,7 +22,8 @@ interface AnyWord extends Translatable {
     getWordFact(): Fact
 
     getTranslationCount(): number
-    
+
+    setWordForm(wordForm: WordForm)
 }
 
 export default AnyWord

@@ -1,7 +1,8 @@
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
-import { FORMS, PartOfSpeech, Tense, Number, Comparison, GrammaticalCase } from './inflection/InflectionForms' 
+import { PartOfSpeech, Tense, GrammarNumber, AdjectiveForm, GrammarCase } from './inflection/Dimensions' 
+import FORMS from './inflection/InflectionForms' 
 import InflectableWord from './InflectableWord'
 import Words from './Words'
 import Fact from './fact/Fact'
@@ -101,7 +102,7 @@ export default class InflectedWord extends Word {
             + (this.omitted ? '*' : '')
     }
 
-    static getEnglishForm(pos: string, formString: string, en: { [ form: string ]: string }): string {
+    static getEnglishForm(pos: PartOfSpeech, formString: string, en: { [ form: string ]: string }): string {
         let form = FORMS[formString]
 
         if (!form) {
@@ -111,7 +112,7 @@ export default class InflectedWord extends Word {
 
         let result = ''
 
-        if (pos == 'v') {
+        if (pos == PartOfSpeech.VERB) {
             if (formString == '1') {
                 result = '1'
             }
@@ -122,35 +123,35 @@ export default class InflectedWord extends Word {
                 result = 'inf'
             }
             else if (form.tense == Tense.PAST) {
-                if (form.number == Number.PLURAL && en['pastpl']) {
+                if (form.number == GrammarNumber.PLURAL && en['pastpl']) {
                     result = 'pastpl'
                 }
                 else {
                     result = 'past'
                 }
             }
-            else if (form.number == Number.PLURAL) {
+            else if (form.number == GrammarNumber.PLURAL) {
                 result = 'pl'
             }
         }
-        else if (pos == 'adj') {
-            if (form.comparison == Comparison.COMPARATIVE) {
+        else if (pos == PartOfSpeech.ADJECTIVE) {
+            if (form.adjectiveForm == AdjectiveForm.COMPARATIVE) {
                 result = 'comp'
             }
             else if (form.pos == PartOfSpeech.ADVERB) {
                 result = 'adv'
             }
-            else if (form.number == Number.PLURAL) {
+            else if (form.number == GrammarNumber.PLURAL) {
                 result = 'pl'
             }
         }
-        else if (pos == 'pron') {
-            if (form.grammaticalCase != null && form.grammaticalCase != GrammaticalCase.NOM) {
+        else if (pos == PartOfSpeech.PRONOUN) {
+            if (form.grammaticalCase != null && form.grammaticalCase != GrammarCase.NOM) {
                 result = 'acc'
             }
         }
-        else if (pos == 'n') {
-            if (form.number == Number.PLURAL) {
+        else if (pos == PartOfSpeech.NOUN) {
+            if (form.number == GrammarNumber.PLURAL) {
                 result = 'pl'
             }
         }
@@ -160,7 +161,7 @@ export default class InflectedWord extends Word {
 
     getEnglish(form?, translationIndex?: number) {
         if (!form) {
-            form = InflectedWord.getEnglishForm(this.pos, this.form, this.en)
+            form = InflectedWord.getEnglishForm(this.wordForm.pos, this.form, this.en)
         }
 
         var result = super.getEnglish(form, translationIndex)

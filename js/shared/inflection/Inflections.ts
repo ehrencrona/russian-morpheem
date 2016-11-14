@@ -46,22 +46,6 @@ export default class Inflections {
         return this.inflectionsById[id]
     }
 
-    getAllPos(): string[] {
-        if (!this.allPos) {
-            let all : { [s: string]: boolean } = {}
-
-            this.inflections.forEach((inflection) => {
-                if (inflection.pos) {
-                    all[inflection.pos] = true
-                }
-            })
-            
-            this.allPos = Object.keys(all)
-        }
-
-        return this.allPos
-    }
-    
     getForm(formId) {
         let els = formId.split('@')
         

@@ -3,7 +3,7 @@ import Corpus from '../../../shared/Corpus'
 import Fact from '../../../shared/fact/Fact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
 import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 

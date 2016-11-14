@@ -14,7 +14,7 @@ import Word from '../../shared/Word'
 
 import FactoidComponent from '../fact/FactoidComponent'
 
-import { InflectionForm } from '../../shared/inflection/InflectionForms'
+import InflectionForm from '../../shared/inflection/InflectionForm'
 
 import { Component, createElement } from 'react';
 

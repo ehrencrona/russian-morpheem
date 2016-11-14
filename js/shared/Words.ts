@@ -1,3 +1,4 @@
+import { WordForm } from './inflection/WordForm';
 import Word from './Word'
 import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
@@ -191,6 +192,14 @@ export default class Words {
         }
     }
 
+    setWordForm(wordForm: WordForm, word: AnyWord) {
+        word.setWordForm(wordForm)
+
+        if (this.onChangeWord) {
+            this.onChangeWord(word)
+        }
+    }
+
     get(id: string): Word {
         let omitted = false
 
@@ -268,7 +277,7 @@ export default class Words {
         let result = new Words();
         
         json.forEach((wordJson) => {
-            if (wordJson.type == InflectableWord.getJsonType()) {
+            if (wordJson.t == InflectableWord.getJsonType()) {
                 result.addInflectableWord(
                     InflectableWord.fromJson(wordJson as InflectableWordJsonFormat, inflections))
             }

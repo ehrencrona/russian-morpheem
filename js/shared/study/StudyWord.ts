@@ -3,7 +3,8 @@ import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
 import InflectedWord from '../../shared/InflectedWord'
 
-import { InflectionForm, FORMS } from '../../shared/inflection/InflectionForms'
+import InflectionForm from '../../shared/inflection/InflectionForm'
+import FORMS from '../../shared/inflection/InflectionForms'
 
 import StudyToken from './StudyToken'
 import StudyFact from './StudyFact'

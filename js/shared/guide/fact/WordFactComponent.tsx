@@ -15,6 +15,7 @@ import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
+import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import SentenceScore from '../../../shared/study/SentenceScore'
@@ -182,7 +183,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
         return <div className='fact'>
             <h1>{ word.toText() }</h1>
-            <h2>{ word.getEnglish((word.pos == 'v' ? 'inf' : '')) }</h2>
+            <h2>{ word.getEnglish((word.wordForm.pos == PoS.VERB ? 'inf' : '')) }</h2>
 
             {
                 factoid ? 
@@ -252,8 +253,8 @@ export default class WordFactComponent extends Component<Props, State> {
             { word instanceof InflectableWord ?
                 <div className='columns'>
                     <div className='main'>
-                        <h3>{ word.pos == 'v' ? 'Conjugation' : 
-                                (word.pos == 'n' ? 'Declension' : 'Forms') }</h3>
+                        <h3>{ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
+                                (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }</h3>
                         <InflectionTableComponent
                             corpus={ this.props.corpus }
                             inflection={ word.inflection }

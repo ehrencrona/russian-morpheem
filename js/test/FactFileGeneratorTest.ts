@@ -1,3 +1,4 @@
+import { WordForm } from '../shared/inflection/WordForm';
 
 import { parseFactFile as parser, resolvePhrases } from '../shared/fact/FactFileParser'
 import { factToString } from '../shared/fact/FactFileGenerator'
@@ -7,6 +8,7 @@ import { expect } from 'chai';
 import Inflections from '../shared/inflection/Inflections'
 import Inflection from '../shared/inflection/Inflection'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
+import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 import Transforms from '../shared/Transforms'
 
 import Facts from '../shared/fact/Facts'
@@ -25,7 +27,7 @@ describe('FactFileParser', function() {
     inflections.add(new Inflection('lastchar', 'nom', null, 
         parseEndings('nom: <a', 'fake').endings))
 
-    inflections.add(new Inflection('yToI', 'm', 'adj', 
+    inflections.add(new Inflection('yToI', 'm', new WordForm({ pos: PoS.ADJECTIVE }), 
         parseEndings('m: ый', 'ru').endings).addTransform(Transforms.get('yToI')))
 
     let w1: Word, w3: InflectableWord

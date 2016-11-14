@@ -3,7 +3,8 @@ import WordMatch from './WordMatch'
 import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 import InflectableWord from '../InflectableWord'
-import { FORMS, CASES, GrammaticalCase } from '../inflection/InflectionForms'
+import { FORMS, CASES } from '../inflection/InflectionForms'
+import { GrammarCase } from '../inflection/Dimensions'
 import Phrase from './Phrase'
 import Corpus from '../../shared/Corpus'
 import Facts from '../../shared/fact/Facts'
@@ -17,7 +18,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     phrase: Phrase
     corpus: Corpus
 
-    constructor(public phraseId: string, public overrideFormCase: GrammaticalCase, public tag?: string) {
+    constructor(public phraseId: string, public overrideFormCase: GrammarCase, public tag?: string) {
         this.phraseId = phraseId
         this.overrideFormCase = overrideFormCase
         this.tag = tag
@@ -34,7 +35,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         childContext.words = context.words.slice(wordPosition)
 
         childContext.overrideFormCase = 
-            ((!this.overrideFormCase || this.overrideFormCase == GrammaticalCase.CONTEXT) && 
+            ((!this.overrideFormCase || this.overrideFormCase == GrammarCase.CONTEXT) && 
                 context.overrideFormCase ?
                     context.overrideFormCase :
                     this.overrideFormCase)

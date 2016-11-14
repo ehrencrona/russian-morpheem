@@ -1,9 +1,12 @@
 
 import { Component,createElement } from 'react'
 import Corpus from '../../shared/Corpus'
+import AbstractAnyWord from '../../shared/AbstractAnyWord'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import FilteredFactsListComponent from './FilteredFactsListComponent'
+import WORD_FORMS from '../../shared/inflection/WordForms'
+import { WordForm, NamedWordForm } from '../../shared/inflection/WordForm'
 
 import { FactIndex } from './FactIndex'
 
@@ -15,52 +18,52 @@ interface Props {
 }
 
 interface State {
-    tag?: string
+    form?: WordForm
 }
 
 let React = { createElement: createElement }
 
-export default class FactsWordFormComponent extends Component<Props, State> {
+export default class FactsFormComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        let lastTag
-        let allTags = this.props.corpus.facts.getAllTags()
+        let lastForm
         
         this.state = {
-            tag: (this.state && this.state.tag) || localStorage.getItem('lastTag') || allTags[0]
+            form: null
         }
     }
 
     render() {
-        let allTags = this.props.corpus.facts.getAllTags()
+        let allForms: NamedWordForm[] = Object.keys(WORD_FORMS).map(i => WORD_FORMS[i])
 
-        allTags.sort()
+        allForms.sort((f1, f2) => f1.id.localeCompare(f2.id))
 
         let filter: (factIndex: FactIndex) => boolean
 
-        if (this.state.tag) {
-            let factIdSet = this.props.corpus.facts.getFactIdsWithTag(this.state.tag)
-
-            filter = (factIndex: FactIndex) =>
-                factIdSet.has(factIndex.fact.getId())
+        if (this.state.form) {
+            filter = (factIndex: FactIndex) => {
+                let fact = factIndex.fact 
+                
+                return fact instanceof AbstractAnyWord 
+                    && fact.wordForm.matches(this.state.form)
+            }
         }
         else {
             filter = (factIndex: FactIndex) => false
         }
 
-        let buttonForTag = (tag) =>
-            <div className={ 'tag ' + (this.state.tag == tag ? ' selected' : '') }
-                key={ tag }
+        let buttonForForm = (form: NamedWordForm) =>
+            <div className={ 'tag ' + (this.state.form === form ? ' selected' : '') }
+                key={ form.id }
                 onClick={ () => { 
-                    this.setState({ tag: tag })
-                    localStorage.setItem('lastTag', tag)    
-                }}>{ tag }</div>
+                    this.setState({ form: form })
+                }}>{ form.id }</div>
 
         return (<div>
             <div className='tagFilter'>
             {
-                allTags.map(buttonForTag)
+                allForms.map(buttonForForm)
             }
             </div>
 

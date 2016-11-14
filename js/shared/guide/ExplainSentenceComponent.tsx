@@ -9,7 +9,8 @@ import Sentence from '../../shared/Sentence'
 
 import Fact from '../../shared/fact/Fact'
 import Inflection from '../../shared/inflection/Inflection'
-import { FORMS, GrammaticalCase } from '../../shared/inflection/InflectionForms'
+import { GrammarCase, PartOfSpeech as PoS } from '../../shared/inflection/Dimensions'
+import FORMS from '../../shared/inflection/InflectionForms'
 
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
@@ -65,7 +66,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         if (translate) {
             let en = translation.string
 
-            if (word.pos == 'v') {
+            if (word.wordForm.pos == PoS.VERB) {
                 en = word.getEnglish('inf', translation.index)                
             }
             
@@ -88,7 +89,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
 
             let content
             
-            if (word.pos == 'v') {
+            if (word.wordForm.pos == PoS.VERB) {
                 let EN_PRON = { 1: 'I', 2: 'you', 3: 's/he/it', '1pl': 'we', '2pl': 'you (pl)', '3pl': 'they', 'pastm': 'he', 'pastf': 'she', 'pastpl': 'we/they' }
                 let RU_PRON = { 1: 'я', 2: 'ты', 3: 'он/а', '1pl': 'мы', '2pl': 'вы', '3pl': 'они', 'pastm': 'он', 'pastf': 'она', 'pastpl': 'мы/вы/они' }
 

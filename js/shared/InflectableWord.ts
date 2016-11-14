@@ -2,7 +2,9 @@ import Word from './Word'
 import InflectedWord from './InflectedWord'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
-import INFLECTION_FORMS from './inflection/InflectionForms'
+import { WordForm, WordCoordinates } from './inflection/WordForm'
+import { INFLECTION_FORMS } from './inflection/InflectionForms'
+import { PartOfSpeech } from './inflection/Dimensions'
 import MASKS from './Masks'
 import AbstractAnyWord from './AbstractAnyWord'
 import AnyWord from './AnyWord'
@@ -10,12 +12,12 @@ import AnyWord from './AnyWord'
 export interface JsonFormat {
     stem: string,
     en: { [ form: string ]: string },
-    inflection: string,
-    type: string,
-    classifier?: string,
+    i: string,
+    t: string,
+    cl?: string,
     mask?: string,
     unstudied?: boolean,
-    pos?: string
+    f: WordCoordinates
 }
 
 export default class InflectableWord extends AbstractAnyWord {
@@ -29,7 +31,7 @@ export default class InflectableWord extends AbstractAnyWord {
         this.stem = stem
         this.inflection = inflection
         this.classifier = classifier
-        this.pos = inflection.pos
+        this.wordForm = new WordForm(inflection.wordForm)
     }
 
     visitFacts(visitor: (Fact) => any) {
@@ -55,7 +57,7 @@ export default class InflectableWord extends AbstractAnyWord {
 
                 result.en = this.en
                 result.enCount = this.enCount
-                result.pos = this.pos
+                result.wordForm = this.wordForm
 
                 result.classifier = this.classifier
                 result.studied = this.studied
@@ -90,7 +92,7 @@ export default class InflectableWord extends AbstractAnyWord {
                 // TODO: Russian assumed
                 const LANG = 'ru'
 
-                defaultForm = INFLECTION_FORMS[LANG][this.inflection.pos].allForms.find(
+                defaultForm = INFLECTION_FORMS[this.inflection.wordForm.pos].allForms.find(
                     (form) => !this.mask(form) && this.inflection.hasForm(form))
 
                 if (!defaultForm) {
@@ -138,14 +140,14 @@ export default class InflectableWord extends AbstractAnyWord {
     }
 
     static fromJson(json: JsonFormat, inflections: Inflections): InflectableWord {
-        let inflection = inflections.get(json.inflection)
+        let inflection = inflections.get(json.i)
 
         if (!inflection) {
-            throw new Error('The inflection ' + json.inflection + ' does not exist.')
+            throw new Error('The inflection ' + json.i + ' does not exist.')
         }
 
         let result = new InflectableWord(
-            json.stem, inflection, json.classifier)
+            json.stem, inflection, json.cl)
             
             
         result.en = json.en
@@ -153,7 +155,7 @@ export default class InflectableWord extends AbstractAnyWord {
         result.calculateEnCount()
 
         if (json.mask) {
-            let posMasks = MASKS[inflection.pos]
+            let posMasks = MASKS[inflection.wordForm.pos]
 
             result.setMask(posMasks[json.mask])
         }
@@ -162,9 +164,7 @@ export default class InflectableWord extends AbstractAnyWord {
             result.studied = false
         }
 
-        if (json.pos) {
-            result.pos = json.pos
-        }
+        result.wordForm = new WordForm(json.f)
 
         return result
     }
@@ -184,20 +184,17 @@ export default class InflectableWord extends AbstractAnyWord {
         let result: JsonFormat = {
             stem: this.stem,
             en: this.en,
-            inflection: this.inflection.id,
-            type: InflectableWord.getJsonType()
+            i: this.inflection.id,
+            t: InflectableWord.getJsonType(),
+            f: this.wordForm
         }
-
+        
         if (this.classifier) {
-            result.classifier = this.classifier
+            result.cl = this.classifier
         }
 
         if (this.mask) {
             result.mask = this.getMaskId()
-        }
-
-        if (this.pos != this.inflection.pos) {
-            result.pos = this.pos
         }
 
         if (!this.studied) {
@@ -208,7 +205,7 @@ export default class InflectableWord extends AbstractAnyWord {
     }
 
     getMaskId() {
-        let posMasks = MASKS[this.inflection.pos]
+        let posMasks = MASKS[this.inflection.wordForm.pos]
 
         let maskId = Object.keys(posMasks).find((key) => {
             return posMasks[key] === this.mask

@@ -13,7 +13,8 @@ import AddPhraseComponent from '../AddPhraseComponent'
 import WordSearchComponent from '../word/WordSearchComponent'
 import FilteredFactsListComponent from '../fact/FilteredFactsListComponent'
 
-import { GrammaticalCase, CASES, getFormName } from '../../shared/inflection/InflectionForms'
+import { GrammarCase } from '../../shared/inflection/Dimensions'
+import { getFormName, CASES } from '../../shared/inflection/InflectionForms'
 
 import openFact from '../fact/openFact'
 
@@ -25,7 +26,7 @@ interface Props {
 const ADD_PHRASE = 'addPhrase'
 
 interface State {
-    case: GrammaticalCase,
+    case: GrammarCase,
     expression: boolean,
     pendingIds: string[]
 }
@@ -44,7 +45,7 @@ export default class PhrasesComponent extends Component<Props, State> {
     }
     
     render() {
-        let caseButton = (grammaticalCase: GrammaticalCase) =>
+        let caseButton = (grammaticalCase: GrammarCase) =>
             <div className={ 'button ' + (this.state.case == grammaticalCase ? ' selected' : '') } key={ grammaticalCase } 
                 onClick={ () => { this.setState({ case: grammaticalCase, expression: false, pendingIds: null }) }}>{ getFormName(CASES[grammaticalCase]) }</div>
 
@@ -110,7 +111,7 @@ export default class PhrasesComponent extends Component<Props, State> {
                         onClick={ () => { this.setState({ case: null, expression: false, pendingIds: null }) }}>All</div>
                         
                     {
-                        Object.keys(CASES).map((grammaticalCase) => caseButton(parseInt(grammaticalCase) as GrammaticalCase))
+                        Object.keys(CASES).map((grammaticalCase) => caseButton(parseInt(grammaticalCase) as GrammarCase))
                     }
 
                     <div className={ 'button ' + (this.state.expression ? ' selected' : '') } key='expression' 

@@ -4,7 +4,7 @@ import Sentence from '../Sentence'
 import Facts from '../fact/Facts'
 import { CaseStudy } from './PhrasePattern'
 import Match from './Match'
-import { GrammaticalCase } from '../inflection/InflectionForms'
+import { GrammarCase } from '../inflection/Dimensions'
 
 interface MatchContext {
     depth?: number
@@ -12,7 +12,7 @@ interface MatchContext {
     sentence?: Sentence
     facts: Facts
     study?: CaseStudy
-    overrideFormCase?: GrammaticalCase
+    overrideFormCase?: GrammarCase
 }
 
 export default MatchContext

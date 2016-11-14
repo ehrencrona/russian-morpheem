@@ -7,6 +7,7 @@ import Word from '../shared/Word'
 import Ending from '../shared/Ending'
 import InflectableWord from '../shared/InflectableWord'
 import { parseEndings } from '../shared/inflection/InflectionsFileParser'
+import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 
 import { expect } from 'chai';
 
@@ -17,7 +18,7 @@ let inflections = new Inflections([
 describe('Word', function() {
     it('converts unstudied to JSON and back', function () {
         let before = new Word('foo', 'bar').setEnglish('eng')
-        before.pos = 'verb'
+        before.wordForm.pos = PoS.VERB
 
         let after = Word.fromJson(before.toJson(), inflections);
         
@@ -25,7 +26,7 @@ describe('Word', function() {
         
         expect(after.classifier).to.equal(before.classifier)
         expect(after.jp).to.equal(before.jp)
-        expect(after.pos).to.equal(before.pos)
+        expect(after.wordForm.pos).to.equal(before.wordForm.pos)
         expect(after.getEnglish()).to.equal(before.getEnglish())
     })
     

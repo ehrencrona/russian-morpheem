@@ -1,7 +1,6 @@
 
 import { Component, createElement } from 'react'
 
-import { CASES, POSES } from '../inflection/InflectionForms'
 import Corpus from '../Corpus'
 import Fact from '../fact/Fact'
 import Sentence from '../Sentence'
@@ -9,7 +8,8 @@ import AbstractAnyWord from '../AbstractAnyWord'
 
 import capitalize from './fact/capitalize'
 
-import { InflectionForm, FORMS } from '../inflection/InflectionForms'
+import { CASES, POSES, FORMS } from '../inflection/InflectionForms'
+import InflectionForm from '../inflection/InflectionForm'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectedWord from '../InflectedWord'
 import getPhraseSeoText from './fact/getPhraseSeoText'
@@ -101,16 +101,16 @@ export default function guidePageComponent(props: Props) {
                 + inflected.toText() 
 
             description = 'The ' + form.name 
-                + ' of the Russian ' + POSES[props.context.pos] + ' ' 
+                + ' of the Russian ' + POSES[props.context.wordForm.pos] + ' ' 
                 + inflected.toText() + ' ("' + inflected.getEnglish() + '") is ' + props.context.toText() + '.'
         }
         else {
             title = 'Forming the ' 
                 + form.name 
-                + ' of Russian ' + POSES[fact.inflection.pos] + 's' 
+                + ' of Russian ' + POSES[fact.inflection.wordForm.pos] + 's' 
                 + ' using -' + fact.inflection.getEnding([fact.form]).suffix
 
-            description = 'Some ' + POSES[fact.inflection.pos] + 's use the ending -' 
+            description = 'Some ' + POSES[fact.inflection.wordForm.pos] + 's use the ending -' 
                 + fact.inflection.getEnding([fact.form]).suffix + ' to form the ' 
                 + form.name + ' form in Russian, for example ' + 
                 getExamplesUsingInflection(fact.form, fact.inflection, props.corpus, 
@@ -142,7 +142,7 @@ export default function guidePageComponent(props: Props) {
             title =
                 fact.toText() 
                 + ' – Russian ' 
-                + POSES[fact.pos] 
+                + POSES[fact.wordForm.pos] 
                 + ' meaning '
                 + translations.map(t => `"${t}"`).join(', ') 
         }

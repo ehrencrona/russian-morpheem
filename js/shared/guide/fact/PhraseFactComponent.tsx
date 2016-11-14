@@ -14,10 +14,10 @@ import Inflection from '../../../shared/inflection/Inflection'
 import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
-import { CASES, GrammaticalCase } from '../../../shared/inflection/InflectionForms'
+import { CASES, getFormName } from '../../../shared/inflection/InflectionForms' 
+import { GrammarCase } from '../../../shared/inflection/Dimensions'
 import PhraseMatch from '../../../shared/phrase/PhraseMatch'
 
-import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import SentenceScore from '../../../shared/study/SentenceScore'

@@ -1,5 +1,5 @@
 
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
 import TagFact from '../../../shared/TagFact'
 import Corpus from '../../../shared/Corpus'
 

@@ -7,7 +7,7 @@ import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
 
-import { InflectionForm } from '../../shared/inflection/InflectionForms'
+import InflectionForm from '../../shared/inflection/InflectionForm'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import Word from '../../shared/Word'
 import InflectableWord from '../../shared/InflectableWord'

@@ -20,6 +20,7 @@ import ExternalSentences from '../sentence/ExternalSentencesComponent'
 import PhrasesWithWordComponent from '../PhrasesWithWordComponent'
 import WordTranslationComponent from '../word/WordTranslationComponent'
 import WordClassifierComponent from '../word/WordClassifierComponent'
+import WordFormComponent from'../word/WordFormComponent'
 import FactoidComponent from '../fact/FactoidComponent'
 
 import Sentence from '../../shared/Sentence'
@@ -68,7 +69,10 @@ export default class WordFactComponent extends Component<Props, State> {
         let tab;    
 
         if (this.state.tab == 'inflection') {
-            tab = <div>                            
+            tab = <div>
+                <WordFormComponent
+                    corpus={ this.props.corpus} 
+                    word={ this.props.fact } />
                 <ChangeInflectionComponent
                     corpus={ this.props.corpus } 
                     tab={ this.props.tab }

@@ -4,9 +4,8 @@ import Facts from '../fact/Facts'
 import PhrasePattern from './PhrasePattern'
 import PhraseCase from './PhraseCase'
 import CaseStudyMatch from './CaseStudyMatch'
-import { JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
-import { GrammaticalCase } from '../../shared/inflection/InflectionForms'
-import { CaseStudy } from './PhrasePattern'
+import { CaseStudy, JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
+import { GrammarCase } from '../../shared/inflection/Dimensions'
 import { Match } from './Match'
 import MatchContext from './MatchContext'
 
@@ -96,7 +95,7 @@ export default class Phrase extends AbstractFact {
         return result
     }
 
-    hasCase(grammaticalCase: GrammaticalCase): boolean {
+    hasCase(grammaticalCase: GrammarCase): boolean {
         return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
     }
 
@@ -111,7 +110,7 @@ export default class Phrase extends AbstractFact {
                 if (m.isCaseStudy()) {
                     let grammaticalCase = ((m as any) as CaseStudyMatch).getCaseStudied()
 
-                    if (grammaticalCase == GrammaticalCase.CONTEXT) {
+                    if (grammaticalCase == GrammarCase.CONTEXT) {
                         return
                     }
 
@@ -127,7 +126,7 @@ export default class Phrase extends AbstractFact {
         return this.casesCache
     }
 
-    getCaseFact(grammaticalCase: GrammaticalCase): PhraseCase {
+    getCaseFact(grammaticalCase: GrammarCase): PhraseCase {
         return new PhraseCase(this, grammaticalCase)
     }
 
@@ -160,10 +159,10 @@ export default class Phrase extends AbstractFact {
         return allWords ? Array.from(allWords) : []
     }
 
-    getCases(): GrammaticalCase[] {
+    getCases(): GrammarCase[] {
         let phrase = this
 
-        let allCases: Set<GrammaticalCase>
+        let allCases: Set<GrammarCase>
 
         phrase.patterns.forEach((pattern) => {
             let patternCases = pattern.getCases()
@@ -186,7 +185,7 @@ export default class Phrase extends AbstractFact {
             }
         })
 
-        allCases.delete(GrammaticalCase.CONTEXT)
+        allCases.delete(GrammarCase.CONTEXT)
 
         return allCases ? Array.from(allCases) : [] 
     }

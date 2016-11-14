@@ -5,14 +5,16 @@ import Inflections from './inflection/Inflections'
 import Words from './Words'
 import InflectableWord from './InflectableWord'
 import AbstractAnyWord from './AbstractAnyWord'
+import { WordCoordinates, WordForm } from './inflection/WordForm'
+import { PartOfSpeech as PoS } from './inflection/Dimensions'
 
 export interface JsonFormat {
     target: string,
     en: { [ form: string ]: string },
-    classifier: string,
-    type: string,
+    cl: string,
+    t: string,
     unstudied?: boolean,
-    pos?: string
+    f: WordCoordinates
 }
 
 /**
@@ -87,7 +89,7 @@ export default class Word extends AbstractAnyWord {
     }
 
     static fromJson(json: JsonFormat, inflections: Inflections): Word {
-        let result = new Word(json.target, json.classifier)
+        let result = new Word(json.target, json.cl)
         
         result.en = json.en
 
@@ -97,7 +99,7 @@ export default class Word extends AbstractAnyWord {
             result.studied = false
         }
 
-        result.pos = json.pos
+        result.wordForm = new WordForm(json.f)
 
         return result
     }
@@ -106,9 +108,9 @@ export default class Word extends AbstractAnyWord {
         let result: JsonFormat = {
             target: this.jp,
             en: this.en,
-            classifier: this.classifier,
-            type: this.getJsonType(),
-            pos: this.pos
+            cl: this.classifier,
+            t: this.getJsonType(),
+            f: this.wordForm
         }
 
         if (!this.studied) {

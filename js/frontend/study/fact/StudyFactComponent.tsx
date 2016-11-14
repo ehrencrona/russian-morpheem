@@ -15,7 +15,7 @@ import InflectableWord from '../../../shared/InflectableWord'
 import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import InflectionFact from '../../../shared/inflection/InflectionFact'
-import { InflectionForm } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
 import FixedIntervalFactSelector from '../../../shared/study/FixedIntervalFactSelector'
 import { REPETITION_COUNT } from '../../../shared/study/FixedIntervalFactSelector'
 

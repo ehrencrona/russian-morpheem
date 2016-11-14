@@ -1,3 +1,4 @@
+import { WordForm } from '../../shared/inflection/WordForm';
 
 
 import Corpus from '../../shared/Corpus'
@@ -9,6 +10,7 @@ import SentenceComponent from '../sentence/SentenceComponent'
 import ChangeInflectionComponent from '../inflection/ChangeInflectionComponent'
 import MoveFactButton from '../fact/MoveFactButtonComponent'
 import TagButton from '../TagButtonComponent'
+import WordFormComponent from './WordFormComponent'
 import TopicButton from '../TopicsButtonComponent'
 import WordsWithInflectionComponent from '../inflection/WordsWithInflectionComponent'
 import SentencesWithFact from '../fact/SentencesWithFactComponent'
@@ -69,6 +71,9 @@ export default class WordFactComponent extends Component<Props, State> {
 
         if (this.state.tab == 'word') {
             tab = <div>
+                    <WordFormComponent
+                        corpus={ this.props.corpus}
+                        word={ this.props.fact } />
                     <WordClassifierComponent 
                         corpus={ this.props.corpus} 
                         word={ this.props.fact } 

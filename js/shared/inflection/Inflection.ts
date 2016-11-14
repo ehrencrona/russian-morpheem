@@ -3,6 +3,7 @@
 import InflectedWord from '../InflectedWord'
 import Inflections from './Inflections'
 import InflectionFact from './InflectionFact'
+import { WordCoordinates, WordForm } from './WordForm'
 import Ending from '../Ending'
 import Transform from '../Transform'
 import allTransforms from '../Transforms'
@@ -12,7 +13,7 @@ type Endings = { [s: string]: Ending }
 export interface JsonFormat {
     id: string,
     defaultForm: string,
-    pos: string,
+    f: WordCoordinates,
     endings: Endings,
     inherits?: string[],
     transforms?: string[],
@@ -26,16 +27,16 @@ export default class Inflection {
     inherits: Inflection[] = []
     transforms: Transform[] = []
 
-    constructor(public id, public defaultForm, public pos, public endings: Endings, public description?: string) {
+    constructor(public id: string, public defaultForm: string, public wordForm: WordForm, public endings: Endings, public description?: string) {
         this.id = id
-        this.pos = pos
+        this.wordForm = wordForm
         this.defaultForm = defaultForm
         this.endings = endings
         this.description = description
     } 
 
     static fromJson(json: JsonFormat, inflections: Inflections) {
-        let result = new Inflection(json.id, json.defaultForm, json.pos, json.endings, json.description)
+        let result = new Inflection(json.id, json.defaultForm, new WordForm(json.f), json.endings, json.description)
         
         if (json.inherits) {
             json.inherits.forEach((inheritId) => {
@@ -60,7 +61,7 @@ export default class Inflection {
         return {
             id: this.id,
             defaultForm: this.defaultForm,
-            pos: this.pos,
+            f: this.wordForm,
             endings: this.endings,
             inherits: (this.inherits.length ? this.inherits.map((inflection) => inflection.id) : undefined),
             transforms: (this.transforms.length ? this.transforms.map((transform) => transform.getId()) : undefined),

@@ -1,4 +1,4 @@
-"use strict"
+
 
 import Word from '../Word'
 import { EndingTransform } from '../Transforms'
@@ -6,9 +6,12 @@ import { EndingTransform } from '../Transforms'
 import Fact from './Fact'
 import Facts from './Facts'
 import TagFact from '../TagFact'
+import AbstractAnyWord from '../AbstractAnyWord'
 import InflectableWord from '../InflectableWord'
 import InflectionFact from '../inflection/InflectionFact'
-import { InflectionForm } from '../inflection/InflectionForms'
+import InflectionForm from '../inflection/InflectionForm'
+import WORD_FORMS from '../inflection/WordForms'
+import { POSES } from '../inflection/InflectionForms'
 import Phrase from '../phrase/Phrase'
 
 export function factToString(fact: Fact, facts: Facts) {
@@ -26,24 +29,38 @@ export function factToString(fact: Fact, facts: Facts) {
         return result
     }
 
-    if (fact instanceof InflectableWord) {
-        let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
-        let suffix: string = fact.inflection.getSuffix(ending, fact.stem).suffix
+    if (fact instanceof AbstractAnyWord) {
+        let forms = Object.keys(WORD_FORMS)
+            .filter(id => fact.wordForm.matches(WORD_FORMS[id]))
+            .map(id => WORD_FORMS[id])
 
-        return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + suffix + 
-            (fact.classifier ? `[${ fact.classifier }]` : '') + 
-            ': ' + fact.getEnglish() +
-            nonDefaultEnglish(fact) +
-            ', inflect: ' + fact.inflection.getId() + tags +
-            (fact.pos && fact.inflection.pos != fact.pos ? ', pos: ' + fact.pos : '') +
-            (fact.mask ? ', mask: ' + fact.getMaskId() : '')
-    }
-    else if (fact instanceof Word) {
-        return fact.jp +
-            (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
-            nonDefaultEnglish(fact) +
-            (fact.pos ? ', pos: ' + fact.pos : '') +
-            tags
+        if (forms.length > 1) {
+            // eliminate redundant forms
+            forms = forms.filter(form => !forms.find(superSetForm => 
+                form.id != superSetForm.id && form.matches(superSetForm)))
+        }
+
+        let formString = forms.map(form => ', form: ' + form.id).join('')
+
+        if (fact instanceof InflectableWord) {
+            let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
+            let suffix: string = fact.inflection.getSuffix(ending, fact.stem).suffix
+
+            return fact.stem + '--' + '<'.repeat(ending.subtractFromStem) + suffix + 
+                (fact.classifier ? `[${ fact.classifier }]` : '') + 
+                ': ' + fact.getEnglish() +
+                nonDefaultEnglish(fact) +
+                ', inflect: ' + fact.inflection.getId() + tags +
+                formString +
+                (fact.mask ? ', mask: ' + fact.getMaskId() : '')
+        }
+        else if (fact instanceof Word) {
+            return fact.jp +
+                (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
+                nonDefaultEnglish(fact) +
+                formString +
+                tags
+        }
     }
     else if (fact instanceof EndingTransform) {
         return 'transform: ' + fact.getId()

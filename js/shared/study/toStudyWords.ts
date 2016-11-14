@@ -1,7 +1,9 @@
 import InflectionFact from '../../shared/inflection/InflectionFact'
 import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
-import { InflectionForm, CASES, FORMS, Tense, Number, Gender, GrammaticalCase } from '../../shared/inflection/InflectionForms'
+import { Tense, GrammarNumber, Gender, GrammarCase } from '../../shared/inflection/Dimensions'
+import InflectionForm from '../../shared/inflection/InflectionForm'
+import { CASES, FORMS } from '../../shared/inflection/InflectionForms'
 
 import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'

@@ -38,6 +38,11 @@ export default function(corpus: Corpus) {
             let word = Word.fromJson(req.body as JsonFormat, corpus.inflections)
             let author = getAuthor(req).name
 
+            if (!word.wordForm.equals(existingWord.wordForm)) {
+                console.log(author + ' changed word form for word ' + existingWord.getId() + ' to ' + JSON.stringify(word.wordForm))
+                corpus.words.setWordForm(word.wordForm, existingWord)
+            }
+
             Object.keys(word.en).forEach((form) => {
                 if (word.getEnglish(form) != existingWord.getEnglish(form)) {
                     corpus.words.setEnglish(word.getEnglish(form), existingWord, form)

@@ -2,7 +2,8 @@
 import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import InflectedWord from '../InflectedWord';
-import { FORMS, InflectionForm } from '../inflection/InflectionForms' 
+import FORMS from '../inflection/InflectionForms' 
+import InflectionForm from '../inflection/InflectionForm' 
 import Fact from './Fact';
 import Inflections from '../inflection/Inflections';
 import Word from '../Word';

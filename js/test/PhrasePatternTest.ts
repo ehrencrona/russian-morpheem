@@ -1,9 +1,10 @@
+import { WordForm } from '../shared/inflection/WordForm';
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
 import Inflections from '../shared/inflection/Inflections';
 import Inflection from '../shared/inflection/Inflection';
-import { GrammaticalCase } from '../shared/inflection/InflectionForms';
+import { GrammarCase, PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 
 import Facts from '../shared/fact/Facts';
 import Words from '../shared/Words';
@@ -25,8 +26,8 @@ import StudyPhrase from '../shared/study/StudyPhrase'
 import { expect } from 'chai';
 
 describe('PhrasePatterns', () => {
-    let nounInflection = new Inflection('regular', 'nom', 'n', 
-            parseEndings('nom , gen а, dat у, pl и, acc а, datpl ей, genpl ей', 'ru', 'n').endings)
+    let nounInflection = new Inflection('regular', 'nom', new WordForm({ pos: PoS.NOUN }), 
+            parseEndings('nom , gen а, dat у, pl и, acc а, datpl ей, genpl ей', 'ru', PoS.NOUN).endings)
 
     let inflections = new Inflections([ nounInflection ])
     

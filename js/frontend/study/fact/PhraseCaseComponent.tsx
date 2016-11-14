@@ -6,7 +6,9 @@ import Phrase from '../../../shared/phrase/Phrase'
 import PhraseCase from '../../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../../shared/phrase/CaseStudyMatch'
 import InflectedWord from '../../../shared/InflectedWord'
-import { GrammaticalCase, InflectionForm, FORMS, CASES, INFLECTION_FORMS } from '../../../shared/inflection/InflectionForms'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
+import { GrammarCase } from '../../../shared/inflection/Dimensions'
+import { FORMS, CASES, INFLECTION_FORMS } from '../../../shared/inflection/InflectionForms'
 
 import shouldHideWord from '../shouldHideWord'
 import { FactComponentProps } from '../fact/StudyFactComponent'
@@ -17,9 +19,9 @@ function removeCase(word: InflectedWord, corpus: Corpus) {
     let form = FORMS[word.form]
 
     let clone = new InflectionForm('clone', 'clone', form)
-    clone.grammaticalCase = GrammaticalCase.NOM
+    clone.grammaticalCase = GrammarCase.NOM
 
-    let nominative: string = INFLECTION_FORMS[corpus.lang][word.word.pos].allForms.find(
+    let nominative: string = INFLECTION_FORMS[word.word.wordForm.pos].allForms.find(
         formId => {
             let form = FORMS[formId]
 

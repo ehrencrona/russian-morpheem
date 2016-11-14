@@ -9,17 +9,19 @@ import Word from '../shared/Word';
 import InflectedWord from '../shared/InflectedWord';
 import InflectableWord from '../shared/InflectableWord';
 import { parseEndings } from '../shared/inflection/InflectionsFileParser';
+import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
+import WordForm from '../shared/inflection/WordForm'
 
 import { expect } from 'chai';
 
 describe('InflectableWord', function() {
     let regular =
-        new Inflection('regular', 'inf', 'v', 
-            parseEndings('inf: a, impr: o, pastm: x', 'ru', 'v').endings)
+        new Inflection('regular', 'inf', new WordForm({ pos: PoS.VERB }), 
+            parseEndings('inf: a, impr: o, pastm: x', 'ru', PoS.VERB).endings)
 
     let irregular =
-        new Inflection('irregular', 'inf', 'v', 
-            parseEndings('impr: i', 'ru', 'v').endings).inherit(regular)
+        new Inflection('irregular', 'inf', new WordForm({ pos: PoS.VERB }), 
+            parseEndings('impr: i', 'ru', PoS.VERB).endings).inherit(regular)
 
     let inflections = new Inflections([ regular, irregular ])
     
@@ -43,7 +45,7 @@ describe('InflectableWord', function() {
 
     it('gets right ID on inflections removing last char', () => {
         let regular =
-            new Inflection('regular', 'inf', 'v', 
+            new Inflection('regular', 'inf', new WordForm({ pos: PoS.VERB }), 
                 parseEndings('inf: <a, 1: b', 'fake').endings)
 
         let inflectableWord = 

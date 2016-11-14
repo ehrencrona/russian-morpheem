@@ -17,7 +17,7 @@ readCorpus('ru', false)
     console.log('Read corpus.')
 
     corpus.facts.facts.forEach((fact) => {
-        if (fact instanceof InflectableWord && fact.pos == 'v') {
+        if (fact instanceof InflectableWord) {
             console.log(fact.toText()) 
         }
     })
