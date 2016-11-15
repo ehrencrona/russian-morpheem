@@ -402,7 +402,7 @@ export default class WordSearchComponent extends Component<Props, State> {
                     return <div key={pos} onClick={ () => 
                         this.setState({ filterPos: (pos == this.state.filterPos ? null : pos), 
                             filterWord: null })
-                    } className={ 'option' + (pos == this.state.filterPos ? ' active' : '') }>{pos}</div>
+                    } className={ 'option' + (pos == this.state.filterPos ? ' active' : '') }>{ POSES[pos] }</div>
                 })
             }
             </div>

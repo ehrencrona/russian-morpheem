@@ -36,7 +36,7 @@ let verbInflection =
 let inflections = new Inflections([
     femInflection,
     new Inflection('adj', 'm', new WordForm({ pos: PoS.ADJECTIVE }),
-        parseEndings('m ий, adv о, genpl ах, gen а', 'ru', PoS.ADJECTIVE).endings),
+        parseEndings('m ий, adv о, genpl ах, genm а', 'ru', PoS.ADJECTIVE).endings),
     mascInflection,
     verbInflection
 ])
@@ -99,7 +99,7 @@ describe('Phrase', function() {
         corpus.facts = facts
 
         let np = new Phrase('np', [
-            PhrasePattern.fromString('noun@nominative', '[someone]', words, inflections) 
+            PhrasePattern.fromString('noun@context', '[someone]', words, inflections) 
         ])
 
         corpus.phrases.add(np)
@@ -170,19 +170,18 @@ describe('Phrase', function() {
         testStr('в[loc]@ библиотека@prep')
         testStr('в[loc]@ я|библиотека@prepositional')
         testStr('в[loc]@ я|библиотека@')
-        testStr('в[dir]@ prep')
-        testStr('в[loc]@ tag:location', 'в[loc]@ #location')
+        testStr('в[dir]@ prep', 'в[dir]@ @prep')
         testStr('в[loc]@ #location')
         testStr('в[loc]@ phrase:np')
-        testStr('в[loc]@ phrase:np@gen')
-        testStr('в[loc]@ phrase:np@gen#location')
+        testStr('в[loc]@ phrase:np@gen', 'в[loc]@ phrase:np@genitive')
+        testStr('в[loc]@ phrase:np@genitive#location')
         testStr('в[loc]@ phrase:np#location')
-        testStr('noun prep')
-        testStr('noun @prep!', 'noun prep')
-        testStr('noun@+ @prep+', 'noun @prep+')
-        testStr('noun@! @prep+')
-        testStr('noun@? @prep?')
-        testStr('noun@* @prep*')
+        testStr('noun @prep', 'n @prep')
+        testStr('noun @prep!', 'n @prep')
+        testStr('noun@+ @prep+', 'n @prep+')
+        testStr('n! @prep+')
+        testStr('n? @prep?')
+        testStr('n* @prep*')
     })
 
     it('respects quantifiers', function () {
@@ -228,6 +227,7 @@ describe('Phrase', function() {
         }
 
         expect(phrase.match({ words: wordArray, facts: facts })).to.be.not.undefined
+                
         expect(phrase.match({ words: wordArray, facts: facts }).words.length).to.equal(length)
     }
 
@@ -274,7 +274,7 @@ describe('Phrase', function() {
         testMatch(wordArray, 'adjective! adjective! noun', 3)
     })
 
-    it('any matching empty', function () {
+    it.only('any matching empty', function () {
         let wordArray = [
             w4.inflect('nom'), w5.inflect('m'), w3.inflect('nom'), words.get('.') 
         ]

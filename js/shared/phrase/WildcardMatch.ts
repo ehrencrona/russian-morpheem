@@ -29,7 +29,7 @@ export default class WildcardMatch implements WordMatch {
         return 0
     }
 
-    getForm() {
+    getInflectionForm() {
         return null
     }
 

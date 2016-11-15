@@ -1,3 +1,5 @@
+import { inflate } from 'zlib';
+import { NamedWordForm } from '../inflection/WordForm';
 
 import WordMatch from './WordMatch'
 import WildcardMatch from './WildcardMatch'
@@ -8,9 +10,12 @@ import TagWordMatch from './TagWordMatch'
 import { QUANTIFIERS } from './AbstractQuantifierMatch'
 
 import Inflections from '../inflection/Inflections'
-import { ENGLISH_FORMS_BY_POS, FORMS } from '../inflection/InflectionForms'
+import { ENGLISH_FORMS_BY_POS, FORMS, INFLECTION_FORMS } from '../inflection/InflectionForms';
 import { GrammarNumber, GrammarCase, PartOfSpeech as PoS } from '../inflection/Dimensions'
 import InflectionForm from '../inflection/InflectionForm'
+import WordForm from '../inflection/WordForm'
+import { POS_BY_NAME } from '../inflection/InflectionForms'
+import WORD_FORMS from '../inflection/WordForms'
 import Facts from '../fact/Facts'
 
 import AnyWord from '../AnyWord'
@@ -41,7 +46,7 @@ export interface JsonFormat {
 
 let counter = 0
 
-export const POS_BY_NAME = {
+export const POS_BY_LONG_NAME = {
     'verb': PoS.VERB,
     'noun': PoS.NOUN,
     'adjective': PoS.ADJECTIVE,
@@ -53,32 +58,37 @@ export const POS_BY_NAME = {
     'conjunction': PoS.CONJUNCTION
 }
 
-export let POS_NAMES: { [pos: number] : string } = {}
+export let POS_LONG_NAMES: { [pos: number] : string } = {}
 
-for (let name in POS_BY_NAME) {
-    POS_NAMES[POS_BY_NAME[name]] = name
+for (let name in POS_BY_LONG_NAME) {
+    POS_LONG_NAMES[POS_BY_LONG_NAME[name]] = name
 }
 
-function getEnglishInflectionFromList(pos, form, inflectionList) {
+function getEnglishInflectionFromList(pos: PoS, form, inflectionList) {
     let en: { [ form: string ]: string } = {}
     en[''] = inflectionList[0]
 
-    ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
-        let inflection = inflectionList[index+1]
+    if (ENGLISH_FORMS_BY_POS[pos]) {
+        ENGLISH_FORMS_BY_POS[pos].allForms.map((form, index) => {
+            let inflection = inflectionList[index+1]
 
-        if (!inflection) {
-            return
-        }
+            if (!inflection) {
+                return
+            }
 
-        let els = inflection.split(':')
+            let els = inflection.split(':')
 
-        if (els.length == 2) {
-            en[els[0]] = els[1].trim()
-        }
-        else {
-            en[form] = inflectionList[index+1]
-        }
-    })
+            if (els.length == 2) {
+                en[els[0]] = els[1].trim()
+            }
+            else {
+                en[form] = inflectionList[index+1]
+            }
+        })
+    }
+    else {
+        console.error(`Unhandled PoS ${pos}.`)
+    }
 
     let englishForm = InflectedWord.getEnglishForm(pos, form, en)
 
@@ -285,7 +295,7 @@ class Fragment implements EnglishPatternFragment {
     }
 
     toString() { 
-        return this.en 
+        return this.enString
     }
 
     enWithJpForCases(match: Match, beforeCase?: string, afterCase?: string) {
@@ -349,21 +359,25 @@ class Fragment implements EnglishPatternFragment {
                         .map(w => w.word as InflectedWord)
 
                 if (words.length) {
-                    let inflectAsPoS
+                    let inflectAsPoS: PoS
 
                     if (placeholder.toPosOrForm) {
-                        inflectAsPoS = placeholder.toPosOrForm
+                        inflectAsPoS = POS_BY_NAME[placeholder.toPosOrForm]
+
+                        if (!inflectAsPoS) {
+                            console.error(`Unknown PoS ${placeholder.toPosOrForm} in ${this.toString()}`)
+                        } 
                     }
                     else {
                         console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${result}`)
-                        inflectAsPoS = 'v'
+                        inflectAsPoS = PoS.VERB
                     }
 
                     let accordWith = words.find(w => w.wordForm.pos == inflectAsPoS) 
                     let form: string
                     
                     if (!accordWith) {
-                        if (inflectAsPoS == 'v') {
+                        if (inflectAsPoS == PoS.VERB) {
                             form = this.getVerbForm(words)
                         }
                         else {
@@ -500,8 +514,8 @@ export default class PhrasePattern {
         let words = context.words
         let until = (onlyFirstWord ? 0 : words.length - minWords)
 
-        for (let i = 0; i <= until; i++) {
-            let at = i
+        for (let startAtWord = 0; startAtWord <= until; startAtWord++) {
+            let at = startAtWord
             let found = true
             let childMatch: Match
             let wordsMatched: WordMatched[] = []
@@ -511,7 +525,7 @@ export default class PhrasePattern {
 
                 let m = wordMatch.matches(context, at, this.wordMatches, j)
 
-                if (!m && j > 0 && words[at].wordForm.pos == PoS.PARTICLE) {
+                if (!m && j > 0 && words[at] && words[at].wordForm.pos == PoS.PARTICLE) {
                     at++
 
                     m = wordMatch.matches(context, at, this.wordMatches, j)
@@ -629,15 +643,21 @@ export default class PhrasePattern {
             posStr = null
         }
 
-        if (posStr && !POS_BY_NAME[posStr]) {
-            throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_BY_NAME).join(', ') }.`)
+        if (posStr && !POS_BY_LONG_NAME[posStr]) {
+            throw new Error(`Unknown part of speech "${posStr}" on line "${line}". Should be one of ${ Object.keys(POS_BY_LONG_NAME).join(', ') }.`)
         }
 
         if (posStr == 'adverb' && !formStr) {
             return new AdverbWordMatch(quantifier)
         }
 
-        return new PosFormWordMatch(POS_BY_NAME[posStr], FORMS[formStr], formStr, quantifier)
+        let wordForms = []
+
+        if (posStr) {
+            wordForms.push(findNamedWordFormForPoS(posStr))
+        }
+
+        return new PosFormWordMatch(wordForms, FORMS[formStr], quantifier)
     }
 
     getWords(): Set<AnyWord> {
@@ -688,21 +708,28 @@ export default class PhrasePattern {
 
             let match: WordMatch
 
-            if (str.indexOf('@') == 0 || (str.indexOf('@') > 0 && POS_BY_NAME[str.substr(0, str.indexOf('@'))])) {
+            // Legacy. remove
+            if (str.indexOf('@') > 0 && POS_BY_LONG_NAME[str.substr(0, str.indexOf('@'))]) {
                 match = this.parseFormMatch(str, line)
             }
+            // Legacy. remove
             else if (FORMS[str]) {
-                match = new PosFormWordMatch(null, FORMS[str], str, null)
+                match = new PosFormWordMatch([], FORMS[str], null)
             }
-            else if (POS_BY_NAME[str]) {
+            else if (WORD_FORMS[str]) {
+                match = new PosFormWordMatch([ WORD_FORMS[str] ], null, null)
+            }
+            // Legacy. remove
+            else if (POS_BY_LONG_NAME[str]) {
                 if (str == 'adverb') {
                     match = new AdverbWordMatch()
                 }
                 else {
-                    match = new PosFormWordMatch(POS_BY_NAME[str], null, null, null)
+                    match = new PosFormWordMatch([ findNamedWordFormForPoS(str) ], null, null)
                 }
             }
-            else if (POS_BY_NAME[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
+            // Legacy. remove
+            else if (POS_BY_LONG_NAME[str.substr(0, str.length-1)] && QUANTIFIERS[str[str.length-1]]) {
                 let posStr = str.substr(0, str.length-1) 
                 let quantifier = str[str.length-1]
 
@@ -710,7 +737,7 @@ export default class PhrasePattern {
                     match = new AdverbWordMatch(quantifier)
                 }
                 else {
-                    match = new PosFormWordMatch(POS_BY_NAME[str], null, null, quantifier)
+                    match = new PosFormWordMatch([ findNamedWordFormForPoS(posStr) ], null, quantifier)
                 }
             }
             else if (str.substr(0, 7) == 'phrase:') {
@@ -746,92 +773,92 @@ export default class PhrasePattern {
 
                 match = new PhraseMatch(phraseIdMatch[1], grammaticalCase, tag)
             }
-            else if (str.substr(0, 4) == 'tag:' || str[0] == '#') {
-                str = (str[0] == '#' ? str.substr(1) : str.substr(4))
-
-                let els = str.split('@')
-
-                let tagStr = els[0]
-
-                let form 
-                
-                if (els[1]) {
-                    form = FORMS[els[1]]
-
-                    if (!form) {
-                        throw new Error(`"${ els[1] } was not recognized as a form. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
-                    }
-                }
-
-    	        match = new TagWordMatch(tagStr, form)
-            }
             else if (str == 'any') {
                 match = new WildcardMatch()
             }
-            else if (str.indexOf('@') > 0 || str.indexOf('|') >= 0 || words.inflectableWordsById[str] || words.get(str)) {
-                let wordStr
-                let word: AnyWord
+            else {
+                let originalStr = str
+
+                let quantifier = null
                 
-                if (str.indexOf('@') < 0) {
-                    str += '@'
+                if (QUANTIFIERS[str[str.length-1]]) {
+                    quantifier = str[str.length-1]
+                    str = str.substr(0, str.length-1)
                 }
 
-                if (str[str.length-1] == '@') {
-                    wordStr = str.substr(0, str.length-1)
-                    
-                    let wordList: AnyWord[] = wordStr.split('|').map((w) => {
-                        let result: AnyWord = words.inflectableWordsById[w]
+                let els = str.split('@')
+
+                let inflectionForm: InflectionForm
+
+                if (els[1]) {
+                    inflectionForm = FORMS[els[1]]
+
+                    if (!inflectionForm) {
+                        throw new Error(`"${els[1]} in ${originalStr} was not recognized as an inflection form. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
+                    }
+                }
+
+                str = els[0]
+                els = str.split('#')
+
+                let tag: string
+
+                if (els[1]) {
+                    tag = els[1]
+                    str = els[0]
+                }
+
+                let wordForms: NamedWordForm[] = []
+                let matchWords: AnyWord[] = []
+
+                if ((str.indexOf(',') >= 0 && str != ',') || WORD_FORMS[str] || FORMS[str]) {
+                    wordForms = str.split(',').map(form => {
+                        let result = WORD_FORMS[form] 
 
                         if (!result) {
-                            result = words.get(w)
-                        }
-                        
-                        if (!result) {
-                            throw new Error(`Unknown word "${w}". Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
+                            throw new Error(`Unknown word form "${form}" in "${originalStr}". Valid forms are: ${ Object.keys(WORD_FORMS).join(', ') }.`)
                         }
 
                         return result
                     })
+                }
+                else if (str) {
+                    matchWords = str.split('|').map((w) => {
+                        let result = words.wordsById[w] || words.inflectableWordsById[w]
 
-                    match = new ExactWordMatch(wordList)
+                        if (!result) {
+                            throw new Error(`Word "${w}" (specified in "${originalStr}") is unknown. Did you mean ${words.getSimilarTo(w).join(', ')}?`)
+                        }
+
+                        return result
+                    })                    
+                }
+
+                if (tag) {
+                    if (matchWords.length) {
+                        throw new Error(`Cannot specify both words and tag in ${line}`)
+                    }
+
+        	        match = new TagWordMatch(tag, wordForms, inflectionForm, quantifier)
+                }
+                else if (matchWords.length && !wordForms.length && !inflectionForm && !quantifier) {
+                    match = new ExactWordMatch(matchWords)
+                }
+                else if (matchWords.length && inflectionForm) {
+                    if (matchWords.find(w => w instanceof Word)) {
+                        throw new Error(`${matchWords.find(w => w instanceof Word).toText()} is not inflectable.`)
+                    }
+
+                    match = new WordInFormMatch(matchWords.map(w => (w instanceof InflectableWord ? w : null)).filter(w => !!w), 
+                        inflectionForm, quantifier)
                 }
                 else {
-                    wordStr = str
-
-                    word = words.get(wordStr)
-
-                    if (!word) {
-                        let wordForm = str.split('@')
-
-                        let wordList: InflectableWord[] = wordForm[0].split('|').map((w) => {
-                            let result = words.inflectableWordsById[w]
-
-                            if (!result) {
-                                throw new Error(`Word "${w}" (specified in "${str}" in "${line}") is unknown or uninflected. Did you mean ${ words.getSimilarTo(w).join(', ') }?`)
-                            }
-
-                            return result
-                        })
-
-                        let form = FORMS[wordForm[1]]
-
-                        if (!form) {
-                            throw new Error(`Unknown form ${wordForm[1]} of word ${wordForm[0]}. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
-                        }
-
-                        match = new WordInFormMatch(wordList, form)
+                    if (matchWords.length) {
+                        throw new Error(`Cannot word with other criteria in ${line}`)
                     }
-                    else {
-                        if (!word) {
-                            throw new Error(`Unknown word "${ wordStr }". Did you mean ${ words.getSimilarTo(wordStr).join(', ') }?`)
-                        }
 
-                        match = new ExactWordMatch([ word ])
-                    }
+                    match = new PosFormWordMatch(wordForms, inflectionForm, quantifier)
                 }
-            }
-            else {
-                throw new Error(`Unknown word match "${str}". Should either be a form, a part of speech (${ Object.keys(POS_BY_NAME).join(', ')}), 'any', word@, 'tag:tagName' or 'tag:tagName@case'. Type '@form' to see all forms.`)
             }
 
             wordMatches.push(match)
@@ -855,4 +882,22 @@ export default class PhrasePattern {
         return this.wordMatches.map((wm) => wm.toString()).join(' ')
     }
 
+}
+
+function findNamedWordFormForPoS(posStr: string) {
+    let pos = POS_BY_LONG_NAME[posStr]
+
+    if (!pos) {
+        throw new Error(`No PoS named "${pos}".`)
+    }
+
+    let unnamedWordForm = new WordForm({ pos: pos })
+
+    let namedWordForm = Object.keys(WORD_FORMS).map(i => WORD_FORMS[i]).find(form => form.equals(unnamedWordForm))
+
+    if (!namedWordForm) {
+        throw new Error(`Could not find a named word form for ${ POS_BY_LONG_NAME[posStr] } (from ${posStr}).`)
+    }
+
+    return namedWordForm
 }

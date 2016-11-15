@@ -45,3 +45,76 @@ export interface SentenceHistory {
     getExistingExternalIds(externalIds: string[]): Promise<string[]>
 
 }
+
+const MSG = 'Failure loading corpus'
+
+export class EmptySentenceHistory {
+    setStatus(status: SentenceStatus, sentenceId: number) {
+        throw new Error(MSG)
+    }
+
+    getStatus(sentenceId: number): Promise<SentenceStatusResponse> {
+        return Promise.reject(new Error(MSG))
+    }
+    
+    getPendingSentences(exceptAuthor?: string): Promise<number[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getUnrecordedSentences(): Promise<number[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getEventsForSentence(sentenceId: number): Promise<Event[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getLatestEvents(author?: string, type?: string): Promise<Event[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    recordComment(comment: string, sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordCreate(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordDelete(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordEdit(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordAccept(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordImport(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordTranslate(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    recordRecord(sentence: Sentence, author: string) {
+        throw new Error(MSG)
+    }
+
+    getEventsByDate(eventType: string): Promise<SentencesByDate> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getNewsfeed(author?: string): Promise<Event[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getExistingExternalIds(externalIds: string[]): Promise<string[]> {
+        return Promise.reject(new Error(MSG))
+    }
+
+}

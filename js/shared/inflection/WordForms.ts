@@ -20,6 +20,7 @@ const WORD_FORMS: { [id: string] : NamedWordForm } = {
     v: new NamedWordForm('v', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE }),
     adv: new NamedWordForm('adv', { pos: Dim.PartOfSpeech.ADVERB }),
+    prep: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PREPOSITION }),
     pron: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PRONOUN }),
     possessive: new NamedWordForm('poss', { pos: Dim.PartOfSpeech.POSSESSIVE }),
     number: new NamedWordForm('number', { pos: Dim.PartOfSpeech.NUMBER }),

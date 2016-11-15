@@ -11,7 +11,6 @@ import { Knowledge } from '../../../shared/study/Exposure'
 
 import { Factoid } from '../../../shared/metadata/Factoids'
 import { getFormName, FORMS, CASES, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms'
-import { POS_NAMES, POS_BY_NAME } from '../../../shared/phrase/PhrasePattern'
 import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions'
 import { InflectionForm } from '../../../shared/inflection/InflectionForm'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
@@ -67,7 +66,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let allPhrases = corpus.phrases.all().filter((phrase) => 
             phrase.patterns.every((pattern) => 
                 !!pattern.wordMatches.find((wordMatch) => {
-                    let phraseForm = wordMatch.getForm()
+                    let phraseForm = wordMatch.getInflectionForm()
 
                     return phraseForm && form.matches(phraseForm)
                 })

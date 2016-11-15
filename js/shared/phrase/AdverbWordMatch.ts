@@ -43,7 +43,7 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     setCorpus() {
     }
 
-    getForm() {
+    getInflectionForm() {
         if (this.range[0] > 0) {
             return FORMS['adv']
         }

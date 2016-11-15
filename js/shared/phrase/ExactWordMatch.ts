@@ -40,7 +40,7 @@ export class ExactWordMatch implements WordMatch {
         return (match ? 1 : 0)
     }
 
-    getForm() {
+    getInflectionForm() {
         for (let wordId in this.wordIds) {
             let word = this.corpus.words.get(wordId)
 

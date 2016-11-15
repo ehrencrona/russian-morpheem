@@ -16,7 +16,7 @@ interface WordMatch {
     allowEmptyMatch(): boolean
 
     /* may be null */
-    getForm(): InflectionForm
+    getInflectionForm(): InflectionForm
 
     /* must also implement CaseStudyMatch if true */
     isCaseStudy(): boolean

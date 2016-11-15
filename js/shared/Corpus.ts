@@ -1,11 +1,11 @@
 import Facts from '../shared/fact/Facts'
 import Words from '../shared/Words'
-import { Factoids } from '../shared/metadata/Factoids'
+import { Factoids, EmptyFactoids } from '../shared/metadata/Factoids'
 import { Topics } from '../shared/metadata/Topics'
 import Sentences from '../shared/Sentences'
 import Phrases from '../shared/phrase/Phrases'
 import Inflections from '../shared/inflection/Inflections'
-import { SentenceHistory } from '../shared/metadata/SentenceHistory'
+import { SentenceHistory, EmptySentenceHistory } from '../shared/metadata/SentenceHistory'
 import { PhraseHistory } from '../shared/metadata/PhraseHistory'
 import { ExternalCorpus } from '../shared/external/ExternalCorpus'
 
@@ -43,6 +43,9 @@ export default class Corpus {
             new Phrases(),
             lang
         )
+
+        result.factoids = new EmptyFactoids()
+        result.sentenceHistory = new EmptySentenceHistory()
 
         result.phrases.setCorpus(result)
 

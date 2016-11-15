@@ -199,7 +199,7 @@ export function getFormName(formId: string) {
     }
 }
 
-export let ENGLISH_FORMS_BY_POS: { [s: string]: Forms } = { }
+export let ENGLISH_FORMS_BY_POS: { [pos: number]: Forms } = { }
 
 ENGLISH_FORMS_BY_POS[PartOfSpeech.VERB] 
     = new Forms([], [], [['3', 'past', 'prog', 'pastpart', 'inf', 'pl', 'pastpl', '1' ]]),

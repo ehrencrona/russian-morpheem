@@ -1,3 +1,4 @@
+import { homedir } from 'os';
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'
@@ -66,7 +67,13 @@ export default class InflectedWord extends Word {
             }
             else if (!homonyms.find((otherWord) => !(otherWord instanceof InflectedWord) ||
                 otherWord.word.getIdWithoutClassifier() != this.word.getIdWithoutClassifier())) {
-                disambiguation = this.getEnglish()
+
+                if (homonyms.find(otherWord => otherWord instanceof InflectedWord && otherWord.form == this.form)) {
+                    disambiguation = this.form + ', ' + this.getEnglish()
+                }
+                else {
+                    disambiguation = this.getEnglish()
+                }
             }
             else if (!homonyms.find((otherWord) => otherWord.getWordFact().getId() == this.getWordFact().getId())) {
                 disambiguation = this.word.toText()

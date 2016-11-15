@@ -74,7 +74,7 @@ export function parseEndings(str: string, lang?: string, pos?: PoS, id?: string)
             }
 
             if (lang && !formExists(pos, form)) {
-                console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang} when parsing "${id}".`)
+                console.warn(`The form ${form} is unknown for PoS ${pos} in language ${lang} when parsing "${str}".`)
             }
 
             let ending

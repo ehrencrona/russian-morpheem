@@ -12,8 +12,8 @@ import InflectionForm from '../inflection/InflectionForm'
 export class WordInFormMatch extends AbstractFormMatch {
     wordIds: { [id:string]: boolean}
 
-    constructor(public words : InflectableWord[], form: InflectionForm) {
-        super(form, '!')
+    constructor(public words : InflectableWord[], form: InflectionForm, quantifier: string) {
+        super([], form, quantifier || '!')
 
         this.words = words
 
@@ -28,15 +28,15 @@ export class WordInFormMatch extends AbstractFormMatch {
         if (word instanceof InflectedWord &&
             this.wordIds[word.word.getId()]) {
             let wordForm = FORMS[word.form]
-            return this.matchesForm(wordForm, context)
+            return this.matchesInflectionForm(wordForm, context)
         }
         else {
             return false
         }
     }
 
-    getForm() {
-        return this.range[0] > 0 && this.form
+    getInflectionForm() {
+        return this.range[0] > 0 && this.inflectionForm
     }
 
     isCaseStudy() {
@@ -44,11 +44,11 @@ export class WordInFormMatch extends AbstractFormMatch {
     }
 
     getCaseStudied() {
-        return
+        return null
     }
 
     toString() {
-        return this.words.map((w) => w.getId()).join('|') + '@' + this.form.id
+        return this.words.map((w) => w.getId()).join('|') + '@' + this.inflectionForm.id
     }
 }
 

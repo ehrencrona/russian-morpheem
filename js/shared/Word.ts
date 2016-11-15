@@ -81,9 +81,7 @@ export default class Word extends AbstractAnyWord {
     }
     
     visitFacts(visitor) {
-        if (this.studied) {
-            visitor(this.getWordFact())
-        }
+        visitor(this.getWordFact())
 
         this.visitRequired(visitor)
     }

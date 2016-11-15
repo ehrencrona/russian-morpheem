@@ -209,7 +209,7 @@ export default class Words {
         }
 
         let result = this.wordsByString[id]
-        
+
         if (!result && id[0] == '"' && id[id.length-1] == '"') {
             result = new UnparsedWord(id.substr(1, id.length-2))
         }
@@ -229,13 +229,25 @@ export default class Words {
     }
     
     getSimilarTo(token) {
-        let exactMatches = Object.keys(this.wordsById).map((id) => this.wordsById[id]).filter((word) => word.jp == token).map((word) => word.getId())
+        let exactMatches = Object.keys(this.wordsById)
+            .map((id) => this.wordsById[id])
+            .filter((word) => word.jp == token)
+            .map((word) => word.getId())
 
         if (exactMatches.length) {
-            return exactMatches
+            return dedup(exactMatches.map(i => {
+                let w = this.wordsById[i] 
+                
+                if (w instanceof InflectedWord) {
+                    return w.word.getId()
+                }
+                else {
+                    return i
+            }}))
         }
 
-        let sameLetter: string[] = Object.keys(this.wordsById).filter((word) => word[0] == token[0])
+        let sameLetter: string[] = Object.keys(this.wordsById)
+            .filter((word) => word[0] == token[0])
  
         let byMatchLength = sameLetter.map((word) => {
             let i;
@@ -313,3 +325,18 @@ export default class Words {
     }
 }
  
+function dedup(strs: string[]) {
+    let seen = {}
+
+    return strs.filter(str => {
+        if (!str) {
+            return false
+        }
+
+        let result = !seen[str]
+
+        seen[str] = true
+        
+        return result
+    })
+}

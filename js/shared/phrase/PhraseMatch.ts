@@ -67,7 +67,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
         }
     }
 
-    getForm() {
+    getInflectionForm() {
         if (this.overrideFormCase) {
             return FORMS[CASES[this.overrideFormCase]]
         }

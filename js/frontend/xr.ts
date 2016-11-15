@@ -106,7 +106,16 @@ export function handleException(e) {
         message = 'Your login has expired. Please reload and log in again.'
     }
     else {
-        message = 'An error with code ' + e.status + ' happened while saving.'
+        let url = e.xhr && e.xhr.responseURL
+
+        let i = url.indexOf('/', 8)
+
+        if (i) {
+            url = url.substr(i)
+        }
+
+        message = 'Error ' + e.status + ' while calling ' 
+            + (url || 'unknown URL') + ': ' + e.response.substr(0, 50)
     }
     
     if (onException) {

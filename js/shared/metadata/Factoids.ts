@@ -24,3 +24,25 @@ export interface Factoids {
     getAll(): Promise<Factoid[]>
 
 }
+
+const MSG = 'Failure loading corpus'
+
+export class EmptyFactoids {
+
+    setFactoid(factoid: Factoid, fact: Fact) {
+        return Promise.reject(new Error(MSG))
+    }
+
+    getFactoidAsync(fact: Fact): Promise<Factoid> {
+        return Promise.reject(new Error(MSG))
+    }
+    
+    getFactoid(fact: Fact): Factoid {
+        return null
+    }
+
+    getAll(): Promise<Factoid[]> {
+        return Promise.resolve([])
+    }
+    
+}

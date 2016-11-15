@@ -11,7 +11,7 @@ export default function(corpus: Corpus) {
             })
             .catch((e) => {
                 console.error(e.stack)
-                res.status(500).send(e)
+                res.status(500).send(e.message)
             })
     }
 }

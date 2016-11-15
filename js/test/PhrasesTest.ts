@@ -27,7 +27,7 @@ describe('Phrases', function() {
     words.addWord(w1)
 
     it('parses phrase files', function () {
-        let phrases = parsePhraseFile('вloc: "в for location" "English text" в[loc]@ prep', words, inflections)
+        let phrases = parsePhraseFile('вloc: "в for location" "" "English text" в[loc]@ @prep', words, inflections)
         let phrase = phrases.get('вloc')
 
         expect(phrase).to.be.instanceOf(Phrase)
@@ -35,8 +35,9 @@ describe('Phrases', function() {
         expect(phrase.description).to.equal('в for location')
     })
 
+    
     it('generates phrase files', function () {
-        let fileStr = 'вloc: "в for location" "English text" в[loc]@ prep\nвloc: "в for location" "text English" prep в[loc]@'
+        let fileStr = 'вloc: "в for location" "" "English text" в[loc]@ @prep\nвloc: "в for location" "" "text English" @prep в[loc]@'
         let phrases = parsePhraseFile(fileStr, words, inflections)
         
         expect(phrasesToString(phrases)).to.equal(fileStr)

@@ -51,7 +51,7 @@ describe('PhrasePatterns', () => {
     let phrases = new Phrases()
 
     let np = new Phrase('auto-np', [ 
-        PhrasePattern.fromString('noun@context', '(article)(1)', words, inflections), 
+        PhrasePattern.fromString('noun@context', '(article) (1)', words, inflections), 
         PhrasePattern.fromString('phrase:много', '(1)', words, inflections) 
     ])
     phrases.add(np)
@@ -115,6 +115,7 @@ describe('PhrasePatterns', () => {
 
     it('translates articles', () => {
         sentence.setEnglish('some of the people have cars')
+
         let m = uPhrase.match({
             sentence: sentence,
             words: sentence.words,
