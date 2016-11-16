@@ -1,7 +1,9 @@
-import { NamedWordForm } from './WordForm'
+import { reverse } from 'dns';
+import { wordToStudyWord } from '../study/toStudyWords';
+import { NamedWordForm, WordForm } from './WordForm';
 import * as Dim from './Dimensions'
 
-const WORD_FORMS: { [id: string] : NamedWordForm } = {
+export const WORD_FORMS: { [id: string] : NamedWordForm } = {
 
     nounf: new NamedWordForm('nounf', { pos: Dim.PartOfSpeech.NOUN, gender: Dim.Gender.F }),
     nounm: new NamedWordForm('nounm', { pos: Dim.PartOfSpeech.NOUN, gender: Dim.Gender.M }),
@@ -19,6 +21,9 @@ const WORD_FORMS: { [id: string] : NamedWordForm } = {
     n: new NamedWordForm('n', { pos: Dim.PartOfSpeech.NOUN }),
     v: new NamedWordForm('v', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE }),
+    adjneg: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.NEGATIVE  }),
+    adjpos: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.POSITIVE }),
+
     adv: new NamedWordForm('adv', { pos: Dim.PartOfSpeech.ADVERB }),
     prep: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PREPOSITION }),
     pron: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PRONOUN }),
@@ -27,9 +32,57 @@ const WORD_FORMS: { [id: string] : NamedWordForm } = {
     quest: new NamedWordForm('quest', { pos: Dim.PartOfSpeech.QUESTION }),
     conj: new NamedWordForm('conj', { pos: Dim.PartOfSpeech.CONJUNCTION }),
 
-    perf: new NamedWordForm('perf', { aspect: Dim.Aspect.PERFECTIVE }),
-    imperf: new NamedWordForm('imperf', { aspect: Dim.Aspect.IMPERFECTIVE }),
+    perf: new NamedWordForm('perf', { aspect: Dim.Aspect.PERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
+    imperf: new NamedWordForm('imperf', { aspect: Dim.Aspect.IMPERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
 
 }
 
 export default WORD_FORMS
+
+export interface Derivation {
+    id: string,
+    toForm: NamedWordForm
+}
+
+const DERIVATIONS: 
+    { [ wordForm : string ] : Derivation[] } = {} 
+
+export function getDerivations(wordForm: WordForm): Derivation[] {
+    let result = []
+
+    Object.keys(DERIVATIONS).forEach(formId => {
+        if (wordForm.matches(WORD_FORMS[formId])) {
+            result = result.concat(DERIVATIONS[formId])
+        }
+    })
+
+    return result
+}
+
+function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, reverseDerivation: string) {
+    function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string) {
+        let d = DERIVATIONS[fromForm.id]
+
+        if (!d) {
+            d = []
+            DERIVATIONS[fromForm.id] = d
+        }
+
+        d.push({
+            id: derivation,
+            toForm: toForm
+        })
+    }
+
+    if (toForm == null || fromForm == null) {
+        console.error('No form for derivation ' + derivation)
+        return
+    }
+
+    addOneDirection(fromForm, toForm, derivation)
+    addOneDirection(toForm, fromForm, reverseDerivation)
+}
+
+addDerivation(WORD_FORMS['perf'], WORD_FORMS['imperf'], 'imperfective', 'perfective')
+addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'negative', 'positive')
+addDerivation(WORD_FORMS['adv'], WORD_FORMS['adj'], 'adj', 'adv')

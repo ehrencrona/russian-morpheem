@@ -1,9 +1,21 @@
+import { getDerivations } from './inflection/WordForms';
+import { WordCoordinates } from './inflection/WordForm';
 
+import Words from './Words'
 import AnyWord from './AnyWord'
 import Fact from './fact/Fact'
 import WordForm from './inflection/WordForm'
 import * as Dimension from './inflection/Dimensions'
 export const TRANSLATION_INDEX_SEPARATOR = '-'
+
+export interface JsonFormat {
+    en: { [ form: string ]: string },
+    t: string,
+    f: WordCoordinates
+    cl?: string,
+    unstudied?: boolean,
+    d?: [string, string][]
+}
 
 export abstract class AbstractAnyWord implements AnyWord {
     studied: boolean = true
@@ -11,6 +23,9 @@ export abstract class AbstractAnyWord implements AnyWord {
     en: { [ form: string ]: string } = {}
     enCount: number = 0 
     required: Fact[]
+    classifier: string
+
+    derivations: { [ id: string ] : AnyWord[] } = {}
 
     wordForm: WordForm = new WordForm({ })
 
@@ -19,6 +34,10 @@ export abstract class AbstractAnyWord implements AnyWord {
     abstract toText()
     abstract getWordFact()
     abstract hasMyStem(word: AnyWord)
+
+    constructor(classifier?: string) {
+        this.classifier = classifier
+    }
 
     requiresFact(fact: Fact) {
         if (!fact) {
@@ -119,6 +138,59 @@ export abstract class AbstractAnyWord implements AnyWord {
     setWordForm(wordForm: WordForm) {
         this.wordForm = new WordForm(wordForm)
     }
+
+    resolveDerivations(json: JsonFormat, words: Words) {
+        if (!json.d) {
+            return 
+        }
+
+        json.d.map(([derivation, derivedId]) => {
+            let derived = words.wordsById[derivedId] || words.inflectableWordsById[derivedId] 
+
+            if (derived) {
+                this.addDerivedWord(derivation, derived)
+            }
+            else {
+                throw new Error(`Could not find derived word ${derivedId}.`)
+            }
+        })
+    }
+
+    addDerivedWord(derivation: string, derived: AnyWord) {
+        let existingWords = this.derivations[derivation]
+
+        if (!existingWords) {
+            existingWords = []
+            this.derivations[derivation] = existingWords
+        }
+
+        existingWords.push(derived)
+    }
+
+    setDerivedWords(derivation: string, derived: AnyWord[]) {
+        this.derivations[derivation] = derived
+    }
+
+    getDerivedWords(derivation: string): AnyWord[] {
+        return this.derivations[derivation] || []
+    }
+
+    getDerivationJson() {
+        let derivationJson: [string, string][] = null
+
+        Object.keys(this.derivations).map(d => {
+            if (!derivationJson) {
+                derivationJson = []
+            }
+
+            this.derivations[d].forEach(w =>
+                derivationJson.push([d, w.getId()])
+            )
+        })
+
+        return derivationJson
+    }
+
 }
 
 export default AbstractAnyWord

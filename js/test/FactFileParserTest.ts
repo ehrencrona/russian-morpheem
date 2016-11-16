@@ -24,7 +24,7 @@ inflections.add(new Inflection('lastchar', 'nom', null,
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {
-        var facts = parser('word:meaning, pl: meanings', inflections, 'ru')
+        var [ facts, words ] = parser('word:meaning, pl: meanings', inflections, 'ru')
         let word = facts.facts[0]
         
         expect(word.toString()).to.equal('word')
@@ -36,7 +36,7 @@ describe('FactFileParser', function() {
     })
 
     it('parses inflected words', function () {
-        var facts = parser('wordd--<a:meaning, inflect: lastchar', inflections, 'ru')
+        var [ facts, words ] = parser('wordd--<a:meaning, inflect: lastchar', inflections, 'ru')
         let word = facts.facts[0]
 
         expect(word.getId()).to.equal('worda')
@@ -47,7 +47,7 @@ describe('FactFileParser', function() {
     })
 
     it('parses classifiers', function () {
-        var facts = parser(
+        var [ facts, words ] = parser(
             [
                 'word[a]:meaning',
                 'word[b]:meaning',
@@ -62,14 +62,14 @@ describe('FactFileParser', function() {
     })
     
     it('parses PoS', function () {
-        var facts = parser(
+        var [ facts, words ] = parser(
             'word:meaning, pos: verb', inflections, 'ru')
 
         expect((facts.facts[0] as Word).wordForm.pos).to.equal('verb')
     })
 
     it('parses grammar facts', function () {
-        var facts = parser('grammar:inflection@nom', inflections, 'ru')
+        var [ facts, words ] = parser('grammar:inflection@nom', inflections, 'ru')
         let fact = facts.facts[0]
         
         expect(fact).to.be.instanceOf(AbstractFact)
@@ -80,7 +80,7 @@ describe('FactFileParser', function() {
     })
     
     it('parses tagged grammar facts', function () {
-        var facts = parser('grammar:inflection@nom, tag: foo', inflections, 'ru')
+        var [ facts, words ] = parser('grammar:inflection@nom, tag: foo', inflections, 'ru')
         let fact = facts.facts[0]
 
         expect(fact).to.be.instanceOf(AbstractFact)
@@ -93,7 +93,7 @@ describe('FactFileParser', function() {
     })
     
     it('parses transform facts', function () {
-        var facts = parser('transform: yToI', inflections, 'ru')
+        var [ facts, words ] = parser('transform: yToI', inflections, 'ru')
         let fact = facts.facts[0]
 
         expect(fact).to.be.instanceOf(EndingTransform)
@@ -102,7 +102,7 @@ describe('FactFileParser', function() {
     })
 
     it('handles classifiers', function () {
-        var facts = parser('word[type]:meaning', inflections, 'ru')
+        var [ facts, words ] = parser('word[type]:meaning', inflections, 'ru')
         let word = facts.facts[0]
         
         expect(word).to.be.instanceOf(Word)
@@ -114,7 +114,7 @@ describe('FactFileParser', function() {
     })
 
     it('handles requires', function () {
-        var facts = parser('a:meaning\nb:meaning, grammar: a', inflections, 'ru')
+        var [ facts, words ] = parser('a:meaning\nb:meaning, grammar: a', inflections, 'ru')
 
         let a = facts.facts[0]
         let b = facts.facts[1]

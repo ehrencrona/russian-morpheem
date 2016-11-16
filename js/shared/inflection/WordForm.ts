@@ -2,7 +2,7 @@ import { ENGLISH_FORMS_BY_POS } from './InflectionForms';
 
 import * as Dimension from './Dimensions'
 
-export const FORM_PROPS = [ 'pos', 'gender', 'animate', 'number', 'person', 'numberEn', 'aspect' ]
+export const FORM_PROPS = [ 'pos', 'gender', 'animate', 'number', 'person', 'numberEn', 'aspect', 'reflex', 'negation' ]
 
 export class WordCoordinates {
     pos?: Dimension.PartOfSpeech
@@ -12,6 +12,9 @@ export class WordCoordinates {
     person?: Dimension.Person
     numberEn?: Dimension.GrammarNumber
     aspect?: Dimension.Aspect
+
+    reflex?: Dimension.Reflexivity
+    negation?: Dimension.Negation
 }
 
 export class WordForm extends WordCoordinates {
@@ -22,6 +25,8 @@ export class WordForm extends WordCoordinates {
     person?: Dimension.Person
     numberEn?: Dimension.GrammarNumber
     aspect?: Dimension.Aspect
+    reflex?: Dimension.Reflexivity
+    negation?: Dimension.Negation
 
     constructor(coordinates: WordCoordinates) {
         super() 

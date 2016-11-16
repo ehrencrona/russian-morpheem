@@ -43,7 +43,7 @@ describe('FactFileParser', function() {
     phrases.add(new Phrase('phraseId', []))
 
     function test(str) {
-        var facts = parser(str, inflections, 'ru')
+        var [ facts, words ] = parser(str, inflections, 'ru')
 
         expect(factToString(facts.facts[0], facts)).to.equal(str)
 
@@ -74,7 +74,7 @@ describe('FactFileParser', function() {
     it('handles requires', function () {
         let str = 'a: meaning\nb: meaning, grammar: a'
 
-        var facts = parser(str, inflections, 'ru')
+        var [ facts, words ] = parser(str, inflections, 'ru')
 
         expect(factsToString(facts)).to.equal(str)
     })
@@ -82,7 +82,7 @@ describe('FactFileParser', function() {
     it('handles phrases', function () {
         let str = 'phrase: phraseId'
 
-        var facts = parser(str, inflections, 'ru')
+        var [ facts, words ] = parser(str, inflections, 'ru')
 
         resolvePhrases(facts, phrases)
 

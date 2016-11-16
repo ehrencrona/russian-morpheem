@@ -10,7 +10,7 @@ import AbstractAnyWord from '../AbstractAnyWord'
 import InflectableWord from '../InflectableWord'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectionForm from '../inflection/InflectionForm'
-import WORD_FORMS from '../inflection/WordForms'
+import { WORD_FORMS, getDerivations } from '../inflection/WordForms'
 import { POSES } from '../inflection/InflectionForms'
 import Phrase from '../phrase/Phrase'
 
@@ -42,6 +42,19 @@ export function factToString(fact: Fact, facts: Facts) {
 
         let formString = forms.map(form => ', form: ' + form.id).join('')
 
+        let derivations = ''
+        
+        getDerivations(fact.wordForm)
+            .forEach(derivation => {
+                let words = fact.derivations[derivation.id] 
+
+                if (words) {
+                    words.forEach(word => {
+                        derivations += ', derive:' + derivation.id + ':' + word.getId()
+                    })
+                }
+            })
+
         if (fact instanceof InflectableWord) {
             let ending = fact.inflection.getEnding(fact.inflection.defaultForm)
             let suffix: string = fact.inflection.getSuffix(ending, fact.stem).suffix
@@ -52,6 +65,7 @@ export function factToString(fact: Fact, facts: Facts) {
                 nonDefaultEnglish(fact) +
                 ', inflect: ' + fact.inflection.getId() + tags +
                 formString +
+                derivations + 
                 (fact.mask ? ', mask: ' + fact.getMaskId() : '')
         }
         else if (fact instanceof Word) {
@@ -59,6 +73,7 @@ export function factToString(fact: Fact, facts: Facts) {
                 (fact.classifier ? `[${ fact.classifier }]` : '') + ': ' + fact.getEnglish('') + 
                 nonDefaultEnglish(fact) +
                 formString +
+                derivations + 
                 tags
         }
     }

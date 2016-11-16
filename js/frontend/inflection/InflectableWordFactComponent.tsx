@@ -21,6 +21,7 @@ import PhrasesWithWordComponent from '../PhrasesWithWordComponent'
 import WordTranslationComponent from '../word/WordTranslationComponent'
 import WordClassifierComponent from '../word/WordClassifierComponent'
 import WordFormComponent from'../word/WordFormComponent'
+import WordDerivationsComponent from '../word/WordDerivationsComponent'
 import FactoidComponent from '../fact/FactoidComponent'
 
 import Sentence from '../../shared/Sentence'
@@ -73,22 +74,32 @@ export default class WordFactComponent extends Component<Props, State> {
                 <WordFormComponent
                     corpus={ this.props.corpus} 
                     word={ this.props.fact } />
+
                 <ChangeInflectionComponent
                     corpus={ this.props.corpus } 
                     tab={ this.props.tab }
                     word={ fact }
                     onChange={ () => inflections.forceUpdate() } />
+
                 <InflectionsContainerComponent 
                     corpus={ this.props.corpus } 
                     inflection={ fact.inflection } 
                     word={ fact } 
                     tab={ this.props.tab }
                     ref={ (component) => inflections = component} />
+
                 <WordTranslationComponent
                     corpus={ this.props.corpus } 
                     word={ fact } />
 
-                <WordClassifierComponent corpus={ this.props.corpus} word={ this.props.fact } tab={ this.props.tab }/>
+                <WordDerivationsComponent
+                    corpus={ this.props.corpus} 
+                    word={ this.props.fact } />
+
+                <WordClassifierComponent 
+                    corpus={ this.props.corpus} 
+                    word={ this.props.fact } 
+                    tab={ this.props.tab }/>
 
                 <PhrasesWithWordComponent
                     word={ this.props.fact }

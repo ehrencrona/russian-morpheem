@@ -72,7 +72,6 @@ export default class FactsComponent extends Component<Props, State> {
         else if (this.state.list == SEARCH) {
             list = <FactSearchComponent 
                 corpus={ this.props.corpus }
-                tab={ this.props.tab } 
                 onFactSelect={ (fact) =>  
                     openFact(fact, this.props.corpus, this.props.tab) 
                 } />

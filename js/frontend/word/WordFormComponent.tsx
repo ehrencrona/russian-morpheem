@@ -42,7 +42,9 @@ export default class WordFormComponent extends Component<Props, State> {
         let props = this.props
         let wordForm = props.word.wordForm
 
-        return <ul className='wordForms'>
+        return <div>
+            <h3>Form</h3>
+            <ul className='wordForms'>
             { 
                 Object.keys(WORD_FORMS)
                     .filter(id => wordForm.isCompatibleWith(WORD_FORMS[id]))
@@ -51,5 +53,6 @@ export default class WordFormComponent extends Component<Props, State> {
                             className={ wordForm.matches(WORD_FORMS[id]) ? 'current' : '' }>{ id }</li>)
             }
             </ul>
+        </div>
     }
 }

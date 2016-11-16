@@ -7,17 +7,13 @@ import { INFLECTION_FORMS } from './inflection/InflectionForms'
 import { PartOfSpeech } from './inflection/Dimensions'
 import MASKS from './Masks'
 import AbstractAnyWord from './AbstractAnyWord'
+import { JsonFormat as AbstractJsonFormat } from './AbstractAnyWord'
 import AnyWord from './AnyWord'
 
-export interface JsonFormat {
+export interface JsonFormat extends AbstractJsonFormat {
     stem: string,
-    en: { [ form: string ]: string },
     i: string,
-    t: string,
-    cl?: string,
-    mask?: string,
-    unstudied?: boolean,
-    f: WordCoordinates
+    mask?: string
 }
 
 export default class InflectableWord extends AbstractAnyWord {
@@ -25,12 +21,8 @@ export default class InflectableWord extends AbstractAnyWord {
     mask: (string) => boolean
     defaultInflection: InflectedWord
 
-    constructor(public stem: string, public inflection: Inflection, public classifier?: string) {
-        super()
-
-        this.stem = stem
-        this.inflection = inflection
-        this.classifier = classifier
+    constructor(public stem: string, public inflection: Inflection, classifier?: string) {
+        super(classifier)
         this.wordForm = new WordForm(inflection.wordForm)
     }
 
@@ -149,7 +141,6 @@ export default class InflectableWord extends AbstractAnyWord {
         let result = new InflectableWord(
             json.stem, inflection, json.cl)
             
-            
         result.en = json.en
 
         result.calculateEnCount()
@@ -188,7 +179,13 @@ export default class InflectableWord extends AbstractAnyWord {
             t: InflectableWord.getJsonType(),
             f: this.wordForm
         }
-        
+
+        let derivationJson = this.getDerivationJson()
+
+        if (derivationJson) {
+            result.d = derivationJson
+        }
+
         if (this.classifier) {
             result.cl = this.classifier
         }

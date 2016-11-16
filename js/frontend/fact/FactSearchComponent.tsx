@@ -5,7 +5,6 @@ import TagFact from '../../shared/TagFact'
 
 import Fact from '../../shared/fact/Fact'
 
-import Tab from '../OpenTab'
 import FactNameComponent from './FactNameComponent'
 import { Component, createElement } from 'react'
 
@@ -15,8 +14,8 @@ const MAX_SUGGESTIONS = 50
 
 interface Props {
     corpus: Corpus,
-    tab: Tab,
     onFactSelect: (Fact) => any,
+    filter?: (Fact) => boolean
 }
 
 interface State {
@@ -49,7 +48,13 @@ export default class FactSearchComponent extends Component<Props, State> {
         let facts = []
         
         if (filterString) {
-            facts = allGuideFacts(corpus).filter(
+            let all = allGuideFacts(corpus)
+
+            if (this.props.filter) {
+                all = all.filter(this.props.filter)
+            }
+
+            facts = all.filter(
                 f => doesFactMatchQuery(f, filterString)).slice(0, MAX_SUGGESTIONS)
         }
 

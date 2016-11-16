@@ -100,7 +100,6 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
                         factSearch.clearFilters()
                     } }
-                    tab={ this.props.tab } 
                 />
             </div>
         </div>

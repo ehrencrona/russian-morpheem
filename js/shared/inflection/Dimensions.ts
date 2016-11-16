@@ -50,6 +50,14 @@ export enum AdjectiveForm {
     NORMAL = 1, SHORT, COMPARATIVE, SUPERLATIVE
 }
 
+export enum Reflexivity {
+    NON_REFLEXIVE = 1, REFLEXIVE
+}
+
+export enum Negation {
+    POSITIVE = 1, NEGATIVE 
+}
+
 export enum PronounForm {
     STANDARD = 1,
     ALTERNATIVE

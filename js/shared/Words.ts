@@ -192,6 +192,14 @@ export default class Words {
         }
     }
 
+    setDerivedWords(word: AnyWord, derivation: string, derivedWords: AnyWord[]) {
+        word.setDerivedWords(derivation, derivedWords)
+
+        if (this.onChangeWord) {
+            this.onChangeWord(word)
+        }
+    }
+
     setWordForm(wordForm: WordForm, word: AnyWord) {
         word.setWordForm(wordForm)
 
@@ -288,16 +296,31 @@ export default class Words {
     static fromJson(json: JsonFormat, inflections) {
         let result = new Words();
         
+        let later: (() => void)[] = []
+
         json.forEach((wordJson) => {
             if (wordJson.t == InflectableWord.getJsonType()) {
-                result.addInflectableWord(
-                    InflectableWord.fromJson(wordJson as InflectableWordJsonFormat, inflections))
+                let word = InflectableWord.fromJson(wordJson as InflectableWordJsonFormat, inflections)
+
+                result.addInflectableWord(word)
+
+                if (wordJson.d) {
+                    later.push(() => word.resolveDerivations(wordJson as InflectableWordJsonFormat, result))
+                }
             }
             else {
-                result.addWord(InflectedWord.fromJson(wordJson as WordJsonFormat, inflections))
+                let word = Word.fromJson(wordJson as WordJsonFormat, inflections)
+
+                result.addWord(word)
+
+                if (wordJson.d) {
+                    later.push(() => word.resolveDerivations(wordJson as WordJsonFormat, result))
+                }
             }
         })
-        
+
+        later.forEach(f => f())
+
         return result
     }
 

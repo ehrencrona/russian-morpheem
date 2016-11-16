@@ -4,28 +4,32 @@ import WORD_FORMS from '../inflection/WordForms';
 
 import Word from '../Word'
 import InflectableWord from '../InflectableWord'
-import Inflections from '../inflection/Inflections'
-import InflectionFact from '../inflection/InflectionFact'
 import Fact from './Fact'
 import AbstractFact from './AbstractFact'
 import Facts from './Facts'
-import Phrases from '../phrase/Phrases'
 import Grammars from '../Grammars'
 import Corpus from '../Corpus'
 import MASKS from '../Masks'
 import TagFact from '../TagFact'
 import transforms from '../Transforms'
 import Transform from '../Transform'
+import Words from '../Words'
+import Phrases from '../phrase/Phrases'
 import Phrase from '../phrase/Phrase'
+
+import Inflections from '../inflection/Inflections'
+import InflectionFact from '../inflection/InflectionFact'
 import { POS_BY_NAME, ENGLISH_FORMS } from '../inflection/InflectionForms'
+
 import { AbstractAnyWord, TRANSLATION_INDEX_SEPARATOR } from '../AbstractAnyWord';
 
 class PhraseFact extends AbstractFact {
 }
 
-export function parseFactFile(data, inflections: Inflections, lang: string): Facts {
+export function parseFactFile(data, inflections: Inflections, lang: string): [Facts,Words] {
     let facts = new Facts()
     let grammars = new Grammars(inflections)
+    let later: (() => void)[] = []
 
     function parseWordAndClassifier(jpWord) {
         let classifier
@@ -74,13 +78,13 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 return [ null, split[0] ]
             }
             else {
-                return [ split[0], split[1] ]
+                return [ split[0], split.slice(1).join(':') ]
             }
         })
     }
 
-    function parseRightSideOfDefinition(rightSide, word: Word): Fact {
-        let fact: Fact = word
+    function parseRightSideOfDefinition(rightSide, word: Word): AbstractAnyWord {
+        let fact: AbstractAnyWord = word
         let en = ''
 
         splitRightSide(rightSide).forEach((pair) => {
@@ -148,16 +152,32 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     }
                 }
                 else {
-                    facts.tag(fact, text)
+                    facts.tag(fact.getWordFact(), text)
 
                     if (text == 'untranslatable' && (fact instanceof Word || fact instanceof InflectableWord)) {
                         fact.studied = false
                     }
                 }
             }
+            else if (tag == 'derive') {
+                let [derivation, derivedId] = text.split(':')
+                
+                later.push(() => {
+                    let derived = words.wordsById[derivedId] || words.inflectableWordsById[derivedId] 
+                    
+                    if (derived) {
+                        word.addDerivedWord(derivation, derived)
+                    }
+                    else {
+                        throw new Error(`Could not find derived word ${derivedId}.`)
+                    }
+                })
+            }
             else if (tag == 'form') {
                 if (WORD_FORMS[text]) {
-                    word.wordForm.add(WORD_FORMS[text])
+                    if (fact instanceof AbstractAnyWord) {
+                        fact.wordForm.add(WORD_FORMS[text])
+                    }
                 }
                 else {
                     throw new Error(`Unknown word form ${text}.`)
@@ -171,9 +191,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                     throw new Error(`Unknown PoS "${text}" for ${word.getId()}.`)
                 }
 
-                word.wordForm.pos = pos
-
-                if (fact instanceof InflectableWord) {
+                if (fact instanceof AbstractAnyWord) {
                     fact.wordForm.pos = pos
                 }
             }
@@ -207,6 +225,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
                 if (tag[tag.length-2] == TRANSLATION_INDEX_SEPARATOR) {
                     translationNumber = parseInt(tag[tag.length-1]) - 1
                     tag = tag.substr(0, tag.length-2)
+                }
+                else if (tag[tag.length-3] == TRANSLATION_INDEX_SEPARATOR) {
+                    translationNumber = parseInt(tag.substr(-2)) - 1
+                    tag = tag.substr(0, tag.length-3)
                 }
 
                 if (ENGLISH_FORMS[tag] || tag == '') {
@@ -304,7 +326,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         else {
             let word = parseLeftSideOfDefinition(leftSide)
 
-            fact = parseRightSideOfDefinition(rightSide, word)
+            fact = parseRightSideOfDefinition(rightSide, word).getWordFact()
         }
 
         if (fact) {
@@ -312,7 +334,11 @@ export function parseFactFile(data, inflections: Inflections, lang: string): Fac
         }
     }
 
-    return facts
+    let words = new Words(facts)
+
+    later.forEach(f => f())
+
+    return [ facts, words ]
 }
 
 export function resolvePhrases(facts: Facts, phrases: Phrases) {

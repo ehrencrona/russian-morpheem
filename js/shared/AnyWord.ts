@@ -24,6 +24,10 @@ interface AnyWord extends Translatable {
     getTranslationCount(): number
 
     setWordForm(wordForm: WordForm)
+
+    getDerivedWords(derivation: string): AnyWord[]
+
+    setDerivedWords(derivation: string, derived: AnyWord[])
 }
 
 export default AnyWord

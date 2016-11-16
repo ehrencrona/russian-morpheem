@@ -136,7 +136,6 @@ export default class FactoidComponent extends Component<Props, State> {
 
                         factoids.setFactoid(relatedFactoid, fact)
                     } }
-                    tab={ this.props.tab } 
                 />
             </div>
     

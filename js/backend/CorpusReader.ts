@@ -49,10 +49,9 @@ export default function readCorpus(lang, doWatch) {
     return readInflectionsFile(corpusDir + '/inflections.txt', lang)
     .then((inflections: Inflections) => {
         return readFactFile(corpusDir + '/facts.txt', inflections, lang)        
-            .then((facts: Facts) => {
+            .then(([ facts, words ]) => {
                 console.log('read', facts.facts.length, 'facts in', lang)
                 
-                let words = new Words(facts)                
                 words.addPunctuation()
 
                 return readPhraseFile(corpusDir + '/phrases.txt', words, inflections, lang)

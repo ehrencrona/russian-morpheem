@@ -11,6 +11,7 @@ import ChangeInflectionComponent from '../inflection/ChangeInflectionComponent'
 import MoveFactButton from '../fact/MoveFactButtonComponent'
 import TagButton from '../TagButtonComponent'
 import WordFormComponent from './WordFormComponent'
+import WordDerivationsComponent from './WordDerivationsComponent'
 import TopicButton from '../TopicsButtonComponent'
 import WordsWithInflectionComponent from '../inflection/WordsWithInflectionComponent'
 import SentencesWithFact from '../fact/SentencesWithFactComponent'
@@ -71,23 +72,28 @@ export default class WordFactComponent extends Component<Props, State> {
 
         if (this.state.tab == 'word') {
             tab = <div>
-                    <WordFormComponent
-                        corpus={ this.props.corpus}
-                        word={ this.props.fact } />
-                    <WordClassifierComponent 
-                        corpus={ this.props.corpus} 
-                        word={ this.props.fact } 
-                        tab={ this.props.tab }/>
+                <WordFormComponent
+                    corpus={ this.props.corpus}
+                    word={ this.props.fact } />
 
-                    <WordTranslationComponent 
-                        corpus={ this.props.corpus }
-                        word={ fact } />
+                <WordTranslationComponent 
+                    corpus={ this.props.corpus }
+                    word={ fact } />
 
-                    <PhrasesWithWordComponent
-                        word={ this.props.fact }
-                        corpus={ this.props.corpus }
-                        tab={ this.props.tab } />
-                </div>
+                <WordDerivationsComponent
+                    corpus={ this.props.corpus} 
+                    word={ this.props.fact } />
+
+                <WordClassifierComponent 
+                    corpus={ this.props.corpus} 
+                    word={ this.props.fact } 
+                    tab={ this.props.tab }/>
+
+                <PhrasesWithWordComponent
+                    word={ this.props.fact }
+                    corpus={ this.props.corpus }
+                    tab={ this.props.tab } />
+            </div>
         }
         else if (this.state.tab == 'sentences') {
             tab = <SentencesWithFact 

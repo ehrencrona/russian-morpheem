@@ -1,28 +1,23 @@
-"use strict";
+import { Derivation } from './inflection/WordForms';
 
 import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
 import Words from './Words'
 import InflectableWord from './InflectableWord'
 import AbstractAnyWord from './AbstractAnyWord'
+import { JsonFormat as AbstractJsonFormat } from './AbstractAnyWord'
 import { WordCoordinates, WordForm } from './inflection/WordForm'
-import { PartOfSpeech as PoS } from './inflection/Dimensions'
 
-export interface JsonFormat {
-    target: string,
-    en: { [ form: string ]: string },
-    cl: string,
-    t: string,
-    unstudied?: boolean,
-    f: WordCoordinates
+export interface JsonFormat extends AbstractJsonFormat {
+    target: string
 }
 
 /**
  * Rename to UninflectedWord
  */
 export default class Word extends AbstractAnyWord {
-    constructor(public jp: string, public classifier?: string) {
-        super()
+    constructor(public jp: string, classifier?: string) {
+        super(classifier)
 
         this.en = { }
     }
@@ -108,7 +103,13 @@ export default class Word extends AbstractAnyWord {
             en: this.en,
             cl: this.classifier,
             t: this.getJsonType(),
-            f: this.wordForm
+            f: this.wordForm,
+        }
+
+        let derivationJson = this.getDerivationJson()
+
+        if (derivationJson) {
+            result.d = derivationJson
         }
 
         if (!this.studied) {
