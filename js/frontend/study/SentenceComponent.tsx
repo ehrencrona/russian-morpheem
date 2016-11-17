@@ -1,3 +1,4 @@
+import { PUNCTUATION_NOT_PRECEDED_BY_SPACE, SENTENCE_ENDINGS } from '../../shared/Punctuation';
 
 import { Component, createElement } from 'react'
 import Corpus from '../../shared/Corpus'
@@ -180,7 +181,7 @@ export default class SentenceComponent extends Component<Props, State> {
                             className += ' highlight low'
                         }
                     }
-                    capitalizeNext = text && Words.SENTENCE_ENDINGS.indexOf(text) >= 0
+                    capitalizeNext = text && SENTENCE_ENDINGS.indexOf(text) >= 0
 
                     return <div key={ index } className={ className } onClick={ () => 
                         token instanceof StudyWord && this.props.wordClicked(token) }>
@@ -306,7 +307,7 @@ function flatten(tokens: StudyToken[]) {
 
 function isWordWithSpaceBefore(word: StudyToken) {
     if (word instanceof StudyWord ) {
-        return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
+        return !(word.jp.length == 1 && PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
     }
     else {
         return true

@@ -21,11 +21,11 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     n: new NamedWordForm('n', { pos: Dim.PartOfSpeech.NOUN }),
     v: new NamedWordForm('v', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE }),
-    adjneg: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.NEGATIVE  }),
-    adjpos: new NamedWordForm('adj', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.POSITIVE }),
+    adjneg: new NamedWordForm('adjneg', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.NEGATIVE  }),
+    adjpos: new NamedWordForm('adjpos', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.POSITIVE }),
 
     adv: new NamedWordForm('adv', { pos: Dim.PartOfSpeech.ADVERB }),
-    prep: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PREPOSITION }),
+    prep: new NamedWordForm('prep', { pos: Dim.PartOfSpeech.PREPOSITION }),
     pron: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PRONOUN }),
     poss: new NamedWordForm('poss', { pos: Dim.PartOfSpeech.POSSESSIVE }),
     number: new NamedWordForm('number', { pos: Dim.PartOfSpeech.NUMBER }),
@@ -35,6 +35,9 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
 
     perf: new NamedWordForm('perf', { aspect: Dim.Aspect.PERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
     imperf: new NamedWordForm('imperf', { aspect: Dim.Aspect.IMPERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
+
+    reflex: new NamedWordForm('reflex', { reflex: Dim.Reflexivity.REFLEXIVE, pos: Dim.PartOfSpeech.VERB }),
+    nonreflex: new NamedWordForm('nonreflex', { reflex: Dim.Reflexivity.NON_REFLEXIVE, pos: Dim.PartOfSpeech.VERB }),
 
 }
 
@@ -84,6 +87,9 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
     addOneDirection(toForm, fromForm, reverseDerivation)
 }
 
+addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflexive', 'nonreflexive')
 addDerivation(WORD_FORMS['perf'], WORD_FORMS['imperf'], 'imperfective', 'perfective')
 addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'negative', 'positive')
 addDerivation(WORD_FORMS['adv'], WORD_FORMS['adj'], 'adj', 'adv')
+addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'question', 'pronoun')
+addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'possessive', 'pronoun')

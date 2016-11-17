@@ -109,11 +109,11 @@ function parseLine(line, words: Words, phrases: Phrases, lineNumber: number, sen
         id = Math.max(sentenceIndex, lineNumber-1)
     }
 
-    if (Words.PUNCTUATION.indexOf(elements.words[elements.words.length-1]) < 0) {
+    if (!elements.words[elements.words.length-1].isPunctuation()) {
         let fullStop = words.get('.')
 
         if (fullStop) {
-             elements.words.push(fullStop)
+            elements.words.push(fullStop)
         }
     }
 

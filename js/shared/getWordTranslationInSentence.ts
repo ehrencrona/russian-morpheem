@@ -1,9 +1,9 @@
 
 import Sentence from './Sentence'
 import AnyWord from './AnyWord'
-import Words from './Words'
+import { PUNCTUATION } from './Punctuation'
 
-const WORD_DELIMITER = ' ' + Words.PUNCTUATION
+const WORD_DELIMITER = ' ' + PUNCTUATION
 
 interface Translation {
     index: number

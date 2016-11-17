@@ -201,6 +201,10 @@ export default class InflectableWord extends AbstractAnyWord {
         return result
     }
 
+    isPunctuation() {
+        return false
+    }
+
     getMaskId() {
         let posMasks = MASKS[this.inflection.wordForm.pos]
 

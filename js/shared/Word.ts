@@ -2,9 +2,10 @@ import { Derivation } from './inflection/WordForms';
 
 import Fact from './fact/Fact';
 import Inflections from './inflection/Inflections'
+import PUNCTUATION from './Punctuation'
 import Words from './Words'
-import InflectableWord from './InflectableWord'
 import AbstractAnyWord from './AbstractAnyWord'
+import AnyWord from './AnyWord'
 import { JsonFormat as AbstractJsonFormat } from './AbstractAnyWord'
 import { WordCoordinates, WordForm } from './inflection/WordForm'
 
@@ -76,7 +77,9 @@ export default class Word extends AbstractAnyWord {
     }
     
     visitFacts(visitor) {
-        visitor(this.getWordFact())
+        if (!this.isPunctuation()) {
+            visitor(this.getWordFact())
+        }
 
         this.visitRequired(visitor)
     }
@@ -119,7 +122,11 @@ export default class Word extends AbstractAnyWord {
         return result
     }
 
-    hasMyStem(word: Word | InflectableWord): boolean {
+    isPunctuation() {
+        return PUNCTUATION.indexOf(this.jp) >= 0 && this.jp != '-' 
+    }
+
+    hasMyStem(word: AnyWord): boolean {
         return word.getId() == this.getId()
     }
 

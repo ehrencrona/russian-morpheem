@@ -1,5 +1,6 @@
+import { SENTENCE_ENDINGS } from './Punctuation'
 import Fact from './fact/Fact'
-import Words from './Words'
+import { Words } from './Words'
 import Facts from './fact/Facts'
 import Phrase from './phrase/Phrase'
 import Phrases from './phrase/Phrases'
@@ -138,7 +139,7 @@ export default class Sentence {
         let capitalize = true 
 
         this.words.forEach((word, index) => {
-            if (res.length && (word.jp.length > 1 || Words.PUNCTUATION.indexOf(word.jp) < 0)) {
+            if (res.length && !word.isPunctuation()) {
                 res += ' '
             }
 
@@ -150,10 +151,10 @@ export default class Sentence {
 
             res += wordString
 
-            capitalize = Words.SENTENCE_ENDINGS.indexOf(word.jp) >= 0
+            capitalize = SENTENCE_ENDINGS.indexOf(word.jp) >= 0
         })
 
-        if (this.words.length && Words.PUNCTUATION.indexOf(this.words[this.words.length-1].jp) < 0) {
+        if (this.words.length && !this.words[this.words.length-1].isPunctuation()) {
             res += '.'
         }
 

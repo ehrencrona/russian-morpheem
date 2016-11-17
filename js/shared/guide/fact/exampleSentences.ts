@@ -1,3 +1,4 @@
+import { PUNCTUATION, PUNCTUATION_NOT_PRECEDED_BY_SPACE } from '../../Punctuation';
 import InflectableWord from '../../../shared/InflectableWord'
 import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
@@ -58,7 +59,7 @@ export function downscoreRepeatedWord(scores: SentenceScore[], wordMatches: (wor
 export function tokensToHtml(tokens: StudyToken[]) {
     function isWordWithSpaceBefore(word: StudyToken) {
         if (word instanceof StudyWord ) {
-            return !(word.jp.length == 1 && Words.PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
+            return !(word.jp.length == 1 && PUNCTUATION_NOT_PRECEDED_BY_SPACE.indexOf(word.jp) >= 0)
         }
         else {
             return true
@@ -89,7 +90,7 @@ export function highlightTranslation(sentence: TokenizedSentence) {
             let word = t.word
 
             for (let i = 0; i < word.getTranslationCount(); i++) {
-                let separator = '([\\\s' + Words.PUNCTUATION + ']|^|$)'
+                let separator = '([\\\s' + PUNCTUATION + ']|^|$)'
                 let translation = word.getEnglish('', i)
 
                 let regex = new RegExp(separator + '(' + translation + ')' + separator, 'i')

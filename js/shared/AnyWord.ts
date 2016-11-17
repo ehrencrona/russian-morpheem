@@ -1,8 +1,6 @@
 import { WordCoordinates } from './inflection/WordForm';
 
-import Word from './Word'
 import Fact from './fact/Fact'
-import InflectableWord from './InflectableWord'
 import Translatable from './Translatable'
 import WordForm from './inflection/WordForm'
 
@@ -28,6 +26,8 @@ interface AnyWord extends Translatable {
     getDerivedWords(derivation: string): AnyWord[]
 
     setDerivedWords(derivation: string, derived: AnyWord[])
+
+    isPunctuation(): boolean
 }
 
 export default AnyWord

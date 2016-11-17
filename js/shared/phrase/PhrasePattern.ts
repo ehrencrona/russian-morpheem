@@ -665,7 +665,7 @@ export default class PhrasePattern {
         let result = new Set<AnyWord>()
 
         let addWord = (word: AnyWord) => {
-            if (Words.PUNCTUATION.indexOf(word.toText()) < 0) {
+            if (!word.isPunctuation()) {
                 result.add(word)
             }
         }

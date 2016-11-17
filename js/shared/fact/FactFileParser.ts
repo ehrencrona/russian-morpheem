@@ -1,5 +1,5 @@
 import { inflate } from 'zlib';
-import { Animateness, Aspect, PartOfSpeech as PoS } from '../inflection/Dimensions';
+import { AdjectiveForm, Animateness, Aspect, Negation, PartOfSpeech as PoS } from '../inflection/Dimensions';
 import WORD_FORMS from '../inflection/WordForms';
 
 import Word from '../Word'
@@ -151,6 +151,11 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
                         (fact as AbstractAnyWord).wordForm.animate = Animateness.ANIMATE
                     }
                 }
+                else if (text == 'possessive') {
+                    if (fact instanceof AbstractAnyWord) {
+                        (fact as AbstractAnyWord).wordForm.pos = PoS.POSSESSIVE
+                    }
+                }
                 else {
                     facts.tag(fact.getWordFact(), text)
 
@@ -242,8 +247,20 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
 
         // conversion code. remove
         if (fact instanceof AbstractAnyWord) {
-            if (fact.wordForm.pos == PoS.VERB && fact.wordForm.aspect != Aspect.PERFECTIVE) {
+            if (fact.wordForm.pos == PoS.VERB && !fact.wordForm.aspect) {
                 fact.wordForm.aspect = Aspect.IMPERFECTIVE
+            }
+
+            if (fact.wordForm.pos == PoS.ADJECTIVE && !fact.wordForm.negation) {
+                fact.wordForm.negation = Negation.POSITIVE
+            }
+
+            if (fact.wordForm.pos == PoS.PRONOUN && fact.toText().substr(0, 2) == 'ни') {
+                fact.wordForm.negation = Negation.NEGATIVE
+            }
+
+            if (fact.wordForm.pos == PoS.ADJECTIVE && fact.toText().substr(0, 2) == 'не') {
+                fact.wordForm.negation = Negation.NEGATIVE
             }
         }
         

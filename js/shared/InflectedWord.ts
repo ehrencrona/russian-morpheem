@@ -1,4 +1,3 @@
-import { homedir } from 'os';
 import Word from './Word'
 import Inflection from './inflection/Inflection'
 import Inflections from './inflection/Inflections'

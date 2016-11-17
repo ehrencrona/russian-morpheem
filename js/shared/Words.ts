@@ -12,7 +12,9 @@ import { JsonFormat as WordJsonFormat } from './Word'
 
 export type JsonFormat = (InflectableWordJsonFormat | WordJsonFormat)[]
 
-export default class Words {
+import { PUNCTUATION } from './Punctuation'
+
+export class Words {
     wordsByString : { [s: string]: Word } = {}
     wordsById : { [s: string]: Word } = {}
     inflectableWordsById : { [s: string]: InflectableWord } = {}
@@ -23,10 +25,6 @@ export default class Words {
     onChangeWord: (word: AnyWord) => void = null
     onAddInflectableWord: (word: InflectableWord) => void = null
     
-    static PUNCTUATION = '.?!,;:«»—'
-    static PUNCTUATION_NOT_PRECEDED_BY_SPACE = '.?!,:;»'
-    static SENTENCE_ENDINGS = '.?!—'
-
     sortedWords: Word[]
 
     constructor(facts?: Facts) {
@@ -49,7 +47,7 @@ export default class Words {
     }
 
     getPunctuationWords() {
-        return Words.PUNCTUATION.split('').map((char) => {
+        return PUNCTUATION.split('').map((char) => {
             let result = new Word(char, null)
 
             result.studied = false
@@ -347,6 +345,8 @@ export default class Words {
         return result
     }
 }
+
+export default Words
  
 function dedup(strs: string[]) {
     let seen = {}

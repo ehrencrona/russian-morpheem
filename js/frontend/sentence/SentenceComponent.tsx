@@ -5,9 +5,10 @@ import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
 import Words from '../../shared/Words'
 import InflectedWord from '../../shared/InflectedWord'
-import UnparsedWord from '../../shared/UnparsedWord';
+import UnparsedWord from '../../shared/UnparsedWord'
 import Sentence from '../../shared/Sentence'
 import { MISSING_INDEX } from '../../shared/fact/Facts'
+import PUNCTUATION from '../../shared/Punctuation'
 import Tab from '../OpenTab'
 
 import FactNameComponent from '../fact/FactNameComponent'
@@ -126,7 +127,7 @@ export default class SentenceComponent extends Component<Props, State> {
             </div>
             <div className='buttonBar'>
                 {
-                    Words.PUNCTUATION.split('').map((char) => 
+                    PUNCTUATION.split('').map((char) => 
                         <div className='button' key={ char } onClick={ () => editor.setWord(
                             this.props.corpus.words.get(char)
                         ) }>{ char }</div>

@@ -34,6 +34,7 @@ export abstract class AbstractAnyWord implements AnyWord {
     abstract toText()
     abstract getWordFact()
     abstract hasMyStem(word: AnyWord)
+    abstract isPunctuation()
 
     constructor(classifier?: string) {
         this.classifier = classifier

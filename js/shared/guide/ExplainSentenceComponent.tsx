@@ -429,7 +429,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
 }
 
 function isPunctuation(word: AnyWord) {
-    return Words.PUNCTUATION.indexOf(word.toText()) >= 0
+    return word.isPunctuation()
 }
 
 function renderEnding(inflected, base: string) {
