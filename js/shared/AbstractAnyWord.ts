@@ -1,3 +1,4 @@
+import { exists } from 'fs';
 import { getDerivations } from './inflection/WordForms';
 import { WordCoordinates } from './inflection/WordForm';
 
@@ -146,10 +147,10 @@ export abstract class AbstractAnyWord implements AnyWord {
         }
 
         json.d.map(([derivation, derivedId]) => {
-            let derived = words.wordsById[derivedId] || words.inflectableWordsById[derivedId] 
+            let derived: AnyWord = words.wordsById[derivedId] || words.inflectableWordsById[derivedId] 
 
             if (derived) {
-                this.addDerivedWord(derivation, derived)
+                this.addDerivedWords(derivation, derived)
             }
             else {
                 throw new Error(`Could not find derived word ${derivedId}.`)
@@ -157,19 +158,26 @@ export abstract class AbstractAnyWord implements AnyWord {
         })
     }
 
-    addDerivedWord(derivation: string, derived: AnyWord) {
+    addDerivedWords(derivation: string, ... derived: AnyWord[]) {
         let existingWords = this.derivations[derivation]
 
         if (!existingWords) {
             existingWords = []
-            this.derivations[derivation] = existingWords
         }
 
-        existingWords.push(derived)
+        this.derivations[derivation] = dedup(existingWords.concat(derived))
     }
 
-    setDerivedWords(derivation: string, derived: AnyWord[]) {
-        this.derivations[derivation] = derived
+    removeDerivedWords(derivation: string, ... derived: AnyWord[]) {
+        let existingWords = this.derivations[derivation]
+
+        if (!existingWords) {
+            existingWords = []
+        }
+
+        this.derivations[derivation] = existingWords.filter(w =>
+            !derived.find(w2 => w2.getId() == w.getId())
+        )
     }
 
     getDerivedWords(derivation: string): AnyWord[] {
@@ -195,3 +203,19 @@ export abstract class AbstractAnyWord implements AnyWord {
 }
 
 export default AbstractAnyWord
+
+function dedup(words: AnyWord[]) {
+    let seen = {}
+
+    return words.filter(fact => {
+        if (!fact) {
+            return false
+        }
+
+        let result = !seen[fact.getId()]
+
+        seen[fact.getId()] = true
+        
+        return result
+    })
+}

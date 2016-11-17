@@ -53,7 +53,8 @@ export default function(corpus: Corpus) {
                     `${existingWord.getId()} from ${existingWord.getDerivedWords(id).map(w => w.getId())} ` +
                     `to ${word.getDerivedWords(id).map(w => w.getId())}.`)
 
-                corpus.words.setDerivedWords(existingWord, id, word.getDerivedWords(id))
+                corpus.words.removeDerivedWords(existingWord, id, ... existingWord.getDerivedWords(id))
+                corpus.words.addDerivedWords(existingWord, id, ... word.getDerivedWords(id))
             })
 
             Object.keys(word.en).forEach((form) => {

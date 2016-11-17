@@ -25,7 +25,8 @@ interface AnyWord extends Translatable {
 
     getDerivedWords(derivation: string): AnyWord[]
 
-    setDerivedWords(derivation: string, derived: AnyWord[])
+    addDerivedWords(derivation: string, ...derived: AnyWord[])
+    removeDerivedWords(derivation: string, ...derived: AnyWord[])
 
     isPunctuation(): boolean
 }

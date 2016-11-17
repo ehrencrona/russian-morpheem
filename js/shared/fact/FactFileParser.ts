@@ -188,7 +188,7 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
                     let derived = words.wordsById[derivedId] || words.inflectableWordsById[derivedId] 
                     
                     if (derived) {
-                        word.addDerivedWord(derivation, derived)
+                        words.addDerivedWords(fact.getWordFact(), derivation, derived)
                     }
                     else {
                         throw new Error(`Could not find derived word ${derivedId}.`)

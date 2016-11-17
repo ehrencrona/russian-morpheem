@@ -1,3 +1,4 @@
+import { del } from 'request';
 import { reverse } from 'dns';
 import { wordToStudyWord } from '../study/toStudyWords';
 import { NamedWordForm, WordForm } from './WordForm';
@@ -46,10 +47,13 @@ export default WORD_FORMS
 export interface Derivation {
     id: string,
     toForm: NamedWordForm
+    isForward: boolean
 }
 
 const DERIVATIONS: 
     { [ wordForm : string ] : Derivation[] } = {} 
+const REVERSE_DERIVATION: 
+    { [ from: string ] : string } = {}
 
 export function getDerivations(wordForm: WordForm): Derivation[] {
     let result = []
@@ -63,6 +67,10 @@ export function getDerivations(wordForm: WordForm): Derivation[] {
     return result
 }
 
+export function getReverseDerivation(derivation: string): string {
+    return REVERSE_DERIVATION[derivation]
+} 
+
 export function getNonRedundantNamedForms(wordForm: WordForm): NamedWordForm[] {
     let forms = Object.keys(WORD_FORMS)
         .filter(id => wordForm.matches(WORD_FORMS[id]))
@@ -71,14 +79,14 @@ export function getNonRedundantNamedForms(wordForm: WordForm): NamedWordForm[] {
     if (forms.length > 1) {
         // eliminate redundant forms
         forms = forms.filter(form => !forms.find(superSetForm => 
-            form.id != superSetForm.id && form.matches(superSetForm)))
+            form.id != superSetForm.id && superSetForm.matches(form)))
     }
 
     return forms
 }
 
 function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, reverseDerivation: string) {
-    function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string) {
+    function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, isForward: boolean) {
         let d = DERIVATIONS[fromForm.id]
 
         if (!d) {
@@ -88,7 +96,8 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
 
         d.push({
             id: derivation,
-            toForm: toForm
+            toForm: toForm,
+            isForward: isForward
         })
     }
 
@@ -97,13 +106,16 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
         return
     }
 
-    addOneDirection(fromForm, toForm, derivation)
-    addOneDirection(toForm, fromForm, reverseDerivation)
+    addOneDirection(fromForm, toForm, derivation, true)
+    addOneDirection(toForm, fromForm, reverseDerivation, false)
+
+    REVERSE_DERIVATION[derivation] = reverseDerivation 
+    REVERSE_DERIVATION[reverseDerivation] = derivation 
 }
 
-addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflexive', 'nonreflexive')
-addDerivation(WORD_FORMS['perf'], WORD_FORMS['imperf'], 'imperfective', 'perfective')
-addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'negative', 'positive')
-addDerivation(WORD_FORMS['adv'], WORD_FORMS['adj'], 'adj', 'adv')
-addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'question', 'pronoun')
-addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'possessive', 'pronoun')
+addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflex', 'nonreflex')
+addDerivation(WORD_FORMS['imperf'], WORD_FORMS['perf'], 'perf', 'imperf')
+addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'neg', 'pos')
+addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')
+addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'quest', 'pron')
+addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'poss', 'pron')

@@ -61,7 +61,7 @@ export default class WordDerivationsComponent extends Component<Props, State> {
                                         <div className='remove button' 
                                             onClick={ 
                                                 () => {
-                                                    props.corpus.words.setDerivedWords(props.word, derivation.id, [])
+                                                    props.corpus.words.removeDerivedWords(props.word, derivation.id, ... derivedWords)
                                                     this.forceUpdate()
                                             }}>Remove</div>
                                     : null
@@ -78,8 +78,7 @@ export default class WordDerivationsComponent extends Component<Props, State> {
                                     corpus={ this.props.corpus }
                                     onFactSelect={ 
                                         (fact) => {
-                                            props.corpus.words.setDerivedWords(props.word, derivation.id, 
-                                                props.word.getDerivedWords(derivation.id).concat(fact as AnyWord))
+                                            props.corpus.words.addDerivedWords(props.word, derivation.id, fact as AnyWord)
 
                                             this.forceUpdate()
                                         }

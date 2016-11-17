@@ -1,4 +1,7 @@
-import { WordForm } from './inflection/WordForm';
+
+import { WordForm } from './inflection/WordForm'
+import { getReverseDerivation } from './inflection/WordForms'
+
 import Word from './Word'
 import InflectedWord from './InflectedWord'
 import InflectableWord from './InflectableWord'
@@ -190,8 +193,22 @@ export class Words {
         }
     }
 
-    setDerivedWords(word: AnyWord, derivation: string, derivedWords: AnyWord[]) {
-        word.setDerivedWords(derivation, derivedWords)
+    addDerivedWords(word: AnyWord, derivation: string, ...derivedWords: AnyWord[]) {
+        word.addDerivedWords(derivation, ...derivedWords)
+
+        derivedWords.forEach(derivedWord => 
+            derivedWord.addDerivedWords(getReverseDerivation(derivation), word))
+
+        if (this.onChangeWord) {
+            this.onChangeWord(word)
+        }
+    }
+
+    removeDerivedWords(word: AnyWord, derivation: string, ...derivedWords: AnyWord[]) {
+        word.removeDerivedWords(derivation, ...derivedWords)
+
+        derivedWords.forEach(derivedWord => 
+            derivedWord.removeDerivedWords(getReverseDerivation(derivation), word))
 
         if (this.onChangeWord) {
             this.onChangeWord(word)

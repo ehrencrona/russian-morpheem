@@ -1,3 +1,4 @@
+import { Aspect } from '../inflection/Dimensions';
 
 
 import Word from '../Word'
@@ -37,6 +38,10 @@ export function factToString(fact: Fact, facts: Facts) {
         
         getDerivations(fact.wordForm)
             .forEach(derivation => {
+                if (!derivation.isForward) {
+                    return
+                }
+
                 let words = fact.derivations[derivation.id] 
 
                 if (words) {
