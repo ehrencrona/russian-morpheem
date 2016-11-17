@@ -27,10 +27,11 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     adv: new NamedWordForm('adv', { pos: Dim.PartOfSpeech.ADVERB }),
     prep: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PREPOSITION }),
     pron: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PRONOUN }),
-    possessive: new NamedWordForm('poss', { pos: Dim.PartOfSpeech.POSSESSIVE }),
+    poss: new NamedWordForm('poss', { pos: Dim.PartOfSpeech.POSSESSIVE }),
     number: new NamedWordForm('number', { pos: Dim.PartOfSpeech.NUMBER }),
     quest: new NamedWordForm('quest', { pos: Dim.PartOfSpeech.QUESTION }),
     conj: new NamedWordForm('conj', { pos: Dim.PartOfSpeech.CONJUNCTION }),
+    part: new NamedWordForm('part', { pos: Dim.PartOfSpeech.PARTICLE }),
 
     perf: new NamedWordForm('perf', { aspect: Dim.Aspect.PERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
     imperf: new NamedWordForm('imperf', { aspect: Dim.Aspect.IMPERFECTIVE, pos: Dim.PartOfSpeech.VERB }),

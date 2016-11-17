@@ -7,13 +7,16 @@ import * as Dimension from '../../shared/inflection/Dimensions';
 import { getDerivations, Derivation, WORD_FORMS } from '../../shared/inflection/WordForms'
 import { WordCoordinates, WordForm, NamedWordForm } from '../../shared/inflection/WordForm'
 
-import FactSearchComponent from '../../frontend/fact/FactSearchComponent'
+import FactSearchComponent from '../fact/FactSearchComponent'
+import openFact from '../fact/openFact'
+import OpenTab from '../OpenTab'
 
 import { Component, createElement } from 'react';
 
 interface Props {
     corpus: Corpus,
     word: AnyWord
+    tab: OpenTab
 }
 
 interface State {
@@ -39,16 +42,35 @@ export default class WordDerivationsComponent extends Component<Props, State> {
             { 
                 getDerivations(props.word.wordForm)
                     .map(derivation => {
+                        let derivedWords = props.word.getDerivedWords(derivation.id)
+
                         return <li key={ derivation.id } >
-                            <div className='derivation'>{ 
+                            <div className='derivation'>
+                                <div className='label'>{ 
                                     derivation.id 
                                 }</div> 
-                            { 
-                                props.word.getDerivedWords(derivation.id).map(w => 
-                                    <div key={ w.getId() } className='word'>{ 
-                                        w.toText() } { w instanceof AbstractAnyWord ? w.classifier : "" 
-                                    }</div>)
-                            }
+                                { 
+                                    derivedWords.map(w => 
+                                        <div key={ w.getId() } className='word clickable'
+                                            onClick={ () => openFact(w.getWordFact(), this.props.corpus, this.props.tab )}>{ 
+                                            w.toText() } { w instanceof AbstractAnyWord ? w.classifier : "" 
+                                        }</div>)
+                                }
+                                { 
+                                    derivedWords.length ?
+                                        <div className='remove button' 
+                                            onClick={ 
+                                                () => {
+                                                    props.corpus.words.setDerivedWords(props.word, derivation.id, [])
+                                                    this.forceUpdate()
+                                            }}>Remove</div>
+                                    : null
+                                }
+                                <div className='add button' 
+                                    onClick={ () => this.setState({ 
+                                        add: (this.state.add != derivation ? derivation : null) }) 
+                                    }>Add</div>
+                            </div>
                             {
                                 this.state.add == derivation ?
 
@@ -71,8 +93,6 @@ export default class WordDerivationsComponent extends Component<Props, State> {
                                 : 
                                 null
                             }
-                            <div className='add button' 
-                                onClick={ () => this.setState({ add: derivation }) }>Add</div>
                         </li>
                     })
             }

@@ -82,6 +82,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
                 <WordDerivationsComponent
                     corpus={ this.props.corpus} 
+                    tab={ this.props.tab }
                     word={ this.props.fact } />
 
                 <WordClassifierComponent 

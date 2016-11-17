@@ -1,5 +1,5 @@
 import { inflate } from 'zlib';
-import { Animateness, Aspect } from '../inflection/Dimensions';
+import { Animateness, Aspect, PartOfSpeech as PoS } from '../inflection/Dimensions';
 import WORD_FORMS from '../inflection/WordForms';
 
 import Word from '../Word'
@@ -239,6 +239,13 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
                 }
             }
         })
+
+        // conversion code. remove
+        if (fact instanceof AbstractAnyWord) {
+            if (fact.wordForm.pos == PoS.VERB && fact.wordForm.aspect != Aspect.PERFECTIVE) {
+                fact.wordForm.aspect = Aspect.IMPERFECTIVE
+            }
+        }
         
         return fact
     }

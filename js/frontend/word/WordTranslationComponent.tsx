@@ -82,7 +82,8 @@ export default class WordTranslationComponent extends Component<Props, State> {
                 })
             }
 
-            <div className='button' onClick={ () => this.setState({ translationCount: this.state.translationCount+1} )}>
+            <div className='button add' 
+                    onClick={ () => this.setState({ translationCount: this.state.translationCount+1} )}>
                 Add
             </div>
         </div> 

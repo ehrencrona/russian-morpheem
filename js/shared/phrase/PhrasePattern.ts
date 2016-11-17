@@ -55,7 +55,8 @@ export const POS_BY_LONG_NAME = {
     'preposition': PoS.PREPOSITION,
     'numeral': PoS.NUMBER,
     'question': PoS.QUESTION,
-    'conjunction': PoS.CONJUNCTION
+    'conjunction': PoS.CONJUNCTION,
+    'particle': PoS.PARTICLE
 }
 
 export let POS_LONG_NAMES: { [pos: number] : string } = {}

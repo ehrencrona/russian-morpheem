@@ -228,6 +228,10 @@ input[type=text], input[type=number], textarea {
         @extend .borderBoxSizing;
         width: 100%;
     }
+
+    .button.add {
+        display: inline-block;
+    }
 }
 
 .sentenceTab {
@@ -379,6 +383,38 @@ input[type=text], input[type=number], textarea {
     }
 }
 
+.wordInSearch {
+    display: flex;
+    flex-direction: row;
+    background-color: $color6-light;
+    padding: 2 * $unit;
+    margin-right: $unit;
+    margin-bottom: 2 * $unit;
+    cursor: pointer;
+
+    .index {
+        color: $color2;
+        background-color: $color12;
+        top: auto;
+    }
+
+    .error {
+        color: $color5;
+    }
+
+    .form {
+        margin-left: 4px;
+        font-size: 80%;
+        align-self: center;
+    }
+
+    .count {
+        margin-left: 4px;
+        font-size: 80%;
+        align-self: center;
+    }
+}
+
 .wordSearch {    
     .filter {
         padding: $unit;
@@ -429,35 +465,7 @@ input[type=text], input[type=number], textarea {
         }
 
         .suggestion {
-            display: flex;
-            flex-direction: row;
-            background-color: $color6-light;
-            padding: 2 * $unit;
-            margin-right: $unit;
-            margin-bottom: 2 * $unit;
-            cursor: pointer;
-
-            .index {
-                color: $color2;
-                background-color: $color12;
-                top: auto;
-            }
-
-            .error {
-                color: $color5;
-            }
-
-            .form {
-                margin-left: 4px;
-                font-size: 80%;
-                align-self: center;
-            }
-
-            .count {
-                margin-left: 4px;
-                font-size: 80%;
-                align-self: center;
-            }
+            @extend .wordInSearch
         }
     }
 }
@@ -556,6 +564,37 @@ ul {
     
     .name {
         font-weight: bold;
+    }
+}
+
+ul.wordDerivations {
+    margin-top: 2 * $unit;
+
+    li {
+        .derivation {
+            display: flex;
+            flex-direction: row;
+
+            .label {
+                font-weight: bold;
+                padding: 2 * $unit;
+                padding-left: 0;
+                width: 8em;
+            }
+
+            .word {
+                @extend .wordInSearch;
+            }
+        }
+
+        .wordSearch {
+            width: 100%;
+        }
+    }
+
+    .button {
+        position: relative;
+        top: -$unit;
     }
 }
 
