@@ -4,6 +4,7 @@ import Inflections from './Inflections'
 import Inflection from './Inflection'
 import Ending from '../Ending'
 import { INFLECTION_FORMS } from './InflectionForms'
+import { getNonRedundantNamedForms } from './WordForms'
 
 function endingToString(ending: Ending) {
     let result = ''
@@ -59,13 +60,16 @@ function inflectionToString(inflection: Inflection, lang: string) {
         })
     }
 
+    let formString = getNonRedundantNamedForms(inflection.wordForm)
+        .map(form => ', form ' + form.id).join('')
+
     let description = ''
 
     if (inflection.description) {
         description = '"' + inflection.description + '" '
     }
 
-    return `${inflection.id}[${inflection.wordForm.pos}]: ${ description }${ endings.join(', ') }${ inherit }${ transformString }`
+    return `${inflection.id}: ${ description }${ endings.join(', ') }${ inherit }${ formString }${ transformString }`
 }
 
 export default function inflectionsToString(inflections: Inflections, lang: string) {

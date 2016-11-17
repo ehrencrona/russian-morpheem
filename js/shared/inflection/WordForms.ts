@@ -63,6 +63,20 @@ export function getDerivations(wordForm: WordForm): Derivation[] {
     return result
 }
 
+export function getNonRedundantNamedForms(wordForm: WordForm): NamedWordForm[] {
+    let forms = Object.keys(WORD_FORMS)
+        .filter(id => wordForm.matches(WORD_FORMS[id]))
+        .map(id => WORD_FORMS[id])
+
+    if (forms.length > 1) {
+        // eliminate redundant forms
+        forms = forms.filter(form => !forms.find(superSetForm => 
+            form.id != superSetForm.id && form.matches(superSetForm)))
+    }
+
+    return forms
+}
+
 function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, reverseDerivation: string) {
     function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string) {
         let d = DERIVATIONS[fromForm.id]

@@ -1,7 +1,13 @@
-import { inflate } from 'zlib';
-import { AdjectiveForm, Animateness, Aspect, Negation, PartOfSpeech as PoS } from '../inflection/Dimensions';
-import WORD_FORMS from '../inflection/WordForms';
-
+import {
+    AdjectiveForm,
+    Animateness,
+    Aspect,
+    Negation,
+    PartOfSpeech as PoS,
+    Reflexivity
+} from '../inflection/Dimensions';
+import WORD_FORMS from '../inflection/WordForms'
+import Inflection from '../inflection/Inflection'
 import Word from '../Word'
 import InflectableWord from '../InflectableWord'
 import Fact from './Fact'
@@ -130,12 +136,23 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
                 }
 
                 let iw = new InflectableWord(stem, inflection, word.classifier)
+
                 iw.en = word.en
                 iw.enCount = word.enCount
                 
-                if (iw.wordForm.matches(inflection.wordForm)) {
-                    iw.wordForm.add(inflection.wordForm)
+                let inheritWordForm = (inflection: Inflection) => {
+                    if (iw.wordForm.isCompatibleWith(inflection.wordForm)) {
+                        iw.wordForm.add(inflection.wordForm)
+                    }
+                    else {
+                        console.error('Wanted to assign', inflection.wordForm, 
+                            ' to ' + iw.toString() + ' but it had an incompatible form ', iw.wordForm)
+                    }
+
+                    inflection.inherits.forEach(inheritWordForm)
                 }
+
+                inheritWordForm(inflection)
 
                 fact = iw
             }
@@ -249,6 +266,10 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
         if (fact instanceof AbstractAnyWord) {
             if (fact.wordForm.pos == PoS.VERB && !fact.wordForm.aspect) {
                 fact.wordForm.aspect = Aspect.IMPERFECTIVE
+            }
+
+            if (fact.wordForm.pos == PoS.VERB && !fact.wordForm.reflex) {
+                fact.wordForm.reflex = Reflexivity.NON_REFLEXIVE
             }
 
             if (fact.wordForm.pos == PoS.ADJECTIVE && !fact.wordForm.negation) {

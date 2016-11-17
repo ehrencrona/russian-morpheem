@@ -10,7 +10,7 @@ import AbstractAnyWord from '../AbstractAnyWord'
 import InflectableWord from '../InflectableWord'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectionForm from '../inflection/InflectionForm'
-import { WORD_FORMS, getDerivations } from '../inflection/WordForms'
+import { WORD_FORMS, getDerivations, getNonRedundantNamedForms } from '../inflection/WordForms'
 import { POSES } from '../inflection/InflectionForms'
 import Phrase from '../phrase/Phrase'
 
@@ -30,17 +30,8 @@ export function factToString(fact: Fact, facts: Facts) {
     }
 
     if (fact instanceof AbstractAnyWord) {
-        let forms = Object.keys(WORD_FORMS)
-            .filter(id => fact.wordForm.matches(WORD_FORMS[id]))
-            .map(id => WORD_FORMS[id])
-
-        if (forms.length > 1) {
-            // eliminate redundant forms
-            forms = forms.filter(form => !forms.find(superSetForm => 
-                form.id != superSetForm.id && form.matches(superSetForm)))
-        }
-
-        let formString = forms.map(form => ', form: ' + form.id).join('')
+        let formString = getNonRedundantNamedForms(fact.wordForm)
+            .map(form => ', form: ' + form.id).join('')
 
         let derivations = ''
         

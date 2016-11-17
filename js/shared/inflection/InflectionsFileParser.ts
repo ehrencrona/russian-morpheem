@@ -1,8 +1,11 @@
-'use strict'
-import { WordForm } from './WordForm';
+import { inflate } from 'zlib';
 
+
+import { WordForm } from './WordForm'
+import WORD_FORMS from './WordForms'
 import Inflection from './Inflection'
 import Inflections from './Inflections'
+
 import Ending from '../Ending'
 import Transform from '../Transform'
 import allTransforms from '../Transforms'
@@ -15,6 +18,7 @@ interface Endings {
     endings: { [s: string]: Ending },
     inherits: string[],
     transforms: Transform[],
+    wordForm: WordForm
     description: string
 }
 
@@ -24,6 +28,7 @@ export function parseEndings(str: string, lang?: string, pos?: PoS, id?: string)
     let defaultForm 
     let description 
     let transforms: Transform[] = []
+    let wordForm = new WordForm({ pos: pos })
 
     if (str.trim()[0] == '"') {
         let descstr = str.trim()
@@ -58,6 +63,15 @@ export function parseEndings(str: string, lang?: string, pos?: PoS, id?: string)
         }
         else if (form == 'describe') {
             description = endingString
+        }
+        else if (form == 'form') {
+            let addWordForm = WORD_FORMS[endingString]
+
+            if (!addWordForm) {
+                throw new Error(`Unknown word form ${ endingString } in "${str}"`)
+            }
+
+            wordForm.add(addWordForm)
         }
         else if (form == 'transform') {
             let transform = allTransforms.get(endingString)
@@ -113,7 +127,7 @@ export function parseEndings(str: string, lang?: string, pos?: PoS, id?: string)
         }            
     }
 
-    return { default: defaultForm, endings: result, inherits: inherits, transforms: transforms, description: description }
+    return { default: defaultForm, endings: result, inherits: inherits, transforms: transforms, description: description, wordForm: wordForm }
 }
 
 export default function parseInflectionsFile(data, lang?: string) {
@@ -150,7 +164,7 @@ export default function parseInflectionsFile(data, lang?: string) {
         else {
             id = line.substr(0, i)
         }
-        
+
         let rightSide = line.substr(i + 1)
 
         let endings = parseEndings(rightSide, lang, pos, id)
@@ -172,6 +186,7 @@ export default function parseInflectionsFile(data, lang?: string) {
         inflection.defaultForm = INFLECTION_FORMS[pos].allForms.find((form) => inflection.hasForm(form))
 
         inflection.transforms = endings.transforms
+        inflection.wordForm.add(endings.wordForm)
 
         inflectionById[id] = inflection
         inflections.push(inflection)
