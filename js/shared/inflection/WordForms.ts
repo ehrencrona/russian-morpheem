@@ -67,6 +67,8 @@ export interface Derivation {
     isForward: boolean
 }
 
+export const DERIVATION_BY_ID: 
+    { [ ID : string ] : Derivation } = {} 
 const DERIVATIONS: 
     { [ wordForm : string ] : Derivation[] } = {} 
 const REVERSE_DERIVATION: 
@@ -103,7 +105,7 @@ export function getNonRedundantNamedForms(wordForm: WordForm): NamedWordForm[] {
 }
 
 function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, reverseDerivation: string) {
-    function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivation: string, isForward: boolean) {
+    function addOneDirection(fromForm: NamedWordForm, toForm: NamedWordForm, derivationId: string, isForward: boolean) {
         let d = DERIVATIONS[fromForm.id]
 
         if (!d) {
@@ -111,11 +113,15 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
             DERIVATIONS[fromForm.id] = d
         }
 
-        d.push({
-            id: derivation,
+        let derivation = {
+            id: derivationId,
             toForm: toForm,
             isForward: isForward
-        })
+        }
+        
+        d.push(derivation)
+
+        DERIVATION_BY_ID[derivationId] = derivation
     }
 
     if (toForm == null || fromForm == null) {
@@ -127,7 +133,7 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
     addOneDirection(toForm, fromForm, reverseDerivation, false)
 
     REVERSE_DERIVATION[derivation] = reverseDerivation 
-    REVERSE_DERIVATION[reverseDerivation] = derivation 
+    REVERSE_DERIVATION[reverseDerivation] = derivation
 }
 
 addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflex', 'nonreflex')

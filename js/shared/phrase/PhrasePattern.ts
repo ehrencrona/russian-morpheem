@@ -15,7 +15,7 @@ import { GrammarNumber, GrammarCase, PartOfSpeech as PoS } from '../inflection/D
 import InflectionForm from '../inflection/InflectionForm'
 import WordForm from '../inflection/WordForm'
 import { POS_BY_NAME } from '../inflection/InflectionForms'
-import WORD_FORMS from '../inflection/WordForms'
+import { WORD_FORMS, DERIVATION_BY_ID } from '../inflection/WordForms'
 import Facts from '../fact/Facts'
 
 import AnyWord from '../AnyWord'
@@ -150,6 +150,28 @@ const defaultPhraseToString: PhraseToString =
     return childMatch.pattern.getEnglishFragments().map(f => f.en(childMatch, wordToString)).join(' ')
 }
 
+function derivationTransform(derivation: string): WordToString {
+    return (word: Word, enSentence) => {
+        let words = word.getDerivedWords(derivation)
+
+        if (words[0]) {
+            let derivedWord = words[0]
+
+            if (derivedWord instanceof Word) {
+                word = derivedWord
+            }
+            else if (derivedWord instanceof InflectableWord && word instanceof InflectedWord) {
+                word = derivedWord.inflect(word.form)
+            }
+            else if (derivedWord instanceof InflectableWord) {
+                word = derivedWord.getDefaultInflection()
+            }
+        }
+
+        return defaultWordToString(word, enSentence)
+    }    
+}
+
 function formTransform(pos: PoS, forms: string[]): WordToString {
     return (word: Word, enSentence) => {
         if (word instanceof InflectedWord && word.wordForm.pos == pos) {
@@ -214,9 +236,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'sg': formTransform(PoS.NOUN, ['nom']),
     'pl': formTransform(PoS.NOUN, ['pl']),
     'nom': formTransform(PoS.PRONOUN, ['nom', 'pl']),
-    'acc': formTransform(PoS.PRONOUN, ['acc']),
-    'adj': formTransform(PoS.ADJECTIVE, ['m']),
-    'adv': formTransform(PoS.ADJECTIVE, ['adv'])
+    'acc': formTransform(PoS.PRONOUN, ['acc'])
 }
 
 class Fragment implements EnglishPatternFragment {
@@ -401,10 +421,16 @@ class Fragment implements EnglishPatternFragment {
                         if (!isNaN(matchIndex)) {
                             let wordMatch = match.pattern.wordMatches[matchIndex-1]
 
-                            let words = match.words.filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord)).map(w => w.word as InflectedWord)
+                            let words = match.words
+                                .filter(w => !!(w.wordMatch == wordMatch && w.word as InflectedWord))
+                                .map(w => w.word as InflectedWord)
 
                             let form = this.getVerbForm(words)
+
                             wordToString = formTransform(PoS.VERB, [ form ])
+                        }
+                        else if (DERIVATION_BY_ID[placeholder.toPosOrForm]) {
+                            wordToString = derivationTransform(placeholder.toPosOrForm)
                         }
                         else {
                             console.warn(`Unknown wordToString ${placeholder.toPosOrForm} in fragment.`)

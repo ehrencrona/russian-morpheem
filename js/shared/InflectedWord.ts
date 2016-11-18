@@ -103,6 +103,10 @@ export default class InflectedWord extends Word {
         return this.word
     }
 
+    getDerivedWords(derivation: string) {
+        return this.word.getDerivedWords(derivation)
+    }
+
     getId() {
         return this.word.getId() + '@' + this.form
             + (this.omitted ? '*' : '')
