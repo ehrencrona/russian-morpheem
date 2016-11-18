@@ -160,11 +160,16 @@ function derivationTransform(derivation: string): WordToString {
             if (derivedWord instanceof Word) {
                 word = derivedWord
             }
-            else if (derivedWord instanceof InflectableWord && word instanceof InflectedWord) {
-                word = derivedWord.inflect(word.form)
-            }
             else if (derivedWord instanceof InflectableWord) {
-                word = derivedWord.getDefaultInflection()
+                word = null
+
+                if (word instanceof InflectedWord) {
+                    word = derivedWord.inflect(word.form)
+                }
+
+                if (!word) {
+                    word = derivedWord.getDefaultInflection()
+                }
             }
         }
 
