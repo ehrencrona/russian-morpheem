@@ -228,7 +228,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 <div className='main'>
                     <h3>Examples of usage</h3>
 
-                    <ul>
+                    <ul className='sentences'>
                         {
                             (this.state.sentences || []).map(sentence => 
                                 <li key={ sentence.sentence.id }>

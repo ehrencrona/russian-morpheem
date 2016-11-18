@@ -513,7 +513,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                     <h3>Examples of usage</h3>
 
-                    <ul>
+                    <ul className='sentences'>
                         {
                             (sentences || []).map(sentence => 
                                 <li key={ sentence.sentence.id }>

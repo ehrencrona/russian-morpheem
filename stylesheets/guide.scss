@@ -150,6 +150,10 @@ body.guide {
         }
     }
 
+    ul.sentences li:hover {
+        color: $clickableColor;
+    }
+
     .clickable:hover {
         color: $clickableColor;
     }

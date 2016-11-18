@@ -170,7 +170,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 <div className='main'>
                     <h3>Examples of usage</h3>
 
-                    <ul>{
+                    <ul className='sentences'>{
                         matches.map(match => this.renderMatch(match))
                     }</ul>
                 </div>
