@@ -3,8 +3,11 @@ import * as express from 'express'
 import Corpus from '../../shared/Corpus'
 import { Factoid } from '../../shared/metadata/Factoids'
 import getAuthor from '../getAuthor'
+import Grammars from '../../shared/Grammars'
 
 export default function(corpus: Corpus) {
+    let grammars = new Grammars(corpus.inflections)
+
     return (req: express.Request, res: express.Response) => {
         let factId = req.params['id']
 
@@ -12,7 +15,7 @@ export default function(corpus: Corpus) {
             throw new Error('No fact ID')
         }
 
-        let fact = corpus.facts.get(factId)
+        let fact = corpus.facts.get(factId) || grammars.get(factId)
 
         if (!fact) {
             throw new Error(`Unknown fact "${factId}"`)
