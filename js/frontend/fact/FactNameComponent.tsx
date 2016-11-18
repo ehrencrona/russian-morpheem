@@ -1,3 +1,4 @@
+import { NamedWordForm } from '../../shared/inflection/WordForm';
 
 
 import Corpus from '../../shared/Corpus'
@@ -58,6 +59,9 @@ export default class FactNameComponent extends Component<Props, State> {
         }
         else if (fact instanceof Phrase) {
             return <span>{ (fact.description || fact.getId()) + ': ' + fact.en }</span>
+        }
+        else if (fact instanceof NamedWordForm) {
+            return <span>{ fact.id + ': ' + fact.name }</span>
         }
         else {
             let name = fact.getId()

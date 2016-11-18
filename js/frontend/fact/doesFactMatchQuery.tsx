@@ -1,3 +1,4 @@
+import { NamedWordForm } from '../../shared/inflection/WordForm';
 
 import Fact from '../../shared/fact/Fact'
 import Word from '../../shared/Word'
@@ -94,7 +95,12 @@ export default function doesFactMatchQuery(fact: Fact, filter: string): number {
         matches(fact.inflection.endings[fact.form].suffix)
         matches(FORMS[fact.form].name, 5)
     }
+    else if (fact instanceof NamedWordForm) {
+        matches(fact.id, 15)
+        matches(fact.name)
+    }
     else if (fact instanceof InflectionForm) {
+        matches(fact.id, 15)
         matches(fact.name)
     }
     else if (fact instanceof Phrase) {
