@@ -112,6 +112,14 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let defaultForm = INFLECTION_FORMS[this.props.form.pos].allForms[0]
 
+        let inflections = this.mostCommonInflections(this.props.form, defaultForm)
+
+        if (!inflections.length || 
+            !inflections.find(i => 
+                i.getEnding(defaultForm).suffix != inflections[0].getEnding(defaultForm).suffix)) {
+            return null
+        }
+
         return <div>
             <h3>Endings</h3>
 
@@ -119,7 +127,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
  
             <ul className='formation'>
             {
-                this.mostCommonInflections(this.props.form, defaultForm).map(inflection => {
+                inflections.map(inflection => {
                     let ending = inflection.getEnding(defaultForm)
 
                     return <div key={ inflection.getId() }>
@@ -144,6 +152,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
     getRelatedForms() {
         let thisForm = this.props.form
+
         return Object.keys(WORD_FORMS).map(i => WORD_FORMS[i])
             .filter(form => (thisForm.matches(form) || form.matches(thisForm)) && thisForm.id != form.id)
             .map(f => f as Fact)

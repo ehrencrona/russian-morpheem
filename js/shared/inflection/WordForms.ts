@@ -32,24 +32,61 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     n: new NamedWordForm('n', 'Nouns', { pos: Dim.PartOfSpeech.NOUN }),
     v: new NamedWordForm('v', 'Verbs', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', 'Adjectives', { pos: Dim.PartOfSpeech.ADJECTIVE }),
-    adjneg: new NamedWordForm('adjneg', 'Negated Adjectives', 
+    adjneg: new NamedWordForm('adjneg', 'Negative Adjectives', 
         { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.NEGATIVE  }),
-    adjpos: new NamedWordForm('adjpos', 'Non-negated Adjectives', 
+    adjpos: new NamedWordForm('adjpos', 'Positive Adjectives', 
         { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.POSITIVE }),
 
     adv: new NamedWordForm('adv', 'Adverbs', { pos: Dim.PartOfSpeech.ADVERB }),
-    advneg: new NamedWordForm('advneg', 'Negated Adverbs', 
+    advneg: new NamedWordForm('advneg', 'Negative Adverbs', 
         { pos: Dim.PartOfSpeech.ADVERB, negation: Dim.Negation.NEGATIVE  }),
-    advpos: new NamedWordForm('advpos', 'Non-negated Adverbs', 
+    advpos: new NamedWordForm('advpos', 'Positive Adverbs', 
         { pos: Dim.PartOfSpeech.ADVERB, negation: Dim.Negation.POSITIVE }),
 
     prep: new NamedWordForm('prep', 'Prepositions', { pos: Dim.PartOfSpeech.PREPOSITION }),
+
+    prepgen: new NamedWordForm('prepgen', 'Prepositions used with the Genitive', { 
+        pos: Dim.PartOfSpeech.PREPOSITION, 
+        grammaticalCase: Dim.GrammarCase.GEN 
+    }),
+
+    prepprep: new NamedWordForm('prepprep', 'Prepositions used with the Prepositional', { 
+        pos: Dim.PartOfSpeech.PREPOSITION, 
+        grammaticalCase: Dim.GrammarCase.PREP 
+    }),
+
+    prepacc: new NamedWordForm('prepacc', 'Prepositions used with the Accusative', { 
+        pos: Dim.PartOfSpeech.PREPOSITION, 
+        grammaticalCase: Dim.GrammarCase.ACC 
+    }),
+
+    prepinstr: new NamedWordForm('prepinstr', 'Prepositions used with the Instrumental', { 
+        pos: Dim.PartOfSpeech.PREPOSITION, 
+        grammaticalCase: Dim.GrammarCase.INSTR 
+    }),
+
+    prepdat: new NamedWordForm('prepdat', 'Prepositions used with the Dative', { 
+        pos: Dim.PartOfSpeech.PREPOSITION, 
+        grammaticalCase: Dim.GrammarCase.DAT 
+    }),
+
     pron: new NamedWordForm('pron', 'Pronouns', { pos: Dim.PartOfSpeech.PRONOUN }),
     poss: new NamedWordForm('poss', 'Possessive Pronouns', { pos: Dim.PartOfSpeech.POSSESSIVE }),
-    number: new NamedWordForm('number', 'Numbers', { pos: Dim.PartOfSpeech.NUMBER }),
     quest: new NamedWordForm('quest', 'Question Words', { pos: Dim.PartOfSpeech.QUESTION }),
     conj: new NamedWordForm('conj', 'Conjunction', { pos: Dim.PartOfSpeech.CONJUNCTION }),
     part: new NamedWordForm('part', 'Particles', { pos: Dim.PartOfSpeech.PARTICLE }),
+
+    number: new NamedWordForm('number', 'Numbers', { pos: Dim.PartOfSpeech.NUMBER }),
+
+    numbercard: new NamedWordForm('numcard', 'Cardinal Numbers', { 
+        pos: Dim.PartOfSpeech.NUMBER, 
+        card: Dim.Cardinality.CARDINAL 
+    }),
+
+    numberord: new NamedWordForm('numcard', 'Ordinal Numbers', { 
+        pos: Dim.PartOfSpeech.NUMBER, 
+        card: Dim.Cardinality.ORDINAL 
+    }),
 
     perf: new NamedWordForm('perf', 'Perfective Verbs', { aspect: Dim.Aspect.PERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
     imperf: new NamedWordForm('imperf', 'Imperfective Verbs', { aspect: Dim.Aspect.IMPERFECTIVE, pos: Dim.PartOfSpeech.VERB }),
@@ -142,3 +179,4 @@ addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'neg', 'pos')
 addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'quest', 'pron')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'poss', 'pron')
+addDerivation(WORD_FORMS['numbercard'], WORD_FORMS['numberord'], 'card', 'ord')

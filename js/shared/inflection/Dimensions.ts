@@ -62,3 +62,8 @@ export enum PronounForm {
     STANDARD = 1,
     ALTERNATIVE
 }
+
+export enum Cardinality {
+    CARDINAL = 1,
+    ORDINAL
+}

@@ -183,6 +183,7 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/translate`, getTranslation(corpus))    
 
+    app.get(`/words/:fact`, getGuide(corpus))    
     app.get(`/word/:fact`, getGuide(corpus))    
     app.get(`/phrase/:fact`, getGuide(corpus))    
     app.get(`/form/:fact`, getGuide(corpus))    

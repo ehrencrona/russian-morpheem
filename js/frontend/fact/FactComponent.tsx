@@ -1,4 +1,4 @@
-
+import { NamedWordForm } from '../../shared/inflection/WordForm';
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
@@ -12,6 +12,7 @@ import PhraseFactComponent from '../phrase/PhraseFactComponent'
 import WordFactComponent from '../word/WordFactComponent'
 import InflectionFactComponent from '../inflection/InflectionFactComponent'
 import InflectionFormComponent from '../inflection/InflectionFormComponent'
+import WordFormComponent from '../inflection/WordFormComponent'
 
 import Tab from '../OpenTab'
 import TagFactComponent from '../TagFactComponent'
@@ -53,8 +54,8 @@ export default class FactComponent extends Component<Props, State> {
         else if (fact instanceof EndingTransform) {
             return <TransformFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
-        else if (fact instanceof InflectionForm) {
-            return <InflectionFormComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        else if (fact instanceof NamedWordForm) {
+            return <WordFormComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
         else if (fact instanceof TagFact) {
             return <TagFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />

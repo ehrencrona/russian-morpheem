@@ -3,7 +3,10 @@ import Fact from '../fact/Fact'
 
 import * as Dimension from './Dimensions'
 
-export const FORM_PROPS = [ 'pos', 'gender', 'animate', 'number', 'person', 'numberEn', 'aspect', 'reflex', 'negation' ]
+export const FORM_PROPS = [ 
+    'pos', 'gender', 'animate', 'number', 'person', 'card',
+    'numberEn', 'aspect', 'reflex', 'negation', 'grammaticalCase' 
+]
 
 export class WordCoordinates {
     pos?: Dimension.PartOfSpeech
@@ -13,7 +16,9 @@ export class WordCoordinates {
     person?: Dimension.Person
     numberEn?: Dimension.GrammarNumber
     aspect?: Dimension.Aspect
+    grammaticalCase?: Dimension.GrammarCase
 
+    card?: Dimension.Cardinality
     reflex?: Dimension.Reflexivity
     negation?: Dimension.Negation
 }
@@ -28,6 +33,8 @@ export class WordForm extends WordCoordinates {
     aspect?: Dimension.Aspect
     reflex?: Dimension.Reflexivity
     negation?: Dimension.Negation
+    grammaticalCase?: Dimension.GrammarCase
+    card?: Dimension.Cardinality
 
     constructor(coordinates: WordCoordinates) {
         super() 
@@ -86,6 +93,10 @@ export class WordForm extends WordCoordinates {
 export class NamedWordForm extends WordForm implements Fact {
     constructor(public id: string, public name: string, coordinates: WordCoordinates) {
         super(coordinates)
+    }
+
+    toString() {
+        return this.id
     }
 
     getId() {

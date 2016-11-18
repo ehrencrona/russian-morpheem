@@ -1,3 +1,4 @@
+import { NamedWordForm } from '../inflection/WordForm';
 import Fact from '../../shared/fact/Fact'
 import Phrase from '../../shared/phrase/Phrase'
 import AbstractAnyWord from '../../shared/AbstractAnyWord'
@@ -16,6 +17,9 @@ export default function getGuideUrl(fact: Fact|Sentence, context?: InflectedWord
     }
     else if (fact instanceof Phrase) {
         type = 'phrase'
+    }
+    else if (fact instanceof NamedWordForm) {
+        type = 'words'
     }
 
     return `/${type}/${ encodeURI(fact.getId()) }${ 
