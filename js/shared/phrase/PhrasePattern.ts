@@ -241,7 +241,8 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'sg': formTransform(PoS.NOUN, ['nom']),
     'pl': formTransform(PoS.NOUN, ['pl']),
     'nom': formTransform(PoS.PRONOUN, ['nom', 'pl']),
-    'acc': formTransform(PoS.PRONOUN, ['acc'])
+    'acc': formTransform(PoS.PRONOUN, ['acc']),
+    'super': formTransform(PoS.ADJECTIVE, ['super'])
 }
 
 class Fragment implements EnglishPatternFragment {
