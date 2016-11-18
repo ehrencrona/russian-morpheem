@@ -10,13 +10,15 @@ import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
 
-import Inflection from '../../../shared/inflection/Inflection'
 import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
+import Inflection from '../../../shared/inflection/Inflection'
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
+import { getDerivations } from '../../../shared/inflection/WordForms' 
+
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import SentenceScore from '../../../shared/study/SentenceScore'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
@@ -173,8 +175,16 @@ export default class WordFactComponent extends Component<Props, State> {
                 }
             })
 
+        let derivations =
+            getDerivations(word.wordForm)
+                .map(derivation =>
+                        word.getDerivedWords(derivation.id)
+                        .map(w => w.getWordFact()))
+                .reduce((a, b) => a.concat(b))
+                    
         let related = 
             (word.required || [])
+            .concat(derivations)
             .concat(factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
