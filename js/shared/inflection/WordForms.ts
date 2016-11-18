@@ -45,45 +45,21 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
 
     prep: new NamedWordForm('prep', 'Prepositions', { pos: Dim.PartOfSpeech.PREPOSITION }),
 
-    prepgen: new NamedWordForm('prepgen', 'Prepositions used with the Genitive', { 
-        pos: Dim.PartOfSpeech.PREPOSITION, 
-        grammaticalCase: Dim.GrammarCase.GEN 
-    }),
-
-    prepprep: new NamedWordForm('prepprep', 'Prepositions used with the Prepositional', { 
-        pos: Dim.PartOfSpeech.PREPOSITION, 
-        grammaticalCase: Dim.GrammarCase.PREP 
-    }),
-
-    prepacc: new NamedWordForm('prepacc', 'Prepositions used with the Accusative', { 
-        pos: Dim.PartOfSpeech.PREPOSITION, 
-        grammaticalCase: Dim.GrammarCase.ACC 
-    }),
-
-    prepinstr: new NamedWordForm('prepinstr', 'Prepositions used with the Instrumental', { 
-        pos: Dim.PartOfSpeech.PREPOSITION, 
-        grammaticalCase: Dim.GrammarCase.INSTR 
-    }),
-
-    prepdat: new NamedWordForm('prepdat', 'Prepositions used with the Dative', { 
-        pos: Dim.PartOfSpeech.PREPOSITION, 
-        grammaticalCase: Dim.GrammarCase.DAT 
-    }),
-
     pron: new NamedWordForm('pron', 'Pronouns', { pos: Dim.PartOfSpeech.PRONOUN }),
     poss: new NamedWordForm('poss', 'Possessive Pronouns', { pos: Dim.PartOfSpeech.POSSESSIVE }),
     quest: new NamedWordForm('quest', 'Question Words', { pos: Dim.PartOfSpeech.QUESTION }),
     conj: new NamedWordForm('conj', 'Conjunction', { pos: Dim.PartOfSpeech.CONJUNCTION }),
     part: new NamedWordForm('part', 'Particles', { pos: Dim.PartOfSpeech.PARTICLE }),
 
-    number: new NamedWordForm('number', 'Numbers', { pos: Dim.PartOfSpeech.NUMBER }),
+    number: new NamedWordForm('number', 'Numbers', { 
+        pos: Dim.PartOfSpeech.NUMBER }),
 
-    numbercard: new NamedWordForm('numcard', 'Cardinal Numbers', { 
+    numcard: new NamedWordForm('numcard', 'Cardinal Numbers', { 
         pos: Dim.PartOfSpeech.NUMBER, 
         card: Dim.Cardinality.CARDINAL 
     }),
 
-    numberord: new NamedWordForm('numcard', 'Ordinal Numbers', { 
+    numord: new NamedWordForm('numord', 'Ordinal Numbers', { 
         pos: Dim.PartOfSpeech.NUMBER, 
         card: Dim.Cardinality.ORDINAL 
     }),
@@ -93,7 +69,6 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
 
     reflex: new NamedWordForm('reflex', 'Reflexive Verbs', { reflex: Dim.Reflexivity.REFLEXIVE, pos: Dim.PartOfSpeech.VERB }),
     nonreflex: new NamedWordForm('nonreflex', 'Non-reflexive Verbs', { reflex: Dim.Reflexivity.NON_REFLEXIVE, pos: Dim.PartOfSpeech.VERB }),
-
 }
 
 export default WORD_FORMS
@@ -179,4 +154,4 @@ addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'neg', 'pos')
 addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'quest', 'pron')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'poss', 'pron')
-addDerivation(WORD_FORMS['numbercard'], WORD_FORMS['numberord'], 'card', 'ord')
+addDerivation(WORD_FORMS['numcard'], WORD_FORMS['numord'], 'card', 'ord')
