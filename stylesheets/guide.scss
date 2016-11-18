@@ -249,7 +249,7 @@ body.guide {
         }
     }
 
-    .inflectionForm {
+    .inflectionForm, .wordForm {
         .posName {
             @extend .smallFont;
             font-weight: bold;
@@ -304,6 +304,17 @@ body.guide {
                 @extend .seeAlso;
             }
         } 
+    }
+
+    .wordForm {
+        li.clickable::before {
+            @extend .seeAlso
+        }
+
+        .formation .word::before {
+            @extend .seeAlso;
+            margin-left: 2 * $unit;
+        }
     }
 
 

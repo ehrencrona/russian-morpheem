@@ -69,7 +69,7 @@ export class Words {
         if (this.wordsById[word.getId()]) {
             throw new Error('Multiple words with ID ' + word.getId() + '.');
         }
-        
+
         this.wordsById[word.getId()] = word;
 
         let str = word.jp;

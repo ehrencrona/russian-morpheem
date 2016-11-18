@@ -12,6 +12,7 @@ import InflectableWord from '../InflectableWord'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectionForm from '../inflection/InflectionForm'
 import { WORD_FORMS, getDerivations, getNonRedundantNamedForms } from '../inflection/WordForms'
+import WordForm from '../inflection/WordForm'
 import { POSES } from '../inflection/InflectionForms'
 import Phrase from '../phrase/Phrase'
 
@@ -82,7 +83,7 @@ export function factToString(fact: Fact, facts: Facts) {
     else if (fact instanceof TagFact) {
         return `tag: ${fact.id}`
     }
-    else if (fact instanceof InflectionForm || fact instanceof InflectionFact) {
+    else if (fact instanceof InflectionForm || fact instanceof InflectionFact || fact instanceof WordForm) {
         return 'grammar: ' + fact.getId() + tags
     }
     else if (!fact) {

@@ -1,3 +1,4 @@
+import { NamedWordForm, WordForm } from '../../inflection/WordForm';
 import { Component, createElement } from 'react'
 
 import Corpus from '../../../shared/Corpus'
@@ -45,6 +46,11 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
         inner = pair(
             fact.name,
             '(form)')
+    }
+    else if (fact instanceof NamedWordForm) {
+        inner = pair(
+            fact.name,
+            '(word type)')
     }
     else if (fact instanceof TagFact) {
         let factoid = corpus.factoids.getFactoid(fact)

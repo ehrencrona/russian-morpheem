@@ -46,7 +46,7 @@ interface Props {
 interface State {
 }
 
-/** Explains how a certain ending is formed for an inflection fact */
+/** Explains how a certain ending is formed for a certain word (an inflection fact) */
 export default class InflectionFactComponent extends Component<Props, State> {
     constructor(props) {
         super(props)

@@ -1,4 +1,4 @@
-
+import { NamedWordForm } from '../../inflection/WordForm';
 
 import Corpus from '../../../shared/Corpus'
 import Fact from '../../../shared/fact/Fact'
@@ -16,6 +16,7 @@ import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 
 import InflectionFactComponent from './InflectionFactComponent'
 import InflectionFormComponent from './InflectionFormComponent'
+import WordFormComponent from './WordFormComponent'
 import WordFactComponent from './WordFactComponent'
 import PhraseFactComponent from './PhraseFactComponent'
 import TagFactComponent from './TagFactComponent'
@@ -75,7 +76,14 @@ export default function factComponent(props: Props) {
             factLinkComponent={ props.factLinkComponent }
         />
     }
-    else if (fact instanceof TagFact) {
+    else if (fact instanceof NamedWordForm) {
+        content = <WordFormComponent 
+            corpus={ props.corpus } 
+            knowledge={ props.knowledge }
+            form={ fact }
+            factLinkComponent={ props.factLinkComponent }
+        />
+    }    else if (fact instanceof TagFact) {
         content = <TagFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }

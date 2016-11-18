@@ -1,9 +1,11 @@
+import { NamedWordForm } from '../inflection/WordForm';
 
 import InflectionFact from '../inflection/InflectionFact';
 import InflectableWord from '../InflectableWord';
 import InflectedWord from '../InflectedWord';
 import FORMS from '../inflection/InflectionForms' 
-import InflectionForm from '../inflection/InflectionForm' 
+import InflectionForm from '../inflection/InflectionForm'
+import WORD_FORMS from '../inflection/WordForms' 
 import Fact from './Fact';
 import Inflections from '../inflection/Inflections';
 import Word from '../Word';
@@ -20,7 +22,8 @@ const INFLECTABLE = 'ib'
 const WORD = 'w'
 const TRANSFORM = 't'
 const PHRASE = 'p'
-const FORM = 'f'
+const INFLECTION_FORM = 'if'
+const WORD_FORM = 'wf'
 const TAG = 'g'
 
 export interface FactJsonFormat {
@@ -291,11 +294,18 @@ export default class Facts {
                     throw new Error(`Unknown transform "${factJson.id}".`)
                 }
             }
-            else if (factJson.type == FORM) {
+            else if (factJson.type == INFLECTION_FORM) {
                 fact = FORMS[factJson.id];
                 
                 if (!fact) {
-                    throw new Error(`Unknown form "${factJson.id}".`)
+                    throw new Error(`Unknown inflection form "${factJson.id}".`)
+                }
+            }
+            else if (factJson.type == WORD_FORM) {
+                fact = WORD_FORMS[factJson.id];
+                
+                if (!fact) {
+                    throw new Error(`Unknown word form "${factJson.id}".`)
                 }
             }
             else if (factJson.type == TAG) {
@@ -342,7 +352,10 @@ export default class Facts {
                 type = PHRASE
             }
             else if (fact instanceof InflectionForm) {
-                type = FORM
+                type = INFLECTION_FORM
+            }
+            else if (fact instanceof NamedWordForm) {
+                type = WORD_FORM
             }
             else if (fact instanceof TagFact) {
                 type = TAG

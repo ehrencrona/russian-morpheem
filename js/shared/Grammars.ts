@@ -1,5 +1,6 @@
 import Fact from './fact/Fact'
 import { FORMS } from './inflection/InflectionForms'
+import WORD_FORMS from './inflection/WordForms'
 
 export default class Grammars {
     grammarById : { [s: string]: Fact } = {}
@@ -15,6 +16,12 @@ export default class Grammars {
 
         for (let formId in FORMS) {
             let inflectionForm = FORMS[formId]
+
+            this.grammarById[formId] = inflectionForm
+        }
+
+        for (let formId in WORD_FORMS) {
+            let inflectionForm = WORD_FORMS[formId]
 
             this.grammarById[formId] = inflectionForm
         }

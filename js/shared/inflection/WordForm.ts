@@ -1,4 +1,5 @@
 import { ENGLISH_FORMS_BY_POS } from './InflectionForms';
+import Fact from '../fact/Fact'
 
 import * as Dimension from './Dimensions'
 
@@ -82,9 +83,21 @@ export class WordForm extends WordCoordinates {
     }
 }
 
-export class NamedWordForm extends WordForm {
-    constructor(public id: string, coordinates: WordCoordinates) {
+export class NamedWordForm extends WordForm implements Fact {
+    constructor(public id: string, public name: string, coordinates: WordCoordinates) {
         super(coordinates)
+    }
+
+    getId() {
+        return this.id
+    }
+
+    visitFacts(visitor: (Fact) => any): any {
+        visitor(this)
+    }
+
+    requiresFact(fact: Fact) {
+        // ignore.
     }
 }
 

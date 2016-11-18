@@ -206,6 +206,10 @@ export default class InflectableWord extends AbstractAnyWord {
     }
 
     getMaskId() {
+        if (!this.mask) {
+            return null
+        }
+
         let posMasks = MASKS[this.inflection.wordForm.pos]
 
         let maskId = Object.keys(posMasks).find((key) => {

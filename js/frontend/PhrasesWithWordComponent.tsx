@@ -1,7 +1,9 @@
 
 
 import Corpus from '../shared/Corpus'
+import AnyWord from '../shared/AnyWord'
 import Fact from '../shared/fact/Fact'
+
 import InflectableWord from '../shared/InflectableWord'
 import InflectedWord from '../shared/InflectedWord'
 import ExactWordMatch from '../shared/phrase/ExactWordMatch'
@@ -14,8 +16,6 @@ import Phrase from '../shared/phrase/Phrase'
 import openFact from './fact/openFact'
 
 import { Component, createElement } from 'react';
-
-export type AnyWord = InflectableWord | Word
 
 interface Props {
     corpus: Corpus

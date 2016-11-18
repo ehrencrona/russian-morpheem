@@ -46,7 +46,7 @@ export default class WordFactComponent extends Component<Props, State> {
         super(props)
         
         this.state = {
-            tab: 'sentences'
+            tab: 'word'
         }
     }
 

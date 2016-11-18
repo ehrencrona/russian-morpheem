@@ -51,7 +51,7 @@ interface State {
     allPhrases?: boolean
 }
 
-/** Gives general information about a form that matches several forms, typically a case */
+/** Gives general information about a inflection form that matches several more specific forms (typically a case) */
 export default class InflectionFormComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
