@@ -180,16 +180,16 @@ function derivationTransform(derivation: string): WordToString {
 function formTransform(pos: PoS, forms: string[]): WordToString {
     return (word: Word, enSentence) => {
         if (word instanceof InflectedWord && word.wordForm.pos == pos) {
-            let inflection
+            let inflected
 
             forms.find(form => {
-                inflection = word.word.inflect(form)
+                inflected = word.word.inflect(form)
 
-                return !!inflection
+                return !!inflected
             })
             
-            if (inflection) {
-                return inflection.getEnglish()
+            if (inflected) {
+                return inflected.getEnglish()
             }
             else {
                 console.warn(`No form ${forms.join(', ')} of ${word} for transform.`)
@@ -242,7 +242,7 @@ const TRANSFORMS: { [id: string]: WordToString } = {
     'pl': formTransform(PoS.NOUN, ['pl']),
     'nom': formTransform(PoS.PRONOUN, ['nom', 'pl']),
     'acc': formTransform(PoS.PRONOUN, ['acc']),
-    'super': formTransform(PoS.ADJECTIVE, ['super'])
+    'super': englishOnlyTransform(PoS.ADJECTIVE, 'super')
 }
 
 class Fragment implements EnglishPatternFragment {

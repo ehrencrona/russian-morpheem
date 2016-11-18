@@ -120,7 +120,7 @@ export default function guidePageComponent(props: Props) {
     }
     else if (fact instanceof NamedWordForm) {
         if (!title) {
-            title = fact.name
+            title = 'Russian ' + fact.name
         }
     }
     else if (fact instanceof InflectionForm) {
