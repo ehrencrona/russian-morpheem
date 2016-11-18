@@ -1,3 +1,4 @@
+import { NamedWordForm } from '../inflection/WordForm';
 
 import { Component, createElement } from 'react'
 
@@ -115,6 +116,11 @@ export default function guidePageComponent(props: Props) {
                 + form.name + ' form in Russian, for example ' + 
                 getExamplesUsingInflection(fact.form, fact.inflection, props.corpus, 
                     new NaiveKnowledge(), null, 2).map(w => w.toText()).join(' and ') + '.' 
+        }
+    }
+    else if (fact instanceof NamedWordForm) {
+        if (!title) {
+            title = fact.name
         }
     }
     else if (fact instanceof InflectionForm) {

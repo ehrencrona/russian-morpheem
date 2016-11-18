@@ -180,7 +180,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 .map(derivation =>
                         word.getDerivedWords(derivation.id)
                         .map(w => w.getWordFact()))
-                .reduce((a, b) => a.concat(b))
+                .reduce((a, b) => a.concat(b), [])
                     
         let related = 
             (word.required || [])
@@ -273,7 +273,10 @@ export default class WordFactComponent extends Component<Props, State> {
                             renderForm={ (inflectedWord, form, factIndex) => {
                                 return <div className='clickable' key={ form }>{
                                     React.createElement(this.props.factLinkComponent, 
-                                        { fact: (word as InflectableWord).inflection.getFact(form), context: (word as InflectableWord).inflect(form) }, 
+                                        { 
+                                            fact: (word as InflectableWord).inflection.getFact(form), 
+                                            context: (word as InflectableWord).inflect(form) 
+                                        }, 
                                         (word as InflectableWord).inflect(form).jp) 
                                     }</div>
                             }}
