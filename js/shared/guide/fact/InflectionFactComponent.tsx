@@ -456,7 +456,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
                     renderForm={ (inflectedWord, form, factIndex) => {
                         return <div className='clickable' key={ form }>{
                             React.createElement(this.props.factLinkComponent, 
-                                { fact: word.word.inflection.getFact(form) }, 
+                                { 
+                                    fact: word.word.inflection.getFact(form),
+                                    context: word
+                                }, 
                                 word.word.inflect(form).jp)
                         }</div>
                     }}

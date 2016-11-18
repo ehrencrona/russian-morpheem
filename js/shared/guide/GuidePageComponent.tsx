@@ -140,10 +140,9 @@ export default function guidePageComponent(props: Props) {
             }
 
             title =
-                fact.toText() 
-                + ' – Russian ' 
-                + POSES[fact.wordForm.pos] 
-                + ' meaning '
+                'Meaning of ' 
+                + fact.toText() 
+                + ' in Russian: ' 
                 + translations.map(t => `"${t}"`).join(', ') 
         }
     }

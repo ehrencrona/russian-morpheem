@@ -1,3 +1,4 @@
+import { InflectionForm } from '../../shared/inflection/InflectionForm';
 import * as express from 'express'
 
 import FactComponent from '../../shared/guide/fact/FactComponent'
@@ -83,7 +84,7 @@ export default function(corpus: Corpus) {
                         factLinkComponent={ (props) => {
                             return <a 
                                 key={ props.fact.getId() }
-                                rel={ props.fact instanceof Sentence ? 'nofollow' : '' }
+                                rel={ props.fact instanceof Sentence || props.fact instanceof InflectionFact ? 'nofollow' : '' }
                                 href={ getGuideUrl(props.fact, props.context) }>{ props.children }</a> }
                         }
                         knowledge={ new NaiveKnowledge() }

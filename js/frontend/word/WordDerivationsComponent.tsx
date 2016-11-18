@@ -53,8 +53,9 @@ export default class WordDerivationsComponent extends Component<Props, State> {
                                     derivedWords.map(w => 
                                         <div key={ w.getId() } className='word clickable'
                                             onClick={ () => openFact(w.getWordFact(), this.props.corpus, this.props.tab )}>{ 
-                                            w.toText() } { w instanceof AbstractAnyWord ? w.classifier : "" 
-                                        }</div>)
+                                            w.toText() } { w instanceof AbstractAnyWord && w.classifier ? 
+                                                <span className='classifier'>{ w.classifier }</span> : '' } 
+                                        </div>)
                                 }
                                 { 
                                     derivedWords.length ?

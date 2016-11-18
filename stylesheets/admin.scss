@@ -584,6 +584,12 @@ ul.wordDerivations {
 
             .word {
                 @extend .wordInSearch;
+
+                display: block;
+
+                .classifier {
+                    font-size: 80%;
+                }
             }
         }
 

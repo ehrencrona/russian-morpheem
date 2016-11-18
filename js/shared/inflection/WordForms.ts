@@ -26,6 +26,9 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     adjpos: new NamedWordForm('adjpos', { pos: Dim.PartOfSpeech.ADJECTIVE, negation: Dim.Negation.POSITIVE }),
 
     adv: new NamedWordForm('adv', { pos: Dim.PartOfSpeech.ADVERB }),
+    advneg: new NamedWordForm('advneg', { pos: Dim.PartOfSpeech.ADVERB, negation: Dim.Negation.NEGATIVE  }),
+    advpos: new NamedWordForm('advpos', { pos: Dim.PartOfSpeech.ADVERB, negation: Dim.Negation.POSITIVE }),
+
     prep: new NamedWordForm('prep', { pos: Dim.PartOfSpeech.PREPOSITION }),
     pron: new NamedWordForm('pron', { pos: Dim.PartOfSpeech.PRONOUN }),
     poss: new NamedWordForm('poss', { pos: Dim.PartOfSpeech.POSSESSIVE }),

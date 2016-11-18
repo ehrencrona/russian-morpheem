@@ -5,11 +5,11 @@ import InflectedWord from '../../shared/InflectedWord'
 import Sentence from '../../shared/Sentence'
 
 export default function getGuideUrl(fact: Fact|Sentence, context?: InflectedWord) {
-    let type = 'form'
-
     if (fact instanceof Sentence) {
         return `/sentence/${fact.id}` 
     }
+
+    let type = 'form'
 
     if (fact instanceof AbstractAnyWord) {
         type = 'word'
