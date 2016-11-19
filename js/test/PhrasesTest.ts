@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 import parsePhraseFile from '../shared/phrase/PhraseFileParser'
 import phrasesToString from '../shared/phrase/PhraseFileGenerator'
 
@@ -15,7 +16,7 @@ describe('Phrases', function() {
     var inflections = new Inflections()
 
     inflections.add(new Inflection('inflection', 'nom', null, 
-        parseEndings('nom: a', 'fake').endings))
+        parseEndings('nom: a', WORD_FORMS['pron']).endings))
 
     let w1: Word, w3: InflectableWord
 

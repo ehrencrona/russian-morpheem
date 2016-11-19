@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
@@ -13,7 +14,7 @@ import { expect } from 'chai';
 
 let inflections = new Inflections([
     new Inflection('infl', 'nom', null, 
-        parseEndings('nom: er, past1: ais, past2: ais', 'fake').endings)
+        parseEndings('nom: er, past1: ais, past2: ais', WORD_FORMS['pron']).endings)
 ])
 
 describe('Words', function() {

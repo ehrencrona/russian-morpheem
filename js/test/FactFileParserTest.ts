@@ -5,6 +5,7 @@ import { expect } from 'chai';
 import Word from '../shared/Word'
 import AbstractFact from '../shared/fact/AbstractFact'
 import Inflections from '../shared/inflection/Inflections'
+import WORD_FORMS from '../shared/inflection/WordForms'
 import Inflection from '../shared/inflection/Inflection'
 import Words from '../shared/Words'
 import Sentences from '../shared/Sentences'
@@ -17,10 +18,10 @@ import AnyWord from '../shared/AnyWord'
 var inflections = new Inflections()
 
 inflections.add(new Inflection('inflection', 'nom', null, 
-    parseEndings('nom: a', 'fake').endings))
+    parseEndings('nom: a', WORD_FORMS['pron']).endings))
 
 inflections.add(new Inflection('lastchar', 'nom', null, 
-    parseEndings('nom: <a', 'fake').endings))
+    parseEndings('nom: <a', WORD_FORMS['pron']).endings))
 
 describe('FactFileParser', function() {
     it('parses word and meaning', function () {

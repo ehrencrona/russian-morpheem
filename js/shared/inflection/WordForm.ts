@@ -8,7 +8,7 @@ export const FORM_PROPS = [
     'numberEn', 'aspect', 'reflex', 'negation', 'grammaticalCase' 
 ]
 
-export class WordCoordinates {
+export interface WordCoordinates {
     pos?: Dimension.PartOfSpeech
     gender?: Dimension.Gender
     animate?: Dimension.Animateness
@@ -23,7 +23,7 @@ export class WordCoordinates {
     negation?: Dimension.Negation
 }
 
-export class WordForm extends WordCoordinates {
+export class WordForm implements WordCoordinates {
     pos?: Dimension.PartOfSpeech
     gender?: Dimension.Gender
     animate?: Dimension.Animateness
@@ -37,8 +37,6 @@ export class WordForm extends WordCoordinates {
     card?: Dimension.Cardinality
 
     constructor(coordinates: WordCoordinates) {
-        super() 
-
         Object.assign(this, coordinates)
     }
 

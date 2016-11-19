@@ -10,6 +10,7 @@ import Words from '../shared/Words'
 import InflectableWord from '../shared/InflectableWord'
 import Inflection from '../shared/inflection/Inflection'
 import Inflections from '../shared/inflection/Inflections'
+import WORD_FORMS from '../shared/inflection/WordForms'
 import Sentences from '../shared/Sentences'
 import Ending from '../shared/Ending'
 import Facts from '../shared/fact/Facts'
@@ -49,9 +50,9 @@ describe('SentenceFileGenerator', function() {
     it('adds forms', function () {
         let inflections = new Inflections([            
             new Inflection('fem', 'nom', null,
-                parseEndings('nom: a, acc: y', 'fake').endings),
+                parseEndings('nom: a, acc: y', WORD_FORMS['pron']).endings),
             new Inflection('masc', 'nom', null, 
-                parseEndings('nom: , acc: ', 'fake').endings) ])
+                parseEndings('nom: , acc: ', WORD_FORMS['pron']).endings) ])
         
         let words = new Words();
 

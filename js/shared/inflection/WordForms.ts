@@ -1,7 +1,7 @@
 import { del } from 'request';
 import { reverse } from 'dns';
 import { wordToStudyWord } from '../study/toStudyWords';
-import { NamedWordForm, WordForm } from './WordForm';
+import { NamedWordForm, WordCoordinates, WordForm } from './WordForm';
 import * as Dim from './Dimensions'
 
 export const WORD_FORMS: { [id: string] : NamedWordForm } = {
@@ -155,3 +155,9 @@ addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'quest', 'pron')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'poss', 'pron')
 addDerivation(WORD_FORMS['numcard'], WORD_FORMS['numord'], 'card', 'ord')
+
+export function getNamedForm(coordinates: WordCoordinates) {
+    return Object.keys(WORD_FORMS).map(k => WORD_FORMS[k]).find(form => 
+        form.equals(coordinates)
+    )
+}

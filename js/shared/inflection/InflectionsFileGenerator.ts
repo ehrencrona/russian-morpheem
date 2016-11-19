@@ -46,10 +46,6 @@ function inflectionToString(inflection: Inflection, lang: string) {
         inflection.inherits.forEach((parent) => 
             inherit += ', inherit ' + parent.id
         )
-
-        if (!endings.length) {
-            inherit = inherit.substr(2)
-        }
     }
     
     let transformString = ''
@@ -69,7 +65,11 @@ function inflectionToString(inflection: Inflection, lang: string) {
         description = '"' + inflection.description + '" '
     }
 
-    return `${inflection.id}: ${ description }${ endings.join(', ') }${ inherit }${ formString }${ transformString }`
+    let postDescription = `${ formString }${ endings.map(e => ', ' + e).join('') }${ inherit }${ transformString }`
+
+    postDescription = postDescription.substr(2)
+
+    return `${inflection.id}: ${ description }${ postDescription }`
 }
 
 export default function inflectionsToString(inflections: Inflections, lang: string) {

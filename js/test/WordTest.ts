@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
@@ -12,7 +13,7 @@ import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 import { expect } from 'chai';
 
 let inflections = new Inflections([
-    new Inflection('infl', 'nom', null, parseEndings('nom: ium', 'fake').endings)
+    new Inflection('infl', 'nom', null, parseEndings('nom: ium', WORD_FORMS['pron']).endings)
 ])
 
 describe('Word', function() {

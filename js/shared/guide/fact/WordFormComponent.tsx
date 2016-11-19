@@ -28,6 +28,9 @@ import renderRelatedFact from './renderRelatedFact';
 import marked = require('marked');
 import { Component, createElement } from 'react';
 import Corpus from '../../../shared/Corpus'
+import PivotTableComponent from '../pivot/PivotTableComponent'
+import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 
 let React = { createElement: createElement }
 
@@ -150,6 +153,24 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
+    renderPhrases() {
+        let props = this.props
+
+        if (props.form.pos != PoS.PREPOSITION) {
+            return
+        }
+
+        return <PivotTableComponent
+            corpus={ props.corpus }
+            data={ props.corpus.phrases.all() }
+            factLinkComponent={ props.factLinkComponent }
+            dimensions={ [ 
+                new PhraseCaseDimension(props.factLinkComponent), 
+                new PhrasePrepositionDimension(props.factLinkComponent), 
+            ] }
+        />
+    }
+
     getRelatedForms() {
         let thisForm = this.props.form
 
@@ -200,6 +221,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                     {
                         this.renderFormation()
+                    }
+                    {
+                        this.renderPhrases()
                     }
 
                     <h3>Common Words</h3>

@@ -82,6 +82,10 @@ export default function(corpus: Corpus) {
                         fact={ fact }
                         context={ context }
                         factLinkComponent={ (props) => {
+                            if (!props.fact) {
+                                return null
+                            }
+
                             return <a 
                                 key={ props.fact.getId() }
                                 rel={ props.fact instanceof Sentence || props.fact instanceof InflectionFact ? 'nofollow' : '' }

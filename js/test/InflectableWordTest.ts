@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
@@ -17,11 +18,11 @@ import { expect } from 'chai';
 describe('InflectableWord', function() {
     let regular =
         new Inflection('regular', 'inf', new WordForm({ pos: PoS.VERB }), 
-            parseEndings('inf: a, impr: o, pastm: x', 'ru', PoS.VERB).endings)
+            parseEndings('inf: a, impr: o, pastm: x', WORD_FORMS['v']).endings)
 
     let irregular =
         new Inflection('irregular', 'inf', new WordForm({ pos: PoS.VERB }), 
-            parseEndings('impr: i', 'ru', PoS.VERB).endings).inherit(regular)
+            parseEndings('impr: i', WORD_FORMS['v']).endings).inherit(regular)
 
     let inflections = new Inflections([ regular, irregular ])
     
@@ -46,7 +47,7 @@ describe('InflectableWord', function() {
     it('gets right ID on inflections removing last char', () => {
         let regular =
             new Inflection('regular', 'inf', new WordForm({ pos: PoS.VERB }), 
-                parseEndings('inf: <a, 1: b', 'fake').endings)
+                parseEndings('inf: <a, 1: b', WORD_FORMS['n']).endings)
 
         let inflectableWord = 
             new InflectableWord('foo', regular)

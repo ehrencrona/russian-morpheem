@@ -1,4 +1,5 @@
 import { WordForm } from '../shared/inflection/WordForm';
+import WORD_FORMS from '../shared/inflection/WordForms';
 
 import { parseFactFile as parser, resolvePhrases } from '../shared/fact/FactFileParser'
 import { factToString } from '../shared/fact/FactFileGenerator'
@@ -22,13 +23,13 @@ describe('FactFileParser', function() {
     var inflections = new Inflections()
         
     inflections.add(new Inflection('inflection', 'nom', null, 
-        parseEndings('nom: a', 'fake').endings))
+        parseEndings('nom: a', WORD_FORMS['n']).endings))
 
     inflections.add(new Inflection('lastchar', 'nom', null, 
-        parseEndings('nom: <a', 'fake').endings))
+        parseEndings('nom: <a', WORD_FORMS['n']).endings))
 
     inflections.add(new Inflection('yToI', 'm', new WordForm({ pos: PoS.ADJECTIVE }), 
-        parseEndings('m: ый', 'ru').endings).addTransform(Transforms.get('yToI')))
+        parseEndings('m: ый', WORD_FORMS['n']).endings).addTransform(Transforms.get('yToI')))
 
     let w1: Word, w3: InflectableWord
 

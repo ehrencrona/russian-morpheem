@@ -254,6 +254,20 @@ body.guide {
     }
 
     .inflectionForm, .wordForm {
+        table.pivot {
+            border-collapse: collapse;
+
+            td {
+                border-top: solid 1px lightgray;
+                padding: 2 * $unit;
+                vertical-align: top;
+            }
+
+            li.related {
+                margin: 0;
+            }
+        }
+        
         .posName {
             @extend .smallFont;
             font-weight: bold;

@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 import { WordForm } from '../shared/inflection/WordForm';
 
 /// <reference path="./mocha.d.ts" />
@@ -23,20 +24,20 @@ import { expect } from 'chai';
 
 let mascInflection =
     new Inflection('m', 'nom', new WordForm({ pos: PoS.NOUN }), 
-        parseEndings('nom , acc , gen и, genpl ах, prep е', 'ru', PoS.NOUN).endings)
+        parseEndings('nom , acc , gen и, genpl ах, prep е', WORD_FORMS['n']).endings)
 
 let femInflection =
     new Inflection('f', 'nom', new WordForm({ pos: PoS.NOUN }),
-        parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', 'ru', PoS.NOUN).endings)
+        parseEndings('nom а, acc у, gen и, pl ы, genpl ах, prep е', WORD_FORMS['n']).endings)
 
 let verbInflection =
     new Inflection('verb', '1', new WordForm({ pos: PoS.VERB }),
-        parseEndings('1 ю, 2 ешь, 3 ет', 'ru', PoS.VERB).endings)
+        parseEndings('1 ю, 2 ешь, 3 ет', WORD_FORMS['v']).endings)
 
 let inflections = new Inflections([
     femInflection,
     new Inflection('adj', 'm', new WordForm({ pos: PoS.ADJECTIVE }),
-        parseEndings('m ий, adv о, genpl ах, genm а', 'ru', PoS.ADJECTIVE).endings),
+        parseEndings('m ий, adv о, genpl ах, genm а', WORD_FORMS['adj']).endings),
     mascInflection,
     verbInflection
 ])

@@ -10,6 +10,7 @@ import { parseEndings } from '../shared/inflection/InflectionsFileParser'
 import Transforms from '../shared/Transforms'
 import { PartOfSpeech as PoS } from '../shared/inflection/Dimensions'
 import WordForm from '../shared/inflection/WordForm'
+import WORD_FORMS from '../shared/inflection/WordForms'
 
 import { expect } from 'chai';
 
@@ -18,11 +19,11 @@ describe('Inflections', function() {
 
         let before = new Inflections([            
             new Inflection('regular', 'nom', new WordForm({ pos: PoS.NOUN }), 
-                parseEndings('nom: а', 'ru', PoS.NOUN).endings),
+                parseEndings('nom: а', WORD_FORMS['n']).endings),
             new Inflection('funny', 'nom', new WordForm({ pos: PoS.NOUN }), 
-                parseEndings('acc: ц', 'ru', PoS.NOUN).endings),
+                parseEndings('acc: ц', WORD_FORMS['n']).endings),
             new Inflection('irregular', 'nom', new WordForm({ pos: PoS.NOUN }), 
-                parseEndings('nom: в', 'ru', PoS.NOUN).endings)
+                parseEndings('nom: в', WORD_FORMS['n']).endings)
         ])
 
         before.inflections[2].inherit(before.inflections[0]);
@@ -75,7 +76,7 @@ describe('Inflections', function() {
     it('handles relative inflections', function () {
         let inflection = 
             new Inflection('сказать', 'nom', new WordForm({ pos: PoS.VERB }), 
-                parseEndings('inf: ать, pastm: ал, pastf: pastm-а', 'ru', PoS.VERB).endings)
+                parseEndings('inf: ать, pastm: ал, pastf: pastm-а', WORD_FORMS['v']).endings)
 
         let word = new InflectableWord('сказ', inflection)
 
@@ -91,7 +92,7 @@ describe('Inflections', function() {
     it('handles transforms', function () {
         let inflection = 
             new Inflection('adj', 'm', new WordForm({ pos: PoS.ADJECTIVE }), 
-                parseEndings('m ый', 'ru', PoS.ADJECTIVE).endings).addTransform(Transforms.get('yToI'))
+                parseEndings('m ый', WORD_FORMS['adj']).endings).addTransform(Transforms.get('yToI'))
 
         let word = new InflectableWord('маленьк', inflection)
 

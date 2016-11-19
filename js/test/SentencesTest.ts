@@ -1,3 +1,4 @@
+import { WORD_FORMS } from '../shared/inflection/WordForms';
 /// <reference path="./mocha.d.ts" />
 /// <reference path="./chai.d.ts" />
 
@@ -42,7 +43,7 @@ describe('Sentences', function() {
     it('handles JSON conversion', function () {
         
         let inflection = new Inflection('verb', 'inf', null, 
-            parseEndings('inf: re, i: vo', 'fake').endings)
+            parseEndings('inf: re, i: vo', WORD_FORMS['pron']).endings)
 
         let io = new Word('io')
 
