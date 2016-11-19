@@ -45,6 +45,9 @@ export default class FactComponent extends Component<Props, State> {
         else if (fact instanceof InflectableWord) {
             return <InflectableWordFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
+        else if (fact instanceof InflectionForm) {
+            return <InflectionFormComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        }
         else if (fact instanceof InflectionFact) {
             return <InflectionFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
         }
@@ -59,6 +62,10 @@ export default class FactComponent extends Component<Props, State> {
         }
         else if (fact instanceof TagFact) {
             return <TagFactComponent corpus={ this.props.corpus } fact={ fact } tab={ this.props.tab } />
+        }
+        else {
+            console.error('Unhandled fact', fact)
+            return null
         }
     }
 }

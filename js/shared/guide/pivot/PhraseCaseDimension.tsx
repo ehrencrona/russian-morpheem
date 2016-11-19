@@ -22,7 +22,14 @@ export default class PhraseCaseDimension implements PivotDimension<GrammarCase> 
 
     getValues(fact) {
         if (fact instanceof Phrase) {
-            return fact.getCases().filter(c => c != GrammarCase.NOM)
+            let result = fact.getCases().filter(c => c != GrammarCase.NOM)
+
+            // ambiguous if we are looking to break down phrases for a preposition by case.
+            if (result.length > 1) {
+                result = []
+            }
+
+            return result
         }
     }
 
