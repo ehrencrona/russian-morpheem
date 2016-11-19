@@ -50,6 +50,10 @@ import renderRelatedFact from './renderRelatedFact'
 
 import marked = require('marked')
 
+import PivotTableComponent from '../pivot/PivotTableComponent'
+import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
+
 let React = { createElement: createElement }
 
 interface Props {
@@ -161,11 +165,12 @@ export default class WordFactComponent extends Component<Props, State> {
     }
 
     render() {
-        let word = this.props.word
-        let corpus = this.props.corpus
+        let props = this.props
+        let word = props.word
+        let corpus = props.corpus
         let thisIdWithoutClassifier = word.getIdWithoutClassifier() 
 
-        let factoid = this.props.corpus.factoids.getFactoid(this.props.word.getWordFact())
+        let factoid = props.corpus.factoids.getFactoid(props.word.getWordFact())
 
         let otherMeanings = corpus.facts.facts.filter(fact => 
             { 
@@ -189,7 +194,31 @@ export default class WordFactComponent extends Component<Props, State> {
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
                 [])
-            .concat(sortByKnowledge(findPhrasesWithWord(word, corpus), this.props.knowledge))
+
+        let posSpecific = null
+
+        let phrasesWithWord = findPhrasesWithWord(word, corpus)
+        
+        if (word.wordForm.pos == PoS.PREPOSITION) {
+            posSpecific = <div>
+                <h3>Phrases</h3>
+
+                { props.word.toText() } is used in the following phrases with the following cases:
+
+                <PivotTableComponent
+                    corpus={ props.corpus }
+                    data={ phrasesWithWord }
+                    factLinkComponent={ props.factLinkComponent }
+                    dimensions={ [ 
+                        new PhraseCaseDimension(props.factLinkComponent), 
+                    ] }
+                />
+            </div>
+        }
+        else {
+            related = related.concat(
+                sortByKnowledge(phrasesWithWord, props.knowledge))
+        }
 
         return <div className='fact'>
             <h1>{ word.toText() }</h1>
@@ -211,7 +240,7 @@ export default class WordFactComponent extends Component<Props, State> {
                             otherMeanings.map((fact, index) =>
                                 <span key={ fact.getId() }>{ index > 0 ? ' or ' : ''}<span 
                                     className='clickable'>{
-                                        React.createElement(this.props.factLinkComponent, 
+                                        React.createElement(props.factLinkComponent, 
                                             { fact: fact }, 
                                             (fact as Word).getEnglish())
                                     }</span>
@@ -226,6 +255,9 @@ export default class WordFactComponent extends Component<Props, State> {
 
             <div className='columns'>
                 <div className='main'>
+                    { 
+                        posSpecific
+                    }
                     <h3>Examples of usage</h3>
 
                     <ul className='sentences'>
@@ -233,7 +265,7 @@ export default class WordFactComponent extends Component<Props, State> {
                             (this.state.sentences || []).map(sentence => 
                                 <li key={ sentence.sentence.id }>
                                     {
-                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
+                                        React.createElement(props.factLinkComponent, { fact: sentence.sentence }, 
                                             <div dangerouslySetInnerHTML={ { __html: 
                                                 tokensToHtml(sentence.tokens)
                                             }}/>)
@@ -252,7 +284,7 @@ export default class WordFactComponent extends Component<Props, State> {
                         <ul>
                         {
                             related.map(fact => 
-                                renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
+                                renderRelatedFact(fact, corpus, props.factLinkComponent) 
                             ) 
                         }
                         </ul>
@@ -266,13 +298,13 @@ export default class WordFactComponent extends Component<Props, State> {
                         <h3>{ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
                                 (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }</h3>
                         <InflectionTableComponent
-                            corpus={ this.props.corpus }
+                            corpus={ props.corpus }
                             inflection={ word.inflection }
                             word={ word }
-                            factLinkComponent={ this.props.factLinkComponent }
+                            factLinkComponent={ props.factLinkComponent }
                             renderForm={ (inflectedWord, form, factIndex) => {
                                 return <div className='clickable' key={ form }>{
-                                    React.createElement(this.props.factLinkComponent, 
+                                    React.createElement(props.factLinkComponent, 
                                         { 
                                             fact: (word as InflectableWord).inflection.getFact(form), 
                                             context: (word as InflectableWord).inflect(form) 
@@ -289,7 +321,7 @@ export default class WordFactComponent extends Component<Props, State> {
                             <ul>
                             {
                                 this.wordsWithSimilarInflection().map(fact => 
-                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent) 
+                                    renderRelatedFact(fact, corpus, props.factLinkComponent) 
                                 ) 
                             }
                             </ul>

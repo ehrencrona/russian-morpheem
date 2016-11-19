@@ -165,7 +165,7 @@ export default class Phrase extends AbstractFact {
         let allCases: Set<GrammarCase>
 
         phrase.patterns.forEach((pattern) => {
-            let patternCases = pattern.getCases()
+            let patternCases = pattern.getAnyCase()
 
             if (patternCases.size == 0 && 
                 pattern.wordMatches.length == 1 && 

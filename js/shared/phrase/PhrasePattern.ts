@@ -715,7 +715,7 @@ export default class PhrasePattern {
         return result
     }
 
-    getCases(): Set<GrammarCase> {
+    getCaseStudyCase(): Set<GrammarCase> {
         let result = new Set<GrammarCase>()
 
         this.wordMatches.forEach((wordMatch) => {
@@ -725,6 +725,29 @@ export default class PhrasePattern {
                 if (grammaticalCase) {
                     result.add(grammaticalCase)
                 }
+            }
+        })
+
+        return result
+    }
+
+    getAnyCase(): Set<GrammarCase> {
+        let result = new Set<GrammarCase>()
+
+        this.wordMatches.forEach((wordMatch) => {
+            let grammaticalCase
+
+            let form = wordMatch.getInflectionForm()
+            
+            if (form) {
+                grammaticalCase = form.grammaticalCase
+            }
+            else if (wordMatch.isCaseStudy()) {
+                grammaticalCase = (wordMatch as CaseStudyMatch).getCaseStudied()
+            }
+
+            if (grammaticalCase) {
+                result.add(grammaticalCase)
             }
         })
 

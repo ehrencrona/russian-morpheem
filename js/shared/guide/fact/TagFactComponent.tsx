@@ -29,6 +29,10 @@ import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
 
+import PivotTableComponent from '../pivot/PivotTableComponent'
+import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
+
 import marked = require('marked')
 
 let React = { createElement: createElement }
@@ -46,11 +50,14 @@ interface State {
 /** Gives general information about a form that matches several forms, typically a case */
 export default class TagFactComponent extends Component<Props, State> {
     render() {
-        let corpus = this.props.corpus
-        let factoid = corpus.factoids.getFactoid(this.props.fact)
+        let props = this.props
+        let corpus = props.corpus
+        let factoid = corpus.factoids.getFactoid(props.fact)
+
+        let factsWithTag = props.corpus.facts.getFactsWithTag(props.fact.id)
 
         return <div className='tagFact'>
-            <h1>{ factoid.name || this.props.fact.id }</h1>
+            <h1>{ factoid.name || props.fact.id }</h1>
             <div className='columns'>
                 <div className='main'>
                     {
@@ -63,10 +70,19 @@ export default class TagFactComponent extends Component<Props, State> {
 
                     <ul className='factsWithTag'>
                         {
-                            (this.props.fact.required || [])
-                            .concat(this.props.corpus.facts.getFactsWithTag(this.props.fact.id))
+                            factsWithTag.length < 5 || factsWithTag.find(f => !(f instanceof Phrase)) 
+                            ? factsWithTag
                                 .map(fact =>     
-                                    renderRelatedFact(fact, corpus, this.props.factLinkComponent))
+                                    renderRelatedFact(fact, corpus, props.factLinkComponent))
+                            : <PivotTableComponent
+                                corpus={ props.corpus }
+                                data={ factsWithTag }
+                                factLinkComponent={ props.factLinkComponent }
+                                dimensions={ [ 
+                                    new PhrasePrepositionDimension(props.factLinkComponent), 
+                                    new PhraseCaseDimension(props.factLinkComponent), 
+                                ] }
+                            />
                         }
                     </ul>
                 </div>

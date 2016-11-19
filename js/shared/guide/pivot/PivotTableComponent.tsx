@@ -57,7 +57,7 @@ export default class PivotTableComponent extends Component<Props, State> {
                 }
                 else {
                     let values = dim.getValues(entry)
-                    
+
                     line.dimensionValues[dimensionIndex] = values[0]
 
                     if (values.length > 1) {
