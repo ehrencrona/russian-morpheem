@@ -54,8 +54,11 @@ export default class FactSearchComponent extends Component<Props, State> {
                 all = all.filter(this.props.filter)
             }
 
-            facts = all.filter(
-                f => doesFactMatchQuery(f, filterString)).slice(0, MAX_SUGGESTIONS)
+            facts = all.map(f => { return { fact: f, weight: doesFactMatchQuery(f, filterString) } })
+                .filter(fw => fw.weight > 0)
+                .sort((fw1, fw2) => fw2.weight - fw1.weight)
+                .map(fw => fw.fact)
+                .slice(0, MAX_SUGGESTIONS)
         }
 
         return (<div className='wordSearch'>
