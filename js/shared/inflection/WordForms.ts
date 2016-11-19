@@ -152,6 +152,7 @@ addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflex', 'nonrefle
 addDerivation(WORD_FORMS['imperf'], WORD_FORMS['perf'], 'perf', 'imperf')
 addDerivation(WORD_FORMS['adjpos'], WORD_FORMS['adjneg'], 'neg', 'pos')
 addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')
+addDerivation(WORD_FORMS['advpos'], WORD_FORMS['advneg'], 'neg', 'pos')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['quest'], 'quest', 'pron')
 addDerivation(WORD_FORMS['pron'], WORD_FORMS['poss'], 'poss', 'pron')
 addDerivation(WORD_FORMS['numcard'], WORD_FORMS['numord'], 'card', 'ord')

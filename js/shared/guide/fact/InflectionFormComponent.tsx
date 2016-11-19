@@ -36,6 +36,9 @@ import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
 import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
 
+import PivotTableComponent from '../pivot/PivotTableComponent'
+import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+
 import marked = require('marked')
 
 let React = { createElement: createElement }
@@ -210,6 +213,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 .find(oneForm => 
                     form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
 
+        let isCase = form.equals({ grammaticalCase: form.grammaticalCase })
+
         return <div className='inflectionForm'>
             <h1>{ title }</h1>
             <div className='columns'>
@@ -220,6 +225,56 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
                         :
                             null 
+                    }
+
+                    { 
+                        phrases.length ?
+                        <div>
+                            <h3>Expressions</h3>
+                            {
+                                isCase 
+                                ?
+                                <div>
+                                    These are the prepositions and expressions that use the { form.name } case. 
+
+                                    <PivotTableComponent
+                                        corpus={ corpus }
+                                        data={ phrases }
+                                        factLinkComponent={ this.props.factLinkComponent }
+                                        dimensions={ [ 
+                                            new PhrasePrepositionDimension(this.props.factLinkComponent)
+                                        ] }
+                                    />
+                                </div>
+                                :
+                                <div>
+                                    { !this.state.allPhrases ?
+                                        <div>
+                                            These are the most important expressions using the { form.name }:
+                                            
+                                            <div className='seeAll' onClick={ () => this.setState({ allPhrases : true })}>See all</div>
+                                        </div>
+                                        :                        
+                                        <div>
+                                            These are all expressions using the { form.name } (in order of commonness):
+                                            
+                                            <div className='seeAll' onClick={ () => this.setState({ allPhrases : false })}>See less</div>
+                                        </div>
+                                    }
+
+                                    <ul className='phrases'>
+                                    {
+                                        (this.state.allPhrases ? phrases : phrases.slice(0, 10))
+                                            .map(phrase => 
+                                                renderRelatedFact(phrase, corpus, this.props.factLinkComponent) 
+                                            )
+                                    }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                        :
+                        null
                     }
 
                     { formationExists ? 
@@ -255,36 +310,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
                             }
                         </div>
                         : 
-                        null
-                    }
-
-                    { phrases.length ?
-                        <div>
-                            <h3>Expressions</h3>
-                            { !this.state.allPhrases ?
-                                <div>
-                                    These are the most important expressions using the { form.name }:
-                                    
-                                    <div className='seeAll' onClick={ () => this.setState({ allPhrases : true })}>See all</div>
-                                </div>
-                                :                        
-                                <div>
-                                    These are all expressions using the { form.name } (in order of commonness):
-                                    
-                                    <div className='seeAll' onClick={ () => this.setState({ allPhrases : false })}>See less</div>
-                                </div>
-                            }
-
-                            <ul className='phrases'>
-                            {
-                                (this.state.allPhrases ? phrases : phrases.slice(0, 10))
-                                    .map(phrase => 
-                                        renderRelatedFact(phrase, corpus, this.props.factLinkComponent) 
-                                    )
-                            }
-                            </ul>
-                        </div>
-                        :
                         null
                     }
 
