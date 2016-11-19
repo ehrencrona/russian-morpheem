@@ -22,7 +22,7 @@ export default class PhraseCaseDimension implements PivotDimension<GrammarCase> 
 
     getValues(fact) {
         if (fact instanceof Phrase) {
-            return fact.getCases()
+            return fact.getCases().filter(c => c != GrammarCase.NOM)
         }
     }
 
