@@ -188,7 +188,14 @@ export default function guidePageComponent(props: Props) {
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Rubik:300,700,900" rel="stylesheet"/>
 
+            <link rel="icon" type="image/png" href="/img/favicon-192x192.png" sizes="192x192"/>
+            <link rel="icon" type="image/png" href="/img/favicon-160x160.png" sizes="160x160"/>
+            <link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96"/>
+            <link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16"/>
+            <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32"/>
+
             <title>{ title }</title>
+
             <meta name="description" content={ description }/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 

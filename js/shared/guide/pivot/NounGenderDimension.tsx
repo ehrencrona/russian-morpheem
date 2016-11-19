@@ -1,4 +1,4 @@
-import { CASES, FORMS, GENDERS } from '../../inflection/InflectionForms';
+import { CASES, FORMS } from '../../inflection/InflectionForms';
 import { getNamedForm } from '../../inflection/WordForms';
 import { Gender, GrammarCase } from '../../inflection/Dimensions';
 
@@ -12,6 +12,12 @@ import Ending from '../../../shared/Ending'
 import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
+
+export let GENDERS: { [id: number] : string } = {}
+
+GENDERS[Gender.M] = 'masculine'
+GENDERS[Gender.F] = 'feminine'
+GENDERS[Gender.N] = 'neuter'
 
 export default class NounGenderDimension implements PivotDimension<Gender> {
     name = 'Gender'

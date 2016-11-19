@@ -1,3 +1,4 @@
+import { getFileName } from '../../../backend/route/getAudio';
 
 
 import { Component, createElement } from 'react'
@@ -17,7 +18,7 @@ import Inflection from '../../../shared/inflection/Inflection'
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
-import { getDerivations } from '../../../shared/inflection/WordForms' 
+import { getDerivations, getNamedForm, getNonRedundantNamedForms } from '../../../shared/inflection/WordForms';
 
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import SentenceScore from '../../../shared/study/SentenceScore'
@@ -189,6 +190,7 @@ export default class WordFactComponent extends Component<Props, State> {
                     
         let related = 
             (word.required || [])
+            .concat(getNonRedundantNamedForms(word.wordForm))
             .concat(derivations)
             .concat(factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
