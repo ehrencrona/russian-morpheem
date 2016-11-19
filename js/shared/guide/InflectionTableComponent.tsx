@@ -1,3 +1,4 @@
+import { InflectionForm } from '../inflection/InflectionForm';
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
@@ -21,6 +22,7 @@ interface Props {
     word?: InflectableWord,
     hideForms?: Object,
     factLinkComponent?: FactLinkComponent
+    title?: string
 }
 
 interface State {
@@ -88,8 +90,13 @@ export default class InflectionTableComponent extends Component<Props, State> {
                 { table.cols.length > 1 ?
                     <thead>
                         <tr>
-                            <td></td>
-                            { table.cols.map((name) => <td key={name}>{ name }</td>) }
+                            <td className='tableTitle'>{ this.props.title || ''}</td>
+                            { table.cols.map((name) => {
+                                let [l1, l2] = name.split(' ')
+
+                                // needs to be two lines to align with the h3 next to it.
+                                return <td key={name}>{ l1 }<br/>{ l2 }&nbsp;</td> 
+                            }) }
                         </tr>
                     </thead>
                     : []
@@ -133,18 +140,26 @@ export default class InflectionTableComponent extends Component<Props, State> {
                                 return null
                             }
 
-                            let form = table.rows[index]
-                            let fact = this.props.corpus.facts.get(form)
+                            let formId = table.rows[index]
+                            let fact = this.props.corpus.facts.get(formId)
 
-                            let name = (form && FORMS[form].name) || ''
+                            let name = (formId && FORMS[formId].name) || ''
+                            let nameComponent
 
-                            return <tr key={ form }>
+                            if (name && FORMS[formId].equals({ grammaticalCase: FORMS[formId].grammaticalCase })) {
+                                nameComponent = <span className={ 'caseName ' + name }>{ name.toUpperCase() }</span>
+                            }
+                            else {
+                                nameComponent = name
+                            }
+
+                            return <tr key={ formId }>
                                 {
                                     (fact && this.props.factLinkComponent ?
                                         <td className='clickable'>{
                                             React.createElement(this.props.factLinkComponent, 
                                             { fact: fact }, 
-                                            name) 
+                                            nameComponent) 
                                         }</td>
                                         :
                                         <td>{ name }</td>)

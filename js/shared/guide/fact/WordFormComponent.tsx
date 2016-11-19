@@ -1,3 +1,4 @@
+import { PivotDimension } from '../pivot/PivotDimension';
 import { define } from 'mime';
 import { NamedWordForm, WordForm } from '../../inflection/WordForm';
 import { WORD_FORMS } from '../../inflection/WordForms';
@@ -31,6 +32,8 @@ import Corpus from '../../../shared/Corpus'
 import PivotTableComponent from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
+import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
+import NounGenderDimension from '../pivot/NounGenderDimension'
 
 let React = { createElement: createElement }
 
@@ -123,33 +126,40 @@ export default class InflectionFormComponent extends Component<Props, State> {
             return null
         }
 
+        let dimensions: PivotDimension<any>[] = 
+            [ new WordDefaultEndingDimension(this.props.factLinkComponent, 1) ]
+
+        let facts =
+            this.props.corpus.facts.facts.filter(fact =>
+                fact instanceof InflectableWord && fact.wordForm.matches(this.props.form))
+
+        let filterLimit
+
+        if (this.props.form.pos == PoS.NOUN) {
+            // exclude those that don't have singular
+            facts = facts.filter(w => w instanceof InflectableWord && !!w.inflect('nom'))
+
+            if (!this.props.form.gender) {
+                dimensions = [ new NounGenderDimension() as PivotDimension<any> ].concat(dimensions)
+            }
+        }
+
+        filterLimit = Math.round(facts.length / 50)
+
         return <div>
             <h3>Endings</h3>
 
             <div>Most common endings:</div>
  
-            <ul className='formation'>
-            {
-                inflections.map(inflection => {
-                    let ending = inflection.getEnding(defaultForm)
-
-                    return <div key={ inflection.getId() }>
-                        {
-                            ending.suffix || 'None'
-                        }: 
-                        {
-                            getExamplesUsingInflection(defaultForm, inflection, this.props.corpus, this.props.knowledge, null, 3)
-                                .map(w => <span key={ w.getId() } className='word clickable'>{ 
-                                    React.createElement(this.props.factLinkComponent, {
-                                        fact: w
-                                    }, w.toText())
-                                }</span>)
-                        }
-                    </div>
-
-                })
-            }
-            </ul>
+            <PivotTableComponent
+                corpus={ this.props.corpus }
+                dimensions={ dimensions }
+                factLinkComponent={ this.props.factLinkComponent }
+                data={
+                    facts
+                }
+                filterLimit={ filterLimit }
+            />
         </div>
     }
 

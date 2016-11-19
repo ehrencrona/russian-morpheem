@@ -35,7 +35,9 @@ export default class PhraseCaseDimension implements PivotDimension<GrammarCase> 
             this.factLinkComponent, {
                 fact: FORMS[CASES[value]]
             },
-            CASES[value]
+            <div className={ 'caseName ' + CASES[value] }>
+                { CASES[value].toUpperCase() }
+            </div>
         )
     }
 

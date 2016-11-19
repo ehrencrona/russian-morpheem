@@ -83,6 +83,8 @@ body.guide {
     }
 }
 
+$h3PaddingBottom: 3px;
+
 .guide {
     font-weight: 400;
     font-size: 12pt;
@@ -97,8 +99,10 @@ body.guide {
 
     h3 {
         @extend .smallFont;
-        padding-bottom: 3px;
-        border-bottom: 1px solid black;
+        padding-bottom: $h3PaddingBottom;
+        border-bottom: 1px solid gray;
+        margin-top: 1em;
+        margin-bottom: 1em;
     }
     
     h1 {
@@ -128,9 +132,11 @@ body.guide {
         line-height: 120%;
         margin-top: 3*$unit;
         margin-bottom: 3*$unit;
+    }
 
+    li.related {
         .match {
-            color: $clickableColor;
+            font-weight: bold;
         }
 
         .en {
@@ -138,6 +144,21 @@ body.guide {
             font-style: normal;
             font-size: $smallFont;
         }
+    }
+
+    ul.sentences {
+        li {
+            .match {
+                font-weight: bold;
+            }
+
+            .en {
+                margin-top: $unit;
+                font-style: normal;
+                font-size: $smallFont;
+            }
+        }
+
     }
 
     li.related {
@@ -219,16 +240,73 @@ body.guide {
     }
 
     table.pivot {
+        margin-top: 2em;
+        margin-bottom: 2em;
         border-collapse: collapse;
+        width: 100%;
+
+        tr.main {
+            border-top: solid 1px lightgray;
+        }
 
         td {
-            border-top: solid 1px lightgray;
             padding: 2 * $unit;
+            padding-left: 0;
             vertical-align: top;
         }
 
         li.related {
+            &::before {
+                @extend .seeAlso;
+            }
+
             margin: 0;
+        }
+    }
+
+    table.pivot, .inflections, .sidebar {
+        .caseName {
+            display: inline-block;
+            font-family: Rubik;
+
+            background-color: #6a6766;
+
+            color: white;
+            font-weight: 300;
+            font-size: 80%;
+            margin-top: 0.2em;
+
+            $size: 1.8em;
+            border-radius: 0.3em;
+            padding: 0.2em 0.3em;
+            padding-bottom: 0.1em;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &.genitive {
+                background-color: #53bab4;
+            }
+
+            &.dative {
+                background-color: #957cd7;
+            }
+
+            &.accusative {
+                background-color: #63a1ca;
+            }
+
+            &.instrumental {
+                background-color: #c6cd1f;
+            }
+
+            &.prepositional {
+                background-color: #e464a8;
+            }
+
+            &:hover {
+                background-color: $clickableColor;
+            }
         }
     }
     
@@ -240,6 +318,17 @@ body.guide {
             thead {
                 border-bottom: 1px solid gray;
                 font-size: $smallFont;
+                vertical-align: top;
+                
+                td {
+                    padding-top: 1em;
+                    padding-bottom: 4px;
+                }
+
+                .tableTitle {
+                    font-size: 100% !important;
+                    font-weight: bold;
+                }
             }
 
             td:nth-child(1) {
@@ -280,6 +369,8 @@ body.guide {
             flex-direction: row;
             margin-top: 0.5em;
 
+            padding-top: 0.5em;
+
             .name {
                 @extend .smallFont;
                 margin-top: 0.2em;
@@ -289,20 +380,43 @@ body.guide {
 
             .formation {
                 flex-basis: 0;
-                flex-grow: 2;
+                flex-grow: 3;
 
                 > div {
                     margin-bottom: 0.5em;
 
-                    li {
+                    li.stemToInflected {
                         list-style: none;
                         margin: 0;
+                        display: flex;
+                        flex-direction: row;
+
+                        .clickable:first-child {
+                            margin-right: 0.5em;
+                        }
+
+                        .clickable {
+                            white-space: nowrap;
+
+                            &::before {
+                                @extend .seeAlso;
+                            }
+                        }
+
+                        .arrow {
+                            margin-right: 1em;
+                            position: relative;
+                            top: 0.05em;
+                        }
                     }
 
                     .relativeTo {
                         @extend .smallFont;
+                        margin-bottom: 1em;
+                        margin-left: ($seeAlsoSize + $seeAlsoMargin) / $smallFontFactor;
                     }
                 }
+
             }
         }
 
@@ -335,7 +449,6 @@ body.guide {
         }
     }
 
-
     .otherMeanings {
         .clickable::before {
             @extend .seeAlso;
@@ -348,24 +461,6 @@ body.guide {
 
             &::before {
                 @extend .seeAlso;
-            }
-        }
-    }
-
-    .fact.inflection, .inflectionForm {
-        .stemToInflected {
-            .clickable {
-                white-space: nowrap;
-
-                &::before {
-                    @extend .seeAlso;
-                }
-            }
-
-            .arrow {
-                margin: 0 .2em;
-                position: relative;
-                top: 0.1em;
             }
         }
     }

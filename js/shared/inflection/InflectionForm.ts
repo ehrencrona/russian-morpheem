@@ -18,6 +18,9 @@ export interface InflectionCoordinates {
     command?: Dimension.Command
 }
 
+const FORM_PROPS = [ 'gender', 'tense', 'grammaticalCase', 'animate', 
+    'number', 'person', 'command', 'adjectiveForm', 'pos', 'pronounForm' ]
+
 export class InflectionForm extends AbstractFact implements InflectionCoordinates {
     gender: Dimension.Gender
     tense: Dimension.Tense
@@ -89,18 +92,18 @@ export class InflectionForm extends AbstractFact implements InflectionCoordinate
         visitor(this)
     }
 
-    matches(otherForm: InflectionForm) {
-        return !(
-            (this.grammaticalCase != null && this.grammaticalCase != otherForm.grammaticalCase) ||
-            (this.gender != null && this.gender != otherForm.gender) ||
-            (this.person != null && this.person != otherForm.person) ||
-            (this.number != null && this.number != otherForm.number) ||
-            (this.animate != null && this.animate != otherForm.animate) ||
-            (this.adjectiveForm != null && this.adjectiveForm != otherForm.adjectiveForm) ||
-            (this.command != null && this.command != otherForm.command) ||
-            (this.pos != null && this.pos != otherForm.pos) ||
-            (this.pronounForm != null && this.pronounForm != otherForm.pronounForm) ||
-            (this.tense != null && this.tense != otherForm.tense))
+    equals(other: InflectionCoordinates) {
+        let mismatch = (prop: string) => 
+            (other[prop] || this[prop]) && this[prop] != other[prop]
+
+        return !FORM_PROPS.find(mismatch)
+    }
+
+    matches(other: InflectionCoordinates) {
+        let mismatch = (prop: string) => 
+            this[prop] && this[prop] != other[prop]
+
+        return !FORM_PROPS.find(mismatch)
     }
 }
 

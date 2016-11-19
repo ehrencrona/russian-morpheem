@@ -186,7 +186,7 @@ export default function guidePageComponent(props: Props) {
             <link rel="stylesheet" type="text/css" href="/stylesheets/guide.css"/>
 
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet"/>
-            <link href="https://fonts.googleapis.com/css?family=Rubik:700,900" rel="stylesheet"/>
+            <link href="https://fonts.googleapis.com/css?family=Rubik:300,700,900" rel="stylesheet"/>
 
             <title>{ title }</title>
             <meta name="description" content={ description }/>

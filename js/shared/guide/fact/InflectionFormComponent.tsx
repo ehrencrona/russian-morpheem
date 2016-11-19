@@ -1,3 +1,4 @@
+import { POS_LONG_NAMES } from '../../phrase/PhrasePattern';
 
 
 import { Component, createElement } from 'react'
@@ -134,15 +135,16 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let form = this.props.form
 
         return <div key={ pos }>
-            <div className='posName'>{ capitalize(POSES[pos]) }s</div>
+            <div className='posName'>{ capitalize(POS_LONG_NAMES[pos]) }s</div>
             <div className='pos'>
                 {
                     this.mostCommonInflections(forms, pos).map(i => {
+                        let formName = capitalize(FORMS[i.form].name.replace(form.name, '').trim() || 'singular') 
+
+                        let formNameLines = formName.split(' ')
 
                         return <div key={ i.form } className='form'>
-                            <div className='name' >{
-                                capitalize(FORMS[i.form].name.replace(form.name, '').trim() || 'singular')
-                            }</div>
+                            <div className='name' >{ formNameLines[0] }<br/>{ formNameLines[1] }</div>
                             <ul className='formation'>
                             {
                                 i.inflectionFacts.map(f => {
@@ -159,11 +161,11 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                                     {
                                                         ending.relativeTo ?
                                                         <div className='relativeTo'>
-                                                            ({ 
+                                                            { 
                                                                 !ending.subtractFromStem && !ending.suffix ? 'identical to' : 'formed from' 
                                                             } the { 
                                                                 FORMS[f.inflection.getEnding(i.form).relativeTo].name
-                                                            })
+                                                            }
                                                         </div>
                                                         : 
                                                         null

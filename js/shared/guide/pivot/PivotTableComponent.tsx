@@ -1,3 +1,4 @@
+import { toASCII } from 'punycode';
 import Fact from '../../../shared/fact/Fact';
 import InflectableWord from '../../../shared/InflectableWord';
 import InflectedWord from '../../../shared/InflectedWord';
@@ -16,14 +17,21 @@ interface Props {
     corpus: Corpus
     hideForms?: Object,
     factLinkComponent: FactLinkComponent
+    filterLimit?: number
 }
 
 interface State {
+    showAll?: boolean
 }
 
 let React = { createElement: createElement }
 
 export default class PivotTableComponent extends Component<Props, State> {
+    constructor(props) {
+        super(props)
+
+        this.state = {}
+    }
 
     render() {
         let props = this.props
@@ -76,56 +84,135 @@ export default class PivotTableComponent extends Component<Props, State> {
             handleDimensions(0, line)
         })
 
-        lines = lines.sort((l1, l2) => {
-            function keyString(line: Line) {
-                return line.dimensionValues.map((value, index) => props.dimensions[index].getKey(value)).join('')
+        function keyString(line: Line, toIndex?: number) {
+            let values = line.dimensionValues
+            
+            if (toIndex) {
+                values = values.slice(0, toIndex)
             }
+            
+            return values.map((value, index) => props.dimensions[index].getKey(value)).join('')
+        }
 
-            return keyString(l1).localeCompare(keyString(l2))
-        })
+        let keyCount = {}
 
-        return <table className='pivot'><tbody>
-        {
-            lines.map((line, lineIndex) => {
-                    
-                return <tr key={ lineIndex } >
-                    {
-                        props.dimensions.map((dim, index) => {
+        for (let index = this.props.dimensions.length-1; index >= 0; index--) {
+            let dim = this.props.dimensions[index]
 
-                            if (lineIndex > 0 &&
-                                props.dimensions[index].getKey(line.dimensionValues[index]) ==
-                                props.dimensions[index].getKey(lines[lineIndex-1].dimensionValues[index])) {
-                                return null
-                            }
-                            else {
-                                let rowSpan = 1
+            lines.forEach(line => {
+                let key = keyString(line, index+1)
 
-                                for (let i = lineIndex+1; i < lines.length; i++) {
-                                    if (props.dimensions[index].getKey(lines[i].dimensionValues[index]) !=
-                                        props.dimensions[index].getKey(line.dimensionValues[index])) {
-                                        break
-                                    }
-
-                                    rowSpan++
-                                }
-
-                                return <td key={ dim.name } rowSpan={rowSpan}>{
-                                    dim.renderValue(line.dimensionValues[index])
-                                }</td>
-                            }
-                        })
-                    }
-                    <td>
-                        <ul>{
-                            renderRelatedFact(line.entry, props.corpus, props.factLinkComponent)
-                        }</ul>
-                    </td>
-                </tr>
-
+                if (!keyCount[key]) {
+                    keyCount[key] = 1
+                }
+                else {
+                    keyCount[key]++
+                }
             })
         }
-        </tbody></table>
 
+        lines = lines.sort((l1, l2) => {
+
+            for (let index = 0; index < this.props.dimensions.length; index++) {
+                let key1 = keyString(l1, index+1)
+                let key2 = keyString(l2, index+1)
+                
+                let result = keyCount[key2] - keyCount[key1]
+
+                if (result == 0) {
+                    result = key1.toString().localeCompare(key2.toString())
+                }
+
+                if (result != 0) {
+                    return result
+                }
+            }
+
+        })
+
+        if (this.props.filterLimit && !this.state.showAll) {
+            lines = lines.filter(line => {
+                return keyCount[keyString(line)] > this.props.filterLimit
+            })
+        }
+
+        if (!this.state.showAll) {
+            let seenCount = {}
+
+            lines = lines.filter(l => {
+                let key = keyString(l)
+
+                if (!seenCount[key]) {
+                    seenCount[key] = 1
+                }
+                else {
+                    seenCount[key]++
+                }
+
+                return seenCount[key] < 4
+            })            
+        }
+
+        return <div>
+            {
+                this.state.showAll 
+                ?
+                    <div className='seeAll' onClick={ () => this.setState({ showAll : false })}>See less</div>
+                :
+                    <div className='seeAll' onClick={ () => this.setState({ showAll : true })}>See all</div>
+            }
+            <table className='pivot'>
+                <colgroup>
+                    {
+                        props.dimensions.concat(null).map(d => <col />)
+                    }
+                </colgroup>
+                <tbody>
+                {
+                    lines.map((line, lineIndex) => {
+                        let dimensionEqual = (index) => {
+                            return lineIndex > 0 &&
+                                props.dimensions[index].getKey(line.dimensionValues[index]) ==
+                                props.dimensions[index].getKey(lines[lineIndex-1].dimensionValues[index])
+                        }
+
+                        return <tr key={ lineIndex } className={ dimensionEqual(0) ? '' : 'main' } >
+                            {
+                                props.dimensions.map((dim, index) => {
+
+                                    if (dimensionEqual(index)) {
+                                        return null
+                                    }
+                                    else {
+                                        let rowSpan = 1
+
+                                        for (let i = lineIndex+1; i < lines.length; i++) {
+                                            if (props.dimensions[index].getKey(lines[i].dimensionValues[index]) !=
+                                                props.dimensions[index].getKey(line.dimensionValues[index])) {
+                                                break
+                                            }
+
+                                            rowSpan++
+                                        }
+
+                                        return <td key={ dim.name } rowSpan={rowSpan}>{
+                                            dim.renderValue(line.dimensionValues[index])
+                                        }</td>
+                                    }
+                                })
+                            }
+                            <td>
+                                <ul>{
+                                    renderRelatedFact(line.entry, props.corpus, props.factLinkComponent)
+                                }</ul>
+                            </td>
+                        </tr>
+
+                    })
+                }
+                </tbody>
+            </table>
+        </div> 
     }
 
 }

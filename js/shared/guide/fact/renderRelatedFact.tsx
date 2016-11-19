@@ -43,14 +43,28 @@ export default function renderRelatedFact(fact: Fact, corpus: Corpus, factLinkCo
             fact.en)
     }
     else if (fact instanceof InflectionForm) {
+        let isCase = fact.grammaticalCase && 
+            new InflectionForm('', '', { grammaticalCase: fact.grammaticalCase }).equals(fact)
+
         inner = pair(
             fact.name,
-            '(form)')
+            isCase ? '(case)' : '(form)')
     }
     else if (fact instanceof NamedWordForm) {
+        let type = 'word type'
+
+        if (fact.pos && 
+            fact.equals({ pos: fact.pos })) {
+            type = 'part of speech'
+        }
+        else if (fact.aspect && 
+            fact.equals({ aspect: fact.aspect })) {
+            type = 'aspect'
+        }
+
         inner = pair(
             fact.name,
-            '(word type)')
+            `(${type})`)
     }
     else if (fact instanceof TagFact) {
         let factoid = corpus.factoids.getFactoid(fact)

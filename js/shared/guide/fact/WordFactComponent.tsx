@@ -295,8 +295,6 @@ export default class WordFactComponent extends Component<Props, State> {
             { word instanceof InflectableWord ?
                 <div className='columns'>
                     <div className='main'>
-                        <h3>{ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
-                                (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }</h3>
                         <InflectionTableComponent
                             corpus={ props.corpus }
                             inflection={ word.inflection }
@@ -312,11 +310,13 @@ export default class WordFactComponent extends Component<Props, State> {
                                         (word as InflectableWord).inflect(form).jp) 
                                     }</div>
                             }}
+                            title={ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
+                                (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }
                             />
                     </div>
                     <div className='sidebar'>
                         <div>
-                            <h3>Words with similar endings</h3>
+                            <h3>Words with<br/>similar endings</h3>
 
                             <ul>
                             {

@@ -143,15 +143,12 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         let factoid = corpus.factoids.getFactoid(phrase)
 
-        let relations = dedup(this.props.phrase.getCases()
-            .map(grammaticalCase =>
-                this.props.corpus.facts.get(CASES[grammaticalCase]))
-            .concat(
+        let relations = [].concat(
                 (factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)) 
                 : 
                 []))
-            .concat(this.props.phrase.getWords().map(word => word.getWordFact())))
+            .concat(this.props.phrase.getWords().map(word => word.getWordFact()))
  
         let phraseSeoText = getPhraseSeoText(phrase)
 
@@ -178,6 +175,19 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     { relations.length ?
                         <div>
                             <h3>See also</h3>
+
+                            {
+                                this.props.phrase.getCases()
+                                    .map(grammaticalCase => {
+                                        let fact = this.props.corpus.facts.get(CASES[grammaticalCase])
+
+                                        return React.createElement(this.props.factLinkComponent, 
+                                                { fact: fact },                                         
+                                                <div className={ 'caseName ' + CASES[grammaticalCase] }>
+                                                    { CASES[grammaticalCase].toUpperCase() }
+                                                </div>)
+                                    })
+                            }
 
                             <ul>
                             {
