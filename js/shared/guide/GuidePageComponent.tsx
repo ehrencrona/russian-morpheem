@@ -49,7 +49,10 @@ export default function guidePageComponent(props: Props) {
         title = factoid.name
     }
 
-    if (factoid.explanation) {
+    if (factoid.description) {
+        description = factoid.description
+    }
+    else if (factoid.explanation) {
         description = factoid.explanation
         
         if (description.length > 100) {

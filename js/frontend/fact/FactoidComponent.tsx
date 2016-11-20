@@ -62,6 +62,18 @@ export default class FactoidComponent extends Component<Props, State> {
                 }
             } } />
 
+            <h3>Meta description (optional) </h3>
+
+            <textarea className='factoid description' defaultValue={ factoid.description } onBlur={ (e) => {
+                let description = (e.target as HTMLTextAreaElement).value
+
+                if (factoid.description != description) {
+                    factoid.description = description
+
+                    factoids.setFactoid(factoid, this.props.fact)
+                }
+            } } />
+
             <h3>Explanation</h3>
 
             <textarea className='factoid' defaultValue={ factoid.explanation } onBlur={ (e) => {

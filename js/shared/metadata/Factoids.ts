@@ -8,6 +8,7 @@ export interface Relation {
 
 export interface Factoid {
     explanation: string
+    description?: string
     name?: string
     fact?: string
     relations: Relation[]
