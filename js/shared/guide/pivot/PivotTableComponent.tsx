@@ -88,15 +88,20 @@ class Pivot {
     }
 
     filterChildren(filter: (Pivot) => boolean) {
+        let didFilter = false
+
         this.childArray().forEach(child => {
-            child.filterChildren(filter)
+            didFilter = didFilter || child.filterChildren(filter)
 
             if (!filter(child)) {
                 this.lineCount -= child.lineCount
 
                 delete this.children[child.key]
+                didFilter = true
             }
         })
+
+        return didFilter
     }
 }
 
@@ -134,6 +139,8 @@ export default class PivotTableComponent extends Component<Props, State> {
             return at
         }
 
+        let didFilter = false
+
         props.data.forEach(fact => {
             let pivot = getPivot(fact)
 
@@ -145,12 +152,13 @@ export default class PivotTableComponent extends Component<Props, State> {
                 }
                 else {
                     pivot.addFilteredFact()
+                    didFilter = true
                 }
             }
         })
 
         if (props.hideCategoryLimit && !this.state.showAll) {
-            root.filterChildren(pivot => pivot.lineCount > props.hideCategoryLimit)
+            didFilter = root.filterChildren(pivot => pivot.lineCount > props.hideCategoryLimit)
         }
 
         let getFactLines = (pivot: Pivot) => {

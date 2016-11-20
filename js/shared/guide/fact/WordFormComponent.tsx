@@ -160,7 +160,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
-    renderPhrases() {
+    renderPrepositionPhrases() {
         let props = this.props
 
         if (props.form.pos == PoS.PREPOSITION) {
@@ -169,7 +169,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 data={ props.corpus.phrases.all() }
                 factLinkComponent={ props.factLinkComponent }
                 itemsPerCategoryLimit={ 1 }
-                dimensions={ [ 
+                dimensions={ [
                     new PhraseCaseDimension(props.factLinkComponent), 
                     new PhrasePrepositionDimension(props.factLinkComponent), 
                 ] }
@@ -215,7 +215,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let title = corpus.factoids.getFactoid(form).name || form.name
 
-        let showFormation = form.pos && INFLECTION_FORMS[form.pos] && form.pos != PoS.PRONOUN
+        let showFormation = form.pos && INFLECTION_FORMS[form.pos] && 
+            form.pos != PoS.PRONOUN  && form.pos != PoS.PREPOSITION
 
         let showUsage = form != WORD_FORMS['n'] && form != WORD_FORMS['v'] && form != WORD_FORMS['adj'] 
 
@@ -257,7 +258,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 }</ul>
                             </div>
                             :
-                            this.renderPhrases())
+                            this.renderPrepositionPhrases())
                     }
 
                     { showUsage ?
