@@ -34,6 +34,7 @@ import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
 import NounGenderDimension from '../pivot/NounGenderDimension'
+import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
 
 let React = { createElement: createElement }
 
@@ -220,6 +221,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let showUsage = form != WORD_FORMS['n'] && form != WORD_FORMS['v'] && form != WORD_FORMS['adj'] 
 
+        let showForms = form.equals({ pos: form.pos }) && INFLECTION_FORMS[form.pos]
+
         return <div className='wordForm'>
             <h1>{ title }</h1>
             <div className='columns'>
@@ -284,6 +287,24 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         </div>
                         :
                         null
+                    }
+
+                    {
+                        showForms ?
+                            <div>
+                                <h3>Forms</h3>
+
+                                <InflectionTableComponent
+                                    corpus={ this.props.corpus }
+                                    pos={ form.pos  }
+                                    mask={ () => false }
+                                    factLinkComponent={ this.props.factLinkComponent }
+                                    className='otherForms'
+                                    renderForm={ renderFormName(form.pos, this.props.factLinkComponent) }
+                                />
+                            </div>
+                            :
+                            null
                     }
                 </div>
                 { related.length ?

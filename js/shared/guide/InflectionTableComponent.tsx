@@ -8,7 +8,7 @@ import InflectableWord from '../../shared/InflectableWord'
 import { MISSING_INDEX } from '../../shared/fact/Facts'
 
 import Inflection from '../../shared/inflection/Inflection'
-import { INFLECTION_FORMS, FORMS } from '../../shared/inflection/InflectionForms'
+import { CASES, FORMS, INFLECTION_FORMS } from '../../shared/inflection/InflectionForms';
 
 import FactLinkComponent from './fact/FactLinkComponent'
 
@@ -46,7 +46,36 @@ export function renderWordInflection(word: InflectableWord, corpus: Corpus, rend
     }
 }
 
-export default class InflectionTableComponent extends Component<Props, State> {
+export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkComponent) {
+    return (form) => {
+        let grammarCase = FORMS[form].grammaticalCase
+        let content
+
+        if (grammarCase) {
+            content = 
+            <div className='otherForm'>{
+                <div className={ 'caseName ' + CASES[grammarCase] }>{                                                    
+                    FORMS[form].name.toUpperCase().split(' ').reduce((lines, line) =>
+                        lines.concat(line, <br/>), [] )
+                }</div>
+            }</div>
+        }
+        else {
+            content = 
+                <div className='otherForm nonCase'>{
+                    FORMS[form].name.split(' ').reduce((lines, line) =>
+                        lines.concat(line, <br/>), [] )
+                }</div>
+        }
+
+        return React.createElement(
+            factLinkComponent,
+            { fact: FORMS[form] },
+                content)
+    }
+}
+
+export class InflectionTableComponent extends Component<Props, State> {
     getWordsByForm(word: InflectableWord): { [ form:string]: string} {
         let wordsByForm : { [ form:string]: string} = {}
 
@@ -160,3 +189,5 @@ export default class InflectionTableComponent extends Component<Props, State> {
             </div>)
     }
 }
+
+export default InflectionTableComponent

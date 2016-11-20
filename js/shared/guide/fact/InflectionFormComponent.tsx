@@ -39,7 +39,7 @@ import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTransl
 import PivotTableComponent from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 
-import InflectionTableComponent from '../InflectionTableComponent'
+import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
 
 import marked = require('marked')
 
@@ -354,34 +354,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                     mask={ () => true }
                                     pos={ pos }
                                     className='otherForms'
-                                    renderForm={ 
-                                        (form) => {
-                                            let grammarCase = FORMS[form].grammaticalCase
-                                            let content
-
-                                            if (grammarCase) {
-                                                content = 
-                                                <div className='otherForm'>{
-                                                    <div className={ 'caseName ' + CASES[grammarCase] }>{                                                    
-                                                        FORMS[form].name.toUpperCase().split(' ').reduce((lines, line) =>
-                                                            lines.concat(line, <br/>), [] )
-                                                    }</div>
-                                                }</div>
-                                            }
-                                            else {
-                                                content = 
-                                                    <div className='otherForm nonCase'>{
-                                                        FORMS[form].name.split(' ').reduce((lines, line) =>
-                                                            lines.concat(line, <br/>), [] )
-                                                    }</div>
-                                            }
-
-                                            return React.createElement(
-                                                this.props.factLinkComponent,
-                                                { fact: FORMS[form] },
-                                                 content)
-                                        }
-                                    }
+                                    renderForm={ renderFormName(pos, this.props.factLinkComponent) }
                                 />
                             </div>
                         )
