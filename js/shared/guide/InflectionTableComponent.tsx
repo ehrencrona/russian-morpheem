@@ -1,3 +1,4 @@
+import { PartOfSpeech } from '../inflection/Dimensions';
 import { InflectionForm } from '../inflection/InflectionForm';
 
 import Corpus from '../../shared/Corpus'
@@ -17,18 +18,33 @@ import { Component, createElement } from 'react';
 
 interface Props {
     corpus: Corpus,
-    inflection: Inflection,
-    renderForm: (inflectedWord: string, form: string, factIndex: number) => any
-    word?: InflectableWord,
-    hideForms?: Object,
+    renderForm: (form: string) => any
+    pos: PartOfSpeech,
+    mask: (string) => boolean,
     factLinkComponent?: FactLinkComponent
     title?: string
+    className?: string
 }
 
 interface State {
 }
 
 let React = { createElement: createElement }
+
+export function renderWordInflection(word: InflectableWord, corpus: Corpus, renderForm: (InflectedWord, string, number) => any) {
+    return (form: string) => {
+        let inflected = word.inflect(form)
+
+        if (!inflected) {
+            return null
+        }
+
+        let fact = word.inflection.getFact(form)
+        let index = corpus.facts.indexOf(fact)
+
+        return renderForm(inflected, form, index)
+    }
+}
 
 export default class InflectionTableComponent extends Component<Props, State> {
     getWordsByForm(word: InflectableWord): { [ form:string]: string} {
@@ -53,39 +69,15 @@ export default class InflectionTableComponent extends Component<Props, State> {
         let wordsByForm: { [ form:string]: string}
         let forms: string[]
 
-        let inflection = this.props.inflection
-        let word: InflectableWord = this.props.word
-
-        if (!word) {
-            word = new InflectableWord('.', inflection)
-        } 
-
-        wordsByForm = this.getWordsByForm(word)
-
-        let formComponent = (form) => {
-            let fact = this.props.inflection.getFact(form)
-            let index = this.props.corpus.facts.indexOf(fact)
-
-            let inherited = !this.props.inflection.endings[form]
-            
-            if ((!this.props.word && inherited) ||
-                (this.props.hideForms && this.props.hideForms[form] != undefined)) {
-
-                return <div key={form}/>
-            }
-
-            return this.props.renderForm(wordsByForm[form], form, index)
-        }
-
-        let table = INFLECTION_FORMS[this.props.inflection.wordForm.pos]
+        let table = INFLECTION_FORMS[this.props.pos]
         
         if (!table) {
-            console.log('Unknown PoS ' + this.props.inflection.wordForm.pos + ' of ' + this.props.inflection.getId())
+            console.log('Unknown PoS ' + this.props.pos)
             return <div/>;
         }
 
         return (
-            <div className='inflections' key={ this.props.inflection.getId() }>
+            <div className={ 'inflections ' + (this.props.className || '') }>
                 <table>
                 { table.cols.length > 1 ?
                     <thead>
@@ -106,28 +98,21 @@ export default class InflectionTableComponent extends Component<Props, State> {
                             let count = 0
 
                             let cells = forms.map((form) => {
-                                let endings
-                                
+                                let content
+
                                 if (typeof form == 'string') {
-                                    if (wordsByForm[form]) {
-                                        endings = formComponent(form) 
-                                    }
+                                    content = this.props.renderForm(form)
                                 }
                                 else {
-                                    endings = form.filter((form) => wordsByForm[form])
-                                        .map(formComponent)
-
-                                    if (!endings.length) {
-                                        endings = null
-                                    }
+                                    content = form.map(f => this.props.renderForm(f))
                                 }
-                                
-                                if (endings) {
+
+                                if (content) {
                                     count++
                                     
                                     return <td key={form.toString()} className='full'>
                                         {
-                                            endings
+                                            content
                                         }
                                     </td>
                                 }

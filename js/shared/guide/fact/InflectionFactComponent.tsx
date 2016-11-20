@@ -30,6 +30,7 @@ import getExamplesUsingInflection from './getExamplesUsingInflection'
 import renderRelatedFact from './renderRelatedFact'
 import capitalize from './capitalize'
 
+import { renderWordInflection } from '../InflectionTableComponent'
 import InflectionTableComponent from '../InflectionTableComponent'
 import FactLinkComponent from './FactLinkComponent'
 
@@ -450,19 +451,21 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                 <InflectionTableComponent
                     corpus={ this.props.corpus }
-                    inflection={ word.word.inflection }
-                    word={ word.word }
+                    pos={ word.wordForm.pos  }
+                    mask={ word.word.mask }
                     factLinkComponent={ this.props.factLinkComponent }
-                    renderForm={ (inflectedWord, form, factIndex) => {
-                        return <div className='clickable' key={ form }>{
-                            React.createElement(this.props.factLinkComponent, 
-                                { 
-                                    fact: word.word.inflection.getFact(form),
-                                    context: word
-                                }, 
-                                word.word.inflect(form).jp)
-                        }</div>
-                    }}
+                    renderForm={ renderWordInflection(word.word, this.props.corpus, 
+                        (inflectedWord, form, factIndex) => {
+                            return <div className='clickable' key={ form }>{
+                                React.createElement(this.props.factLinkComponent, 
+                                    { 
+                                        fact: word.word.inflection.getFact(form),
+                                        context: word
+                                    }, 
+                                    word.word.inflect(form).jp)
+                            }</div>
+                        })
+                    }
                     />
             </div>
     }
@@ -577,7 +580,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
             scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
 
             scores = downscoreRepeatedWord(scores, matchWord)
-            scores = topScores(scores, 6)
+            scores = topScores(scores, 12)
         }
         else {
             scores = []

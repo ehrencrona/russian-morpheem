@@ -84,6 +84,7 @@ body.guide {
 }
 
 $h3PaddingBottom: 3px;
+$sectionMargin: 2em;
 
 .guide {
     font-weight: 400;
@@ -101,7 +102,7 @@ $h3PaddingBottom: 3px;
         @extend .smallFont;
         padding-bottom: $h3PaddingBottom;
         border-bottom: 1px solid gray;
-        margin-top: 1em;
+        margin-top: $sectionMargin;
         margin-bottom: 1em;
     }
     
@@ -312,6 +313,7 @@ $h3PaddingBottom: 3px;
     
     .inflections {
         table {
+            margin-top: $sectionMargin - 1em;
             border-collapse: collapse;
             width: 100%;
 
@@ -345,6 +347,25 @@ $h3PaddingBottom: 3px;
                     padding: 0.5em 4 * $unit;  
                 }
                 
+                .otherForm {
+                    @extend .smallFont;
+
+                    .caseName {
+                        text-align: center;
+                        display: block;
+                    }
+                }
+
+                .otherForm.nonCase {
+                    @extend .clickable;
+                    margin-left: $seeAlsoSize + $seeAlsoMargin;
+                    text-indent: -($seeAlsoSize + $seeAlsoMargin);
+                }
+
+                .otherForm.nonCase::before {
+                    @extend .seeAlso;
+                }
+
                 .clickable {
                     white-space: nowrap;
                 }
@@ -352,6 +373,12 @@ $h3PaddingBottom: 3px;
                 .clickable::before {
                     @extend .seeAlso;
                 }
+            }
+        }
+        
+        table.otherForms {
+            td {
+                vertical-align: top;
             }
         }
     }

@@ -161,7 +161,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
             })
 
         scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
-        scores = topScores(scores, 6)
+        scores = topScores(scores, 12)
 
         let matches = scores.map(score => matchBySentenceId.get(score.sentence.id))
 

@@ -215,7 +215,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let title = corpus.factoids.getFactoid(form).name || form.name
 
-        let showFormation = form.pos && INFLECTION_FORMS[form.pos]
+        let showFormation = form.pos && INFLECTION_FORMS[form.pos] && form.pos != PoS.PRONOUN
 
         let showUsage = form != WORD_FORMS['n'] && form != WORD_FORMS['v'] && form != WORD_FORMS['adj'] 
 
@@ -330,7 +330,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             scores = downscoreRepeatedWord(scores, 
                 (word) => word instanceof InflectedWord && form.matches(FORMS[word.form]))
 
-            scores = topScores(scores, 6)
+            scores = topScores(scores, 12)
         }
         else {
             scores = []

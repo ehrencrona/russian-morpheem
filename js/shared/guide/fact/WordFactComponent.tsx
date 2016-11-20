@@ -37,6 +37,7 @@ import Word from '../../../shared/Word'
 import AnyWord from '../../../shared/AnyWord'
 
 import InflectionTableComponent from '../../../shared/guide/InflectionTableComponent'
+import { renderWordInflection } from '../../../shared/guide/InflectionTableComponent'
 import StudyToken from '../../study/StudyToken'
 import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'
@@ -97,7 +98,7 @@ export default class WordFactComponent extends Component<Props, State> {
 
             scores = downscoreRepeatedWord(scores, w => w instanceof InflectedWord && w.word == word)
 
-            scores = topScores(scores, 6)
+            scores = topScores(scores, 12)
         }
         else {
             scores = []
@@ -299,10 +300,11 @@ export default class WordFactComponent extends Component<Props, State> {
                     <div className='main'>
                         <InflectionTableComponent
                             corpus={ props.corpus }
-                            inflection={ word.inflection }
-                            word={ word }
+                            pos={ word.wordForm.pos }
+                            mask={ word.mask }
                             factLinkComponent={ props.factLinkComponent }
-                            renderForm={ (inflectedWord, form, factIndex) => {
+                            renderForm={ renderWordInflection(word, this.props.corpus, 
+                                (inflectedWord, form, factIndex) => {
                                 return <div className='clickable' key={ form }>{
                                     React.createElement(props.factLinkComponent, 
                                         { 
@@ -311,7 +313,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                         }, 
                                         (word as InflectableWord).inflect(form).jp) 
                                     }</div>
-                            }}
+                            })}
                             title={ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
                                 (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }
                             />

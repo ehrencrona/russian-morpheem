@@ -246,6 +246,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                         dimensions={ [ 
                                             new PhrasePrepositionDimension(this.props.factLinkComponent)
                                         ] }
+                                        itemsPerCategoryLimit={ 3 }
                                     />
                                 </div>
                                 :
@@ -333,6 +334,59 @@ export default class InflectionFormComponent extends Component<Props, State> {
                             )
                         }
                     </ul>
+
+                    {
+                        
+                    }
+
+                    <h3>Other forms</h3> 
+
+                    {
+                                
+                        [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB ].filter(pos => 
+                            !!INFLECTION_FORMS[pos].allForms
+                                .find(oneForm => form.equals(FORMS[oneForm])))
+                        .map(pos =>
+                            <div key={ pos }>
+                                <InflectionTableComponent
+                                    title={ POS_LONG_NAMES[pos] }
+                                    corpus={ corpus }
+                                    mask={ () => true }
+                                    pos={ pos }
+                                    className='otherForms'
+                                    renderForm={ 
+                                        (form) => {
+                                            let grammarCase = FORMS[form].grammaticalCase
+                                            let content
+
+                                            if (grammarCase) {
+                                                content = 
+                                                <div className='otherForm'>{
+                                                    <div className={ 'caseName ' + CASES[grammarCase] }>{                                                    
+                                                        FORMS[form].name.toUpperCase().split(' ').reduce((lines, line) =>
+                                                            lines.concat(line, <br/>), [] )
+                                                    }</div>
+                                                }</div>
+                                            }
+                                            else {
+                                                content = 
+                                                    <div className='otherForm nonCase'>{
+                                                        FORMS[form].name.split(' ').reduce((lines, line) =>
+                                                            lines.concat(line, <br/>), [] )
+                                                    }</div>
+                                            }
+
+                                            return React.createElement(
+                                                this.props.factLinkComponent,
+                                                { fact: FORMS[form] },
+                                                 content)
+                                        }
+                                    }
+                                />
+                            </div>
+                        )
+                    }
+
                 </div>
                 { related.length ?
                     <div className='sidebar'>
@@ -379,7 +433,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             scores = downscoreRepeatedWord(scores, 
                 (word) => word instanceof InflectedWord && form.matches(FORMS[word.form]))
 
-            scores = topScores(scores, 6)
+            scores = topScores(scores, 12)
         }
         else {
             scores = []

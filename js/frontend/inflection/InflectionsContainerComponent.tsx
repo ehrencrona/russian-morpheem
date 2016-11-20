@@ -8,6 +8,7 @@ import InflectedWord from '../../shared/InflectedWord'
 import InflectableWord from '../../shared/InflectableWord'
 import Inflection from '../../shared/inflection/Inflection'
 import InflectionTableComponent from '../../shared/guide/InflectionTableComponent'
+import { renderWordInflection } from '../../shared/guide/InflectionTableComponent'
 
 import Tab from '../OpenTab'
 import openFact from '../fact/openFact'
@@ -53,11 +54,11 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
     render() {
 
         return <InflectionTableComponent 
-            corpus={ this.props.corpus } 
-            inflection={ this.props.inflection } 
-            word={ this.props.word }
-            hideForms={ this.props.hideForms }
-            renderForm={ (inflected, form, factIndex) => {
+            corpus={ this.props.corpus }
+            pos={ this.props.inflection.wordForm.pos } 
+            mask={ this.props.word ? this.props.word.mask : (form) => !this.props.hideForms[form] }
+            renderForm={ renderWordInflection(this.props.word, this.props.corpus, 
+                (inflected, form, factIndex) => {
                 let className = 'form'
 
                 if (factIndex < MISSING_INDEX) {
@@ -76,7 +77,7 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
                         </div>
                     </div>
                 }
-            }
+            })
         } />
     }
 }
