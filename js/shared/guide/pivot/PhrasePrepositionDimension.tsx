@@ -40,13 +40,25 @@ export default class PhrasePrepositionDimension implements PivotDimension<AnyWor
             return null
         }
 
+        let en = []
+
+        for (let i = 0; i < value.getTranslationCount(); i++) {
+            en.push(value.getEnglish('', i))
+        }
+
         return <ul key={ value.getId() }>
             <li className='related clickable'>{
                 React.createElement(
                     this.factLinkComponent, {
                         fact: value.getWordFact()
                     },
-                    value.toText()
+                    [
+                        <div key='jp' className='jp'>{ value.toText() }</div>,
+                        <div key='en' className='en'>{ 
+                            en.join(', ')
+                        }</div>
+                    ]
+                    
                 )
             }</li>
         </ul>

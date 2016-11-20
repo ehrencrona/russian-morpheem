@@ -84,7 +84,7 @@ body.guide {
 }
 
 $h3PaddingBottom: 3px;
-$sectionMargin: 2em;
+$sectionMargin: 1em;
 
 .guide {
     font-weight: 400;
@@ -447,22 +447,22 @@ $sectionMargin: 2em;
             }
         }
 
-        .seeAll {
-            @extend .clickable;
-            color: $clickableColor;
-            @extend .smallFont;
-            margin-top: 0.5em;
-
-            &:hover {
-                color: darken($clickableColor, 20%);
-            }
-        }
-
         ul.phrases {
             .clickable::before {
                 @extend .seeAlso;
             }
         } 
+    }
+
+    .seeAll {
+        @extend .clickable;
+        color: $clickableColor;
+        @extend .smallFont;
+        margin-top: 0.5em;
+
+        &:hover {
+            color: darken($clickableColor, 20%);
+        }
     }
 
     .wordForm {

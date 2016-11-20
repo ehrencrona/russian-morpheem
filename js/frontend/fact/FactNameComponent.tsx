@@ -1,3 +1,4 @@
+import { InflectionForm } from '../../shared/inflection/InflectionForm';
 import { NamedWordForm } from '../../shared/inflection/WordForm';
 
 
@@ -57,11 +58,14 @@ export default class FactNameComponent extends Component<Props, State> {
                 <span className='form'>{ fact.form }</span>
             </span>
         }
-        else if (fact instanceof Phrase) {
-            return <span>{ (fact.description || fact.getId()) + ': ' + fact.en }</span>
+        else if (fact instanceof InflectionForm) {
+            return <span>{ fact.id + ': ' + fact.name }</span>
         }
         else if (fact instanceof NamedWordForm) {
             return <span>{ fact.id + ': ' + fact.name }</span>
+        }
+        else if (fact instanceof Phrase) {
+            return <span>{ (fact.description || fact.getId()) + ': ' + fact.en }</span>
         }
         else {
             let name = fact.getId()
