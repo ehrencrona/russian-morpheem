@@ -494,7 +494,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let components = FORMS[form].getComponents()
 
         let inflectionFact = inflection.getFact(form)
-        let related = (inflectionFact.required || []).concat(components)
+        let related = (inflectionFact.required || []).concat(FORMS[form]).concat(components)
 
         let sentences = this.getSentences(this.props.inflection)
 

@@ -112,10 +112,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
     }
 
     renderFormation() {
-        if (!this.props.form.pos || !INFLECTION_FORMS[this.props.form.pos]) {
-            return null
-        }
-
         let defaultForm = INFLECTION_FORMS[this.props.form.pos].allForms[0]
 
         let inflections = this.mostCommonInflections(this.props.form, defaultForm)
@@ -158,7 +154,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 data={
                     facts
                 }
-                filterLimit={ filterLimit }
+                hideCategoryLimit={ 1 }
+                itemsPerCategoryLimit={ 3 } 
             />
         </div>
     }
@@ -166,19 +163,20 @@ export default class InflectionFormComponent extends Component<Props, State> {
     renderPhrases() {
         let props = this.props
 
-        if (props.form.pos != PoS.PREPOSITION) {
-            return
+        if (props.form.pos == PoS.PREPOSITION) {
+            return <PivotTableComponent
+                corpus={ props.corpus }
+                data={ props.corpus.phrases.all() }
+                factLinkComponent={ props.factLinkComponent }
+                itemsPerCategoryLimit={ 1 }
+                dimensions={ [ 
+                    new PhraseCaseDimension(props.factLinkComponent), 
+                    new PhrasePrepositionDimension(props.factLinkComponent), 
+                ] }
+            />
         }
 
-        return <PivotTableComponent
-            corpus={ props.corpus }
-            data={ props.corpus.phrases.all() }
-            factLinkComponent={ props.factLinkComponent }
-            dimensions={ [ 
-                new PhraseCaseDimension(props.factLinkComponent), 
-                new PhrasePrepositionDimension(props.factLinkComponent), 
-            ] }
-        />
+        return null
     }
 
     getRelatedForms() {
@@ -217,6 +215,10 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let title = corpus.factoids.getFactoid(form).name || form.name
 
+        let showFormation = form.pos && INFLECTION_FORMS[form.pos]
+
+        let showUsage = form != WORD_FORMS['n'] && form != WORD_FORMS['v'] && form != WORD_FORMS['adj'] 
+
         return <div className='wordForm'>
             <h1>{ title }</h1>
             <div className='columns'>
@@ -230,50 +232,58 @@ export default class InflectionFormComponent extends Component<Props, State> {
                     }
 
                     {
-                        this.renderFormation()
-                    }
-                    {
-                        this.renderPhrases()
+                        showFormation 
+                        ? this.renderFormation()
+                        : (this.props.form.pos != PoS.PREPOSITION ?
+                            <div>
+                                <h3>Common Words</h3>
+
+                                { !this.state.allWords ?
+                                    <div>
+                                        Examples of some important { form.name.toLowerCase() }:
+                                        
+                                        <div className='seeAll' onClick={ () => this.setState({ allWords : true })}>See all</div>
+                                    </div>
+                                    : 
+                                    <div>
+                                        These are all { form.name.toLowerCase() } up to a lower intermediate level.
+                                        
+                                        <div className='seeAll' onClick={ () => this.setState({ allWords : false })}>See all</div>
+                                    </div>
+                                }
+
+                                <ul>{
+                                    this.getWords().map(word => renderRelatedFact(word, this.props.corpus, this.props.factLinkComponent))
+                                }</ul>
+                            </div>
+                            :
+                            this.renderPhrases())
                     }
 
-                    <h3>Common Words</h3>
-
-                    { !this.state.allWords ?
+                    { showUsage ?
                         <div>
-                            Examples of some important { form.name.toLowerCase() }:
-                            
-                            <div className='seeAll' onClick={ () => this.setState({ allWords : true })}>See all</div>
+                            <h3>Examples of usage</h3>
+
+                            <ul className='sentences'>
+                                {
+                                    (sentences || []).map(sentence => 
+                                        <li key={ sentence.sentence.id }>
+                                            {
+                                                React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
+                                                    <div dangerouslySetInnerHTML={ { __html: 
+                                                        tokensToHtml(sentence.tokens)
+                                                    }}/>)
+                                            }
+                                            <div className='en' dangerouslySetInnerHTML={ { __html: 
+                                                highlightTranslation(sentence) } }/>
+                                        </li>
+                                    )
+                                }
+                            </ul>
                         </div>
-                        : 
-                        <div>
-                            These are all { form.name.toLowerCase() } up to a lower intermediate level.
-                            
-                            <div className='seeAll' onClick={ () => this.setState({ allWords : false })}>See all</div>
-                        </div>
+                        :
+                        null
                     }
-
-                    <ul>{
-                        this.getWords().map(word => renderRelatedFact(word, this.props.corpus, this.props.factLinkComponent))
-                    }</ul>
-
-                    <h3>Examples of usage</h3>
-
-                    <ul className='sentences'>
-                        {
-                            (sentences || []).map(sentence => 
-                                <li key={ sentence.sentence.id }>
-                                    {
-                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
-                                            <div dangerouslySetInnerHTML={ { __html: 
-                                                tokensToHtml(sentence.tokens)
-                                            }}/>)
-                                    }
-                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                        highlightTranslation(sentence) } }/>
-                                </li>
-                            )
-                        }
-                    </ul>
                 </div>
                 { related.length ?
                     <div className='sidebar'>

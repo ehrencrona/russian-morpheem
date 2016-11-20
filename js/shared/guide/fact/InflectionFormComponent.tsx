@@ -39,6 +39,8 @@ import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTransl
 import PivotTableComponent from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 
+import InflectionTableComponent from '../InflectionTableComponent'
+
 import marked = require('marked')
 
 let React = { createElement: createElement }

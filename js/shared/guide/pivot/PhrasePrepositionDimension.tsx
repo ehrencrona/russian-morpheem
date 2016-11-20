@@ -40,12 +40,16 @@ export default class PhrasePrepositionDimension implements PivotDimension<AnyWor
             return null
         }
 
-        return React.createElement(
-            this.factLinkComponent, {
-                fact: value.getWordFact()
-            },
-            value.toText()
-        )
+        return <ul key={ value.getId() }>
+            <li className='related clickable'>{
+                React.createElement(
+                    this.factLinkComponent, {
+                        fact: value.getWordFact()
+                    },
+                    value.toText()
+                )
+            }</li>
+        </ul>
     }
 
 }

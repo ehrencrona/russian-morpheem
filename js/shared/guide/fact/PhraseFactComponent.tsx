@@ -15,7 +15,7 @@ import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
 import { CASES, getFormName } from '../../../shared/inflection/InflectionForms' 
-import { GrammarCase } from '../../../shared/inflection/Dimensions'
+import { GrammarCase, PartOfSpeech } from '../../../shared/inflection/Dimensions';
 import PhraseMatch from '../../../shared/phrase/PhraseMatch'
 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
@@ -104,6 +104,30 @@ export default class PhraseFactComponent extends Component<Props, State> {
         </li>
     }
 
+    getSamePrepAndCase() {
+        let phrase = this.props.phrase
+
+        let cases = phrase.getCases()
+        let words = phrase.getWords()
+        
+        let caseHash = {}
+
+        cases.forEach(grammarCase => caseHash[grammarCase] = true)
+        
+        let wordHash = {}
+
+        words.forEach(word => wordHash[word.getId()] = true)
+
+        return this.props.corpus.phrases.all().filter(phrase => {
+            if (phrase == this.props.phrase) {
+                return
+            }
+
+            return phrase.getCases().find(grammarCase => caseHash[grammarCase]) &&
+                phrase.getWords().find(word => wordHash[word.getId()])
+        })
+    }
+
     render() {
         let phrase = this.props.phrase
         let corpus = this.props.corpus
@@ -149,8 +173,10 @@ export default class PhraseFactComponent extends Component<Props, State> {
                 : 
                 []))
             .concat(this.props.phrase.getWords().map(word => word.getWordFact()))
- 
+
         let phraseSeoText = getPhraseSeoText(phrase)
+    
+        let similarPhrases = this.getSamePrepAndCase()
 
         return <div>
             <h1>"{ phrase.description }"</h1>
@@ -201,6 +227,23 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
                         : null
                     }
+
+                    { 
+                        similarPhrases.length ?
+                        <div>
+                            <h3>Similar Phrase</h3>
+
+                            <ul> {
+                                similarPhrases
+                                    .map(fact => 
+                                        renderRelatedFact(fact, corpus, this.props.factLinkComponent)) 
+                            }
+                            </ul>
+                        </div>
+                        :
+                        null
+                    }
+
                 </div>
             </div>
         </div>
