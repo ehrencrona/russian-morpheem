@@ -132,7 +132,7 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
     }
 
     if (toForm == null || fromForm == null) {
-        console.error('No form for derivation ' + derivation)
+        console.error('No form for derivation ' + derivation + ' or ' + reverseDerivation)
         return
     }
 
@@ -143,7 +143,7 @@ function addDerivation(fromForm: NamedWordForm, toForm: NamedWordForm, derivatio
     REVERSE_DERIVATION[reverseDerivation] = derivation
 }
 
-addDerivation(WORD_FORMS['nonreflex'], WORD_FORMS['reflex'], 'reflex', 'nonreflex')
+addDerivation(WORD_FORMS['v'], WORD_FORMS['reflex'], 'reflex', 'nonreflex')
 addDerivation(WORD_FORMS['imperf'], WORD_FORMS['perf'], 'perf', 'imperf')
 addDerivation(WORD_FORMS['adj'], WORD_FORMS['adjneg'], 'neg', 'pos')
 addDerivation(WORD_FORMS['adj'], WORD_FORMS['adv'], 'adv', 'adj')

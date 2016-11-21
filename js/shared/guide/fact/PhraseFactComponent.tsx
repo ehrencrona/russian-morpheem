@@ -231,7 +231,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     { 
                         similarPhrases.length ?
                         <div>
-                            <h3>Similar Phrase</h3>
+                            <h3>Similar Phrases</h3>
 
                             <ul> {
                                 similarPhrases

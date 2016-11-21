@@ -1,6 +1,3 @@
-// somehow this one reference makes all the components in this folder work.
-// excluding it currently makes the import 'react' fail in the entire folder. 
-/// <reference path="../../../typings/index.d.ts" />
 
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
@@ -52,7 +49,6 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
     }
 
     render() {
-
         return <InflectionTableComponent 
             corpus={ this.props.corpus }
             pos={ this.props.inflection.wordForm.pos } 
@@ -66,12 +62,12 @@ export default class InflectionsContainerComponent extends Component<Props, Stat
 
                     return <div key={ form } className={ className } onClick={ 
                         () => this.onSelect(form) }>
-                        { inflected } 
+                        { inflected.toText() } 
                         <div className='index'><div className='number'>{ factIndex + 1 }</div></div>
                     </div>
                 }
                 else {
-                    return <div key={ form } className={ className }>{ inflected }
+                    return <div key={ form } className={ className }>{ inflected.toText() }
                         <div className='add' onClick={ () => this.addFact(form) }>
                             <div className='number'>add</div>
                         </div>

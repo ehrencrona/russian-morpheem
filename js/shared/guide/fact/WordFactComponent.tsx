@@ -311,7 +311,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                             fact: (word as InflectableWord).inflection.getFact(form), 
                                             context: (word as InflectableWord).inflect(form) 
                                         }, 
-                                        (word as InflectableWord).inflect(form).jp) 
+                                        (word as InflectableWord).inflect(form).toString()) 
                                     }</div>
                             })}
                             title={ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
