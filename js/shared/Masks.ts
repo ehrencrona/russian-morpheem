@@ -24,7 +24,7 @@ MASKS[PoS.ADJECTIVE] = {
     allbutpl: (form) => !pl(form),
     allbutadv: (form) => form != 'adv',
     allbutadvandcomp: (form) => form != 'adv' && form != 'comp',
-    allbutplandadv: (form) => !pl(form) && form != 'adv'
+    allbutplandadv: (form) => !pl(form) && form != 'adv',
 }
 
 MASKS[PoS.NUMBER] = {
@@ -42,7 +42,8 @@ MASKS[PoS.VERB] = {
     sg: (form) => form.substr(form.length-2) != 'pl' && form != 'inf',
     past: (form) => form.substr(0, 4) == 'past',
     impr: (form) => form.substr(0, 4) == 'impr',
-    non_impr: (form) => form.substr(0, 4) !== 'impr'
+    non_impr: (form) => form.substr(0, 4) !== 'impr',
+    allbut3rdsg: (form) => form != '3' && form != 'pastn' && form != 'inf',
 }
 
 export default MASKS

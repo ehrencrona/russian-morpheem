@@ -886,12 +886,7 @@ export default class PhrasePattern {
                             result = words.wordsByString[w]
 
                             if (!result) {
-                                // LEGACY code for splitting adverbs. remove
-                                result = words.ambiguousForms[w].filter(w => w instanceof InflectedWord && w.form == 'adv')[0]
-
-                                if (!result) {
-                                    throw new Error(`Word "${w}" (specified in "${originalStr}") is unknown. Did you mean ${words.getSimilarTo(w).join(', ')}?`)
-                                }
+                                throw new Error(`Word "${w}" (specified in "${originalStr}") is unknown. Did you mean ${words.getSimilarTo(w).join(', ')}?`)
                             }
                         }
 
