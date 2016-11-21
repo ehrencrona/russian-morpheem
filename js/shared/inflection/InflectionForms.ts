@@ -76,12 +76,12 @@ CASES[GrammarCase.PREP] = 'prepositional'
 CASES[GrammarCase.LOC] = 'locative'
 CASES[GrammarCase.CONTEXT] = 'context'
 
-addForm('1', 'first person (I)', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('2', 'second person (you)', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('3', 'third person (s/he, it)', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('1pl', 'first person plural (we)', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
-addForm('2pl', 'second person plural (you)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
-addForm('3pl', 'third person plural (they)', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
+addForm('1', 'I', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
+addForm('2', 'you', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
+addForm('3', 's/he, it', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
+addForm('1pl', 'we', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
+addForm('2pl', 'you (plural)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
+addForm('3pl', 'they', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
 addForm('pastm', 'masculine past', { gender: Gender.M, number: GrammarNumber.SINGULAR, tense: Tense.PAST })
 addForm('pastn', 'neuter past', { gender: Gender.N, number: GrammarNumber.SINGULAR, tense: Tense.PAST })
 addForm('pastf', 'feminine past', { gender: Gender.F, number: GrammarNumber.SINGULAR, tense: Tense.PAST })

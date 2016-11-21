@@ -9,6 +9,7 @@ import AbstractAnyWord from '../AbstractAnyWord'
 
 import capitalize from './fact/capitalize'
 
+import { PartOfSpeech as PoS, Aspect,Reflexivity } from '../inflection/Dimensions'
 import { CASES, POSES, FORMS } from '../inflection/InflectionForms'
 import InflectionForm from '../inflection/InflectionForm'
 import InflectionFact from '../inflection/InflectionFact'
@@ -137,22 +138,39 @@ export default function guidePageComponent(props: Props) {
         }
     }
     else if (fact instanceof AbstractAnyWord) {
+        let translations = []
+
+        let translationIndex = 0
+        let translation
+        
+        while (translation = fact.getEnglish('', translationIndex)) {
+            translations.push(translation)
+            translationIndex++
+        }
+
         if (!title) {
-            let translations = []
+            if (fact.wordForm.pos == PoS.VERB) {
+                title = `${fact.toText()} – ` 
+                    + translations.map(t => `"${t}"`).join(', ')
+                    + ` – conjugation and meaning`
 
-            let translationIndex = 0
-            let translation
-            
-            while (translation = fact.getEnglish('', translationIndex)) {
-                translations.push(translation)
-                translationIndex++
+            }  
+            else {
+                title = 'Meaning of ' 
+                    + fact.toText() 
+                    + ' in Russian: ' 
+                    + translations.map(t => `"${t}"`).join(', ') 
             }
+        }
 
-            title =
-                'Meaning of ' 
-                + fact.toText() 
-                + ' in Russian: ' 
-                + translations.map(t => `"${t}"`).join(', ') 
+        if (!description && fact.wordForm.pos == PoS.VERB) {
+            let sentences = props.corpus.sentences.getSentencesByFact(props.corpus.facts)[fact.getWordFact().getId()]
+
+            description = 
+                `${fact.toText()} is a Russian `
+                + (fact.wordForm.reflex == Reflexivity.REFLEXIVE ? 'reflexive ' : '')
+                + (fact.wordForm.aspect == Aspect.PERFECTIVE ? 'perfective' : 'imperfective')
+                + ` verb meaning "${ translations[0] }". Morpheem has ${sentences.count} examples of usage.`
         }
     }
 
