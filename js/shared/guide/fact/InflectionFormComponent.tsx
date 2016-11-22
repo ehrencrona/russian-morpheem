@@ -1,6 +1,5 @@
 import { POS_LONG_NAMES } from '../../phrase/PhrasePattern';
 
-
 import { Component, createElement } from 'react'
 import Corpus from '../../../shared/Corpus'
 
@@ -18,6 +17,7 @@ import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import topScores from '../../../shared/study/topScores'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
 import toStudyWords from '../../study/toStudyWords'
+import Sentence from '../../Sentence'
 import SentenceScore from '../../../shared/study/SentenceScore'
 
 import WordInFormMatch from '../../../shared/phrase/WordInFormMatch'
@@ -34,9 +34,9 @@ import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
-import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation } from './exampleSentences'
 
-import PivotTableComponent from '../pivot/PivotTableComponent'
+import { FactPivotTable } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 
 import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
@@ -190,7 +190,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
     }
 
     render() {
-        let phrases = this.findPhrasesWithForm()
         let corpus = this.props.corpus
         let form = this.props.form
 
@@ -215,7 +214,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 .find(oneForm => 
                     form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
 
-        let isCase = form.equals({ grammaticalCase: form.grammaticalCase })
+        let isCase = form.isCase()
+
+        let phrases = (isCase || form.id == 'short' || form.id == 'comp') && this.findPhrasesWithForm()
 
         return <div className='inflectionForm'>
             <h1>{ title }</h1>
@@ -230,7 +231,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                     }
 
                     { 
-                        phrases.length ?
+                        phrases && phrases.length ?
                         <div>
                             <h3>Expressions</h3>
                             {
@@ -239,13 +240,14 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 <div>
                                     These are the prepositions and expressions that use the { form.name } case. 
 
-                                    <PivotTableComponent
+                                    <FactPivotTable
                                         corpus={ corpus }
                                         data={ phrases }
                                         factLinkComponent={ this.props.factLinkComponent }
                                         dimensions={ [ 
                                             new PhrasePrepositionDimension(this.props.factLinkComponent)
                                         ] }
+                                        getFactOfEntry={ (f) => f }
                                         itemsPerCategoryLimit={ 3 }
                                     />
                                 </div>
@@ -320,18 +322,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                     <ul className='sentences'>
                         {
-                            (sentences || []).map(sentence => 
-                                <li key={ sentence.sentence.id }>
-                                    {
-                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
-                                            <div dangerouslySetInnerHTML={ { __html: 
-                                                tokensToHtml(sentence.tokens)
-                                            }}/>)
-                                    }
-                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                        highlightTranslation(sentence) } }/>
-                                </li>
-                            )
+                            sentences 
                         }
                     </ul>
 
@@ -382,43 +373,50 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
-    getSentences(form: InflectionForm) {
-        let corpus = this.props.corpus
+    getPhrase(sentence: Sentence, form: InflectionForm) {
+        let result: { text: string, phrase: Phrase, en: () => string }
 
-        let sentences = this.props.corpus.sentences.sentences.filter(sentence => {
-            return !!sentence.words.find(w => w instanceof InflectedWord && form.matches(FORMS[w.form]))
-        })
-        
-        let scores
+        sentence.phrases.find(phrase => {
+            if (form.grammaticalCase && !phrase.hasCase(form.grammaticalCase)) {
+                return 
+            }
 
-        if (sentences.length) {
-            scores = sentences.map(sentence => 
-                { 
-                    return {
-                        sentence: sentence,
-                        fact: form,
-                        score: 1
-                    }    
-                })
+            let m = phrase.match({ words: sentence.words, sentence: sentence, facts: this.props.corpus.facts })
 
-            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
+            if (m && m.words.find(w => { let word = w.word; return word instanceof InflectedWord && form.matches(FORMS[word.form]) })) {
+                result = {
+                    text: m.words.map(w => w.word.toString()).join(' '),
+                    phrase: phrase,
+                    en: () => m.pattern.getEnglishFragments().map(frag => frag.en(m)).join(' '),
+                }
 
-            scores = downscoreRepeatedWord(scores, 
-                (word) => word instanceof InflectedWord && form.matches(FORMS[word.form]))
-
-            scores = topScores(scores, 12)
-        }
-        else {
-            scores = []
-        }
-
-        let ignorePhrases = true
-
-        return scores.map(s => {
-            return {
-                sentence: s.sentence,
-                tokens: toStudyWords(s.sentence, [ form ], this.props.corpus, ignorePhrases)
+                return true
             }
         })
+
+        return result
     }
+
+    renderSentences(sentences: Sentence[]) {
+        return sentences.map(sentence => {
+            let ignorePhrases = true
+
+            let tokenized = {
+                sentence: sentence,
+                tokens: toStudyWords(sentence, [ this.props.form ], this.props.corpus, ignorePhrases)
+            }
+
+            return <li key={ sentence.id }>
+                    {
+                        React.createElement(this.props.factLinkComponent, { fact: sentence }, 
+                            <div dangerouslySetInnerHTML={ { __html: 
+                                tokensToHtml(tokenized.tokens)
+                            }}/>)
+                    }
+                    <div className='en' dangerouslySetInnerHTML={ { __html: 
+                        highlightTranslation(tokenized) } }/>
+                </li>
+        })
+    }
+
 }

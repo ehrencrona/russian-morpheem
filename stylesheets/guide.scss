@@ -11,6 +11,13 @@ $seeAlsoMargin: 0.1em;
 $color2: #2CAAA9;
 $lowerColor: lighten($color2, 40%);
 
+$genitiveColor: #53bab4;
+$dativeColor: #957cd7;
+$accusativeColor: #63a1ca;
+$instrumentalColor: #c6cd1f;
+$prepositionalColor: #e464a8;
+$otherCaseColor: #6a6766;
+
 body.sentence {
 
     /* This makes the page as wide as the widest of its children. see 
@@ -147,6 +154,73 @@ $sectionMargin: 1em;
         }
     }
 
+    .exampleSentences {
+        .phraseGroup {
+            display: inline-flex;
+            flex-direction: row;
+
+            font-family: 'Rubik';
+            font-weight: 400;
+
+            color: $otherCaseColor;
+            border: 1px solid $otherCaseColor;
+
+            > div {
+                padding: 1px 3px;
+            }
+
+            .jp {
+                color: white;
+                background-color: $otherCaseColor;
+            }
+
+            &.genitive {
+                color: $genitiveColor;
+                border: 1px solid $genitiveColor;
+
+                .jp {
+                    background-color: $genitiveColor;
+                }
+            }
+
+            &.dative {
+                color: $dativeColor;
+                border: 1px solid $dativeColor;
+
+                .jp {
+                    background-color: $dativeColor;
+                }
+            }
+
+            &.accusative {
+                color: $accusativeColor;
+                border: 1px solid $accusativeColor;
+
+                .jp {
+                    background-color: $accusativeColor;
+                }
+            }
+
+            &.instrumental {
+                color: $instrumentalColor;
+                border: 1px solid $instrumentalColor;
+
+                .jp {
+                    background-color: $instrumentalColor;
+                }
+            }
+
+            &.prepositional {
+                color: $prepositionalColor;
+                border: 1px solid $prepositionalColor;
+
+                .jp {
+                    background-color: $prepositionalColor;
+                }
+            }
+        }
+    }
+
     ul.sentences {
         li {
             .match {
@@ -159,7 +233,6 @@ $sectionMargin: 1em;
                 font-size: $smallFont;
             }
         }
-
     }
 
     li.related {
@@ -270,7 +343,7 @@ $sectionMargin: 1em;
             display: inline-block;
             font-family: Rubik;
 
-            background-color: #6a6766;
+            background-color: $otherCaseColor;
 
             color: white;
             font-weight: 300;
@@ -286,23 +359,23 @@ $sectionMargin: 1em;
             cursor: pointer;
 
             &.genitive {
-                background-color: #53bab4;
+                background-color: $genitiveColor;
             }
 
             &.dative {
-                background-color: #957cd7;
+                background-color: $dativeColor;
             }
 
             &.accusative {
-                background-color: #63a1ca;
+                background-color: $accusativeColor;
             }
 
             &.instrumental {
-                background-color: #c6cd1f;
+                background-color: $instrumentalColor;
             }
 
             &.prepositional {
-                background-color: #e464a8;
+                background-color: $prepositionalColor;
             }
 
             &:hover {

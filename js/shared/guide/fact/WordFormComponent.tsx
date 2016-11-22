@@ -29,7 +29,7 @@ import renderRelatedFact from './renderRelatedFact';
 import marked = require('marked');
 import { Component, createElement } from 'react';
 import Corpus from '../../../shared/Corpus'
-import PivotTableComponent from '../pivot/PivotTableComponent'
+import { FactPivotTable } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
@@ -123,7 +123,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             return null
         }
 
-        let dimensions: PivotDimension<any>[] = 
+        let dimensions: PivotDimension<Fact, any>[] = 
             [ new WordDefaultEndingDimension(this.props.factLinkComponent, 1) ]
 
         let facts =
@@ -137,7 +137,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             facts = facts.filter(w => w instanceof InflectableWord && !!w.inflect('nom'))
 
             if (!this.props.form.gender) {
-                dimensions = [ new NounGenderDimension() as PivotDimension<any> ].concat(dimensions)
+                dimensions = [ new NounGenderDimension() as PivotDimension<Fact, any> ].concat(dimensions)
             }
         }
 
@@ -148,13 +148,12 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
             <div>Most common endings:</div>
  
-            <PivotTableComponent
+            <FactPivotTable
                 corpus={ this.props.corpus }
+                data={ facts }
                 dimensions={ dimensions }
                 factLinkComponent={ this.props.factLinkComponent }
-                data={
-                    facts
-                }
+                getFactOfEntry={ (f) => f }
                 hideCategoryLimit={ 1 }
                 itemsPerCategoryLimit={ 3 } 
             />
@@ -165,8 +164,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let props = this.props
 
         if (props.form.pos == PoS.PREPOSITION) {
-            return <PivotTableComponent
+            return <FactPivotTable
                 corpus={ props.corpus }
+                getFactOfEntry={ (f) => f }
                 data={ props.corpus.phrases.all() }
                 factLinkComponent={ props.factLinkComponent }
                 itemsPerCategoryLimit={ 1 }

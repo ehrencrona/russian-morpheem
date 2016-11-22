@@ -202,7 +202,8 @@ export function parseFactFile(data, inflections: Inflections, lang: string): [Fa
                     }
                 }
                 else {
-                    throw new Error(`Unknown word form ${text}.`)
+                    throw new Error(`Unknown word form ${text}.` + 
+                        '\n    at (/projects/morpheem-jp/public/corpus/russian/facts.txt:' + lineIndex + ':1)')
                 }
             }
             // TODO: legacy. delete once server is updated.

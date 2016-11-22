@@ -45,14 +45,14 @@ import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 
-import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation } from './exampleSentences'
 
 import FactLinkComponent from './FactLinkComponent'
 import renderRelatedFact from './renderRelatedFact'
 
 import marked = require('marked')
 
-import PivotTableComponent from '../pivot/PivotTableComponent'
+import { FactPivotTable } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 
@@ -208,9 +208,10 @@ export default class WordFactComponent extends Component<Props, State> {
 
                 { props.word.toText() } is used in the following phrases with the following cases:
 
-                <PivotTableComponent
+                <FactPivotTable
                     corpus={ props.corpus }
                     data={ phrasesWithWord }
+                    getFactOfEntry={ (f) => f }
                     factLinkComponent={ props.factLinkComponent }
                     dimensions={ [ 
                         new PhraseCaseDimension(props.factLinkComponent), 
@@ -337,4 +338,20 @@ export default class WordFactComponent extends Component<Props, State> {
             }
         </div>
     }
+}
+
+export function sortByKnowledge(facts: Fact[], knowledge: NaiveKnowledge) {
+    let known: Fact[] = []
+    let unknown: Fact[] = []
+
+    facts.forEach(fact => {
+        if (knowledge.getKnowledge(fact) == Knowledge.KNEW) {
+            known.push(fact)
+        }
+        else {
+            unknown.push(fact)
+        }
+    })
+
+    return known.concat(unknown)
 }

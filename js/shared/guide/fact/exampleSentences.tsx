@@ -1,10 +1,14 @@
+import { Match } from '../../phrase/Match';
 import { PUNCTUATION, PUNCTUATION_NOT_PRECEDED_BY_SPACE } from '../../Punctuation';
 import InflectableWord from '../../../shared/InflectableWord'
 import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
 
 import Inflection from '../../../shared/inflection/Inflection'
+import InflectionForm from '../../../shared/inflection/InflectionForm'
+import FORMS from '../../../shared/inflection/InflectionForms'
 import Sentence from '../../../shared/Sentence'
+import Corpus from '../../../shared/Corpus'
 
 import SentenceScore from '../../../shared/study/SentenceScore'
 import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
@@ -23,6 +27,9 @@ import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'
 
 import StudyFact from '../../study/StudyFact'
+import { Component, createElement } from 'react'
+
+let React = { createElement: createElement }
 
 export interface TokenizedSentence {
     sentence: Sentence,
@@ -110,20 +117,4 @@ export function highlightTranslation(sentence: TokenizedSentence) {
     })
 
     return result
-}
-
-export function sortByKnowledge(facts: Fact[], knowledge: NaiveKnowledge) {
-    let known: Fact[] = []
-    let unknown: Fact[] = []
-
-    facts.forEach(fact => {
-        if (knowledge.getKnowledge(fact) == Knowledge.KNEW) {
-            known.push(fact)
-        }
-        else {
-            unknown.push(fact)
-        }
-    })
-
-    return known.concat(unknown)
 }

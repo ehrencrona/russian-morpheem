@@ -105,6 +105,10 @@ export class InflectionForm extends AbstractFact implements InflectionCoordinate
 
         return !FORM_PROPS.find(mismatch)
     }
+
+    isCase() {
+        return this.grammaticalCase && this.equals({ grammaticalCase: this.grammaticalCase })
+    }
 }
 
 export default InflectionForm 

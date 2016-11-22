@@ -1,10 +1,10 @@
 
 import Fact from '../../fact/Fact'
 
-export interface PivotDimension<V> {
+export interface PivotDimension<PivotEntry, V> {
     getKey(value: V): string|number
 
-    getValues(fact: Fact): V[]
+    getValues(fact: PivotEntry): V[]
 
     renderValue(value: V)
 

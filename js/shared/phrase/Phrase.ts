@@ -29,7 +29,7 @@ export interface JsonFormat {
 export default class Phrase extends AbstractFact {
     description: string = ''
     en: string = ''
-    casesCache: PhraseCase[]
+    casesCache: GrammarCase[]
     corpus: Corpus
 
     // whether there are any study words. 
@@ -96,34 +96,11 @@ export default class Phrase extends AbstractFact {
     }
 
     hasCase(grammaticalCase: GrammarCase): boolean {
-        return !!this.patterns.find((pattern) => pattern.hasCase(grammaticalCase))
+        return this.getCases().indexOf(grammaticalCase) >= 0
     }
 
-    // todo: join with getCases()? note that the semantics are slightly different: getCases requires
-    // the case in all phrases and this only in any.
     getCaseFacts() {
-        if (!this.casesCache) {
-            this.casesCache = []
-
-            let allCases = {}
-            this.patterns.forEach((p) => p.wordMatches.forEach((m) => {
-                if (m.isCaseStudy()) {
-                    let grammaticalCase = ((m as any) as CaseStudyMatch).getCaseStudied()
-
-                    if (grammaticalCase == GrammarCase.CONTEXT) {
-                        return
-                    }
-
-                    if (!allCases[grammaticalCase]) {
-                        allCases[grammaticalCase] = true
-
-                        this.casesCache.push(this.getCaseFact(grammaticalCase))
-                    }
-                }
-            }))
-        }
-
-        return this.casesCache
+        return this.getCases().map(c => this.getCaseFact(c))
     }
 
     getCaseFact(grammaticalCase: GrammarCase): PhraseCase {
@@ -160,34 +137,38 @@ export default class Phrase extends AbstractFact {
     }
 
     getCases(): GrammarCase[] {
-        let phrase = this
+        if (!this.casesCache) {
+            let phrase = this
 
-        let allCases: Set<GrammarCase>
+            let allCases: Set<GrammarCase>
 
-        phrase.patterns.forEach((pattern) => {
-            let patternCases = pattern.getAnyCase()
+            phrase.patterns.forEach((pattern) => {
+                let patternCases = pattern.getAnyCase()
 
-            if (patternCases.size == 0 && 
-                pattern.wordMatches.length == 1 && 
-                pattern.wordMatches[0] instanceof PhraseMatch) {
-                return
-            }
+                if (patternCases.size == 0 && 
+                    pattern.wordMatches.length == 1 && 
+                    pattern.wordMatches[0] instanceof PhraseMatch) {
+                    return
+                }
 
-            if (!allCases) {
-                allCases = patternCases
-            }
-            else {
-                allCases.forEach((grammaticalCase) => {
-                    if (!patternCases.has(grammaticalCase)) {
-                        allCases.delete(grammaticalCase)
-                    }
-                })
-            }
-        })
+                if (!allCases) {
+                    allCases = patternCases
+                }
+                else {
+                    allCases.forEach((grammaticalCase) => {
+                        if (!patternCases.has(grammaticalCase)) {
+                            allCases.delete(grammaticalCase)
+                        }
+                    })
+                }
+            })
 
-        allCases.delete(GrammarCase.CONTEXT)
+            allCases.delete(GrammarCase.CONTEXT)
 
-        return allCases ? Array.from(allCases) : [] 
+            this.casesCache = allCases ? Array.from(allCases) : [] 
+        }
+
+        return this.casesCache
     }
 
     setCorpus(corpus: Corpus) {

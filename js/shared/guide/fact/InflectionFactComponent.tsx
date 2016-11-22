@@ -17,7 +17,7 @@ import InflectionFact from '../../../shared/inflection/InflectionFact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
 
-import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation, sortByKnowledge } from './exampleSentences'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation } from './exampleSentences'
 
 import Fact from '../../../shared/fact/Fact'
 
