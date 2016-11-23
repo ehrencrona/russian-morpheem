@@ -143,7 +143,7 @@ export default function guidePageComponent(props: Props) {
         let translationIndex = 0
         let translation
         
-        while (translation = fact.getEnglish('', translationIndex)) {
+        while (translation = fact.getEnglish((fact.wordForm.pos == PoS.VERB ? 'inf' : ''), translationIndex)) {
             translations.push(translation)
             translationIndex++
         }
@@ -170,7 +170,11 @@ export default function guidePageComponent(props: Props) {
                 `${fact.toText()} is a Russian `
                 + (fact.wordForm.reflex == Reflexivity.REFLEXIVE ? 'reflexive ' : '')
                 + (fact.wordForm.aspect == Aspect.PERFECTIVE ? 'perfective' : 'imperfective')
-                + ` verb meaning "${ translations[0] }". Morpheem has ${sentences.count} examples of usage.`
+                + ` verb meaning "${ translations[0] }".`
+
+            if (sentences) {
+                description += ` Morpheem has ${sentences.count} examples of usage.`
+            }
         }
     }
 
