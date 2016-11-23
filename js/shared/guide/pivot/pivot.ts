@@ -120,7 +120,7 @@ export function pivot<PivotEntry>(data: PivotEntry[], dimensions: PivotDimension
         }
     })
 
-    if (hideCategoryLimit && !this.state.showAll) {
+    if (hideCategoryLimit) {
         didFilter = root.filterChildren(pivot => pivot.lineCount > hideCategoryLimit)
     }
 
