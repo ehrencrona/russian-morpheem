@@ -88,7 +88,7 @@ export abstract class AbstractAnyWord implements AnyWord {
             }
         }
 
-        if (form == 'inf') {
+        if (form == 'inf' && result) {
             result = 'to ' + result
         }
 
@@ -98,6 +98,10 @@ export abstract class AbstractAnyWord implements AnyWord {
     setEnglish(en: string, form?: string, translationIndex?: number) {
         if (!form) {
             form = ''
+        }
+
+        if (en && en.substr(0, 3) == 'to ') {
+            en = en.substr(3)
         }
 
         translationIndex = translationIndex || 0
