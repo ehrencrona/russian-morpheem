@@ -17,6 +17,7 @@ interface Props<PivotEntry> {
     getIdOfEntry: (PivotEntry) => string,
     renderEntry: (PivotEntry) => any,
     renderGroup: (entry: any, children: any, key: string) => any,
+    itemsLimit?: number
     itemsPerGroupLimit?: number,
     hideCategoryLimit?: number,
     groupLimit?: number
@@ -73,6 +74,11 @@ export default class GroupedListComponent<PivotEntry> extends Component<Props<Pi
 
         if (props.groupLimit) {
             children = children.slice(0, props.groupLimit)
+        }
+
+        if (this.props.itemsLimit) {
+            itemsPerGroupLimit = Math.max(itemsPerGroupLimit || 0, 
+                Math.ceil(this.props.itemsLimit / root.childArray().length))
         }
 
         return <div className='groupedList'>

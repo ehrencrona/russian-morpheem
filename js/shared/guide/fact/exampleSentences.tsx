@@ -353,6 +353,10 @@ export function getMatchesForWord(
 
     let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
 
+    if (!sbf[wordFactId]) {
+        return []
+    }
+
     return getMatchesForCertainWords(filterWords, filterPhrases,
         sbf[word.getWordFact().getId()], knowledge, corpus)
 }

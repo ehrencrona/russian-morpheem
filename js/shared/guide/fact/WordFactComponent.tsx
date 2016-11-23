@@ -1,3 +1,4 @@
+import { Match } from '../../phrase/Match';
 import { getFileName } from '../../../backend/route/getAudio';
 
 
@@ -50,11 +51,16 @@ import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTransl
 import FactLinkComponent from './FactLinkComponent'
 import renderRelatedFact from './renderRelatedFact'
 
-import marked = require('marked')
+import marked = require('marked');
 
 import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
+
+import GroupedListComponent from '../pivot/GroupedListComponent'
+import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
+
+import { getMatchesForWord, renderMatch } from './exampleSentences'
 
 let React = { createElement: createElement }
 
@@ -166,6 +172,35 @@ export default class WordFactComponent extends Component<Props, State> {
         }
     }
 
+    getSentences() {
+        let corpus = this.props.corpus
+        let word = this.props.word
+
+        let matches = getMatchesForWord(word, this.props.knowledge, corpus)
+
+        class MatchListComponent extends GroupedListComponent<Match> {
+        }
+
+        let dimensions = [ 
+            new MatchPhraseDimension(),
+            new MatchTextDimension(true) 
+        ]
+
+        return <MatchListComponent
+            data={ matches }
+            getIdOfEntry={ (match) => match.sentence.id }
+            dimensions={ dimensions }
+            renderEntry={ renderMatch(word.getWordFact(), corpus, this.props.factLinkComponent) }
+            renderGroup={ (entry, children, key) => <div key={ key }>
+                { entry }
+                <ul className='sentences'>{ children }</ul>
+            </div> }
+            itemsPerGroupLimit={ 3 }
+            itemsLimit={ 30 }
+            groupLimit={ 10 }
+        />   
+    }
+
     render() {
         let props = this.props
         let word = props.word
@@ -263,22 +298,10 @@ export default class WordFactComponent extends Component<Props, State> {
                     }
                     <h3>Examples of usage</h3>
 
-                    <ul className='sentences'>
-                        {
-                            (this.state.sentences || []).map(sentence => 
-                                <li key={ sentence.sentence.id }>
-                                    {
-                                        React.createElement(props.factLinkComponent, { fact: sentence.sentence }, 
-                                            <div dangerouslySetInnerHTML={ { __html: 
-                                                tokensToHtml(sentence.tokens)
-                                            }}/>)
-                                    }
-                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                        highlightTranslation(sentence) } }/>
-                                </li>
-                            )
-                        }
-                    </ul>
+                    <div className='exampleSentences'>{
+                        this.getSentences()
+                    }
+                    </div>
                 </div>
                 <div className='sidebar'>
                     <div>
