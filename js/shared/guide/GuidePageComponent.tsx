@@ -143,9 +143,8 @@ export default function guidePageComponent(props: Props) {
         let translationIndex = 0
         let translation
         
-        while (translation = fact.getEnglish((fact.wordForm.pos == PoS.VERB ? 'inf' : ''), translationIndex)) {
-            translations.push(translation)
-            translationIndex++
+        for (let translationIndex = 0; translationIndex < fact.enCount; translationIndex++) {
+            translations.push(fact.getEnglish((fact.wordForm.pos == PoS.VERB ? 'inf' : '')))
         }
 
         if (!title) {
