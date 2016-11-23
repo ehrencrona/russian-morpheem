@@ -495,7 +495,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
             getIdOfEntry={ (match) => match.sentence.id }
             dimensions={ dimensions }
             renderEntry={ renderMatch(fact, corpus, this.props.factLinkComponent) }
-            renderGroup={ (entry, children) => <div>
+            renderGroup={ (entry, children, key) => <div key={ key }>
                 { entry }
                 <ul className='sentences'>{ children }</ul>
             </div> }

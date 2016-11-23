@@ -50,7 +50,7 @@ export class MatchTextDimension implements PivotDimension<Match, Text> {
             return null
         }
 
-        return <div className='phraseGroup'>
+        return <div key={ value.jp } className='phraseGroup'>
             <div className='jp'>{ value.jp }</div>
             <div className='en'>{ value.en }</div>
         </div>

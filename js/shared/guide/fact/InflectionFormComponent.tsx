@@ -221,7 +221,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             getIdOfEntry={ (match) => match.sentence.id }
             dimensions={ dimensions }
             renderEntry={ renderMatch(form, corpus, this.props.factLinkComponent) }
-            renderGroup={ (entry, children) => <div>
+            renderGroup={ (entry, children, key) => <div key={ key }>
                 { entry }
                 <ul className='sentences'>{ children }</ul>
             </div> }

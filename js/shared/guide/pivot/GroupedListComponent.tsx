@@ -16,7 +16,7 @@ interface Props<PivotEntry> {
     dimensions: PivotDimension<PivotEntry, any>[],
     getIdOfEntry: (PivotEntry) => string,
     renderEntry: (PivotEntry) => any,
-    renderGroup: (entry: any, children: any) => any,
+    renderGroup: (entry: any, children: any, key: string) => any,
     itemsPerGroupLimit?: number,
     hideCategoryLimit?: number,
     groupLimit?: number
@@ -97,7 +97,8 @@ export default class GroupedListComponent<PivotEntry> extends Component<Props<Pi
 
                 return this.props.renderGroup(
                     dimensions[0].renderValue(group.value),
-                    lines
+                    lines,
+                    group.key.toString()
                 )
             })
         }</div>
