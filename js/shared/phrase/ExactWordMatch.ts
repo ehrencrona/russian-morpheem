@@ -41,13 +41,26 @@ export class ExactWordMatch implements WordMatch {
     }
 
     getInflectionForm() {
-        for (let wordId in this.wordIds) {
-            let word = this.corpus.words.get(wordId)
+/*
+    this is only used by get cases with allowes us to categorize things such as в то время as prepositional,
+    but that may anyway not be desirable. 
+*/
 
-            if (word instanceof InflectedWord) {
-                return FORMS[word.form]
-            }
+/*
+    this happens during fact loading 
+    facts.fromJson calls it before words are available.    
+*/
+    if (!this.corpus) {
+        return
+    }
+
+    for (let wordId in this.wordIds) {
+        let word = this.corpus.words.get(wordId)
+
+        if (word instanceof InflectedWord) {
+            return FORMS[word.form]
         }
+    }
     }
 
     setCorpus(corpus: Corpus) {

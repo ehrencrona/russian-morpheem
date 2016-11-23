@@ -51,7 +51,7 @@ export default class KnowledgeSentenceSelector {
                 SCORE_BY_UNKNOWNS[Math.min(unknowns, STOP_COUNTING_AT)]
     }
 
-    scoreSentences(sentenceScores: SentenceScore[]): SentenceScore[] {
+    scoreSentences<S extends SentenceScore>(sentenceScores: S[]): S[] {
         let chosenSentence
         let highestScore = -1
 

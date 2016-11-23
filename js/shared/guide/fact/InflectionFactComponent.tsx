@@ -1,3 +1,5 @@
+import { PivotDimension } from '../pivot/PivotDimension';
+import { Match } from '../../phrase/Match';
 
 
 import { Component, createElement } from 'react'
@@ -17,8 +19,6 @@ import InflectionFact from '../../../shared/inflection/InflectionFact'
 import InflectedWord from '../../../shared/InflectedWord'
 import InflectableWord from '../../../shared/InflectableWord'
 
-import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation } from './exampleSentences'
-
 import Fact from '../../../shared/fact/Fact'
 
 import { EndingTransform } from '../../../shared/Transforms'
@@ -33,6 +33,16 @@ import capitalize from './capitalize'
 import { renderWordInflection } from '../InflectionTableComponent'
 import InflectionTableComponent from '../InflectionTableComponent'
 import FactLinkComponent from './FactLinkComponent'
+
+import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
+import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import GroupedListComponent from '../pivot/GroupedListComponent'
+import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
+import MatchEndingDimension from '../pivot/MatchEndingDimension'
+
+import { getMatchesForInflectionFact, renderMatch, 
+    TokenizedSentence, downscoreRepeatedWord, 
+        tokensToHtml, highlightTranslation } from './exampleSentences'
 
 let React = { createElement: createElement }
 
@@ -355,7 +365,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                                 <ul>
                                     {
-                                        sameDefaultSuffix.slice(0, 3).map((otherWord) => 
+                                        sameDefaultSuffix.slice(0, 7).map((otherWord) => 
                                             this.renderStemToInflected(otherWord, word, transforms))
                                     }
                                 </ul>
@@ -470,6 +480,30 @@ export default class InflectionFactComponent extends Component<Props, State> {
             </div>
     }
 
+    getSentences(fact: InflectionFact) {
+        let corpus = this.props.corpus
+
+        let matches = getMatchesForInflectionFact(fact, this.props.knowledge, corpus)
+
+        class MatchListComponent extends GroupedListComponent<Match> {
+        }
+
+        let dimensions = [ new MatchTextDimension() ]
+
+        return <MatchListComponent
+            data={ matches }
+            getIdOfEntry={ (match) => match.sentence.id }
+            dimensions={ dimensions }
+            renderEntry={ renderMatch(fact, corpus, this.props.factLinkComponent) }
+            renderGroup={ (entry, children) => <div>
+                { entry }
+                <ul className='sentences'>{ children }</ul>
+            </div> }
+            itemsPerGroupLimit={ 3 }
+            groupLimit={ 10 }
+        />   
+    }
+
     render() {
         let corpus = this.props.corpus
         let word = this.props.word
@@ -497,9 +531,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
         let components = FORMS[form].getComponents()
 
         let inflectionFact = inflection.getFact(form)
-        let related = (inflectionFact.required || []).concat(FORMS[form]).concat(components)
-
-        let sentences = this.getSentences(this.props.inflection)
+        
+        let related = (this.props.word ? [ this.props.word.getWordFact() ] : [])
+            .concat(inflectionFact.required || [])
+            .concat(FORMS[form]).concat(components)
 
         return <div className='inflectionFact'>
             <h1>The { this.renderFormName(form) }</h1>
@@ -516,22 +551,11 @@ export default class InflectionFactComponent extends Component<Props, State> {
 
                     <h3>Examples of usage</h3>
 
-                    <ul className='sentences'>
-                        {
-                            (sentences || []).map(sentence => 
-                                <li key={ sentence.sentence.id }>
-                                    {
-                                        React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
-                                            <div dangerouslySetInnerHTML={ { __html: 
-                                                tokensToHtml(sentence.tokens)
-                                            }}/>)
-                                    }
-                                    <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                        highlightTranslation(sentence) } }/>
-                                </li>
-                            )
-                        }
-                    </ul>
+                    <div className='exampleSentences'>
+                    {
+                        this.getSentences(this.props.inflection)
+                    }
+                    </div>
                 </div>
                 {
                     related.length ?
@@ -552,48 +576,6 @@ export default class InflectionFactComponent extends Component<Props, State> {
                 }
             </div>
         </div>
-    }
-
-    getSentences(fact: InflectionFact) {
-        let corpus = this.props.corpus
-
-        let matchWord = (w) => w instanceof InflectedWord && 
-            fact.form == w.form &&
-            w.word.inflection.getInflectionId(w.form) == fact.inflection.getId()
-
-        let sentences = this.props.corpus.sentences.sentences.filter(sentence => {
-            return !!sentence.words.find(matchWord)
-        })
-        
-        let scores
-
-        if (sentences.length) {
-            scores = sentences.map(sentence => 
-                { 
-                    return {
-                        sentence: sentence,
-                        fact: fact,
-                        score: 1
-                    }    
-                })
-
-            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
-
-            scores = downscoreRepeatedWord(scores, matchWord)
-            scores = topScores(scores, 12)
-        }
-        else {
-            scores = []
-        }
-
-        let ignorePhrases = true
-
-        return scores.map(s => {
-            return {
-                sentence: s.sentence,
-                tokens: toStudyWords(s.sentence, [ fact ], this.props.corpus, ignorePhrases)
-            }
-        })
     }
 }
 

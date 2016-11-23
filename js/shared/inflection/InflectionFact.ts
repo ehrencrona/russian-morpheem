@@ -1,5 +1,3 @@
-'use strict'
-
 import AbstractFact from '../fact/AbstractFact'
 import Inflection from './Inflection'
 import { AdjectiveForm, PartOfSpeech, PronounForm } from './Dimensions'
@@ -11,7 +9,6 @@ export default class InflectionFact extends AbstractFact {
     }
 
     visitFacts(visitor: (Fact) => any) {
-
         visitor(this)
 
         let form = FORMS[this.form]
@@ -35,7 +32,5 @@ export default class InflectionFact extends AbstractFact {
         if (form.pronounForm == PronounForm.ALTERNATIVE) {
             visitor(FORMS["alt"])
         }
-
     }
-
 }

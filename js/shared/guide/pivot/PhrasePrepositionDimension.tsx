@@ -10,7 +10,7 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export default class PhrasePrepositionDimension implements PivotDimension<AnyWord> {
+export default class PhrasePrepositionDimension implements PivotDimension<Phrase, AnyWord> {
     name = 'Preposition'
 
     constructor(public factLinkComponent: FactLinkComponent) {

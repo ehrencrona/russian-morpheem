@@ -80,9 +80,18 @@ export function indexSentencesByFact(sentences: Sentences, facts: Facts, okInter
         let hardestIndex = -1
         let hardestFactSentences 
         let allFactSentences: FactSentences[] = []
+        let seenFacts = {}
 
         sentence.visitFacts((fact) => {
-            let fs = result[fact.getId()]
+            let factId = fact.getId()
+            
+            if (seenFacts[factId]) {
+                return
+            }
+
+            seenFacts[factId] = true
+
+            let fs = result[factId]
 
             if (!fs) {
                 let factIndex = facts.indexOf(fact)

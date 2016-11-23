@@ -55,16 +55,16 @@ export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkCom
             content = 
             <div className='otherForm'>{
                 <div className={ 'caseName ' + CASES[grammarCase] }>{                                                    
-                    FORMS[form].name.toUpperCase().split(' ').reduce((lines, line) =>
-                        lines.concat(line, <br/>), [] )
+                    FORMS[form].name.toUpperCase().split(' ').reduce((lines, line, i) =>
+                        lines.concat(line, <br key={ i } />), [] )
                 }</div>
             }</div>
         }
         else {
             content = 
                 <div className='otherForm nonCase'>{
-                    FORMS[form].name.split(' ').reduce((lines, line) =>
-                        lines.concat(line, <br/>), [] )
+                    FORMS[form].name.split(' ').reduce((lines, line, i) =>
+                        lines.concat(line, <br key={ i } />), [] )
                 }</div>
         }
 

@@ -1,3 +1,5 @@
+import InflectedWord from '../../InflectedWord';
+import { Match } from '../../phrase/Match';
 import { CASES, FORMS } from '../../inflection/InflectionForms';
 import { getNamedForm } from '../../inflection/WordForms';
 import { Gender, GrammarCase } from '../../inflection/Dimensions';
@@ -13,30 +15,27 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export let GENDERS: { [id: number] : string } = {}
+export default class MatchEndingDimension implements PivotDimension<Match, string> {
+    name = ''
 
-GENDERS[Gender.M] = 'masculine'
-GENDERS[Gender.F] = 'feminine'
-GENDERS[Gender.N] = 'neuter'
-
-export default class NounGenderDimension implements PivotDimension<InflectableWord, Gender> {
-    name = 'Gender'
-
-    constructor() {
-    }
-
-    getKey(value: Gender) {
+    getKey(value: string) {
         return value
     }
 
-    getValues(fact) {
-        if (fact instanceof InflectableWord) {
-            return [ fact.wordForm.gender ]
+    getValues(match: Match): string[] {
+        let w = match.words[0].word
+        
+        if (w instanceof InflectedWord) {
+            return [ w.word.inflection.getEnding(w.form).suffix ]
+        }
+        else {
+            return [ '' ]
         }
     }
 
-    renderValue(value: Gender) {
-        return GENDERS[value]
+    renderValue(value: string) {
+        return <div className='phraseGroup'>
+            <div className='jp'>{ value }</div>
+        </div>
     }
-
 }

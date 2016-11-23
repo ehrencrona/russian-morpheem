@@ -9,18 +9,17 @@ import Corpus from '../../../shared/Corpus'
 import FactLinkComponent from '../fact/FactLinkComponent';
 import renderRelatedFact from '../fact/renderRelatedFact';
 import PivotDimension from './PivotDimension'
+import { pivot, Pivot } from './pivot'
 
 import { Component, createElement } from 'react';
 
 interface Props<PivotEntry> {
-    dimensions: PivotDimension<PivotEntry ,any>[],
     data: PivotEntry[]
-    getFactOfEntry: (PivotEntry) => Fact
-    corpus: Corpus
-    hideForms?: Object,
-    factLinkComponent: FactLinkComponent
-    itemsPerCategoryLimit?: number
-    hideCategoryLimit?: number
+    dimensions: PivotDimension<PivotEntry, any>[],
+    getIdOfEntry: (PivotEntry) => string,
+    renderEntry: (PivotEntry) => any,
+    itemsPerCategoryLimit?: number,
+    hideCategoryLimit?: number,
 }
 
 interface State {
@@ -28,83 +27,6 @@ interface State {
 }
 
 let React = { createElement: createElement }
-
-class Pivot<PivotEntry> {
-    children: { [key: string] : Pivot<PivotEntry> } = {}
-    lineCount: number = 0
-    countBeforeFilter: number = 0
-    entries: PivotEntry[]  = []
-    
-    constructor(public parent: Pivot<PivotEntry>, public key: string|number, public value) {
-    }
-
-    getChild(key: string|number, value: any) {
-        let result = this.children[key]
-
-        if (!result) {
-            result = new Pivot(this, key, value)
-
-            this.children[key] = result
-        }
-
-        return result
-    }
-
-    addFact(entry: PivotEntry) {
-        this.entries.push(entry)
-
-        let at: Pivot<PivotEntry> = this
-
-        at.lineCount++
-        at.countBeforeFilter++
-
-        while (at.parent) {
-            at.parent.lineCount++
-            at.parent.countBeforeFilter++
-
-            at = at.parent
-        }
-    }
-
-    addFilteredFact() {
-        let at: Pivot<PivotEntry> = this
-
-        at.countBeforeFilter++
-
-        while (at.parent) {
-            at.parent.countBeforeFilter++
-
-            at = at.parent
-        }
-    }
-
-    childArray() {
-        return Object.keys(this.children).map(c => this.children[c])
-    }
-
-    getSortedChildren() {
-        return this.childArray().sort((c1, c2) => {
-            return c2.countBeforeFilter - c1.countBeforeFilter
-        })
-    }
-
-    filterChildren(filter: (Pivot) => boolean) {
-        let didFilter = false
-
-        this.childArray().forEach(child => {
-            didFilter = didFilter || child.filterChildren(filter)
-
-            if (!filter(child)) {
-                this.lineCount -= child.lineCount
-
-                delete this.children[child.key]
-                didFilter = true
-            }
-        })
-
-        return didFilter
-    }
-}
 
 export default class PivotTableComponent<PivotEntry> extends Component<Props<PivotEntry>, State> {
     constructor(props) {
@@ -117,66 +39,20 @@ export default class PivotTableComponent<PivotEntry> extends Component<Props<Piv
         let props = this.props
         let dimensions = props.dimensions
 
-        let root = new Pivot<PivotEntry>(null, null, null)
-
-        let getPivot = (entry: PivotEntry) => {
-            let at = root
-
-            dimensions.forEach((dim, index) => {
-                if (!at) {
-                    return
-                }
-
-                let value = dim.getValues(entry)[0]
-
-                if (value) {
-                    at = at.getChild(dim.getKey(value), value)
-                }
-                else {
-                    at = null
-                }
-            })
-
-            return at
-        }
-
-        let didFilter = false
-
-        props.data.forEach(entry => {
-            let pivot = getPivot(entry)
-
-            if (pivot) {
-                if (!props.itemsPerCategoryLimit 
-                    || pivot.entries.length < props.itemsPerCategoryLimit 
-                    || this.state.showAll) {
-                    pivot.addFact(entry)
-                }
-                else {
-                    pivot.addFilteredFact()
-                    didFilter = true
-                }
-            }
-        })
-
-        if (props.hideCategoryLimit && !this.state.showAll) {
-            didFilter = root.filterChildren(pivot => pivot.lineCount > props.hideCategoryLimit)
-        }
+        let { root, didFilter } = 
+            pivot(props.data, props.dimensions, 
+                props.itemsPerCategoryLimit, props.hideCategoryLimit)
 
         let getFactLines = (pivot: Pivot<PivotEntry>) => {
             return pivot.entries.map(entry => [ 
-                <td key={ props.getFactOfEntry(entry).getId() }>
-                <ul>{
-                    renderRelatedFact(
-                        props.getFactOfEntry(entry), 
-                        props.corpus, 
-                        props.factLinkComponent)
-                }</ul>
+                <td key={ props.getIdOfEntry(entry) }>
+                { props.renderEntry(entry) }
             </td> ])
         }
 
         let getLines = (pivot: Pivot<PivotEntry>, dimensionIndex: number) => {
             let childLines: any[][] 
-            
+
             if (dimensionIndex == dimensions.length-1) {
                 childLines = getFactLines(pivot)
             }
@@ -223,7 +99,15 @@ export default class PivotTableComponent<PivotEntry> extends Component<Props<Piv
             </table>
         </div> 
     }
+}
 
+export function renderFactEntry(corpus: Corpus, factLinkComponent: FactLinkComponent) {
+    return entry => <ul> {
+        renderRelatedFact(
+            entry, 
+            corpus, 
+            factLinkComponent)
+    }</ul>
 }
 
 export class FactPivotTable extends PivotTableComponent<Fact> {

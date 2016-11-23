@@ -13,7 +13,7 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export default class WordRootInflectionDimension implements PivotDimension<Ending> {
+export default class WordRootInflectionDimension implements PivotDimension<InflectableWord, Ending> {
     name = 'Ending'
 
     constructor(public factLinkComponent: FactLinkComponent, public stepsFromRoot: number) {

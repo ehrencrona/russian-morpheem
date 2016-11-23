@@ -10,7 +10,7 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export default class PhraseCaseDimension implements PivotDimension<GrammarCase> {
+export default class PhraseCaseDimension implements PivotDimension<Phrase, GrammarCase> {
     name = 'Case'
 
     constructor(public factLinkComponent: FactLinkComponent) {

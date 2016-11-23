@@ -52,7 +52,7 @@ import renderRelatedFact from './renderRelatedFact'
 
 import marked = require('marked')
 
-import { FactPivotTable } from '../pivot/PivotTableComponent'
+import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 
@@ -209,10 +209,9 @@ export default class WordFactComponent extends Component<Props, State> {
                 { props.word.toText() } is used in the following phrases with the following cases:
 
                 <FactPivotTable
-                    corpus={ props.corpus }
                     data={ phrasesWithWord }
-                    getFactOfEntry={ (f) => f }
-                    factLinkComponent={ props.factLinkComponent }
+                    getIdOfEntry={ (f) => f.getId() }
+                    renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
                     dimensions={ [ 
                         new PhraseCaseDimension(props.factLinkComponent), 
                     ] }

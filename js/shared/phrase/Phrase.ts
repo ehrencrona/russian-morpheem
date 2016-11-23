@@ -60,6 +60,8 @@ export default class Phrase extends AbstractFact {
             let match = this.patterns[i].match(context, onlyFirstWord)
 
             if (match) {
+                match.phrase = this
+
                 return match
             }
         }

@@ -599,7 +599,7 @@ export default class PhrasePattern {
                 return {
                     sentence: context.sentence,
                     words: wordsMatched,
-                    pattern: this
+                    pattern: this,
                 }
             }
         }

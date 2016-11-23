@@ -249,10 +249,10 @@ export default class Facts {
 
     static fromJson(json, inflections: Inflections, words: Words, phrases: Phrases) {
         let facts = new Facts()
-        
+
         json.forEach((factJson: FactJsonFormat) => {
             let fact 
-            
+
             if (factJson.type == INFLECTION) {
                 fact = inflections.getForm(factJson.id)
 

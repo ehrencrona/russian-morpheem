@@ -1,3 +1,4 @@
+import { PivotDimension } from '../pivot/PivotDimension';
 import { POS_LONG_NAMES } from '../../phrase/PhrasePattern';
 
 import { Component, createElement } from 'react'
@@ -23,6 +24,7 @@ import SentenceScore from '../../../shared/study/SentenceScore'
 import WordInFormMatch from '../../../shared/phrase/WordInFormMatch'
 import PhraseMatch from '../../../shared/phrase/PhraseMatch'
 import Phrase from '../../../shared/phrase/Phrase'
+import Match from '../../../shared/phrase/Match'
 
 import Transform from '../../../shared/Transform'
 import { EndingTransform } from '../../../shared/Transforms'
@@ -34,10 +36,14 @@ import StudyFact from '../../study/StudyFact'
 import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
-import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTranslation } from './exampleSentences'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, getFilterPhrasesForInflectionForm,
+    highlightTranslation, getMatchesForInflectionForm, renderMatch } from './exampleSentences'
 
-import { FactPivotTable } from '../pivot/PivotTableComponent'
+import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import GroupedListComponent from '../pivot/GroupedListComponent'
+import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
+import MatchEndingDimension from '../pivot/MatchEndingDimension'
 
 import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
 
@@ -189,6 +195,41 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
+    getSentences() {
+        let corpus = this.props.corpus
+        let form = this.props.form
+
+        let filterPhrases = getFilterPhrasesForInflectionForm(form)
+        let matches = getMatchesForInflectionForm(filterPhrases, form, this.props.knowledge, corpus)
+
+        class MatchListComponent extends GroupedListComponent<Match> {
+        }
+
+        let dimensions: PivotDimension<Match, any>[] = [
+            new MatchTextDimension()
+        ]
+
+        if (filterPhrases) {
+            dimensions = [ new MatchPhraseDimension() ].concat(dimensions)
+        }
+        else {
+            dimensions = [ new MatchEndingDimension() as PivotDimension<Match, any> ].concat(dimensions)
+        }
+
+        return <MatchListComponent
+            data={ matches }
+            getIdOfEntry={ (match) => match.sentence.id }
+            dimensions={ dimensions }
+            renderEntry={ renderMatch(form, corpus, this.props.factLinkComponent) }
+            renderGroup={ (entry, children) => <div>
+                { entry }
+                <ul className='sentences'>{ children }</ul>
+            </div> }
+            itemsPerGroupLimit={ 3 }
+            groupLimit={ 10 }
+        />   
+    }
+
     render() {
         let corpus = this.props.corpus
         let form = this.props.form
@@ -205,7 +246,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 (factoid ? 
                     factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
 
-        let sentences = this.getSentences(form)
+        let sentences = this.getSentences()
 
         let title = corpus.factoids.getFactoid(form).name || ('The ' + form.name)
 
@@ -241,13 +282,12 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                     These are the prepositions and expressions that use the { form.name } case. 
 
                                     <FactPivotTable
-                                        corpus={ corpus }
                                         data={ phrases }
-                                        factLinkComponent={ this.props.factLinkComponent }
                                         dimensions={ [ 
                                             new PhrasePrepositionDimension(this.props.factLinkComponent)
                                         ] }
-                                        getFactOfEntry={ (f) => f }
+                                        getIdOfEntry={ (f) => f.getId() }
+                                        renderEntry={ renderFactEntry(corpus, this.props.factLinkComponent) }
                                         itemsPerCategoryLimit={ 3 }
                                     />
                                 </div>
@@ -320,15 +360,11 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                     <h3>Examples of usage</h3>
 
-                    <ul className='sentences'>
-                        {
-                            sentences 
-                        }
-                    </ul>
-
+                    <div className='exampleSentences'>
                     {
-                        
+                        sentences 
                     }
+                    </div>
 
                     <h3>Other forms</h3> 
 
@@ -397,26 +433,5 @@ export default class InflectionFormComponent extends Component<Props, State> {
         return result
     }
 
-    renderSentences(sentences: Sentence[]) {
-        return sentences.map(sentence => {
-            let ignorePhrases = true
-
-            let tokenized = {
-                sentence: sentence,
-                tokens: toStudyWords(sentence, [ this.props.form ], this.props.corpus, ignorePhrases)
-            }
-
-            return <li key={ sentence.id }>
-                    {
-                        React.createElement(this.props.factLinkComponent, { fact: sentence }, 
-                            <div dangerouslySetInnerHTML={ { __html: 
-                                tokensToHtml(tokenized.tokens)
-                            }}/>)
-                    }
-                    <div className='en' dangerouslySetInnerHTML={ { __html: 
-                        highlightTranslation(tokenized) } }/>
-                </li>
-        })
-    }
 
 }

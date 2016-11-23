@@ -1,4 +1,6 @@
-import { Match } from '../../phrase/Match';
+import { FactSentences } from '../../SentencesByFactIndex';
+import { AdjectiveForm, GrammarCase, Tense } from '../../inflection/Dimensions';
+import { Match, WordMatched } from '../../phrase/Match';
 import { PUNCTUATION, PUNCTUATION_NOT_PRECEDED_BY_SPACE } from '../../Punctuation';
 import InflectableWord from '../../../shared/InflectableWord'
 import Fact from '../../../shared/fact/Fact'
@@ -7,6 +9,7 @@ import { Knowledge } from '../../../shared/study/Exposure'
 import Inflection from '../../../shared/inflection/Inflection'
 import InflectionForm from '../../../shared/inflection/InflectionForm'
 import FORMS from '../../../shared/inflection/InflectionForms'
+import InflectionFact from '../../../shared/inflection/InflectionFact'
 import Sentence from '../../../shared/Sentence'
 import Corpus from '../../../shared/Corpus'
 
@@ -21,13 +24,20 @@ import findPhrasesWithWord from '../../../shared/phrase/findPhrasesWithWord'
 
 import htmlEscape from '../../../shared/util/htmlEscape'
 import Words from '../../../shared/Words'
+import Word from '../../../shared/Word'
+import AnyWord from '../../../shared/AnyWord'
+import { NamedWordForm } from '../../../shared/inflection/WordForm'
+import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions'
 
 import StudyToken from '../../study/StudyToken'
 import StudyWord from '../../study/StudyWord'
 import StudyPhrase from '../../study/StudyPhrase'
+import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 import { Component, createElement } from 'react'
+
+import FactLinkComponent from './FactLinkComponent'
 
 let React = { createElement: createElement }
 
@@ -117,4 +127,242 @@ export function highlightTranslation(sentence: TokenizedSentence) {
     })
 
     return result
+}
+
+interface ScoredMatch extends SentenceScore {
+    match: Match
+}
+
+export function sortByKnowledge(matches: Match[], knowledge: NaiveKnowledge) {
+    let scores: ScoredMatch[]
+
+    if (matches.length) {
+        scores = matches.map(match => 
+            {
+                return {
+                    sentence: match.sentence,
+                    match: match,
+                    // remove?
+                    fact: null,
+                    score: 1
+                }
+            })
+
+        scores = new KnowledgeSentenceSelector(knowledge).scoreSentences(scores)
+    }
+    else {
+        scores = []
+    }
+
+    return scores.map(s => s.match)
+}
+
+/**
+ * Returns a list of Match objects containing the word of sentences matching a certain filter criterion that selects certain words.
+ * If filterPhrases is set, the match objects will contain the entire phrase of the match (if any). 
+ */
+export function getMatchesForCertainWords(
+        filterWords: (words: Word[]) => Word[],
+        filterPhrases: (Phrase) => boolean,
+        factSentences: FactSentences, 
+        knowledge: NaiveKnowledge, 
+        corpus: Corpus,
+        onlyPhraseMatches?: boolean): Match[] {
+    let sentences: Sentence[]
+    
+    if (factSentences) {
+        sentences = factSentences.easy
+            .concat(factSentences.ok)
+                .concat(factSentences.hard).map(sd => sd.sentence)
+    }
+    else {
+        sentences = corpus.sentences.sentences
+    }
+
+    let matches: Match[] = sentences.map(sentence => {
+        if (filterPhrases) {
+            let match = mapFind(sentence.phrases, (phrase: Phrase) => {
+                if (filterPhrases(phrase)) {
+                    let m = phrase.match({ 
+                        words: sentence.words, 
+                        sentence: sentence, 
+                        facts: corpus.facts })
+
+                    if (m && filterWords(m.words.map(w => w.word)).length) {
+                        return m
+                    }
+                }
+            })
+
+            if (match) {
+                return match
+            }
+        }
+
+        if (!onlyPhraseMatches) {
+            let matchingWords = filterWords(sentence.words)
+
+            if (matchingWords.length) {
+                let wordsMatched: WordMatched[] = 
+                    matchingWords.map(word => {
+                        let m: WordMatched = {
+                            word: word,
+                            wordMatch: null,
+                            index: 0,
+                        }
+
+                        return m
+                    })
+
+                return {
+                    words: wordsMatched,
+                    pattern: null,
+                    sentence: sentence,
+                } as Match
+            }
+        }
+    }).filter(m => !!m)
+
+    matches = sortByKnowledge(matches, knowledge)
+
+    return matches
+}
+
+export function renderMatch(highlight: Fact, 
+        corpus: Corpus, factLinkComponent: FactLinkComponent) {
+    return (match: Match) => {
+        let sentence = match.sentence
+        let ignorePhrases = true
+
+        let tokenized = {
+            sentence: sentence,
+            tokens: toStudyWords(sentence, [ highlight ], corpus, ignorePhrases)
+        }
+
+        return <li key={ sentence.id }>
+                {
+                    React.createElement(factLinkComponent, { fact: sentence }, 
+                        <div dangerouslySetInnerHTML={ { __html: 
+                            tokensToHtml(tokenized.tokens)
+                        }}/>)
+                }
+                <div className='en' dangerouslySetInnerHTML={ { __html: 
+                    highlightTranslation(tokenized) } }/>
+            </li>
+    }
+}
+
+export function getFilterPhrasesForInflectionForm(form: InflectionForm) {
+    let filterPhrases = null
+
+    if (form.grammaticalCase && form.grammaticalCase != GrammarCase.NOM) {
+        filterPhrases = (phrase: Phrase) => phrase.hasCase(form.grammaticalCase)
+    }
+    else if (form.adjectiveForm || form.command || form.tense == Tense.PAST || form.pos == PoS.ADVERB ) {
+        filterPhrases = () => true
+    }
+
+    return filterPhrases
+}
+
+/**
+ * Returns Match objects with all sentences that have words with a certain inflection form.
+ */
+export function getMatchesForInflectionForm(filterPhrases: (Phrase) => boolean,
+        form: InflectionForm, knowledge: NaiveKnowledge, corpus: Corpus) {
+    let filterWords = (words) => words.filter(
+        w => w instanceof InflectedWord && form.matches(FORMS[w.form]))
+
+    let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
+    let mostDiscriminating: FactSentences
+
+    new InflectionFact('foo', null, form.id).visitFacts((fact) => {
+        let factSentences = sbf[fact.getId()]
+
+        if (!mostDiscriminating || factSentences.count < mostDiscriminating.count) {
+            mostDiscriminating = factSentences
+        }
+    })
+
+    if (mostDiscriminating.count > 1000) {
+        mostDiscriminating = Object.assign({}, mostDiscriminating)
+        
+        mostDiscriminating.easy = mostDiscriminating.easy
+            .concat(mostDiscriminating.ok)
+                .concat(mostDiscriminating.hard).slice(0, 1000)
+
+        mostDiscriminating.ok = []
+        mostDiscriminating.hard = []
+    }
+
+    return getMatchesForCertainWords(filterWords, filterPhrases,
+        mostDiscriminating, knowledge, corpus)
+}
+
+
+/**
+ * Returns Match objects with all sentences that have words with a certain inflection fact (=ending and case)
+ */
+export function getMatchesForInflectionFact(
+        fact: InflectionFact, knowledge: NaiveKnowledge, corpus: Corpus) {
+    let filterWords = (words) => words.filter(
+        w => w instanceof InflectedWord && 
+            w.word.inflection.id == fact.inflection.id &&
+            w.form == fact.form)
+
+    let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
+
+    if (!sbf[fact.getId()]) {
+        return []
+    }
+
+    let filterPhrases = null
+
+    return getMatchesForCertainWords(filterWords, filterPhrases,
+        sbf[fact.getId()], knowledge, corpus)
+}
+
+/**
+ * Returns Match objects with all sentences that have words with a certain word form.
+ */
+export function getMatchesForWordForm(
+        form: NamedWordForm, knowledge: NaiveKnowledge, corpus: Corpus) {
+    let filterWords = (words) => words.filter(
+        w => w instanceof InflectedWord && form.matches(FORMS[w.form]))
+
+    let filterPhrases = null
+
+    if (form.pos == PoS.PRONOUN || form.pos == PoS.PREPOSITION) {
+        filterPhrases = () => true
+    }
+
+    return getMatchesForCertainWords(filterWords, filterPhrases,
+        null, knowledge, corpus)
+}
+
+/**
+ * Returns Match objects with all sentences that have a certain word.
+ */
+export function getMatchesForWord(
+        word: AnyWord, knowledge: NaiveKnowledge, corpus: Corpus) {
+    let wordFactId = word.getWordFact().getId()
+    let filterWords = (words) => words.filter(
+        w => w.getWordFact().getId() == wordFactId)
+
+    let filterPhrases = () => true
+
+    let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
+
+    return getMatchesForCertainWords(filterWords, filterPhrases,
+        sbf[word.getWordFact().getId()], knowledge, corpus)
+}
+
+function mapFind<T, V>(array: T[], mapFunction: (T) => V) {
+    for (let i = 0; i < array.length; i++) {
+        let v = mapFunction(array[i])
+
+        if (v) {
+            return v
+        }
+    }
 }

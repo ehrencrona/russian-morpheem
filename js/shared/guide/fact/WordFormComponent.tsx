@@ -29,7 +29,7 @@ import renderRelatedFact from './renderRelatedFact';
 import marked = require('marked');
 import { Component, createElement } from 'react';
 import Corpus from '../../../shared/Corpus'
-import { FactPivotTable } from '../pivot/PivotTableComponent'
+import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
@@ -113,9 +113,10 @@ export default class InflectionFormComponent extends Component<Props, State> {
     }
 
     renderFormation() {
-        let defaultForm = INFLECTION_FORMS[this.props.form.pos].allForms[0]
+        let props = this.props
+        let defaultForm = INFLECTION_FORMS[props.form.pos].allForms[0]
 
-        let inflections = this.mostCommonInflections(this.props.form, defaultForm)
+        let inflections = this.mostCommonInflections(props.form, defaultForm)
 
         if (!inflections.length || 
             !inflections.find(i => 
@@ -124,19 +125,19 @@ export default class InflectionFormComponent extends Component<Props, State> {
         }
 
         let dimensions: PivotDimension<Fact, any>[] = 
-            [ new WordDefaultEndingDimension(this.props.factLinkComponent, 1) ]
+            [ new WordDefaultEndingDimension(props.factLinkComponent, 1) ]
 
         let facts =
-            this.props.corpus.facts.facts.filter(fact =>
-                fact instanceof InflectableWord && fact.wordForm.matches(this.props.form))
+            props.corpus.facts.facts.filter(fact =>
+                fact instanceof InflectableWord && fact.wordForm.matches(props.form))
 
         let filterLimit
 
-        if (this.props.form.pos == PoS.NOUN) {
+        if (props.form.pos == PoS.NOUN) {
             // exclude those that don't have singular
             facts = facts.filter(w => w instanceof InflectableWord && !!w.inflect('nom'))
 
-            if (!this.props.form.gender) {
+            if (!props.form.gender) {
                 dimensions = [ new NounGenderDimension() as PivotDimension<Fact, any> ].concat(dimensions)
             }
         }
@@ -149,11 +150,10 @@ export default class InflectionFormComponent extends Component<Props, State> {
             <div>Most common endings:</div>
  
             <FactPivotTable
-                corpus={ this.props.corpus }
                 data={ facts }
                 dimensions={ dimensions }
-                factLinkComponent={ this.props.factLinkComponent }
-                getFactOfEntry={ (f) => f }
+                getIdOfEntry={ (f) => f.getId() }
+                renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
                 hideCategoryLimit={ 1 }
                 itemsPerCategoryLimit={ 3 } 
             />
@@ -165,10 +165,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         if (props.form.pos == PoS.PREPOSITION) {
             return <FactPivotTable
-                corpus={ props.corpus }
-                getFactOfEntry={ (f) => f }
                 data={ props.corpus.phrases.all() }
-                factLinkComponent={ props.factLinkComponent }
+                getIdOfEntry={ (f) => f.getId() }
+                renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
                 itemsPerCategoryLimit={ 1 }
                 dimensions={ [
                     new PhraseCaseDimension(props.factLinkComponent), 

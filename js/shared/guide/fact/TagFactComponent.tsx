@@ -29,7 +29,7 @@ import getExamplesUsingInflection from './getExamplesUsingInflection'
 import { renderStemToInflected } from './InflectionFactComponent'
 import FactLinkComponent from './FactLinkComponent'
 
-import { FactPivotTable } from '../pivot/PivotTableComponent'
+import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 
@@ -75,10 +75,9 @@ export default class TagFactComponent extends Component<Props, State> {
                                 .map(fact =>     
                                     renderRelatedFact(fact, corpus, props.factLinkComponent))
                             : <FactPivotTable
-                                corpus={ props.corpus }
                                 data={ factsWithTag }
-                                factLinkComponent={ props.factLinkComponent }
-                                getFactOfEntry={ (f) => f }
+                                getIdOfEntry={ (f) => f.getId() }
+                                renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
                                 dimensions={ [ 
                                     new PhrasePrepositionDimension(props.factLinkComponent), 
                                     new PhraseCaseDimension(props.factLinkComponent), 
