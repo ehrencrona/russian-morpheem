@@ -488,7 +488,7 @@ export default class InflectionFactComponent extends Component<Props, State> {
         class MatchListComponent extends GroupedListComponent<Match> {
         }
 
-        let dimensions = [ new MatchTextDimension() ]
+        let dimensions = [ new MatchTextDimension(true) ]
 
         return <MatchListComponent
             data={ matches }

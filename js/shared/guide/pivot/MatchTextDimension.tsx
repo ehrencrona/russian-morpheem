@@ -25,6 +25,9 @@ const NO_PHRASE = ''
 export class MatchTextDimension implements PivotDimension<Match, Text> {
     name = ''
 
+    constructor(public renderText?: boolean) {
+    }
+
     getKey(value: Text) {
         return value.jp
     }
@@ -34,14 +37,16 @@ export class MatchTextDimension implements PivotDimension<Match, Text> {
             jp: match.words.map(w => w.word.toText()).join(' '),
             en: (match.pattern?
                 match.pattern.getEnglishFragments().map(frag => frag.en(match)).join(' ') :
-                NO_PHRASE
+                (this.renderText 
+                    ? match.words.map(w => w.word.getEnglish()).join(' ')
+                    : NO_PHRASE)
             ),
             match: match,
         } ]
     }
 
     renderValue(value: Text) {
-        if (value.en === NO_PHRASE) {
+        if (!this.renderText && value.en === NO_PHRASE) {
             return null
         }
 

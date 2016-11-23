@@ -307,8 +307,8 @@ export function getMatchesForInflectionFact(
         fact: InflectionFact, knowledge: NaiveKnowledge, corpus: Corpus) {
     let filterWords = (words) => words.filter(
         w => w instanceof InflectedWord && 
-            w.word.inflection.id == fact.inflection.id &&
-            w.form == fact.form)
+            w.form == fact.form &&
+            w.word.inflection.getFact(w.form).getId() == fact.getId())
 
     let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
 
