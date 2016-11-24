@@ -275,7 +275,7 @@ export function getFilterPhrasesForInflectionForm(form: InflectionForm) {
     if (form.grammaticalCase && form.grammaticalCase != GrammarCase.NOM) {
         filterPhrases = (phrase: Phrase) => phrase.hasCase(form.grammaticalCase)
     }
-    else if (form.adjectiveForm || form.command || form.tense == Tense.PAST || form.pos == PoS.ADVERB ) {
+    else if (form.adjectiveForm || form.command || form.pos == PoS.ADVERB ) {
         filterPhrases = () => true
     }
 
@@ -293,13 +293,15 @@ export function getMatchesForInflectionForm(filterPhrases: (Phrase) => boolean,
     let sbf = corpus.sentences.getSentencesByFact(corpus.facts)
     let mostDiscriminating: FactSentences
 
-    new InflectionFact('foo', null, form.id).visitFacts((fact) => {
+    let visit = (fact) => {
         let factSentences = sbf[fact.getId()]
 
         if (!mostDiscriminating || factSentences.count < mostDiscriminating.count) {
             mostDiscriminating = factSentences
         }
-    })
+    }
+
+    new InflectionFact('foo', null, form.id).visitFacts(visit)
 
     if (mostDiscriminating.count > 1000) {
         mostDiscriminating = Object.assign({}, mostDiscriminating)

@@ -1,6 +1,6 @@
 import AbstractFact from '../fact/AbstractFact'
 import Inflection from './Inflection'
-import { AdjectiveForm, PartOfSpeech, PronounForm } from './Dimensions'
+import { AdjectiveForm, PartOfSpeech, PronounForm, Tense } from './Dimensions';
 import { FORMS, CASES } from './InflectionForms'
 
 export default class InflectionFact extends AbstractFact {
@@ -19,6 +19,10 @@ export default class InflectionFact extends AbstractFact {
 
         if (form.pos == PartOfSpeech.ADVERB) {
             visitor(FORMS["adv"])
+        }
+
+        if (form.tense == Tense.PAST) {
+            visitor(FORMS["past"])
         }
 
         if (form.adjectiveForm == AdjectiveForm.COMPARATIVE) {
