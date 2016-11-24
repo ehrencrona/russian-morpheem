@@ -50,6 +50,8 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
         { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.QUESTION }),
     perspron: new NamedWordForm('perspron', 'Personal Pronouns', 
         { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.PERSONAL }),
+    negpron: new NamedWordForm('negpron', 'Negative Pronouns', 
+        { pos: Dim.PartOfSpeech.PRONOUN, negation: Dim.Negation.NEGATIVE }),
 
     number: new NamedWordForm('number', 'Numbers', { 
         pos: Dim.PartOfSpeech.NUMBER }),

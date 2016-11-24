@@ -382,10 +382,13 @@ export default class InflectionFormComponent extends Component<Props, State> {
                     }
 
                     { showUsage ?
-                        <div className='exampleSentences'>
-                        {
-                            sentences 
-                        }
+                        <div>
+                            <h3>Examples of Usage</h3>
+                            <div className='exampleSentences'>
+                            {
+                                sentences 
+                            }
+                            </div>
                         </div>
                         :
                         null
