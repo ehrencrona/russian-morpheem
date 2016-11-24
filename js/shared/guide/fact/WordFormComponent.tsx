@@ -133,7 +133,12 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let filterLimit
 
-        if (props.form.pos == PoS.NOUN) {
+        if (props.form.pos == PoS.ADJECTIVE) {
+            // exclude those that are only comparative
+            facts = facts.filter(w => w instanceof InflectableWord && 
+                !!w.inflect('m') && !!w.inflect('shortm'))
+        }
+        else if (props.form.pos == PoS.NOUN) {
             // exclude those that don't have singular
             facts = facts.filter(w => w instanceof InflectableWord && !!w.inflect('nom'))
 
