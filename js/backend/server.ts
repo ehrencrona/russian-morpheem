@@ -94,6 +94,38 @@ app.use('/api', (req, res, next) => {
 function registerRoutes(corpus: Corpus) {
     let lang = corpus.lang
 
+    app.use('/api', (req, res, next) => {
+        if (req.method == 'PUT' || req.method == 'POST' || req.method == 'DELETE') {
+            corpus.lastModified = new Date()
+        }
+
+        next()
+    })
+
+    let ifNoneMatch = (req, res, next) => {
+        if (req.method == 'GET') {
+            let etag = corpus.lastModified.getTime().toString()
+            let ifNoneMatch = req.header('If-None-Match')
+
+            res.header('ETag', etag)
+
+console.log(req.url, ifNoneMatch, etag)
+
+            if (ifNoneMatch) {
+                let values = ifNoneMatch.replace(/W\//g, '').split(',').map(s => s.trim())
+
+                if (values.indexOf(`"${etag}"`) >= 0) {
+                    res.sendStatus(304)
+                    return
+                }
+            }
+        }
+
+        next()
+    }
+
+
+    app.use(`/public-api/${lang}/corpus`, ifNoneMatch) 
     app.get(`/public-api/${lang}/corpus`, function(req, res) {
         res.contentType('application/json')
         res.status(200).json(corpus.toJson())
@@ -183,10 +215,13 @@ function registerRoutes(corpus: Corpus) {
 
     app.get(`/api/translate`, getTranslation(corpus))    
 
-    app.get(`/words/:fact`, getGuide(corpus))    
-    app.get(`/word/:fact`, getGuide(corpus))    
-    app.get(`/phrase/:fact`, getGuide(corpus))    
-    app.get(`/form/:fact`, getGuide(corpus))    
+    let guideUrls = [ '/words/:fact', '/phrase/:fact', '/word/:fact', '/form/:fact' ]
+    
+    guideUrls.forEach(
+        guideUrl => {
+            app.use(guideUrl, ifNoneMatch)
+            app.get(guideUrl, getGuide(corpus))
+        })
 
     app.get(`/sentence/:sentence`, getGuideSentence(corpus))    
 

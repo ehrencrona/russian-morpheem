@@ -31,6 +31,7 @@ export default class Corpus {
     externalCorpus: ExternalCorpus
     factoids: Factoids
     topics: Topics
+    lastModified: Date = new Date()
     
     static createEmpty(lang: string) {
         let facts = new Facts()

@@ -39,7 +39,7 @@ export default function(corpus: Corpus) {
         }
 
         if (!fact) {
-            return res.send(`Unknown fact ${ factId }.`).status(404)
+            return res.status(404).send(`Unknown fact ${ factId }.`)
         }
 
         let context: InflectedWord
