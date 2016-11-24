@@ -244,14 +244,10 @@ export default class WordFactComponent extends Component<Props, State> {
             }, content)
         }
 
-        let res = getDerivations(word.wordForm).map(derivation =>
+        return getDerivations(word.wordForm).map(derivation =>
             word.getDerivedWords(derivation.id)
                 .map(derived => renderDerivedWord(derived, derivation)))
             .reduce((a, b) => a.concat(b), [])
-
-res.forEach(r => console.log(r.key))
-
-        return res
     }
 
     render() {
