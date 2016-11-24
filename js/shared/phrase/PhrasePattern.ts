@@ -396,7 +396,6 @@ class Fragment implements EnglishPatternFragment {
                         } 
                     }
                     else {
-                        console.warn(`When agreeing with a case, PoS of forms must be specified in phrase translated as ${result}`)
                         inflectAsPoS = PoS.VERB
                     }
 

@@ -313,6 +313,29 @@ $sectionMargin: 1em;
         }
     }
 
+    .renderTagFacts {
+        margin: 2 * $unit 0;
+
+        li {
+            display: inline-block;
+            margin-right: 1em;
+
+            font-family: 'Rubik';
+            font-weight: 400;
+
+            background-color: $color2;
+            color: white;
+
+            padding: 0 0.7em;
+            line-height: 1.4em;
+            border-radius: 0.7em;
+        }
+
+        li:hover {
+            background-color: $clickableColor;
+        }
+    }
+
     table.pivot {
         margin-top: 2em;
         margin-bottom: 2em;
@@ -567,6 +590,43 @@ $sectionMargin: 1em;
 
     .tagFact ul.factsWithTag li::before {
         @extend .seeAlso;   
+    }
+
+    .wordFact {
+        .derivation {
+            display: block;
+            margin: 2 * $unit 0;
+
+            .inner {
+                display: inline-flex;
+                flex-direction: row;
+
+                font-family: 'Rubik';
+                font-weight: 400;
+
+                $color: black;
+                color: $color;
+                border: 1px solid $color;
+
+                > div {
+                    padding: 3px 5px;
+                }
+
+                .word {
+                    color: white;
+                    background-color: $color;
+                }
+
+                &:hover {
+                    color: $clickableColor;
+                    border: 1px solid $clickableColor;
+
+                    .word {
+                        background-color: $clickableColor;
+                    }
+                }
+            }
+        }
     }
 }
 

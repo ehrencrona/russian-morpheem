@@ -19,7 +19,12 @@ import Inflection from '../../../shared/inflection/Inflection'
 import { getFormName } from '../../../shared/inflection/InflectionForms' 
 import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
-import { getDerivations, getNamedForm, getNonRedundantNamedForms } from '../../../shared/inflection/WordForms';
+import {
+    Derivation,
+    getDerivations,
+    getNamedForm,
+    getNonRedundantNamedForms
+} from '../../../shared/inflection/WordForms';
 
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import SentenceScore from '../../../shared/study/SentenceScore'
@@ -50,6 +55,7 @@ import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, highlightTransl
 
 import FactLinkComponent from './FactLinkComponent'
 import renderRelatedFact from './renderRelatedFact'
+import renderTagFacts from './renderTagFacts'
 
 import marked = require('marked');
 
@@ -201,6 +207,53 @@ export default class WordFactComponent extends Component<Props, State> {
         />   
     }
 
+    renderDerivations() {
+        let word = this.props.word
+
+        const DERIVATION_NAMES = {
+            perf: 'perfective',
+            imperf: 'imperfective',
+            refl: 'reflexive',
+            nonrefl: 'non-reflexive',
+            adj: 'adjective',
+            adv: 'adverb'
+        }
+
+        let renderDerivedWord = (derived: AnyWord, derivation: Derivation) => {
+            let name = derived.getEnglish() 
+
+            if (name == word.getEnglish()) {
+                name = DERIVATION_NAMES[derivation.id] || derivation.id 
+            }
+            else if (DERIVATION_NAMES[derivation.id]) {
+                name += ` – ${DERIVATION_NAMES[derivation.id]}` 
+            }
+
+            let content = <div className='derivation' key={ derived.getId() }>
+                <div className='inner'>
+                    <div>{
+                        name
+                    }</div>
+                    <div className='word'>{ derived.toText() }</div>
+                </div>
+            </div>
+
+            return React.createElement(this.props.factLinkComponent, {
+                fact: derived.getWordFact(),
+                key: derived.getId()
+            }, content)
+        }
+
+        let res = getDerivations(word.wordForm).map(derivation =>
+            word.getDerivedWords(derivation.id)
+                .map(derived => renderDerivedWord(derived, derivation)))
+            .reduce((a, b) => a.concat(b), [])
+
+res.forEach(r => console.log(r.key))
+
+        return res
+    }
+
     render() {
         let props = this.props
         let word = props.word
@@ -217,17 +270,8 @@ export default class WordFactComponent extends Component<Props, State> {
                 }
             })
 
-        let derivations =
-            getDerivations(word.wordForm)
-                .map(derivation =>
-                        word.getDerivedWords(derivation.id)
-                        .map(w => w.getWordFact()))
-                .reduce((a, b) => a.concat(b), [])
-                    
         let related = 
             (word.required || [])
-            .concat(getNonRedundantNamedForms(word.wordForm))
-            .concat(derivations)
             .concat(factoid ? 
                 factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
                 : 
@@ -258,9 +302,14 @@ export default class WordFactComponent extends Component<Props, State> {
                 sortByKnowledge(phrasesWithWord, props.knowledge))
         }
 
-        return <div className='fact'>
+        return <div className='fact wordFact'>
             <h1>{ word.toText() }</h1>
             <h2>{ word.getEnglish((word.wordForm.pos == PoS.VERB ? 'inf' : '')) }</h2>
+
+            { renderTagFacts(word.getWordFact(), corpus, 
+                props.factLinkComponent, getNonRedundantNamedForms(word.wordForm)) }
+
+            { this.renderDerivations() }
 
             {
                 factoid ? 
