@@ -33,7 +33,7 @@ export default function(corpus: Corpus) {
             map[getGuideUrl(FORMS[formId])] = get 
         }
 
-        var host = 'russian.morpheem.com'
+        var host = req.hostname
 
         sitemap({map: map, route: {}, url: host}).XMLtoWeb(res)
 

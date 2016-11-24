@@ -122,6 +122,9 @@ console.log('unchanged', req.originalUrl, ifNoneMatch, etag)
 console.log('changed', req.originalUrl, ifNoneMatch, etag)
                 }
             }
+            else {
+console.log('no ifnonematch', req.originalUrl, ifNoneMatch, etag)
+            }
         }
 
         next()
