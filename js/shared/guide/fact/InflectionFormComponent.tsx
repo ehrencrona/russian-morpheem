@@ -126,17 +126,25 @@ export default class InflectionFormComponent extends Component<Props, State> {
             }
         }
 
-        return formArray.map(form => {
-            let wordsByInflection = wordsByInflectionByForm[form]
+        return formArray.map(formId => {
+            let form = FORMS[formId]
+            let wordsByInflection = wordsByInflectionByForm[formId]
 
             let inflectionIds = Object.keys(wordsByInflection).sort((form1, form2) => wordsByInflection[form2] - wordsByInflection[form1])
 
-            inflectionIds = inflectionIds.slice(0, (this.state.allFormations ? 99 : (pos == PoS.PRONOUN ? 5 : 3)))
+            let count = (this.state.allFormations ? 99 : (pos == PoS.PRONOUN ? 5 : 3))
+
+            // if we don't have a to show a long list of parts of speech we can show more for each PoS.
+            if (!form.equals({ pos: form.pos })) {
+                count = 3 * count
+            }
+
+            inflectionIds = inflectionIds.slice(0, count)
 
             return {
-                form: form,
+                form: formId,
                 inflectionFacts: inflectionIds.map(inflectionId => 
-                    corpus.inflections.getInflection(inflectionId).getFact(form)
+                    corpus.inflections.getInflection(inflectionId).getFact(formId)
                 ).filter(f => !!f)
             }
         })

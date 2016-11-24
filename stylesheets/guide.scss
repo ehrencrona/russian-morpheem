@@ -562,6 +562,28 @@ $sectionMargin: 1em;
     }
 
     .wordForm {
+        table.pronouns {
+            border-collapse: collapse;
+
+            td {
+                border-top: 1px solid gray;
+                padding: 2 * $unit 0;
+                padding-right: 4em;
+                
+                a {
+                    display: inline-block;
+                    min-width: 3em;
+                    color: $clickableColor;
+                }
+
+                a:before {
+                    @extend .seeAlso;
+                }
+
+                vertical-align: top;
+            }
+        }
+
         li.clickable::before {
             @extend .seeAlso
         }

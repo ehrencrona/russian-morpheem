@@ -70,7 +70,7 @@ export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkCom
 
         return React.createElement(
             factLinkComponent,
-            { fact: FORMS[form] },
+            { fact: FORMS[form], key: form },
                 content)
     }
 }

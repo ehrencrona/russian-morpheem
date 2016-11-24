@@ -1,3 +1,4 @@
+import AnyWord from '../../AnyWord';
 import { PivotDimension } from '../pivot/PivotDimension';
 import { define } from 'mime';
 import { NamedWordForm, WordForm } from '../../inflection/WordForm';
@@ -136,7 +137,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         if (props.form.pos == PoS.ADJECTIVE) {
             // exclude those that are only comparative
             facts = facts.filter(w => w instanceof InflectableWord && 
-                !!w.inflect('m') && !!w.inflect('shortm'))
+                (!!w.inflect('m') || !!w.inflect('shortm')))
         }
         else if (props.form.pos == PoS.NOUN) {
             // exclude those that don't have singular
@@ -196,12 +197,74 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let result = this.props.corpus.facts.facts.filter(f => 
             f instanceof AbstractAnyWord && f.wordForm.matches(this.props.form))
 
+        if (this.props.form.pos == PoS.PRONOUN) {
+            const PERSONAL_PRONOUNS = {
+                я: 1, ты: 1, он:1, мы: 1, вы: 1, они: 1, она: 1, оно: 1
+            }
+
+            result = result.filter(w => !PERSONAL_PRONOUNS[w.getId()])
+        }
+
         if (!this.state.allWords) {
             result = result.slice(0, 12)
         }
 
         return result
     }
+
+    renderPronouns() {
+        let link = (id) => {
+            let word = this.props.corpus.facts.get(id)
+
+            if (word instanceof AbstractAnyWord) {
+                return <div key={ word.getId() }>{ 
+                    React.createElement(this.props.factLinkComponent, {
+                        fact: word.getWordFact(),
+                        key: word.getId()
+                    }, word.toText()) } – { word.getEnglish() }</div>
+            }
+            else {
+                return null
+            }
+        }
+
+        return <table className='pronouns'>
+            <thead>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>
+                        { link('я') }
+                    </td>
+                    <td>
+                        { link('мы') }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        { link('ты') }
+                    </td>
+                    <td>
+                        { link('вы') }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        { link('он') }
+                        { link('она') }
+                        { link('оно') }
+                    </td>
+                    <td>
+                        { link('они') }
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    }
+
 
     render() {
         let corpus = this.props.corpus
@@ -237,6 +300,13 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 dangerouslySetInnerHTML={ { __html: marked(factoid.explanation) } }/>
                         :
                             null 
+                    }
+
+                    {
+                        this.props.form.pos == PoS.PRONOUN ?
+                            this.renderPronouns()
+                            :
+                            null
                     }
 
                     {
