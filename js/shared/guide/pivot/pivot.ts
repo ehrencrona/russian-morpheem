@@ -90,7 +90,8 @@ export function pivot<PivotEntry>(data: PivotEntry[], dimensions: PivotDimension
                 return
             }
 
-            let value = dim.getValues(entry)[0]
+            let values = dim.getValues(entry)
+            let value = values && values[0]
 
             if (value) {
                 at = at.getChild(dim.getKey(value), value)

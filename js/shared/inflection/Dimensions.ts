@@ -10,7 +10,6 @@ export enum PartOfSpeech {
     POSSESSIVE,
     NUMBER,
     PARTICLE,
-    QUESTION,
     CONJUNCTION
 }
 
@@ -61,6 +60,11 @@ export enum Negation {
 export enum PronounForm {
     STANDARD = 1,
     ALTERNATIVE
+}
+
+export enum PronounKind {
+    PERSONAL = 1,
+    QUESTION
 }
 
 export enum Cardinality {

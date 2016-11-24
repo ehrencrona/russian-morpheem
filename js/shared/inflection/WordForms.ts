@@ -43,9 +43,13 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
 
     pron: new NamedWordForm('pron', 'Pronouns', { pos: Dim.PartOfSpeech.PRONOUN }),
     poss: new NamedWordForm('poss', 'Possessive Pronouns', { pos: Dim.PartOfSpeech.POSSESSIVE }),
-    quest: new NamedWordForm('quest', 'Question Words', { pos: Dim.PartOfSpeech.QUESTION }),
     conj: new NamedWordForm('conj', 'Conjunction', { pos: Dim.PartOfSpeech.CONJUNCTION }),
     part: new NamedWordForm('part', 'Particles', { pos: Dim.PartOfSpeech.PARTICLE }),
+
+    quest: new NamedWordForm('quest', 'Question Words', 
+        { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.QUESTION }),
+    perspron: new NamedWordForm('perspron', 'Personal Pronouns', 
+        { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.PERSONAL }),
 
     number: new NamedWordForm('number', 'Numbers', { 
         pos: Dim.PartOfSpeech.NUMBER }),

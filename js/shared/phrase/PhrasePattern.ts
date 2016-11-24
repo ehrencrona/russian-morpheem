@@ -54,7 +54,6 @@ export const POS_BY_LONG_NAME = {
     'pronoun': PoS.PRONOUN,
     'preposition': PoS.PREPOSITION,
     'numeral': PoS.NUMBER,
-    'question': PoS.QUESTION,
     'conjunction': PoS.CONJUNCTION,
     'particle': PoS.PARTICLE
 }

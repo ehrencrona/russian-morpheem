@@ -565,6 +565,12 @@ $sectionMargin: 1em;
         table.pronouns {
             border-collapse: collapse;
 
+            tr:first-of-type {
+                td {
+                    border-top: none;
+                }                
+            }
+
             td {
                 border-top: 1px solid gray;
                 padding: 2 * $unit 0;

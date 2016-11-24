@@ -1,3 +1,4 @@
+import { AbstractAnyWord } from '../../AbstractAnyWord';
 import { FactSentences } from '../../SentencesByFactIndex';
 import { AdjectiveForm, GrammarCase, Tense } from '../../inflection/Dimensions';
 import { Match, WordMatched } from '../../phrase/Match';
@@ -180,6 +181,12 @@ export function getMatchesForCertainWords(
     }
 
     let matches: Match[] = sentences.map(sentence => {
+        let matchingWords = filterWords(sentence.words)
+
+        if (!matchingWords.length) {
+            return
+        }
+
         if (filterPhrases) {
             let match = mapFind(sentence.phrases, (phrase: Phrase) => {
                 if (filterPhrases(phrase)) {
@@ -200,26 +207,22 @@ export function getMatchesForCertainWords(
         }
 
         if (!onlyPhraseMatches) {
-            let matchingWords = filterWords(sentence.words)
+            let wordsMatched: WordMatched[] = 
+                matchingWords.map(word => {
+                    let m: WordMatched = {
+                        word: word,
+                        wordMatch: null,
+                        index: 0,
+                    }
 
-            if (matchingWords.length) {
-                let wordsMatched: WordMatched[] = 
-                    matchingWords.map(word => {
-                        let m: WordMatched = {
-                            word: word,
-                            wordMatch: null,
-                            index: 0,
-                        }
+                    return m
+                })
 
-                        return m
-                    })
-
-                return {
-                    words: wordsMatched,
-                    pattern: null,
-                    sentence: sentence,
-                } as Match
-            }
+            return {
+                words: wordsMatched,
+                pattern: null,
+                sentence: sentence,
+            } as Match
         }
     }).filter(m => !!m)
 
@@ -234,9 +237,23 @@ export function renderMatch(highlight: Fact,
         let sentence = match.sentence
         let ignorePhrases = true
 
+        let tokens = toStudyWords(sentence, [ highlight ], corpus, ignorePhrases)
+
+        if (highlight instanceof NamedWordForm) {
+            tokens.forEach(token => {
+                if (token instanceof StudyWord) {
+                    let word = token.word 
+                    
+                    if (word instanceof AbstractAnyWord && word.wordForm.matches(highlight)) {
+                        token.studied = true
+                    }
+                } 
+            })
+        }
+
         let tokenized = {
             sentence: sentence,
-            tokens: toStudyWords(sentence, [ highlight ], corpus, ignorePhrases)
+            tokens: tokens
         }
 
         return <li key={ sentence.id }>
@@ -322,19 +339,24 @@ export function getMatchesForInflectionFact(
         sbf[fact.getId()], knowledge, corpus)
 }
 
+export function getFilterPhrasesForWordForm(form: NamedWordForm) {
+    let filterPhrases = null
+
+    if (form.pos == PoS.PRONOUN || form.pos == PoS.PREPOSITION || 
+        form.pos == PoS.POSSESSIVE || form.pos == PoS.NUMBER) {
+        filterPhrases = () => true
+    }
+
+    return filterPhrases
+}
+
 /**
  * Returns Match objects with all sentences that have words with a certain word form.
  */
-export function getMatchesForWordForm(
+export function getMatchesForWordForm(filterPhrases: (Phrase) => boolean,
         form: NamedWordForm, knowledge: NaiveKnowledge, corpus: Corpus) {
     let filterWords = (words) => words.filter(
-        w => w instanceof InflectedWord && form.matches(FORMS[w.form]))
-
-    let filterPhrases = null
-
-    if (form.pos == PoS.PRONOUN || form.pos == PoS.PREPOSITION) {
-        filterPhrases = () => true
-    }
+        w => w instanceof AbstractAnyWord && w.wordForm.matches(form))
 
     return getMatchesForCertainWords(filterWords, filterPhrases,
         null, knowledge, corpus)

@@ -1,3 +1,4 @@
+import { Match } from '../../phrase/Match';
 import AnyWord from '../../AnyWord';
 import { PivotDimension } from '../pivot/PivotDimension';
 import { define } from 'mime';
@@ -6,7 +7,7 @@ import { WORD_FORMS } from '../../inflection/WordForms';
 import Fact from '../../../shared/fact/Fact';
 import InflectableWord from '../../../shared/InflectableWord';
 import InflectedWord from '../../../shared/InflectedWord';
-import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions';
+import { PartOfSpeech as PoS, PronounKind } from '../../../shared/inflection/Dimensions';
 import { InflectionForm } from '../../../shared/inflection/InflectionForm';
 import Inflection from '../../../shared/inflection/Inflection'
 import { FORMS, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms';
@@ -23,19 +24,24 @@ import StudyFact from '../../study/StudyFact';
 import StudyWord from '../../study/StudyWord'
 import toStudyWords from '../../study/toStudyWords';
 import capitalize from './capitalize';
-import { downscoreRepeatedWord, highlightTranslation, tokensToHtml } from './exampleSentences';
 import FactLinkComponent from './FactLinkComponent';
 import getExamplesUsingInflection from './getExamplesUsingInflection';
 import renderRelatedFact from './renderRelatedFact';
 import marked = require('marked');
 import { Component, createElement } from 'react';
 import Corpus from '../../../shared/Corpus'
-import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
+import GroupedListComponent from '../pivot/GroupedListComponent'
+import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
+import MatchEndingDimension from '../pivot/MatchEndingDimension'
+import { FactPivotTable, renderFactEntry as renderPivotFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
 import NounGenderDimension from '../pivot/NounGenderDimension'
+import MatchDefaultFormDimension from '../pivot/MatchDefaultFormDimension'
 import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
+import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, getMatchesForWordForm, getFilterPhrasesForWordForm,
+    highlightTranslation, getMatchesForInflectionForm, renderMatch } from './exampleSentences'
 
 let React = { createElement: createElement }
 
@@ -159,7 +165,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 data={ facts }
                 dimensions={ dimensions }
                 getIdOfEntry={ (f) => f.getId() }
-                renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
+                renderEntry={ renderPivotFactEntry(props.corpus, props.factLinkComponent) }
                 hideCategoryLimit={ 1 }
                 itemsPerCategoryLimit={ 3 } 
             />
@@ -173,7 +179,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             return <FactPivotTable
                 data={ props.corpus.phrases.all() }
                 getIdOfEntry={ (f) => f.getId() }
-                renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
+                renderEntry={ renderPivotFactEntry(props.corpus, props.factLinkComponent) }
                 itemsPerCategoryLimit={ 1 }
                 dimensions={ [
                     new PhraseCaseDimension(props.factLinkComponent), 
@@ -196,14 +202,6 @@ export default class InflectionFormComponent extends Component<Props, State> {
     getWords() {
         let result = this.props.corpus.facts.facts.filter(f => 
             f instanceof AbstractAnyWord && f.wordForm.matches(this.props.form))
-
-        if (this.props.form.pos == PoS.PRONOUN) {
-            const PERSONAL_PRONOUNS = {
-                я: 1, ты: 1, он:1, мы: 1, вы: 1, они: 1, она: 1, оно: 1
-            }
-
-            result = result.filter(w => !PERSONAL_PRONOUNS[w.getId()])
-        }
 
         if (!this.state.allWords) {
             result = result.slice(0, 12)
@@ -265,6 +263,81 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
     }
 
+    renderWordExamples() {
+        let props = this.props
+        let form = props.form
+
+        if (form.pos == PoS.PREPOSITION) {
+            return this.renderPrepositionPhrases()
+        }
+        else if (form.pronounKind == PronounKind.PERSONAL) {
+            return <div>
+                <h3>Table</h3>
+                { this.renderPronouns() }
+            </div>
+        }
+        else if (form.pos == PoS.PRONOUN && !form.pronounKind) {
+            const NAMES = {}
+            NAMES[PronounKind.PERSONAL] = 'personal'
+            NAMES[PronounKind.QUESTION] = 'question'
+
+            let dimension: PivotDimension<Fact, string> = {
+                getKey: (value: string) => {
+                    return value
+                },
+
+                getValues: (fact: Fact): string[] => {
+                    if (fact instanceof AbstractAnyWord) {
+                        if (fact.wordForm.negation) {
+                            return [ 'negative' ]
+                        }
+
+                        return [ NAMES[fact.wordForm.pronounKind] || 'other' ]
+                    }
+                },
+
+                renderValue: (value: string) => {
+                    return value
+                },
+
+                name: 'Kind'
+            }
+
+            return <div>
+                <h3>Common Words</h3>
+
+                <FactPivotTable
+                    data={ this.getWords() }
+                    renderEntry={ renderPivotFactEntry(props.corpus, props.factLinkComponent) }
+                    getIdOfEntry={ (f)=> f.getId()}
+                    dimensions={ [
+                        dimension
+                    ]}
+                />
+            </div>
+        }
+        else {
+            return <div>
+                { !this.state.allWords ?
+                    <div>
+                        Examples of some important { form.name.toLowerCase() }:
+                        
+                        <div className='seeAll' onClick={ () => this.setState({ allWords : true })}>See all</div>
+                    </div>
+                    : 
+                    <div>
+                        These are all { form.name.toLowerCase() } up to a lower intermediate level.
+                        
+                        <div className='seeAll' onClick={ () => this.setState({ allWords : false })}>See all</div>
+                    </div>
+                }
+                <ul>{
+                    this.getWords().map(word => renderRelatedFact(word, props.corpus, props.factLinkComponent))
+                }</ul>
+            </div>  
+        }
+    }
+
 
     render() {
         let corpus = this.props.corpus
@@ -279,7 +352,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 (factoid ? 
                     factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
 
-        let sentences = this.getSentences(form)
+        let sentences = this.getSentences()
 
         let title = corpus.factoids.getFactoid(form).name || form.name
 
@@ -303,61 +376,16 @@ export default class InflectionFormComponent extends Component<Props, State> {
                     }
 
                     {
-                        this.props.form.pos == PoS.PRONOUN ?
-                            this.renderPronouns()
-                            :
-                            null
-                    }
-
-                    {
                         showFormation 
                         ? this.renderFormation()
-                        : (this.props.form.pos != PoS.PREPOSITION ?
-                            <div>
-                                <h3>Common Words</h3>
-
-                                { !this.state.allWords ?
-                                    <div>
-                                        Examples of some important { form.name.toLowerCase() }:
-                                        
-                                        <div className='seeAll' onClick={ () => this.setState({ allWords : true })}>See all</div>
-                                    </div>
-                                    : 
-                                    <div>
-                                        These are all { form.name.toLowerCase() } up to a lower intermediate level.
-                                        
-                                        <div className='seeAll' onClick={ () => this.setState({ allWords : false })}>See all</div>
-                                    </div>
-                                }
-
-                                <ul>{
-                                    this.getWords().map(word => renderRelatedFact(word, this.props.corpus, this.props.factLinkComponent))
-                                }</ul>
-                            </div>
-                            :
-                            this.renderPrepositionPhrases())
+                        : this.renderWordExamples()
                     }
 
                     { showUsage ?
-                        <div>
-                            <h3>Examples of usage</h3>
-
-                            <ul className='sentences'>
-                                {
-                                    (sentences || []).map(sentence => 
-                                        <li key={ sentence.sentence.id }>
-                                            {
-                                                React.createElement(this.props.factLinkComponent, { fact: sentence.sentence }, 
-                                                    <div dangerouslySetInnerHTML={ { __html: 
-                                                        tokensToHtml(sentence.tokens)
-                                                    }}/>)
-                                            }
-                                            <div className='en' dangerouslySetInnerHTML={ { __html: 
-                                                highlightTranslation(sentence) } }/>
-                                        </li>
-                                    )
-                                }
-                            </ul>
+                        <div className='exampleSentences'>
+                        {
+                            sentences 
+                        }
                         </div>
                         :
                         null
@@ -402,53 +430,40 @@ export default class InflectionFormComponent extends Component<Props, State> {
         </div>
     }
 
-    getSentences(form: NamedWordForm) {
+    getSentences() {
         let corpus = this.props.corpus
+        let form = this.props.form
 
-        let sentences = this.props.corpus.sentences.sentences.filter(sentence => {
-            return !!sentence.words.find(w => w.wordForm.matches(form))
-        })
-        
-        let scores
+        let filterPhrases = null ; // getFilterPhrasesForWordForm(form)
+        let matches = getMatchesForWordForm(filterPhrases, form, this.props.knowledge, corpus)
 
-        if (sentences.length) {
-            scores = sentences.map(sentence => 
-                { 
-                    return {
-                        sentence: sentence,
-                        fact: form,
-                        score: 1
-                    }    
-                })
-
-            scores = new KnowledgeSentenceSelector(this.props.knowledge).scoreSentences(scores)
-
-            scores = downscoreRepeatedWord(scores, 
-                (word) => word instanceof InflectedWord && form.matches(FORMS[word.form]))
-
-            scores = topScores(scores, 12)
-        }
-        else {
-            scores = []
+        class MatchListComponent extends GroupedListComponent<Match> {
         }
 
-        let ignorePhrases = true
+        let dimensions: PivotDimension<Match, any>[] = [
+            new MatchTextDimension(true)
+        ]
 
-        return scores.map(s => {
-            return {
-                sentence: s.sentence,
-                tokens: this.highlightExamples(toStudyWords(s.sentence, [ form ], this.props.corpus, ignorePhrases))
-            }
-        })
-    }
+        let renderEntry = (entry, children, key) => key
 
-    highlightExamples(tokens: any[]) {
-        tokens.forEach(token => {
-            if (token instanceof StudyWord && token.word.wordForm.matches(this.props.form)) {
-                token.studied = true
-            } 
-        })
+        if (filterPhrases) {
+            dimensions = [ new MatchPhraseDimension() ].concat(dimensions)
+        }
+        else if (INFLECTION_FORMS[ form.pos ]) {
+            dimensions = [ new MatchDefaultFormDimension() as PivotDimension<Match, any> ].concat(dimensions)
+        }
 
-        return tokens
+        return <MatchListComponent
+            data={ matches }
+            getIdOfEntry={ (match) => match.sentence.id }
+            dimensions={ dimensions }
+            renderEntry={ renderMatch(form, corpus, this.props.factLinkComponent) }
+            renderGroup={ (entry, children, key) => <div key={ key }>
+                { entry }
+                <ul className='sentences'>{ children }</ul>
+            </div> }
+            itemsPerGroupLimit={ 3 }
+            groupLimit={ 10 }
+        />   
     }
 }

@@ -56,7 +56,6 @@ POSES[PartOfSpeech.PREPOSITION] = 'prep'
 POSES[PartOfSpeech.NUMBER] = 'num'
 POSES[PartOfSpeech.POSSESSIVE] = 'poss'
 POSES[PartOfSpeech.PARTICLE] = 'part'
-POSES[PartOfSpeech.QUESTION] = 'quest'
 POSES[PartOfSpeech.CONJUNCTION] = 'conj'
 
 export let POS_BY_NAME: { [id: string] : PartOfSpeech } = {}

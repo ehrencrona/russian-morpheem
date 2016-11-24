@@ -5,7 +5,7 @@ import * as Dimension from './Dimensions'
 
 export const FORM_PROPS = [ 
     'pos', 'gender', 'animate', 'number', 'person', 'card',
-    'numberEn', 'aspect', 'reflex', 'negation', 'grammaticalCase' 
+    'numberEn', 'aspect', 'reflex', 'negation', 'grammaticalCase', 'pronounKind'
 ]
 
 export interface WordCoordinates {
@@ -21,6 +21,7 @@ export interface WordCoordinates {
     card?: Dimension.Cardinality
     reflex?: Dimension.Reflexivity
     negation?: Dimension.Negation
+    pronounKind?: Dimension.PronounKind
 }
 
 export class WordForm implements WordCoordinates {
@@ -35,6 +36,7 @@ export class WordForm implements WordCoordinates {
     negation?: Dimension.Negation
     grammaticalCase?: Dimension.GrammarCase
     card?: Dimension.Cardinality
+    pronounKind?: Dimension.PronounKind
 
     constructor(coordinates: WordCoordinates) {
         Object.assign(this, coordinates)
