@@ -303,7 +303,11 @@ export function getMatchesForInflectionForm(filterPhrases: (Phrase) => boolean,
 
     new InflectionFact('foo', null, form.id).visitFacts(visit)
 
-    if (mostDiscriminating.count > 1000) {
+    if (!mostDiscriminating) {
+        console.error('Could not find any indexed sentences for word form ' + form.id)
+    }
+
+    if (mostDiscriminating && mostDiscriminating.count > 1000) {
         mostDiscriminating = Object.assign({}, mostDiscriminating)
         
         mostDiscriminating.easy = mostDiscriminating.easy

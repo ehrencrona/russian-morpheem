@@ -26,7 +26,8 @@ export default function(corpus: Corpus) {
     return (req: express.Request, res: express.Response) => {
 
         if (req.hostname == 'russian.morpheem.com') {
-            res.header({ 'Cache-Control': 'public, max-age=300000' });
+            // we're warming the cache every hour so time out a bit before that 
+            res.header({ 'Cache-Control': 'public, max-age=3400000' });
         }
 
         let factId = req.params.fact

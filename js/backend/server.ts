@@ -114,16 +114,9 @@ function registerRoutes(corpus: Corpus) {
                 let values = ifNoneMatch.replace(/W\//g, '').split(',').map(s => s.trim())
 
                 if (values.indexOf(`"${etag}"`) >= 0 || values.indexOf(etag) >= 0) {
-console.log('unchanged', req.originalUrl, ifNoneMatch, etag)
                     res.sendStatus(304)
                     return
                 }
-                else {
-console.log('changed', req.originalUrl, ifNoneMatch, etag)
-                }
-            }
-            else {
-console.log('no ifnonematch', req.originalUrl, ifNoneMatch, etag)
             }
         }
 
