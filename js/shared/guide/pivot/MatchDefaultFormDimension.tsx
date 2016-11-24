@@ -11,7 +11,7 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export default class MatchDefaultFormDimension implements PivotDimension<Match, InflectableWord> {
+export default class MatchDefaultFormDimension implements PivotDimension<Match, AnyWord> {
     name = ''
 
     constructor(public renderText?: boolean) {
@@ -21,15 +21,18 @@ export default class MatchDefaultFormDimension implements PivotDimension<Match, 
         return value.getId()
     }
 
-    getValues(match: Match): InflectableWord[] {
+    getValues(match: Match): AnyWord[] {
         let word = match.words[0].word
 
         if (word instanceof InflectedWord) {
             return [ word.word ]
         }
+        else {
+            return [ word ]
+        }
     }
 
-    renderValue(value: InflectableWord) {
+    renderValue(value: AnyWord) {
         return <div key={ value.getId() } className='phraseGroup'>
             <div className='jp'>{ value.toText() }</div>
             <div className='en'>{ value.getEnglish()  }</div>
