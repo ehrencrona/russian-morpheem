@@ -1,3 +1,4 @@
+import { PUNCTUATION_NOT_PRECEDED_BY_SPACE } from '../Punctuation';
 const ARTICLES = ['a ', 'an ', 'the ']
 
 export default function findPotentialArticle(inEnglishString: string, before: string): string {
@@ -13,9 +14,10 @@ export default function findPotentialArticle(inEnglishString: string, before: st
             let found = ARTICLES.find(article => 
                 i - article.length >= 0 
                 && inEnglishString.substr(i - article.length, article.length) == article 
-                && (i == article.length || inEnglishString[i - article.length-1].match(/\s/)) 
-                && before.substr(0, article.length) != article) 
-            
+                && (i == article.length || inEnglishString[i - article.length - 1].match(/\s/)) 
+                && before.substr(0, article.length) != article 
+                && (' ' + PUNCTUATION_NOT_PRECEDED_BY_SPACE).indexOf(inEnglishString[i + before.length]) >= 0)
+
             if (found) {
                 return found.trim()
             }
