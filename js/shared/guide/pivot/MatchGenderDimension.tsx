@@ -1,6 +1,8 @@
 import InflectedWord from '../../InflectedWord';
-import { Match } from '../../phrase/Match';
-import { CASES, FORMS } from '../../inflection/InflectionForms';
+import { AbstractAnyWord } from '../../AbstractAnyWord'
+import { Match } from '../../phrase/Match'
+import { GrammarNumber } from '../../inflection/Dimensions'
+import { CASES, FORMS, LONG_GENDERS } from '../../inflection/InflectionForms';
 import { Gender, GrammarCase } from '../../inflection/Dimensions';
 
 import PivotDimension from './PivotDimension'
@@ -9,7 +11,7 @@ import { Component, createElement } from 'react';
 
 let React = { createElement: createElement }
 
-export default class MatchEndingDimension implements PivotDimension<Match, string> {
+export default class MatchGenderDimension implements PivotDimension<Match, string> {
     name = ''
 
     getKey(value: string) {
@@ -18,9 +20,16 @@ export default class MatchEndingDimension implements PivotDimension<Match, strin
 
     getValues(match: Match): string[] {
         let w = match.words[0].word
-        
+
         if (w instanceof InflectedWord) {
-            return [ w.word.inflection.getEnding(w.form).suffix ]
+            let form = FORMS[w.form]
+
+            if (form.gender) { 
+                return [ LONG_GENDERS[form.gender] ]
+            }
+            else if (form.number == GrammarNumber.PLURAL) {
+                return [ 'plural' ]
+            }
         }
         else {
             return [ '' ]

@@ -75,6 +75,12 @@ CASES[GrammarCase.PREP] = 'prepositional'
 CASES[GrammarCase.LOC] = 'locative'
 CASES[GrammarCase.CONTEXT] = 'context'
 
+export let LONG_GENDERS: { [id: number] : string } = {}
+
+LONG_GENDERS[Gender.M] = 'masculine'
+LONG_GENDERS[Gender.F] = 'feminine'
+LONG_GENDERS[Gender.N] = 'neuter'
+
 addForm('1', 'I', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
 addForm('2', 'you', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
 addForm('3', 's/he, it', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),

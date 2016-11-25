@@ -41,6 +41,7 @@ import { TokenizedSentence, downscoreRepeatedWord, tokensToHtml, getFilterPhrase
 
 import { FactPivotTable, renderFactEntry } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
+import MatchGenderDimension from '../pivot/MatchGenderDimension'
 import GroupedListComponent from '../pivot/GroupedListComponent'
 import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
 import MatchEndingDimension from '../pivot/MatchEndingDimension'
@@ -221,7 +222,16 @@ export default class InflectionFormComponent extends Component<Props, State> {
             dimensions = [ new MatchPhraseDimension() ].concat(dimensions)
         }
         else {
-            dimensions = [ new MatchEndingDimension() as PivotDimension<Match, any> ].concat(dimensions)
+            let primaryDimension: PivotDimension<Match, any>
+
+            if (form.id == 'past') {
+                primaryDimension = new MatchGenderDimension()
+            }
+            else {
+                primaryDimension = new MatchEndingDimension()                 
+            }
+
+            dimensions = [ primaryDimension ].concat(dimensions)
         }
 
         return <MatchListComponent
@@ -238,6 +248,14 @@ export default class InflectionFormComponent extends Component<Props, State> {
         />   
     }
 
+    getRelatedForms() {
+        let thisForm = this.props.form
+
+        return Object.keys(FORMS).map(i => FORMS[i])
+            .filter(form => (thisForm.matches(form) || form.matches(thisForm)) && thisForm.id != form.id)
+            .map(f => f as Fact)
+    }
+
     render() {
         let corpus = this.props.corpus
         let form = this.props.form
@@ -248,7 +266,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         const POS = [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB, PoS.PRONOUN ]
 
-        let related = (form.required || [])
+        let related = this.getRelatedForms()
+            .concat(form.required || [])
             .concat(form.getComponents())
             .concat(
                 (factoid ? 
