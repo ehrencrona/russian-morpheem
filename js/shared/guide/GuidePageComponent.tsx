@@ -10,7 +10,7 @@ import AbstractAnyWord from '../AbstractAnyWord'
 import capitalize from './fact/capitalize'
 
 import { PartOfSpeech as PoS, Aspect,Reflexivity } from '../inflection/Dimensions'
-import { CASES, POSES, FORMS } from '../inflection/InflectionForms'
+import { CASES, LONG_POS_NAMES, FORMS } from '../inflection/InflectionForms'
 import InflectionForm from '../inflection/InflectionForm'
 import InflectionFact from '../inflection/InflectionFact'
 import InflectedWord from '../InflectedWord'
@@ -106,16 +106,16 @@ export default function guidePageComponent(props: Props) {
                 + inflected.toText() 
 
             description = 'The ' + form.name 
-                + ' of the Russian ' + POSES[props.context.wordForm.pos] + ' ' 
+                + ' of the Russian ' + LONG_POS_NAMES[props.context.wordForm.pos] + ' ' 
                 + inflected.toText() + ' ("' + inflected.getEnglish() + '") is ' + props.context.toText() + '.'
         }
         else {
             title = 'Forming the ' 
                 + form.name 
-                + ' of Russian ' + POSES[fact.inflection.wordForm.pos] + 's' 
+                + ' of Russian ' + LONG_POS_NAMES[fact.inflection.wordForm.pos] + 's' 
                 + ' using -' + fact.inflection.getEnding([fact.form]).suffix
 
-            description = 'Some ' + POSES[fact.inflection.wordForm.pos] + 's use the ending -' 
+            description = 'Some ' + LONG_POS_NAMES[fact.inflection.wordForm.pos] + 's use the ending -' 
                 + fact.inflection.getEnding([fact.form]).suffix + ' to form the ' 
                 + form.name + ' form in Russian, for example ' + 
                 getExamplesUsingInflection(fact.form, fact.inflection, props.corpus, 

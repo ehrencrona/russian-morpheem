@@ -64,6 +64,18 @@ for (let pos in POSES) {
     POS_BY_NAME[POSES[pos]] = parseInt(pos) as PartOfSpeech
 }
 
+export const LONG_POS_NAMES = {}
+
+LONG_POS_NAMES[PartOfSpeech.VERB] ='verb'
+LONG_POS_NAMES[PartOfSpeech.NOUN] ='noun'
+LONG_POS_NAMES[PartOfSpeech.ADJECTIVE] ='adjective'
+LONG_POS_NAMES[PartOfSpeech.ADVERB] ='adverb'
+LONG_POS_NAMES[PartOfSpeech.PRONOUN] ='pronoun'
+LONG_POS_NAMES[PartOfSpeech.PREPOSITION] ='preposition'
+LONG_POS_NAMES[PartOfSpeech.NUMBER] ='numeral'
+LONG_POS_NAMES[PartOfSpeech.CONJUNCTION] ='conjunction'
+LONG_POS_NAMES[PartOfSpeech.PARTICLE] ='particle' 
+
 export let CASES = {}
 
 CASES[GrammarCase.NOM] = 'nominative'
