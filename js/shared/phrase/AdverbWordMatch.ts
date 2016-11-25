@@ -39,6 +39,7 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     }
 
     getInflectionForm() {
+        return null
     }
 
     toString() {

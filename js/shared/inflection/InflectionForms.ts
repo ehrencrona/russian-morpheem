@@ -96,7 +96,7 @@ addForm('m', 'masculine singular', { gender: Gender.M, number: GrammarNumber.SIN
 addForm('f', 'feminine singular', { gender: Gender.F, number: GrammarNumber.SINGULAR, grammaticalCase: GrammarCase.NOM })
 addForm('n', 'neuter singular', { gender: Gender.N, number: GrammarNumber.SINGULAR, grammaticalCase: GrammarCase.NOM })
 addForm('pl', 'plural', { number: GrammarNumber.PLURAL, grammaticalCase: GrammarCase.NOM })
-addForm('fpl', 'feminine plural', { number: GrammarNumber.PLURAL, gender: Gender.F, pos: PartOfSpeech.NU })
+addForm('fpl', 'feminine plural', { number: GrammarNumber.PLURAL, gender: Gender.F })
 addForm('sg', 'singular', { number: GrammarNumber.SINGULAR })
 
 addForm('nom', 'nominative singular', { grammaticalCase: GrammarCase.NOM, number: GrammarNumber.SINGULAR })
