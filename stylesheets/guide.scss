@@ -562,6 +562,33 @@ $sectionMargin: 1em;
     }
 
     .wordForm {
+        ul.factEntryWithDerivation {
+            display: flex;
+            flex-direction: row;
+
+            li {
+                width: 50%;
+            }
+        }
+
+        table.perf, table.imperf {
+            ul.factEntryWithDerivation li:nth-child(2) .en {
+                display: none;
+            }
+        }
+
+        table.poss {
+            td {
+                border-bottom: 1px solid lightgray;
+            }
+
+            tr:last-of-type {
+                td {
+                    border-bottom: none;
+                }                
+            }
+        }
+
         table.pronouns {
             border-collapse: collapse;
 

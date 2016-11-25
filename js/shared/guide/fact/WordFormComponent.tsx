@@ -1,3 +1,4 @@
+import { renderFactEntry } from '../pivot/GroupedListComponent';
 import { Match } from '../../phrase/Match';
 import AnyWord from '../../AnyWord';
 import { PivotDimension } from '../pivot/PivotDimension';
@@ -7,7 +8,7 @@ import { WORD_FORMS } from '../../inflection/WordForms';
 import Fact from '../../../shared/fact/Fact';
 import InflectableWord from '../../../shared/InflectableWord';
 import InflectedWord from '../../../shared/InflectedWord';
-import { PartOfSpeech as PoS, PronounKind } from '../../../shared/inflection/Dimensions';
+import { Aspect, PartOfSpeech as PoS, PronounKind, Reflexivity } from '../../../shared/inflection/Dimensions';
 import { InflectionForm } from '../../../shared/inflection/InflectionForm';
 import Inflection from '../../../shared/inflection/Inflection'
 import { FORMS, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms';
@@ -32,8 +33,9 @@ import { Component, createElement } from 'react';
 import Corpus from '../../../shared/Corpus'
 import GroupedListComponent from '../pivot/GroupedListComponent'
 import { MatchPhraseDimension, MatchTextDimension } from '../pivot/MatchTextDimension'
+import DerivationFormationDimension from '../pivot/DerivationFormationDimension'
 import MatchEndingDimension from '../pivot/MatchEndingDimension'
-import { FactPivotTable, renderFactEntry as renderPivotFactEntry } from '../pivot/PivotTableComponent'
+import { FactPivotTable, renderFactEntry as renderPivotFactEntry, renderFactEntryWithDerivation } from '../pivot/PivotTableComponent'
 import PhrasePrepositionDimension from '../pivot/PhrasePrepositionDimension'
 import PhraseCaseDimension from '../pivot/PhraseCaseDimension'
 import WordDefaultEndingDimension from '../pivot/WordDefaultEndingDimension'
@@ -121,9 +123,33 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
     renderFormation() {
         let props = this.props
-        let defaultForm = INFLECTION_FORMS[props.form.pos].allForms[0]
+        let form = props.form
 
-        let inflections = this.mostCommonInflections(props.form, defaultForm)
+        let facts =
+            props.corpus.facts.facts.filter(fact =>
+                fact instanceof AbstractAnyWord && fact.wordForm.matches(form))
+
+        if (form.equals({ aspect: form.aspect, pos: PoS.VERB })) {
+            return this.renderPerfective(facts)
+        }
+
+        if (form.equals({ pos: PoS.ADVERB })) {
+            return this.renderAdverb(facts)
+        }
+
+        if (form.equals({ pos: PoS.POSSESSIVE })) {
+            return this.renderPossessive(facts)
+        }
+        else {
+            return this.renderFormationByEnding(facts)
+        }
+    }
+
+    renderFormationByEnding(facts: Fact[]) {
+        let props = this.props
+        let form = props.form
+        let defaultForm = INFLECTION_FORMS[form.pos].allForms[0]
+        let inflections = this.mostCommonInflections(form, defaultForm)
 
         if (!inflections.length || 
             !inflections.find(i => 
@@ -134,27 +160,31 @@ export default class InflectionFormComponent extends Component<Props, State> {
         let dimensions: PivotDimension<Fact, any>[] = 
             [ new WordDefaultEndingDimension(props.factLinkComponent, 1) ]
 
-        let facts =
-            props.corpus.facts.facts.filter(fact =>
-                fact instanceof InflectableWord && fact.wordForm.matches(props.form))
-
-        let filterLimit
-
-        if (props.form.pos == PoS.ADJECTIVE) {
+        if (form.pos == PoS.ADJECTIVE) {
             // exclude those that are only comparative
             facts = facts.filter(w => w instanceof InflectableWord && 
                 (!!w.inflect('m') || !!w.inflect('shortm')))
         }
-        else if (props.form.pos == PoS.NOUN) {
+        else if (form.pos == PoS.NOUN) {
             // exclude those that don't have singular
             facts = facts.filter(w => w instanceof InflectableWord && !!w.inflect('nom'))
 
-            if (!props.form.gender) {
+            if (!form.gender) {
                 dimensions = [ new NounGenderDimension() as PivotDimension<Fact, any> ].concat(dimensions)
             }
         }
 
-        filterLimit = Math.round(facts.length / 50)
+        let renderEntry
+        let hideCategoryLimit
+
+        if (form.reflex) {
+            renderEntry = renderFactEntryWithDerivation(props.corpus,   
+                (form.reflex == Reflexivity.REFLEXIVE ? 'nonreflex' : 'reflex'), props.factLinkComponent)
+        }
+        else {
+            renderEntry = renderPivotFactEntry(props.corpus, props.factLinkComponent)
+            hideCategoryLimit = 1
+        }
 
         return <div>
             <h3>Endings</h3>
@@ -165,9 +195,98 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 data={ facts }
                 dimensions={ dimensions }
                 getIdOfEntry={ (f) => f.getId() }
-                renderEntry={ renderPivotFactEntry(props.corpus, props.factLinkComponent) }
-                hideCategoryLimit={ 1 }
-                itemsPerCategoryLimit={ 3 } 
+                renderEntry={ renderEntry }
+                hideCategoryLimit={ hideCategoryLimit }
+                itemsPerCategoryLimit={ 3 }
+                className={ form.id } 
+            />
+        </div>
+    }
+
+    renderPerfective(facts: Fact[]) {
+        let props = this.props
+        let form = props.form
+        let renderFactEntry
+        let dimensions: PivotDimension<Fact, any>[]
+
+        let derivation
+
+        if (form.id == 'perf') {
+            derivation = 'imperf'
+        }
+        else {
+            derivation = 'perf'
+        }
+
+        renderFactEntry = renderFactEntryWithDerivation(props.corpus, derivation, props.factLinkComponent)
+
+        dimensions = 
+            [ new DerivationFormationDimension(derivation, false) as PivotDimension<Fact, any> ]
+
+        return <div>
+            <h3>Formation</h3>
+
+            <div>Most common ways of forming the perfective:</div>
+ 
+            <FactPivotTable
+                data={ facts }
+                dimensions={ dimensions }
+                getIdOfEntry={ (f) => f.getId() }
+                renderEntry={ renderFactEntry }
+                hideCategoryLimit={ 2 }
+                itemsPerCategoryLimit={ 3 }
+                className={ form.id } 
+            />
+        </div>
+    }
+
+    renderAdverb(facts: Fact[]) {
+        let props = this.props
+        let form = props.form
+        let renderFactEntry
+        let dimensions: PivotDimension<Fact, any>[]
+
+        renderFactEntry = renderFactEntryWithDerivation(props.corpus, 'adj', props.factLinkComponent)
+
+        dimensions = 
+            [ new DerivationFormationDimension('adj', true) as PivotDimension<Fact, any> ]
+
+        return <div>
+            <h3>Formation</h3>
+
+            <div>Most common ways of forming the adverb:</div>
+ 
+            <FactPivotTable
+                data={ facts }
+                dimensions={ dimensions }
+                getIdOfEntry={ (f) => f.getId() }
+                renderEntry={ renderFactEntry }
+                hideCategoryLimit={ 2 }
+                itemsPerCategoryLimit={ 3 }
+                className={ form.id } 
+            />
+        </div>
+    }
+
+    renderPossessive(facts: Fact[]) {
+        let props = this.props
+        let form = props.form
+        let renderFactEntry
+        let dimensions: PivotDimension<Fact, any>[]
+
+        renderFactEntry = renderFactEntryWithDerivation(props.corpus, 'pron', props.factLinkComponent)
+
+        dimensions = [ ]
+
+        return <div>
+            <h3>Possessives and their pronouns</h3>
+ 
+            <FactPivotTable
+                data={ facts }
+                dimensions={ dimensions }
+                getIdOfEntry={ (f) => f.getId() }
+                renderEntry={ renderFactEntry }
+                className={ form.id } 
             />
         </div>
     }
@@ -356,7 +475,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let title = corpus.factoids.getFactoid(form).name || form.name
 
-        let showFormation = form.pos && INFLECTION_FORMS[form.pos] && 
+        let showFormation = form.pos && 
+            (INFLECTION_FORMS[form.pos] || form.equals({ pos: PoS.ADVERB }) || form.pos == PoS.POSSESSIVE) && 
             form.pos != PoS.PRONOUN  && form.pos != PoS.PREPOSITION
 
         let showUsage = form != WORD_FORMS['n'] && form != WORD_FORMS['v'] && form != WORD_FORMS['adj'] 
@@ -452,7 +572,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         if (filterPhrases) {
             dimensions = [ new MatchPhraseDimension() ].concat(dimensions)
         }
-        else if (INFLECTION_FORMS[ form.pos ]) {
+        else if (INFLECTION_FORMS[ form.pos ] || form.id == 'poss') {
             dimensions = [ new MatchDefaultFormDimension() as PivotDimension<Match, any> ].concat(dimensions)
         }
 

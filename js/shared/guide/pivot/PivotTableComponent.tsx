@@ -1,3 +1,5 @@
+import AnyWord from '../../AnyWord';
+import { AbstractAnyWord } from '../../AbstractAnyWord';
 import { WSAECANCELLED } from 'constants';
 import { toASCII } from 'punycode';
 import Fact from '../../../shared/fact/Fact';
@@ -20,6 +22,7 @@ interface Props<PivotEntry> {
     renderEntry: (PivotEntry) => any,
     itemsPerCategoryLimit?: number,
     hideCategoryLimit?: number,
+    className?: string
 }
 
 interface State {
@@ -85,7 +88,7 @@ export default class PivotTableComponent<PivotEntry> extends Component<Props<Piv
                 :
                     <div className='seeAll' onClick={ () => this.setState({ showAll : true })}>See all</div>
             }
-            <table className='pivot'>
+            <table className={ 'pivot ' + this.props.className || ''} >
                 <colgroup>
                     {
                         props.dimensions.concat(null).map((d, index) => <col key={ index }/>)
@@ -108,6 +111,29 @@ export function renderFactEntry(corpus: Corpus, factLinkComponent: FactLinkCompo
             corpus, 
             factLinkComponent)
     }</ul>
+}
+
+export function renderFactEntryWithDerivation(corpus: Corpus, derivation: string, factLinkComponent: FactLinkComponent) {
+    return (entry: Fact) => {
+        let derived: AnyWord
+
+        if (entry instanceof AbstractAnyWord) {
+            derived = entry.getDerivedWords(derivation)[0]
+        }
+
+        return <ul className='factEntryWithDerivation'>{
+            renderRelatedFact(
+                entry, 
+                corpus, 
+                factLinkComponent)
+        }{
+            derived && renderRelatedFact(
+                derived.getWordFact(), 
+                corpus, 
+                factLinkComponent)
+        }</ul>
+
+    } 
 }
 
 export class FactPivotTable extends PivotTableComponent<Fact> {
