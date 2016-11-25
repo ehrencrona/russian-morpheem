@@ -16,7 +16,7 @@ let React = { createElement: createElement }
 
 export default function renderTagFacts(fact: Fact, corpus: Corpus, factLinkComponent: FactLinkComponent, addFacts?: Fact[] ) {
     return <ul className='renderTagFacts'>{
-        addFacts.concat(
+        (addFacts || []).concat(
             corpus.facts.getTagsOfFact(fact)
                 .map(tag => { 
                     let tagFact = new TagFact(tag)

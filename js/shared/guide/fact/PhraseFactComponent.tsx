@@ -51,6 +51,7 @@ import FactLinkComponent from './FactLinkComponent'
 
 import renderRelatedFact from './renderRelatedFact'
 import getPhraseSeoText from './getPhraseSeoText'
+import renderTagFacts from './renderTagFacts'
 
 let React = { createElement: createElement }
 
@@ -181,6 +182,9 @@ export default class PhraseFactComponent extends Component<Props, State> {
         return <div>
             <h1>"{ phrase.description }"</h1>
             <h2>{ phrase.en } { phraseSeoText ? ' – ' + phraseSeoText : '' }</h2>
+
+            { renderTagFacts(phrase, corpus, this.props.factLinkComponent) }
+
             {
                 factoid ? 
                     <div className='factoid' 

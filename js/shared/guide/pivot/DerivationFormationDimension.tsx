@@ -39,7 +39,7 @@ export default class DerivationFormationDimension implements PivotDimension<Fact
                     }
                 }
 
-                return result || 'other'
+                return result || 'irregular'
             })
 
             if (!result.length && this.allowNone) {

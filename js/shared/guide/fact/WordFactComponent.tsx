@@ -140,7 +140,6 @@ export default class WordFactComponent extends Component<Props, State> {
         this.wordChanged(fact)
     } 
 
-
     wordsWithSimilarInflection() {
         let word = this.props.word
 
@@ -266,11 +265,11 @@ export default class WordFactComponent extends Component<Props, State> {
                 }
             })
 
-        let related = 
+        let related =
             (word.required || [])
-            .concat(factoid ? 
-                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) 
-                : 
+            .concat(factoid ?
+                factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f)
+                :
                 [])
 
         let posSpecific = null
