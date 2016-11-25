@@ -1,3 +1,4 @@
+import AnyWord from '../AnyWord';
 import { post } from 'request';
 import { inflate } from 'zlib';
 
@@ -7,7 +8,7 @@ import Word from '../Word'
 import InflectedWord from '../InflectedWord'
 
 import { FORMS } from '../inflection/InflectionForms'
-import { PartOfSpeech } from '../inflection/Dimensions'
+import { GrammarCase, PartOfSpeech } from '../inflection/Dimensions';
 import InflectionForm from '../inflection/InflectionForm'
 import { NamedWordForm, WordForm } from '../inflection/WordForm'
 
@@ -24,12 +25,14 @@ export default class PosFormWordMatch extends AbstractFormMatch implements CaseS
         super(wordForms, inflectionForm, quantifier || getDefaultQuantifier(wordForms))
     }
 
-    wordMatches(word: Word, context: MatchContext) {
+    wordMatches(word: AnyWord, context: MatchContext) {
         if (!this.matchesWordForm(word.wordForm, context)) {
             return false
         }
 
-        if (word instanceof Word && !this.inflectionForm) { 
+        if (word instanceof Word && (!this.inflectionForm || 
+                // this is primarily for the matching of adjectives as possessives
+                this.inflectionForm.equals({ grammaticalCase: GrammarCase.CONTEXT }))) { 
             return true
         }
         else if (word instanceof InflectedWord) {

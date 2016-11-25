@@ -34,10 +34,10 @@ abstract class AbstractFormMatch extends AbstractQuantifierMatch {
     }
 
     matchesWordForm(wordForm: WordForm, context: MatchContext): boolean {
-        for (let form of this.wordForms) {
-            if (!wordForm.matches(form)) {
+        for (let matchForm of this.wordForms) {
+            if (!wordForm.matches(matchForm)) {
                 // possessives are pronouns but can for most purposes be treated as adjectives
-                if (form.id == 'adj' && wordForm.pos == PoS.POSSESSIVE) {
+                if (matchForm.pos == PoS.ADJECTIVE && wordForm.pos == PoS.POSSESSIVE) {
                     continue
                 }
 
