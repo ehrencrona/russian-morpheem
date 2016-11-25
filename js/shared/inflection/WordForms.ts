@@ -30,7 +30,8 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
         'Nouns used in the singular in Russian (but not English)',
         { numberEn: Dim.GrammarNumber.PLURAL }),
 */
-    n: new NamedWordForm('n', 'Nouns', { pos: Dim.PartOfSpeech.NOUN }),
+    n: new NamedWordForm('noun', 'Nouns', { pos: Dim.PartOfSpeech.NOUN }),
+    noun: new NamedWordForm('noun', 'Nouns', { pos: Dim.PartOfSpeech.NOUN }),
     v: new NamedWordForm('v', 'Verbs', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', 'Adjectives', { pos: Dim.PartOfSpeech.ADJECTIVE }),
     adjneg: new NamedWordForm('adjneg', 'Negative Adjectives', 
