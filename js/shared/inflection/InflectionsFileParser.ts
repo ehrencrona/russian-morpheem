@@ -9,7 +9,7 @@ import Inflections from './Inflections'
 import Ending from '../Ending'
 import Transform from '../Transform'
 import allTransforms from '../Transforms'
-import { formExists } from './InflectionForms'
+import { formExists, FORMS, POSES } from './InflectionForms';
 import { INFLECTION_FORMS, POS_BY_NAME } from './InflectionForms'
 import { PartOfSpeech as PoS } from './Dimensions'
 
@@ -88,6 +88,7 @@ export function parseEndings(str: string, wordForm: WordForm, id?: string): Endi
 
             if (!formExists(wordForm.pos, form)) {
                 console.warn(`The form ${form} is unknown for PoS ${wordForm.pos} when parsing "${str}".`)
+                continue
             }
 
             let ending

@@ -10,6 +10,7 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     nounm: new NamedWordForm('nounm', 'Masculine Nouns', { pos: Dim.PartOfSpeech.NOUN, gender: Dim.Gender.M }),
     nounn: new NamedWordForm('nounn', 'Neuter Nouns', { pos: Dim.PartOfSpeech.NOUN, gender: Dim.Gender.N }),
     animate: new NamedWordForm('animate', 'Animate Words', { animate: Dim.Animateness.ANIMATE }),
+/*
     'accord1sg': new NamedWordForm('accord1sg', 'Words that go with the first person singular', 
         { person: Dim.Person.FIRST, number: Dim.GrammarNumber.SINGULAR}),
     'accord2sg': new NamedWordForm('accord2sg', 'Words that go with the second person singular',
@@ -28,7 +29,7 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     en_pl: new NamedWordForm('en_pl', 
         'Nouns used in the singular in Russian (but not English)',
         { numberEn: Dim.GrammarNumber.PLURAL }),
-
+*/
     n: new NamedWordForm('n', 'Nouns', { pos: Dim.PartOfSpeech.NOUN }),
     v: new NamedWordForm('v', 'Verbs', { pos: Dim.PartOfSpeech.VERB }),
     adj: new NamedWordForm('adj', 'Adjectives', { pos: Dim.PartOfSpeech.ADJECTIVE }),
@@ -42,16 +43,16 @@ export const WORD_FORMS: { [id: string] : NamedWordForm } = {
     prepos: new NamedWordForm('prepos', 'Prepositions', { pos: Dim.PartOfSpeech.PREPOSITION }),
 
     pron: new NamedWordForm('pron', 'Pronouns', { pos: Dim.PartOfSpeech.PRONOUN }),
-    poss: new NamedWordForm('poss', 'Possessive Pronouns', { pos: Dim.PartOfSpeech.POSSESSIVE }),
-    conj: new NamedWordForm('conj', 'Conjunction', { pos: Dim.PartOfSpeech.CONJUNCTION }),
-    part: new NamedWordForm('part', 'Particles', { pos: Dim.PartOfSpeech.PARTICLE }),
-
     quest: new NamedWordForm('quest', 'Question Words', 
         { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.QUESTION }),
     perspron: new NamedWordForm('perspron', 'Personal Pronouns', 
         { pos: Dim.PartOfSpeech.PRONOUN, pronounKind: Dim.PronounKind.PERSONAL }),
     negpron: new NamedWordForm('negpron', 'Negative Pronouns', 
         { pos: Dim.PartOfSpeech.PRONOUN, negation: Dim.Negation.NEGATIVE }),
+
+    poss: new NamedWordForm('poss', 'Possessive Pronouns', { pos: Dim.PartOfSpeech.POSSESSIVE }),
+    conj: new NamedWordForm('conj', 'Conjunction', { pos: Dim.PartOfSpeech.CONJUNCTION }),
+    part: new NamedWordForm('part', 'Particles', { pos: Dim.PartOfSpeech.PARTICLE }),
 
     number: new NamedWordForm('number', 'Numbers', { 
         pos: Dim.PartOfSpeech.NUMBER }),

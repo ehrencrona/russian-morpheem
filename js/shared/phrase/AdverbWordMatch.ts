@@ -24,12 +24,7 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     }
 
     wordMatches(word: Word): boolean {
-        if (word.wordForm.pos == PoS.ADVERB) {
-            return true
-        } 
-        else if (word instanceof InflectedWord && word.form == 'adv') {
-            return true
-        }
+        return word.wordForm.pos == PoS.ADVERB
     }
 
     isCaseStudy() {
@@ -44,9 +39,6 @@ export default class AdverbWordMatch extends AbstractQuantifierMatch {
     }
 
     getInflectionForm() {
-        if (this.range[0] > 0) {
-            return FORMS['adv']
-        }
     }
 
     toString() {

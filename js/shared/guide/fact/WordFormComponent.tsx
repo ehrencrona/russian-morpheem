@@ -210,7 +210,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         return result
     }
 
-    renderPronouns() {
+    renderPersonalPronouns() {
         let link = (id) => {
             let word = this.props.corpus.facts.get(id)
 
@@ -273,7 +273,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         else if (form.pronounKind == PronounKind.PERSONAL) {
             return <div>
                 <h3>Table</h3>
-                { this.renderPronouns() }
+                { this.renderPersonalPronouns() }
             </div>
         }
         else if (form.pos == PoS.PRONOUN && !form.pronounKind) {

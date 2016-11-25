@@ -152,8 +152,13 @@ export default function guidePageComponent(props: Props) {
                 title = `${fact.toText()} – ` 
                     + translations.map(t => `"${t}"`).join(', ')
                     + ` – conjugation and meaning`
-
             }  
+            else if (fact.wordForm.pos == PoS.PREPOSITION) {
+                title = 'The Russian preposition ' 
+                    + fact.toText() 
+                    + ' meaning ' 
+                    + translations.map(t => `"${t}"`).join(', ') 
+            }
             else {
                 title = 'Meaning of ' 
                     + fact.toText() 

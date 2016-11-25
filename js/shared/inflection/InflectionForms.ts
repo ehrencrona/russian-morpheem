@@ -75,28 +75,28 @@ CASES[GrammarCase.PREP] = 'prepositional'
 CASES[GrammarCase.LOC] = 'locative'
 CASES[GrammarCase.CONTEXT] = 'context'
 
-addForm('1', 'I', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('2', 'you', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('3', 's/he, it', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT }),
-addForm('1pl', 'we', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
-addForm('2pl', 'you (plural)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
-addForm('3pl', 'they', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT }),
-addForm('pastm', 'masculine past', { gender: Gender.M, number: GrammarNumber.SINGULAR, tense: Tense.PAST })
-addForm('pastn', 'neuter past', { gender: Gender.N, number: GrammarNumber.SINGULAR, tense: Tense.PAST })
-addForm('pastf', 'feminine past', { gender: Gender.F, number: GrammarNumber.SINGULAR, tense: Tense.PAST })
-addForm('pastpl', 'past plural', { number: GrammarNumber.PLURAL, tense: Tense.PAST })
-addForm('impr', 'imperative singular', { number: GrammarNumber.SINGULAR, command: Command.IMPERATIVE })
-addForm('imprpl', 'imperative plural', { number: GrammarNumber.PLURAL, command: Command.IMPERATIVE })
-addForm('inf', 'infinitive', {})
+addForm('1', 'I', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('2', 'you', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('3', 's/he, it', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('1pl', 'we', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('2pl', 'you (plural)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('3pl', 'they', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('pastm', 'masculine past', { gender: Gender.M, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
+addForm('pastn', 'neuter past', { gender: Gender.N, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
+addForm('pastf', 'feminine past', { gender: Gender.F, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
+addForm('pastpl', 'past plural', { number: GrammarNumber.PLURAL, tense: Tense.PAST, pos: PartOfSpeech.VERB })
+addForm('impr', 'imperative singular', { number: GrammarNumber.SINGULAR, command: Command.IMPERATIVE, pos: PartOfSpeech.VERB })
+addForm('imprpl', 'imperative plural', { number: GrammarNumber.PLURAL, command: Command.IMPERATIVE, pos: PartOfSpeech.VERB })
+addForm('inf', 'infinitive', { pos: PartOfSpeech.VERB })
 
-addForm('past', 'past', { tense: Tense.PAST })
-addForm('present', 'present', { tense: Tense.PRESENT })
+addForm('past', 'past', { tense: Tense.PAST, pos: PartOfSpeech.VERB })
+addForm('present', 'present', { tense: Tense.PRESENT, pos: PartOfSpeech.VERB })
 
 addForm('m', 'masculine singular', { gender: Gender.M, number: GrammarNumber.SINGULAR, grammaticalCase: GrammarCase.NOM })
 addForm('f', 'feminine singular', { gender: Gender.F, number: GrammarNumber.SINGULAR, grammaticalCase: GrammarCase.NOM })
 addForm('n', 'neuter singular', { gender: Gender.N, number: GrammarNumber.SINGULAR, grammaticalCase: GrammarCase.NOM })
 addForm('pl', 'plural', { number: GrammarNumber.PLURAL, grammaticalCase: GrammarCase.NOM })
-addForm('fpl', 'feminine plural', { number: GrammarNumber.PLURAL, gender: Gender.F })
+addForm('fpl', 'feminine plural', { number: GrammarNumber.PLURAL, gender: Gender.F, pos: PartOfSpeech.NU })
 addForm('sg', 'singular', { number: GrammarNumber.SINGULAR })
 
 addForm('nom', 'nominative singular', { grammaticalCase: GrammarCase.NOM, number: GrammarNumber.SINGULAR })
@@ -167,7 +167,6 @@ addForm('accalt', 'accusative plural alternative form', { grammaticalCase: Gramm
 addForm('instralt', 'instrumental plural alternative form', { grammaticalCase: GrammarCase.INSTR, number: GrammarNumber.SINGULAR, pronounForm: PronounForm.ALTERNATIVE })
 addForm('prepalt', 'prepositional plural alternative form', { grammaticalCase: GrammarCase.PREP, number: GrammarNumber.SINGULAR, pronounForm: PronounForm.ALTERNATIVE })
 
-addForm('adv', 'adverb', { pos: PartOfSpeech.ADVERB })
 addForm('comp', 'comparative', { adjectiveForm: AdjectiveForm.COMPARATIVE })
 
 addForm('shortf', 'short form feminine', { gender: Gender.F, number: GrammarNumber.SINGULAR, adjectiveForm: AdjectiveForm.SHORT })
@@ -203,7 +202,7 @@ export let ENGLISH_FORMS_BY_POS: { [pos: number]: Forms } = { }
 ENGLISH_FORMS_BY_POS[PartOfSpeech.VERB] 
     = new Forms([], [], [['3', 'past', 'prog', 'pastpart', 'inf', 'pl', 'pastpl', '1' ]]),
 ENGLISH_FORMS_BY_POS[PartOfSpeech.ADJECTIVE] 
-    = new Forms([], [], [[ 'adv', 'comp', 'super', 'pl' ]]),
+    = new Forms([], [], [[ 'comp', 'super', 'pl' ]]),
 ENGLISH_FORMS_BY_POS[PartOfSpeech.NOUN] 
     = new Forms([], [], [[ 'pl' ]]),
 ENGLISH_FORMS_BY_POS[PartOfSpeech.PRONOUN] 
@@ -233,7 +232,7 @@ INFLECTION_FORMS[PartOfSpeech.VERB] =
 INFLECTION_FORMS[PartOfSpeech.ADJECTIVE] =
     new Forms(
         [ 'masculine singular', 'neuter singular', 'feminine singular', 'plural' ],
-        [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional', 'short', 'adv', 'comp' ],
+        [ 'nominative', 'genitive', 'dative', 'accusative', 'instrumental', 'prepositional', 'short', 'comp' ],
         [
             ['m','n','f','pl'],
             ['genm','genn','genf','genpl'],
@@ -242,7 +241,6 @@ INFLECTION_FORMS[PartOfSpeech.ADJECTIVE] =
             ['instrm','instrn','instrf','instrpl'],
             ['prepm','prepn','prepf','preppl'],
             ['shortm', 'shortn', 'shortf', 'shortpl'],
-            ['adv'],
             ['comp']
         ])
 

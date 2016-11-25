@@ -843,12 +843,18 @@ export default class PhrasePattern {
                 let els = str.split('@')
 
                 let inflectionForm: InflectionForm
+                let wordForms: NamedWordForm[] = []
 
                 if (els[1]) {
                     inflectionForm = FORMS[els[1]]
 
                     if (!inflectionForm) {
-                        throw new Error(`"${els[1]} in ${originalStr} was not recognized as an inflection form. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
+                        if (els[1] == 'adv') {
+                            wordForms = [ WORD_FORMS['adv'] ]
+                        }
+                        else {
+                            throw new Error(`"${els[1]} in ${originalStr} was not recognized as an inflection form. Valid forms are: ${ Object.keys(FORMS).join(', ') }.`)
+                        }
                     }
                 }
 
@@ -862,7 +868,6 @@ export default class PhrasePattern {
                     str = els[0]
                 }
 
-                let wordForms: NamedWordForm[] = []
                 let matchWords: AnyWord[] = []
 
                 if ((str.indexOf(',') >= 0 && str != ',') || WORD_FORMS[str] || FORMS[str]) {
