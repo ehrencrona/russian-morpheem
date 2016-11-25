@@ -30,15 +30,15 @@ export default class PosFormWordMatch extends AbstractFormMatch implements CaseS
             return false
         }
 
-        if (word instanceof Word && (!this.inflectionForm || 
-                // this is primarily for the matching of adjectives as possessives
-                this.inflectionForm.equals({ grammaticalCase: GrammarCase.CONTEXT }))) { 
-            return true
-        }
-        else if (word instanceof InflectedWord) {
+        if (word instanceof InflectedWord) {
             let wordForm = FORMS[word.form]
 
             return wordForm && this.matchesInflectionForm(wordForm, context) 
+        }
+        else if (!this.inflectionForm || 
+                // this is primarily for the matching of adjectives as possessives
+                this.inflectionForm.equals({ grammaticalCase: GrammarCase.CONTEXT })) { 
+            return true
         }
     }
 
