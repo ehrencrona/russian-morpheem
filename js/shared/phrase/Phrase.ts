@@ -165,7 +165,9 @@ export default class Phrase extends AbstractFact {
                 }
             })
 
-            allCases.delete(GrammarCase.CONTEXT)
+            if (allCases) {
+                allCases.delete(GrammarCase.CONTEXT)
+            }
 
             this.casesCache = allCases ? Array.from(allCases) : [] 
         }
