@@ -24,12 +24,6 @@ export default function(corpus: Corpus) {
     let grammars = new Grammars(corpus.inflections)
 
     return (req: express.Request, res: express.Response) => {
-
-        if (req.hostname == 'russian.morpheem.com') {
-            // we're warming the cloudflare cache three hours; time out a bit before that 
-            res.header({ 'Cache-Control': 'public, max-age=10700' });
-        }
-
         let factId = req.params.fact
 
         let fact = corpus.facts.get(factId)
@@ -59,6 +53,13 @@ export default function(corpus: Corpus) {
             if (wordFact instanceof InflectableWord && fact instanceof InflectionFact) {
                 context = wordFact.inflect(fact.form)
             }
+        }
+
+        if (req.hostname == 'russian.morpheem.com') {
+            // we're warming the cloudflare cache three hours; time out a bit before that.
+            // however, for the form pages (context) that we are not warming, let them be
+            // cached for a very long time. 
+            res.header({ 'Cache-Control': 'public, max-age=' + 10700 * (context ? 500 : 1) });
         }
 
         let canonical = getGuideUrl(fact, context)
