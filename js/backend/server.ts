@@ -255,7 +255,7 @@ readCorpus('ru', true).catch((e) => {
     listenForChanges(corpus)
     registerRoutes(corpus)
 
-    app.use('/', express.static('public', { maxAge: 3600 }));
+    app.use('/', express.static('public', { maxAge: 3600000 }));
 
     app.listen(port)
 
