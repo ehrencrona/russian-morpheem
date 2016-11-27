@@ -55,14 +55,20 @@ export default function(corpus: Corpus) {
             }
         }
 
+        let canonical = getGuideUrl(fact, context)
+
         if (req.hostname == 'russian.morpheem.com') {
+            if (req.protocol == 'http') {
+                res.redirect(301, 'https://russian.morpheem.com' + canonical)
+
+                return
+            }
+
             // we're warming the cloudflare cache three hours; time out a bit before that.
             // however, for the form pages (context) that we are not warming, let them be
             // cached for a very long time.
             res.header({ 'Cache-Control': 'public, max-age=' + 10700 * (context ? 500 : 1) });
         }
-
-        let canonical = getGuideUrl(fact, context)
 
         if (req.url != canonical && decodeURI(req.url) != decodeURI(canonical)) {
             console.warn(`Non-canonical URL ${ decodeURI(req.url) }. Using ${ decodeURI(canonical) } instead.`)
