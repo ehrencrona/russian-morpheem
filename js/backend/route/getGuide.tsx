@@ -58,7 +58,7 @@ export default function(corpus: Corpus) {
         if (req.hostname == 'russian.morpheem.com') {
             // we're warming the cloudflare cache three hours; time out a bit before that.
             // however, for the form pages (context) that we are not warming, let them be
-            // cached for a very long time. 
+            // cached for a very long time.
             res.header({ 'Cache-Control': 'public, max-age=' + 10700 * (context ? 500 : 1) });
         }
 
