@@ -25,16 +25,10 @@ interface State {
 }
 
 export default class AddWordComponent extends Component<Props, State> {
-    word: HTMLInputElement
-
     constructor(props) {
         super(props)
         
         this.state = { word: '' }     
-    }
-    
-    componentDidMount() {
-        this.word.focus();
     }
     
     submit() {
