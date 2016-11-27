@@ -35,7 +35,7 @@ export default function(corpus: Corpus) {
 
         var host = req.hostname
 
-        sitemap({map: map, route: {}, http: req.protocol, url: host}).XMLtoWeb(res)
+        sitemap({map: map, route: {}, http: 'https', url: host}).XMLtoWeb(res)
 
     }
 }
