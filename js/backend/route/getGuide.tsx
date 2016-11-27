@@ -58,12 +58,6 @@ export default function(corpus: Corpus) {
         let canonical = getGuideUrl(fact, context)
 
         if (req.hostname == 'russian.morpheem.com') {
-            if (req.protocol == 'http') {
-                res.redirect(301, 'https://russian.morpheem.com' + canonical)
-
-                return
-            }
-
             // we're warming the cloudflare cache three hours; time out a bit before that.
             // however, for the form pages (context) that we are not warming, let them be
             // cached for a very long time.
