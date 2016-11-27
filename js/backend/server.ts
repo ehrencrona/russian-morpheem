@@ -82,7 +82,18 @@ if (process.env.ENV != 'dev') {
 app.use(bodyParser.json())
 app.use(busboy())
 
+app.use('/public-api', (req, res, next) => {
+    let isLoggedIn = req['authorization'] || req.hostname == 'localhost' 
+
+    res.header({ 'Cache-Control': 'public, s-max-age=0, max-age=' +
+        (isLoggedIn ? 0 : 86000) });
+
+    next();
+})
+
 app.use('/api', (req, res, next) => {
+    res.header({ 'Cache-Control': 'private, max-age=0' });
+
     try {
         next()
     }
