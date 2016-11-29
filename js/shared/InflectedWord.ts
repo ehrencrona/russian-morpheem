@@ -76,6 +76,12 @@ export default class InflectedWord extends Word {
             }
             else if (!homonyms.find((otherWord) => otherWord.getWordFact().getId() == this.getWordFact().getId())) {
                 disambiguation = this.word.toText()
+
+                if (this.word.classifier 
+                    && homonyms.find((otherWord) => otherWord instanceof InflectedWord 
+                    && otherWord.word.getIdWithoutClassifier() == this.word.getIdWithoutClassifier())) {
+                    disambiguation += ' / ' + this.word.classifier
+                }
             }
             else {
                 if (!homonyms.find((otherWord) => otherWord instanceof InflectedWord && 
