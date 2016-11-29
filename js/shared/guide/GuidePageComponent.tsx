@@ -261,6 +261,7 @@ export default function guidePageComponent(props: Props) {
             { props.children }
 
             <div id="disqus_thread"></div>
+
             <script dangerouslySetInnerHTML={ { __html:
                 `var disqus_config = function () {
                     this.page.url = "${ getGuideUrl(fact) }"; 
