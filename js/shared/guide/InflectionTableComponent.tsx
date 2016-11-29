@@ -31,7 +31,8 @@ interface State {
 
 let React = { createElement: createElement }
 
-export function renderWordInflection(word: InflectableWord, corpus: Corpus, renderForm: (InflectedWord, string, number) => any) {
+export function renderWordInflection(word: InflectableWord, corpus: Corpus, 
+        renderForm: (InflectedWord, string, number) => any) {
     return (form: string) => {
         let inflected = word.inflect(form)
 
@@ -46,32 +47,41 @@ export function renderWordInflection(word: InflectableWord, corpus: Corpus, rend
     }
 }
 
-export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkComponent) {
+export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkComponent, current?: InflectionForm) {
+    let linkTo = (content, fact) => React.createElement(
+        factLinkComponent,
+        { fact: fact, key: fact.getId() },
+            content) 
+
     return (form) => {
         let grammarCase = FORMS[form].grammaticalCase
         let content
 
+        let className = 'otherForm'
+
+        if (current && !current.matches(FORMS[form])) {
+            className += ' inactive'
+        }
+
         if (grammarCase) {
             content = 
-            <div className='otherForm'>{
-                <div className={ 'caseName ' + CASES[grammarCase] }>{                                                    
+                <div className={ 'caseName ' + CASES[grammarCase] }>{
                     FORMS[form].name.toUpperCase().split(' ').reduce((lines, line, i) =>
                         lines.concat(line, <br key={ i } />), [] )
                 }</div>
-            }</div>
         }
         else {
+            className += ' nonCase'
             content = 
-                <div className='otherForm nonCase'>{
-                    FORMS[form].name.split(' ').reduce((lines, line, i) =>
-                        lines.concat(line, <br key={ i } />), [] )
-                }</div>
+                FORMS[form].name.split(' ').reduce((lines, line, i) =>
+                    lines.concat(line, <br key={ i } />), [] )
         }
 
-        return React.createElement(
-            factLinkComponent,
-            { fact: FORMS[form], key: form },
-                content)
+        return linkTo(
+            <div className={ className }>{
+                content
+            }</div>, 
+            FORMS[form])
     }
 }
 
@@ -139,14 +149,14 @@ export class InflectionTableComponent extends Component<Props, State> {
                                 if (content) {
                                     count++
                                     
-                                    return <td key={form.toString()} className='full'>
+                                    return <td key={ form.toString() } className='full'>
                                         {
                                             content
                                         }
                                     </td>
                                 }
                                 else {
-                                    return <td key={form.toString()}/> 
+                                    return <td key={ form.toString() }/> 
                                 }
                             })
                      

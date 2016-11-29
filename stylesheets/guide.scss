@@ -405,6 +405,52 @@ $sectionMargin: 1em;
                 background-color: $clickableColor;
             }
         }
+
+        .inactive.nonCase {
+            color: #d0d0d0;
+
+            &::before {
+                background-image: url('/img/see-also-inactive.svg') !important;
+            }
+        }
+
+        .inactive .caseName {
+            $amount: 20%;
+            $amount2: 30%;
+            color: #909090;
+            background-color: inherit;
+            border: 1px solid #a0a0a0;
+
+            &.genitive {
+                border-color: $genitiveColor;
+                color: $genitiveColor;
+            }
+
+            &.dative {
+                border-color: $dativeColor;
+                color: $dativeColor;
+            }
+
+            &.accusative {
+                border-color: $accusativeColor;
+                color: $accusativeColor;
+            }
+
+            &.instrumental {
+                border-color: $instrumentalColor;
+                color: $instrumentalColor;
+            }
+
+            &.prepositional {
+                border-color: $prepositionalColor;
+                color: $prepositionalColor;
+            }
+
+            &:hover {
+                border-color: $clickableColor;
+                color: $clickableColor;
+            }
+        }
     }
     
     .inflections {

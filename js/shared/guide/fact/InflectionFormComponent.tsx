@@ -1,3 +1,4 @@
+import { getNamedForm } from '../../inflection/WordForms';
 import { PivotDimension } from '../pivot/PivotDimension';
 import { POS_LONG_NAMES } from '../../phrase/PhrasePattern';
 
@@ -271,9 +272,19 @@ export default class InflectionFormComponent extends Component<Props, State> {
     getRelatedForms() {
         let thisForm = this.props.form
 
-        return Object.keys(FORMS).map(i => FORMS[i])
+        let result = Object.keys(FORMS).map(i => FORMS[i])
             .filter(form => (thisForm.matches(form) || form.matches(thisForm)) && thisForm.id != form.id)
             .map(f => f as Fact)
+
+        if (result.length > 5) {
+            result = []
+        }
+
+        if (thisForm.pos) {
+            result = result.concat(getNamedForm({ pos: thisForm.pos }))
+        }
+
+        return result
     }
 
     render() {
@@ -293,14 +304,19 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 (factoid ? 
                     factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
 
-        let sentences = this.getSentences()
-
         let title = corpus.factoids.getFactoid(form).name || ('The ' + form.name)
 
-        let formationExists = !!POS.find(pos => 
-            !!INFLECTION_FORMS[pos].allForms
-                .find(oneForm => 
-                    form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
+        let showFormation 
+
+        if (form.number && form.equals({ number: form.number})) {
+            showFormation  = false
+        }
+        else {
+            showFormation  = !!POS.find(pos => 
+                !!INFLECTION_FORMS[pos].allForms
+                    .find(oneForm => 
+                        form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0))
+        }
 
         let isCase = form.isCase()
 
@@ -315,7 +331,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
         else {
             poses = [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB ].filter(pos => 
                 !!INFLECTION_FORMS[pos].allForms
-                    .find(oneForm => form.equals(FORMS[oneForm])))
+                    .find(oneForm => form.matches(FORMS[oneForm])))
         }
 
         let filter
@@ -325,7 +341,9 @@ export default class InflectionFormComponent extends Component<Props, State> {
                  fact.wordForm.aspect != Aspect.PERFECTIVE
         }
 
-        let showExamples = form.id != 'present'
+        let showExamples = form.id != 'present' 
+            && !form.equals({ gender: form.gender }) 
+                && !form.equals({ number: form.number }) 
 
         let getForms = (pos: PoS) =>
             INFLECTION_FORMS[pos].allForms
@@ -399,7 +417,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         null
                     }
 
-                    { formationExists ? 
+                    { showFormation  ? 
                         <div>
                             <h3>Formation</h3>
 
@@ -439,7 +457,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
                             <div className='exampleSentences'>
                             {
-                                sentences 
+                                this.getSentences() 
                             }
                             </div>
                         </div>
@@ -447,23 +465,28 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         null
                     }
 
-                    <h3>Other forms</h3> 
+                    { poses.length ?
+                        <div>
+                            <h3>Other forms</h3> 
 
-                    {   
-                        poses.map(pos =>
-                            <div key={ pos }>
-                                <InflectionTableComponent
-                                    title={ POS_LONG_NAMES[pos] }
-                                    corpus={ corpus }
-                                    mask={ () => true }
-                                    pos={ pos }
-                                    className='otherForms'
-                                    renderForm={ renderFormName(pos, this.props.factLinkComponent) }
-                                />
-                            </div>
-                        )
+                            {   
+                                poses.map(pos =>
+                                    <div key={ pos }>
+                                        <InflectionTableComponent
+                                            title={ POS_LONG_NAMES[pos] }
+                                            corpus={ corpus }
+                                            mask={ () => true }
+                                            pos={ pos }
+                                            className='otherForms'
+                                            renderForm={ renderFormName(pos, this.props.factLinkComponent, form) }
+                                        />
+                                    </div>
+                                )
+                            }
+                        </div>
+                        : 
+                        null
                     }
-
                 </div>
                 { related.length ?
                     <div className='sidebar'>

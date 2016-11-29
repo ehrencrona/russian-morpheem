@@ -168,7 +168,7 @@ addForm('datpl', 'dative plural', { grammaticalCase: GrammarCase.DAT, number: Gr
 addForm('accpl', 'accusative plural', { grammaticalCase: GrammarCase.ACC, number: GrammarNumber.PLURAL })
 addForm('accanpl', 'accusative animate plural', { grammaticalCase: GrammarCase.ACC, animate: Animateness.ANIMATE, number: GrammarNumber.PLURAL })
 addForm('accinanpl', 'accusative inanimate plural', { grammaticalCase: GrammarCase.ACC, animate: Animateness.INANIMATE, number: GrammarNumber.PLURAL })
-addForm('accinanfpl', 'accusative femininate inanimate plural', { grammaticalCase: GrammarCase.ACC, gender: Gender.F, animate: Animateness.INANIMATE, number: GrammarNumber.PLURAL })
+addForm('accinanfpl', 'accusative feminine inanimate plural', { grammaticalCase: GrammarCase.ACC, gender: Gender.F, animate: Animateness.INANIMATE, number: GrammarNumber.PLURAL })
 
 addForm('instrpl', 'instrumental plural', { grammaticalCase: GrammarCase.INSTR, number: GrammarNumber.PLURAL })
 addForm('preppl', 'prepositional plural', { grammaticalCase: GrammarCase.PREP, number: GrammarNumber.PLURAL })
