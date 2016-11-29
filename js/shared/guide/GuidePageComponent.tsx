@@ -229,6 +229,7 @@ export default function guidePageComponent(props: Props) {
 
             <meta name="description" content={ description }/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <meta property="fb:app_id" content="816890828349481" />
 
             <script dangerouslySetInnerHTML={ { __html: 
                 "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){"
