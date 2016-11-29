@@ -260,19 +260,14 @@ export default function guidePageComponent(props: Props) {
 
             { props.children }
 
-            <div id="disqus_thread"></div>
-
             <script dangerouslySetInnerHTML={ { __html:
-                `var disqus_config = function () {
-                    this.page.url = "${ getGuideUrl(fact) }"; 
-                    this.page.identifier = "${ fact.getId() }";
-                };
-                (function() { // DON'T EDIT BELOW THIS LINE
-                var d = document, s = d.createElement('script');
-                s.src = '//morpheem.disqus.com/embed.js';
-                s.setAttribute('data-timestamp', +new Date());
-                (d.head || d.body).appendChild(s);
-                })();` 
+                `(function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=816890828349481";
+                fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));`
             } } />               
         </body>
     </html>

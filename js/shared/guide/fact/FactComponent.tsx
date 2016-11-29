@@ -1,3 +1,4 @@
+import getGuideUrl from '../getGuideUrl';
 import { NamedWordForm } from '../../inflection/WordForm';
 
 import Corpus from '../../../shared/Corpus'
@@ -95,7 +96,15 @@ export default function factComponent(props: Props) {
         content = <div>Unhandled fact { fact.getId() }</div>
     }
 
+    let canonical = getGuideUrl(fact)
+
     return <div className='content guide' onClick={ (e) => e.stopPropagation() }>
             {content}
+            <div id='fb-root'/>
+            <div className="fb-comments"
+                data-href={ 'https://russian.morpheem.com' + canonical }
+                data-width='100%'
+                data-numposts='3'
+                />
         </div>
 }
