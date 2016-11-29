@@ -9,3 +9,7 @@ export default function allGuideFacts(corpus: Corpus) {
         .concat(Object.keys(WORD_FORMS).filter(f => !corpus.facts.get(f)).map(k => WORD_FORMS[k]))
         .concat(Object.keys(FORMS).filter(f => !corpus.facts.get(f) && !WORD_FORMS[f]).map(k => FORMS[k]))
 }
+
+export function getGuideFact(factId: string, corpus: Corpus) {
+    return corpus.facts.get(factId) || WORD_FORMS[factId] || FORMS[factId]
+}

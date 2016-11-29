@@ -1,3 +1,4 @@
+import { getGuideFact } from '../../shared/guide/allGuideFacts';
 import Corpus from '../../shared/Corpus'
 import Fact from '../../shared/fact/Fact'
 import { MISSING_INDEX } from '../../shared/fact/Facts'
@@ -91,7 +92,7 @@ export default class FactoidComponent extends Component<Props, State> {
             <ul className='factoidRelated'>{
 
                 factoid.relations.map(relation => {
-                    let related = this.props.corpus.facts.get(relation.fact)
+                    let related = getGuideFact(relation.fact, this.props.corpus)
 
                     if (related) {
                         return <FactsEntryComponent 
@@ -107,14 +108,12 @@ export default class FactoidComponent extends Component<Props, State> {
                                 updated()
                                 e.stopPropagation()
 
-                                let relatedFact = this.props.corpus.facts.get(relation.fact)
-
-                                let relatedFactoid = factoids.getFactoid(relatedFact)
+                                let relatedFactoid = factoids.getFactoid(related)
 
                                 relatedFactoid.relations = relatedFactoid.relations.filter(
                                     r => r.fact != this.props.fact.getId())
                                 
-                                factoids.setFactoid(relatedFactoid, relatedFact)
+                                factoids.setFactoid(relatedFactoid, related)
                             } }>Remove</div>
                         </FactsEntryComponent>
                     }
