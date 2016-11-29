@@ -229,7 +229,7 @@ export default function guidePageComponent(props: Props) {
 
             <meta name="description" content={ description }/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-            <meta property="fb:app_id" content="816890828349481" />
+            <meta property="fb:app_id" content="683730168469087" />
 
             <script dangerouslySetInnerHTML={ { __html: 
                 "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){"
@@ -266,7 +266,7 @@ export default function guidePageComponent(props: Props) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
                 js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=816890828349481";
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=683730168469087";
                 fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));`
             } } />               
