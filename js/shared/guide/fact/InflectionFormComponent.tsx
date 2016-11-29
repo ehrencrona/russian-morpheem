@@ -12,7 +12,7 @@ import { Knowledge } from '../../../shared/study/Exposure'
 
 import { Factoid } from '../../../shared/metadata/Factoids'
 import { getFormName, FORMS, CASES, INFLECTION_FORMS, POSES } from '../../../shared/inflection/InflectionForms'
-import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions'
+import { Aspect, PartOfSpeech as PoS, Tense } from '../../../shared/inflection/Dimensions';
 import { InflectionForm } from '../../../shared/inflection/InflectionForm'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import topScores from '../../../shared/study/topScores'
@@ -98,12 +98,15 @@ export default class InflectionFormComponent extends Component<Props, State> {
         return allPhrases
     }
 
-    mostCommonInflections(formArray: string[], pos: PoS) {
+    mostCommonInflections(formArray: string[], pos: PoS, filter: (fact: InflectableWord) => boolean, count) {
         let wordsByInflection = {}
         let corpus = this.props.corpus
 
         corpus.facts.facts.forEach(fact => {
-            if (fact instanceof InflectableWord && fact.wordForm.pos == pos && fact.inflection.wordForm.pos == pos) {
+            if (fact instanceof InflectableWord 
+                && (!filter || filter(fact)) 
+                && fact.wordForm.pos == pos 
+                && fact.inflection.wordForm.pos == pos) {
                 wordsByInflection[fact.inflection.id] = (wordsByInflection[fact.inflection.id] || 0) + 1
             }
         })
@@ -131,14 +134,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
             let form = FORMS[formId]
             let wordsByInflection = wordsByInflectionByForm[formId]
 
-            let inflectionIds = Object.keys(wordsByInflection).sort((form1, form2) => wordsByInflection[form2] - wordsByInflection[form1])
-
-            let count = (this.state.allFormations ? 99 : (pos == PoS.PRONOUN ? 5 : 3))
-
-            // if we don't have a to show a long list of parts of speech we can show more for each PoS.
-            if (!form.equals({ pos: form.pos })) {
-                count = 3 * count
-            }
+            let inflectionIds = Object.keys(wordsByInflection)
+                .sort((form1, form2) => wordsByInflection[form2] - wordsByInflection[form1])
 
             inflectionIds = inflectionIds.slice(0, count)
 
@@ -151,26 +148,49 @@ export default class InflectionFormComponent extends Component<Props, State> {
         })
     }
 
-    renderFormation(pos: PoS, forms: string[]) {
+    renderFormation(pos: PoS, forms: string[], filter: (fact: InflectableWord) => boolean, totalFormCount: number) {
         let form = this.props.form
+
+        let count
+
+        if (totalFormCount == 1) {
+            count = 6
+        }
+        else if (totalFormCount < 3) {
+            count = 4
+        }
+        else if (totalFormCount < 10) {
+            count = 2
+        }
+        else if (totalFormCount > 10) {
+            count = 1
+        }
+
+        if (this.state.allFormations) {
+            count = 99
+        }
 
         return <div key={ pos }>
             <div className='posName'>{ capitalize(POS_LONG_NAMES[pos]) }s</div>
             <div className='pos'>
                 {
-                    this.mostCommonInflections(forms, pos).map(i => {
+                    this.mostCommonInflections(forms, pos, filter, count).map(i => {
                         let formName = capitalize(FORMS[i.form].name.replace(form.name, '').trim() || 'singular') 
 
                         let formNameLines = formName.split(' ')
 
                         return <div key={ i.form } className='form'>
-                            <div className='name' >{ formNameLines[0] }<br/>{ formNameLines[1] }</div>
+                            <div className='name' >{ 
+                                formNameLines.slice(0, formNameLines.length-1).join(' ') 
+                            }<br/>{ 
+                                formNameLines[formNameLines.length-1] 
+                            }</div>
                             <ul className='formation'>
                             {
                                 i.inflectionFacts.map(f => {
 
                                     return <div key={ f.getId() }>{
-                                        getExamplesUsingInflection(i.form, f.inflection, this.props.corpus, this.props.knowledge, null, 1)
+                                        getExamplesUsingInflection(i.form, f.inflection, this.props.corpus, this.props.knowledge, filter, 1)
                                             .map(w => {
                                                 let ending = f.inflection.getEnding(i.form)
 
@@ -286,6 +306,36 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let phrases = (isCase || form.id == 'short' || form.id == 'comp') && this.findPhrasesWithForm()
 
+        let poses
+        
+        if (form.pos) {
+            // inf needs this.
+            poses = [ form.pos ]
+        }
+        else {
+            poses = [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB ].filter(pos => 
+                !!INFLECTION_FORMS[pos].allForms
+                    .find(oneForm => form.equals(FORMS[oneForm])))
+        }
+
+        let filter
+
+        if (form.equals({ tense: Tense.PRESENT, pos: PoS.VERB })) {
+            filter = (fact: InflectableWord) => 
+                 fact.wordForm.aspect != Aspect.PERFECTIVE
+        }
+
+        let showExamples = form.id != 'present'
+
+        let getForms = (pos: PoS) =>
+            INFLECTION_FORMS[pos].allForms
+                .filter(oneForm => 
+                    form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0)
+
+        let formCount = 0
+        
+        poses.map(pos => formCount += getForms(pos).length)
+
         return <div className='inflectionForm'>
             <h1>{ title }</h1>
             <div className='columns'>
@@ -367,13 +417,11 @@ export default class InflectionFormComponent extends Component<Props, State> {
                                 </div>
                             }
                             {
-                                POS.map(pos => {
-                                    let forms = INFLECTION_FORMS[pos].allForms
-                                        .filter(oneForm => 
-                                            form.matches(FORMS[oneForm]) && oneForm.indexOf('alt') < 0)
+                                poses.map(pos => {
+                                    let forms = getForms(pos)
 
                                     if (forms.length) {
-                                        return this.renderFormation(pos, forms)
+                                        return this.renderFormation(pos, forms, filter, formCount)
                                     }
                                     else {
                                         return null
@@ -385,22 +433,24 @@ export default class InflectionFormComponent extends Component<Props, State> {
                         null
                     }
 
-                    <h3>Examples of usage</h3>
+                    { showExamples ?
+                        <div>
+                            <h3>Examples of usage</h3>
 
-                    <div className='exampleSentences'>
-                    {
-                        sentences 
+                            <div className='exampleSentences'>
+                            {
+                                sentences 
+                            }
+                            </div>
+                        </div>
+                        :
+                        null
                     }
-                    </div>
 
                     <h3>Other forms</h3> 
 
-                    {
-                                
-                        [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB ].filter(pos => 
-                            !!INFLECTION_FORMS[pos].allForms
-                                .find(oneForm => form.equals(FORMS[oneForm])))
-                        .map(pos =>
+                    {   
+                        poses.map(pos =>
                             <div key={ pos }>
                                 <InflectionTableComponent
                                     title={ POS_LONG_NAMES[pos] }

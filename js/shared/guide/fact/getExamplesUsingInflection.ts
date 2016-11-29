@@ -11,7 +11,7 @@ import InflectionFact from '../../../shared/inflection/InflectionFact'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 
 export default function getExamplesUsingInflection(form: string, inflection: Inflection, 
-        corpus: Corpus, knowledge: NaiveKnowledge, excludeWord?: InflectedWord, count?: number): InflectableWord[] {
+        corpus: Corpus, knowledge: NaiveKnowledge, filter: (word: InflectableWord) => boolean, count?: number): InflectableWord[] {
     count = count || 99;
 
     let inflectionIds = new Set()
@@ -37,7 +37,7 @@ export default function getExamplesUsingInflection(form: string, inflection: Inf
         
         if (fact instanceof InflectableWord && 
             !!fact.inflect(form) &&
-            (!excludeWord || fact.inflect(form).jp != excludeWord.jp) &&
+            (!filter || filter(fact)) &&
             !foundByStem.has(fact.toText()) && 
             inflectionIds.has(fact.inflection.id)) {
             let list: InflectableWord[]

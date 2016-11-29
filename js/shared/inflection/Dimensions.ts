@@ -22,7 +22,7 @@ export enum Aspect {
 }
 
 export enum Tense {
-    PRESENT = 1, PAST, PROGRESSIVE, PAST_PARTICIPLE
+    PRESENT = 1, PAST, PROGRESSIVE, PAST_PARTICIPLE, INFINITVE
 }
 
 export enum GrammarCase {

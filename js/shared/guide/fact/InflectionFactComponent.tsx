@@ -302,7 +302,10 @@ export default class InflectionFactComponent extends Component<Props, State> {
     }
 
     getExamplesUsingInflection(form: string, inflection: Inflection, inflectedWord: InflectedWord, count?: number) {
-        return getExamplesUsingInflection(form, inflection, this.props.corpus, this.props.knowledge, inflectedWord, count)
+        let inflectedId = inflectedWord.word.getId()
+        
+        return getExamplesUsingInflection(form, inflection, this.props.corpus, this.props.knowledge, 
+            (word) => word.getId() != inflectedId, count)
     }
 
     renderForm(word: InflectedWord) {

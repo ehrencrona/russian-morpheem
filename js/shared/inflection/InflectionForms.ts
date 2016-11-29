@@ -93,19 +93,19 @@ LONG_GENDERS[Gender.M] = 'masculine'
 LONG_GENDERS[Gender.F] = 'feminine'
 LONG_GENDERS[Gender.N] = 'neuter'
 
-addForm('1', 'I', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
-addForm('2', 'you', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
-addForm('3', 's/he, it', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
-addForm('1pl', 'we', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
-addForm('2pl', 'you (plural)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
-addForm('3pl', 'they', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('1', '\'I\' form', { person: Person.FIRST, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('2', '\'you\' form (singular)', { person: Person.SECOND, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('3', '\'s/he, it\' form', { person: Person.THIRD, number: GrammarNumber.SINGULAR, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('1pl', '\'we\' form', { person: Person.FIRST, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('2pl', '\'you\' form (plural)', { person: Person.SECOND, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
+addForm('3pl', '\'they\' form', { person: Person.THIRD, number: GrammarNumber.PLURAL, tense: Tense.PRESENT, pos: PartOfSpeech.VERB }),
 addForm('pastm', 'masculine past', { gender: Gender.M, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
 addForm('pastn', 'neuter past', { gender: Gender.N, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
 addForm('pastf', 'feminine past', { gender: Gender.F, number: GrammarNumber.SINGULAR, tense: Tense.PAST, pos: PartOfSpeech.VERB })
 addForm('pastpl', 'past plural', { number: GrammarNumber.PLURAL, tense: Tense.PAST, pos: PartOfSpeech.VERB })
 addForm('impr', 'imperative singular', { number: GrammarNumber.SINGULAR, command: Command.IMPERATIVE, pos: PartOfSpeech.VERB })
 addForm('imprpl', 'imperative plural', { number: GrammarNumber.PLURAL, command: Command.IMPERATIVE, pos: PartOfSpeech.VERB })
-addForm('inf', 'infinitive', { pos: PartOfSpeech.VERB })
+addForm('inf', 'infinitive', { pos: PartOfSpeech.VERB, tense: Tense.INFINITVE })
 
 addForm('past', 'past', { tense: Tense.PAST, pos: PartOfSpeech.VERB })
 addForm('present', 'present', { tense: Tense.PRESENT, pos: PartOfSpeech.VERB })

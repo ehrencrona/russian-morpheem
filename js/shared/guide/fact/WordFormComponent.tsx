@@ -129,7 +129,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
             props.corpus.facts.facts.filter(fact =>
                 fact instanceof AbstractAnyWord && fact.wordForm.matches(form))
 
-        if (form.equals({ aspect: form.aspect, pos: PoS.VERB })) {
+        if (form.aspect && form.equals({ aspect: form.aspect, pos: PoS.VERB })) {
             return this.renderPerfective(facts)
         }
 
