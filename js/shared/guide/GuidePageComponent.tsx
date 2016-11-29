@@ -1,3 +1,4 @@
+import getGuideUrl from './getGuideUrl';
 import { NamedWordForm } from '../inflection/WordForm';
 
 import { Component, createElement } from 'react'
@@ -17,6 +18,7 @@ import InflectedWord from '../InflectedWord'
 import getPhraseSeoText from './fact/getPhraseSeoText'
 import getExamplesUsingInflection from './fact/getExamplesUsingInflection'
 import NaiveKnowledge from '../study/NaiveKnowledge'
+
 
 import Phrase from '../phrase/Phrase'
 
@@ -257,6 +259,20 @@ export default function guidePageComponent(props: Props) {
             <div id="react-guide-search"></div>
 
             { props.children }
+
+            <div id="disqus_thread"></div>
+            <script dangerouslySetInnerHTML={ { __html:
+                `var disqus_config = function () {
+                    this.page.url = "${ getGuideUrl(fact) }"; 
+                    this.page.identifier = "${ fact.getId() }";
+                };
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = '//morpheem.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();` 
+            } } />               
         </body>
     </html>
 }
