@@ -19,7 +19,7 @@ export const QUANTIFIERS: { [name: string]: Range } = {
     '!': [ 1, 1 ]
 }
 
-abstract class AbstractQuantifierMatch implements WordMatch {
+export abstract class AbstractQuantifierMatch implements WordMatch {
     range: Range
 
     constructor(public quantifier?: string) {

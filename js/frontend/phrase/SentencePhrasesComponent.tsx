@@ -1,3 +1,6 @@
+import { DebugPosition } from '../../shared/phrase/MatchContext';
+import { DebugNode } from './PhraseDebugger';
+import PhraseDebugger from './PhraseDebugger';
 
 
 import { Component, createElement } from 'react'
@@ -21,6 +24,8 @@ interface Props {
 }
 
 interface State {
+    debug?: boolean
+    openDebugNodes?: Set<number>
 }
 
 let React = { createElement: createElement }
@@ -29,7 +34,9 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            openDebugNodes: new Set<number>()
+        }
     }
 
     openPhrase(phrase) {
@@ -90,8 +97,9 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
         return result.join(' ')
     }
 
-    renderStudyWords(phrase: Phrase) {
-        let match = phrase.match({ sentence: this.props.sentence, words: this.props.sentence.words, facts: this.props.corpus.facts, study: null })
+    renderStudyWords(phrase: Phrase, debug?: (message: string, position: DebugPosition) => void) {
+        let match = phrase.match({ sentence: this.props.sentence, words: this.props.sentence.words, 
+            facts: this.props.corpus.facts, study: null, debug: debug })
 
         if (!match) {
             return <div>
@@ -122,54 +130,105 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let sentence = this.props.sentence
 
+        let phraseDebugger
+        let debug 
+        
+        if (this.state.debug) {
+            phraseDebugger = new PhraseDebugger()
+            debug = phraseDebugger.debug()
+        }
+
         let potentialPhrases = corpus.phrases.all().filter((p) =>
             !p.isAutomaticallyAssigned() &&
-            !!p.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, study: null}) && !sentence.hasPhrase(p)
+            !!p.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, 
+                study: null, debug: null }) && 
+            !sentence.hasPhrase(p)
         )
 
-        let renderPhrase = (p) => 
+        let renderPhrase = (p, debug?) => 
             <div className='clickable' onClick={() => this.openPhrase(p) }>
-                { this.renderStudyWords(p) }</div>
+                { this.renderStudyWords(p, debug) }</div>
 
-        return <div className='sentenceFacts'>
-            <div className='current'>
-                <h4>Added</h4>
-                <ul>
-
-                    {
+        return <div>
+            <div className='sentencePhrases'>
+                <div className='current'>
+                    <h4>Added</h4>
+                    <ul>{
 
                         this.props.sentence.phrases.map((p) => 
                             <li key={ p.id }>
                                 <div className='clickable button' onClick={ () => this.removePhrase(p) }>Remove</div>
-                                { renderPhrase(p) }
+                                { renderPhrase(p, debug) }
                             </li>
                         )
 
-                    }
+                    }</ul>
+                </div>
 
-                </ul>
-            </div>
+                <div className='matching'>
+                    <h4>Matching</h4>
 
-            <div className='matching'>
-                <h4>Matching</h4>
-
-                <ul>
-
-                    {
-
+                    <ul>{
                         potentialPhrases.map((p) => 
                             <li key={ p.id }>
                                 <div className='clickable button' onClick={ () => this.addPhrase(p) } >Add</div>
                                 { renderPhrase(p) }
                             </li>
                         )
-
-                    }
-
-                </ul>
+                    }</ul>
+                </div>
             </div>
+            {
+                this.renderPhraseDebugger(phraseDebugger)
+            }
         </div>
 
+    }
+
+    renderPhraseDebugger(phraseDebugger: PhraseDebugger) {
+        return <div className='phraseDebugger'>
+            { 
+                phraseDebugger ?
+                    <div className='debug'>
+                        { this.renderDebugNode(phraseDebugger.root) }
+                    </div>
+                    :
+                    <div className='button' onClick={ () => this.setState({ debug: true }) }>
+                        Debug
+                    </div>
+            }
+            </div>
+    }
+
+    renderDebugNode(node: DebugNode) {
+        let openDebugNodes = this.state.openDebugNodes
+        let open = openDebugNodes.has(node.id) || !node.parent 
+
+        return <ul key={ node.id } >
+            { 
+                node.children.length ?
+                    <div className='toggle'>{
+                        open?
+                        <a onClick={ () => { openDebugNodes.delete(node.id); this.setState({ openDebugNodes: openDebugNodes }) }}>-</a> :
+                        <a onClick={ () => { openDebugNodes.add(node.id); this.setState({ openDebugNodes: openDebugNodes }) }}>+</a> 
+                    }</div>
+                    : 
+                    null
+            }
+            <div>{
+                node.startMessage
+            }</div>
+            { 
+                open ?
+                node.children.map(n => {
+                    return this.renderDebugNode(n)
+                }) :
+                null
+            }
+            <div>{
+                node.endMessage
+            }</div>
+        </ul>
     }
 
 }

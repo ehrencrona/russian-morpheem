@@ -7,15 +7,18 @@ import { CaseStudy } from './PhrasePattern'
 import Match from './Match'
 import { GrammarCase } from '../inflection/Dimensions'
 
-interface MatchContext {
+export interface MatchContext {
     depth?: number
     words: Word[]
-    sentence?: Sentence
     facts: Facts
-    parent?: MatchContext
-    phrase?: Phrase
-    study?: CaseStudy
     overrideFormCase?: GrammarCase
+    sentence?: Sentence
+    study?: CaseStudy
+    debug?: (message: string, position: DebugPosition) => void
+}
+
+export enum DebugPosition {
+    START, END
 }
 
 export default MatchContext

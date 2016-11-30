@@ -41,22 +41,11 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
                     this.overrideFormCase)
 
         childContext.study = null
-        childContext.parent = context
-        childContext.phrase = this.phrase
         
         childContext.depth = (context.depth || 0) + 1
 
         if (childContext.depth > 12) {
             console.warn('Maximum phrase depth reaching. Bailing.')
-
-            let at = childContext
-
-            while (at) {
-                console.log(at.depth + ' ' + (at.phrase ? at.phrase.getId() : 'no phrase') + 
-                    ' in ' + at.words.map(w => w.toText()).join(' '))
-
-                at = at.parent
-            }
 
             return
         }

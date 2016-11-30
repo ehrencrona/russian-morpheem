@@ -250,13 +250,127 @@ export default class WordFactComponent extends Component<Props, State> {
             .reduce((a, b) => a.concat(b), [])
     }
 
+    renderInflectionTable() {
+        let props = this.props
+        let word = props.word
+        let corpus = props.corpus
+
+        let renderForm: (form: string) => any
+
+        interface FormsOfInflection {
+            inflection: Inflection
+            forms: string[]
+            index: number
+            depth: number
+        }
+
+        let inflections: FormsOfInflection[] = []
+        let inflectionsById: { [ id: string ] : FormsOfInflection } = {}
+
+        if (word instanceof InflectableWord) {
+            let inflection = word.inflection
+
+            inflection.getAllForms().forEach(form => {
+                let formInflection = inflection.getFact(form).inflection
+
+                let foi: FormsOfInflection = inflectionsById[formInflection.id]
+                
+                if (!foi) {
+                    foi = {
+                        inflection: formInflection,
+                        forms: [],
+                        index: inflections.length,
+                        depth: formInflection.getDepth()
+                    }
+
+                    inflectionsById[formInflection.id] = foi
+                    inflections.push(foi)
+                }
+                
+                foi.forms.push(form)
+            })
+
+            inflections.sort((i1, i2) => i2.depth - i1.depth)
+            inflections.forEach((foi, index) => foi.index = index)
+
+            renderForm = renderWordInflection(word, corpus, 
+                    (inflectedWord, form, factIndex) => {
+                let inflectionIndex = inflectionsById[(word as InflectableWord)
+                    .inflection.getFact(form).inflection.id].index
+
+                return <div className={ 'clickable inflection' + inflectionIndex } key={ form }>{
+                    React.createElement(props.factLinkComponent, 
+                        { 
+                            fact: (word as InflectableWord).inflection.getFact(form), 
+                            context: (word as InflectableWord).inflect(form) 
+                        }, 
+                        (word as InflectableWord).inflect(form).toString())
+                    }
+                </div>
+            })
+
+            return <div className='inflectionTable'>
+                    <InflectionTableComponent
+                        corpus={ corpus }
+                        pos={ word.wordForm.pos }
+                        mask={ word.mask }
+                        factLinkComponent={ props.factLinkComponent }
+                        renderForm={ renderForm }
+                        title={ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
+                            (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }
+                        />
+
+                    <div>
+                        These words share endings with { word.toText() }, starting from the <b>{ word.stem }</b>. 
+                    </div>
+
+                    <ul className='legend'>{
+                        inflections.map((foi, index) => <li>
+                            <div className={ 'swatch inflection' + index }/>
+                            { foi.inflection.description ? foi.inflection.description + ': ' : '' }{
+                                this.getWordsUsingInflection(foi.inflection, foi.forms).map(word => 
+                                    React.createElement(this.props.factLinkComponent, {
+                                        fact: word
+                                    },
+                                    <span>
+                                        <span className='word'>{ word.toText() }</span> / 
+                                        <span className='stem'>{ word.stem }</span>
+                                    </span>))
+                            }
+                        </li>)
+                    }</ul>
+                </div>
+        }
+        else {
+            return null
+        }
+    }
+
+    getWordsUsingInflection(inflection: Inflection, forms: string[]) {
+        let result: InflectableWord[] = []
+
+        this.props.corpus.facts.facts.find(fact => {
+            if (fact instanceof InflectableWord && !forms.find(form => {
+                    let inflectionFact = fact.inflection.getFact(form)
+                    
+                    return !inflectionFact || inflectionFact.inflection.id != inflection.id
+                })) {
+                result.push(fact)
+
+                return result.length > 6
+            }
+        })
+
+        return result
+    }
+
     render() {
         let props = this.props
         let word = props.word
         let corpus = props.corpus
         let thisIdWithoutClassifier = word.getIdWithoutClassifier() 
 
-        let factoid = props.corpus.factoids.getFactoid(props.word.getWordFact())
+        let factoid = corpus.factoids.getFactoid(props.word.getWordFact())
 
         let otherMeanings = corpus.facts.facts.filter(fact => 
             { 
@@ -286,7 +400,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 <FactPivotTable
                     data={ phrasesWithWord }
                     getIdOfEntry={ (f) => f.getId() }
-                    renderEntry={ renderFactEntry(props.corpus, props.factLinkComponent) }
+                    renderEntry={ renderFactEntry(corpus, props.factLinkComponent) }
                     dimensions={ [ 
                         new PhraseCaseDimension(props.factLinkComponent), 
                     ] }
@@ -366,25 +480,7 @@ export default class WordFactComponent extends Component<Props, State> {
             { word instanceof InflectableWord ?
                 <div className='columns'>
                     <div className='main'>
-                        <InflectionTableComponent
-                            corpus={ props.corpus }
-                            pos={ word.wordForm.pos }
-                            mask={ word.mask }
-                            factLinkComponent={ props.factLinkComponent }
-                            renderForm={ renderWordInflection(word, this.props.corpus, 
-                                (inflectedWord, form, factIndex) => {
-                                return <div className='clickable' key={ form }>{
-                                    React.createElement(props.factLinkComponent, 
-                                        { 
-                                            fact: (word as InflectableWord).inflection.getFact(form), 
-                                            context: (word as InflectableWord).inflect(form) 
-                                        }, 
-                                        (word as InflectableWord).inflect(form).toString()) 
-                                    }</div>
-                            })}
-                            title={ word.wordForm.pos == PoS.VERB ? 'Conjugation' : 
-                                (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }
-                            />
+                        { this.renderInflectionTable() }
                     </div>
                     <div className='sidebar'>
                         <div>

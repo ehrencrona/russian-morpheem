@@ -110,6 +110,10 @@ export default class Inflection {
         return this
     }
 
+    getDepth() {
+        return this.inherits.reduce((d, i) => Math.max(d, i.getDepth()+1), 0)
+    }
+
     visitFacts(visitor: (Fact) => any) {
         for (let form in this.endings) {
             visitor(this.getFact(form));

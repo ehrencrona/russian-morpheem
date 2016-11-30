@@ -1,3 +1,4 @@
+import { untag } from '../../backend/route/tag';
 import { inflate } from 'zlib';
 import { NamedWordForm } from '../inflection/WordForm';
 
@@ -7,7 +8,7 @@ import { ExactWordMatch } from './ExactWordMatch'
 import PosFormWordMatch from './PosFormWordMatch'
 import WordInFormMatch from './WordInFormMatch'
 import TagWordMatch from './TagWordMatch'
-import { QUANTIFIERS } from './AbstractQuantifierMatch'
+import { AbstractQuantifierMatch, QUANTIFIERS } from './AbstractQuantifierMatch';
 
 import Inflections from '../inflection/Inflections'
 import { ENGLISH_FORMS_BY_POS, FORMS, INFLECTION_FORMS } from '../inflection/InflectionForms';
@@ -545,55 +546,144 @@ export default class PhrasePattern {
         let words = context.words
         let until = (onlyFirstWord ? 0 : words.length - minWords)
 
-        for (let startAtWord = 0; startAtWord <= until; startAtWord++) {
-            let at = startAtWord
-            let found = true
-            let childMatch: Match
-            let wordsMatched: WordMatched[] = []
+        let firstMatch = this.wordMatches[0] 
 
-            for (let j = 0; j < this.wordMatches.length; j++) {
-                let wordMatch = this.wordMatches[j]
-
-                let m = wordMatch.matches(context, at, this.wordMatches, j)
-
-                if (!m && j > 0 && words[at] && words[at].wordForm.pos == PoS.PARTICLE) {
-                    at++
-
-                    m = wordMatch.matches(context, at, this.wordMatches, j)
+        // patterns starting with noun phrase are super-slow. it's faster to first check if 
+        // the remaining patterns have any chance of matching and bailing if they don't.
+        if (firstMatch instanceof PhraseMatch && firstMatch.phraseId == 'np') {
+            // find the first non-phrase match without a quantifier
+            let nonPhraseMatchIndex = this.wordMatches.findIndex(m => {
+                if (m instanceof PhraseMatch) {
+                    return false
                 }
 
-                if (!m && !wordMatch.allowEmptyMatch()) {
-                    found = false
-                    break
-                }
-
-                let matchedWordCount: number
-
-                if (typeof m == 'number') {
-                    matchedWordCount = m as number
-                }
-                else {
-                    childMatch = m as Match
-                    matchedWordCount = childMatch.words.length
-                }
-
-                if (!(wordMatch instanceof WildcardMatch) &&
-                    (caseStudy == CaseStudy.STUDY_BOTH || 
-                     wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
-                    for (let i = 0; i < matchedWordCount; i++) {
-                        wordsMatched.push({
-                            index: at+i,
-                            word: words[at+i],
-                            wordMatch: wordMatch,
-                            childMatch: childMatch
-                        })
+                if (m instanceof AbstractQuantifierMatch) {
+                    if (m.range[0] == 0) {
+                        return false
                     }
                 }
 
-                at += matchedWordCount
+                return true
+            })
+
+            if (nonPhraseMatchIndex > 0) {
+                let nonPhraseMatch = this.wordMatches[nonPhraseMatchIndex]
+                let lastIndexOfNext;
+
+                let toNumber = (n: number | Match) => {
+                    if (!n) {
+                        return 
+                    }
+
+                    if (typeof n == 'number') {
+                        return n
+                    }
+                    else {
+                        return n.words.length
+                    }
+                }
+
+                let m = toNumber(nonPhraseMatch.matches(context, 0, this.wordMatches, nonPhraseMatchIndex))
+                
+                if (!m) {
+                    return 
+                }
+
+                // even if we do match, we know we don't need to go longer than until the word before.
+                lastIndexOfNext = m
+
+                let next
+
+                do {
+                    next = toNumber(nonPhraseMatch.matches(context, lastIndexOfNext + 1, this.wordMatches, nonPhraseMatchIndex))
+
+                    if (next) {
+                        lastIndexOfNext = next + lastIndexOfNext + 1
+                    }
+                }
+                while (next)
+
+                until = lastIndexOfNext - 1
+            }
+        }
+
+        for (let startAtWord = 0; startAtWord <= until; startAtWord++) {
+            if (onlyFirstWord && words[startAtWord].isPunctuation()) {
+                break
             }
 
-            if (found && wordsMatched.length) {
+            let matchFromWordMatch: (wordMatchIndex: number, at: number) => 
+                    WordMatched[] = (wordMatchIndex, originalAt) => {
+                let at = originalAt
+                let wordMatch = this.wordMatches[wordMatchIndex]
+
+                let m = wordMatch.matches(context, at, this.wordMatches, wordMatchIndex)
+
+                if (!m && wordMatchIndex > 0 && words[at] && words[at].wordForm.pos == PoS.PARTICLE) {
+                    at++
+
+                    m = wordMatch.matches(context, at, this.wordMatches, wordMatchIndex)
+                }
+
+                if (!m && !wordMatch.allowEmptyMatch()) {
+                    return
+                }
+                else {
+                    let matchedWordCount: number
+                    let childMatch: Match
+
+                    if (typeof m == 'number') {
+                        matchedWordCount = m as number
+                    }
+                    else {
+                        childMatch = m as Match
+                        matchedWordCount = childMatch.words.length
+                    }
+
+                    let wordsMatched: WordMatched[] = []
+
+                    if (!(wordMatch instanceof WildcardMatch) &&
+                        (caseStudy == CaseStudy.STUDY_BOTH || 
+                        wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
+
+                        for (let i = 0; i < matchedWordCount; i++) {
+                            wordsMatched.push({
+                                index: at+i,
+                                word: words[at+i],
+                                wordMatch: wordMatch,
+                                childMatch: childMatch
+                            })
+                        }
+                    }
+
+                    if (wordMatchIndex < this.wordMatches.length-1) {
+                        let next = matchFromWordMatch(wordMatchIndex + 1, at + matchedWordCount)
+
+                        if (next) {
+                            wordsMatched = wordsMatched.concat(next)
+                        }
+                        else {
+                            // if we fail to match the next it could have been because we are at a
+                            // quantifier match and we matched it too greedily, so back up and 
+                            // try again giving the quantifier match nothing.
+                            if (wordMatch instanceof AbstractQuantifierMatch 
+                                    && wordMatch.range[0] == 0 
+                                    && wordsMatched.length) {
+                                wordsMatched = matchFromWordMatch(wordMatchIndex + 1, originalAt)
+                            }
+                            else {
+                                wordsMatched = null
+                            }
+                        }
+                    }
+
+                    return wordsMatched
+                }
+            }
+
+            let wordsMatched = matchFromWordMatch(0, startAtWord)
+
+            if (wordsMatched && wordsMatched.length) {
                 return {
                     sentence: context.sentence,
                     words: wordsMatched,

@@ -337,7 +337,7 @@ input[type=text], input[type=number], textarea {
         margin-left: $unit;
     }
 
-    .sentenceFacts {
+    .sentencePhrases {
         display: flex;
         flex-direction: line;
         
@@ -370,6 +370,23 @@ input[type=text], input[type=number], textarea {
                 .phrase {
                     font-size: 80%;
                 }
+            }
+        }
+    }
+
+    .phraseDebugger {
+        ul {
+            margin-left: 4 * $unit;
+
+            li {
+                margin-top: $unit;
+            }
+
+            .toggle {
+                position: relative;
+                height: 0;
+                font-weight: bold;
+                left: - 3 * $unit;
             }
         }
     }

@@ -483,6 +483,8 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         let showForms = form.equals({ pos: form.pos }) && INFLECTION_FORMS[form.pos]
 
+        let renderForm
+
         return <div className='wordForm'>
             <h1>{ title }</h1>
             <div className='columns'>

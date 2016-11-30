@@ -1,3 +1,5 @@
+import { CASES } from '../inflection/InflectionForms';
+import { CursorResult } from '~mongodb/mongodb';
 
 import Fact from '../fact/Fact'
 import Facts from '../fact/Facts'
@@ -7,7 +9,7 @@ import CaseStudyMatch from './CaseStudyMatch'
 import { CaseStudy, JsonFormat as PhrasePatternJsonFormat } from './PhrasePattern'
 import { GrammarCase } from '../../shared/inflection/Dimensions'
 import { Match } from './Match'
-import MatchContext from './MatchContext'
+import { MatchContext, DebugPosition } from './MatchContext'
 
 import PhraseMatch from './PhraseMatch'
 import Words from '../Words'
@@ -56,15 +58,43 @@ export default class Phrase extends AbstractFact {
             throw new Error('setCorpus was never called.')
         }
 
-        for (let i = 0; i < this.patterns.length; i++) {
+        if (context.debug) {
+            context.debug('does ' + this.description  
+                    + (context.overrideFormCase 
+                        ? '@' + CASES[context.overrideFormCase]
+                        : '') 
+                    + ' match ' + 
+                context.words.map(w => w.toText()).join(' ') + '?', 
+                    DebugPosition.START)
+        }
+
+        let result
+
+        for (let i = 0; i < this.patterns.length && !result; i++) {
+            if (context.debug) {
+                context.debug(this.patterns[i].toString(), DebugPosition.START)
+            }
+
             let match = this.patterns[i].match(context, onlyFirstWord)
 
             if (match) {
                 match.phrase = this
+                result = match
+            }
 
-                return match
+            if (context.debug) {
+                context.debug(
+                    result 
+                        ? `yes! "${ match.words.map(w => w.word.toString()).join(' ') }"` 
+                        : 'no.', DebugPosition.END)
             }
         }
+
+        if (context.debug) {
+            context.debug(result ? 'yes! ' : 'no.', DebugPosition.END)
+        }
+
+        return result
     }
 
     isAutomaticallyAssigned() {
