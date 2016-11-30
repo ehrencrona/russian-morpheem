@@ -82,6 +82,8 @@ interface State {
     sentences?: TokenizedSentence[]
 }
 
+const MAX_EXAMPLES_OF_INFLECTION = 5
+
 export default class WordFactComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
@@ -298,7 +300,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 let inflectionIndex = inflectionsById[(word as InflectableWord)
                     .inflection.getFact(form).inflection.id].index
 
-                return <div className={ 'clickable inflection' + inflectionIndex } key={ form }>{
+                return <div className={ 'clickable pad inflection' + inflectionIndex } key={ form }>{
                     React.createElement(props.factLinkComponent, 
                         { 
                             fact: (word as InflectableWord).inflection.getFact(form), 
@@ -320,24 +322,48 @@ export default class WordFactComponent extends Component<Props, State> {
                             (word.wordForm.pos == PoS.NOUN ? 'Declension' : 'Forms') }
                         />
 
-                    <div>
-                        These words share endings with { word.toText() }, starting from the <b>{ word.stem }</b>. 
+                    <div className='legendIntro'>
+                        These words share endings with { word.toText() }, starting from the stem <b>{ word.stem }-</b>: 
                     </div>
 
                     <ul className='legend'>{
-                        inflections.map((foi, index) => <li>
-                            <div className={ 'swatch inflection' + index }/>
-                            { foi.inflection.description ? foi.inflection.description + ': ' : '' }{
-                                this.getWordsUsingInflection(foi.inflection, foi.forms).map(word => 
-                                    React.createElement(this.props.factLinkComponent, {
+                        inflections.map((foi, index) => {
+                            let words = this.getWordsUsingInflection(
+                                    foi.inflection, foi.forms, word as InflectableWord)
+
+                            let ellipsis
+
+                            if (words.length > MAX_EXAMPLES_OF_INFLECTION) {
+                                words = words.slice(0, MAX_EXAMPLES_OF_INFLECTION)
+                                ellipsis = true
+                            }
+                            
+                            let wordElements = words.map(word => 
+                                React.createElement(
+                                    this.props.factLinkComponent, 
+                                    {
                                         fact: word
                                     },
-                                    <span>
-                                        <span className='word'>{ word.toText() }</span> / 
-                                        <span className='stem'>{ word.stem }</span>
-                                    </span>))
-                            }
-                        </li>)
+                                    <span className='wordStem'>
+                                        <span className='word'>{ word.toText() }</span> 
+                                        {
+                                            word.inflection.getEnding(word.getDefaultInflection().form).subtractFromStem 
+                                            ? <span>({ word.stem }-)</span>
+                                            : null
+                                        }
+                                    </span>
+                                    ))
+
+                            return <li>
+                                <div className={ 'swatch inflection' + index }/>
+                                { wordElements.length ?
+                                    <span>{ foi.inflection.description ? foi.inflection.description + ': ' : '' }{
+                                        joinWithComma(wordElements)
+                                    }{ ellipsis ? ' ...' : null }</span>
+                                    :
+                                    <span>unique to { word.toText() }</span>
+                                }
+                            </li>})
                     }</ul>
                 </div>
         }
@@ -346,18 +372,23 @@ export default class WordFactComponent extends Component<Props, State> {
         }
     }
 
-    getWordsUsingInflection(inflection: Inflection, forms: string[]) {
+    getWordsUsingInflection(inflection: Inflection, forms: string[], otherThan: InflectableWord) {
         let result: InflectableWord[] = []
+        let seen = new Set<string>()
 
         this.props.corpus.facts.facts.find(fact => {
-            if (fact instanceof InflectableWord && !forms.find(form => {
+            if (fact instanceof InflectableWord 
+                && fact.stem != otherThan.stem
+                && !seen.has(fact.toText()) 
+                && !forms.find(form => {
                     let inflectionFact = fact.inflection.getFact(form)
                     
                     return !inflectionFact || inflectionFact.inflection.id != inflection.id
                 })) {
                 result.push(fact)
+                seen.add(fact.toText())
 
-                return result.length > 6
+                return result.length > MAX_EXAMPLES_OF_INFLECTION
             }
         })
 
@@ -517,4 +548,19 @@ export function sortByKnowledge(facts: Fact[], knowledge: NaiveKnowledge) {
     })
 
     return known.concat(unknown)
+}
+
+
+function joinWithComma(array: any[]) {
+    let result = []
+
+    array.forEach((item, index) => {
+        if (index > 0) {
+            result.push(<span key={ index }>, </span>)
+        }
+
+        result.push(item)
+    })
+
+    return result
 }

@@ -456,8 +456,32 @@ $sectionMargin: 1em;
             }
         }
     }
-    
+
     .inflections {
+        td {
+            padding: 0.5em 1em;  
+
+            @media (min-width: 600px) {
+                padding: 0.5em 4 * $unit;  
+            }                    
+        }
+    }
+    
+    .wordFact .inflectionTable {
+        tbody td {
+            padding: 0;
+
+            .pad {
+                padding: 0.5em 1em;  
+
+                @media (min-width: 600px) {
+                    padding: 0.5em 4 * $unit;  
+                }                    
+            }
+        }
+    }
+
+    .inflectionTable, .inflections {
         table {
             margin-top: $sectionMargin - 1em;
             border-collapse: collapse;
@@ -487,12 +511,6 @@ $sectionMargin: 1em;
             }
 
             td {
-                padding: 0.5em 1em;  
-
-                @media (min-width: 600px) {
-                    padding: 0.5em 4 * $unit;  
-                }
-                
                 .otherForm {
                     @extend .smallFont;
 
@@ -526,6 +544,46 @@ $sectionMargin: 1em;
             td {
                 vertical-align: top;
             }
+        }
+
+        .legendIntro {
+            margin-top: 2 * $unit;
+        }
+
+        .legend {
+            li {
+                margin-left: 1.4em;
+
+                .swatch {
+                    border: 1px solid lightgray;
+                    position: relative;
+                    left: -1em;
+                    width: 0.7em;
+                    height: 0.7em;
+                    margin-right: -0.7em;
+                    display: inline-block;
+                }
+            }
+
+            .wordStem {
+                white-space: nowrap;
+            }
+        }
+
+        .inflection0 {
+            background-color: #f8f0fa;
+        }
+
+        .inflection1 {
+            background-color: #d3cdfa;
+        }
+
+        .inflection2 {
+            background-color: #d5ecfe;
+        }
+
+        .inflection3 {
+            background-color: #f6d4d4;
         }
     }
 

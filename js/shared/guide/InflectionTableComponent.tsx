@@ -126,7 +126,7 @@ export class InflectionTableComponent extends Component<Props, State> {
                                 let [l1, l2] = name.split(' ')
 
                                 // needs to be two lines to align with the h3 next to it.
-                                return <td key={name}>{ l1 }<br/>{ l2 }&nbsp;</td> 
+                                return <td key={name}><div className='pad'>{ l1 }<br/>{ l2 }&nbsp;</div></td> 
                             }) }
                         </tr>
                     </thead>
@@ -180,11 +180,11 @@ export class InflectionTableComponent extends Component<Props, State> {
                             return <tr key={ formId }>
                                 {
                                     (fact && this.props.factLinkComponent ?
-                                        <td className='clickable'>{
+                                        <td className='clickable'><div className='pad'>{
                                             React.createElement(this.props.factLinkComponent, 
                                             { fact: fact }, 
                                             nameComponent) 
-                                        }</td>
+                                        }</div></td>
                                         :
                                         <td>{ name }</td>)
                                 }
