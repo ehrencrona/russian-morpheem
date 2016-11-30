@@ -1,3 +1,4 @@
+import Phrase from './Phrase';
 
 import Word from '../Word'
 import Sentence from '../Sentence'
@@ -11,6 +12,8 @@ interface MatchContext {
     words: Word[]
     sentence?: Sentence
     facts: Facts
+    parent?: MatchContext
+    phrase?: Phrase
     study?: CaseStudy
     overrideFormCase?: GrammarCase
 }
