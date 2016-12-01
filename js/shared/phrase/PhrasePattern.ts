@@ -1,3 +1,6 @@
+import { wordToStudyWord } from '../study/toStudyWords';
+import { DebugNode } from '../../frontend/phrase/PhraseDebugger';
+import { DebugPosition } from './MatchContext';
 import getWordTranslationInSentence from '../getWordTranslationInSentence';
 import { untag } from '../../backend/route/tag';
 import { inflate } from 'zlib';
@@ -446,6 +449,8 @@ class Fragment implements EnglishPatternFragment {
 
             result = result.replace(placeholder.placeholder, replaceWith)
         })
+/*
+no idea what this is. its replacing any remaining placeholders with russian words. seems old.
 
         let replace: { [key: string]: Word[]} = {}		 
 
@@ -464,12 +469,12 @@ class Fragment implements EnglishPatternFragment {
             }		
         })
 
-        Object.keys(replace).forEach((r) => {		
-            result = result.replace(new RegExp(r, 'g'), replace[r].map((w) => 		
+        Object.keys(replace).forEach((r) => {
+            result = result.replace(new RegExp('(?:[ |^])' + r + '(?:[ |$])', 'g'), replace[r].map((w) => 		
                 (w instanceof InflectedWord ? w.word.getDefaultInflection().jp : w.jp)		
             ).join(' '))		
         })		
-
+*/
         // there can be multiple article placeholders so we must handle them separately
 
         if (match.sentence && match.sentence.en()) {
@@ -550,6 +555,10 @@ export default class PhrasePattern {
                     }
                 }
 
+                if (m.allowEmptyMatch) {
+                    return false
+                }
+
                 return true
             })
 
@@ -570,8 +579,16 @@ export default class PhrasePattern {
                     }
                 }
 
+                if (context.debug) {
+                    context.debug('Was there a match anywhere of ' + nonPhraseMatch.toString() + '?', DebugPosition.START)
+                }
+
                 let m = toNumber(nonPhraseMatch.matches(context, 0, this.wordMatches, nonPhraseMatchIndex))
                 
+                if (context.debug) {
+                    context.debug(m ? 'Yes' : 'No', DebugPosition.END)
+                }
+
                 if (!m) {
                     return 
                 }

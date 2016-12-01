@@ -16,6 +16,7 @@ export default function getWordTranslationInSentence(
     let result: string
 
     sentenceTranslation = sentenceTranslation.toLowerCase()
+
     if (word.getTranslationCount() > 1) {
         let matches: TranslationFound[] = []
         let wordTranslations = word.getAllTranslations()
@@ -66,10 +67,17 @@ export default function getWordTranslationInSentence(
         }
 
         if (!result) {
-            result = matches[0].string
+            if (matches.length) {
+                result = matches[0].string
+            }
+            else {                
+                console.error('Found none of ' + wordTranslations.map(w => `"${w}"`).join(' ') + 
+                    ' in "' + sentenceTranslation + '".')
+            }
         }
     }
-    else {
+    
+    if (!result) {
         result = word.getEnglish()
     }
 
