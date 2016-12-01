@@ -365,7 +365,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                     </span>
                                     ))
 
-                            return <li>
+                            return <li key={ foi.inflection.id }>
                                 <div className={ 'swatch inflection' + index }/>
                                 { wordElements.length ?
                                     <span>{ foi.inflection.description ? foi.inflection.description + ': ' : '' }{

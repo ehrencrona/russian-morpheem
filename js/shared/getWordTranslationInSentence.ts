@@ -71,7 +71,7 @@ export default function getWordTranslationInSentence(
                 result = matches[0].string
             }
 /*
-            else {                
+        else {                
                 console.error('Found none of ' + wordTranslations.map(w => `"${w}"`).join(' ') + 
                     ' in "' + sentenceTranslation + '".')
             }
