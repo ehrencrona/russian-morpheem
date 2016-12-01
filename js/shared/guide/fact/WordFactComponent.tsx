@@ -300,13 +300,16 @@ export default class WordFactComponent extends Component<Props, State> {
                 let inflectionIndex = inflectionsById[(word as InflectableWord)
                     .inflection.getFact(form).inflection.id].index
 
+                let inflectableWord = word as InflectableWord 
+
                 return <div className={ 'clickable pad inflection' + inflectionIndex } key={ form }>{
                     React.createElement(props.factLinkComponent, 
                         { 
-                            fact: (word as InflectableWord).inflection.getFact(form), 
-                            context: (word as InflectableWord).inflect(form) 
+                            fact: inflectableWord.inflection.getFact(form),
+                            key: inflectableWord.inflection.id,
+                            context: inflectableWord.inflect(form) 
                         }, 
-                        (word as InflectableWord).inflect(form).toString())
+                        inflectableWord.inflect(form).toString())
                     }
                 </div>
             })
@@ -476,7 +479,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                 <span key={ fact.getId() }>{ index > 0 ? ' or ' : ''}<span 
                                     className='clickable'>{
                                         React.createElement(props.factLinkComponent, 
-                                            { fact: fact }, 
+                                            { fact: fact, key: fact.getId() }, 
                                             (fact as Word).getEnglish())
                                     }</span>
                                 </span>)
