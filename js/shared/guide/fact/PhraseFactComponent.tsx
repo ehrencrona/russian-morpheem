@@ -82,7 +82,11 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         return <li key={ match.sentence.id }>
             {
-                React.createElement(this.props.factLinkComponent, { fact: match.sentence, key: match.sentence.id }, 
+                React.createElement(this.props.factLinkComponent, 
+                    { 
+                        fact: match.sentence, 
+                        key: match.sentence.id 
+                    }, 
                     <span dangerouslySetInnerHTML={ { __html: 
                         match.sentence.innerToString((word, first, index) => {
                             let wordString = htmlEscape(word.toString())

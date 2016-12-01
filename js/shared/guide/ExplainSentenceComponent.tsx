@@ -372,7 +372,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                                         cells.push(<td key={ cells.length } className='phrase' 
                                             colSpan={ colSpan } >{
                                             React.createElement(this.props.factLinkComponent, 
-                                                { fact: lastPhrase.phrase },
+                                                { fact: lastPhrase.phrase, key: lastPhrase.phrase.getId() },
                                                 [
                                                     lastPhrase.getHint(), 
                                                     <div className='phraseName'>see "{ lastPhrase.phrase.en }"</div>
