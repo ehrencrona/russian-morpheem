@@ -617,6 +617,10 @@ export default class PhrasePattern {
                 let at = originalAt
                 let wordMatch = this.wordMatches[wordMatchIndex]
 
+                if (!wordMatch) {
+                    return []
+                }
+
                 let m = wordMatch.matches(context, at, this.wordMatches, wordMatchIndex)
 
                 if (!m && wordMatchIndex > 0 && words[at] && words[at].wordForm.pos == PoS.PARTICLE) {
@@ -656,24 +660,22 @@ export default class PhrasePattern {
                         }
                     }
 
-                    if (wordMatchIndex < this.wordMatches.length-1) {
-                        let next = matchFromWordMatch(wordMatchIndex + 1, at + matchedWordCount)
+                    let next = matchFromWordMatch(wordMatchIndex + 1, at + matchedWordCount)
 
-                        if (next) {
-                            wordsMatched = wordsMatched.concat(next)
+                    if (next) {
+                        wordsMatched = wordsMatched.concat(next)
+                    }
+                    else {
+                        // if we fail to match the next it could have been because we are at a
+                        // quantifier match and we matched it too greedily, so back up and 
+                        // try again giving the quantifier match nothing.
+                        if (wordMatch instanceof AbstractQuantifierMatch 
+                                && wordMatch.range[0] == 0 
+                                && wordsMatched.length) {
+                            wordsMatched = matchFromWordMatch(wordMatchIndex + 1, originalAt)
                         }
                         else {
-                            // if we fail to match the next it could have been because we are at a
-                            // quantifier match and we matched it too greedily, so back up and 
-                            // try again giving the quantifier match nothing.
-                            if (wordMatch instanceof AbstractQuantifierMatch 
-                                    && wordMatch.range[0] == 0 
-                                    && wordsMatched.length) {
-                                wordsMatched = matchFromWordMatch(wordMatchIndex + 1, originalAt)
-                            }
-                            else {
-                                wordsMatched = null
-                            }
+                            wordsMatched = null
                         }
                     }
 
