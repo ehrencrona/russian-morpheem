@@ -1,3 +1,4 @@
+import dedup from './dedup';
 import { getNamedForm } from '../../inflection/WordForms';
 import { PivotDimension } from '../pivot/PivotDimension';
 import { POS_LONG_NAMES } from '../../phrase/PhrasePattern';
@@ -49,7 +50,7 @@ import MatchEndingDimension from '../pivot/MatchEndingDimension'
 
 import { renderFormName, InflectionTableComponent } from '../InflectionTableComponent'
 
-import marked = require('marked')
+import marked = require('marked');
 
 let React = { createElement: createElement }
 
@@ -297,12 +298,12 @@ export default class InflectionFormComponent extends Component<Props, State> {
 
         const POS = [ PoS.NOUN, PoS.ADJECTIVE, PoS.VERB, PoS.PRONOUN ]
 
-        let related = this.getRelatedForms()
+        let related = dedup(this.getRelatedForms()
             .concat(form.required || [])
             .concat(form.getComponents())
             .concat(
                 (factoid ? 
-                    factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : []))
+                    factoid.relations.map(f => corpus.facts.get(f.fact)).filter(f => !!f) : [])))
 
         let title = corpus.factoids.getFactoid(form).name || ('The ' + form.name)
 

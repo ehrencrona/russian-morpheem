@@ -258,18 +258,3 @@ export default class PhraseFactComponent extends Component<Props, State> {
     }
 }
 
-function dedup(facts: Fact[]) {
-    let seen = {}
-
-    return facts.filter(fact => {
-        if (!fact) {
-            return false
-        }
-
-        let result = !seen[fact.getId()]
-
-        seen[fact.getId()] = true
-        
-        return result
-    })
-}
