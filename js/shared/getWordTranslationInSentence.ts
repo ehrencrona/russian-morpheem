@@ -70,10 +70,12 @@ export default function getWordTranslationInSentence(
             if (matches.length) {
                 result = matches[0].string
             }
+/*
             else {                
                 console.error('Found none of ' + wordTranslations.map(w => `"${w}"`).join(' ') + 
                     ' in "' + sentenceTranslation + '".')
             }
+            */
         }
     }
     

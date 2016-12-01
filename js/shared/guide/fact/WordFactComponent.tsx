@@ -352,6 +352,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                 React.createElement(
                                     this.props.factLinkComponent, 
                                     {
+                                        key: word.getId(),
                                         fact: word
                                     },
                                     <span className='wordStem'>
