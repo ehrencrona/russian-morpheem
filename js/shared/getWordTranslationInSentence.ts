@@ -62,7 +62,7 @@ export default function getWordTranslationInSentence(
                     }
                 })
 
-                result = best.string
+                result = best &&best.string
             }
         }
 
