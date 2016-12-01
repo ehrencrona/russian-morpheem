@@ -186,7 +186,7 @@ export class InflectionTableComponent extends Component<Props, State> {
                                             nameComponent) 
                                         }</div></td>
                                         :
-                                        <td>{ name }</td>)
+                                        <td><div className='pad'>{ name }</div></td>)
                                 }
                                 {
                                     cells

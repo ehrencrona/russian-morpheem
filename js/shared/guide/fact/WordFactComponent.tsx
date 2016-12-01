@@ -359,7 +359,7 @@ export default class WordFactComponent extends Component<Props, State> {
                                         <span className='word'>{ word.toText() }</span> 
                                         {
                                             word.inflection.getEnding(word.getDefaultInflection().form).subtractFromStem 
-                                            ? <span>({ word.stem }-)</span>
+                                            ? <span> ({ word.stem }-)</span>
                                             : null
                                         }
                                     </span>

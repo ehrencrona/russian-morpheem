@@ -468,15 +468,24 @@ $sectionMargin: 1em;
     }
     
     .wordFact .inflectionTable {
-        tbody td {
-            padding: 0;
+        tbody {
 
-            .pad {
-                padding: 0.5em 1em;  
+            td {
+                padding: 0;
 
-                @media (min-width: 600px) {
-                    padding: 0.5em 4 * $unit;  
-                }                    
+                .pad {
+                    padding: 0.5em 1em;  
+
+                    @media (min-width: 600px) {
+                        padding: 0.5em 4 * $unit;  
+                    }                    
+                }
+            }
+
+            td:first-child {
+                .pad {
+                    padding-left: 0;  
+                }
             }
         }
     }
