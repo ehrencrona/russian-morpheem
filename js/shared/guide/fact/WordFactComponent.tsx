@@ -17,7 +17,7 @@ import Ending from '../../../shared/Ending'
 import Sentence from '../../../shared/Sentence'
 
 import Inflection from '../../../shared/inflection/Inflection'
-import { getFormName } from '../../../shared/inflection/InflectionForms' 
+import { getFormName, INFLECTION_FORMS } from '../../../shared/inflection/InflectionForms';
 import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import {
@@ -311,10 +311,17 @@ export default class WordFactComponent extends Component<Props, State> {
                 </div>
             })
 
+            let pos = word.wordForm.pos
+
+            // primarily for мой
+            if (!INFLECTION_FORMS[pos]) {
+                pos = word.inflection.wordForm.pos
+            }
+
             return <div className='inflectionTable'>
                     <InflectionTableComponent
                         corpus={ corpus }
-                        pos={ word.wordForm.pos }
+                        pos={ pos }
                         mask={ word.mask }
                         factLinkComponent={ props.factLinkComponent }
                         renderForm={ renderForm }

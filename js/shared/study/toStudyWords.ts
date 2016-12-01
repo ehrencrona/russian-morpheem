@@ -253,13 +253,15 @@ export function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: C
         return word instanceof InflectedWord && form.matches(FORMS[word.form]) 
     }
 
-    words.forEach(word => {
+    words.forEach((word, index) => {
         studiedFacts.forEach(fact => {
             if (word.hasFact(fact) 
                 || (fact instanceof InflectionForm && hasForm(word.word, fact))) {
                 word.studied = true
 
-                word.en = getWordTranslationInSentence(word.word, sentence).string
+                let nextWord = words[index+1]
+
+                word.en = getWordTranslationInSentence(word.word, sentence.en(), nextWord && nextWord.word)
             }
         })
     })

@@ -19,6 +19,8 @@ interface AnyWord extends Translatable {
 
     getWordFact(): Fact
 
+    getDictionaryFormOfTranslation(translation: string, form?: string): string
+    getAllTranslations(): string[]
     getTranslationCount(): number
 
     setWordForm(wordForm: WordForm)

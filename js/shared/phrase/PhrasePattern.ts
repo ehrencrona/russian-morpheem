@@ -1,3 +1,4 @@
+import getWordTranslationInSentence from '../getWordTranslationInSentence';
 import { untag } from '../../backend/route/tag';
 import { inflate } from 'zlib';
 import { NamedWordForm } from '../inflection/WordForm';
@@ -110,37 +111,11 @@ class Placeholder {
     article: boolean
 }
 
-type WordToString = (word: Word, enSentence: string) => string;
+type WordToString = (word: Word, enSentence: string, nextWord: AnyWord) => string;
 type PhraseToString = (phrase: PhraseMatch, wordMatched: WordMatched, wordToString?: WordToString) => string;
 
-const defaultWordToString: WordToString = (word, enSentence) => {
-    let tc = word.getTranslationCount()
-
-    if (tc > 1 && enSentence) {    
-        enSentence = enSentence.toLowerCase()
-
-        for (let i = 1; i < tc; i++) {
-            let enWord = word.getEnglish('', i) 
-            let en = enWord.toLowerCase()
-
-            let matchIndex = enSentence.indexOf(en)
-
-            if (matchIndex >= 0) {
-                if (matchIndex > 0 && enSentence[matchIndex-1].match(/\w/)) {
-                    continue
-                }
-
-                if (matchIndex + enWord.length < enSentence.length && 
-                    enSentence[matchIndex + enWord.length].match(/\w/)) {
-                    continue
-                }
-
-                return en
-            }
-        }
-    }
-
-    return word.getEnglish()
+const defaultWordToString: WordToString = (word, enSentence, nextWord) => {
+    return getWordTranslationInSentence(word, enSentence, nextWord)
 } 
 
 const defaultPhraseToString: PhraseToString = 
@@ -151,7 +126,7 @@ const defaultPhraseToString: PhraseToString =
 }
 
 function derivationTransform(derivation: string): WordToString {
-    return (word: Word, enSentence) => {
+    return (word: Word, enSentence, nextWord) => {
         let words = word.getDerivedWords(derivation)
 
         if (words[0]) {
@@ -173,12 +148,12 @@ function derivationTransform(derivation: string): WordToString {
             }
         }
 
-        return defaultWordToString(word, enSentence)
+        return defaultWordToString(word, enSentence, nextWord)
     }    
 }
 
 function formTransform(pos: PoS, forms: string[]): WordToString {
-    return (word: Word, enSentence) => {
+    return (word: Word, enSentence, nextWord) => {
         if (word instanceof InflectedWord && word.wordForm.pos == pos) {
             let inflected
 
@@ -196,12 +171,12 @@ function formTransform(pos: PoS, forms: string[]): WordToString {
             }
         }
 
-        return defaultWordToString(word, enSentence)
+        return defaultWordToString(word, enSentence, nextWord)
     }
 }
 
 function simplePresentTransform(): WordToString {
-    return (word: Word, enSentence) => {
+    return (word: Word, enSentence, nextWord) => {
         if (word instanceof InflectedWord && word.wordForm.pos == PoS.VERB) {
             let inflection = word.word.inflect('inf')
             
@@ -217,17 +192,17 @@ function simplePresentTransform(): WordToString {
             }
         }
 
-        return defaultWordToString(word, enSentence)
+        return defaultWordToString(word, enSentence, nextWord)
     }
 }
 
 function englishOnlyTransform(pos: PoS, englishForm: string): WordToString {
-    return (word: Word, enSentence) => {
+    return (word: Word, enSentence, nextWord) => {
         if (word instanceof InflectedWord && word.wordForm.pos == pos) {
             return word.word.getEnglish(englishForm)
         }
 
-        return defaultWordToString(word, enSentence)
+        return defaultWordToString(word, enSentence, nextWord)
     }
 }
 
@@ -451,8 +426,21 @@ class Fragment implements EnglishPatternFragment {
                     replaceWith = phraseToString(wordMatch, wordMatched, wordToString)
                 }
                 else {
-                    replaceWith = match.words.filter((w) => w.wordMatch == wordMatch)
-                        .map(w => wordToString(w.word, match.sentence.english)).join(' ')
+                    replaceWith = ''
+
+                    match.words.forEach((w, index) => {
+                        if (w.wordMatch == wordMatch) {
+                            let nextWord = match.words[index+1]
+
+                            let wordString = wordToString(w.word, match.sentence.english, nextWord && nextWord.word)
+
+                            if (replaceWith.length) {
+                                replaceWith += ' '
+                            }
+                            
+                            replaceWith += wordString
+                        }
+                    })
                 }
             }
 
@@ -497,7 +485,6 @@ class Fragment implements EnglishPatternFragment {
                     let m = following.match(/\w+/)
 
                     let nextWord = (m && m[0]) || following
-
                     let article = findPotentialArticle(match.sentence.en(), nextWord) 
 
                     if (article) {
@@ -617,6 +604,7 @@ export default class PhrasePattern {
                 let at = originalAt
                 let wordMatch = this.wordMatches[wordMatchIndex]
 
+                // end of pattern. match.
                 if (!wordMatch) {
                     return []
                 }

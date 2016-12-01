@@ -66,11 +66,11 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
         // search for the inflected word but show the uninflected.
         let originalFormWord = props.studyFact.words[0].word
 
-        translation = word.getEnglish('', 
-            getWordTranslationInSentence(originalFormWord, props.sentence).index)
+        translation = word.getDictionaryFormOfTranslation(
+            getWordTranslationInSentence(originalFormWord, props.sentence.en()))
     }
     else {
-        translation = getWordTranslationInSentence(word, props.sentence).string
+        translation = getWordTranslationInSentence(word, props.sentence.en())
     }
 
     return <div><strong className='nobr verbatim'>{ 

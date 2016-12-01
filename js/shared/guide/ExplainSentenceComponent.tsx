@@ -55,19 +55,19 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
             return null
         }
 
-        let translation = getWordTranslationInSentence(word, this.props.sentence)
+        let translation = getWordTranslationInSentence(word, this.props.sentence.en())
 
-        let translate = forceTranslation || translation.string != studyWord.getHint()
+        let translate = forceTranslation || translation != studyWord.getHint()
 
         let lines = [
             <div key='jp' className='jp'>{ word.toText() }</div>,
         ]
 
         if (translate) {
-            let en = translation.string
+            let en = translation
 
             if (word.wordForm.pos == PoS.VERB) {
-                en = word.getEnglish('inf', translation.index)                
+                en = word.getDictionaryFormOfTranslation(translation, 'inf')                
             }
             
             lines.push(<div key='en' className='en'>{ en }</div>)
@@ -83,9 +83,9 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         let facts = this.props.corpus.facts
 
         if (word instanceof InflectedWord && word != word.word.getDefaultInflection()) {
-            let translation = getWordTranslationInSentence(word, this.props.sentence)
+            let translation = getWordTranslationInSentence(word, this.props.sentence.en())
 
-            let dictionaryForm = word.word.getEnglish('', translation.index)
+            let dictionaryForm = word.word.getDictionaryFormOfTranslation(translation)
 
             let content
             
@@ -100,11 +100,11 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                 ]
 
                 if (facts.hasTag(word.getWordFact(), 'perfective')) {
-                    translation.string = 'will ' + dictionaryForm
+                    translation = 'will ' + dictionaryForm
                 }
 
                 content.push(
-                    <div key='en' className='en'>{ EN_PRON[word.form] + ' ' + translation.string }</div>)
+                    <div key='en' className='en'>{ EN_PRON[word.form] + ' ' + translation }</div>)
             }
             else {
                 content = [
@@ -113,9 +113,9 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
                     }</div>
                 ]
 
-                if (dictionaryForm != translation.string) {
+                if (dictionaryForm != translation) {
                     content.push(
-                        <div key='en' className='en'>{ translation.string }</div>)
+                        <div key='en' className='en'>{ translation }</div>)
                 }
                 else {
                     content.push(
@@ -305,9 +305,11 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
         
         let studyWords = toStudyWords(sentence, [], this.props.corpus)
 
-        studyWords.forEach(studyWord => {
+        studyWords.forEach((studyWord, index) => {
             if (studyWord instanceof StudyWord) {
-                studyWord.en = getWordTranslationInSentence(studyWord.word, this.props.sentence).string
+                let nextWord = studyWords[index+1]
+                studyWord.en = getWordTranslationInSentence(studyWord.word, this.props.sentence.en(), 
+                    nextWord instanceof StudyWord && nextWord.word)
             }
         })
 

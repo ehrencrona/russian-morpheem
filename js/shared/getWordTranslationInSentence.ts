@@ -1,3 +1,4 @@
+import { debug } from 'util';
 
 import Sentence from './Sentence'
 import AnyWord from './AnyWord'
@@ -5,30 +6,76 @@ import { PUNCTUATION } from './Punctuation'
 
 const WORD_DELIMITER = ' ' + PUNCTUATION
 
-interface Translation {
+interface TranslationFound {
     index: number
     string: string
 }
 
-export default function getWordTranslationInSentence(word: AnyWord, sentence: Sentence): Translation {
-    let result: Translation = {
-        string: word.getEnglish(),
-        index: 0
-    }
+export default function getWordTranslationInSentence(
+        word: AnyWord, sentenceTranslation: string, nextWord?: AnyWord): string {
+    let result: string
 
-    let sentenceTranslation = sentence.en().toLowerCase()
+    sentenceTranslation = sentenceTranslation.toLowerCase()
+    if (word.getTranslationCount() > 1) {
+        let matches: TranslationFound[] = []
+        let wordTranslations = word.getAllTranslations()
 
-    for (let i = 1; i < word.getTranslationCount(); i++) {
-        let wordTranslation = word.getEnglish('', i)
-        let index = sentenceTranslation.indexOf(wordTranslation.toLowerCase())
-        let end = index + wordTranslation.length
+        wordTranslations.forEach(wordTranslation => {
+            let index = -1
+            
+            do {
+                index = sentenceTranslation.indexOf(wordTranslation.toLowerCase(), index + 1)
+                
+                if (index >= 0) {
+                    let end = index + wordTranslation.length
 
-        if ((index == 0 || WORD_DELIMITER.indexOf(sentenceTranslation[index-1]) >= 0) &&
-            (end == wordTranslation.length || WORD_DELIMITER.indexOf(sentenceTranslation[end]) >= 0)) {
-            result.string = wordTranslation
-            result.index = i
+                    if ((index == 0 || isWordDelimiter(sentenceTranslation[index-1])) &&
+                        (end == wordTranslation.length || isWordDelimiter(sentenceTranslation[end]))) {
+                        matches.push({
+                            string: wordTranslation,
+                            index: index
+                        })
+                    }
+                }
+            }
+            while (index >= 0)
+        })
+
+        if (matches.length > 1 && nextWord) {
+            let nextIndex
+
+            nextWord.getAllTranslations().find(nextTranslation => {
+                nextIndex = sentenceTranslation.indexOf(nextTranslation)
+
+                return nextIndex >= 0
+            })
+
+            // pick the last match that is still before the next word
+            if (nextIndex > 0) {
+                let best: TranslationFound
+
+                matches.forEach(m => {
+                    if (m.index < nextIndex &&
+                        (!best || best.index < m.index)) {
+                        best = m
+                    }
+                })
+
+                result = best.string
+            }
         }
+
+        if (!result) {
+            result = matches[0].string
+        }
+    }
+    else {
+        result = word.getEnglish()
     }
 
     return result
+}
+
+function isWordDelimiter(char: string) {
+    return WORD_DELIMITER.indexOf(char) >= 0
 }
