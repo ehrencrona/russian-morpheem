@@ -99,7 +99,7 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
 
     renderStudyWords(phrase: Phrase, debug?: (message: string, position: DebugPosition) => void) {
         let match = phrase.match({ sentence: this.props.sentence, words: this.props.sentence.words, 
-            facts: this.props.corpus.facts, study: null, debug: debug })
+            facts: this.props.corpus.facts, debug: debug })
 
         if (!match) {
             return <div>
@@ -141,7 +141,7 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
         let potentialPhrases = corpus.phrases.all().filter((p) =>
             !p.isAutomaticallyAssigned() &&
             !!p.match({ sentence: sentence, words: sentence.words, facts: corpus.facts, 
-                study: null, debug: null }) && 
+                debug: null }) && 
             !sentence.hasPhrase(p)
         )
 

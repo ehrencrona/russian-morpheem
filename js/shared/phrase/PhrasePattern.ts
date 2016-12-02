@@ -40,10 +40,6 @@ import { Match, WordMatched } from './Match'
 
 import findPotentialArticle from './findPotentialArticle'
 
-export enum CaseStudy {
-    STUDY_CASE, STUDY_BOTH
-}
-
 export interface JsonFormat {
     pattern: string,
     en: string
@@ -521,12 +517,6 @@ export default class PhrasePattern {
     }
 
     match(context: MatchContext, onlyFirstWord?: boolean): Match {
-        let caseStudy = context.study
-
-        if (caseStudy == null) {
-            caseStudy = CaseStudy.STUDY_BOTH
-        }
-
         let minWords = this.wordMatches.length
 
         this.wordMatches.forEach((m) => {
@@ -651,10 +641,7 @@ export default class PhrasePattern {
 
                     let wordsMatched: WordMatched[] = []
 
-                    if (!(wordMatch instanceof WildcardMatch) &&
-                        (caseStudy == CaseStudy.STUDY_BOTH || 
-                        wordMatch.isCaseStudy() == (caseStudy == CaseStudy.STUDY_CASE))) {
-
+                    if (!(wordMatch instanceof WildcardMatch)) {
                         for (let i = 0; i < matchedWordCount; i++) {
                             wordsMatched.push({
                                 index: at+i,

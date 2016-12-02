@@ -19,7 +19,6 @@ import Fact from '../../shared/fact/Fact'
 import Words from '../../shared/Words'
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
-import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'

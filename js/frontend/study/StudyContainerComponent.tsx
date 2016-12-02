@@ -41,7 +41,6 @@ import PhraseMatch from '../../shared/phrase/PhraseMatch'
 import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 import { WordMatched } from '../../shared/phrase/Match'
-import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import { GrammarCase } from '../../shared/inflection/Dimensions'
 
 import ExplainFactComponent from '../../shared/guide/fact/FactComponent'
@@ -284,8 +283,8 @@ console.log('Did not ought to know ' + visitedFact.getId())
                 let match = phrase.match({ 
                     sentence: sentence, 
                     words: sentence.words, 
-                    facts: this.props.corpus.facts, 
-                    study: CaseStudy.STUDY_BOTH })
+                    facts: this.props.corpus.facts 
+                })
 
                 if (match) {
                     let wordMatched = findWordMatched(match.words, fact)

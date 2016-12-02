@@ -40,8 +40,6 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
                     context.overrideFormCase :
                     this.overrideFormCase)
 
-        childContext.study = null
-        
         childContext.depth = (context.depth || 0) + 1
 
         if (childContext.depth > 12) {

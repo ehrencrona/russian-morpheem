@@ -14,7 +14,6 @@ import FORMS from '../../shared/inflection/InflectionForms'
 
 import Phrase from '../../shared/phrase/Phrase'
 import PhraseCase from '../../shared/phrase/PhraseCase'
-import { CaseStudy } from '../../shared/phrase/PhrasePattern'
 import findPotentialArticle from '../../shared/phrase/findPotentialArticle'
 
 import InflectedWord from '../../shared/InflectedWord'
@@ -199,8 +198,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
             let match = phrase.match({
                 sentence: sentence,
                 words: sentence.words,
-                facts: this.props.corpus.facts,
-                study: CaseStudy.STUDY_BOTH
+                facts: this.props.corpus.facts
             })
 
             let words = studyWords.map(st => st as StudyWord)
