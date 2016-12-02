@@ -158,7 +158,7 @@ export function toStudyWords(sentence: Sentence, studiedFacts: Fact[], corpus: C
     let tokens: StudyToken[] = words.slice(0)
 
     let handlePhrase = (phrase: Phrase) => {
-        let phraseMatch: Match = phrase.match({ sentence: sentence, words: sentence.words, facts: corpus.facts })
+        let phraseMatch: Match = corpus.sentences.match(sentence, phrase, corpus.facts)
 
         if (!phraseMatch) {
             console.warn(`Phrase ${phrase.id} does not match sentence ${sentence.id}.`)

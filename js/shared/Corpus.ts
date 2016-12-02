@@ -82,6 +82,7 @@ export default class Corpus {
             json.lang)
 
         phrases.setCorpus(corpus)
+
         return corpus
     }
 

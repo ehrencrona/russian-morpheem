@@ -76,7 +76,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
                     patterns={ fact.patterns }
                     tab={ this.props.tab }
                     filter={ (sentence) => !!sentence.hasPhrase(fact) }
-                    isConflict={ isConflictFunction(this.props.fact, this.props.corpus.facts) }
+                    isConflict={ isConflictFunction(this.props.fact, this.props.corpus) }
                     includeConflicts={ true }
                     noMatchIsConflict={ true }
                     ref='sentences'

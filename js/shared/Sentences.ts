@@ -1,3 +1,5 @@
+import { Match } from './phrase/Match';
+import { DebugPosition } from './phrase/MatchContext';
 
 import Sentence from './Sentence';
 import Facts from './fact/Facts';
@@ -21,6 +23,8 @@ export default class Sentences {
     nextSentenceId: number = 0
 
     sentencesByFact : SentencesByFactIndex
+
+    phraseMatchCache = new Map<string, Match>()
 
     constructor() {
     }
@@ -49,9 +53,7 @@ export default class Sentences {
 
         this.sentencesByFact = null
 
-        if (this.onChange) {
-            this.onChange(sentence)
-        }
+        this.fireOnChange(sentence)
     }
 
     removePhrase(phrase: Phrase, sentence: Sentence) {
@@ -59,9 +61,7 @@ export default class Sentences {
 
         this.sentencesByFact = null
 
-        if (this.onChange) {
-            this.onChange(sentence)
-        }
+        this.fireOnChange(sentence)
     }
 
     remove(sentence: Sentence) {
@@ -127,10 +127,18 @@ export default class Sentences {
             }
         })
         
-        this.sentencesByFact = null
+        this.fireOnChange(sentence)
+    }
+
+    phraseChanged(phrase: Phrase) {
+        this.phraseMatchCache.clear()
+    }
+
+    fireOnChange(sentence) {
+        this.phraseMatchCache.clear()
 
         if (this.onChange) {
-            this.onChange(sentence)
+            this.onChange(sentence) 
         }
     }
 
@@ -141,7 +149,24 @@ export default class Sentences {
 
         return this
     }
-    
+
+    match(sentence: Sentence, phrase: Phrase, facts: Facts, debug?: 
+            (message: string, position: DebugPosition) => void): Match {
+        let cacheKey = sentence.id + phrase.id
+        
+        let result = this.phraseMatchCache.get(cacheKey)
+
+        if (result !== undefined) {
+            return result
+        }
+
+        result = phrase.match({ facts: facts, sentence: sentence, words: sentence.words, debug: debug })
+
+        this.phraseMatchCache.set(cacheKey, result)
+
+        return result
+    }
+
     toJson(): JsonFormat {
         return this.sentences.map((sentence) => sentence.toJson())
     }

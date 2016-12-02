@@ -93,7 +93,7 @@ export default class SentencesComponent extends Component<Props, State> {
                                     includeConflicts={ !this.state.onlyNonPhrase }
                                     isConflict={ (this.state.onlyNonPhrase ?
                                         (sentence: Sentence, wordIndexes: number[]) => 
-                                            isConflictFunction(phrase, this.props.corpus.facts)(sentence, wordIndexes) :
+                                            isConflictFunction(phrase, this.props.corpus)(sentence, wordIndexes) :
                                         null) }
                                     />
 

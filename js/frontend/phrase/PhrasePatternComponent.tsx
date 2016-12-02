@@ -62,18 +62,17 @@ export default class PhrasePatternComponent extends Component<Props, State> {
     findSentencesByPhrase() {
         let sentencesByPhrase: { [ key: number]: Sentence[] } = {}
         let start = new Date()
+        let props = this.props
+        let corpus = props.corpus
+        let phrase = props.phrase
 
-        this.props.corpus.sentences.sentences.find(sentence => {
-            if (!this.props.phrase.isAutomaticallyAssigned() &&
-                !sentence.phrases.find((p) => p.getId() == this.props.phrase.getId())) {
+        corpus.sentences.sentences.find(sentence => {
+            if (!phrase.isAutomaticallyAssigned() &&
+                !sentence.phrases.find((p) => p.getId() == phrase.getId())) {
                 return
             }
 
-            let match = this.props.phrase.match({
-                words: sentence.words,
-                sentence: sentence,
-                facts: this.props.corpus.facts
-            })
+            let match = corpus.sentences.match(sentence, phrase, corpus.facts) 
             
             if (match) {
                 let sentences = sentencesByPhrase[match.pattern.key]
@@ -87,7 +86,7 @@ export default class PhrasePatternComponent extends Component<Props, State> {
             }
 
             if (new Date().getTime() - start.getTime() > 500) {
-                console.log('Timeout matching sentences for ' + this.props.phrase.id)
+                console.log('Timeout matching sentences for ' + props.phrase.id)
 
                 return true
             }
@@ -97,9 +96,12 @@ export default class PhrasePatternComponent extends Component<Props, State> {
     }
 
     changePattern(patternStr: string, oldPattern: PhrasePattern) {
+        let props = this.props
+        let corpus = props.corpus
+
         try {
             let newPattern = PhrasePattern.fromString(patternStr.trim(), oldPattern.en,
-                this.props.corpus.words, this.props.corpus.inflections)
+                corpus.words, corpus.inflections)
 
             if (newPattern.toString() == oldPattern.toString()) {
                 this.setState({ 
@@ -109,17 +111,17 @@ export default class PhrasePatternComponent extends Component<Props, State> {
                 return
             }
 
-            let patterns = this.props.phrase.patterns.map((p) => 
+            let patterns = props.phrase.patterns.map((p) => 
                 (p == oldPattern ? newPattern : p))
 
-            this.props.corpus.phrases.setPattern(this.props.phrase, patterns)
+            corpus.phrases.setPattern(props.phrase, patterns)
 
             this.setState({ 
                 error: null,
                 sentencesByPhrase: this.findSentencesByPhrase()
             })
 
-            this.props.onChange();
+            props.onChange();
 
             return newPattern
         }
@@ -129,19 +131,23 @@ export default class PhrasePatternComponent extends Component<Props, State> {
     }
 
     deletePattern(pattern: PhrasePattern) {
-        this.props.phrase.patterns = this.props.phrase.patterns.filter(p => p != pattern)
-        this.props.corpus.phrases.store(this.props.phrase)
+        let props = this.props
+
+        props.phrase.patterns = props.phrase.patterns.filter(p => p != pattern)
+        props.corpus.phrases.store(props.phrase)
 
         this.forceUpdate()
     }
 
     movePattern(pattern: PhrasePattern, offset: number) {
-        let i = this.props.phrase.patterns.indexOf(pattern)
+        let phrase = this.props.phrase
 
-        this.props.phrase.patterns.splice(i, 1)
-        this.props.phrase.patterns.splice(i+offset, 0, pattern)
+        let i = phrase.patterns.indexOf(pattern)
 
-        this.props.corpus.phrases.store(this.props.phrase)
+        phrase.patterns.splice(i, 1)
+        phrase.patterns.splice(i+offset, 0, pattern)
+
+        this.props.corpus.phrases.store(phrase)
 
         this.forceUpdate()
     }

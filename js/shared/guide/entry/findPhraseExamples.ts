@@ -20,11 +20,7 @@ export default function findPhraseExamples(phrase: Phrase, corpus: Corpus, knowl
             return
         }
 
-        let match = phrase.match({
-            words: sentence.words,
-            sentence: sentence,
-            facts: corpus.facts
-        })
+        let match = corpus.sentences.match(sentence, phrase, corpus.facts)
         
         if (match) {
             let fragment = match.words.map(w => w.word.toText()).join(' ')

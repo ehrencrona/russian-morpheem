@@ -195,11 +195,7 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
 
             let phrase = (studyFact.fact as Phrase)
 
-            let match = phrase.match({
-                sentence: sentence,
-                words: sentence.words,
-                facts: this.props.corpus.facts
-            })
+            let match = this.props.corpus.sentences.match(sentence, phrase, this.props.corpus.facts)
 
             let words = studyWords.map(st => st as StudyWord)
             let tokens = studyWords.slice(0)

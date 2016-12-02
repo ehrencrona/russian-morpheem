@@ -61,6 +61,8 @@ export default class Phrases {
         if (this.onChange) {
             this.onChange(phrase)
         }
+
+        this.corpus.sentences.phraseChanged(phrase)
     }
 
     setPatternEnglish(phrase: Phrase, pattern: PhrasePattern, en: string) {

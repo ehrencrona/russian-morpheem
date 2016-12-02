@@ -518,7 +518,7 @@ export default class InflectionFormComponent extends Component<Props, State> {
                 return 
             }
 
-            let m = phrase.match({ words: sentence.words, sentence: sentence, facts: this.props.corpus.facts })
+            let m = this.props.corpus.sentences.match(sentence, phrase, this.props.corpus.facts)
 
             if (m && m.words.find(w => { let word = w.word; return word instanceof InflectedWord && form.matches(FORMS[word.form]) })) {
                 result = {

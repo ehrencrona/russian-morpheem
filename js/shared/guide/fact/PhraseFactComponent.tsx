@@ -142,13 +142,7 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
         corpus.sentences.sentences.forEach((sentence) => {
             if (phrase.isAutomaticallyAssigned() || sentence.hasPhrase(phrase)) {
-                let context = {
-                    words: sentence.words,
-                    sentence: sentence,
-                    facts: corpus.facts,
-                }
-
-                let match = phrase.match(context)
+                let match = corpus.sentences.match(sentence, phrase, corpus.facts)
 
                 if (match) {
                     matchBySentenceId.set(sentence.id, match)

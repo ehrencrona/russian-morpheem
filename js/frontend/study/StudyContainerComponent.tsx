@@ -168,6 +168,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         sentenceScores = sentenceScores.filter((score) => {
             let phrase: Phrase
             let fact = score.fact
+            let corpus = this.props.corpus
 
             if (fact instanceof Phrase) {
                 phrase = fact
@@ -177,7 +178,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
                 phrase = fact.phrase
             }
 
-            if (phrase && !phrase.match({ sentence: score.sentence, words: score.sentence.words, facts: this.props.corpus.facts })) {
+            if (phrase && !corpus.sentences.match(sentence, phrase, this.props.corpus.facts)) {
                 console.log(score.sentence + ' did not match phrase ' + phrase)
                 return false
             }
@@ -280,11 +281,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
             }
 
             sentence.phrases.forEach(phrase => {
-                let match = phrase.match({ 
-                    sentence: sentence, 
-                    words: sentence.words, 
-                    facts: this.props.corpus.facts 
-                })
+                let match = this.props.corpus.sentences.match(sentence, phrase, this.props.corpus.facts)
 
                 if (match) {
                     let wordMatched = findWordMatched(match.words, fact)
