@@ -8,7 +8,6 @@ import Corpus from '../../../shared/Corpus'
 import { Knowledge } from '../../../shared/study/Exposure'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import topScores from '../../../shared/study/topScores'
-import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
 import toStudyWords from '../../study/toStudyWords'
 import SentenceScore from '../../../shared/study/SentenceScore'
 

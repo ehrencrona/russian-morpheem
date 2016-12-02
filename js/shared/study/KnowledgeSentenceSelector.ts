@@ -52,6 +52,10 @@ export default class KnowledgeSentenceSelector {
     }
 
     scoreSentences<S extends SentenceScore>(sentenceScores: S[]): S[] {
+        if (this.knowledge.isEmpty()) {
+            return sentenceScores
+        }
+
         let chosenSentence
         let highestScore = -1
 

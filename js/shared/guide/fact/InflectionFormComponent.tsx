@@ -18,7 +18,6 @@ import { Aspect, PartOfSpeech as PoS, Tense } from '../../../shared/inflection/D
 import { InflectionForm } from '../../../shared/inflection/InflectionForm'
 import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import topScores from '../../../shared/study/topScores'
-import KnowledgeSentenceSelector from '../../../shared/study/KnowledgeSentenceSelector'
 import toStudyWords from '../../study/toStudyWords'
 import Sentence from '../../Sentence'
 import SentenceScore from '../../../shared/study/SentenceScore'

@@ -1,3 +1,4 @@
+import dedup from './dedup';
 import { getGuideFact } from '../allGuideFacts';
 import { Match } from '../../phrase/Match';
 import { getFileName } from '../../../backend/route/getAudio';
@@ -423,11 +424,11 @@ export default class WordFactComponent extends Component<Props, State> {
             })
 
         let related =
-            (word.required || [])
+            dedup((word.required || [])
             .concat(factoid ?
                 factoid.relations.map(f => getGuideFact(f.fact, corpus)).filter(f => !!f)
                 :
-                [])
+                []))
 
         let posSpecific = null
 

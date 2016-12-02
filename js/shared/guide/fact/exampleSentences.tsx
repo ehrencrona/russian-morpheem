@@ -134,7 +134,11 @@ interface ScoredMatch extends SentenceScore {
     match: Match
 }
 
-export function sortByKnowledge(matches: Match[], knowledge: NaiveKnowledge) {
+export function sortByKnowledge(matches: Match[], knowledge: NaiveKnowledge): Match[] {
+    if (knowledge.isEmpty()) {
+        return matches
+    }
+
     let scores: ScoredMatch[]
 
     if (matches.length) {
