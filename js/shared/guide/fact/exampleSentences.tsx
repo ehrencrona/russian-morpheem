@@ -190,10 +190,7 @@ export function getMatchesForCertainWords(
         if (filterPhrases) {
             let match = mapFind(sentence.phrases, (phrase: Phrase) => {
                 if (filterPhrases(phrase)) {
-                    let m = phrase.match({ 
-                        words: sentence.words, 
-                        sentence: sentence, 
-                        facts: corpus.facts })
+                    let m = corpus.sentences.match(sentence, phrase, corpus.facts)
 
                     if (m && filterWords(m.words.map(w => w.word)).length) {
                         return m

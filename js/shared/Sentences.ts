@@ -156,13 +156,20 @@ export default class Sentences {
         
         let result = this.phraseMatchCache.get(cacheKey)
 
-        if (result !== undefined) {
-            return result
+        if (result === undefined) {
+            result = phrase.match({ facts: facts, sentence: sentence, words: sentence.words, debug: debug })
+
+            this.phraseMatchCache.set(cacheKey, result)
+
+            misses++
         }
+        else {
+            hits++
 
-        result = phrase.match({ facts: facts, sentence: sentence, words: sentence.words, debug: debug })
-
-        this.phraseMatchCache.set(cacheKey, result)
+            if (hits % 10000 == 0) {
+                console.log(Math.round(hits / (hits+misses) * 100) + '% hit ratio in phrase cache')
+            }
+        }
 
         return result
     }
@@ -171,3 +178,6 @@ export default class Sentences {
         return this.sentences.map((sentence) => sentence.toJson())
     }
 }
+
+let hits = 0
+let misses = 0
