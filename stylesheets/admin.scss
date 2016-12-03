@@ -1210,7 +1210,7 @@ textarea.description {
     }
 }
 
-.pending {
+.pendingSentences {
     li {
         display: flex;
         align-items: center;
@@ -1219,6 +1219,19 @@ textarea.description {
     .unacceptable {
         background-color: $color11;
         @extend .button;
+    }
+}
+
+.allSentences {
+    li {
+        margin-bottom: 2 * $unit;
+    }
+
+    .jp {
+        margin-bottom: $unit;
+    }
+
+    .en {
     }
 }
 

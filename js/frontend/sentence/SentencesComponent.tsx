@@ -11,6 +11,7 @@ import LatestEventsComponent from './LatestEventsComponent'
 import NewsfeedComponent from './NewsfeedComponent'
 import SentenceComponent from './SentenceComponent'
 import SearchSentencesComponent from './SearchSentencesComponent'
+import AllSentencesComponent from './AllSentencesComponent'
 import Sentence from '../../shared/Sentence'
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
     tab: Tab
 }
 
+const ALL = 'all'
 const LATEST = 'latest'
 const MY_LATEST = 'my-latest'
 const PENDING = 'pending'
@@ -67,6 +69,12 @@ export default class SentencesComponent extends Component<Props, State> {
                 corpus={ this.props.corpus }
                 key='newsfeed'/>
         }
+        else if (this.state.list == ALL) {
+            list = <AllSentencesComponent
+                tab={ this.props.tab }
+                corpus={ this.props.corpus }
+                key='all'/>
+        }
         else if (this.state.list == SEARCH) {
             list = <SearchSentencesComponent
                 key='search'
@@ -109,6 +117,7 @@ export default class SentencesComponent extends Component<Props, State> {
 
                     { filterButton(NEWSFEED, 'Newsfeed') }
                     { filterButton(SEARCH, 'Search') }
+                    { filterButton(ALL, 'All') }
                     { filterButton(LATEST, 'Latest') }
                     { filterButton(MY_LATEST, 'My latest') }
                     { filterButton(UNTRANSLATED, 'Untranslated') }

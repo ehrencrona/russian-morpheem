@@ -1,3 +1,4 @@
+import dedup from './dedup';
 
 
 import { Component, createElement } from 'react'
@@ -45,7 +46,7 @@ import toStudyWords from '../../study/toStudyWords'
 
 import StudyFact from '../../study/StudyFact'
 
-import marked = require('marked')
+import marked = require('marked');
 
 import FactLinkComponent from './FactLinkComponent'
 
@@ -219,8 +220,8 @@ export default class PhraseFactComponent extends Component<Props, State> {
 
                             <ul>
                             {
-                                (this.props.phrase.required || [])
-                                    .concat(relations)
+                                dedup((this.props.phrase.required || [])
+                                    .concat(relations))
                                     .map(fact => 
                                         renderRelatedFact(fact, corpus, this.props.factLinkComponent)) 
                             }

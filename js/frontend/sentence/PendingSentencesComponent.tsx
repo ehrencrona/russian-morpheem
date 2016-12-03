@@ -56,7 +56,7 @@ export default class PendingSentencesComponent extends Component<Props, State> {
         ).filter((s) => !!s)
 
         return (<div>
-            <ul className='pending'>
+            <ul className='pendingSentences'>
 
                 { sentences.map((sentence) => 
 
