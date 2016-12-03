@@ -178,7 +178,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
                 phrase = fact.phrase
             }
 
-            if (phrase && !corpus.sentences.match(sentence, phrase, this.props.corpus.facts)) {
+            if (phrase && !corpus.sentences.match(score.sentence, phrase, this.props.corpus.facts)) {
                 console.log(score.sentence + ' did not match phrase ' + phrase)
                 return false
             }
