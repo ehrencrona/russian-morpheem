@@ -526,6 +526,11 @@ export default class PhrasePattern {
         })
 
         let words = context.words
+
+        if (!words.length) {
+            return
+        }
+
         let until = (onlyFirstWord ? 0 : words.length - minWords)
 
         let firstMatch = this.wordMatches[0] 
