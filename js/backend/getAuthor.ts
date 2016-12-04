@@ -130,6 +130,14 @@ const AUTHORS: { [id:string] : Author } = {
     '5820934a4f553ca3314851e6': {
         numericalId: 26,
         name: 'ben'
+    },
+    '584481565d3ccb985cf4e05e': {
+        numericalId: 27,
+        name: 'jon'
+    },
+    '58448c725d3ccb985cf4e08a': {
+        numericalId: 28,
+        name: 'diliad'
     }
 }
 
