@@ -92,18 +92,6 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
             }
         })
 
-        if (!result) {
-            // we ought to match all auto phrases but in effect this is the only one that's interesting
-            let np = corpus.phrases.get('auto-np')
-
-            if (np) {
-                let childContext = Object.assign({}, context)
-                childContext.overrideFormCase = GrammarCase.ACC
-
-                result = this.matchesSpecificPhrase(np, childContext, wordPosition, matches, matchPosition)
-            }
-        }
-
         return result
     }
 

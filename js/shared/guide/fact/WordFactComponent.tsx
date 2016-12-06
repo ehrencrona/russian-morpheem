@@ -22,7 +22,7 @@ import Sentence from '../../../shared/Sentence'
 
 import Inflection from '../../../shared/inflection/Inflection'
 import { getFormName, INFLECTION_FORMS } from '../../../shared/inflection/InflectionForms';
-import { PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions' 
+import { GrammarCase, PartOfSpeech as PoS } from '../../../shared/inflection/Dimensions';
 import InflectionFact from '../../../shared/inflection/InflectionFact'
 import {
     Derivation,
@@ -192,6 +192,10 @@ export default class WordFactComponent extends Component<Props, State> {
             new PhrasePattern( [
                 new ExactWordMatch([ word ]),
                 new PhraseMatch('any')
+            ], '(1) (2)'),
+            new PhrasePattern( [
+                new ExactWordMatch([ word ]),
+                new PhraseMatch('np', GrammarCase.ACC)
             ], '(1) (2)')
         ])
 
