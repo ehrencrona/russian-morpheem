@@ -183,10 +183,10 @@ export default class SentenceComponent extends Component<Props, State> {
                     }
                     capitalizeNext = text && SENTENCE_ENDINGS.indexOf(text) >= 0
 
-                    return <div key={ index } className={ className } onClick={ () => 
+                    return <span key={ index } className={ className } onClick={ () => 
                         token instanceof StudyWord && this.props.wordClicked(token) }>
                             { text || <span>&nbsp;</span>}
-                    </div>
+                    </span>
                 })
             }
             </div></div>

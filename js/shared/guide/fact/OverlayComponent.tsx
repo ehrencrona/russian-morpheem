@@ -13,9 +13,7 @@ let React = { createElement: createElement }
 export default function overlayComponent(props: Props) {
     return <div className='overlayContainer' onClick={ props.onClose }>
         <div className='overlay'>
-            <div className='content guide' onClick={ (e) => e.stopPropagation() }>
-                { props.children }
-            </div>
+            { props.children }
         </div>
     </div>
 }

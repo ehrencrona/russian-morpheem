@@ -1,3 +1,4 @@
+import ExplainSentenceComponent from '../ExplainSentenceComponent';
 import getGuideUrl from '../getGuideUrl';
 import { NamedWordForm } from '../../inflection/WordForm';
 
@@ -13,6 +14,7 @@ import NaiveKnowledge from '../../../shared/study/NaiveKnowledge'
 import InflectableWord from '../../../shared/InflectableWord'
 import { EndingTransform } from '../../../shared/Transforms'
 import Word from '../../../shared/Word'
+import Sentence from '../../../shared/Sentence'
 import AbstractAnyWord from '../../../shared/AbstractAnyWord'
 
 import InflectionFactComponent from './InflectionFactComponent'
@@ -84,11 +86,19 @@ export default function factComponent(props: Props) {
             form={ fact }
             factLinkComponent={ props.factLinkComponent }
         />
-    }    else if (fact instanceof TagFact) {
+    }
+    else if (fact instanceof TagFact) {
         content = <TagFactComponent 
             corpus={ props.corpus } 
             knowledge={ props.knowledge }
             fact={ fact }
+            factLinkComponent={ props.factLinkComponent }
+        />
+    }
+    else if (fact instanceof Sentence) {
+        content = <ExplainSentenceComponent
+            corpus={ props.corpus }
+            sentence={ fact }
             factLinkComponent={ props.factLinkComponent }
         />
     }

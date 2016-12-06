@@ -267,6 +267,7 @@ $sectionMargin: 1em;
 
         .main {
             flex-grow: 1;
+            max-width: 100%;
         }
 
         .sidebar {
@@ -807,6 +808,7 @@ $sectionMargin: 1em;
     flex-direction: column;
     align-items: center;
     height: 100%;
+    width: 100%;
     background-color: white;
 
     #beforeTable, #afterTable {
