@@ -271,7 +271,7 @@ readCorpus('ru', true).catch((e) => {
     app.listen(port)
 
     if (process.env['ENV'] == 'dev') {
-//        triggerLivereload()
+        triggerLivereload()
     }
 }).catch((e) => {
     console.error(e)

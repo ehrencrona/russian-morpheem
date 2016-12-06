@@ -1,3 +1,6 @@
+import { PhraseMatch } from '../../phrase/PhraseMatch';
+import { ExactWordMatch } from '../../phrase/ExactWordMatch';
+import PhrasePattern from '../../phrase/PhrasePattern';
 import dedup from './dedup';
 import { getGuideFact } from '../allGuideFacts';
 import { Match } from '../../phrase/Match';
@@ -185,13 +188,22 @@ export default class WordFactComponent extends Component<Props, State> {
         let corpus = this.props.corpus
         let word = this.props.word
 
-        let matches = getMatchesForWord(word, this.props.knowledge, corpus)
+        let vp = new Phrase(word.getId() + '-vp', [ 
+            new PhrasePattern( [
+                new ExactWordMatch([ word ]),
+                new PhraseMatch('any')
+            ], '(1) (2)')
+        ])
+
+        vp.setCorpus(corpus)
+
+        let matches = getMatchesForWord(word, this.props.knowledge, corpus, vp)
 
         class MatchListComponent extends GroupedListComponent<Match> {
         }
 
         let dimensions = [ 
-            new MatchPhraseDimension(),
+            new MatchPhraseDimension(vp.getId()),
             new MatchTextDimension(true) 
         ]
 
@@ -217,7 +229,7 @@ export default class WordFactComponent extends Component<Props, State> {
             perf: 'perfective',
             imperf: 'imperfective',
             refl: 'reflexive',
-            nonrefl: 'non-reflexive',
+            nonreflex: 'non-reflexive',
             adj: 'adjective',
             adv: 'adverb'
         }

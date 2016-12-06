@@ -102,7 +102,7 @@ export default class GroupedListComponent<PivotEntry> extends Component<Props<Pi
                 renderGroup(group, lines, itemsPerNode, 0, 0)
 
                 return this.props.renderGroup(
-                    dimensions[0].renderValue(group.value),
+                    dimensions[0].renderValue(group.value, index),
                     lines,
                     group.key.toString()
                 )

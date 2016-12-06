@@ -1,3 +1,4 @@
+import mapFind from '../../mapFind';
 import { Match } from '../../phrase/Match';
 import { CASES, FORMS } from '../../inflection/InflectionForms';
 import { getNamedForm } from '../../inflection/WordForms';
@@ -45,8 +46,8 @@ export class MatchTextDimension implements PivotDimension<Match, Text> {
         } ]
     }
 
-    renderValue(value: Text) {
-        if (!this.renderText && value.en === NO_PHRASE) {
+    renderValue(value: Text, valueIndex: number) {
+        if (!this.renderText && value.en === NO_PHRASE && valueIndex == 0) {
             return null
         }
 
@@ -61,9 +62,20 @@ export class MatchTextDimension implements PivotDimension<Match, Text> {
 export default MatchTextDimension
 
 export class MatchPhraseDimension extends MatchTextDimension {
+    // addedPhraseId is for verb phrases grouping by what comes after the verb.
+    constructor(public addedPhraseId?: string) {
+        super()
+    }
+
     getKey(value: Text) {
         if (value.match.phrase) {
-            return value.match.phrase.id
+            let result = value.match.phrase.id
+
+            if (result == this.addedPhraseId) {
+                result = mapFind(value.match.words, w => w.childMatch ? w.childMatch.phrase.id : null)
+            }
+
+            return result
         }
         else {
             return 'nophrase'

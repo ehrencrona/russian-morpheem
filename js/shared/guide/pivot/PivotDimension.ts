@@ -6,7 +6,7 @@ export interface PivotDimension<PivotEntry, V> {
 
     getValues(fact: PivotEntry): V[]
 
-    renderValue(value: V)
+    renderValue(value: V, valueIndex: number)
 
     name: string
 }

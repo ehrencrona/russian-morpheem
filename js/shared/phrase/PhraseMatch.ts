@@ -19,7 +19,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     phrase: Phrase
     corpus: Corpus
 
-    constructor(public phraseId: string, public overrideFormCase: GrammarCase, public tag?: string) {
+    constructor(public phraseId: string, public overrideFormCase?: GrammarCase, public tag?: string) {
         this.phraseId = phraseId == 'any' ? null : phraseId
         this.overrideFormCase = overrideFormCase
         this.tag = tag
@@ -97,7 +97,10 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
             let np = corpus.phrases.get('auto-np')
 
             if (np) {
-                result = this.matchesSpecificPhrase(np, context, wordPosition, matches, matchPosition)
+                let childContext = Object.assign({}, context)
+                childContext.overrideFormCase = GrammarCase.ACC
+
+                result = this.matchesSpecificPhrase(np, childContext, wordPosition, matches, matchPosition)
             }
         }
 

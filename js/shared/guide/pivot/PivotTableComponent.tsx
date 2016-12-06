@@ -69,7 +69,7 @@ export default class PivotTableComponent<PivotEntry> extends Component<Props<Piv
                 let dim = dimensions[dimensionIndex]
 
                 let cell = <td key={ pivot.key } rowSpan={ pivot.lineCount }>{
-                    dim.renderValue(pivot.value)
+                    dim.renderValue(pivot.value, dimensionIndex)
                 }</td>
 
                 childLines[0] = [

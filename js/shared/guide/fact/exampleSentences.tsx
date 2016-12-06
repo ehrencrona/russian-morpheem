@@ -394,6 +394,6 @@ export function getMatchesForWord(
     }
 
     return getMatchesForCertainWords(filterWords, filterPhrases,
-        sbf[word.getWordFact().getId()], knowledge, corpus)
+        sbf[word.getWordFact().getId()], knowledge, corpus, false, addPhrase)
 }
 
