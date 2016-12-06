@@ -6,6 +6,7 @@ import { PUNCTUATION, PUNCTUATION_NOT_PRECEDED_BY_SPACE } from '../../Punctuatio
 import InflectableWord from '../../../shared/InflectableWord'
 import Fact from '../../../shared/fact/Fact'
 import { Knowledge } from '../../../shared/study/Exposure'
+import mapFind from '../../../shared/mapFind'
 
 import Inflection from '../../../shared/inflection/Inflection'
 import InflectionForm from '../../../shared/inflection/InflectionForm'
@@ -172,7 +173,7 @@ export function getMatchesForCertainWords(
         factSentences: FactSentences, 
         knowledge: NaiveKnowledge, 
         corpus: Corpus,
-        onlyPhraseMatches?: boolean): Match[] {
+        onlyPhraseMatches?: boolean, addPhrase?: Phrase): Match[] {
     let sentences: Sentence[]
     
     if (factSentences) {
@@ -192,7 +193,13 @@ export function getMatchesForCertainWords(
         }
 
         if (filterPhrases) {
-            let match = mapFind(sentence.phrases, (phrase: Phrase) => {
+            let phrases = sentence.phrases
+
+            if (addPhrase) {
+                phrases = phrases.concat(addPhrase)
+            }
+
+            let match = mapFind(phrases, (phrase: Phrase) => {
                 if (filterPhrases(phrase)) {
                     let m = corpus.sentences.match(sentence, phrase, corpus.facts)
 
@@ -373,7 +380,7 @@ export function getMatchesForWordForm(filterPhrases: (Phrase) => boolean,
  * Returns Match objects with all sentences that have a certain word.
  */
 export function getMatchesForWord(
-        word: AnyWord, knowledge: NaiveKnowledge, corpus: Corpus) {
+        word: AnyWord, knowledge: NaiveKnowledge, corpus: Corpus, addPhrase?: Phrase) {
     let wordFactId = word.getWordFact().getId()
     let filterWords = (words) => words.filter(
         w => w.getWordFact().getId() == wordFactId)
@@ -390,12 +397,3 @@ export function getMatchesForWord(
         sbf[word.getWordFact().getId()], knowledge, corpus)
 }
 
-function mapFind<T, V>(array: T[], mapFunction: (T) => V) {
-    for (let i = 0; i < array.length; i++) {
-        let v = mapFunction(array[i])
-
-        if (v) {
-            return v
-        }
-    }
-}

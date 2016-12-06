@@ -104,6 +104,8 @@ export default class StudyContainerComponent extends Component<Props, State> {
         }
 
         this.setState({ explainFact: fact.fact, explainContext: context })
+
+        ga('send', 'event', 'study', 'explain')
     }
 
     chooseSentence() {
@@ -137,7 +139,7 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
 /*
         if (dev)
         this.setState({
-            explainFact: this.props.corpus.facts.get('нравиться')
+            ga this.props.corpus.facts.get('нравиться')
         })
 */
 
@@ -372,6 +374,8 @@ console.log('Did not ought to know ' + visitedFact.getId())
         this.processExposures(exposures)
 
         this.chooseSentence()
+
+        ga('send', 'event', 'study', 'answer')
     }
 
     render() {

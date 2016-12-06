@@ -44,6 +44,21 @@ export default class GuideSearchComponent extends Component<Props, State> {
         document.removeEventListener('click', this.documentClickListener)
     }
 
+    searchAnalyticsTimer
+
+    search(query: string) {
+        this.setState({ query: query })
+
+        if (this.searchAnalyticsTimer) {
+            clearTimeout(this.searchAnalyticsTimer)
+        }
+
+        this.searchAnalyticsTimer = setTimeout(() => {
+            ga('send', 'event', 'guide', 'search', query)
+            this.searchAnalyticsTimer = null
+        }, 1500)
+    }
+
     render() {
         let facts = []
         let query = this.state.query
@@ -79,7 +94,7 @@ export default class GuideSearchComponent extends Component<Props, State> {
             <div className='form'>
                 <input type='text' value={ query }
                     placeholder="search e.g. 'eat' or 'ем'" 
-                    onChange={ event => this.setState({ query: (event.target as HTMLInputElement).value })}
+                    onChange={ event => this.search((event.target as HTMLInputElement).value) }
                     onKeyPress={ (event) => {
                         if (event.charCode == 13 && facts[0]) {
                             window.location.href = getGuideUrl(facts[0])

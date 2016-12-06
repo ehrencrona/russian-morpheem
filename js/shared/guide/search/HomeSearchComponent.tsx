@@ -1,4 +1,3 @@
-
 import { Component, createElement } from 'react'
 
 import Corpus from '../../Corpus'
@@ -69,7 +68,7 @@ export default class HomeSearchComponent extends Component<Props, State> {
         return <div id='search'>
             <div className='form'>
                 <input type='text' ref='input' value={ query }
-                    onChange={ event => this.setState({ query: (event.target as HTMLInputElement).value })}
+                    onChange={ event => this.search((event.target as HTMLInputElement).value) }
                     onKeyPress={ (event) => {
                         if (event.charCode == 13 && results[0]) {
                             window.location.href = getGuideUrl(results[0])
@@ -80,9 +79,24 @@ export default class HomeSearchComponent extends Component<Props, State> {
                             this.setState({ query: '' })
                         }
                     }
-                    }/>
+                }/>
             </div>
         </div>
+    }
+
+    searchAnalyticsTimer
+
+    search(query: string) {
+        this.setState({ query: query })
+
+        if (this.searchAnalyticsTimer) {
+            clearTimeout(this.searchAnalyticsTimer)
+        }
+
+        this.searchAnalyticsTimer = setTimeout(() => {
+            ga('send', 'event', 'home', 'search', query)
+            this.searchAnalyticsTimer = null
+        }, 1500)
     }
 
     renderSearchResults(facts: Fact[]) {
