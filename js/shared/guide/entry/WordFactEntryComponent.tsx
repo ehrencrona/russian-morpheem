@@ -1,4 +1,5 @@
-
+import { encode } from 'punycode';
+import { PartOfSpeech } from '../../inflection/Dimensions';
 
 import AnyWord from '../../../shared/AnyWord'
 
@@ -16,9 +17,18 @@ export default class FactComponent extends Component<Props, State> {
     render() {
         let fact = this.props.fact
 
+        let en
+
+        if (fact.wordForm.pos == PartOfSpeech.VERB) {
+            en = fact.getEnglish('inf')
+        }
+        else {
+            en = fact.getEnglish()
+        }
+
         return <dl>
             <dt>{ fact.toText() }</dt>
-            <dd>{ fact.getEnglish() }</dd>
+            <dd>{ en }</dd>
         </dl>
     }
 }

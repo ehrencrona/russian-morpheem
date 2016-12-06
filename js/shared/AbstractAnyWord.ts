@@ -9,6 +9,10 @@ import WordForm from './inflection/WordForm'
 import * as Dimension from './inflection/Dimensions'
 export const TRANSLATION_INDEX_SEPARATOR = '-'
 
+export const MODAL_VERBS = {
+    must: 1, can: 1, could: 1, may: 1, might: 1
+}
+
 export interface JsonFormat {
     en: { [ form: string ]: string },
     t: string,
@@ -115,7 +119,7 @@ export abstract class AbstractAnyWord implements AnyWord {
             }
         }
 
-        if (form == 'inf' && result) {
+        if (form == 'inf' && result && !MODAL_VERBS[result]) {
             result = 'to ' + result
         }
 

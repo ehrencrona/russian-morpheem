@@ -13,6 +13,7 @@ import PosFormWordMatch from './PosFormWordMatch'
 import WordInFormMatch from './WordInFormMatch'
 import TagWordMatch from './TagWordMatch'
 import { AbstractQuantifierMatch, QUANTIFIERS } from './AbstractQuantifierMatch';
+import { MODAL_VERBS } from '../AbstractAnyWord'
 
 import Inflections from '../inflection/Inflections'
 import { ENGLISH_FORMS_BY_POS, FORMS, INFLECTION_FORMS } from '../inflection/InflectionForms';
@@ -95,7 +96,7 @@ function getEnglishInflectionFromList(pos: PoS, form, inflectionList) {
 
     let result = en[englishForm] || en['']
 
-    if (englishForm == 'inf') {
+    if (englishForm == 'inf' && !MODAL_VERBS[result]) {
         result = 'to ' + result
     }
 
