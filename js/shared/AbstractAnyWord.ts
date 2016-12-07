@@ -99,7 +99,7 @@ export abstract class AbstractAnyWord implements AnyWord {
         return Object.keys(this.en).map(k => this.en[k])
     }
 
-    getEnglish(form?: string, translationIndex?: number, raw?: boolean) {
+    getEnglish(form?: string, translationIndex?: number) {
         if (!form) {
             form = ''
         }
@@ -107,22 +107,28 @@ export abstract class AbstractAnyWord implements AnyWord {
         let suffix = (translationIndex ? TRANSLATION_INDEX_SEPARATOR + (translationIndex + 1) : '')
         var result = this.en[form + suffix]
 
-        if (!raw) {
-            if (!result && form == 'pastpart') {
-                result = this.en['past' + suffix]
-            }
+        if (!result && (form == 'pastpart' || form == 'pastpl')) {
+            result = this.en['past' + suffix]
+        }
 
-            if (!result) {
-                result = this.en[suffix]
+        if (!result) {
+            result = this.en[suffix] || ''
 
-                if (!result) {
-                    result = ''
+            if (result) {
+                if (form == '3') {
+                    result += 's'
+                }
+                else if (form == 'past') {
+                    result += 'ed'
+                }
+                else if (form == 'prog') {
+                    result += 'ing'
                 }
             }
+        }
 
-            if (form == 'inf' && result && !MODAL_VERBS[result]) {
-                result = 'to ' + result
-            }
+        if (form == 'inf' && result && !MODAL_VERBS[result]) {
+            result = 'to ' + result
         }
 
         return result
@@ -132,6 +138,8 @@ export abstract class AbstractAnyWord implements AnyWord {
         if (!form) {
             form = ''
         }
+
+        en = en.trim()
 
         if (en && en.substr(0, 3) == 'to ') {
             en = en.substr(3)
@@ -149,8 +157,12 @@ export abstract class AbstractAnyWord implements AnyWord {
 
         // if we are setting a value that we can already deduce from another form there is no need to set it
         if (this.getEnglish(form, translationIndex) != en) {
+console.log(`setting ${property} to ${en} instaed of ${this.getEnglish(form, translationIndex)}`)
             this.en[property] = en
         }
+else {
+console.log(`clearing ${property}`)
+}
 
         return this
     }

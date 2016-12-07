@@ -36,7 +36,7 @@ export default class WordTranslationComponent extends Component<Props, State> {
             return (e) => {
                 let value = (e.target as HTMLInputElement).value
 
-                if (value != word.getEnglish(form, translationIndex, true)) {
+                if (value != word.getEnglish(form, translationIndex)) {
                     props.corpus.words.setEnglish(value, word, form, translationIndex) 
                 }
             } 
@@ -67,7 +67,7 @@ export default class WordTranslationComponent extends Component<Props, State> {
                                     <input type='text'
                                         autoCapitalize='off' 
                                         defaultValue={ 
-                                            word.getEnglish(form, translationIndex, true) 
+                                            word.getEnglish(form, translationIndex) 
                                         } 
                                         onBlur={ setValue(form, translationIndex) }/>
                                 </div>
