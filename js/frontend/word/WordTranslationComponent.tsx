@@ -1,3 +1,4 @@
+import { TRANSLATION_INDEX_SEPARATOR } from '../../shared/AbstractAnyWord';
 
 import Corpus from '../../shared/Corpus'
 import Translatable from '../../shared/Translatable'
@@ -35,7 +36,7 @@ export default class WordTranslationComponent extends Component<Props, State> {
             return (e) => {
                 let value = (e.target as HTMLInputElement).value
 
-                if (value != word.getEnglish(form)) {
+                if (value != word.getEnglish(form, translationIndex, true)) {
                     props.corpus.words.setEnglish(value, word, form, translationIndex) 
                 }
             } 
@@ -51,8 +52,8 @@ export default class WordTranslationComponent extends Component<Props, State> {
             <h3>Translation</h3>
 
             {
-                translationIndices.map(translationIndex => {
-                    return <div key={ translationIndex }>
+                translationIndices.map(translationIndex => 
+                    <div key={ translationIndex }>
                         <input type='text' autoCapitalize='off' 
                             defaultValue={ word.getEnglish('', translationIndex) } 
                             onBlur={ setValue('', translationIndex) }/>
@@ -66,10 +67,7 @@ export default class WordTranslationComponent extends Component<Props, State> {
                                     <input type='text'
                                         autoCapitalize='off' 
                                         defaultValue={ 
-                                            word.getEnglish(form, translationIndex, true) != 
-                                                word.getEnglish('', translationIndex, true) ?
-                                            word.getEnglish(form, translationIndex, true) :
-                                            ''
+                                            word.getEnglish(form, translationIndex, true) 
                                         } 
                                         onBlur={ setValue(form, translationIndex) }/>
                                 </div>
@@ -80,7 +78,7 @@ export default class WordTranslationComponent extends Component<Props, State> {
                             null
                         }
                     </div>
-                })
+                )
             }
 
             <div className='button add' 

@@ -107,20 +107,22 @@ export abstract class AbstractAnyWord implements AnyWord {
         let suffix = (translationIndex ? TRANSLATION_INDEX_SEPARATOR + (translationIndex + 1) : '')
         var result = this.en[form + suffix]
 
-        if (!result && form == 'pastpart') {
-            result = this.en['past' + suffix]
-        }
-
-        if (!result) {
-            result = this.en[suffix]
+        if (!raw) {
+            if (!result && form == 'pastpart') {
+                result = this.en['past' + suffix]
+            }
 
             if (!result) {
-                result = ''
-            }
-        }
+                result = this.en[suffix]
 
-        if (form == 'inf' && result && !MODAL_VERBS[result] && !raw) {
-            result = 'to ' + result
+                if (!result) {
+                    result = ''
+                }
+            }
+
+            if (form == 'inf' && result && !MODAL_VERBS[result]) {
+                result = 'to ' + result
+            }
         }
 
         return result
@@ -143,10 +145,10 @@ export abstract class AbstractAnyWord implements AnyWord {
 
         let property = form + (translationIndex ? TRANSLATION_INDEX_SEPARATOR + (translationIndex + 1) : '')
 
-        if (!en) {
-            delete this.en[property]    
-        }
-        else {
+        delete this.en[property]    
+
+        // if we are setting a value that we can already deduce from another form there is no need to set it
+        if (this.getEnglish(form, translationIndex) != en) {
             this.en[property] = en
         }
 
