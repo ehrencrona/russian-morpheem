@@ -29,13 +29,14 @@ export default class WordTranslationComponent extends Component<Props, State> {
 
     render() {
         let props = this.props
+        let word = props.word
 
         let setValue = (form: string, translationIndex: number) => {
             return (e) => {
                 let value = (e.target as HTMLInputElement).value
 
-                if (value != props.word.getEnglish(form)) {
-                    props.corpus.words.setEnglish(value, props.word, form, translationIndex) 
+                if (value != word.getEnglish(form)) {
+                    props.corpus.words.setEnglish(value, word, form, translationIndex) 
                 }
             } 
         }
@@ -53,21 +54,21 @@ export default class WordTranslationComponent extends Component<Props, State> {
                 translationIndices.map(translationIndex => {
                     return <div key={ translationIndex }>
                         <input type='text' autoCapitalize='off' 
-                            defaultValue={ props.word.getEnglish('', translationIndex) } 
+                            defaultValue={ word.getEnglish('', translationIndex) } 
                             onBlur={ setValue('', translationIndex) }/>
                         {
-                            ENGLISH_FORMS_BY_POS[props.word.wordForm.pos] ?
+                            ENGLISH_FORMS_BY_POS[word.wordForm.pos] ?
 
-                            ENGLISH_FORMS_BY_POS[props.word.wordForm.pos].allForms.map((form) => 
+                            ENGLISH_FORMS_BY_POS[word.wordForm.pos].allForms.map((form) => 
                                 <div key={ form + translationIndex } className='form'>
                                     <div className='label'>{ form }</div>
 
                                     <input type='text'
                                         autoCapitalize='off' 
                                         defaultValue={ 
-                                            props.word.getEnglish(form, translationIndex) != 
-                                                props.word.getEnglish('', translationIndex) ?
-                                            props.word.getEnglish(form, translationIndex) :
+                                            word.getEnglish(form, translationIndex, true) != 
+                                                word.getEnglish('', translationIndex, true) ?
+                                            word.getEnglish(form, translationIndex, true) :
                                             ''
                                         } 
                                         onBlur={ setValue(form, translationIndex) }/>

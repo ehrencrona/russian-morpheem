@@ -99,7 +99,7 @@ export abstract class AbstractAnyWord implements AnyWord {
         return Object.keys(this.en).map(k => this.en[k])
     }
 
-    getEnglish(form?: string, translationIndex?: number) {
+    getEnglish(form?: string, translationIndex?: number, raw?: boolean) {
         if (!form) {
             form = ''
         }
@@ -119,7 +119,7 @@ export abstract class AbstractAnyWord implements AnyWord {
             }
         }
 
-        if (form == 'inf' && result && !MODAL_VERBS[result]) {
+        if (form == 'inf' && result && !MODAL_VERBS[result] && !raw) {
             result = 'to ' + result
         }
 
