@@ -1,3 +1,5 @@
+import { FORMS } from '../inflection/InflectionForms';
+import { WORD_FORMS } from '../inflection/WordForms';
 
 import Fact from '../fact/Fact'
 import Corpus from '../Corpus'
@@ -13,7 +15,14 @@ export function getLastSeenFacts(corpus: Corpus): Fact[] {
         return
     }
 
-    return getLastSeenFactIds().map(id => corpus.facts.get(id)).filter(f => !!f)
+    let ids = getLastSeenFactIds()
+
+    if (ids.length < 9) {
+        ids = ids.concat([ 'prepos', 'perf', 'reflex', 'adv', 'quest', 
+            'time-phrase', 'location-phrase', 'dative', 'genitive' ])
+    }
+
+    return ids.map(id => corpus.facts.get(id) || WORD_FORMS[id] || FORMS[id]).filter(f => !!f)
 }
 
 function getLastSeenFactIds(): string[] {
@@ -40,7 +49,7 @@ export function sawFact(factId: string) {
 
     let factIds = getLastSeenFactIds().filter(f => f != factId)
 
-    factIds.push(factId)
+    factIds = [ factId ].concat(factIds).slice(0, 18)
 
     localStorage.setItem(KEY, JSON.stringify(factIds))
 }
