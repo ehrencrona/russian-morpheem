@@ -107,15 +107,17 @@ export abstract class AbstractAnyWord implements AnyWord {
         let suffix = (translationIndex ? TRANSLATION_INDEX_SEPARATOR + (translationIndex + 1) : '')
         var result = this.en[form + suffix]
 
-        if (!result && (form == 'pastpart' || form == 'pastpl')) {
-            result = this.en['past' + suffix]
-        }
-
         if (!result) {
-            result = this.en[suffix] || ''
+            if (form == 'pastpart' || form == 'pastpl') {
+                result = this.en['past' + suffix]
+            }
+            else if (this.en[suffix]) {
+                result = this.en[suffix]
 
-            if (result) {
                 if (form == '3') {
+                    result += 's'
+                }
+                else if (form == 'pl') {
                     result += 's'
                 }
                 else if (form == 'past') {

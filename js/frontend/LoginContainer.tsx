@@ -89,6 +89,10 @@ export default class LoginContainer extends Component<Props, State> {
             }
             else {
                 this.lock.show()
+
+                if (ga) {
+                    ga('send', 'event', 'login', 'login')
+                }
             }
         }
         else {
@@ -123,8 +127,6 @@ export default class LoginContainer extends Component<Props, State> {
             setRecorderXrArgs(xrArgs)
 
             this.setState({ corpus: corpus, error: null, loading: false })
-
-            ga('send', 'event', 'login', 'login')
         })
         .catch((e) => {
             console.log('While loading corpus: ', e.stack || e)
