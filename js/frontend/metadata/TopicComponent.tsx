@@ -22,7 +22,7 @@ interface State {
 
 let React = { createElement: createElement }
 
-export default class PhraseFactComponent extends Component<Props, State> {
+export default class TopicComponent extends Component<Props, State> {
 
     constructor(props) {
         super(props)

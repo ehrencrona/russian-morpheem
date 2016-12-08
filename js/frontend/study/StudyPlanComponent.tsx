@@ -194,6 +194,8 @@ console.log(f.getId() + ' is already known')
                 onSelect={ (topic) => {
                     this.selectTopic(topic)
                     this.setState({ showTopics: false })
+
+                    ga('send', 'event', 'study', 'topic', topic.id)
                 } } />
         }
 
@@ -269,10 +271,15 @@ console.log(f.getId() + ' is already known')
                 </div>
 
                 <div className='button done' onClick={ 
-                    () => this.props.onSubmit(new StudiedFacts(
-                        studiedFacts.newFacts.slice(0, this.state.newCount),
-                        studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
-                    )) }>Done</div>
+                    () => {
+                        this.props.onSubmit(new StudiedFacts(
+                            studiedFacts.newFacts.slice(0, this.state.newCount),
+                            studiedFacts.repeatedFacts.slice(0, this.state.repeatCount)
+                        ))
+
+                        ga('send', 'event', 'study', 'plan')
+                    }
+                }>Done</div>
             </div>
         </div>
     }

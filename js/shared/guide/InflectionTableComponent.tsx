@@ -86,8 +86,8 @@ export function renderFormName(pos: PartOfSpeech, factLinkComponent: FactLinkCom
 }
 
 export class InflectionTableComponent extends Component<Props, State> {
-    getWordsByForm(word: InflectableWord): { [ form:string]: string} {
-        let wordsByForm : { [ form:string]: string} = {}
+    getWordsByForm(word: InflectableWord): { [ form:string]: string } {
+        let wordsByForm : { [ form:string]: string } = {}
 
         let inflections: InflectedWord[] = []
         

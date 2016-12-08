@@ -261,19 +261,13 @@ export default class ExplainSentenceComponent extends Component<Props, State> {
     }
 
     renderHeader() {
-        let previousSentence
-        let id = this.props.sentence.id - 1
+        let corpus = this.props.corpus
+        let sentence = this.props.sentence
 
-        while (id >= 0 && !previousSentence) {
-            previousSentence = this.props.corpus.sentences.get(id--)
-        }
-
-        let nextSentence
-        id = this.props.sentence.id + 1
-
-        while (id < this.props.corpus.sentences.sentences.length && !nextSentence) {
-            nextSentence = this.props.corpus.sentences.get(id++)
-        }
+        let sentenceIndex = corpus.sentences.sentences.indexOf(sentence)
+        
+        let previousSentence = corpus.sentences.sentences[sentenceIndex-1]
+        let nextSentence = corpus.sentences.sentences[sentenceIndex+1]
 
         return <div className='nav'>{
                 previousSentence ? 
