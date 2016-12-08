@@ -111,20 +111,22 @@ export abstract class AbstractAnyWord implements AnyWord {
             if (form == 'pastpart' || form == 'pastpl') {
                 result = this.en['past' + suffix]
             }
-            else if (this.en[suffix]) {
+            else {
                 result = this.en[suffix]
 
-                if (form == '3') {
-                    result += 's'
-                }
-                else if (form == 'pl') {
-                    result += 's'
-                }
-                else if (form == 'past') {
-                    result += 'ed'
-                }
-                else if (form == 'prog') {
-                    result += 'ing'
+                if (result && result.indexOf(' ') < 0) {
+                    if (form == '3') {
+                        result += 's'
+                    }
+                    else if (form == 'pl') {
+                        result += 's'
+                    }
+                    else if (form == 'past') {
+                        result += 'ed'
+                    }
+                    else if (form == 'prog') {
+                        result += 'ing'
+                    }
                 }
             }
         }
@@ -133,7 +135,7 @@ export abstract class AbstractAnyWord implements AnyWord {
             result = 'to ' + result
         }
 
-        return result
+        return result || ''
     }
 
     setEnglish(en: string, form?: string, translationIndex?: number) {
