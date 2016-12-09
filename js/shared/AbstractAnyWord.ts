@@ -1,3 +1,4 @@
+import { PartOfSpeech } from './inflection/Dimensions';
 import { exists } from 'fs';
 import { getDerivations } from './inflection/WordForms';
 import { WordCoordinates } from './inflection/WordForm';
@@ -115,14 +116,23 @@ export abstract class AbstractAnyWord implements AnyWord {
                 result = this.en[suffix]
 
                 if (result && result.indexOf(' ') < 0) {
-                    if (form == '3') {
-                        result += 's'
+                    let pos = this.wordForm.pos
+
+                    if (pos == PartOfSpeech.VERB) {
+                        if (form == '3') {
+                            result += 's'
+                        }
+                        else if (form == 'past') {
+                            result += 'ed'
+                        }
+                        else if (form == 'prog') {
+                            result += 'ing'
+                        }
                     }
-                    else if (form == 'past') {
-                        result += 'ed'
-                    }
-                    else if (form == 'prog') {
-                        result += 'ing'
+                    else if (pos == PartOfSpeech.NOUN) {
+                        if (form == 'pl') {
+                            result += 's'
+                        }
                     }
                 }
             }
