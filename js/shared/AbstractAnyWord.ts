@@ -118,9 +118,6 @@ export abstract class AbstractAnyWord implements AnyWord {
                     if (form == '3') {
                         result += 's'
                     }
-                    else if (form == 'pl') {
-                        result += 's'
-                    }
                     else if (form == 'past') {
                         result += 'ed'
                     }
@@ -161,12 +158,8 @@ export abstract class AbstractAnyWord implements AnyWord {
 
         // if we are setting a value that we can already deduce from another form there is no need to set it
         if (this.getEnglish(form, translationIndex) != en) {
-console.log(`setting ${property} to ${en} instaed of ${this.getEnglish(form, translationIndex)}`)
             this.en[property] = en
         }
-else {
-console.log(`clearing ${property}`)
-}
 
         return this
     }
