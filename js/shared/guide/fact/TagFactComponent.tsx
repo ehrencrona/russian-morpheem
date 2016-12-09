@@ -1,3 +1,4 @@
+import { AbstractAnyWord } from '../../AbstractAnyWord';
 import { PartOfSpeech } from '../../inflection/Dimensions';
 
 
@@ -62,7 +63,10 @@ export default class TagFactComponent extends Component<Props, State> {
                 !(f instanceof Phrase) 
                 || !f.getCases().length
                 || !f.getWords().find(w => w.wordForm.pos == PartOfSpeech.PREPOSITION)) 
-                
+
+        let arePhrases = !factsWithTag.find(f => !(f instanceof Phrase))
+        let areWords = !factsWithTag.find(f => !(f instanceof AbstractAnyWord))
+
         return <div className='tagFact'>
             <h1>{ factoid.name || props.fact.id }</h1>
             <div className='columns'>
@@ -74,6 +78,8 @@ export default class TagFactComponent extends Component<Props, State> {
                         :
                             null 
                     }
+
+                    <h3>{ arePhrases ? 'Phrases' : (areWords ? 'Words' : 'Words and expressions') }</h3>
 
                     <ul className='factsWithTag'>
                         {
