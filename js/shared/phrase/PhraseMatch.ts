@@ -122,7 +122,7 @@ export class PhraseMatch implements WordMatch, CaseStudyMatch {
     }
 
     isCaseStudy() {
-        return !!this.overrideFormCase
+        return !!this.overrideFormCase && this.overrideFormCase != GrammarCase.CONTEXT
     }
 
     getCaseStudied() {

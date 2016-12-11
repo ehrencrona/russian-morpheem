@@ -152,9 +152,9 @@ function derivationTransform(derivation: string): WordToString {
     }    
 }
 
-function formTransform(pos: PoS, forms: string[]): WordToString {
+function formTransform(poses: PoS[], forms: string[]): WordToString {
     return (word: Word, enSentence, nextWord) => {
-        if (word instanceof InflectedWord && word.wordForm.pos == pos) {
+        if (word instanceof InflectedWord && poses.indexOf(word.wordForm.pos) >= 0) {
             let inflected
 
             forms.find(form => {
@@ -207,16 +207,16 @@ function englishOnlyTransform(pos: PoS, englishForm: string): WordToString {
 }
 
 const TRANSFORMS: { [id: string]: WordToString } = {
-    'inf': formTransform(PoS.VERB, ['inf']),
+    'inf': formTransform([ PoS.VERB ], ['inf']),
     'pres': simplePresentTransform(),
-    '1sg': formTransform(PoS.VERB, ['1']),
+    '1sg': formTransform([ PoS.VERB ], ['1']),
     'prog': englishOnlyTransform(PoS.VERB, 'prog'),
     'past': englishOnlyTransform(PoS.VERB, 'past'),
     'pastpart': englishOnlyTransform(PoS.VERB, 'pastpart'),
-    'sg': formTransform(PoS.NOUN, ['nom']),
-    'pl': formTransform(PoS.NOUN, ['pl']),
-    'nom': formTransform(PoS.PRONOUN, ['nom', 'pl']),
-    'acc': formTransform(PoS.PRONOUN, ['acc']),
+    'sg': formTransform([ PoS.NOUN, PoS.ADJECTIVE ], ['nom']),
+    'pl': formTransform([ PoS.NOUN ], ['pl']),
+    'nom': formTransform([ PoS.PRONOUN ], ['nom', 'pl']),
+    'acc': formTransform([ PoS.PRONOUN ], ['acc']),
     'super': englishOnlyTransform(PoS.ADJECTIVE, 'super')
 }
 
@@ -407,7 +407,7 @@ class Fragment implements EnglishPatternFragment {
 
                             let form = this.getVerbForm(words)
 
-                            wordToString = formTransform(PoS.VERB, [ form ])
+                            wordToString = formTransform([ PoS.VERB ], [ form ])
                         }
                         else if (DERIVATION_BY_ID[placeholder.toPosOrForm]) {
                             wordToString = derivationTransform(placeholder.toPosOrForm)

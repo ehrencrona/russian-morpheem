@@ -1,3 +1,4 @@
+import { Aspect, PartOfSpeech } from '../../../shared/inflection/Dimensions';
 
 
 import { Component, createElement } from 'react'
@@ -29,6 +30,7 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
     }
     
     let seeAlso = <span key='noalt'/>
+    let derived = null
 
     if (word) {
         let alternatives: Word[] = props.corpus.words.ambiguousForms[word.jp]
@@ -55,6 +57,19 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
                 })
                 </span>
             }
+        }
+
+        if (word.wordForm.aspect == Aspect.PERFECTIVE 
+            && word.getDerivedWords('imperf')) {
+            derived = <span>(perfective of <strong>{
+                word.getDerivedWords('imperf').map(w => w.toText()).join('and')
+            }</strong>)</span>
+        }
+        else if (word.wordForm.pos == PartOfSpeech.ADVERB &&
+            word.getDerivedWords('adj')) {
+            derived = <span>(adverb of <strong>{
+                word.getDerivedWords('adj').map(w => w.toText()).join('and')
+            }</strong>)</span>
         }
     } 
 
@@ -84,6 +99,8 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
             null
     }</strong> { 
         seeAlso 
+    } { 
+        derived 
     }</div>
 }
 
