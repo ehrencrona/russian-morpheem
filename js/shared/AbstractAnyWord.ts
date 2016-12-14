@@ -80,9 +80,9 @@ export abstract class AbstractAnyWord implements AnyWord {
     getDictionaryFormOfTranslation(translation: string, form?: string) {
         let key = Object.keys(this.en).find(k => this.en[k] == translation)
 
-        if (!key) {
+        if (key == null) {
             console.error(`No translation "${translation}" of ${this.getId()}.`)
-            
+
             return this.getEnglish()
         }
 
