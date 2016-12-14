@@ -445,12 +445,6 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
 
         return <div className='content'>
             <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>
-                <div className='sentenceId'>
-                    <a href={ 'http://grammar.ru.morpheem.com/#' + sentence.id } target='backend'>
-                        #{ sentence.id}
-                    </a>
-                </div>
-
                 <SentenceComponent
                     ref='sentence'
                     corpus={ this.props.corpus }

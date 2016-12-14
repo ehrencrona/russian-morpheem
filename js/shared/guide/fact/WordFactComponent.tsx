@@ -338,7 +338,7 @@ export default class WordFactComponent extends Component<Props, State> {
                 pos = word.inflection.wordForm.pos
             }
 
-            return <div className='inflectionTable'>
+            return <div id='inflections' className='inflectionTable'>
                     <InflectionTableComponent
                         corpus={ corpus }
                         pos={ pos }

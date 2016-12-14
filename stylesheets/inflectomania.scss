@@ -1,0 +1,157 @@
+$breakpoint: 600px;
+
+body {
+    font-family: 'Open Sans';
+    font-size: 20px;
+
+    height: 100%;
+    display: flex;
+    
+    .container {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media (max-width: $breakpoint) {
+        font-size: 16px;
+    }
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: #641212;
+}
+
+#scroller-placeholder {
+    display: none; 
+}
+
+#scroller {
+    background-color: white;
+    width: 100%;
+    max-width: 900px;
+}
+
+.sentence {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 3em;
+
+    margin-bottom: 1em;
+    margin-top: 1em;
+
+    .word {
+        font-weight: 600;
+        flex-grow: 1;
+        flex-basis: 0;
+        margin-right: 1em;
+        
+        font-size: 120%;
+
+        @media (max-width: $breakpoint) {
+            font-size: 100%;
+        }
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        > div {
+            text-align: center;
+        }
+
+        color: #86493a;
+
+        .transliteration {
+            font-size: 80%;
+            color: darkgray;
+        }
+    }
+}
+
+.sentence.ru {
+    height: 5em;
+}
+
+h2 {
+    font-size: 200%;
+    font-weight: bold;
+}
+
+h3 {
+    font-weight: normal;
+}
+
+h4 {
+    font-weight: normal;
+}
+
+.switches {
+    display: flex;
+    flex-direction: row;
+
+    .switch1 img, .switch2 img {
+        width: 100%;
+
+        cursor: pointer;
+        background-color: #b6ecec;
+        border: 2px solid #81a8a8;
+        border-radius: 6px;
+
+        &:hover {
+            background-color: #2d416b;
+            border-color: #2d416b;
+            color: #b6ecec;
+        }
+    }
+
+    .switch1 {
+        margin-left: 10%;
+        width: 50%;
+        margin-right: 10px;
+    }
+
+    .switch2 {
+        text-align: center;
+        width: 25%;
+    }
+}
+
+.nouns {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .noun {
+        cursor: pointer;
+        background-color: #b6ecec;
+        border: 2px solid #81a8a8;
+        border-radius: 6px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        padding: 4px;
+
+        text-align: center;
+        width: 30%;
+    }
+
+    .noun:hover {
+        background-color: #2d416b;
+        border-color: #2d416b;
+        color: #b6ecec;
+    }
+}
+
+.finishup {
+    font-size: 60%;
+
+    @media (max-width: $breakpoint) {
+        font-size: 80%;
+    }
+}
+
