@@ -153,7 +153,7 @@ const AUTHORS: { [id:string] : Author } = {
     },
     '584953c8c641b4f413649fcf': {
         numericalId: 32,
-        name: 'goodbyeadios'
+        name: 'deelegend'
     },
     '584912ea48f072dc1307a380': {
         numericalId: 33,
@@ -170,6 +170,14 @@ const AUTHORS: { [id:string] : Author } = {
     '584ac682db62a142074327f0': {
         numericalId: 36,
         name: 'oskar'
+    },
+    '58511ac753f6fa34645e02eb': {
+        numericalId: 37,
+        name: 'griffin'
+    },
+    '58511b0053f6fa34645e02ef': {
+        numericalId: 38,
+        name: 'jusu'
     }
 }
 
