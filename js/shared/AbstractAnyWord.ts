@@ -83,13 +83,13 @@ export abstract class AbstractAnyWord implements AnyWord {
         if (key == null) {
             console.error(`No translation "${translation}" of ${this.getId()}.`)
 
-            return this.getEnglish()
+            return this.getEnglish(form || '')
         }
 
         let els = key.split(TRANSLATION_INDEX_SEPARATOR)
 
         if (els.length == 1) {
-            return this.getEnglish()
+            return this.getEnglish(form || '')
         }
         else {
             return this.getEnglish(form || '', parseInt(els[1])-1)
