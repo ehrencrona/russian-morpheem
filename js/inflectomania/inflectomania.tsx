@@ -141,11 +141,11 @@ const NOUNS2 = [
         [ 'мои дети', '', 'моих детей', 'моими детьми' ],
         [ 'moi deti', '', 'moikh detey', 'moimi det\'mi' ]),
     new Noun('my three children', Gender.F, Number.PL, Animate.ANIMATE, 
-        [ 'мои три ребёнка', '', 'моих три ребёнка', 'моими тремя детьми' ],
-        [ 'moi tri rebonka', '', 'moikh tri rebonka', 'moimi tremya det\'mi' ]),
+        [ 'мои три ребёнка', '', 'моих троих ребёнка', 'моими тремя детьми' ],
+        [ 'moi tri rebonka', '', 'moikh troikh rebonka', 'moimi tremya det\'mi' ]),
     new Noun('my five children', Gender.F, Number.PL, Animate.ANIMATE, 
-        [ 'мои пять детей', '', 'моих пять детей', 'моими пятью детьми' ],
-        [ 'moi pyat\' detey', '', 'moikh pyat\' detey', 'moimi pyat\'yu det\'mi' ])
+        [ 'мои пять детей', '', 'моих пятерых детей', 'моими пятью детьми' ],
+        [ 'moi pyat\' detey', '', 'moikh pyaterykh detey', 'moimi pyat\'yu det\'mi' ])
 ]
 
 class ToCall extends Word {
@@ -383,6 +383,10 @@ class InflectoMania extends Component<Props, { words: Word[] }> {
                     it is often used when someone is/becomes/is called something.
                 </p>
                 <p>
+                    Like in English, <a href='https://russian.morpheem.com/word/дети'>the word for "child"</a> is highly irregular. 
+                    In the plural you use different word from the singular; a bit like "person" and "people" in English..
+                </p>
+                <p>
                     In the <a href='https://russian.morpheem.com/form/past'>past tense</a>, you use different forms of the verb 
                     depending on whether the subject is male, female, neuter or several people.
                 </p>
@@ -396,7 +400,7 @@ class InflectoMania extends Component<Props, { words: Word[] }> {
                     But when talking about an unspecified number, it's just the standard <a href='https://russian.morpheem.com/form/pl'>nominative plural</a>.
                 </p>
                 <p>
-                    Oh, did we mention that "to call" changes if you call people something <a href='https://russian.morpheem.com/words/imperf'>regularly</a> as opposed to only one time.
+                    Oh, did we mention that "to call" changes if you call people something <a href='https://russian.morpheem.com/words/imperf'>regularly</a> as opposed to only one time?
                 </p>
                 <p>
                     Fun.
