@@ -60,13 +60,13 @@ let wordFactComponent = (props: FactComponentProps<TranslatableFact>) => {
         }
 
         if (word.wordForm.aspect == Aspect.PERFECTIVE 
-            && word.getDerivedWords('imperf')) {
+            && word.getDerivedWords('imperf').length) {
             derived = <span>(perfective of <strong>{
                 word.getDerivedWords('imperf').map(w => w.toText()).join('and')
             }</strong>)</span>
         }
         else if (word.wordForm.pos == PartOfSpeech.ADVERB &&
-            word.getDerivedWords('adj')) {
+            word.getDerivedWords('adj').length) {
             derived = <span>(adverb of <strong>{
                 word.getDerivedWords('adj').map(w => w.toText()).join('and')
             }</strong>)</span>

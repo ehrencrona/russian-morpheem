@@ -20,13 +20,14 @@ interface Props {
 }
 
 interface State {
+    stored: boolean
 }
 
 let React = { createElement: createElement }
 
 export default class StudyDone extends Component<Props, State> {
 
-    render() {
+    componentWillMount() {
         let factSelector = this.props.factSelector
         let knowledge = this.props.profile.knowledge
 
@@ -59,11 +60,20 @@ export default class StudyDone extends Component<Props, State> {
         })
 
         this.props.exposures.storeProgress(progress, -1)
+        .then(() => {
+            this.setState({ stored: true})
+        })
+    }
 
+    render() {
         return <div>
             <div className='graphContainer'>
                 <div className='graph'>
-                    <ProgressGraph exposures={ this.props.exposures }/>
+                {
+                    this.state && this.state.stored
+                    ? <ProgressGraph exposures={ this.props.exposures }/>
+                    : null
+                }
                 </div>
 
                 <ul className='legend'>

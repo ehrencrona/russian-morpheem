@@ -202,8 +202,6 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
         let sentence = sentenceScore.sentence
         let fact = sentenceScore.fact
 
-        console.log(sentenceScore)
-
         this.setState({ sentence: sentence, facts: this.expandFact(fact, sentence) })
     }
 
