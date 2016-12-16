@@ -22,7 +22,6 @@ import PhraseCase from '../../shared/phrase/PhraseCase'
 import CaseStudyMatch from '../../shared/phrase/CaseStudyMatch'
 
 import NaiveKnowledge from '../../shared/study/NaiveKnowledge'
-import LeitnerKnowledge from '../../shared/study/LeitnerKnowledge'
 import { Exposure, Skill, Knowledge } from '../../shared/study/Exposure'
 import TrivialKnowledge from '../../shared/study/TrivialKnowledge'
 import FixedIntervalFactSelector from '../../shared/study/FixedIntervalFactSelector'
@@ -445,6 +444,9 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
 
         return <div className='content'>
             <div className={ 'upper' + (this.state.stage == Stage.DID_YOU_KNOW ? ' dimmed' : '') }>
+                <div className='sentenceId'>		
+                    #{ sentence.id}		
+                </div>		
                 <SentenceComponent
                     ref='sentence'
                     corpus={ this.props.corpus }

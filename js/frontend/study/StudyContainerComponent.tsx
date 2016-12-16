@@ -49,6 +49,7 @@ import OverlayComponent from '../../shared/guide/fact/OverlayComponent'
 import FrontendExposures from './FrontendExposures'
 import { fetchStudyPlan } from './FrontendStudentProfile'
 import ForgettingStats from './ForgettingStats'
+import StudyDoneComponent from './StudyDoneComponent'
 
 interface Props {
     corpus: Corpus,
@@ -84,7 +85,7 @@ export default class StudyContainerComponent extends Component<Props, State> {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = { }
 
         this.sentencesByFactIndex = indexSentencesByFact(props.corpus.sentences, props.corpus.facts, 0)
         this.factSelector = new FixedIntervalFactSelector(this.props.corpus.facts)
@@ -446,7 +447,7 @@ console.log('Did not ought to know ' + visitedFact.getId())
                         trivialKnowledge={ this.trivialKnowledge }
                         onAnswer={ (exposures) => this.onAnswer(exposures)} 
                         openPlan={ () => this.setState({ showPlan: true }) } 
-                        onExplain={ (fact) => this.explain(fact) } />            
+                        onExplain={ (fact) => this.explain(fact) } />
                 </div>
 
                 {
@@ -537,14 +538,22 @@ console.log('Did not ought to know ' + visitedFact.getId())
             </div>
         }
         else if (this.state.done) {
-            return <div>
-                <h2>Study session done.</h2>
+            return <div className='studyContainer done'>
+                {
+                    this.state.profile 
+                    ? <StudyDoneComponent
+                        factSelector={ this.factSelector }
+                        profile={ this.state.profile }
+                        corpus={ this.props.corpus }
+                        exposures={ this.exposures }
+                        onRestart={ () => { 
+                            this.state.profile.studyPlan.clear()
 
-                <div className='button' onClick={ () => {
-                    this.state.profile.studyPlan.clear()
-
-                    this.setState({ profile: profile, showPlan: true })
-                }}>Start new session</div>     
+                            this.setState({ profile: profile, showPlan: true })
+                        }}
+                        />
+                    : null
+                }
             </div>
         }
         else {

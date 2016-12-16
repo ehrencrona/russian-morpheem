@@ -1,3 +1,4 @@
+import Progress from '../../shared/study/Progress';
 
 import { handleException } from '../xr';
 import xr from '../xr';
@@ -19,7 +20,7 @@ export default class FrontendExposures implements Exposures {
     getExposures(userId: number): Promise<Exposure[]> {
         return xr.get(`/api/${ this.lang }/exposure`, {}, this.xrArgs)
         .then((xhr) => {
-            return xhr.data.map(convertDate) as Exposure[]
+            return xhr.data.map(e => convertDate(e, 'time')) as Exposure[]
         })
         .catch(handleException)
     }
@@ -28,9 +29,22 @@ export default class FrontendExposures implements Exposures {
         throw new Error('Unsupported')
     }
 
+    storeProgress(progress: Progress, userId: number) {
+        return xr.post(`/api/${ this.lang }/progress`, progress, this.xrArgs)
+        .catch(handleException)
+    }
+
+    getProgress(userId: number): Promise<Progress[]> {
+        return xr.get(`/api/${ this.lang }/progress`, {}, this.xrArgs)
+        .then((xhr) => {
+            return xhr.data.map(p => convertDate(p, 'date')) as Progress[]
+        })
+        .catch(handleException)
+    }
 }
 
-function convertDate(entry) {
-    entry.time = new Date(entry.time)
+function convertDate(entry, property: string) {
+    entry[property] = new Date(entry[property])
+
     return entry
 }

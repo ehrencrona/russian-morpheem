@@ -1,3 +1,5 @@
+import Exposures from '../../shared/study/Exposures';
+import Progress from '../../shared/study/Progress';
 
 /// <reference path="../../../typings/chart-js.d.ts" />
 /// <reference path="../../../typings/human-time.d.ts" />
@@ -6,29 +8,26 @@ import { Component, createElement } from 'react'
 import { SentencesByDate, SentencesByAuthor } from '../../shared/metadata/SentencesByDate'
 import Corpus from '../../shared/Corpus'
 import { Chart } from 'chart.js';
-import human = require('human-time')
+import human = require('human-time');
 
 const COLORS = [
     '31c8c7',
     'f0af33',
     '766db0',
-    '2CAAA9',
-    'ff5f3b',
-    'ffd02a',
-    'd03a3e',
-    '303030',
-    '4bb6ac',
-    'f8f7f5',
-    'e95f3d'
 ]
 
+const LABELS = {
+    known: 'in long-term memory',
+    unknown: 'unknown',
+    studying: 'still studying'
+}
+
 interface Props {
-    corpus: Corpus
+    exposures: Exposures
 }
 
 interface State {
-    sentencesByDate?: SentencesByDate,
-    eventType?: string
+    progresses?: Progress[],
 }
 
 let React = { createElement: createElement }
@@ -41,15 +40,13 @@ function toTransparentRgb(hexColor) {
     return `rgba(${r},${g},${b},0.1)`
 }
 
-export default class SentencesByDateComponent extends Component<Props, State> {
+export default class ProgressGraphComponent extends Component<Props, State> {
     chart: Chart
 
     constructor(props) {
         super(props)
 
-        this.state = {
-            eventType: 'create'
-        }
+        this.state = { }
     }
 
     renderGraph(canvas: HTMLCanvasElement) {
@@ -67,9 +64,19 @@ export default class SentencesByDateComponent extends Component<Props, State> {
 
         let chartData = {
             type: 'line',
+            options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                legend: {
+                    display: false
+                }
+            },
             data: {
-                labels: this.state.sentencesByDate.days.map((day) => {
-                    let date = new Date(day * 24 * 60 * 60 * 1000)
+                labels: this.state.progresses.map(p => {
+                    let date = new Date(p.date)
 
                     let result = human(date)
 
@@ -80,7 +87,7 @@ export default class SentencesByDateComponent extends Component<Props, State> {
                     return result
                 }),
                 datasets: 
-                    this.state.sentencesByDate.authors.map((author, index) =>
+                    [ 'known', 'studying', 'unknown' ].map((kind, index) =>
                     {
                         let total = 0
 
@@ -88,16 +95,8 @@ export default class SentencesByDateComponent extends Component<Props, State> {
                             borderColor: '#' + COLORS[index % COLORS.length],
                             borderWidth: 2,
                             backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
-                            data: this.state.sentencesByDate.values.map(
-                                (value: SentencesByAuthor) => {
-                                    if (value[author] > 0) {
-                                        total += value[author]
-                                    }
-
-                                    return total
-                                }
-                            ),
-                            label: author 
+                            data: this.state.progresses.map(p => p[kind].length),
+                            label: LABELS[kind]
                         }
                     })
             }
@@ -107,36 +106,18 @@ export default class SentencesByDateComponent extends Component<Props, State> {
     }
 
     componentDidMount() {
-        this.load(this.state.eventType)
-    }
-
-    load(eventType: string) {
-        this.props.corpus.sentenceHistory.getEventsByDate(eventType).then(
-            (sentencesByDate) => this.setState({ eventType: eventType, sentencesByDate: sentencesByDate }))
+        this.props.exposures.getProgress(-1).then(
+            (progresses) => this.setState({ progresses: progresses }))
             .catch((e) => console.error(e.stack))
     }
 
     render() {
-        if (!this.state || !this.state.sentencesByDate) {
+        if (!this.state || !this.state.progresses) {
             return <div/>
         }
 
-        let filterButton = (id, name) =>
-            <div className={ 'button ' + (this.state.eventType == id ? ' selected' : '') } 
-                onClick={ () => { this.load( id ) }}>{ name }</div>
-
-        return <div>
-
-                <div className='buttonBar'>
-                    { filterButton( 'create', 'Written') }
-                    { filterButton( 'accept', 'Accepted') }
-                    { filterButton( 'importExternal', 'Imported') }
-                    { filterButton( 'translate', 'Translated') }
-                    { filterButton( 'record', 'Recorded') }
-                </div>
-            
+        return <div>            
             <canvas ref={ (canvas) => this.renderGraph(canvas) }></canvas>
-
         </div>
     }
 }

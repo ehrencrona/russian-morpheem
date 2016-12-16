@@ -616,3 +616,112 @@ $buttonPadding: 0.5em;
     }
 }
 
+.done {
+    text-align: center;
+    height: 100vh;
+    background-color: #47316e;
+
+    > div {
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .graphContainer {
+        flex-grow: 0.3;
+        width: 100%;
+        background-color: #ececec;
+
+        padding: 2em;
+
+        .graph {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 500px;
+        }
+
+        .legend {
+            text-align: left;
+            font-size: 80%;
+            display: inline-block;
+            margin-left: auto;
+            margin-right: auto;
+
+            li {
+                .swatch {
+                    display: inline-block;
+                    width: 1em;
+                    height: 1em;
+                    margin-right: 0.3em;
+                    position: relative;
+                    top: 0.2em;
+                }
+
+                .known {
+                    background-color: #31c8c7
+                }
+
+                .studying {
+                    background-color: #f0af33
+                }
+
+                .unknown {
+                    background-color: #766db0
+                }
+
+                display: inline-block;
+                margin-right: 1em;
+            }
+        }
+    }
+
+    .progressContainer {
+        display: flex;
+        align-content: center;
+        flex-grow: 1.6;
+
+        justify-content: center;
+        align-items: center;
+        
+        .progress {            
+            color: #ececec;
+            padding-top: 1.5em;
+
+            text-align: center;
+            max-width: 700px;
+            padding: 0.5em;
+
+            display: flex;
+            flex-direction: column;
+
+            h2 {
+                margin-top: 0;
+                margin-bottom: 0.6em;
+                font-size: 200%;
+            }
+
+            .explanation {
+                margin-bottom: 1em;
+            }
+
+        }
+    }
+
+    .button {
+        width: 100%;
+        border-radius: 0;
+        margin: 0;
+
+        padding: 1em;
+        background-color: #695d93;
+        margin-top: 1.6em;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .button:hover {
+        background-color: #e19033;
+    }
+}

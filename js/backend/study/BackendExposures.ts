@@ -1,3 +1,4 @@
+import { EINPROGRESS } from 'constants';
 /// <reference path="../../../typings/modules/mongodb/index.d.ts" />
 
 import { MongoClient, MongoError, Db, Cursor } from 'mongodb'
@@ -8,10 +9,12 @@ import { SentenceHistory, SentenceStatusResponse } from '../../shared/metadata/S
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED } from '../../shared/metadata/SentenceStatus'
 import Words from '../../shared/Words'
 import Exposures from '../../shared/study/Exposures'
+import Progress from '../../shared/study/Progress'
 import { SentencesByDate } from '../../shared/metadata/SentencesByDate'
 
 const url = 'mongodb://localhost:27017/study';
 const COLLECTION_EXPOSURES = 'exposures'
+const COLLECTION_PROGRESS = 'progress'
 
 let db: Db
 
@@ -85,6 +88,50 @@ class BackendExposures implements Exposures {
                     exposure.time = new Date(doc.time)
 
                     result.push(doc);
+                }, () => {
+                    resolve(result)
+                });
+        })
+    }
+
+    storeProgress(progress: Progress, userId: number) {
+        if (!db) {
+            return Promise.reject('Not connected')
+        }
+
+        return new Promise((resolve, reject) => {
+            progress.date = new Date(progress.date.getFullYear(), progress.date.getMonth(), progress.date.getDate())
+            progress['user'] = userId
+
+            db.collection(COLLECTION_PROGRESS)
+                .updateOne({ user: userId, date: progress.date }, progress, { upsert: true },
+                (error, result) => {
+                    if (error) {
+                        console.error(error)
+                        reject(error)
+                    }
+                    else (
+                        resolve()
+                    )
+                })
+        })
+    }
+
+    getProgress(userId: number): Promise<Progress[]> {
+        if (!db) {
+            return Promise.resolve([])
+        }
+
+        let cursor = db.collection(COLLECTION_PROGRESS)
+            .find({ user: userId })
+            .sort({ date: 1 })
+
+        return new Promise((resolve, reject) => {
+            let result: Progress[] = []
+
+            cursor
+                .forEach((doc) => {
+                    result.push(doc as Progress);
                 }, () => {
                     resolve(result)
                 });

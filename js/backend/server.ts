@@ -56,6 +56,9 @@ import getProfile from './route/getProfile'
 import setPlan from './route/setPlan'
 import addQueuedFact from './route/addQueuedFact'
 
+import storeProgress from './route/storeProgress'
+import getProgress from './route/getProgress'
+
 import registerExposures from './route/registerExposures'
 import getExposures from './route/getExposures'
 
@@ -216,6 +219,10 @@ function registerRoutes(corpus: Corpus) {
     app.post(`/api/${lang}/exposure`, registerExposures(corpus))    
 
     app.get(`/api/${lang}/exposure`, getExposures(corpus))    
+
+    app.post(`/api/${lang}/progress`, storeProgress(corpus))    
+
+    app.get(`/api/${lang}/progress`, getProgress(corpus))    
 
     app.get(`/api/user/profile`, getProfile(corpus))    
 
