@@ -368,45 +368,6 @@ class InflectoMania extends Component<Props, { words: Word[] }> {
                 Does memorizing this look like fun? You should study Russian!
             </h4>
 
-            <div className='finishup'>
-                <hr/>
-                <p>
-                    Oh, and in case you're wondering:
-                </p>
-                <p>
-                    The first word is in the nominative case (the form you'd find in a dictionary), 
-                    the third word is in the <a href='https://russian.morpheem.com/form/accusative'>accusative case</a> because 
-                    it is a direct object (directly follows the noun without a preposition).
-                </p>
-                <p>
-                    The last word is in the <a href='https://russian.morpheem.com/form/instrumental'>instrumental case</a> because
-                    it is often used when someone is/becomes/is called something.
-                </p>
-                <p>
-                    Like in English, <a href='https://russian.morpheem.com/word/дети'>the word for "child"</a> is highly irregular. 
-                    In the plural you use different word from the singular; a bit like "person" and "people" in English..
-                </p>
-                <p>
-                    In the <a href='https://russian.morpheem.com/form/past'>past tense</a>, you use different forms of the verb 
-                    depending on whether the subject is male, female, neuter or several people.
-                </p>
-                <p>
-                    Here's <a href='https://russian.morpheem.com/word/%D0%BC%D0%BE%D0%B9#inflections'>the full list of inflections of "my"</a>. 
-                    Yes, it's unusually irregular. We're trying to make a point.
-                </p>
-                <p>
-                    When saying <a href='https://russian.morpheem.com/phrase/234-gen'>two, three or four of something</a>, you use the <a href='https://russian.morpheem.com/form/gen'>genitive singular</a>, 
-                    but when there are <a href='https://russian.morpheem.com/phrase/567-genpl'>more than that</a>, it's the <a href='https://russian.morpheem.com/form/genpl'>genitive plural</a>, for obscure historical reasons. 
-                    But when talking about an unspecified number, it's just the standard <a href='https://russian.morpheem.com/form/pl'>nominative plural</a>.
-                </p>
-                <p>
-                    Oh, did we mention that "to call" changes if you call people something <a href='https://russian.morpheem.com/words/imperf'>regularly</a> as opposed to only one time?
-                </p>
-                <p>
-                    Fun.
-                </p>
-                <p></p>
-            </div>
         </div>
     }
 
