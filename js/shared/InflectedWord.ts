@@ -31,7 +31,7 @@ export default class InflectedWord extends Word {
     }
 
     /**
-     * The knowledge required for an inflection is the base form of the word as well as any gramar rules used to
+     * The knowledge required for an inflection is the base form of the word as well as any grammar rules used to
      * derive it.
      */
     visitFacts(visitor: (Fact) => any) {

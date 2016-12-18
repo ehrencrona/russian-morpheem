@@ -348,9 +348,9 @@ $buttonPadding: 0.5em;
                     }
 
                     @extend .smallestFont;
+
                     .lastStudied, .omittedExplanation {
                         font-weight: normal;
-
                     }
 
                     .lastStudied {
@@ -377,7 +377,7 @@ $buttonPadding: 0.5em;
                     justify-content: center;
                 }
 
-                .newFacts {
+                .newFacts, .knowMore {
                     border-radius: 1em;
                     @extend .smallestFont;
                     background-color: $color9;

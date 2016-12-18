@@ -62,6 +62,7 @@ interface Props {
 interface State {
     tokens?: StudyToken[],
     didYouKnow?: StudyFact[],
+    didYouKnowMore?: StudyFact[],
     unknownFacts?: StudyFact[],
     knownFacts?: StudyFact[],
     newFacts?: Fact[],
@@ -211,7 +212,7 @@ export default class StudyComponent extends Component<Props, State> {
         })
     }
 
-    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], returnToStage: Stage) {
+    explainFacts(facts: StudyFact[], hiddenFacts: StudyFact[], returnToStage: Stage, dontFilter?: boolean) {
         let known: StudyFact[] = [],
             unknown: StudyFact[] = []
 
@@ -243,6 +244,7 @@ export default class StudyComponent extends Component<Props, State> {
             console.log('no unknown facts among ' + unknown.map(f => f.fact.getId()) + '. explaining all of them.')
 
             unknown = known
+            known = null
         }
 
         if (unknown.length) {
@@ -250,6 +252,7 @@ export default class StudyComponent extends Component<Props, State> {
 
             this.setState({
                 didYouKnow: unknown,
+                didYouKnowMore: known,
                 stage: Stage.DID_YOU_KNOW,
                 returnToStage: returnToStage,
                 highlightFact: unknown[0]
@@ -328,9 +331,9 @@ export default class StudyComponent extends Component<Props, State> {
                 facts={this.state.didYouKnow}
                 factSelected={(fact) => { this.setState({ highlightFact: fact }) } }
                 factSelector={this.props.factSelector}
-                done={(known, unknown) => {
+                done={ (known, unknown) => {
                     // currently, this duplicates unknownFacts if pressed multiple times.
-                    // if dudplicating in the future, make sure to maintain the unknown fact
+                    // if deduplicating in the future, make sure to maintain the unknown fact
                     // from newFacts
                     this.setState({
                         didYouKnow: null,
@@ -352,6 +355,13 @@ export default class StudyComponent extends Component<Props, State> {
                 <div className='buttons'>
                     <div className='button' onClick={() => this.next()}>Continue</div>
                 </div>
+                {
+                    this.state.didYouKnowMore 
+                    ? <div className='lower'>{
+                        this.renderKnowMore()
+                    }</div>
+                    : null
+                }
             </div>
         }
         else if (this.state.stage == Stage.REVEAL) {
@@ -393,11 +403,27 @@ export default class StudyComponent extends Component<Props, State> {
                             'What Russian word is missing?'
 
                     }</div>
-
                     {
-                        this.renderNewFacts()
+                        this.state.didYouKnowMore 
+                        ? this.renderKnowMore()
+                        : this.renderNewFacts()
                     }
                 </div>
+            </div>
+        }
+        else {
+            return null
+        }
+    }
+
+    renderKnowMore() {
+        if (this.state.didYouKnowMore) {
+            return <div className='knowMore' onClick={() => {
+                this.explainFacts(this.state.didYouKnowMore, [], this.state.stage, true)
+            }}>
+                <div className='fact'>Not clear yet?</div>
+
+                <div className='button'>Show more</div>
             </div>
         }
         else {
@@ -581,6 +607,10 @@ function excludeFact(exclude: StudyFact, array: StudyFact[]) {
 
 function isWorthExplaining(fact: Fact, word: Word) {
     if ((fact instanceof Word || fact instanceof InflectableWord) && !fact.studied) {
+        return false
+    }
+
+    if (fact instanceof InflectionForm && fact.equals({ grammaticalCase: fact.grammaticalCase})) {
         return false
     }
 

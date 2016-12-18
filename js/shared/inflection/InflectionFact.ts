@@ -12,7 +12,7 @@ export default class InflectionFact extends AbstractFact {
         visitor(this)
 
         let form = FORMS[this.form]
-        
+
         if (form.grammaticalCase) {
             visitor(FORMS[CASES[form.grammaticalCase]])
         }
