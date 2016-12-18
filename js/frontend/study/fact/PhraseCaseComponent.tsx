@@ -21,7 +21,9 @@ function removeCase(word: InflectedWord, corpus: Corpus) {
     let clone = new InflectionForm('clone', 'clone', form)
     clone.grammaticalCase = GrammarCase.NOM
 
-    let nominative: string = INFLECTION_FORMS[word.word.wordForm.pos].allForms.find(
+    let forms = INFLECTION_FORMS[word.word.wordForm.pos]
+
+    let nominative: string = forms && forms.allForms.find(
         formId => {
             let form = FORMS[formId]
 
