@@ -17,6 +17,7 @@ import { EXPECTED_REPETITIONS_IN_SESSION, FixedIntervalFactSelector } from '../.
 
 import StudyFact from '../../shared/study/StudyFact'
 import TopicsComponent from './TopicsComponent'
+import FactProgressComponent from './FactProgressComponent'
 
 let React = { createElement: createElement }
 
@@ -100,21 +101,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
     }
 
     renderProgress(fact: Fact) {
-        let percentage = 100 * Math.max(1 - 
-            this.props.factSelector.getExpectedRepetitions(fact, false) / 
-            EXPECTED_REPETITIONS_IN_SESSION, 0)
-
-        return <div className='progress'>
-            <div className='barContainer'>
-                <div className={ 'start' + (percentage == 0 ? ' empty' : '')}>&nbsp;</div>
-            
-                <div className='bar'>
-                    <div className='full' style={ { width: percentage + '%' }}>&nbsp;</div>
-                </div>
-
-                <div className={ 'end'  + (percentage == 100 ? ' full' : '') }>&nbsp;</div>
-            </div>
-        </div>
+        return <FactProgressComponent factSelector={ this.props.factSelector } fact={ fact }/>
     }
 
     renderFacts(facts: Fact[]) {

@@ -7,7 +7,7 @@ import { Exposure, Knowledge } from '../study/Exposure'
 export const REPETITION_COUNT = 9
 const MIN_REPETITION = -1
 
-interface LastStudied {
+export interface LastStudied {
     fact: string,
     time: Date,
     repetition: number
