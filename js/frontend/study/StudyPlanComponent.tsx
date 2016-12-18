@@ -143,7 +143,7 @@ export default class StudyPlanComponent extends Component<Props, State> {
         let repeatFacts = studiedFacts.repeatedFacts
 
         facts.reverse().forEach(f => {
-            if (this.props.profile.knowledge.getKnowledge(f) != Knowledge.KNEW) {
+            if (this.props.profile.knowledge.getKnowledge(f) == Knowledge.MAYBE) {
 console.log(f.getId() + ' should be studied')
                 newFacts = [ f ].concat(newFacts)
             }
