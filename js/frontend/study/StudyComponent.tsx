@@ -269,6 +269,8 @@ console.log('Facts: ' + nextProps.facts.map(f => f.getId()).join(', '))
 
     iWasWrong(hiddenFacts: StudyFact[]) {
         this.explainFacts(this.getProductionFacts(), hiddenFacts, Stage.CONFIRM)
+
+        ga('send', 'event', 'study', 'iwaswrong')
     }
 
     getProductionFacts(): StudyFact[] {
