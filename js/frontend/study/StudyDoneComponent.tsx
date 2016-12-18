@@ -71,15 +71,17 @@ export default class StudyDone extends Component<Props, State> {
                 <div className='graph'>
                 {
                     this.state && this.state.stored
-                    ? <ProgressGraph exposures={ this.props.exposures }/>
+                    ? <ProgressGraph corpus={ this.props.corpus } exposures={ this.props.exposures }/>
                     : null
                 }
                 </div>
 
                 <ul className='legend'>
-                    <li><div className='swatch known'>&nbsp;</div>Facts in long-term memory</li>
-                    <li><div className='swatch studying'>&nbsp;</div>Facts still being studied</li>
-                    <li><div className='swatch unknown'>&nbsp;</div>Facts you have said you don't know</li>
+                    <li><div className='swatch studying'>&nbsp;</div>studying</li>
+                    <li>In long-term memory:</li>
+                    <li><div className='swatch phrases'>&nbsp;</div>phrases</li>
+                    <li><div className='swatch words'>&nbsp;</div>words</li>
+                    <li><div className='swatch forms'>&nbsp;</div>endings</li>
                 </ul>
             </div>
 

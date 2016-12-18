@@ -1,3 +1,6 @@
+import { AbstractAnyWord } from '../../shared/AbstractAnyWord';
+import InflectionFact from '../../shared/inflection/InflectionFact';
+import Phrase from '../../shared/phrase/Phrase';
 import Exposures from '../../shared/study/Exposures';
 import Progress from '../../shared/study/Progress';
 
@@ -14,20 +17,22 @@ const COLORS = [
     '31c8c7',
     'f0af33',
     '766db0',
+    'a0a0a0'
 ]
-
-const LABELS = {
-    known: 'in long-term memory',
-    unknown: 'unknown',
-    studying: 'still studying'
-}
 
 interface Props {
     exposures: Exposures
+    corpus: Corpus
+}
+
+interface ProgressByType {
+    phrases: Progress,
+    words: Progress,
+    forms: Progress
 }
 
 interface State {
-    progresses?: Progress[],
+    progresses?: ProgressByType[],
 }
 
 let React = { createElement: createElement }
@@ -60,6 +65,33 @@ export default class ProgressGraphComponent extends Component<Props, State> {
             this.chart.destroy();
         }
 
+        let datasets = [];
+
+        let index = 0;
+
+        [ 'phrases', 'words', 'forms' ].forEach(type =>
+        {
+            datasets.push({
+                borderColor: '#' + COLORS[index % COLORS.length],
+                borderWidth: 2,
+                backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
+                data: this.state.progresses.map(p => p[type].known.length),
+                label: 'known ' + type  
+            })
+
+            index++
+        })
+
+        datasets.push({
+            borderColor: '#' + COLORS[index % COLORS.length],
+            borderWidth: 2,
+            backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
+            data: this.state.progresses.map(p => 
+                p.forms.studying.length + p.phrases.studying.length + p.words.studying.length),
+            label: 'studying'
+        })
+
+
         let lastDay = new Date().getTime() - 24 * 60 * 60 * 1000
 
         let chartData = {
@@ -76,7 +108,7 @@ export default class ProgressGraphComponent extends Component<Props, State> {
             },
             data: {
                 labels: this.state.progresses.map(p => {
-                    let date = new Date(p.date)
+                    let date = new Date(p.forms.date)
 
                     let result = human(date)
 
@@ -86,19 +118,7 @@ export default class ProgressGraphComponent extends Component<Props, State> {
 
                     return result
                 }),
-                datasets: 
-                    [ 'known', 'studying', 'unknown' ].map((kind, index) =>
-                    {
-                        let total = 0
-
-                        return {
-                            borderColor: '#' + COLORS[index % COLORS.length],
-                            borderWidth: 2,
-                            backgroundColor: toTransparentRgb(COLORS[index % COLORS.length]),
-                            data: this.state.progresses.map(p => p[kind].length),
-                            label: LABELS[kind]
-                        }
-                    })
+                datasets: datasets
             }
         }
 
@@ -107,7 +127,7 @@ export default class ProgressGraphComponent extends Component<Props, State> {
 
     componentDidMount() {
         this.props.exposures.getProgress(-1).then(
-            (progresses) => this.setState({ progresses: progresses }))
+            (progresses) => this.setState({ progresses: progresses.map(p => this.splitByType(p)) }))
             .catch((e) => console.error(e.stack))
     }
 
@@ -119,5 +139,43 @@ export default class ProgressGraphComponent extends Component<Props, State> {
         return <div>            
             <canvas ref={ (canvas) => this.renderGraph(canvas) }></canvas>
         </div>
+    }
+
+    splitByType(progress: Progress) {
+        function emptyProgress(): Progress {
+            return {
+                known: [],
+                studying: [],
+                unknown: [],
+                date: progress.date
+            }
+        }
+
+        let result: ProgressByType = {
+            phrases: emptyProgress(),
+            words: emptyProgress(),
+            forms: emptyProgress()
+        };
+
+        [ 'known', 'studying' ].map(kind => {
+
+            progress[kind].forEach(factId => {
+
+                let fact = this.props.corpus.facts.get(factId)
+
+                if (fact instanceof Phrase) {
+                    result.phrases[kind].push(factId)
+                }
+                else if (fact instanceof InflectionFact) {
+                    result.forms[kind].push(factId)
+                }
+                else if (fact instanceof AbstractAnyWord) {
+                    result.words[kind].push(factId)
+                }
+            })
+
+        })
+
+        return result
     }
 }

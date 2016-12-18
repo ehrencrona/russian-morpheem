@@ -677,16 +677,20 @@ $buttonPadding: 0.5em;
                     top: 0.2em;
                 }
 
-                .known {
-                    background-color: #31c8c7
+                .phrases {
+                    background-color: #31c8c7;
+                }
+ 
+                .words {
+                    background-color: #f0af33;
+                }
+
+                .forms {
+                    background-color: #766db0;
                 }
 
                 .studying {
-                    background-color: #f0af33
-                }
-
-                .unknown {
-                    background-color: #766db0
+                    background-color: #a0a0a0;
                 }
 
                 display: inline-block;
