@@ -210,10 +210,14 @@ console.log('repeat facts', factScores.map(f => f.fact.getId() + ' ' + f.score))
             this.factSelector.isStudied(fact, new Date())
     }
     
-    expandFact(fact: Fact, sentence: Sentence) {
+    expandFact(fact: Fact, sentence: Sentence): Fact[] {
         let additionalFact: Fact
 
         let studiedFacts = [ fact ]
+
+        if (this.factSelector.isFailingAtLearning(fact)) {
+            return studiedFacts
+        }
 
         if (fact instanceof Phrase) {
             fact.getCaseFacts().forEach((caseFact) => {

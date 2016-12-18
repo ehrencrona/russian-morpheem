@@ -4,7 +4,8 @@ import Facts from '../fact/Facts'
 import FactScore from './FactScore'
 import { Exposure, Knowledge } from '../study/Exposure'
 
-export const REPETITION_COUNT = 8
+export const REPETITION_COUNT = 9
+const MIN_REPETITION = -1
 
 interface LastStudied {
     fact: string,
@@ -27,11 +28,11 @@ const STUDY_SESSION_LENGTH_MS = 30 * 60 * 1000;
 // URGENCY + BASE_SCORE must equal 1
 const URGENCY = 0.8
 const BASE_SCORE = 0.2
-const INTERVAL_FIRST_REP_IN_MS = { min: 5000, max: 50000 }
+const INTERVAL_FIRST_REP_IN_MS = { min: 1000, max: 10000 }
 
 export const INTERVAL_BY_REP_IN_MS: Interval[] = [ INTERVAL_FIRST_REP_IN_MS ]
 
-for (let rep = 1; rep < REPETITION_COUNT; rep++) {
+for (let rep = 1; rep < REPETITION_COUNT - MIN_REPETITION; rep++) {
     INTERVAL_BY_REP_IN_MS[rep] = {
         min: INTERVAL_BY_REP_IN_MS[rep-1].min * INCREASE_BY_REPETITION,
         max: INTERVAL_BY_REP_IN_MS[rep-1].max * INCREASE_BY_REPETITION
@@ -44,7 +45,7 @@ function calculateExpectedRepetitionsForNew(sessionLength: number) {
     // how many repetitions can we at most do between now and "before", give that all answers are correct?
     // (note that this is basically a constant since "before"" is always now+sessionLength and could be calculated once and for all) 
     for (let reps = 0; reps < REPETITION_COUNT; reps++) {
-        if (INTERVAL_BY_REP_IN_MS[reps].min > sessionLength) {
+        if (INTERVAL_BY_REP_IN_MS[reps - MIN_REPETITION].min > sessionLength) {
             return reps
         }
     }
@@ -100,7 +101,7 @@ export class FixedIntervalFactSelector {
                     if (lastStudied.repetition >= REPETITION_COUNT) {
                         lastStudied.repetition = REPETITION_COUNT-1                    
                     }
-                    else if (lastStudied.repetition > 0) {
+                    else if (lastStudied.repetition > MIN_REPETITION) {
                         lastStudied.repetition--
                     }
                 }
@@ -112,11 +113,18 @@ export class FixedIntervalFactSelector {
         return !!this.studying[fact.getId()]
     }
 
+    isFailingAtLearning(fact: Fact) {
+        let lastStudied = this.studying[fact.getId()]
+        
+        return lastStudied && lastStudied.repetition < 0
+    }
+
     isStudied(fact: Fact, now: Date): boolean {
         let lastStudied = this.studying[fact.getId()]
         
         if (lastStudied) {
-            return INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1)].max < timeSince(lastStudied, now)
+            return INTERVAL_BY_REP_IN_MS[
+                Math.min(lastStudied.repetition, REPETITION_COUNT-1) - MIN_REPETITION].max < timeSince(lastStudied, now)
         }
         else {
             return false
@@ -127,9 +135,8 @@ export class FixedIntervalFactSelector {
      * ever - true: repetitions made until fact is known over all sessions, false: repetitions in a single session
      */
     getExpectedRepetitions(fact: Fact, ever: boolean): number {
-
         let lastStudied = this.studying[fact.getId()]
-        
+
         if (lastStudied) {
             if (!ever) {
                 let before = new Date(new Date().getTime() + STUDY_SESSION_LENGTH_MS)
@@ -140,7 +147,7 @@ export class FixedIntervalFactSelector {
                 // are correct? 
                 for (let reps = lastStudied.repetition; reps < REPETITION_COUNT; reps++) {
 
-                    if (INTERVAL_BY_REP_IN_MS[reps].min > timeSinceLast) {
+                    if (INTERVAL_BY_REP_IN_MS[reps - MIN_REPETITION].min > timeSinceLast) {
                         // the current repetition will never be done, so the previous one is the last
                         return reps - lastStudied.repetition
                     }
@@ -181,7 +188,7 @@ export class FixedIntervalFactSelector {
             }
 
             let age = timeSince(lastStudied, now)
-            let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1)]
+            let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1) - MIN_REPETITION]
 
             if (age > interval.min) {
                 let score
@@ -224,7 +231,7 @@ export class FixedIntervalFactSelector {
             let lastStudied = this.studying[factId]
 
             let age = timeSince(lastStudied, now)
-            let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1)]
+            let interval = INTERVAL_BY_REP_IN_MS[Math.min(lastStudied.repetition, REPETITION_COUNT-1) - MIN_REPETITION]
 
             if (filter(lastStudied, age, interval)) {
                 let fact = this.facts.get(factId)
