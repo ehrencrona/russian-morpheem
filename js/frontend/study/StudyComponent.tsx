@@ -108,6 +108,7 @@ export default class StudyComponent extends Component<Props, State> {
             newFacts: props.facts.filter(fact =>
                 props.profile.knowledge.getKnowledge(fact) == Knowledge.MAYBE),
             stage: Stage.TEST,
+            didYouKnowMore: null,
             tokens: toStudyWords(sentence, props.facts, props.corpus),
             highlightFact: null
         }
@@ -244,7 +245,7 @@ export default class StudyComponent extends Component<Props, State> {
             console.log('no unknown facts among ' + unknown.map(f => f.fact.getId()) + '. explaining all of them.')
 
             unknown = known
-            known = null
+            known = []
         }
 
         if (unknown.length) {
@@ -252,7 +253,7 @@ export default class StudyComponent extends Component<Props, State> {
 
             this.setState({
                 didYouKnow: unknown,
-                didYouKnowMore: known,
+                didYouKnowMore: known.length ? known : null,
                 stage: Stage.DID_YOU_KNOW,
                 returnToStage: returnToStage,
                 highlightFact: unknown[0]
