@@ -62,7 +62,9 @@ export default class StudyPlanComponent extends Component<Props, State> {
             let comparator = (s1, s2) => s2.score - s1.score
             let repeatFacts = this.props.factSelector.chooseFact(new Date()).sort(comparator).map(s => s.fact)
 
-            studiedFacts = this.addQueuedFacts(studyPlan.getQueuedFacts(), new StudiedFacts(newFacts, repeatFacts))
+            // the 'new' facts can apprently also include some that we have studied sometime previously.
+            studiedFacts = this.addQueuedFacts(studyPlan.getQueuedFacts().reverse().concat(newFacts), 
+                new StudiedFacts([], repeatFacts))
 
             repeatCount = Math.min(repeatCount, studiedFacts.repeatedFacts.length)
             newCount = Math.min(newCount, studiedFacts.newFacts.length)

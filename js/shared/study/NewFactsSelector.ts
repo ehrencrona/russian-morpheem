@@ -64,7 +64,7 @@ export function createNewFactsSelector(profile: StudentProfile, knowledge: Naive
             let factKnowledge = knowledge.getKnowledge(fact)
 
             if ((factKnowledge == Knowledge.MAYBE || factKnowledge == Knowledge.DIDNT_KNOW) &&
-                !factSelector.isStudied(fact, new Date())) {
+                !factSelector.isEverStudied(fact)) {
                 foundFacts.push({
                     fact: fact,
                     score: score,
