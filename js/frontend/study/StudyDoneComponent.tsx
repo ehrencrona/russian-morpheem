@@ -63,6 +63,8 @@ export default class StudyDone extends Component<Props, State> {
         .then(() => {
             this.setState({ stored: true})
         })
+
+        ga('send', 'event', 'study', 'done')
     }
 
     render() {
