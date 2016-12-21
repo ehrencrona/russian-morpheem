@@ -457,7 +457,7 @@ export default class StudyComponent extends Component<Props, State> {
         this.props.facts.forEach(fact => {
             let lastStudied = this.props.factSelector.getLastStudied(fact)
 
-            if (lastStudied && (!oldest || oldest.time.getTime() < lastStudied.time.getTime())) {
+            if (lastStudied && (!oldest || lastStudied.time.getTime() < oldest.time.getTime())) {
                 oldest = lastStudied
             }
         })
@@ -573,6 +573,9 @@ export default class StudyComponent extends Component<Props, State> {
         else if (fact instanceof Word) {
             return 'the word for "' + fact.getEnglish() + '"'
         }
+        else if (fact instanceof InflectionForm) {
+            return 'the ' + fact.name
+        }
         else if (fact instanceof InflectionFact) {
             let examples = findExamplesOfInflection(fact, this.props.corpus, 2,
                 (fact) => this.props.profile.knowledge.getKnowledge(fact) == Knowledge.DIDNT_KNOW)
@@ -583,6 +586,9 @@ export default class StudyComponent extends Component<Props, State> {
                 (words.length == 1
                     ? words[0].toText()
                     : 'words like ' + words.map(w => w.word.toText()).join(' and '))
+        }
+        else if (fact instanceof PhraseCase) {
+            return `using ${ CASES[fact.grammaticalCase] } in the expression "${ fact.phrase.en }"`
         }
         else if (fact instanceof Phrase) {
             return 'the expression "' + fact.en + '"'
