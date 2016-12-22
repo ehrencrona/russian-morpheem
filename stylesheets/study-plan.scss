@@ -266,11 +266,11 @@ $headlineFont: 'Rubik';
             }
 
             .content {
-
                 flex-grow: 1;
             }
 
             .button {
+                flex-grow: 0.4;
                 background-color: darken(#e9d5d0, 15%);
                 justify-content: center;
                 margin: 0;

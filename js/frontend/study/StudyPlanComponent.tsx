@@ -254,7 +254,7 @@ console.log(f.getId() + ' is already known')
 
                     <div className='button topics' onClick={ () => { this.setState({ showTopics: true }) } }>
 
-                        Choose another topic 
+                        Too easy? Choose a topic to study 
 
                     </div> 
                 </div>
