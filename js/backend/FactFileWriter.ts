@@ -1,4 +1,3 @@
-/// <reference path="../../typings/node-4.d.ts"/>
 "use strict";
 
 import { writeFile } from 'fs';

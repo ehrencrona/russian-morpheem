@@ -1,5 +1,3 @@
-/// <reference path="../../typings/node-4.d.ts"/>
-
 import { readFile } from 'fs'
 import parseFactFile from '../shared/fact/FactFileParser'
 

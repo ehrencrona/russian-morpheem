@@ -1,4 +1,3 @@
-/// <reference path="../../typings/request.d.ts"/>
 
 import { post } from 'request';
 import Sentence from '../shared/Sentence'

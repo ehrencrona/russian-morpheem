@@ -32,7 +32,9 @@ declare module "xr" {
             config: { [name: string]: any }
         )
 
-   }
-        
-    export default new XR();
+    }
+    
+    const _default: XR;
+
+    export default _default;
 }

@@ -8,7 +8,7 @@ import { SentenceHistory, SentenceStatusResponse } from '../../shared/metadata/S
 import { SentenceStatus, STATUS_ACCEPTED, STATUS_SUBMITTED, STATUS_DELETED } from '../../shared/metadata/SentenceStatus'
 import Words from '../../shared/Words'
 
-import { SentencesByDate } from '../../shared/metadata/SentencesByDate'
+import { SentencesByDate, SentencesByAuthor } from '../../shared/metadata/SentencesByDate'
 
 const url = 'mongodb://localhost:27017/metadata';
 const COLLECTION_METADATA = 'metadata'
@@ -167,7 +167,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
     getEventsByDate(eventType): Promise<SentencesByDate> {
         if (!db) {
             return Promise.resolve({
-                values: {},
+                values: [{}],
                 days: [],
                 authors: []    
             })
@@ -202,7 +202,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
         return new Promise((resolve, reject) => {
             let ids: number[] = []
 
-            let byDate = {}
+            let byDate: { [key: string]: SentencesByAuthor } = {}
             let authors = {}
 
             cursor.forEach((doc) => {
@@ -223,15 +223,17 @@ export default class BackendSentenceHistory implements SentenceHistory {
                 authors[author] = true
                 byDate[dayNumber][author] = doc.value
             }, () => {
-                let days = Object.keys(byDate).sort()
+                let days = Object.keys(byDate).map(k => parseInt(k)).sort()
 
                 let values = days.map((key) => byDate[key])
 
-                resolve({
+                let sbd: SentencesByDate = {
                     values: values,
                     days: days,
                     authors: Object.keys(authors).sort()    
-                })
+                }
+
+                resolve(sbd)
             });
         })
     }
@@ -373,7 +375,7 @@ export default class BackendSentenceHistory implements SentenceHistory {
                 } ).sort({ 'date': -1 }))
     }
 
-    getExistingExternalIds(externalIds: string[]) {
+    getExistingExternalIds(externalIds: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
             db.collection(COLLECTION_METADATA).distinct('externalId', {
                 externalId: { $in: externalIds } 

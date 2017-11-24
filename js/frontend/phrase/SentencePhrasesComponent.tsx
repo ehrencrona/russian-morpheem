@@ -65,7 +65,7 @@ export default class SentencePhrasesComponent extends Component<Props, State> {
             props.sentence, phrase,  props.corpus.facts)
 
         if (!match) {
-            return <div classname='error'>Does not fit pattern</div>
+            return <div className='error'>Does not fit pattern</div>
         }
         else {
             return <div className='match'>{

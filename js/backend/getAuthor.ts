@@ -216,8 +216,10 @@ export function getSlackOfAuthor(authorName: string): { name: string, id: string
 export default function getAuthor(req: express.Request): Author {
     let result: Author
 
-    if (req.user && req.user.sub) {
-        let id = req.user.sub.split('|')[1]
+    let user = req['user']
+
+    if (user && user.sub) {
+        let id = user.sub.split('|')[1]
 
         result = AUTHORS[id]
 

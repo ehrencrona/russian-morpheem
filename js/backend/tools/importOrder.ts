@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/node-4.d.ts"/>
-
 import readCorpus from '../CorpusReader'
 import InflectionFact from '../../shared/inflection/InflectionFact'
 

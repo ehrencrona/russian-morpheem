@@ -28,7 +28,7 @@ interface Props {
     corpus: Corpus
     fact: Fact
     context?: InflectedWord
-    children?: Element
+    children?: JSX.Element
     bodyClass?: string
 }
 

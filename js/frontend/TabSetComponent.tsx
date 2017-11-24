@@ -317,8 +317,8 @@ export default class TabSetComponent extends Component<Props, State> {
             return <div className='tab tab-header' key={tab.id + (shouldHaveCloseAll ? 'closeall' : '')}
                 onClick={ () => {
                     let state = this.state
-                    state.first = index + offset + addToFirst
-                    this.setState(state)
+
+                    this.setState(Object.assign({}, state, { first: index + offset + addToFirst }))
                 }}>
                 <div className='tab-name'>
                 { (factIndex ? 

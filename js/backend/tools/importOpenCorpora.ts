@@ -1,4 +1,3 @@
-/// <reference path="../../../typings/node-4.d.ts"/>
 /// <reference path="../../../typings/redis.d.ts"/>
 
 import { createReadStream, readFileSync } from 'fs'

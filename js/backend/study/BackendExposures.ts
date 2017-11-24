@@ -78,7 +78,7 @@ class BackendExposures implements Exposures {
         return this.getExposuresFromCursor(cursor)
     }
 
-    getExposuresFromCursor(cursor: Cursor) {
+    getExposuresFromCursor(cursor: Cursor): Promise<Exposure[]> {
         return new Promise((resolve, reject) => {
             let result: Exposure[] = []
 

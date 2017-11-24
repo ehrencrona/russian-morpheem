@@ -1,8 +1,6 @@
-/// <reference path="../../typings/express.d.ts"/>
 /// <reference path="../../typings/index.d.ts" />
 
 import * as express from "express"
-import * as core from "express-serve-static-core";
 import 'source-map-support/register'
 import { watchForChangesOnDisk } from './CorpusReader'
 import readCorpus from './CorpusReader'
@@ -117,7 +115,7 @@ function registerRoutes(corpus: Corpus) {
         next()
     })
 
-    let ifNoneMatch = (req: core.Request, res: core.Response, next) => {
+    let ifNoneMatch = (req: express.Request, res: express.Response, next) => {
         if (req.method == 'GET') {
             let etag = corpus.lastModified.getTime().toString()
             let ifNoneMatch = req.header('If-None-Match')

@@ -1,4 +1,3 @@
-/// <reference path="../../../typings/request.d.ts"/>
 /// <reference path="../../../typings/globals/html-entities/index.d.ts"/>
 
 import { get } from 'request';
