@@ -72,8 +72,21 @@ export default class LoginContainer extends Component<Props, State> {
 
     componentWillMount() {
         if (!this.state.bypass) {
-            this.lock = new Auth0Lock('BcdEIFVbZCfkNbO1GlL7dqS2ghOIfHBk', 'morpheem.eu.auth0.com');
+            this.lock = new Auth0Lock('dQgtYQ55BKV0dlVOQqJ5BlSUE27v1I8s', 'morpheemru.eu.auth0.com');
     
+            this.lock.on("authenticated", (authResult) => {
+                // Use the token in authResult to getUserInfo() and save it to localStorage
+                this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                  if (error) {
+                    console.error(error);
+
+                    return;
+                  }
+              
+                  localStorage.setItem(TOKEN_ITEM, authResult.accessToken);
+                });
+              });
+
             let idToken = this.getIdToken()
 
             this.setState({ idToken: idToken })
@@ -147,19 +160,6 @@ export default class LoginContainer extends Component<Props, State> {
     getIdToken() {
         var idToken = localStorage.getItem(TOKEN_ITEM)
         
-        if (!idToken) {
-            var authHash = this.lock.parseHash(window.location.hash)
-            
-            if (authHash && authHash.id_token) {
-                idToken = authHash.id_token
-                localStorage.setItem(TOKEN_ITEM, authHash.id_token)
-            }
-
-            if (authHash && authHash.error) {
-                console.log("Error signing in", authHash)
-            }
-        }
-
         return idToken
     }
 

@@ -5,8 +5,10 @@ interface AuthHash {
 
 declare class Auth0Lock {
     constructor(foo: string, bar: string)
-    
-    parseHash(hash: string): AuthHash
+
+    on(event: string, callback: (authResult) => void)
+
+    getUserInfo(accessToken: string, callback: (error, profile) => void)
     
     show() 
 }
