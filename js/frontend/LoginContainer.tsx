@@ -75,17 +75,8 @@ export default class LoginContainer extends Component<Props, State> {
             this.lock = new Auth0Lock('dQgtYQ55BKV0dlVOQqJ5BlSUE27v1I8s', 'morpheemru.eu.auth0.com');
     
             this.lock.on("authenticated", (authResult) => {
-                // Use the token in authResult to getUserInfo() and save it to localStorage
-                this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
-                  if (error) {
-                    console.error(error);
-
-                    return;
-                  }
-              
-                  localStorage.setItem(TOKEN_ITEM, authResult.accessToken);
-                });
-              });
+                localStorage.setItem(TOKEN_ITEM, authResult.idToken);
+            });
 
             let idToken = this.getIdToken()
 
