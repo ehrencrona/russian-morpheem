@@ -44,6 +44,7 @@
     "passport-slack": "0.0.6",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
+    "request": "^2.74.0",
     "rollbar": "^0.4.0",
     "ts-loader": "^0.8.1",
     "underscore": "^1.7.0",
